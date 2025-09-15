@@ -1,15 +1,26 @@
-# ---> Unity
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+.utmp/
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
+/[Bb]undles/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+*.log
+
+# Compressed file
+*.zip
+*.rar
+*.7z
+
+# By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
+*.blend1
+*.blend1.meta
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -52,9 +63,14 @@ ExportedObj/
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
-
+/[Aa]ssets/[Ss]treamingAssets/GameFramework/*
+/[Aa]ssets/[Ss]treamingAssets/GameFramework.meta
+/Assets/StreamingAssets/GameFramework
 # Unity3D generated file on crash reports
 sysinfo.txt
+
+# Mono auto generated files
+mono_crash.*
 
 # Builds
 *.apk
@@ -72,4 +88,23 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+/.idea
 
+# Visual Scripting auto-generated files
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
+
+
+# Others
+~/Assets/GameFramework
+/Assets/GameFramework
+output
+output/*
+/TextToolDatas/slim/backup.txt
+/Assets/StreamingAssets/yoo/*
+output/*
+// *.meta
+/Assets/WX-WASM-SDK-V2/Runtime/Plugins/SDK-WX-TextureMin-JS-WEBGL2.jslib.meta
+/Assets/WX-WASM-SDK-V2/Runtime/Plugins/SDK-WX-TextureMin-JS-WEBGL1.jslib.meta
