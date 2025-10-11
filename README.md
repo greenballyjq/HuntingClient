@@ -1,3 +1,3 @@
 # HuntingClient
 
-原始打猎大师
+我给全家打肉吃
