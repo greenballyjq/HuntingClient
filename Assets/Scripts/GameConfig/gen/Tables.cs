@@ -13,14 +13,50 @@ namespace cfg
 {
 public partial class Tables
 {
+    /// <summary>
+    /// 子弹数值表
+    /// </summary>
+    public HuntingConfig.TbBullet TbBullet {get; }
+    /// <summary>
+    /// 物种数值表
+    /// </summary>
+    public HuntingConfig.TbSpecies TbSpecies {get; }
+    /// <summary>
+    /// 物种派发数值表
+    /// </summary>
+    public HuntingConfig.TbSpeciesSpawn TbSpeciesSpawn {get; }
+    /// <summary>
+    /// 地图与物种映射数值表
+    /// </summary>
+    public HuntingConfig.TbMapSpecies TbMapSpecies {get; }
+    /// <summary>
+    /// 全局进度数值表
+    /// </summary>
+    public HuntingConfig.TbProgress TbProgress {get; }
+    /// <summary>
+    /// 动态任务数值表
+    /// </summary>
+    public HuntingConfig.TbDynamicQuest TbDynamicQuest {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
+        TbBullet = new HuntingConfig.TbBullet(loader("huntingconfig_tbbullet"));
+        TbSpecies = new HuntingConfig.TbSpecies(loader("huntingconfig_tbspecies"));
+        TbSpeciesSpawn = new HuntingConfig.TbSpeciesSpawn(loader("huntingconfig_tbspeciesspawn"));
+        TbMapSpecies = new HuntingConfig.TbMapSpecies(loader("huntingconfig_tbmapspecies"));
+        TbProgress = new HuntingConfig.TbProgress(loader("huntingconfig_tbprogress"));
+        TbDynamicQuest = new HuntingConfig.TbDynamicQuest(loader("huntingconfig_tbdynamicquest"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
+        TbBullet.ResolveRef(this);
+        TbSpecies.ResolveRef(this);
+        TbSpeciesSpawn.ResolveRef(this);
+        TbMapSpecies.ResolveRef(this);
+        TbProgress.ResolveRef(this);
+        TbDynamicQuest.ResolveRef(this);
     }
 }
 
