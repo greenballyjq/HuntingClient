@@ -31,14 +31,32 @@ public sealed partial class DynamicQuest : Luban.BeanBase
     }
 
     /// <summary>
-    /// 【V1】动态任务数值表1013
+    /// 任务ID
     /// </summary>
     public readonly int ID;
+    /// <summary>
+    ///  任务类型
+    /// </summary>
     public readonly EDynamicQuestType DynamicQuestType;
+    /// <summary>
+    /// 完成任务的目标数值范围
+    /// </summary>
     public readonly int[] TargetRange;
+    /// <summary>
+    /// 任务持续时间
+    /// </summary>
     public readonly float Duration;
+    /// <summary>
+    /// 奖励类型
+    /// </summary>
     public readonly ERewardType RewardType;
+    /// <summary>
+    /// 完成任务的奖励数值范围
+    /// </summary>
     public readonly int[] RewardRange;
+    /// <summary>
+    /// 备注
+    /// </summary>
     public readonly string Comment;
    
     public const int __ID__ = -110008480;

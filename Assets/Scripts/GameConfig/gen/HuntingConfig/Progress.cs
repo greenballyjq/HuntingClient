@@ -29,12 +29,24 @@ public sealed partial class Progress : Luban.BeanBase
     }
 
     /// <summary>
-    /// 【V1】全局进度数值表1013
+    /// 进度条类型
     /// </summary>
     public readonly EProgressType ProgressType;
+    /// <summary>
+    /// 每秒增加量
+    /// </summary>
     public readonly float IncreasePerSecond;
+    /// <summary>
+    /// 单条所需值
+    /// </summary>
     public readonly float RequiredPerBar;
+    /// <summary>
+    /// 最大条数
+    /// </summary>
     public readonly int MaxBars;
+    /// <summary>
+    /// 备注
+    /// </summary>
     public readonly string Comment;
    
     public const int __ID__ = 591878186;

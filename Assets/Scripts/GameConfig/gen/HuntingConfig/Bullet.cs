@@ -24,6 +24,7 @@ public sealed partial class Bullet : Luban.BeanBase
         FireRate = _buf.ReadInt();
         DamageRangeType = (EBulletDamageRangeType)_buf.ReadInt();
         DamageRange = _buf.ReadFloat();
+        MoveSpeed = _buf.ReadFloat();
         Comment = _buf.ReadString();
     }
 
@@ -33,16 +34,44 @@ public sealed partial class Bullet : Luban.BeanBase
     }
 
     /// <summary>
-    /// 【V1】子弹数值表1013
+    /// 子弹ID
     /// </summary>
     public readonly int ID;
+    /// <summary>
+    /// 子弹类型
+    /// </summary>
     public readonly EBulletType BulletType;
+    /// <summary>
+    /// 子弹显示名称
+    /// </summary>
     public readonly string Name;
+    /// <summary>
+    /// 持续时间
+    /// </summary>
     public readonly float Duration;
+    /// <summary>
+    /// 基础伤害
+    /// </summary>
     public readonly float BaseDamage;
+    /// <summary>
+    /// 射速（发/秒）
+    /// </summary>
     public readonly int FireRate;
+    /// <summary>
+    /// 伤害范围类型
+    /// </summary>
     public readonly EBulletDamageRangeType DamageRangeType;
+    /// <summary>
+    /// 伤害范围
+    /// </summary>
     public readonly float DamageRange;
+    /// <summary>
+    /// 移动速度
+    /// </summary>
+    public readonly float MoveSpeed;
+    /// <summary>
+    /// 备注
+    /// </summary>
     public readonly string Comment;
    
     public const int __ID__ = -813148609;
@@ -63,6 +92,7 @@ public sealed partial class Bullet : Luban.BeanBase
         + "FireRate:" + FireRate + ","
         + "DamageRangeType:" + DamageRangeType + ","
         + "DamageRange:" + DamageRange + ","
+        + "MoveSpeed:" + MoveSpeed + ","
         + "Comment:" + Comment + ","
         + "}";
     }

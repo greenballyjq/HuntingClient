@@ -1,27 +1,22 @@
 namespace Hunting.Manager
 {
     /// <summary>
-    /// 游戏管理器接口，定义了游戏管理器的基本功能和方法
+    /// 游戏业务管理器接口
     /// </summary>
     public interface IGameManager
     {
         /// <summary>
-        /// 初始化游戏管理器
+        /// 初始化管理器
         /// </summary>
         void Init();
 
         /// <summary>
-        /// 开始游戏
+        /// 每帧更新
         /// </summary>
-        void StartGame();
+        void Update();
 
         /// <summary>
-        /// 更新游戏逻辑，每帧调用
-        /// </summary>
-        void DoUpdate();
-
-        /// <summary>
-        /// 释放资源，清理游戏管理器
+        /// 释放资源
         /// </summary>
         void Release();
     }

@@ -1,145 +1,218 @@
+using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core;
-using GameFramework.Network;
+using GameFramework.Manager;
 using Hunting.Manager;
 using UnityEngine;
 
-namespace GameFramework.Game
+namespace Hunting
 {
-    /// <summary>
-    /// 游戏逻辑基类 - 具体游戏逻辑的基类
-    /// </summary>
     public abstract class GameLogic : MonoBehaviour
     {
-        // 游戏框架管理器
-        protected GameFrameworkManager FrameworkManager => GameFrameworkManager.Instance;
+        /// <summary>
+        /// 单例模式
+        /// </summary>
+        private static GameLogic _instance;
+        public static GameLogic Instance => _instance;
 
-        // 平台管理器
-        protected PlatformManager PlatformManager => FrameworkManager.GetManager<PlatformManager>();
-
-        // 资源管理器
-        protected ResourceManager ResourceManager => FrameworkManager.GetManager<ResourceManager>();
-
-        // 游戏配置管理器（游戏业务配置）
-        protected GameConfigManager GameConfigManager => GameConfigManager.Instance;
-
-        // 事件管理器
-        protected EventManager EventManager => FrameworkManager.GetManager<EventManager>();
-
-        // UI管理器
-        protected UIManager UIManager => FrameworkManager.GetManager<UIManager>();
-
-        // 服务器客户端
-        public ServerClient ServerClient => FrameworkManager.GetManager<ServerClient>();
-
-        // HTTP管理器（基础网络功能）
-        protected HttpManager HttpManager => FrameworkManager.GetManager<HttpManager>();
-
-
-        // 游戏状态
+        /// <summary>
+        /// 游戏状态
+        /// </summary>
         public enum GameState
         {
-            None, // 未初始化
-            Loading, // 加载中
-            Ready, // 准备开始
-            Playing, // 游戏中
-            Paused, // 暂停
-            GameOver, // 游戏结束
+            None,           // 未初始化
+            Initializing,   // 初始化中
+            Ready,          // 准备开始
+            Playing,        // 游戏中
+            Paused,         // 暂停
+            GameOver,       // 游戏结束
         }
 
-        // 当前游戏状态
+        /// <summary>
+        /// 当前游戏状态
+        /// </summary>
         public GameState CurrentState { get; protected set; } = GameState.None;
 
-        // 游戏启动器
-        protected GameLauncher GameLauncher => GameLauncher.Instance;
-
-        // 游戏初始化时调用
+        /// <summary>
+        /// 游戏业务管理器字典
+        /// </summary>
+        private readonly Dictionary<Type, IGameManager> _gameManagers = new Dictionary<Type, IGameManager>();
         protected virtual void Awake()
         {
-            // 子类实现
+            if (_instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
         }
 
-        // 游戏开始时调用
-        protected virtual void Start()
+        protected virtual async void Start()
         {
-            // 初始化游戏
-            Debug.Log($"[GameLogic] Start!!!");
-            InitGame();
+            await InitGameAsync();
         }
 
-        // 游戏帧更新
         protected virtual void Update()
         {
-            // 根据游戏状态更新
             switch (CurrentState)
             {
                 case GameState.Playing:
                     OnGamePlaying();
                     break;
-
                 case GameState.Paused:
                     OnGamePaused();
                     break;
-
                 case GameState.GameOver:
                     OnGameOver();
                     break;
             }
         }
 
-        // 初始化游戏
-        protected async void InitGame()
+        protected virtual void OnDestroy()
         {
-            Debug.Log("[GameLogic] 初始化游戏");
-            CurrentState = GameState.Loading;
+            ReleaseGameManagers();
 
-            // 等待框架初始化完成
-// #if !UNITY_EDITOR
-            // while (FrameworkManager == null || !FrameworkManager.IsInitialized)
-// #else
-            while (FrameworkManager == null || !FrameworkManager.IsInitialized || !GameLauncher.IsInitialized)
-// #endif
-            {
-                // Debug.Log("DEBUG!");
-                await UniTask.Delay(10);
-            }
-
-            // await GameConfigManager.Instance.WaitForInitializationAsync();
-
-            // GameConfigManager.Instance.Init();
-            // 等待游戏配置初始化完成
-            await WaitForGameConfigInitialization();
-
-            // 游戏特定的初始化
-            await OnGameInit();
-
-            // 加载完成，进入准备状态
-            CurrentState = GameState.Ready;
-
-            // 调用游戏准备事件
-            OnGameReady();
+            if (_instance == this)
+                _instance = null;
         }
 
         /// <summary>
-        /// 等待游戏配置初始化完成
+        /// 异步初始化游戏
         /// </summary>
-        protected virtual async UniTask WaitForGameConfigInitialization()
+        private async UniTask InitGameAsync()
         {
-            Debug.Log("[GameLogic] 等待游戏配置初始化...");
+            Debug.Log("[GameLogic] 开始初始化游戏");
+            CurrentState = GameState.Initializing;
 
-            // 确保GameConfigManager实例存在并等待初始化完成
-            // await GameConfigManager.WaitForInitializationAsync();
+            // 等待游戏启动器初始化完成
+            await WaitForGameLauncher();
 
-            Debug.Log("[GameLogic] 游戏配置初始化完成");
+            // 等待配置管理器初始化完成
+            await WaitForConfigManager();
+
+            // 注册游戏业务管理器
+            RegisterGameManagers();
+
+            // 初始化游戏业务管理器
+            InitGameManagers();
+
+            // 调用子类初始化
+            await OnGameInit();
+
+            // 完成初始化
+            CurrentState = GameState.Ready;
+
+            Debug.Log("[GameLogic] 游戏初始化完成");
         }
 
-        // 游戏初始化，子类实现
-        protected abstract UniTask OnGameInit();
+        /// <summary>
+        /// 等待游戏启动器初始化
+        /// </summary>
+        private async UniTask WaitForGameLauncher()
+        {
+            Debug.Log("[GameLogic] 等待游戏启动器初始化...");
 
-        // 游戏准备，子类实现
-        protected abstract void OnGameReady();
+            if (GameLauncher.Instance == null)
+                Debug.LogError("[GameLogic] 未在场景中找到GameLauncher。请确保在初始场景中挂载并配置好GameLauncher组件");
 
-        // 开始游戏
+            await GameLauncher.Instance.WaitForInitializationAsync();
+            Debug.Log("[GameLogic] 游戏启动器初始化完成");
+        }
+
+        /// <summary>
+        /// 获取配置管理器实例（由子类实现）
+        /// </summary>
+        protected abstract BaseConfigManager GetConfigManager();
+
+        /// <summary>
+        /// 等待配置管理器初始化
+        /// </summary>
+        private async UniTask WaitForConfigManager()
+        {
+            Debug.Log("[GameLogic] 等待配置管理器初始化...");
+
+            var configManager = GetConfigManager();
+            configManager.Init();
+            await configManager.WaitForInitializationAsync();
+
+            Debug.Log("[GameLogic] 配置管理器初始化完成");
+        }
+
+        /// <summary>
+        /// 注册游戏业务管理器（由子类实现）
+        /// </summary>
+        protected abstract void RegisterGameManagers();
+
+        /// <summary>
+        /// 注册单个游戏业务管理器
+        /// </summary>
+        protected void RegisterManager<T>() where T : BaseGameManager
+        {
+            var managerType = typeof(T);
+
+            if (_gameManagers.ContainsKey(managerType))
+            {
+                Debug.LogWarning($"[GameLogic] 管理器 {managerType.Name} 已注册");
+                return;
+            }
+
+            var manager = FindObjectOfType<T>();
+            if (manager == null)
+            {
+                var go = new GameObject(managerType.Name);
+                manager = go.AddComponent<T>();
+            }
+
+            _gameManagers[managerType] = manager;
+            Debug.Log($"[GameLogic] 注册管理器: {managerType.Name}");
+        }
+
+        /// <summary>
+        /// 初始化所有游戏业务管理器
+        /// </summary>
+        private void InitGameManagers()
+        {
+            Debug.Log("[GameLogic] 初始化游戏业务管理器");
+
+            foreach (var manager in _gameManagers.Values)
+                manager.Init();
+
+            Debug.Log("[GameLogic] 初始化游戏业务管理器完成");
+        }
+
+        /// <summary>
+        /// 获取框架管理器
+        /// </summary>
+        public T GetFrameworkManager<T>() where T : class, IManager
+        {
+            return GameFrameworkManager.Instance.GetManager<T>();
+        }
+
+        /// <summary>
+        /// 获取游戏业务管理器
+        /// </summary>
+        public T GetGameManager<T>() where T : class, IGameManager
+        {
+            return _gameManagers[typeof(T)] as T;
+        }
+
+        /// <summary>
+        /// 释放所有游戏业务管理器
+        /// </summary>
+        private void ReleaseGameManagers()
+        {
+            Debug.Log("[GameLogic] 释放游戏业务管理器");
+
+            foreach (var manager in _gameManagers.Values)
+                manager.Release();
+
+            _gameManagers.Clear();
+        }
+
+        #region 游戏状态控制方法
         public virtual void StartGame()
         {
             if (CurrentState != GameState.Ready)
@@ -147,15 +220,14 @@ namespace GameFramework.Game
                 Debug.LogWarning("[GameLogic] 游戏未准备好，无法开始");
                 return;
             }
-            
+
             CurrentState = GameState.Playing;
             OnGameStart();
+
+            // 触发游戏开始事件
+            GetFrameworkManager<EventManager>().Trigger(HuntingEvents.GameStarted);
         }
 
-        // 游戏开始，子类实现
-        protected abstract void OnGameStart();
-
-        // 暂停游戏
         public virtual void PauseGame()
         {
             if (CurrentState != GameState.Playing)
@@ -166,12 +238,11 @@ namespace GameFramework.Game
 
             CurrentState = GameState.Paused;
             OnGamePause();
+
+            // 触发游戏暂停事件
+            GetFrameworkManager<EventManager>().Trigger(HuntingEvents.GamePaused);
         }
 
-        // 游戏暂停，子类实现
-        protected abstract void OnGamePause();
-
-        // 恢复游戏
         public virtual void ResumeGame()
         {
             if (CurrentState != GameState.Paused)
@@ -182,12 +253,11 @@ namespace GameFramework.Game
 
             CurrentState = GameState.Playing;
             OnGameResume();
+
+            // 触发游戏恢复事件
+            GetFrameworkManager<EventManager>().Trigger(HuntingEvents.GameResumed);
         }
 
-        // 游戏恢复，子类实现
-        protected abstract void OnGameResume();
-
-        // 结束游戏
         public virtual void EndGame()
         {
             if (CurrentState != GameState.Playing && CurrentState != GameState.Paused)
@@ -198,32 +268,32 @@ namespace GameFramework.Game
 
             CurrentState = GameState.GameOver;
             OnGameEnd();
+
+            // 触发游戏结束事件
+            GetFrameworkManager<EventManager>().Trigger(HuntingEvents.GameEnded);
         }
+        #endregion
 
-        // 游戏结束，子类实现
-        protected abstract void OnGameEnd();
+        #region 钩子虚方法供子类重写
+        protected virtual UniTask OnGameInit() => UniTask.CompletedTask;
+        protected virtual void OnGameStart() { }
+        protected virtual void OnGamePause() { }
+        protected virtual void OnGameResume() { }
+        protected virtual void OnGameEnd() { }
+        protected virtual void OnGamePlaying() { }
+        protected virtual void OnGamePaused() { }
+        protected virtual void OnGameOver() { }
+        #endregion
 
-        // 重新开始游戏
-        public virtual void RestartGame()
+        /// <summary>
+        /// 等待初始化完成
+        /// </summary>
+        public async UniTask WaitForInitialization()
         {
-            Debug.Log("[GameLogic] 重新开始游戏");
-            // 结束当前游戏
-            if (CurrentState == GameState.Playing || CurrentState == GameState.Paused)
+            while (CurrentState == GameState.None || CurrentState == GameState.Initializing)
             {
-                EndGame();
+                await UniTask.Yield();
             }
-
-            // 重新初始化游戏
-            InitGame();
         }
-
-        // 游戏进行中更新，子类实现
-        protected abstract void OnGamePlaying();
-
-        // 游戏暂停中更新，子类实现
-        protected abstract void OnGamePaused();
-
-        // 游戏结束后更新，子类实现
-        protected abstract void OnGameOver();
     }
 }
