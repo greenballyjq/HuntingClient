@@ -1,19 +1,19 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ״̬��
+/// 状态机
 /// </summary>
 public class StateMachine
 {
     /// <summary>
-    /// ��ǰ״̬
+    /// 当前状态
     /// </summary>
     public IState currentState { get; private set; }
 
     /// <summary>
-    /// ��ʼ��״̬��
+    /// 初始化状态机
     /// </summary>
     /// <param name="startState"></param>
     public void Initialize(IState startState)
@@ -23,7 +23,7 @@ public class StateMachine
     }
 
     /// <summary>
-    /// �л�״̬
+    /// 切换状态
     /// </summary>
     /// <param name="newState"></param>
     public void ChangeState(IState newState)
@@ -34,7 +34,7 @@ public class StateMachine
     }
 
     /// <summary>
-    /// ���µ�ǰ״̬
+    /// 更新当前状态
     /// </summary>
     public void Update()
     {

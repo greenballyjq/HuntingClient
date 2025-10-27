@@ -1,13 +1,13 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using RVO;
 
 public class RVO2Agent : MonoBehaviour
 {
-    [Header("ÒÆ¶¯ÅäÖÃ")]
+    [Header("ç§»åŠ¨é…ç½®")]
     public Vector3 targetDirection = Vector3.forward;
     public float speed = 2.0f;
 
-    [Header("RVO2²ÎÊı")]
+    [Header("RVO2å‚æ•°")]
     public float radius = 1.5f;
     public float maxSpeed = 2.0f;
     public float neighborDist = 15.0f;
@@ -43,11 +43,11 @@ public class RVO2Agent : MonoBehaviour
     {
         if (agentId < 0) return;
 
-        // Í¬²½Î»ÖÃ
+        // åŒæ­¥ä½ç½®
         RVO.Vector2 pos = new RVO.Vector2(transform.position.x, transform.position.z);
         Simulator.Instance.setAgentPosition(agentId, pos);
 
-        // ÉèÖÃÆ«ºÃËÙ¶È
+        // è®¾ç½®åå¥½é€Ÿåº¦
         RVO.Vector2 prefVel = new RVO.Vector2(targetDirection.x, targetDirection.z);
         if (RVOMath.absSq(prefVel) > 0.01f)
         {
@@ -60,23 +60,23 @@ public class RVO2Agent : MonoBehaviour
     {
         if (agentId < 0) return;
 
-        // »ñÈ¡ĞÂÎ»ÖÃ
+        // è·å–æ–°ä½ç½®
         RVO.Vector2 rvoPos = Simulator.Instance.getAgentPosition(agentId);
         Vector3 newPos = new Vector3(rvoPos.x(), transform.position.y, rvoPos.y());
 
-        // ¼ÆËãÒÆ¶¯·½Ïò£¨ÓÃÎ»ÖÃ²î£¬²»ÒªÓÃvelocity£©
+        // è®¡ç®—ç§»åŠ¨æ–¹å‘ï¼ˆç”¨ä½ç½®å·®ï¼Œä¸è¦ç”¨velocityï¼‰
         Vector3 moveDirection = newPos - lastPosition;
 
-        // Æ½»¬ÒÆ¶¯·½Ïò
+        // å¹³æ»‘ç§»åŠ¨æ–¹å‘
         if (moveDirection.magnitude > 0.01f)
         {
             smoothingVelocity = Vector3.Lerp(smoothingVelocity, moveDirection, Time.deltaTime * 5f);
         }
 
-        // ¸üĞÂÎ»ÖÃ
+        // æ›´æ–°ä½ç½®
         transform.position = newPos;
 
-        // ¸ù¾İÒÆ¶¯·½ÏòĞı×ª£¨ÕâÊÇ¹Ø¼ü£¡£©
+        // æ ¹æ®ç§»åŠ¨æ–¹å‘æ—‹è½¬ï¼ˆè¿™æ˜¯å…³é”®ï¼ï¼‰
         if (smoothingVelocity.magnitude > 0.01f)
         {
             transform.rotation = Quaternion.LookRotation(smoothingVelocity);
@@ -87,15 +87,15 @@ public class RVO2Agent : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        // »ÆÉ«Çò£ºÅö×²°ë¾¶
+        // é»„è‰²çƒï¼šç¢°æ’åŠå¾„
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, radius);
 
-        // °×É«Ïß£ºµ±Ç°ÒÆ¶¯·½Ïò
+        // ç™½è‰²çº¿ï¼šå½“å‰ç§»åŠ¨æ–¹å‘
         Gizmos.color = Color.white;
         Gizmos.DrawRay(transform.position, smoothingVelocity * 2f);
 
-        // ÂÌÉ«¼ıÍ·£ºÄ¿±ê·½Ïò
+        // ç»¿è‰²ç®­å¤´ï¼šç›®æ ‡æ–¹å‘
         Gizmos.color = Color.green;
         Gizmos.DrawRay(transform.position, targetDirection * 2f);
     }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Hunting.Game.Animal;
 using UnityEngine;
@@ -7,32 +7,32 @@ using UnityEngine;
 namespace Hunting.Game.Animal.State
 {
     /// <summary>
-    /// ¶¯Îï×´Ì¬
+    /// åŠ¨ç‰©çŠ¶æ€
     /// </summary>
     public class AnimalState : IState
     {
         /// <summary>
-        /// ×´Ì¬»ú
+        /// çŠ¶æ€æœº
         /// </summary>
         protected StateMachine stateMachine;
 
         /// <summary>
-        /// ×´Ì¬¶¯»­Ãû³Æ
+        /// çŠ¶æ€åŠ¨ç”»åç§°
         /// </summary>
         protected string animName;
 
         /// <summary>
-        /// ¶¯Îï×ÔÉí
+        /// åŠ¨ç‰©è‡ªèº«
         /// </summary>
         protected AnimalBehavior animal;
 
         /// <summary>
-        /// ×´Ì¬¼ÆÊ±Æ÷
+        /// çŠ¶æ€è®¡æ—¶å™¨
         /// </summary>
         protected float stateTimer;
 
         /// <summary>
-        /// ¶¯»­×é¼ş
+        /// åŠ¨ç”»ç»„ä»¶
         /// </summary>
         protected Animator animator;
 
@@ -42,40 +42,40 @@ namespace Hunting.Game.Animal.State
             this.stateMachine = stateMachine;
             this.animName = animName;
 
-            // »ñÈ¡animalÉÏµÄ×é¼ş£¬·½±ãÊ¹ÓÃ
+            // è·å–animalä¸Šçš„ç»„ä»¶ï¼Œæ–¹ä¾¿ä½¿ç”¨
             animator = animal.animator;
         }
 
         /// <summary>
-        /// ½øÈë×´Ì¬
+        /// è¿›å…¥çŠ¶æ€
         /// </summary>
         public virtual void Enter()
         {
-            //Debug.Log($"[AnimalState] ½øÈë{animName}×´Ì¬");
+            //Debug.Log($"[AnimalState] è¿›å…¥{animName}çŠ¶æ€");
             animator.SetBool(animName, true);
         }
 
         /// <summary>
-        /// ÍË³ö×´Ì¬
+        /// é€€å‡ºçŠ¶æ€
         /// </summary>
 
         public virtual void Exit()
         {
-            //Debug.Log($"[AnimalState] ÍË³ö{animName}×´Ì¬");
+            //Debug.Log($"[AnimalState] é€€å‡º{animName}çŠ¶æ€");
             animator.SetBool(animName, false);
 
         }
 
         /// <summary>
-        /// ×´Ì¬¸üĞÂ
+        /// çŠ¶æ€æ›´æ–°
         /// </summary>
 
         public virtual void Update()
         {
-            //Debug.Log($"[AnimalState] ¸üĞÂ{animName}×´Ì¬");
+            //Debug.Log($"[AnimalState] æ›´æ–°{animName}çŠ¶æ€");
             stateTimer -= Time.deltaTime;
 
-            // ÈÎºÎ×´Ì¬¶¼¿ÉÒÔ½øÈëÌÓÅÜ×´Ì¬£¨³ıÁËËÀÍöºÍÌÓÅÜ×´Ì¬±¾Éí£©
+            // ä»»ä½•çŠ¶æ€éƒ½å¯ä»¥è¿›å…¥é€ƒè·‘çŠ¶æ€ï¼ˆé™¤äº†æ­»äº¡å’Œé€ƒè·‘çŠ¶æ€æœ¬èº«ï¼‰
             if (animal.TimeInScene >= animal.StayTime &&
                 !(this is AnimalDeathState) &&
                 !(this is AnimalFleeState))

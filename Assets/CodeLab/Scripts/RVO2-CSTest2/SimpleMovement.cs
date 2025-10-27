@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class SimpleMovement : MonoBehaviour
 {
-    [Header("ÒÆ¶¯ÅäÖÃ")]
+    [Header("ç§»åŠ¨é…ç½®")]
     public UnityEngine.Vector3 targetDirection = UnityEngine.Vector3.forward;
     public float speed = 2.0f;
     public float rotationSpeed = 5.0f;
@@ -16,10 +16,10 @@ public class SimpleMovement : MonoBehaviour
 
     void Update()
     {
-        // Ö±½ÓÒÆ¶¯
+        // ç›´æŽ¥ç§»åŠ¨
         transform.position += targetDirection.normalized * speed * Time.deltaTime;
 
-        // Ðý×ª³¯ÏòÒÆ¶¯·½Ïò
+        // æ—‹è½¬æœå‘ç§»åŠ¨æ–¹å‘
         if (targetDirection.magnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);

@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class SimpleMovementPlus : MonoBehaviour
 {
-    [Header("ÒÆ¶¯ÅäÖÃ")]
+    [Header("ç§»åŠ¨é…ç½®")]
     public Vector3 targetDirection;
     public float speed = 2.0f;
     public float rotationSpeed = 5.0f;
@@ -17,7 +17,7 @@ public class SimpleMovementPlus : MonoBehaviour
 
     void Update()
     {
-        // ÉèÖÃÆÚÍû·½Ïò²¢»ñÈ¡±ÜÕÏÐÞÕý
+        // è®¾ç½®æœŸæœ›æ–¹å‘å¹¶èŽ·å–é¿éšœä¿®æ­£
         if (avoidance != null)
         {
             avoidance.SetDesiredDirection(targetDirection);
@@ -28,7 +28,7 @@ public class SimpleMovementPlus : MonoBehaviour
             blendedDirection = targetDirection;
         }
 
-        // Ó¦ÓÃÒÆ¶¯ºÍÐý×ª
+        // åº”ç”¨ç§»åŠ¨å’Œæ—‹è½¬
         transform.position += blendedDirection.normalized * speed * Time.deltaTime;
 
         if (blendedDirection.magnitude > 0.01f)

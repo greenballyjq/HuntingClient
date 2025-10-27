@@ -1,53 +1,53 @@
-using Hunting.Game.Animal;
+ï»¿using Hunting.Game.Animal;
 using UnityEngine;
 
 
 namespace Hunting.Game.Animal.State
 {
     /// <summary>
-    /// ¶¯ÎïÒÆ¶¯×´Ì¬
+    /// åŠ¨ç‰©ç§»åŠ¨çŠ¶æ€
     /// </summary>
     public class AnimalMoveState : AnimalState
     {
         /// <summary>
-        /// ±ÜÕÏ×ªÏòËÙ¶ÈÇúÏß
+        /// é¿éšœè½¬å‘é€Ÿåº¦æ›²çº¿
         /// </summary>
         private AnimationCurve avoidTurnCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
         /// <summary>
-        /// ÊÇ·ñÕıÔÚ±ÜÕÏÖĞ
+        /// æ˜¯å¦æ­£åœ¨é¿éšœä¸­
         /// </summary>
         private bool isAvoiding = false;
 
         /// <summary>
-        /// ±ÜÕÏÄ¿±ê·½Ïò
+        /// é¿éšœç›®æ ‡æ–¹å‘
         /// </summary>
         private Vector3 avoidTargetDirection;
 
         /// <summary>
-        /// ±ÜÕÏÆğÊ¼Ğı×ª
+        /// é¿éšœèµ·å§‹æ—‹è½¬
         /// </summary>
         private Quaternion avoidStartRotation;
 
         /// <summary>
-        /// ±ÜÕÏ³ÖĞøÊ±¼ä
+        /// é¿éšœæŒç»­æ—¶é—´
         /// </summary>
         private float avoidDuration = 1f;
         private float avoidTimer = 0f;
 
         /// <summary>
-        /// ±ÜÕÏÀäÈ´Ê±¼ä
+        /// é¿éšœå†·å´æ—¶é—´
         /// </summary>
         private float avoidCooldown = 1f;
         private float cooldownTimer = 0f;
 
         /// <summary>
-        /// ±ÜÕÏÊ±µÄÒÆ¶¯ËÙ¶È±ÈÀı
+        /// é¿éšœæ—¶çš„ç§»åŠ¨é€Ÿåº¦æ¯”ä¾‹
         /// </summary>
         private float avoidSpeedMultiplier = 0.5f;
 
         /// <summary>
-        /// ¶¯ÎïÔ­Ê¼ÒÆ¶¯ËÙ¶È
+        /// åŠ¨ç‰©åŸå§‹ç§»åŠ¨é€Ÿåº¦
         /// </summary>
         private float originalMoveSpeed;
 
@@ -56,7 +56,7 @@ namespace Hunting.Game.Animal.State
         public override void Enter()
         {
             base.Enter();
-            // ±£´æÔ­Ê¼ÒÆ¶¯ËÙ¶È
+            // ä¿å­˜åŸå§‹ç§»åŠ¨é€Ÿåº¦
             originalMoveSpeed = animal.moveSpeed;
         }
 
@@ -64,7 +64,7 @@ namespace Hunting.Game.Animal.State
         {
             base.Update();
 
-            // ±ÜÕÏÀäÈ´¼ÆÊ±
+            // é¿éšœå†·å´è®¡æ—¶
             if (cooldownTimer > 0)
             {
                 cooldownTimer -= Time.deltaTime;
@@ -72,24 +72,24 @@ namespace Hunting.Game.Animal.State
 
             if (isAvoiding)
             {
-                // ÕıÔÚ±ÜÕÏÖĞ£¬»º¶¯×ªÏò²¢¼õËÙ
+                // æ­£åœ¨é¿éšœä¸­ï¼Œç¼“åŠ¨è½¬å‘å¹¶å‡é€Ÿ
                 ContinueAvoidance();
             }
             else if (animal.HasFrontObstacle && cooldownTimer <= 0)
             {
-                // ¿ªÊ¼ĞÂµÄ±ÜÕÏ
+                // å¼€å§‹æ–°çš„é¿éšœ
                 StartAvoidance();
             }
             else
             {
-                // Õı³£ÒÆ¶¯£¨È·±£ËÙ¶È»Ö¸´£©
+                // æ­£å¸¸ç§»åŠ¨ï¼ˆç¡®ä¿é€Ÿåº¦æ¢å¤ï¼‰
                 animal.moveSpeed = originalMoveSpeed;
                 animal.transform.Translate(animal.transform.forward * animal.moveSpeed * Time.deltaTime, Space.World);
             }
         }
 
         /// <summary>
-        /// ¿ªÊ¼±ÜÕÏ
+        /// å¼€å§‹é¿éšœ
         /// </summary>
         private void StartAvoidance()
         {
@@ -98,44 +98,44 @@ namespace Hunting.Game.Animal.State
             avoidStartRotation = animal.transform.rotation;
             avoidTargetDirection = GetAvoidDirection();
 
-            // ±ÜÕÏÊ±¼õËÙ
+            // é¿éšœæ—¶å‡é€Ÿ
             animal.moveSpeed = originalMoveSpeed * avoidSpeedMultiplier;
         }
 
         /// <summary>
-        /// ¼ÌĞø±ÜÕÏ×ªÏò£¨»º¶¯Ğ§¹û£©
+        /// ç»§ç»­é¿éšœè½¬å‘ï¼ˆç¼“åŠ¨æ•ˆæœï¼‰
         /// </summary>
         private void ContinueAvoidance()
         {
             avoidTimer += Time.deltaTime;
             float progress = Mathf.Clamp01(avoidTimer / avoidDuration);
 
-            // Ê¹ÓÃ»º¶¯ÇúÏß¼ÆËãĞı×ª½ø¶È
+            // ä½¿ç”¨ç¼“åŠ¨æ›²çº¿è®¡ç®—æ—‹è½¬è¿›åº¦
             float curveProgress = avoidTurnCurve.Evaluate(progress);
 
-            // »º¶¯Ğı×ª
+            // ç¼“åŠ¨æ—‹è½¬
             Quaternion targetRotation = Quaternion.LookRotation(avoidTargetDirection);
             animal.transform.rotation = Quaternion.Slerp(avoidStartRotation, targetRotation, curveProgress);
 
-            // ×ªÏòÍ¬Ê±¼õËÙÒÆ¶¯
+            // è½¬å‘åŒæ—¶å‡é€Ÿç§»åŠ¨
             animal.transform.Translate(animal.transform.forward * animal.moveSpeed * Time.deltaTime, Space.World);
 
-            // ¼ì²éÊÇ·ñÍê³É×ªÏò
+            // æ£€æŸ¥æ˜¯å¦å®Œæˆè½¬å‘
             if (progress >= 1f)
             {
                 isAvoiding = false;
                 cooldownTimer = avoidCooldown;
-                // »Ö¸´Ô­Ê¼ÒÆ¶¯ËÙ¶È
+                // æ¢å¤åŸå§‹ç§»åŠ¨é€Ÿåº¦
                 animal.moveSpeed = originalMoveSpeed;
             }
         }
 
         /// <summary>
-        /// »ñÈ¡±ÜÕÏ·½Ïò
+        /// è·å–é¿éšœæ–¹å‘
         /// </summary>
         private Vector3 GetAvoidDirection()
         {
-            // 50%¸ÅÂÊ×ó×ª£¬50%¸ÅÂÊÓÒ×ª
+            // 50%æ¦‚ç‡å·¦è½¬ï¼Œ50%æ¦‚ç‡å³è½¬
             float turnAngle = Random.Range(0, 2) == 0 ? 60f : -60f;
             Vector3 avoidDir = Quaternion.Euler(0, turnAngle, 0) * animal.transform.forward;
 

@@ -1,24 +1,24 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ×´Ì¬½Ó¿Ú
+/// çŠ¶æ€æ¥å£
 /// </summary>
 public interface IState
 {
     /// <summary>
-    /// ½øÈë×´Ì¬Ê±µ÷ÓÃ
+    /// è¿›å…¥çŠ¶æ€æ—¶è°ƒç”¨
     /// </summary>
     void Enter();
 
     /// <summary>
-    /// ×´Ì¬¸üĞÂÊ±µ÷ÓÃ
+    /// çŠ¶æ€æ›´æ–°æ—¶è°ƒç”¨
     /// </summary>
     void Update();
 
     /// <summary>
-    /// ÍË³ö×´Ì¬Ê±µ÷ÓÃ
+    /// é€€å‡ºçŠ¶æ€æ—¶è°ƒç”¨
     /// </summary>
     void Exit();
 }

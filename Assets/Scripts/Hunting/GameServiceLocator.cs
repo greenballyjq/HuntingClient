@@ -1,15 +1,15 @@
-using Cysharp.Threading.Tasks;
+ï»¿using Cysharp.Threading.Tasks;
 using GameFramework.Core;
 using Hunting.Manager;
 
 namespace Hunting
 {
     /// <summary>
-    /// ÓÎÏ··şÎñ¶¨Î»Æ÷ - Í³Ò»µÄ·şÎñ·ÃÎÊµã
+    /// æ¸¸æˆæœåŠ¡å®šä½å™¨ - ç»Ÿä¸€çš„æœåŠ¡è®¿é—®ç‚¹
     /// </summary>
     public static class GameServiceLocator
     {
-        #region ³£ÓÃ¹ÜÀíÆ÷
+        #region å¸¸ç”¨ç®¡ç†å™¨
         public static EventManager Events => GameLogic.Instance.GetFrameworkManager<EventManager>();
         public static ResourceManager Resources => GameLogic.Instance.GetFrameworkManager<ResourceManager>();
         public static UIManager UI => GameLogic.Instance.GetFrameworkManager<UIManager>();
@@ -17,7 +17,7 @@ namespace Hunting
         #endregion
 
         /// <summary>
-        /// »ñÈ¡¿ò¼Ü¹ÜÀíÆ÷
+        /// è·å–æ¡†æ¶ç®¡ç†å™¨
         /// </summary>
         public static T GetFrameworkManager<T>() where T : class, IManager
         {
@@ -25,7 +25,7 @@ namespace Hunting
         }
 
         /// <summary>
-        /// »ñÈ¡ÓÎÏ·ÒµÎñ¹ÜÀíÆ÷
+        /// è·å–æ¸¸æˆä¸šåŠ¡ç®¡ç†å™¨
         /// </summary>
         public static T GetGameManager<T>() where T : class, IGameManager
         {
@@ -33,7 +33,7 @@ namespace Hunting
         }
 
         /// <summary>
-        /// Òì²½µÈ´ı»ñÈ¡¿ò¼Ü¹ÜÀíÆ÷
+        /// å¼‚æ­¥ç­‰å¾…è·å–æ¡†æ¶ç®¡ç†å™¨
         /// </summary>
         public static async UniTask<T> GetFrameworkManagerAsync<T>() where T : class, IManager
         {
@@ -42,7 +42,7 @@ namespace Hunting
         }
 
         /// <summary>
-        /// Òì²½µÈ´ı»ñÈ¡ÓÎÏ·ÒµÎñ¹ÜÀíÆ÷
+        /// å¼‚æ­¥ç­‰å¾…è·å–æ¸¸æˆä¸šåŠ¡ç®¡ç†å™¨
         /// </summary>
         public static async UniTask<T> GetGameManagerAsync<T>() where T : class, IGameManager
         {
@@ -51,7 +51,7 @@ namespace Hunting
         }
 
         /// <summary>
-        /// µÈ´ıÓÎÏ·³õÊ¼»¯Íê³É
+        /// ç­‰å¾…æ¸¸æˆåˆå§‹åŒ–å®Œæˆ
         /// </summary>
         public static async UniTask WaitForInitialization()
         {

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using cfg;
 using Cysharp.Threading.Tasks;
 using Hunting.Game.Animal;
@@ -12,13 +12,13 @@ namespace Hunting.Game
 {
     public class PlayerControl : MonoBehaviour
     {
-        #region ²âÊÔÓÃ
+        #region æµ‹è¯•ç”¨
 
         private bool initialized;
 
         private async UniTask Init()
         {
-            // µÈ´ı HuntingGameConfigManager ³õÊ¼»¯Íê³É
+            // ç­‰å¾… HuntingGameConfigManager åˆå§‹åŒ–å®Œæˆ
             while (HuntingGameConfigManager.Instance == null || !HuntingGameConfigManager.Instance.Initialized)
             {
                 await UniTask.Delay(10);
@@ -28,119 +28,119 @@ namespace Hunting.Game
 
         #endregion
         
-        #region ÊäÈëÏµÍ³Ïà¹Ø
+        #region è¾“å…¥ç³»ç»Ÿç›¸å…³
         /// <summary>
-        /// ÊäÈëÏµÍ³
+        /// è¾“å…¥ç³»ç»Ÿ
         /// </summary>
         private PlayerInputSet input;
 
         /// <summary>
-        /// »ñÈ¡ÆÁÄ»×ø±ê
+        /// è·å–å±å¹•åæ ‡
         /// </summary>
         private void OnAimPositionPerformed(InputAction.CallbackContext context)
         {
-            // »ñÈ¡ÆÁÄ»×ø±ê
+            // è·å–å±å¹•åæ ‡
             aimPosition = context.ReadValue<Vector2>();
         }
 
         private void OnEnable()
         {
-            // ÆôÓÃÊäÈëÏµÍ³²¢°ó¶¨ÊÂ¼ş
+            // å¯ç”¨è¾“å…¥ç³»ç»Ÿå¹¶ç»‘å®šäº‹ä»¶
             input.Enable();
             input.Player.AimPosition.performed += OnAimPositionPerformed;
         }
 
         private void OnDisable()
         {
-            // ½ûÓÃÊäÈëÏµÍ³²¢½â°óÊÂ¼ş
+            // ç¦ç”¨è¾“å…¥ç³»ç»Ÿå¹¶è§£ç»‘äº‹ä»¶
             input.Disable();
             input.Player.AimPosition.performed -= OnAimPositionPerformed;
 
-            // Òş²ØÃé×¼Ïß
+            // éšè—ç„å‡†çº¿
             if (aimLine != null)
                 aimLine.enabled = false;
         }
         #endregion
 
-        #region Ãé×¼Ïà¹Ø×Ö¶Î
+        #region ç„å‡†ç›¸å…³å­—æ®µ
         /// <summary>
-        /// ´¥ÃşÆÁµÄÃé×¼Î»ÖÃ£¨ÆÁÄ»×ø±ê£©
+        /// è§¦æ‘¸å±çš„ç„å‡†ä½ç½®ï¼ˆå±å¹•åæ ‡ï¼‰
         /// </summary>
         private Vector2 aimPosition;
         /// <summary>
-        /// Ö÷ÉãÏñ»ú
+        /// ä¸»æ‘„åƒæœº
         /// </summary>
         private Camera mainCamera;
         /// <summary>
-        /// Ãé×¼ÏßäÖÈ¾
+        /// ç„å‡†çº¿æ¸²æŸ“
         /// </summary>
         private LineRenderer aimLine;
         /// <summary>
-        /// Ç¹¿ÚÎ»ÖÃ
+        /// æªå£ä½ç½®
         /// </summary>
         private Transform muzzlePoint;
         #endregion
 
-        #region Éä»÷Ïà¹Ø×Ö¶Î
+        #region å°„å‡»ç›¸å…³å­—æ®µ
         /// <summary>
-        /// ÉÏ´ÎÉä»÷µÄÊ±¼ä´Á
+        /// ä¸Šæ¬¡å°„å‡»çš„æ—¶é—´æˆ³
         /// </summary>
         private float lastFireTime;
         /// <summary>
-        /// Éä»÷¼ä¸ô
+        /// å°„å‡»é—´éš”
         /// </summary>
         private float fireInterval;
         /// <summary>
-        /// ÊÇ·ñÔÚÓĞĞ§²Ù×÷ÇøÓòÄÚ
+        /// æ˜¯å¦åœ¨æœ‰æ•ˆæ“ä½œåŒºåŸŸå†…
         /// </summary>
         private bool isInValidArea;
         /// <summary>
-        /// ÌØÊâ×Óµ¯Ê£Óà³ÖĞøÊ±¼ä£¨Ãë£©
+        /// ç‰¹æ®Šå­å¼¹å‰©ä½™æŒç»­æ—¶é—´ï¼ˆç§’ï¼‰
         /// </summary>
         private float specialBulletRemainingTime;
 
         /// <summary>
-        /// ÊÇ·ñ´¦ÓÚÌØÊâ×Óµ¯×´Ì¬
+        /// æ˜¯å¦å¤„äºç‰¹æ®Šå­å¼¹çŠ¶æ€
         /// </summary>
         private bool isUsingSpecialBullet;
         #endregion
 
-        #region ±à¼­Æ÷¿É±à¼­×Ö¶Î
-        [Header("Ğı×ªÉèÖÃ")]
-        [SerializeField] private float rotationSpeed = 20f; // Ç¹ĞµĞı×ªÆ½»¬ËÙ¶È
-        [SerializeField] private float aimDistance = 10f; // Ãé×¼Ä¿±êµãµÄÊÀ½ç¿Õ¼äÉî¶È
+        #region ç¼–è¾‘å™¨å¯ç¼–è¾‘å­—æ®µ
+        [Header("æ—‹è½¬è®¾ç½®")]
+        [SerializeField] private float rotationSpeed = 20f; // æªæ¢°æ—‹è½¬å¹³æ»‘é€Ÿåº¦
+        [SerializeField] private float aimDistance = 10f; // ç„å‡†ç›®æ ‡ç‚¹çš„ä¸–ç•Œç©ºé—´æ·±åº¦
 
-        [Header("Ãé×¼ÏßÉèÖÃ")]
-        [SerializeField] private Color aimLineColor = Color.red; // Ãé×¼ÏßÑÕÉ«
-        [SerializeField] private float aimLineWidth = 0.05f; // Ãé×¼Ïß¿í¶È
-        [SerializeField] private float aimLineLength = 20f; // Ãé×¼Ïß³¤¶È
+        [Header("ç„å‡†çº¿è®¾ç½®")]
+        [SerializeField] private Color aimLineColor = Color.red; // ç„å‡†çº¿é¢œè‰²
+        [SerializeField] private float aimLineWidth = 0.05f; // ç„å‡†çº¿å®½åº¦
+        [SerializeField] private float aimLineLength = 20f; // ç„å‡†çº¿é•¿åº¦
 
-        [Header("Éä»÷ÉèÖÃ")]
-        [SerializeField] private int currentBulletId = 1; // µ±Ç°×Óµ¯ÀàĞÍID
+        [Header("å°„å‡»è®¾ç½®")]
+        [SerializeField] private int currentBulletId = 1; // å½“å‰å­å¼¹ç±»å‹ID
 
-        [Header("ÒôĞ§")]
+        [Header("éŸ³æ•ˆ")]
         [SerializeField] private AudioClip audioClip;
         private AudioSource audioSource;
         #endregion
         private async void Awake()
         {
-            // ³õÊ¼»¯ÊäÈëÏµÍ³
+            // åˆå§‹åŒ–è¾“å…¥ç³»ç»Ÿ
             input = new PlayerInputSet();
             mainCamera = Camera.main;
 
 
-            // ²âÊÔÓÃ
+            // æµ‹è¯•ç”¨
             await Init();
 
-            // »ñÈ¡×é¼ş
+            // è·å–ç»„ä»¶
             audioSource = GetComponent<AudioSource>();
 
-            // ³õÊ¼»¯×é¼ş
+            // åˆå§‹åŒ–ç»„ä»¶
             InitializeMuzzlePoint();
             InitializeAimLine();
             UpdateFireInterval();
 
-            // ¶©ÔÄÊÂ¼ş
+            // è®¢é˜…äº‹ä»¶
             Animal.AnimalBehavior.OnAnimalDropReward += OnAnimalDropReward;
         }
 
@@ -148,161 +148,161 @@ namespace Hunting.Game
         {
             if (dropType == EDropType.Bullet)
             {
-                // µôÂä×Óµ¯½±Àø£¬»ñÈ¡Ëæ»úÌØÊâ×Óµ¯
+                // æ‰è½å­å¼¹å¥–åŠ±ï¼Œè·å–éšæœºç‰¹æ®Šå­å¼¹
                 var specialBullet = HuntingGameConfigManager.Instance.GetRandomSpecialBullet();
                 if (specialBullet != null)
                 {
-                    // ÇĞ»»µ½ÌØÊâ×Óµ¯
+                    // åˆ‡æ¢åˆ°ç‰¹æ®Šå­å¼¹
                     ChangeBullet(specialBullet.ID);
-                    Debug.LogWarning($"[PlayerControl] »ñµÃÌØÊâ×Óµ¯: {specialBullet.Name}£¬³ÖĞøÊ±¼ä: {specialBullet.Duration}Ãë");
+                    Debug.LogWarning($"[PlayerControl] è·å¾—ç‰¹æ®Šå­å¼¹: {specialBullet.Name}ï¼ŒæŒç»­æ—¶é—´: {specialBullet.Duration}ç§’");
                 }
             }
         }
 
         /// <summary>
-        /// ³õÊ¼»¯Ç¹¿ÚÎ»ÖÃµã
+        /// åˆå§‹åŒ–æªå£ä½ç½®ç‚¹
         /// </summary>
         private void InitializeMuzzlePoint()
         {
-            // ²éÕÒÏÖÓĞµÄÇ¹¿Úµã£¬²»´æÔÚÔò´´½¨
+            // æŸ¥æ‰¾ç°æœ‰çš„æªå£ç‚¹ï¼Œä¸å­˜åœ¨åˆ™åˆ›å»º
             muzzlePoint = transform.Find("Muzzle");
             if (muzzlePoint == null)
             {
                 GameObject muzzleObj = new GameObject("Muzzle");
                 muzzleObj.transform.SetParent(transform);
-                muzzleObj.transform.localPosition = new Vector3(0, 0, 1f); // Ç¹¿ÚÔÚÇ¹Ç°·½1Ã×Î»ÖÃ
+                muzzleObj.transform.localPosition = new Vector3(0, 0, 1f); // æªå£åœ¨æªå‰æ–¹1ç±³ä½ç½®
                 muzzlePoint = muzzleObj.transform;
             }
         }
 
         /// <summary>
-        /// ³õÊ¼»¯Ãé×¼Ïß×é¼ş
+        /// åˆå§‹åŒ–ç„å‡†çº¿ç»„ä»¶
         /// </summary>
         private void InitializeAimLine()
         {
-            // »ñÈ¡»òÌí¼ÓLineRenderer×é¼ş
+            // è·å–æˆ–æ·»åŠ LineRendererç»„ä»¶
             aimLine = GetComponent<LineRenderer>();
             if (aimLine == null)
                 aimLine = gameObject.AddComponent<LineRenderer>();
 
-            // ÅäÖÃÃé×¼ÏßÍâ¹Û
+            // é…ç½®ç„å‡†çº¿å¤–è§‚
             aimLine.material = new Material(Shader.Find("Sprites/Default"));
             aimLine.startColor = aimLineColor;
             aimLine.endColor = aimLineColor;
             aimLine.startWidth = aimLineWidth;
             aimLine.endWidth = aimLineWidth;
-            aimLine.positionCount = 2;    // ÆğµãºÍÖÕµãÁ½¸öµã
-            aimLine.enabled = true;       // Ê¼ÖÕÏÔÊ¾Ãé×¼Ïß
+            aimLine.positionCount = 2;    // èµ·ç‚¹å’Œç»ˆç‚¹ä¸¤ä¸ªç‚¹
+            aimLine.enabled = true;       // å§‹ç»ˆæ˜¾ç¤ºç„å‡†çº¿
         }
 
         /// <summary>
-        /// ¸ù¾İ×Óµ¯ÅäÖÃ¸üĞÂÉä»÷¼ä¸ô
+        /// æ ¹æ®å­å¼¹é…ç½®æ›´æ–°å°„å‡»é—´éš”
         /// </summary>
         private void UpdateFireInterval()
         {
             var bulletConfig = HuntingGameConfigManager.Instance.GetBullet(currentBulletId);
             if (bulletConfig != null)
             {
-                // Éä»÷¼ä¸ô = 1 / ÉäËÙ£¨·¢/Ãë£©
+                // å°„å‡»é—´éš” = 1 / å°„é€Ÿï¼ˆå‘/ç§’ï¼‰
                 fireInterval = 1f / bulletConfig.FireRate;
             }
         }
 
         private void Update()
         {
-            // ²âÊÔÓÃ
+            // æµ‹è¯•ç”¨
             if (!initialized) return;
 
-            // °´Êó±êÓÒ¼üÇĞ»»×Óµ¯
+            // æŒ‰é¼ æ ‡å³é”®åˆ‡æ¢å­å¼¹
             if (Input.GetMouseButtonDown(1))
             {
                 ChangeBullet((currentBulletId % 4) + 1);
-                Debug.LogWarning($"µ±Ç°×Óµ¯ID£º{currentBulletId}");
+                Debug.LogWarning($"å½“å‰å­å¼¹IDï¼š{currentBulletId}");
             }
 
-            // ¼ì²é²Ù×÷ÇøÓò
+            // æ£€æŸ¥æ“ä½œåŒºåŸŸ
             CheckValidArea();
 
-            // ¸üĞÂÃé×¼·½Ïò
+            // æ›´æ–°ç„å‡†æ–¹å‘
             UpdateAim();
 
-            // ¸üĞÂÃé×¼ÏßÏÔÊ¾
+            // æ›´æ–°ç„å‡†çº¿æ˜¾ç¤º
             UpdateAimLine();
 
-            // ´¦ÀíÉä»÷Âß¼­
+            // å¤„ç†å°„å‡»é€»è¾‘
             UpdateShooting();
 
-            // ¸üĞÂÌØÊâ×Óµ¯¼ÆÊ±Æ÷
+            // æ›´æ–°ç‰¹æ®Šå­å¼¹è®¡æ—¶å™¨
             UpdateSpecialBulletTimer();
         }
 
         /// <summary>
-        /// ¼ì²éÊäÈëÎ»ÖÃÊÇ·ñÔÚÓĞĞ§²Ù×÷ÇøÓòÄÚ
+        /// æ£€æŸ¥è¾“å…¥ä½ç½®æ˜¯å¦åœ¨æœ‰æ•ˆæ“ä½œåŒºåŸŸå†…
         /// </summary>
         private void CheckValidArea()
         {
             float screenHeight = Screen.height;
-            float minY = screenHeight * 0.2f; // µ×²¿20%ÎªÎŞĞ§ÇøÓò
-            float maxY = screenHeight * 0.8f; // ¶¥²¿20%ÎªÎŞĞ§ÇøÓò
+            float minY = screenHeight * 0.2f; // åº•éƒ¨20%ä¸ºæ— æ•ˆåŒºåŸŸ
+            float maxY = screenHeight * 0.8f; // é¡¶éƒ¨20%ä¸ºæ— æ•ˆåŒºåŸŸ
             isInValidArea = aimPosition.y >= minY && aimPosition.y <= maxY;
         }
 
         /// <summary>
-        /// ¸üĞÂÇ¹ĞµÃé×¼·½Ïò
+        /// æ›´æ–°æªæ¢°ç„å‡†æ–¹å‘
         /// </summary>
         private void UpdateAim()
         {
             if (!isInValidArea) return;
 
-            // °´ÏÂÉä»÷¼üÊ±¸üĞÂÃé×¼
+            // æŒ‰ä¸‹å°„å‡»é”®æ—¶æ›´æ–°ç„å‡†
             if (input.Player.Shoot.IsPressed())
             {
-                // ½«ÆÁÄ»×ø±ê×ª»»ÎªÊÀ½ç×ø±ê
+                // å°†å±å¹•åæ ‡è½¬æ¢ä¸ºä¸–ç•Œåæ ‡
                 Vector3 targetPosition = mainCamera.ScreenToWorldPoint(
                     new Vector3(aimPosition.x, aimPosition.y, aimDistance));
 
-                // ±£³ÖÇ¹Ğµ¸ß¶È²»±ä£¬Ö»ÔÚË®Æ½ÃæĞı×ª
+                // ä¿æŒæªæ¢°é«˜åº¦ä¸å˜ï¼Œåªåœ¨æ°´å¹³é¢æ—‹è½¬
                 targetPosition.y = transform.position.y;
 
-                // ¼ÆËã³¯ÏòÄ¿±êµÄ·½ÏòÏòÁ¿
+                // è®¡ç®—æœå‘ç›®æ ‡çš„æ–¹å‘å‘é‡
                 Vector3 direction = targetPosition - transform.position;
                 Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
 
-                // Æ½»¬Ğı×ªµ½Ä¿±ê·½Ïò
+                // å¹³æ»‘æ—‹è½¬åˆ°ç›®æ ‡æ–¹å‘
                 transform.rotation = Quaternion.Slerp(
                     transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             }
         }
 
         /// <summary>
-        /// »÷ÖĞµã±ê¼ÇĞ¡Çò
+        /// å‡»ä¸­ç‚¹æ ‡è®°å°çƒ
         /// </summary>
         private GameObject hitMarker;
 
         /// <summary>
-        /// ¸üĞÂÃé×¼ÏßÏÔÊ¾
+        /// æ›´æ–°ç„å‡†çº¿æ˜¾ç¤º
         /// </summary>
         private void UpdateAimLine()
         {
             if (aimLine == null || muzzlePoint == null) return;
 
-            // ÉèÖÃÃé×¼ÏßÆğµãÎªÇ¹¿ÚÎ»ÖÃ
+            // è®¾ç½®ç„å‡†çº¿èµ·ç‚¹ä¸ºæªå£ä½ç½®
             Vector3 startPoint = muzzlePoint.position;
-            // ÉèÖÃÃé×¼Ïß·½ÏòÎªÇ¹¿ÚÇ°·½
+            // è®¾ç½®ç„å‡†çº¿æ–¹å‘ä¸ºæªå£å‰æ–¹
             Vector3 direction = muzzlePoint.forward;
 
-            // ½øĞĞÉäÏß¼ì²â£¬ÅÅ³ı×Óµ¯²ã
-            int layerMask = ~(1 << LayerMask.NameToLayer("Bullet")); // ÅÅ³ı×Óµ¯²ã
+            // è¿›è¡Œå°„çº¿æ£€æµ‹ï¼Œæ’é™¤å­å¼¹å±‚
+            int layerMask = ~(1 << LayerMask.NameToLayer("Bullet")); // æ’é™¤å­å¼¹å±‚
             RaycastHit hit;
             bool hasHit = Physics.Raycast(startPoint, direction, out hit, aimLineLength, layerMask);
 
-            // ¸ù¾İÊÇ·ñ»÷ÖĞÎïÌåÉèÖÃÃé×¼ÏßÑÕÉ«
+            // æ ¹æ®æ˜¯å¦å‡»ä¸­ç‰©ä½“è®¾ç½®ç„å‡†çº¿é¢œè‰²
             if (hasHit)
             {
                 aimLine.startColor = Color.green;
                 aimLine.endColor = Color.green;
 
-                // ÔÚ»÷ÖĞµã´´½¨±ê¼ÇĞ¡Çò
+                // åœ¨å‡»ä¸­ç‚¹åˆ›å»ºæ ‡è®°å°çƒ
                 CreateHitMarker(hit.point);
             }
             else
@@ -310,51 +310,51 @@ namespace Hunting.Game
                 aimLine.startColor = Color.red;
                 aimLine.endColor = Color.red;
 
-                // Òş²Ø»÷ÖĞµã±ê¼Ç
+                // éšè—å‡»ä¸­ç‚¹æ ‡è®°
                 HideHitMarker();
             }
 
-            // ÉèÖÃÃé×¼ÏßÖÕµã
+            // è®¾ç½®ç„å‡†çº¿ç»ˆç‚¹
             Vector3 endPoint = hasHit ? hit.point : startPoint + direction * aimLineLength;
 
-            // ¸üĞÂLineRendererµÄµãÎ»
+            // æ›´æ–°LineRendererçš„ç‚¹ä½
             aimLine.SetPosition(0, startPoint);
             aimLine.SetPosition(1, endPoint);
         }
 
 
         /// <summary>
-        /// ÔÚ»÷ÖĞÎ»ÖÃ´´½¨±ê¼ÇĞ¡Çò
+        /// åœ¨å‡»ä¸­ä½ç½®åˆ›å»ºæ ‡è®°å°çƒ
         /// </summary>
-        /// <param name="hitPoint">»÷ÖĞµãÎ»ÖÃ</param>
+        /// <param name="hitPoint">å‡»ä¸­ç‚¹ä½ç½®</param>
         private void CreateHitMarker(Vector3 hitPoint)
         {
             if (hitMarker == null)
             {
-                // ´´½¨Ğ¡Çò¶ÔÏó
+                // åˆ›å»ºå°çƒå¯¹è±¡
                 hitMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 hitMarker.name = "HitMarker";
 
-                // ÒÆ³ıÅö×²Ìå
+                // ç§»é™¤ç¢°æ’ä½“
                 Collider collider = hitMarker.GetComponent<Collider>();
                 if (collider != null)
                     Destroy(collider);
 
-                // ÉèÖÃ²ÄÖÊºÍÑÕÉ«
+                // è®¾ç½®æè´¨å’Œé¢œè‰²
                 Renderer renderer = hitMarker.GetComponent<Renderer>();
                 renderer.material.color = Color.green;
 
-                // ÉèÖÃĞ¡Çò´óĞ¡£¨Ôö´óµ½0.3£©
+                // è®¾ç½®å°çƒå¤§å°ï¼ˆå¢å¤§åˆ°0.3ï¼‰
                 hitMarker.transform.localScale = Vector3.one * 0.3f;
             }
 
-            // ¸üĞÂÎ»ÖÃ²¢ÏÔÊ¾
+            // æ›´æ–°ä½ç½®å¹¶æ˜¾ç¤º
             hitMarker.transform.position = hitPoint;
             hitMarker.SetActive(true);
         }
 
         /// <summary>
-        /// Òş²Ø»÷ÖĞµã±ê¼Ç
+        /// éšè—å‡»ä¸­ç‚¹æ ‡è®°
         /// </summary>
         private void HideHitMarker()
         {
@@ -366,23 +366,23 @@ namespace Hunting.Game
 
         private void OnDestroy()
         {
-            // È¡Ïû¶©ÔÄÊÂ¼ş
+            // å–æ¶ˆè®¢é˜…äº‹ä»¶
             Animal.AnimalBehavior.OnAnimalDropReward -= OnAnimalDropReward;
 
 
-            // Ïú»Ù»÷ÖĞµã±ê¼Ç
+            // é”€æ¯å‡»ä¸­ç‚¹æ ‡è®°
             if (hitMarker != null)
                 Destroy(hitMarker);
         }
 
         /// <summary>
-        /// ¸üĞÂÉä»÷Âß¼­
+        /// æ›´æ–°å°„å‡»é€»è¾‘
         /// </summary>
         private void UpdateShooting()
         {
             if (!isInValidArea) return;
 
-            // ¼ì²âÉä»÷ÊäÈë
+            // æ£€æµ‹å°„å‡»è¾“å…¥
             if (input.Player.Shoot.IsPressed())
             {
                 TryShoot();
@@ -390,11 +390,11 @@ namespace Hunting.Game
         }
 
         /// <summary>
-        /// ³¢ÊÔ·¢Éä×Óµ¯£¨¿¼ÂÇÉä»÷ÀäÈ´£©
+        /// å°è¯•å‘å°„å­å¼¹ï¼ˆè€ƒè™‘å°„å‡»å†·å´ï¼‰
         /// </summary>
         private void TryShoot()
         {
-            // ¼ì²éÉä»÷¼ä¸ô
+            // æ£€æŸ¥å°„å‡»é—´éš”
             if (Time.time - lastFireTime >= fireInterval)
             {
                 SpawnBullet();
@@ -406,30 +406,30 @@ namespace Hunting.Game
         }
 
         /// <summary>
-        /// Éú³É²¢³õÊ¼»¯×Óµ¯
+        /// ç”Ÿæˆå¹¶åˆå§‹åŒ–å­å¼¹
         /// </summary>
         private void SpawnBullet()
         {
-            // ´ÓÅäÖÃ¹ÜÀíÆ÷»ñÈ¡×Óµ¯Êı¾İ
+            // ä»é…ç½®ç®¡ç†å™¨è·å–å­å¼¹æ•°æ®
             var bulletConfig = HuntingGameConfigManager.Instance.GetBullet(currentBulletId);
             if (bulletConfig == null) return;
 
-            // ¸ù¾İ×Óµ¯ÀàĞÍ»ñÈ¡Ô¤ÖÆÌåÃû³Æ
+            // æ ¹æ®å­å¼¹ç±»å‹è·å–é¢„åˆ¶ä½“åç§°
             string bulletName = GetBulletPrefabName(bulletConfig.BulletType);
-            // ´ÓResources¼ÓÔØ×Óµ¯Ô¤ÖÆÌå
+            // ä»ResourcesåŠ è½½å­å¼¹é¢„åˆ¶ä½“
             GameObject bulletPrefab = Resources.Load<GameObject>($"Bullets/{bulletName}");
 
             if (bulletPrefab == null)
             {
-                Debug.LogError($"×Óµ¯Ô¤ÖÆÌå²»´æÔÚ: {bulletName}");
+                Debug.LogError($"å­å¼¹é¢„åˆ¶ä½“ä¸å­˜åœ¨: {bulletName}");
                 return;
             }
 
-            // ÊµÀı»¯×Óµ¯¶ÔÏó
+            // å®ä¾‹åŒ–å­å¼¹å¯¹è±¡
             GameObject bulletObj = Instantiate(bulletPrefab, muzzlePoint.position, muzzlePoint.rotation);
             BulletBehavior bullet = bulletObj.GetComponent<BulletBehavior>();
 
-            // ³õÊ¼»¯×Óµ¯ĞĞÎª
+            // åˆå§‹åŒ–å­å¼¹è¡Œä¸º
             if (bullet != null)
             {
                 bullet.Initialize(bulletConfig, muzzlePoint.position, muzzlePoint.forward);
@@ -437,7 +437,7 @@ namespace Hunting.Game
         }
 
         /// <summary>
-        /// ¸ù¾İ×Óµ¯ÀàĞÍÃ¶¾Ù»ñÈ¡Ô¤ÖÆÌå×ÊÔ´Ãû³Æ
+        /// æ ¹æ®å­å¼¹ç±»å‹æšä¸¾è·å–é¢„åˆ¶ä½“èµ„æºåç§°
         /// </summary>
         private string GetBulletPrefabName(EBulletType bulletType)
         {
@@ -452,7 +452,7 @@ namespace Hunting.Game
         }
 
         /// <summary>
-        /// ¼ì²é²¢¸üĞÂÌØÊâ×Óµ¯³ÖĞøÊ±¼ä
+        /// æ£€æŸ¥å¹¶æ›´æ–°ç‰¹æ®Šå­å¼¹æŒç»­æ—¶é—´
         /// </summary>
         private void UpdateSpecialBulletTimer()
         {
@@ -462,27 +462,27 @@ namespace Hunting.Game
 
             if (specialBulletRemainingTime <= 0f)
             {
-                // »Ö¸´ÎªÆÕÍ¨×Óµ¯
+                // æ¢å¤ä¸ºæ™®é€šå­å¼¹
                 ChangeBullet(1);
                 isUsingSpecialBullet = false;
-                Debug.LogWarning("[PlayerControl] ÌØÊâ×Óµ¯Ê±¼äµ½£¬ÒÑÇĞ»ØÆÕÍ¨×Óµ¯");
+                Debug.LogWarning("[PlayerControl] ç‰¹æ®Šå­å¼¹æ—¶é—´åˆ°ï¼Œå·²åˆ‡å›æ™®é€šå­å¼¹");
             }
         }
 
-        #region ¹«¹²·½·¨
+        #region å…¬å…±æ–¹æ³•
 
         /// <summary>
-        /// ÇĞ»»µ±Ç°Ê¹ÓÃµÄ×Óµ¯ÀàĞÍ
+        /// åˆ‡æ¢å½“å‰ä½¿ç”¨çš„å­å¼¹ç±»å‹
         /// </summary>
-        /// <param name="newBulletId">ĞÂµÄ×Óµ¯ID</param>
+        /// <param name="newBulletId">æ–°çš„å­å¼¹ID</param>
         public void ChangeBullet(int newBulletId)
         {
             currentBulletId = newBulletId;
-            UpdateFireInterval(); // ¸üĞÂÉä»÷¼ä¸ô
+            UpdateFireInterval(); // æ›´æ–°å°„å‡»é—´éš”
 
             var bulletConfig = HuntingGameConfigManager.Instance.GetBullet(newBulletId);
 
-            // Èç¹ûÊÇÌØÊâ×Óµ¯£¨³ÖĞøÊ±¼ä > 0£©£¬ÔòÆô¶¯¼ÆÊ±
+            // å¦‚æœæ˜¯ç‰¹æ®Šå­å¼¹ï¼ˆæŒç»­æ—¶é—´ > 0ï¼‰ï¼Œåˆ™å¯åŠ¨è®¡æ—¶
             if (bulletConfig != null && bulletConfig.Duration > 0)
             {
                 specialBulletRemainingTime = bulletConfig.Duration;

@@ -1,4 +1,4 @@
-using UnityEngine;
+锘縰sing UnityEngine;
 using RVO;
 
 public class RVO2DManager : MonoBehaviour
@@ -14,23 +14,23 @@ public class RVO2DManager : MonoBehaviour
             agents.Add(agent);
         }
 
-        Debug.Log($"找到 {agents.Count} 个Agent");
+        Debug.Log($"鎵惧埌 {agents.Count} 涓狝gent");
     }
 
     void Update()
     {
         if (agents.Count == 0) return;
 
-        // 1. 所有agent设置prefVelocity
+        // 1. 鎵�鏈塧gent璁剧疆prefVelocity
         foreach (var agent in agents)
         {
             agent.UpdateRVO();
         }
 
-        // 2. 执行RVO计算
+        // 2. 鎵цRVO璁＄畻
         Simulator.Instance.doStep();
 
-        // 3. 所有agent同步位置
+        // 3. 鎵�鏈塧gent鍚屾浣嶇疆
         foreach (var agent in agents)
         {
             agent.SyncPosition();

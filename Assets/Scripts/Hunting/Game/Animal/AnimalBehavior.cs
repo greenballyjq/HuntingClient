@@ -1,4 +1,4 @@
-using cfg;
+ï»¿using cfg;
 using cfg.HuntingConfig;
 using Hunting.Game.Animal.State;
 using Hunting.Game.Bullet;
@@ -12,7 +12,7 @@ using UnityEngine;
 namespace Hunting.Game.Animal
 {
     // <summary>
-    /// ¶¯Îï»ùÀà
+    /// åŠ¨ç‰©åŸºç±»
     /// </summary>
     public class AnimalBehavior : MonoBehaviour
     {
@@ -20,119 +20,119 @@ namespace Hunting.Game.Animal
 
         public AudioSource audioSource;
 
-        #region ÊÂ¼ş¶¨Òå
+        #region äº‹ä»¶å®šä¹‰
         /// <summary>
-        /// ¶¯ÎïµôÂä½±ÀøÊÂ¼ş
+        /// åŠ¨ç‰©æ‰è½å¥–åŠ±äº‹ä»¶
         /// </summary>
         public static event Action<AnimalBehavior, EDropType, int> OnAnimalDropReward;
         #endregion
 
-        #region ×´Ì¬»úÓë×´Ì¬
+        #region çŠ¶æ€æœºä¸çŠ¶æ€
         /// <summary>
-        /// ×´Ì¬»ú
+        /// çŠ¶æ€æœº
         /// </summary>
         private StateMachine stateMachine;
 
         /// <summary>
-        /// ĞĞ×ß×´Ì¬
+        /// è¡Œèµ°çŠ¶æ€
         /// </summary>
         public AnimalMoveState moveState { get; private set; }
 
         /// <summary>
-        /// ±»ÃüÖĞ×´Ì¬
+        /// è¢«å‘½ä¸­çŠ¶æ€
         /// </summary>
         public AnimalHitState hitState { get; private set; }
 
         /// <summary>
-        /// ËÀÍö×´Ì¬
+        /// æ­»äº¡çŠ¶æ€
         /// </summary>
         public AnimalDeathState deathState { get; private set; }
 
         /// <summary>
-        /// ÌÓÅÜ×´Ì¬
+        /// é€ƒè·‘çŠ¶æ€
         /// </summary>
         public AnimalFleeState fleeState { get; private set; }
 
         #endregion
 
-        #region ÅäÖÃÊı¾İÓëÔËĞĞÊ±ÊôĞÔ
+        #region é…ç½®æ•°æ®ä¸è¿è¡Œæ—¶å±æ€§
         /// <summary>
-        /// ¶¯ÎïÅäÖÃÊı¾İ
+        /// åŠ¨ç‰©é…ç½®æ•°æ®
         /// </summary>
         public cfg.HuntingConfig.Specie specieData { get; private set; }
         /// <summary>
-        /// ×î´óÉúÃüÖµ
+        /// æœ€å¤§ç”Ÿå‘½å€¼
         /// </summary>
         public float maxHP { get; private set; }
         /// <summary>
-        /// µ±Ç°ÉúÃüÖµ
+        /// å½“å‰ç”Ÿå‘½å€¼
         /// </summary>
         public float currentHP;
         /// <summary>
-        /// ÒÆ¶¯ËÙ¶È
+        /// ç§»åŠ¨é€Ÿåº¦
         /// </summary>
         public float moveSpeed;
         /// <summary>
-        /// ×¤³¡Ê±¼ä
+        /// é©»åœºæ—¶é—´
         /// </summary>
         public float TimeInScene { get; private set; }
         /// <summary>
-        /// ×î´ó×¤³¡Ê±¼ä
+        /// æœ€å¤§é©»åœºæ—¶é—´
         /// </summary>
         public float StayTime { get; private set; }
         /// <summary>
-        /// ³õÊ¼·½Ïò
+        /// åˆå§‹æ–¹å‘
         /// </summary>
         public Vector3 initialDirection { get; private set; }
 
         #endregion
 
         /// <summary>
-        /// ¶¯»­×é¼ş
+        /// åŠ¨ç”»ç»„ä»¶
         /// </summary>
         public Animator animator { get; private set; }
 
         /// <summary>
-        /// ¸ÕÌå×é¼ş
+        /// åˆšä½“ç»„ä»¶
         /// </summary>
         public Rigidbody rb { get; private set; }
 
-        #region ÉäÏß¼ì²âÅäÖÃ
+        #region å°„çº¿æ£€æµ‹é…ç½®
         private float detectDistance = 10f;
         private float checkInterval = 0.05f;
         private float checkTimer = 0f;
         #endregion
 
-        #region ÉäÏß¼ì²â½á¹û
+        #region å°„çº¿æ£€æµ‹ç»“æœ
         private RaycastHit frontHit;
 
         /// <summary>
-        /// ÊÇ·ñ¼ì²âµ½Ç°·½ÕÏ°­Îï
+        /// æ˜¯å¦æ£€æµ‹åˆ°å‰æ–¹éšœç¢ç‰©
         /// </summary>
         public bool HasFrontObstacle { get; private set; }
 
         /// <summary>
-        /// ÕÏ°­Îï¾àÀë£¨Î´¼ì²âµ½Ê±Îª×î´óÖµ£©
+        /// éšœç¢ç‰©è·ç¦»ï¼ˆæœªæ£€æµ‹åˆ°æ—¶ä¸ºæœ€å¤§å€¼ï¼‰
         /// </summary>
         public float ObstacleDistance { get; private set; }
 
         /// <summary>
-        /// ÕÏ°­ÎïÅö×²µã
+        /// éšœç¢ç‰©ç¢°æ’ç‚¹
         /// </summary>
         public Vector3 ObstacleHitPoint { get; private set; }
 
         /// <summary>
-        /// ÉäÏßÆğµã£¨Åö×²Ìå¸ß¶ÈÖĞµã£©
+        /// å°„çº¿èµ·ç‚¹ï¼ˆç¢°æ’ä½“é«˜åº¦ä¸­ç‚¹ï¼‰
         /// </summary>
         public Vector3 RaycastStartPoint { get; private set; }
         #endregion
 
         /// <summary>
-        /// ¼ì²âÇ°·½ÕÏ°­Îï
+        /// æ£€æµ‹å‰æ–¹éšœç¢ç‰©
         /// </summary>
         public void CheckFrontObstacle()
         {
-            // ¼ÆÊ±Æ÷¿ØÖÆ¼ì²âÆµÂÊ
+            // è®¡æ—¶å™¨æ§åˆ¶æ£€æµ‹é¢‘ç‡
             checkTimer += Time.deltaTime;
             if (checkTimer < checkInterval)
             {
@@ -140,7 +140,7 @@ namespace Hunting.Game.Animal
             }
             checkTimer = 0f;
 
-            // ¼ÆËãÉäÏßÆğµã£¨Åö×²Ìå¸ß¶ÈÖĞµã£©
+            // è®¡ç®—å°„çº¿èµ·ç‚¹ï¼ˆç¢°æ’ä½“é«˜åº¦ä¸­ç‚¹ï¼‰
             CalculateRaycastStartPoint();
 
             HasFrontObstacle = Physics.Raycast(RaycastStartPoint, transform.forward, out frontHit, detectDistance);
@@ -149,45 +149,45 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
-        /// ¼ÆËãÉäÏßÆğµã£¨Åö×²Ìå¸ß¶ÈÖĞµã£©
+        /// è®¡ç®—å°„çº¿èµ·ç‚¹ï¼ˆç¢°æ’ä½“é«˜åº¦ä¸­ç‚¹ï¼‰
         /// </summary>
         private void CalculateRaycastStartPoint()
         {
             SphereCollider collider = GetComponent<SphereCollider>();
             if (collider != null)
             {
-                // ¼ÆËãÅö×²ÌåÔÚÊÀ½ç¿Õ¼äÖĞµÄÖĞĞÄµã
+                // è®¡ç®—ç¢°æ’ä½“åœ¨ä¸–ç•Œç©ºé—´ä¸­çš„ä¸­å¿ƒç‚¹
                 RaycastStartPoint = collider.bounds.center;
             }
             else
             {
-                // ±¸ÓÃ·½°¸£ºÊ¹ÓÃÎïÌåÎ»ÖÃ
+                // å¤‡ç”¨æ–¹æ¡ˆï¼šä½¿ç”¨ç‰©ä½“ä½ç½®
                 RaycastStartPoint = transform.position;
             }
         }
 
         /// <summary>
-        /// »æÖÆÇ°·½ÉäÏß£¨±à¼­Æ÷¿É¼û£©
+        /// ç»˜åˆ¶å‰æ–¹å°„çº¿ï¼ˆç¼–è¾‘å™¨å¯è§ï¼‰
         /// </summary>
         private void OnDrawGizmos()
         {
             CalculateRaycastStartPoint();
 
-            // »æÖÆÉäÏßÆğµã£¨Åö×²ÌåÖĞĞÄ£©
+            // ç»˜åˆ¶å°„çº¿èµ·ç‚¹ï¼ˆç¢°æ’ä½“ä¸­å¿ƒï¼‰
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(RaycastStartPoint, 0.1f);
 
-            // »æÖÆÉäÏß
+            // ç»˜åˆ¶å°„çº¿
             Gizmos.color = HasFrontObstacle ? Color.red : Color.green;
             Gizmos.DrawRay(RaycastStartPoint, transform.forward * detectDistance);
 
-            // »æÖÆÅö×²µã
+            // ç»˜åˆ¶ç¢°æ’ç‚¹
             if (HasFrontObstacle)
             {
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawWireSphere(ObstacleHitPoint, 1f);
 
-                // »æÖÆÅö×²µã·¨Ïß
+                // ç»˜åˆ¶ç¢°æ’ç‚¹æ³•çº¿
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawRay(ObstacleHitPoint, frontHit.normal * 3f);
             }
@@ -195,12 +195,12 @@ namespace Hunting.Game.Animal
 
         private void Awake()
         {
-            // »ñÈ¡×é¼ş
+            // è·å–ç»„ä»¶
             animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();
             audioSource = GetComponent<AudioSource>();
 
-            // ĞÂ½¨×´Ì¬
+            // æ–°å»ºçŠ¶æ€
             stateMachine = new StateMachine();
             moveState = new AnimalMoveState(this, stateMachine, "Move");
             hitState = new AnimalHitState(this, stateMachine, "Hit");
@@ -209,14 +209,14 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
-        /// ³õÊ¼»¯
+        /// åˆå§‹åŒ–
         /// </summary>
-        /// <param name="data">¶¯ÎïÅäÖÃÊı¾İ</param>
-        /// <param name="stayTime">×¤³¡Ê±¼ä</param>
-        /// <param name="moveDirection">Éú³É·½Ïò</param>
+        /// <param name="data">åŠ¨ç‰©é…ç½®æ•°æ®</param>
+        /// <param name="stayTime">é©»åœºæ—¶é—´</param>
+        /// <param name="moveDirection">ç”Ÿæˆæ–¹å‘</param>
         public void Initialize(cfg.HuntingConfig.Specie data, float stayTime, Vector3 initialDirection)
         {
-            // ³õÊ¼»¯Êı¾İ
+            // åˆå§‹åŒ–æ•°æ®
             specieData = data;
             maxHP = data.HP;
             currentHP = maxHP;
@@ -232,23 +232,23 @@ namespace Hunting.Game.Animal
         {
             stateMachine.Update();
 
-            // ¸üĞÂ×¤³¡Ê±¼ä
+            // æ›´æ–°é©»åœºæ—¶é—´
             TimeInScene += Time.deltaTime;
 
             CheckFrontObstacle();
         }
 
         /// <summary>
-        /// ¶¯ÎïÊÜµ½ÉËº¦
+        /// åŠ¨ç‰©å—åˆ°ä¼¤å®³
         /// </summary>
-        /// <param name="damage">ÉËº¦Öµ</param>
-        /// <param name="hitPoint">»÷ÖĞµãÎ»ÖÃ</param>
+        /// <param name="damage">ä¼¤å®³å€¼</param>
+        /// <param name="hitPoint">å‡»ä¸­ç‚¹ä½ç½®</param>
         public void TakeDamage(float damage, Vector3 hitPoint)
         {
-            // ¿Û³ıÉúÃüÖµ
+            // æ‰£é™¤ç”Ÿå‘½å€¼
             currentHP -= damage;
 
-            // ¼ì²éÊÇ·ñËÀÍö
+            // æ£€æŸ¥æ˜¯å¦æ­»äº¡
             if (currentHP <= 0)
             {
                 Die();
@@ -258,7 +258,7 @@ namespace Hunting.Game.Animal
 
 
 
-            // ÇĞ»»µ½ÊÜÉË×´Ì¬
+            // åˆ‡æ¢åˆ°å—ä¼¤çŠ¶æ€
             stateMachine.ChangeState(hitState);
         }
 
@@ -269,7 +269,7 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
-        /// ¶¯ÎïËÀÍö
+        /// åŠ¨ç‰©æ­»äº¡
         /// </summary>
         public void Die()
         {
@@ -277,11 +277,11 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
-        /// ´¦ÀíËÀÍöµôÂä
+        /// å¤„ç†æ­»äº¡æ‰è½
         /// </summary>
         public void HandleDeathDrop()
         {
-            // ´¥·¢µôÂä½±ÀøÊÂ¼ş
+            // è§¦å‘æ‰è½å¥–åŠ±äº‹ä»¶
             OnAnimalDropReward?.Invoke(this, specieData.DropType, specieData.DropAmount);
         }
     }

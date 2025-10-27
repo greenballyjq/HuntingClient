@@ -1,10 +1,10 @@
-using Hunting;
+ï»¿using Hunting;
 using Hunting.Game;
 using Hunting.UI;
 using UnityEngine;
 
 /// <summary>
-/// ·şÎñ¶¨Î»Æ÷²âÊÔ
+/// æœåŠ¡å®šä½å™¨æµ‹è¯•
 /// </summary>
 public class GameServiceLocatorTest : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class GameServiceLocatorTest : MonoBehaviour
 
         GameServiceLocator.Events.AddListener("GameStarted", () =>
         {
-            Debug.LogWarning("×¼±¸ºÃ±ù¿éĞı×ªÁËÂğ");
+            Debug.LogWarning("å‡†å¤‡å¥½å†°å—æ—‹è½¬äº†å—");
         });
         HuntingGame.Instance.StartGame();
 

@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using RVO;
 
 [ExecuteInEditMode]
 public class RVO2AvoidancePlus : MonoBehaviour
 {
-    [Header("RVO2²ÎÊı")]
+    [Header("RVO2å‚æ•°")]
     public float radius = 1.5f;
     public float maxSpeed = 2.0f;
     public float neighborDist = 15.0f;
@@ -15,7 +15,7 @@ public class RVO2AvoidancePlus : MonoBehaviour
     public int agentId { get; private set; } = -1;
     private static bool hasInitialized = false;
     private static int frameCount = -1;
-    private UnityEngine.Vector3 desiredDirection;  // ´æ´¢ÆÚÍû·½Ïò
+    private UnityEngine.Vector3 desiredDirection;  // å­˜å‚¨æœŸæœ›æ–¹å‘
 
     void Start()
     {
@@ -35,11 +35,11 @@ public class RVO2AvoidancePlus : MonoBehaviour
     {
         if (agentId < 0) return;
 
-        // 1. Í¬²½Î»ÖÃ
+        // 1. åŒæ­¥ä½ç½®
         RVO.Vector2 pos = new RVO.Vector2(transform.position.x, transform.position.z);
         Simulator.Instance.setAgentPosition(agentId, pos);
 
-        // 2. ÉèÖÃÆ«ºÃËÙ¶È
+        // 2. è®¾ç½®åå¥½é€Ÿåº¦
         RVO.Vector2 prefVel = new RVO.Vector2(desiredDirection.x, desiredDirection.z);
         if (RVOMath.absSq(prefVel) > 0.01f)
         {
@@ -52,7 +52,7 @@ public class RVO2AvoidancePlus : MonoBehaviour
     {
         if (agentId < 0) return;
 
-        // Ö´ĞĞRVO¼ÆËã
+        // æ‰§è¡ŒRVOè®¡ç®—
         if (frameCount != Time.frameCount)
         {
             Simulator.Instance.doStep();
@@ -60,13 +60,13 @@ public class RVO2AvoidancePlus : MonoBehaviour
         }
     }
 
-    // ÉèÖÃÆÚÍû·½Ïò£¨ÓÉÒÆ¶¯×é¼şµ÷ÓÃ£©
+    // è®¾ç½®æœŸæœ›æ–¹å‘ï¼ˆç”±ç§»åŠ¨ç»„ä»¶è°ƒç”¨ï¼‰
     public void SetDesiredDirection(UnityEngine.Vector3 direction)
     {
         desiredDirection = direction;
     }
 
-    // »ñÈ¡»ìºÏºóµÄ·½Ïò£¨ÓÉÒÆ¶¯×é¼şµÄLateUpdateµ÷ÓÃ£©
+    // è·å–æ··åˆåçš„æ–¹å‘ï¼ˆç”±ç§»åŠ¨ç»„ä»¶çš„LateUpdateè°ƒç”¨ï¼‰
     public UnityEngine.Vector3 GetBlendedDirection(UnityEngine.Vector3 currentDirection)
     {
         if (agentId < 0) return currentDirection;

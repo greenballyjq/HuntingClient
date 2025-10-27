@@ -1,14 +1,14 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using RVO;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class RVO2DAgent : MonoBehaviour
 {
-    [Header("ÒÆ¶¯ÅäÖÃ")]
+    [Header("ç§»åŠ¨é…ç½®")]
     public UnityEngine.Vector2 targetDirection = UnityEngine.Vector2.up;
     public float speed = 3.0f;
 
-    [Header("RVO2²ÎÊı")]
+    [Header("RVO2å‚æ•°")]
     public float radius = 0.5f;
     public float maxSpeed = 10.0f;
     public float neighborDist = 10.0f;

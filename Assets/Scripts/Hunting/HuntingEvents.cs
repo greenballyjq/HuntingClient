@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using GameFramework.Core;
 using Hunting.Game.Bullet;
@@ -7,11 +7,11 @@ using UnityEngine;
 namespace Hunting
 {
     /// <summary>
-    /// ´òÁÔÓÎÏ·ÊÂ¼ş¼ü¼¯ÖĞ¹ÜÀíÀà
+    /// æ‰“çŒæ¸¸æˆäº‹ä»¶é”®é›†ä¸­ç®¡ç†ç±»
     /// </summary>
     public static class HuntingEvents
     {
-        #region ÓÎÏ·Âß¼­ÀàÊÂ¼ş
+        #region æ¸¸æˆé€»è¾‘ç±»äº‹ä»¶
         public static readonly EventKey GameStarted = new EventKey();
         public static readonly EventKey GamePaused = new EventKey();
         public static readonly EventKey GameResumed = new EventKey();

@@ -1,10 +1,10 @@
-using Hunting.Game.Animal;
+ï»¿using Hunting.Game.Animal;
 using UnityEngine;
 
 namespace Hunting.Game.Animal.State 
 {
     /// <summary>
-    /// ¶¯ÎïËÀÍö×´Ì¬
+    /// åŠ¨ç‰©æ­»äº¡çŠ¶æ€
     /// </summary>
     public class AnimalDeathState : AnimalState
     {
@@ -16,29 +16,29 @@ namespace Hunting.Game.Animal.State
         {
             base.Enter();
 
-            // ½ûÓÃÅö×²Ìå
+            // ç¦ç”¨ç¢°æ’ä½“
             if (animal.TryGetComponent<Collider>(out var collider))
             {
                 collider.enabled = false;
             }
 
-            // Í£Ö¹ËùÓĞÎïÀíÔË¶¯
+            // åœæ­¢æ‰€æœ‰ç‰©ç†è¿åŠ¨
             if (animal.rb != null)
             {
                 animal.rb.velocity = Vector3.zero;
                 animal.rb.angularVelocity = Vector3.zero;
-                animal.rb.isKinematic = true; // Ö±½ÓÉèÎªÔË¶¯Ñ§£¬²»ÊÜÎïÀíÓ°Ïì
+                animal.rb.isKinematic = true; // ç›´æ¥è®¾ä¸ºè¿åŠ¨å­¦ï¼Œä¸å—ç‰©ç†å½±å“
             }
 
-            // Í£Ö¹ÒÆ¶¯
+            // åœæ­¢ç§»åŠ¨
             animal.moveSpeed = 0f;
 
-            // 2ÃëºóÏú»Ù
+            // 2ç§’åé”€æ¯
             stateTimer = 2f;
 
-            Debug.Log($"[AnimalDeathState] {animal.specieData.Name} ËÀÍö£¬Í£Ö¹ËùÓĞÔË¶¯");
+            Debug.Log($"[AnimalDeathState] {animal.specieData.Name} æ­»äº¡ï¼Œåœæ­¢æ‰€æœ‰è¿åŠ¨");
 
-            // ´¦ÀíµôÂä
+            // å¤„ç†æ‰è½
             animal.HandleDeathDrop();
         }
 
@@ -46,7 +46,7 @@ namespace Hunting.Game.Animal.State
         {
             base.Update();
 
-            // 2ÃëºóÏú»Ù
+            // 2ç§’åé”€æ¯
             if (stateTimer <= 0f)
             {
                 Object.Destroy(animal.gameObject);
