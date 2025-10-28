@@ -36,6 +36,11 @@ namespace Hunting.Game.Animal.State
         /// </summary>
         protected Animator animator;
 
+        /// <summary>
+        /// 移动避障组件
+        /// </summary>
+        protected RVOMovement rvo;
+
         public AnimalState(AnimalBehavior animal, StateMachine stateMachine, string animName)
         {
             this.animal = animal;
@@ -44,6 +49,7 @@ namespace Hunting.Game.Animal.State
 
             // 获取animal上的组件，方便使用
             animator = animal.animator;
+            rvo = animal.rvo;
         }
 
         /// <summary>
@@ -51,7 +57,6 @@ namespace Hunting.Game.Animal.State
         /// </summary>
         public virtual void Enter()
         {
-            //Debug.Log($"[AnimalState] 进入{animName}状态");
             animator.SetBool(animName, true);
         }
 
@@ -61,9 +66,7 @@ namespace Hunting.Game.Animal.State
 
         public virtual void Exit()
         {
-            //Debug.Log($"[AnimalState] 退出{animName}状态");
             animator.SetBool(animName, false);
-
         }
 
         /// <summary>
@@ -72,7 +75,7 @@ namespace Hunting.Game.Animal.State
 
         public virtual void Update()
         {
-            //Debug.Log($"[AnimalState] 更新{animName}状态");
+            // 当前状态倒计时
             stateTimer -= Time.deltaTime;
 
             // 任何状态都可以进入逃跑状态（除了死亡和逃跑状态本身）
@@ -80,7 +83,7 @@ namespace Hunting.Game.Animal.State
                 !(this is AnimalDeathState) &&
                 !(this is AnimalFleeState))
             {
-                stateMachine.ChangeState(animal.fleeState);
+                //stateMachine.ChangeState(animal.fleeState);
             }
         }
 

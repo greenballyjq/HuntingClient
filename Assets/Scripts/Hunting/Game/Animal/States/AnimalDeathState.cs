@@ -16,29 +16,8 @@ namespace Hunting.Game.Animal.State
         {
             base.Enter();
 
-            // 禁用碰撞体
-            if (animal.TryGetComponent<Collider>(out var collider))
-            {
-                collider.enabled = false;
-            }
+            stateTimer = 1f;
 
-            // 停止所有物理运动
-            if (animal.rb != null)
-            {
-                animal.rb.velocity = Vector3.zero;
-                animal.rb.angularVelocity = Vector3.zero;
-                animal.rb.isKinematic = true; // 直接设为运动学，不受物理影响
-            }
-
-            // 停止移动
-            animal.moveSpeed = 0f;
-
-            // 2秒后销毁
-            stateTimer = 2f;
-
-            Debug.Log($"[AnimalDeathState] {animal.specieData.Name} 死亡，停止所有运动");
-
-            // 处理掉落
             animal.HandleDeathDrop();
         }
 
@@ -46,11 +25,8 @@ namespace Hunting.Game.Animal.State
         {
             base.Update();
 
-            // 2秒后销毁
             if (stateTimer <= 0f)
-            {
                 Object.Destroy(animal.gameObject);
-            }
         }
     }
 }

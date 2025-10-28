@@ -16,9 +16,17 @@ namespace Hunting.Game.Animal
     /// </summary>
     public class AnimalBehavior : MonoBehaviour
     {
+        #region 测试
         public AudioClip hitClip;
 
         public AudioSource audioSource;
+
+        public void PlayHitAudio()
+        {
+            audioSource.clip = hitClip;
+            audioSource.Play();
+        }
+        #endregion
 
         #region 事件定义
         /// <summary>
@@ -93,111 +101,16 @@ namespace Hunting.Game.Animal
         public Animator animator { get; private set; }
 
         /// <summary>
-        /// 刚体组件
+        /// RVO避障移动
         /// </summary>
-        public Rigidbody rb { get; private set; }
-
-        #region 射线检测配置
-        private float detectDistance = 10f;
-        private float checkInterval = 0.05f;
-        private float checkTimer = 0f;
-        #endregion
-
-        #region 射线检测结果
-        private RaycastHit frontHit;
-
-        /// <summary>
-        /// 是否检测到前方障碍物
-        /// </summary>
-        public bool HasFrontObstacle { get; private set; }
-
-        /// <summary>
-        /// 障碍物距离（未检测到时为最大值）
-        /// </summary>
-        public float ObstacleDistance { get; private set; }
-
-        /// <summary>
-        /// 障碍物碰撞点
-        /// </summary>
-        public Vector3 ObstacleHitPoint { get; private set; }
-
-        /// <summary>
-        /// 射线起点（碰撞体高度中点）
-        /// </summary>
-        public Vector3 RaycastStartPoint { get; private set; }
-        #endregion
-
-        /// <summary>
-        /// 检测前方障碍物
-        /// </summary>
-        public void CheckFrontObstacle()
-        {
-            // 计时器控制检测频率
-            checkTimer += Time.deltaTime;
-            if (checkTimer < checkInterval)
-            {
-                return;
-            }
-            checkTimer = 0f;
-
-            // 计算射线起点（碰撞体高度中点）
-            CalculateRaycastStartPoint();
-
-            HasFrontObstacle = Physics.Raycast(RaycastStartPoint, transform.forward, out frontHit, detectDistance);
-            ObstacleDistance = HasFrontObstacle ? frontHit.distance : float.MaxValue;
-            ObstacleHitPoint = HasFrontObstacle ? frontHit.point : Vector3.zero;
-        }
-
-        /// <summary>
-        /// 计算射线起点（碰撞体高度中点）
-        /// </summary>
-        private void CalculateRaycastStartPoint()
-        {
-            SphereCollider collider = GetComponent<SphereCollider>();
-            if (collider != null)
-            {
-                // 计算碰撞体在世界空间中的中心点
-                RaycastStartPoint = collider.bounds.center;
-            }
-            else
-            {
-                // 备用方案：使用物体位置
-                RaycastStartPoint = transform.position;
-            }
-        }
-
-        /// <summary>
-        /// 绘制前方射线（编辑器可见）
-        /// </summary>
-        private void OnDrawGizmos()
-        {
-            CalculateRaycastStartPoint();
-
-            // 绘制射线起点（碰撞体中心）
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(RaycastStartPoint, 0.1f);
-
-            // 绘制射线
-            Gizmos.color = HasFrontObstacle ? Color.red : Color.green;
-            Gizmos.DrawRay(RaycastStartPoint, transform.forward * detectDistance);
-
-            // 绘制碰撞点
-            if (HasFrontObstacle)
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(ObstacleHitPoint, 1f);
-
-                // 绘制碰撞点法线
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawRay(ObstacleHitPoint, frontHit.normal * 3f);
-            }
-        }
+        public RVOMovement rvo { get; private set; }
 
         private void Awake()
         {
             // 获取组件
             animator = GetComponent<Animator>();
-            rb = GetComponent<Rigidbody>();
+            rvo = GetComponent<RVOMovement>();
+
             audioSource = GetComponent<AudioSource>();
 
             // 新建状态
@@ -223,19 +136,20 @@ namespace Hunting.Game.Animal
             moveSpeed = data.MoveSpeed;
             TimeInScene = 0f;
             StayTime = 10;
+
             this.initialDirection = initialDirection;
+            rvo.SetMoveDirection(initialDirection);
 
             stateMachine.Initialize(moveState);
         }
 
         private void Update()
         {
+            // 更新状态机
             stateMachine.Update();
 
             // 更新驻场时间
             TimeInScene += Time.deltaTime;
-
-            CheckFrontObstacle();
         }
 
         /// <summary>
@@ -256,16 +170,8 @@ namespace Hunting.Game.Animal
                 return;
             }
 
-
-
-            // 切换到受伤状态
+            // 切换到受伤状态/暂时写在这里
             stateMachine.ChangeState(hitState);
-        }
-
-        public void PlayHitAudio()
-        {
-            audioSource.clip = hitClip;
-            audioSource.Play();
         }
 
         /// <summary>
@@ -273,6 +179,7 @@ namespace Hunting.Game.Animal
         /// </summary>
         public void Die()
         {
+            // 切换到死亡状态/暂时写道这里
             stateMachine.ChangeState(deathState);
         }
 
