@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Obstacle.cs
  * RVO2 Library C#
  *
@@ -41,8 +41,8 @@ namespace RVO
 
         internal Obstacle next_;
         internal Obstacle previous_;
-        internal Vector2 direction_;
-        internal Vector2 point_;
+        internal RVO2Vector2 direction_;
+        internal RVO2Vector2 point_;
         internal int id_;
         internal bool convex_;
     }

@@ -2,7 +2,7 @@
 using RVO;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class RVO2DAgent : MonoBehaviour
+public class RVO22DAgent : MonoBehaviour
 {
     [Header("移动配置")]
     public UnityEngine.Vector2 targetDirection = UnityEngine.Vector2.up;
@@ -21,7 +21,7 @@ public class RVO2DAgent : MonoBehaviour
 
     void Start()
     {
-        RVO.Vector2 startPos = new RVO.Vector2(transform.position.x, transform.position.y);
+        RVO.RVO2Vector2 startPos = new RVO.RVO2Vector2(transform.position.x, transform.position.y);
 
         agentId = Simulator.Instance.addAgent(
             startPos,
@@ -31,7 +31,7 @@ public class RVO2DAgent : MonoBehaviour
             timeHorizon,
             radius,
             maxSpeed,
-            new RVO.Vector2(0, 0)
+            new RVO.RVO2Vector2(0, 0)
         );
 
         lastPosition = transform.position;
@@ -44,10 +44,10 @@ public class RVO2DAgent : MonoBehaviour
     {
         if (agentId < 0) return;
 
-        RVO.Vector2 pos = new RVO.Vector2(transform.position.x, transform.position.y);
+        RVO.RVO2Vector2 pos = new RVO.RVO2Vector2(transform.position.x, transform.position.y);
         Simulator.Instance.setAgentPosition(agentId, pos);
 
-        RVO.Vector2 prefVel = new RVO.Vector2(targetDirection.x, targetDirection.y);
+        RVO.RVO2Vector2 prefVel = new RVO.RVO2Vector2(targetDirection.x, targetDirection.y);
         if (RVOMath.absSq(prefVel) > 0.01f)
         {
             prefVel = RVOMath.normalize(prefVel) * speed;
@@ -60,8 +60,8 @@ public class RVO2DAgent : MonoBehaviour
     {
         if (agentId < 0) return;
 
-        RVO.Vector2 rvoPos = Simulator.Instance.getAgentPosition(agentId);
-        RVO.Vector2 rvoVel = Simulator.Instance.getAgentVelocity(agentId);
+        RVO.RVO2Vector2 rvoPos = Simulator.Instance.getAgentPosition(agentId);
+        RVO.RVO2Vector2 rvoVel = Simulator.Instance.getAgentVelocity(agentId);
 
         UnityEngine.Vector2 newPos = new UnityEngine.Vector2(rvoPos.x(), rvoPos.y());
 

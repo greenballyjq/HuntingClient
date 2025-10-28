@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using RVO;
 
-public class RVO2DManager : MonoBehaviour
+public class RVO22DManager : MonoBehaviour
 {
-    private System.Collections.Generic.List<RVO2DAgent> agents = new System.Collections.Generic.List<RVO2DAgent>();
+    private System.Collections.Generic.List<RVO22DAgent> agents = new System.Collections.Generic.List<RVO22DAgent>();
 
     void Start()
     {
         Simulator.Instance.setTimeStep(0.25f);
 
-        foreach (RVO2DAgent agent in FindObjectsOfType<RVO2DAgent>())
+        foreach (RVO22DAgent agent in FindObjectsOfType<RVO22DAgent>())
         {
             agents.Add(agent);
         }

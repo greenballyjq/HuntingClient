@@ -1,4 +1,4 @@
-/*
+﻿/*
  * KdTree.cs
  * RVO2 Library C#
  *
@@ -244,7 +244,7 @@ namespace RVO
          * <param name="radius">The radius within which visibility is to be
          * tested.</param>
          */
-        internal bool queryVisibility(Vector2 q1, Vector2 q2, float radius)
+        internal bool queryVisibility(RVO2Vector2 q1, RVO2Vector2 q2, float radius)
         {
             return queryVisibilityRecursive(q1, q2, radius, obstacleTree_);
         }
@@ -439,7 +439,7 @@ namespace RVO
                         /* Split obstacle j. */
                         float t = RVOMath.det(obstacleI2.point_ - obstacleI1.point_, obstacleJ1.point_ - obstacleI1.point_) / RVOMath.det(obstacleI2.point_ - obstacleI1.point_, obstacleJ1.point_ - obstacleJ2.point_);
 
-                        Vector2 splitPoint = obstacleJ1.point_ + t * (obstacleJ2.point_ - obstacleJ1.point_);
+                        RVO2Vector2 splitPoint = obstacleJ1.point_ + t * (obstacleJ2.point_ - obstacleJ1.point_);
 
                         Obstacle newObstacle = new();
                         newObstacle.point_ = splitPoint;
@@ -581,7 +581,7 @@ namespace RVO
          * tested.</param>
          * <param name="node">The current obstacle k-D node.</param>
          */
-        private bool queryVisibilityRecursive(Vector2 q1, Vector2 q2, float radius, ObstacleTreeNode node)
+        private bool queryVisibilityRecursive(RVO2Vector2 q1, RVO2Vector2 q2, float radius, ObstacleTreeNode node)
         {
             if (node == null)
             {

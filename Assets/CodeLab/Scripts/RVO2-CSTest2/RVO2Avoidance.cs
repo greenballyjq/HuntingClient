@@ -25,7 +25,7 @@ public class RVO2Avoidance : MonoBehaviour
     {
         movement = GetComponent<SimpleMovement>();
 
-        RVO.Vector2 startPos = new RVO.Vector2(transform.position.x, transform.position.z);
+        RVO.RVO2Vector2 startPos = new RVO.RVO2Vector2(transform.position.x, transform.position.z);
 
         agentId = Simulator.Instance.addAgent(
             startPos,
@@ -35,7 +35,7 @@ public class RVO2Avoidance : MonoBehaviour
             timeHorizon,
             radius,
             maxSpeed,
-            new RVO.Vector2(0, 0)
+            new RVO.RVO2Vector2(0, 0)
         );
 
         if (!hasInitialized)
@@ -53,12 +53,12 @@ public class RVO2Avoidance : MonoBehaviour
         if (agentId < 0) return;
 
         // 1. 同步位置到RVO2
-        RVO.Vector2 pos = new RVO.Vector2(transform.position.x, transform.position.z);
+        RVO.RVO2Vector2 pos = new RVO.RVO2Vector2(transform.position.x, transform.position.z);
         Simulator.Instance.setAgentPosition(agentId, pos);
 
         // 2. 设置偏好速度（从SimpleMovement获取）
         UnityEngine.Vector3 desiredDir = movement.targetDirection;
-        RVO.Vector2 prefVel = new RVO.Vector2(desiredDir.x, desiredDir.z);
+        RVO.RVO2Vector2 prefVel = new RVO.RVO2Vector2(desiredDir.x, desiredDir.z);
         if (RVOMath.absSq(prefVel) > 0.01f)
         {
             prefVel = RVOMath.normalize(prefVel) * maxSpeed;
@@ -78,7 +78,7 @@ public class RVO2Avoidance : MonoBehaviour
         }
 
         // 获取RVO计算后的避障方向
-        RVO.Vector2 rvoVel = Simulator.Instance.getAgentVelocity(agentId);
+        RVO.RVO2Vector2 rvoVel = Simulator.Instance.getAgentVelocity(agentId);
         UnityEngine.Vector3 rvoDirection = new UnityEngine.Vector3(rvoVel.x(), 0, rvoVel.y()).normalized;
 
         // 获取SimpleMovement的期望方向
@@ -106,7 +106,7 @@ public class RVO2Avoidance : MonoBehaviour
         // 白色线：RVO计算的避障方向
         if (agentId >= 0)
         {
-            RVO.Vector2 vel = Simulator.Instance.getAgentVelocity(agentId);
+            RVO.RVO2Vector2 vel = Simulator.Instance.getAgentVelocity(agentId);
             if (RVOMath.absSq(vel) > 0.01f)
             {
                 Gizmos.color = Color.white;

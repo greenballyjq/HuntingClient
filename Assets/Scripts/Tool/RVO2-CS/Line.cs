@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Line.cs
  * RVO2 Library C#
  *
@@ -38,7 +38,7 @@ namespace RVO
      */
     public struct Line
     {
-        public Vector2 direction;
-        public Vector2 point;
+        public RVO2Vector2 direction;
+        public RVO2Vector2 point;
     }
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * RVOMath.cs
  * RVO2 Library C#
  *
@@ -54,7 +54,7 @@ namespace RVO
          * computed.</param>
          * <returns>The length of the two-dimensional vector.</returns>
          */
-        public static float abs(Vector2 vector)
+        public static float abs(RVO2Vector2 vector)
         {
             return sqrt(absSq(vector));
         }
@@ -68,7 +68,7 @@ namespace RVO
          * <param name="vector">The two-dimensional vector whose squared length
          * is to be computed.</param>
          */
-        public static float absSq(Vector2 vector)
+        public static float absSq(RVO2Vector2 vector)
         {
             return vector * vector;
         }
@@ -82,7 +82,7 @@ namespace RVO
          * <param name="vector">The two-dimensional vector whose normalization
          * is to be computed.</param>
          */
-        public static Vector2 normalize(Vector2 vector)
+        public static RVO2Vector2 normalize(RVO2Vector2 vector)
         {
             return vector / abs(vector);
         }
@@ -100,7 +100,7 @@ namespace RVO
          * <param name="vector2">The bottom row of the two-dimensional square
          * matrix.</param>
          */
-        internal static float det(Vector2 vector1, Vector2 vector2)
+        internal static float det(RVO2Vector2 vector1, RVO2Vector2 vector2)
         {
             return vector1.x_ * vector2.y_ - vector1.y_ * vector2.x_;
         }
@@ -118,7 +118,7 @@ namespace RVO
          * <param name="vector3">The point to which the squared distance is to
          * be calculated.</param>
          */
-        internal static float distSqPointLineSegment(Vector2 vector1, Vector2 vector2, Vector2 vector3)
+        internal static float distSqPointLineSegment(RVO2Vector2 vector1, RVO2Vector2 vector2, RVO2Vector2 vector3)
         {
             float r = ((vector3 - vector1) * (vector2 - vector1)) / absSq(vector2 - vector1);
 
@@ -160,7 +160,7 @@ namespace RVO
          * <param name="c">The point to which the signed distance is to be
          * calculated.</param>
          */
-        internal static float leftOf(Vector2 a, Vector2 b, Vector2 c)
+        internal static float leftOf(RVO2Vector2 a, RVO2Vector2 b, RVO2Vector2 c)
         {
             return det(a - c, b - a);
         }

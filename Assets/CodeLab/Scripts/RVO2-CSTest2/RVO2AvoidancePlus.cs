@@ -19,8 +19,8 @@ public class RVO2AvoidancePlus : MonoBehaviour
 
     void Start()
     {
-        RVO.Vector2 startPos = new RVO.Vector2(transform.position.x, transform.position.z);
-        agentId = Simulator.Instance.addAgent(startPos, neighborDist, maxNeighbors, timeHorizon, timeHorizon, radius, maxSpeed, new RVO.Vector2(0, 0));
+        RVO.RVO2Vector2 startPos = new RVO.RVO2Vector2(transform.position.x, transform.position.z);
+        agentId = Simulator.Instance.addAgent(startPos, neighborDist, maxNeighbors, timeHorizon, timeHorizon, radius, maxSpeed, new RVO.RVO2Vector2(0, 0));
 
         if (!hasInitialized)
         {
@@ -36,11 +36,11 @@ public class RVO2AvoidancePlus : MonoBehaviour
         if (agentId < 0) return;
 
         // 1. 同步位置
-        RVO.Vector2 pos = new RVO.Vector2(transform.position.x, transform.position.z);
+        RVO.RVO2Vector2 pos = new RVO.RVO2Vector2(transform.position.x, transform.position.z);
         Simulator.Instance.setAgentPosition(agentId, pos);
 
         // 2. 设置偏好速度
-        RVO.Vector2 prefVel = new RVO.Vector2(desiredDirection.x, desiredDirection.z);
+        RVO.RVO2Vector2 prefVel = new RVO.RVO2Vector2(desiredDirection.x, desiredDirection.z);
         if (RVOMath.absSq(prefVel) > 0.01f)
         {
             prefVel = RVOMath.normalize(prefVel) * maxSpeed;
@@ -71,7 +71,7 @@ public class RVO2AvoidancePlus : MonoBehaviour
     {
         if (agentId < 0) return currentDirection;
 
-        RVO.Vector2 rvoVel = Simulator.Instance.getAgentVelocity(agentId);
+        RVO.RVO2Vector2 rvoVel = Simulator.Instance.getAgentVelocity(agentId);
         UnityEngine.Vector3 rvoDirection = new UnityEngine.Vector3(rvoVel.x(), 0, rvoVel.y()).normalized;
 
         UnityEngine.Vector3 desiredDir = currentDirection.normalized;
@@ -90,7 +90,7 @@ public class RVO2AvoidancePlus : MonoBehaviour
 
         if (agentId >= 0)
         {
-            RVO.Vector2 vel = Simulator.Instance.getAgentVelocity(agentId);
+            RVO.RVO2Vector2 vel = Simulator.Instance.getAgentVelocity(agentId);
             if (RVOMath.absSq(vel) > 0.01f)
             {
                 Gizmos.color = Color.white;
