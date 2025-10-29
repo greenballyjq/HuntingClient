@@ -24,7 +24,6 @@ namespace Hunting.Game.Animal.State
             // 设置状态计时器
             stateTimer = hitDuration;
             animal.PlayHitAudio();
-            Debug.Log($"[AnimalHitState] {animal.specieData.Name} 进入受伤状态，持续时间: {hitDuration}秒");
         }
 
         public override void Update()
@@ -38,7 +37,6 @@ namespace Hunting.Game.Animal.State
         public override void Exit()
         {
             base.Exit();
-            Debug.Log($"[AnimalHitState] {animal.specieData.Name} 退出受伤状态，返回移动状态");
         }
     }
 }

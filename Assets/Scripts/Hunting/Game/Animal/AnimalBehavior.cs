@@ -79,19 +79,20 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 移动速度
         /// </summary>
-        public float moveSpeed;
-        /// <summary>
-        /// 驻场时间
-        /// </summary>
-        public float TimeInScene { get; private set; }
-        /// <summary>
-        /// 最大驻场时间
-        /// </summary>
-        public float StayTime { get; private set; }
+        public float currentMoveSpeed;
         /// <summary>
         /// 初始方向
         /// </summary>
-        public Vector3 initialDirection { get; private set; }
+        public Vector3 currentDirection;
+        /// <summary>
+        /// 驻场时间
+        /// </summary>
+        public float timeInScene { get; private set; }
+        /// <summary>
+        /// 最大驻场时间
+        /// </summary>
+        public float stayTime { get; private set; }
+        
 
         #endregion
 
@@ -107,11 +108,13 @@ namespace Hunting.Game.Animal
 
         private void Awake()
         {
+            #region 测试
+            audioSource = GetComponent<AudioSource>();
+            #endregion
+
             // 获取组件
             animator = GetComponent<Animator>();
             rvo = GetComponent<RVOMovement>();
-
-            audioSource = GetComponent<AudioSource>();
 
             // 新建状态
             stateMachine = new StateMachine();
@@ -119,6 +122,8 @@ namespace Hunting.Game.Animal
             hitState = new AnimalHitState(this, stateMachine, "Hit");
             deathState = new AnimalDeathState(this, stateMachine, "Death");
             fleeState = new AnimalFleeState(this, stateMachine, "Flee");
+
+            
         }
 
         /// <summary>
@@ -127,19 +132,22 @@ namespace Hunting.Game.Animal
         /// <param name="data">动物配置数据</param>
         /// <param name="stayTime">驻场时间</param>
         /// <param name="moveDirection">生成方向</param>
-        public void Initialize(cfg.HuntingConfig.Specie data, float stayTime, Vector3 initialDirection)
+        public void Init(cfg.HuntingConfig.Specie data, float stayTime, Vector3 initialDirection)
         {
             // 初始化数据
             specieData = data;
             maxHP = data.HP;
             currentHP = maxHP;
-            moveSpeed = data.MoveSpeed;
-            TimeInScene = 0f;
-            StayTime = 10;
+            currentMoveSpeed = data.MoveSpeed;
+            timeInScene = 0f;
+            this.stayTime = stayTime;
 
-            this.initialDirection = initialDirection;
-            rvo.SetMoveDirection(initialDirection);
-
+            currentDirection = initialDirection;
+            
+            rvo.SetMaxSpeed(currentMoveSpeed);
+            rvo.SetMoveDirection(currentDirection);
+            rvo.Init();
+            
             stateMachine.Initialize(moveState);
         }
 
@@ -149,7 +157,7 @@ namespace Hunting.Game.Animal
             stateMachine.Update();
 
             // 更新驻场时间
-            TimeInScene += Time.deltaTime;
+            timeInScene += Time.deltaTime;
         }
 
         /// <summary>
@@ -181,6 +189,7 @@ namespace Hunting.Game.Animal
         {
             // 切换到死亡状态/暂时写道这里
             stateMachine.ChangeState(deathState);
+            rvo.Release();
         }
 
         /// <summary>

@@ -158,7 +158,7 @@ public class SpeciesSpawner : MonoBehaviour
         if (animal != null)
         {
             // 初始化动物
-            animal.Initialize(specie, stayTime, moveDirection);
+            animal.Init(specie, stayTime, moveDirection);
 
             // 设置动物朝向与移动方向一致
             if (moveDirection != Vector3.zero)

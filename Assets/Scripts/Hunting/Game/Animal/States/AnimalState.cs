@@ -79,7 +79,7 @@ namespace Hunting.Game.Animal.State
             stateTimer -= Time.deltaTime;
 
             // 任何状态都可以进入逃跑状态（除了死亡和逃跑状态本身）
-            if (animal.TimeInScene >= animal.StayTime &&
+            if (animal.timeInScene >= animal.stayTime &&
                 !(this is AnimalDeathState) &&
                 !(this is AnimalFleeState))
             {
