@@ -39,7 +39,7 @@ namespace RVO
     /**
      * <summary>Defines a two-dimensional vector.</summary>
      */
-    public struct RVO2Vector2
+    public struct RVOVector2
     {
         internal float x_;
         internal float y_;
@@ -53,7 +53,7 @@ namespace RVO
          * <param name="y">The y-coordinate of the two-dimensional vector.
          * </param>
          */
-        public RVO2Vector2(float x, float y)
+        public RVOVector2(float x, float y)
         {
             x_ = x;
             y_ = y;
@@ -101,7 +101,7 @@ namespace RVO
          * <param name="vector1">The first two-dimensional vector.</param>
          * <param name="vector2">The second two-dimensional vector.</param>
          */
-        public static float operator *(RVO2Vector2 vector1, RVO2Vector2 vector2)
+        public static float operator *(RVOVector2 vector1, RVOVector2 vector2)
         {
             return vector1.x_ * vector2.x_ + vector1.y_ * vector2.y_;
         }
@@ -116,7 +116,7 @@ namespace RVO
          * <param name="scalar">The scalar value.</param>
          * <param name="vector">The two-dimensional vector.</param>
          */
-        public static RVO2Vector2 operator *(float scalar, RVO2Vector2 vector)
+        public static RVOVector2 operator *(float scalar, RVOVector2 vector)
         {
             return vector * scalar;
         }
@@ -131,9 +131,9 @@ namespace RVO
          * <param name="vector">The two-dimensional vector.</param>
          * <param name="scalar">The scalar value.</param>
          */
-        public static RVO2Vector2 operator *(RVO2Vector2 vector, float scalar)
+        public static RVOVector2 operator *(RVOVector2 vector, float scalar)
         {
-            return new RVO2Vector2(vector.x_ * scalar, vector.y_ * scalar);
+            return new RVOVector2(vector.x_ * scalar, vector.y_ * scalar);
         }
 
         /**
@@ -146,9 +146,9 @@ namespace RVO
          * <param name="vector">The two-dimensional vector.</param>
          * <param name="scalar">The scalar value.</param>
          */
-        public static RVO2Vector2 operator /(RVO2Vector2 vector, float scalar)
+        public static RVOVector2 operator /(RVOVector2 vector, float scalar)
         {
-            return new RVO2Vector2(vector.x_ / scalar, vector.y_ / scalar);
+            return new RVOVector2(vector.x_ / scalar, vector.y_ / scalar);
         }
 
         /**
@@ -161,9 +161,9 @@ namespace RVO
          * <param name="vector1">The first two-dimensional vector.</param>
          * <param name="vector2">The second two-dimensional vector.</param>
          */
-        public static RVO2Vector2 operator +(RVO2Vector2 vector1, RVO2Vector2 vector2)
+        public static RVOVector2 operator +(RVOVector2 vector1, RVOVector2 vector2)
         {
-            return new RVO2Vector2(vector1.x_ + vector2.x_, vector1.y_ + vector2.y_);
+            return new RVOVector2(vector1.x_ + vector2.x_, vector1.y_ + vector2.y_);
         }
 
         /**
@@ -176,9 +176,9 @@ namespace RVO
          * <param name="vector1">The first two-dimensional vector.</param>
          * <param name="vector2">The second two-dimensional vector.</param>
          */
-        public static RVO2Vector2 operator -(RVO2Vector2 vector1, RVO2Vector2 vector2)
+        public static RVOVector2 operator -(RVOVector2 vector1, RVOVector2 vector2)
         {
-            return new RVO2Vector2(vector1.x_ - vector2.x_, vector1.y_ - vector2.y_);
+            return new RVOVector2(vector1.x_ - vector2.x_, vector1.y_ - vector2.y_);
         }
 
         /**
@@ -190,9 +190,9 @@ namespace RVO
          *
          * <param name="vector">The two-dimensional vector.</param>
          */
-        public static RVO2Vector2 operator -(RVO2Vector2 vector)
+        public static RVOVector2 operator -(RVOVector2 vector)
         {
-            return new RVO2Vector2(-vector.x_, -vector.y_);
+            return new RVOVector2(-vector.x_, -vector.y_);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Hunting
 
         protected virtual async void Start()
         {
-            await InitGameAsync();
+            await InitializeGameAsync();
         }
 
         protected virtual void Update()
@@ -82,7 +82,7 @@ namespace Hunting
         /// <summary>
         /// 异步初始化游戏
         /// </summary>
-        private async UniTask InitGameAsync()
+        private async UniTask InitializeGameAsync()
         {
             Debug.Log("[GameLogic] 开始初始化游戏");
             CurrentState = GameState.Initializing;
@@ -97,7 +97,7 @@ namespace Hunting
             RegisterGameManagers();
 
             // 初始化游戏业务管理器
-            InitGameManagers();
+            InitializeGameManagers();
 
             // 调用子类初始化
             await OnGameInit();
@@ -173,7 +173,7 @@ namespace Hunting
         /// <summary>
         /// 初始化所有游戏业务管理器
         /// </summary>
-        private void InitGameManagers()
+        private void InitializeGameManagers()
         {
             Debug.Log("[GameLogic] 初始化游戏业务管理器");
 

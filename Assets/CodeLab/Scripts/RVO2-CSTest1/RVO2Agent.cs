@@ -20,7 +20,7 @@ public class RVO2Agent : MonoBehaviour
 
     void Start()
     {
-        RVO.RVO2Vector2 startPos = new RVO.RVO2Vector2(transform.position.x, transform.position.z);
+        RVO.RVOVector2 startPos = new RVO.RVOVector2(transform.position.x, transform.position.z);
 
         agentId = Simulator.Instance.addAgent(
             startPos,
@@ -30,7 +30,7 @@ public class RVO2Agent : MonoBehaviour
             timeHorizon,
             radius,
             maxSpeed,
-            new RVO.RVO2Vector2(0, 0)
+            new RVO.RVOVector2(0, 0)
         );
 
         lastPosition = transform.position;
@@ -44,11 +44,11 @@ public class RVO2Agent : MonoBehaviour
         if (agentId < 0) return;
 
         // 同步位置
-        RVO.RVO2Vector2 pos = new RVO.RVO2Vector2(transform.position.x, transform.position.z);
+        RVO.RVOVector2 pos = new RVO.RVOVector2(transform.position.x, transform.position.z);
         Simulator.Instance.setAgentPosition(agentId, pos);
 
         // 设置偏好速度
-        RVO.RVO2Vector2 prefVel = new RVO.RVO2Vector2(targetDirection.x, targetDirection.z);
+        RVO.RVOVector2 prefVel = new RVO.RVOVector2(targetDirection.x, targetDirection.z);
         if (RVOMath.absSq(prefVel) > 0.01f)
         {
             prefVel = RVOMath.normalize(prefVel) * speed;
@@ -61,7 +61,7 @@ public class RVO2Agent : MonoBehaviour
         if (agentId < 0) return;
 
         // 获取新位置
-        RVO.RVO2Vector2 rvoPos = Simulator.Instance.getAgentPosition(agentId);
+        RVO.RVOVector2 rvoPos = Simulator.Instance.getAgentPosition(agentId);
         Vector3 newPos = new Vector3(rvoPos.x(), transform.position.y, rvoPos.y());
 
         // 计算移动方向（用位置差，不要用velocity）

@@ -30,7 +30,7 @@ public class SimpleRVOExample : MonoBehaviour
             timeHorizonObst: 10f,   // 障碍物时间视界：预测未来10秒内与障碍物的碰撞
             radius: 0.5f,           // 代理半径：0.5米（碰撞检测用）
             maxSpeed: 0.2f,           // 最大速度：0.2米/秒
-            velocity: new RVO2Vector2(0, 0)  // 初始速度：静止状态
+            velocity: new RVOVector2(0, 0)  // 初始速度：静止状态
         );
 
         // ==================== 第4步：设置模拟时间步长 ====================
@@ -54,7 +54,7 @@ public class SimpleRVOExample : MonoBehaviour
 
             // 5.2 在RVO模拟器中添加对应的代理
             // 注意：RVO2使用的是2D向量，我们用Unity的X和Z作为RVO的X和Y
-            RVO2Vector2 rvoStartPos = new RVO2Vector2(startPos.x, startPos.z);
+            RVOVector2 rvoStartPos = new RVOVector2(startPos.x, startPos.z);
             int agentId = sim.addAgent(rvoStartPos);
             // agentId应该等于i（按顺序添加，ID从0开始）
 
@@ -80,7 +80,7 @@ public class SimpleRVOExample : MonoBehaviour
         for (int i = 0; i < sim.getNumAgents(); i++)
         {
             // 7.1 获取代理当前位置（RVO坐标系）
-            RVO2Vector2 currentPos = sim.getAgentPosition(i);
+            RVOVector2 currentPos = sim.getAgentPosition(i);
 
             // 7.2 转换为Unity坐标并计算到目标的向量
             Vector3 currentPos3D = new Vector3(currentPos.x(), 0f, currentPos.y());
@@ -90,7 +90,7 @@ public class SimpleRVOExample : MonoBehaviour
             if (toGoal.magnitude < 0.5f)
             {
                 // 期望速度设为0（停止）
-                sim.setAgentPrefVelocity(i, new RVO2Vector2(0, 0));
+                sim.setAgentPrefVelocity(i, new RVOVector2(0, 0));
                 continue;
             }
 
@@ -98,7 +98,7 @@ public class SimpleRVOExample : MonoBehaviour
             Vector3 desiredVelocity3D = toGoal.normalized * sim.getAgentMaxSpeed(i);
 
             // 7.5 转换为RVO2Vector2并设置
-            RVO2Vector2 prefVelocity = new RVO2Vector2(
+            RVOVector2 prefVelocity = new RVOVector2(
                 desiredVelocity3D.x,
                 desiredVelocity3D.z
             );
@@ -116,7 +116,7 @@ public class SimpleRVOExample : MonoBehaviour
         for (int i = 0; i < sim.getNumAgents(); i++)
         {
             // 9.1 获取RVO计算后的位置
-            RVO2Vector2 rvoPos = sim.getAgentPosition(i);
+            RVOVector2 rvoPos = sim.getAgentPosition(i);
 
             // 9.2 转换为Unity坐标
             Vector3 newPos = new Vector3(rvoPos.x(), 0f, rvoPos.y());
@@ -125,7 +125,7 @@ public class SimpleRVOExample : MonoBehaviour
             agentObjects[i].transform.position = newPos;
 
             // 9.4（可选）获取速度并调整朝向
-            RVO2Vector2 rvoVel = sim.getAgentVelocity(i);
+            RVOVector2 rvoVel = sim.getAgentVelocity(i);
             Vector3 velocity3D = new Vector3(rvoVel.x(), 0f, rvoVel.y());
 
             // 如果在移动，让对象朝向移动方向

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4465785, g: 0.4964137, b: 0.57481897, a: 1}
+  m_IndirectSpecularColor: {r: 0.44402316, g: 0.49316597, b: 0.57223195, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnDirection: 0
   currentMapId: 1
-  spawnInterval: 2
+  spawnInterval: 1
   spawnZRange: {x: -3, y: 3}
   spawnXOffset: 2
   minAngle: 45
@@ -3275,7 +3275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnDirection: 1
   currentMapId: 1
-  spawnInterval: 2.5
+  spawnInterval: 1
   spawnZRange: {x: -3, y: 3}
   spawnXOffset: 2.6
   minAngle: -45
