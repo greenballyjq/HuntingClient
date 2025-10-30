@@ -2935,8 +2935,8 @@ MonoBehaviour:
   spawnDirection: 0
   currentMapId: 1
   spawnInterval: 1
-  spawnZRange: {x: -3, y: 3}
-  spawnXOffset: 2.6
+  spawnZRange: {x: -13.65, y: 45.3}
+  spawnXOffset: 4.09
   minAngle: 45
   maxAngle: 90
 --- !u!4 &1501949005

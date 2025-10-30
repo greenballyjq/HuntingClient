@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 namespace Hunting.Game.Animal
@@ -138,12 +139,22 @@ namespace Hunting.Game.Animal
             specieData = data;
             maxHP = data.HP;
             currentHP = maxHP;
-            currentMoveSpeed = data.MoveSpeed;
+            currentMoveSpeed = 20;
             timeInScene = 0f;
             this.stayTime = stayTime;
 
             currentDirection = initialDirection;
+
+            rvo.SetMoveDirection(new Vector3(
+    Random.Range(-1f, 1f),
+    0f,
+    Random.Range(-1f, 1f)
+).normalized);
+            rvo.SetMaxSpeed(currentMoveSpeed);
+            rvo.Init();
             
+           
+
             stateMachine.Initialize(moveState);
         }
 
@@ -198,10 +209,8 @@ namespace Hunting.Game.Animal
         }
 
         public void OnPull()
-        {
-            rvo.SetMaxSpeed(6);
-            rvo.SetMoveDirection(transform.forward);
-            rvo.Init();
+        {   
+            
         }
 
         public void OnPush()
@@ -211,7 +220,7 @@ namespace Hunting.Game.Animal
 
         public void OnPoolDestroy()
         {
-           
+
         }
     }
 }

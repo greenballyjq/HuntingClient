@@ -483,7 +483,7 @@ GameObject:
   - component: {fileID: 4083988028565102088}
   - component: {fileID: 1173234805670576773}
   - component: {fileID: 8839412757672278681}
-  - component: {fileID: -1232921175513512725}
+  - component: {fileID: 8922828311543744342}
   m_Layer: 6
   m_Name: Animal_Special_402
   m_TagString: Animal
@@ -695,8 +695,9 @@ MonoBehaviour:
   hitClip: {fileID: 8300000, guid: f5f2c60655938bd41a899a7f57c106c3, type: 3}
   audioSource: {fileID: 0}
   currentHP: 0
-  moveSpeed: 0
---- !u!114 &-1232921175513512725
+  currentMoveSpeed: 0
+  currentDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &8922828311543744342
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -709,12 +710,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   neighborDist: 10
-  maxNeighbors: 5
+  maxNeighbors: 6
   timeHorizon: 10
   timeHorizonObst: 10
   radius: 3
-  maxSpeed: 8
-  rotationSmoothSpeed: 6
+  rotationSmoothSpeed: 3
 --- !u!1 &5512041106863543837
 GameObject:
   m_ObjectHideFlags: 0

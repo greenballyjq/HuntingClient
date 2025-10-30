@@ -4,21 +4,21 @@ using RVO;
 using UnityEngine;
 
 /// <summary>
-/// RVO 代理配置
+/// RVO代理配置
 /// </summary>
 [System.Serializable]
 public class RVOAgentConfig
 {
-    public float radius = 0.5f;
-    public float maxSpeed = 2.0f;
-    public float neighborDist = 8.0f;
-    public int maxNeighbors = 10;
+    public float neighborDist = 10.0f;
+    public int maxNeighbors = 6;
     public float timeHorizon = 10.0f;
     public float timeHorizonObst = 10.0f;
+    public float radius = 3f;
+    public float maxSpeed = 8f;
 }
 
 /// <summary>
-/// RVO 代理句柄
+/// RVO代理句柄
 /// </summary>
 public class RVOAgentHandle
 {
@@ -29,27 +29,28 @@ public class RVOAgentHandle
 }
 
 /// <summary>
-/// RVO 更新模式
+/// RVO更新模式
 /// </summary>
 public enum RVOUpdateMode
 {
     /// <summary>
-    /// 动态步长 - 每帧更新，步长=Time.deltaTime
+    /// 动态步长
+    /// 步长 = Time.deltaTime
     /// </summary>
     DynamicStep,
 
     /// <summary>
-    /// 固定步长 - 使用累积器，固定时间间隔更新
+    /// 固定步长
+    /// 步长 = 固定时间间隔
     /// </summary>
     FixedStep
 }
 
 /// <summary>
-/// RVO2-CS 管理器 - 管理所有 RVO 代理的生命周期
+/// RVO管理器
 /// </summary>
 public class RVOManager : MonoBehaviour
 {
-    #region 单例
     private static RVOManager _instance;
 
     public static RVOManager Instance
@@ -66,11 +67,9 @@ public class RVOManager : MonoBehaviour
             return _instance;
         }
     }
-    #endregion
 
-    #region 私有字段
     /// <summary>
-    /// RVO 模拟器实例
+    /// RVO模拟器实例
     /// </summary>
     private Simulator _simulator;
 
@@ -85,17 +84,32 @@ public class RVOManager : MonoBehaviour
     private readonly Queue<int> _reuseQueue = new Queue<int>();
 
     /// <summary>
+    /// 待处理的障碍（仅管理器侧缓存，调用ProcessAllObstacles前有效）
+    /// </summary>
+    private class PendingObstacle
+    {
+        public readonly List<Vector3> verticesUnity = new List<Vector3>();
+        public object owner;
+        public bool active = true;
+    }
+
+    /// <summary>
+    /// 待处理障碍列表
+    /// </summary>
+    private readonly List<PendingObstacle> _pendingObstacles = new List<PendingObstacle>();
+
+    /// <summary>
     /// 更新模式
     /// </summary>
     private RVOUpdateMode _updateMode = RVOUpdateMode.DynamicStep;
 
     /// <summary>
-    /// 固定时间步长（仅在 FixedStep 模式下使用）
+    /// 固定时间步长（仅在FixedStep模式下使用）
     /// </summary>
     private float _fixedTimeStep = 0.1f;
 
     /// <summary>
-    /// 时间累积器（仅在 FixedStep 模式下使用）
+    /// 时间累积器（仅在FixedStep模式下使用）
     /// </summary>
     private float _timeAccumulator = 0f;
 
@@ -103,19 +117,12 @@ public class RVOManager : MonoBehaviour
     /// 是否已初始化
     /// </summary>
     private bool _isInitialized = false;
-    #endregion
 
-    #region 事件
     /// <summary>
-    /// RVO 模拟步进完成事件
+    /// RVO模拟步进完成事件
     /// </summary>
     public event Action OnRVOStepCompleted;
-    #endregion
 
-    #region 初始化
-    /// <summary>
-    /// 初始化管理器
-    /// </summary>
     private void Initialize()
     {
         if (_isInitialized)
@@ -130,19 +137,35 @@ public class RVOManager : MonoBehaviour
         _simulator.Clear();
 
         // 设置默认参数
-        RVOAgentConfig defaultConfig = new RVOAgentConfig();
-        SetGlobalDefaults(defaultConfig);
+        SetGlobalDefaults(new RVOAgentConfig());
 
-        // 设置多线程（限制最大线程数，避免过多线程降低性能）
-        int workerCount = Mathf.Min(Environment.ProcessorCount, 8);
-        _simulator.SetNumWorkers(workerCount);
-        Debug.Log($"[RVOManager] 设置工作线程数: {workerCount}");
+        // 设置Works
+        _simulator.SetNumWorkers(0);
+
+        // 初始化障碍数据
+        _pendingObstacles.Clear();
 
         _isInitialized = true;
     }
-    #endregion
 
-    #region Unity 生命周期
+    public void Release()
+    {
+        Debug.Log("[RVOManager] 释放 RVO 管理器");
+
+        _agentHandles.Clear();
+        _reuseQueue.Clear();
+        OnRVOStepCompleted = null;
+
+        // 清空模拟器
+        if (_simulator != null)
+            _simulator.Clear();
+
+        // 清理障碍数据
+        _pendingObstacles.Clear();
+
+        _isInitialized = false;
+    }
+   
     private void LateUpdate()
     {
         if (!_isInitialized)
@@ -150,14 +173,14 @@ public class RVOManager : MonoBehaviour
 
         if (_updateMode == RVOUpdateMode.DynamicStep)
         {
-            // 动态步长模式：每帧更新
+            // 动态步长模式
             _simulator.setTimeStep(Time.deltaTime);
             _simulator.doStep();
             OnRVOStepCompleted?.Invoke();
         }
         else
         {
-            // 固定步长模式：使用累积器
+            // 固定步长模式
             _timeAccumulator += Time.deltaTime;
 
             while (_timeAccumulator >= _fixedTimeStep)
@@ -169,7 +192,7 @@ public class RVOManager : MonoBehaviour
             }
         }
     }
-
+    
     private void OnDestroy()
     {
         if (_instance == this)
@@ -178,9 +201,8 @@ public class RVOManager : MonoBehaviour
             _instance = null;
         }
     }
-    #endregion
 
-    #region 代理管理
+    #region 公共方法
     /// <summary>
     /// 添加代理
     /// </summary>
@@ -223,7 +245,7 @@ public class RVOManager : MonoBehaviour
                 new RVOVector2(0, 0)
             );
 
-            // 重建 Workers
+            // 重建Workers
             _simulator.SetNumWorkers(0);
 
             Debug.Log($"[RVOManager] 创建新代理 ID: {agentId}");
@@ -231,9 +253,7 @@ public class RVOManager : MonoBehaviour
 
         // 创建句柄
         if (!_agentHandles.ContainsKey(agentId))
-        {
             _agentHandles[agentId] = new RVOAgentHandle();
-        }
 
         RVOAgentHandle handle = _agentHandles[agentId];
         handle.agentId = agentId;
@@ -271,33 +291,7 @@ public class RVOManager : MonoBehaviour
 
         Debug.Log($"[RVOManager] 移除代理 ID: {agentId}");
     }
-
-    /// <summary>
-    /// 检查代理是否有效
-    /// </summary>
-    public bool IsAgentValid(int agentId)
-    {
-        return _agentHandles.ContainsKey(agentId) && _agentHandles[agentId].isActive;
-    }
-
-    /// <summary>
-    /// 重置代理属性
-    /// </summary>
-    private void ResetAgent(int agentId, Vector3 position, RVOAgentConfig config)
-    {
-        _simulator.setAgentPosition(agentId, ToRVO(position));
-        _simulator.setAgentMaxSpeed(agentId, config.maxSpeed);
-        _simulator.setAgentRadius(agentId, config.radius);
-        _simulator.setAgentNeighborDist(agentId, config.neighborDist);
-        _simulator.setAgentMaxNeighbors(agentId, config.maxNeighbors);
-        _simulator.setAgentTimeHorizon(agentId, config.timeHorizon);
-        _simulator.setAgentTimeHorizonObst(agentId, config.timeHorizonObst);
-        _simulator.setAgentPrefVelocity(agentId, new RVOVector2(0, 0));
-        _simulator.setAgentVelocity(agentId, new RVOVector2(0, 0));
-    }
-    #endregion
-
-    #region 属性设置
+  
     /// <summary>
     /// 设置代理位置
     /// </summary>
@@ -355,22 +349,6 @@ public class RVOManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 设置代理速度
-    /// </summary>
-    public void SetAgentVelocity(int agentId, Vector3 velocity)
-    {
-        if (!IsAgentValid(agentId))
-        {
-            Debug.LogWarning($"[RVOManager] 尝试设置无效代理 {agentId} 的速度");
-            return;
-        }
-
-        _simulator.setAgentVelocity(agentId, ToRVO(velocity));
-    }
-    #endregion
-
-    #region 属性获取
-    /// <summary>
     /// 获取代理位置
     /// </summary>
     public Vector3 GetAgentPosition(int agentId)
@@ -418,14 +396,11 @@ public class RVOManager : MonoBehaviour
     public RVOAgentHandle GetAgentHandle(int agentId)
     {
         if (_agentHandles.ContainsKey(agentId))
-        {
             return _agentHandles[agentId];
-        }
+
         return null;
     }
-    #endregion
 
-    #region 配置
     /// <summary>
     /// 设置全局默认参数
     /// </summary>
@@ -474,69 +449,74 @@ public class RVOManager : MonoBehaviour
         _simulator.setTimeStep(timeStep);
         Debug.Log($"[RVOManager] 设置固定时间步长: {timeStep}");
     }
-    #endregion
 
-    #region 调试
     /// <summary>
-    /// 获取激活代理数量
+    /// 注册多边形障碍
     /// </summary>
-    public int GetActiveAgentCount()
+    public int RegisterObstaclePolygon(List<Vector3> vertices, object owner = null)
     {
-        int count = 0;
-        foreach (var handle in _agentHandles.Values)
+        if (vertices == null || vertices.Count < 2)
         {
-            if (handle.isActive)
-                count++;
-        }
-        return count;
-    }
-
-    /// <summary>
-    /// 获取池中代理数量
-    /// </summary>
-    public int GetPooledAgentCount()
-    {
-        return _reuseQueue.Count;
-    }
-
-    /// <summary>
-    /// 获取所有激活代理
-    /// </summary>
-    public List<RVOAgentHandle> GetAllActiveAgents()
-    {
-        List<RVOAgentHandle> activeAgents = new List<RVOAgentHandle>();
-        foreach (var handle in _agentHandles.Values)
-        {
-            if (handle.isActive)
-                activeAgents.Add(handle);
-        }
-        return activeAgents;
-    }
-    #endregion
-
-    #region 释放
-    /// <summary>
-    /// 释放管理器
-    /// </summary>
-    public void Release()
-    {
-        Debug.Log("[RVOManager] 释放 RVO 管理器");
-
-        _agentHandles.Clear();
-        _reuseQueue.Clear();
-        OnRVOStepCompleted = null;
-
-        // 清空 Simulator（注意：Simulator 是全局单例）
-        if (_simulator != null)
-        {
-            _simulator.Clear();
+            Debug.LogWarning("[RVOManager] RegisterObstaclePolygon 顶点数不足");
+            return -1;
         }
 
-        _isInitialized = false;
+        var po = new PendingObstacle
+        {
+            owner = owner,
+            active = true,
+        };
+        po.verticesUnity.AddRange(vertices);
+        _pendingObstacles.Add(po);
+        return _pendingObstacles.Count - 1;
+    }
+
+    /// <summary>
+    /// 处理所有待处理障碍并构建障碍树
+    /// </summary>
+    public void ProcessAllObstacles()
+    {
+        if (!_isInitialized || _simulator == null)
+        {
+            Debug.LogError("[RVOManager] 管理器未初始化，无法处理障碍");
+            return;
+        }
+
+        int added = 0;
+        for (int i = 0; i < _pendingObstacles.Count; i++)
+        {
+            var po = _pendingObstacles[i];
+            if (!po.active) continue;
+
+            var rvoVerts = new List<RVOVector2>(po.verticesUnity.Count);
+            for (int k = 0; k < po.verticesUnity.Count; k++)
+            {
+                var v = po.verticesUnity[k];
+                rvoVerts.Add(new RVOVector2(v.x, v.z));
+            }
+
+            int startIdx = _simulator.addObstacle(rvoVerts);
+            if (startIdx >= 0)
+            {
+                added++;
+            }
+        }
+
+        if (added > 0)
+        {
+            _simulator.processObstacles();
+            Debug.Log($"[RVOManager] 障碍处理完成，新增: {added}");
+        }
+        else
+        {
+            Debug.Log("[RVOManager] 无需处理障碍");
+        }
+
+        _pendingObstacles.Clear();
     }
     #endregion
 
-    #region 坐标转换
+    #region 私有方法
     /// <summary>
     /// Unity 坐标转 RVO 坐标
     /// </summary>
@@ -551,6 +531,29 @@ public class RVOManager : MonoBehaviour
     private Vector3 ToUnity(RVOVector2 rvoPos)
     {
         return new Vector3(rvoPos.x(), 0, rvoPos.y());
+    }
+
+    /// <summary>
+    /// 重置代理属性
+    /// </summary>
+    private void ResetAgent(int agentId, Vector3 position, RVOAgentConfig config)
+    {
+        _simulator.setAgentPosition(agentId, ToRVO(position));
+        _simulator.setAgentPrefVelocity(agentId, new RVOVector2(0, 0));
+        _simulator.setAgentNeighborDist(agentId, config.neighborDist);
+        _simulator.setAgentMaxNeighbors(agentId, config.maxNeighbors);
+        _simulator.setAgentTimeHorizon(agentId, config.timeHorizon);
+        _simulator.setAgentTimeHorizonObst(agentId, config.timeHorizonObst);
+        _simulator.setAgentRadius(agentId, config.radius);
+        _simulator.setAgentMaxSpeed(agentId, config.maxSpeed);
+    }
+
+    /// <summary>
+    /// 检查代理是否有效
+    /// </summary>
+    private bool IsAgentValid(int agentId)
+    {
+        return _agentHandles.ContainsKey(agentId) && _agentHandles[agentId].isActive;
     }
     #endregion
 }

@@ -71,7 +71,6 @@ public class SimpleRVOExample : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("asd");
         // ==================== 第6步：获取模拟器引用 ====================
         Simulator sim = Simulator.Instance;
 

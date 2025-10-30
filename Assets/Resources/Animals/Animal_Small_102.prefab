@@ -453,7 +453,7 @@ GameObject:
   - component: {fileID: 1203688702126075025}
   - component: {fileID: -9221332333728369963}
   - component: {fileID: 2179243204159730175}
-  - component: {fileID: -6675216645273443427}
+  - component: {fileID: 1012161089364175123}
   m_Layer: 0
   m_Name: Animal_Small_102
   m_TagString: Untagged
@@ -665,8 +665,9 @@ MonoBehaviour:
   hitClip: {fileID: 8300000, guid: f5f2c60655938bd41a899a7f57c106c3, type: 3}
   audioSource: {fileID: 0}
   currentHP: 0
-  moveSpeed: 0
---- !u!114 &-6675216645273443427
+  currentMoveSpeed: 0
+  currentDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &1012161089364175123
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -679,12 +680,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   neighborDist: 10
-  maxNeighbors: 5
+  maxNeighbors: 6
   timeHorizon: 10
   timeHorizonObst: 10
   radius: 3
-  maxSpeed: 8
-  rotationSmoothSpeed: 6
+  rotationSmoothSpeed: 3
 --- !u!1 &6788538757856321312
 GameObject:
   m_ObjectHideFlags: 0
