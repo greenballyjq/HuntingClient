@@ -10,9 +10,29 @@ namespace Hunting
     public static class GameServiceLocator
     {
         #region 常用管理器
-        public static EventManager Events => GameLogic.Instance.GetFrameworkManager<EventManager>();
-        public static ResourceManager Resources => GameLogic.Instance.GetFrameworkManager<ResourceManager>();
+        /// <summary>
+        /// 事件中心管理器
+        /// </summary>
+        public static EventManager Event => GameLogic.Instance.GetFrameworkManager<EventManager>();
+
+        /// <summary>
+        /// 资源加载管理器
+        /// </summary>
+        public static ResourceManager Resource => GameLogic.Instance.GetFrameworkManager<ResourceManager>();
+
+        /// <summary>
+        /// UI管理器
+        /// </summary>
         public static UIManager UI => GameLogic.Instance.GetFrameworkManager<UIManager>();
+
+        /// <summary>
+        /// 对象池管理器
+        /// </summary>
+        public static GameObjectPoolManager Pool => GameLogic.Instance.GetFrameworkManager<GameObjectPoolManager>();
+
+        /// <summary>
+        /// 配置管理器
+        /// </summary>
         public static HuntingGameConfigManager Config => HuntingGameConfigManager.Instance;
         #endregion
 

@@ -1,5 +1,8 @@
-﻿using Hunting;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Hunting;
 using Hunting.Game;
+using Hunting.Game.Animal;
 using Hunting.UI;
 using UnityEngine;
 
@@ -8,11 +11,13 @@ using UnityEngine;
 /// </summary>
 public class GameServiceLocatorTest : MonoBehaviour
 {
+    private bool _initialized = false;
     private async void Start()
     {
         await GameServiceLocator.WaitForInitialization();
+        _initialized = true;
 
-        GameServiceLocator.Events.AddListener("GameStarted", () =>
+        GameServiceLocator.Event.AddListener("GameStarted", () =>
         {
             Debug.LogWarning("准备好冰块旋转了吗");
         });
@@ -20,10 +25,28 @@ public class GameServiceLocatorTest : MonoBehaviour
 
         Debug.Log(GameServiceLocator.Config.GetBullet(1));
 
-        Debug.Log(await GameServiceLocator.Resources.LoadAssetAsync<GameObject>("Arts/Prefabs/UI/UIMeatProgress"));
+        Debug.Log(await GameServiceLocator.Resource.LoadAssetAsync<GameObject>("Arts/Prefabs/UI/UIMeatProgress"));
 
         UIMeatProgress uIMeatProgress = await GameServiceLocator.UI.OpenUIAsync<UIMeatProgress>("UIMeatProgress");
 
         GameServiceLocator.GetFrameworkManager<HttpManager>().SetDefaultHeader("username", "zhangsan");
+    }
+
+    Queue<GameObject> animals = new Queue<GameObject>();
+    private async void Update()
+    {
+        if (!_initialized) return;
+        
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject obj = await GameServiceLocator.Pool.PullAsync("Animals/Animal_Large_301");
+            animals.Enqueue(obj);
+            obj.GetComponent<AnimalBehavior>().Init(GameServiceLocator.Config.GetSpecie(301),10,transform.forward);
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            GameServiceLocator.Pool.Push(animals.Dequeue());
+        }
     }
 }

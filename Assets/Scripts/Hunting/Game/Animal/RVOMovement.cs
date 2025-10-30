@@ -129,12 +129,9 @@ public class RVOMovement : MonoBehaviour
         if (_isInitialized)
             return;
 
-        // 检查并设置默认速度
-        if (_maxSpeed <= 0)
-        {
-            _maxSpeed = 16.0f;
-            Debug.LogWarning($"[RVOMovement] {gameObject.name} 未设置最大速度，使用默认值: {_maxSpeed}");
-        }
+        // 速度与方向初始化检查
+        if (_maxSpeed <= 0 || !IsMoving())
+            Debug.LogWarning($"[RVOMovement] 速度或方向初始化错误，初始化速度：{_maxSpeed}，初始化方向：{_targetDirection}");
 
         // 创建 RVO 代理配置
         RVOAgentConfig config = new RVOAgentConfig

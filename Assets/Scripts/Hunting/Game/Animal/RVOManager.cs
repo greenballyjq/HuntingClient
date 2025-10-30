@@ -58,7 +58,6 @@ public class RVOManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                // 懒加载创建
                 var go = new GameObject("RVOManager");
                 _instance = go.AddComponent<RVOManager>();
                 DontDestroyOnLoad(go);

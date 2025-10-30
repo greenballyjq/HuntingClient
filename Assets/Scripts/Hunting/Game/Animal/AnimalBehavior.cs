@@ -11,10 +11,10 @@ using UnityEngine;
 
 namespace Hunting.Game.Animal
 {
-    // <summary>
+    /// <summary>
     /// 动物基类
     /// </summary>
-    public class AnimalBehavior : MonoBehaviour
+    public class AnimalBehavior : MonoBehaviour,IPoolable
     {
         #region 测试
         public AudioClip hitClip;
@@ -144,10 +144,6 @@ namespace Hunting.Game.Animal
 
             currentDirection = initialDirection;
             
-            rvo.SetMaxSpeed(currentMoveSpeed);
-            rvo.SetMoveDirection(currentDirection);
-            rvo.Init();
-            
             stateMachine.Initialize(moveState);
         }
 
@@ -199,6 +195,23 @@ namespace Hunting.Game.Animal
         {
             // 触发掉落奖励事件
             OnAnimalDropReward?.Invoke(this, specieData.DropType, specieData.DropAmount);
+        }
+
+        public void OnPull()
+        {
+            rvo.SetMaxSpeed(6);
+            rvo.SetMoveDirection(transform.forward);
+            rvo.Init();
+        }
+
+        public void OnPush()
+        {
+            rvo.Release();
+        }
+
+        public void OnPoolDestroy()
+        {
+           
         }
     }
 }
