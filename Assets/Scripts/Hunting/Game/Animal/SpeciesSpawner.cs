@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
+using Hunting;
 using Hunting.Game.Animal;
 using Hunting.Manager;
 using UnityEngine;
@@ -91,6 +92,12 @@ public class SpeciesSpawner : MonoBehaviour
     #endregion
 
     private async void Start()
+    {
+        EventManager eventManager = await GameServiceLocator.GetFrameworkManagerAsync<EventManager>();
+        eventManager.AddListener(HuntingEvents.HuntingGameStarted, OnHuntingGameStarted);
+    }
+
+    private async void OnHuntingGameStarted()
     {
         await Init();
         lastSpawnTime = Time.time;
