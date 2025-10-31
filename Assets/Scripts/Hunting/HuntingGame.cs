@@ -22,10 +22,6 @@ namespace Hunting
         protected override void OnGameStart()
         {
             Debug.Log("[HuntingGame] 游戏开始");
-
-            // 触发业务事件
-            var eventManager = GetFrameworkManager<EventManager>();
-            eventManager.Trigger(HuntingEvents.HuntingGameStarted);
         }
 
         protected override void OnGamePause()
@@ -41,10 +37,6 @@ namespace Hunting
         protected override void OnGameEnd()
         {
             Debug.Log("[HuntingGame] 游戏结束");
-
-            // 触发业务事件
-            var eventManager = GetFrameworkManager<EventManager>();
-            eventManager.Trigger(HuntingEvents.HuntingGameEnded);
         }
 
         protected override void OnGamePlaying()

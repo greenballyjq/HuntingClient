@@ -2176,31 +2176,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8031339192871210686, guid: 3f9b178ccd3b86f4ebbfc1f5a2815e56, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9999619
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8031339192871210686, guid: 3f9b178ccd3b86f4ebbfc1f5a2815e56, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.0020744076
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031339192871210686, guid: 3f9b178ccd3b86f4ebbfc1f5a2815e56, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0030255069
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031339192871210686, guid: 3f9b178ccd3b86f4ebbfc1f5a2815e56, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.007919418
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031339192871210686, guid: 3f9b178ccd3b86f4ebbfc1f5a2815e56, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.235
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031339192871210686, guid: 3f9b178ccd3b86f4ebbfc1f5a2815e56, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.349
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031339192871210686, guid: 3f9b178ccd3b86f4ebbfc1f5a2815e56, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.908
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8031339192871210686, guid: 3f9b178ccd3b86f4ebbfc1f5a2815e56, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -2932,13 +2932,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d33214e44561ff469e4b801da8c21a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnDirection: 0
-  currentMapId: 1
+  mapId: 1
   spawnInterval: 1
-  spawnZRange: {x: -13.65, y: 45.3}
-  spawnXOffset: 4.09
-  minAngle: 45
-  maxAngle: 90
+  spawnLineRange: {x: -10, y: 10}
+  minSpawnAngle: 20.89
+  maxSpawnAngle: 165.6
 --- !u!4 &1501949005
 Transform:
   m_ObjectHideFlags: 0
@@ -2947,13 +2945,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1501949003}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7016645, z: -0, w: 0.7125074}
-  m_LocalPosition: {x: -45.7, y: 0, z: -29.6}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -43.5, y: 0, z: -42.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 89.121, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1578751594
 GameObject:
   m_ObjectHideFlags: 0
@@ -2983,13 +2981,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d33214e44561ff469e4b801da8c21a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnDirection: 1
-  currentMapId: 1
+  mapId: 1
   spawnInterval: 1
-  spawnZRange: {x: -3, y: 3}
-  spawnXOffset: 2.6
-  minAngle: -45
-  maxAngle: -90
+  spawnLineRange: {x: -3, y: 3}
+  minSpawnAngle: -27.83
+  maxSpawnAngle: 213.2
 --- !u!4 &1578751596
 Transform:
   m_ObjectHideFlags: 0
@@ -2998,13 +2994,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1578751594}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7016645, z: -0, w: 0.7125074}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 48.1, y: 0, z: -29.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 89.121, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1581083524
 PrefabInstance:
   m_ObjectHideFlags: 0
