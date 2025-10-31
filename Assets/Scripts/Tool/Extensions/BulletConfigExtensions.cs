@@ -1,14 +1,14 @@
-using cfg;
+ï»¿using cfg;
 
 namespace Tool.Extensions
 {
     /// <summary>
-    /// ×Óµ¯Êı¾İ½á¹¹À©Õ¹Àà£¬Îª×Óµ¯Êı¾İ½á¹¹ÀàÌá¹©¶îÍâµÄ¹¦ÄÜ
+    /// å­å¼¹æ•°æ®ç»“æ„æ‰©å±•ç±»ï¼Œä¸ºå­å¼¹æ•°æ®ç»“æ„ç±»æä¾›é¢å¤–çš„åŠŸèƒ½
     /// </summary>
     public static class BulletConfigExtensions
     {
         /// <summary>
-        /// ÊÇ·ñÊÇ·¶Î§ÉËº¦
+        /// æ˜¯å¦æ˜¯èŒƒå›´ä¼¤å®³
         /// </summary>
         public static bool IsAOE(this cfg.HuntingConfig.Bullet bullet)
             => bullet.DamageRangeType == EBulletDamageRangeType.AOE;

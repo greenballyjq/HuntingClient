@@ -1,104 +1,96 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
-using Hunting;
 using Hunting.Game.Animal;
 using Hunting.Manager;
 using UnityEngine;
 
 /// <summary>
-/// �����ɷ���
+/// 物种派发器
 /// </summary>
 public class SpeciesSpawner : MonoBehaviour
 {
     /// <summary>
-    /// �����ɷ�����
+    /// 物种派发方向
     /// </summary>
     public enum SpawnDirection
     {
         /// <summary>
-        /// ��������ɣ������ƶ�
+        /// 从左侧生成，向右移动
         /// </summary>
         Left,
 
         /// <summary>
-        /// ���Ҳ����ɣ������ƶ�
+        /// 从右侧生成，向左移动
         /// </summary>
         Right
     }
 
-    #region �༭������
+    #region 编辑器参数
     /// <summary>
-    /// �ɷ�����
+    /// 派发方向
     /// </summary>
     [SerializeField] private SpawnDirection spawnDirection;
 
     /// <summary>
-    /// ��ǰ��ͼID
+    /// 当前地图ID
     /// </summary>
     [SerializeField] private int currentMapId = 1;
 
     /// <summary>
-    /// ���ɼ�����룩
+    /// 生成间隔（秒）
     /// </summary>
     [SerializeField] private float spawnInterval = 2f;
 
     /// <summary>
-    /// ����λ��Z���귶Χ��ǰ��λ�ã�
+    /// 生成位置Z坐标范围（前后位置）
     /// </summary>
     [SerializeField] private Vector2 spawnZRange = new Vector2(-3f, 3f);
 
     /// <summary>
-    /// ����λ��Xƫ�ƣ����ݷ���̶���
+    /// 生成位置X偏移（根据方向固定）
     /// </summary>
     [SerializeField] private float spawnXOffset = 2f;
 
-    [Header("�ƶ���������")]
-    [Tooltip("��С�Ƕȣ��ȣ�")]
+    [Header("移动方向设置")]
+    [Tooltip("最小角度（度）")]
     [SerializeField] private float minAngle = 0f;
 
-    [Tooltip("���Ƕȣ��ȣ�")]
+    [Tooltip("最大角度（度）")]
     [SerializeField] private float maxAngle = 60f;
     #endregion
 
-    #region ����ʱ����
+    #region 运行时变量
     /// <summary>
-    /// �ϴ�����ʱ��
+    /// 上次生成时间
     /// </summary>
     private float lastSpawnTime;
 
     /// <summary>
-    /// ����Ԥ�������·��
+    /// 动物预制体基础路径
     /// </summary>
     private const string ANIMAL_PREFAB_BASE_PATH = "Animals/";
     #endregion
 
-    #region ��ʼ�����
+    #region 初始化相关
     private bool initialized;
 
     /// <summary>
-    /// �첽��ʼ��
+    /// 异步初始化
     /// </summary>
     private async UniTask Init()
     {
-        // �ȴ� HuntingGameConfigManager ��ʼ�����
+        // 等待 HuntingGameConfigManager 初始化完成
         while (HuntingGameConfigManager.Instance == null || !HuntingGameConfigManager.Instance.Initialized)
         {
             await UniTask.Delay(10);
         }
         initialized = true;
 
-        Debug.Log($"[SpeciesSpawner] {spawnDirection}�����ɷ�����ʼ����ɣ���ͼID: {currentMapId}");
+        Debug.Log($"[SpeciesSpawner] {spawnDirection}方向派发器初始化完成，地图ID: {currentMapId}");
     }
     #endregion
 
     private async void Start()
-    {
-        EventManager eventManager = await GameServiceLocator.GetFrameworkManagerAsync<EventManager>();
-        
-        eventManager.AddListener(HuntingEvents.GameStarted, OnGameStarted);
-    }
-
-    private async void OnGameStarted()
     {
         await Init();
         lastSpawnTime = Time.time;
@@ -108,7 +100,7 @@ public class SpeciesSpawner : MonoBehaviour
     {
         if (!initialized) return;
 
-        // ������ɼ��
+        // 检查生成间隔
         if (Time.time - lastSpawnTime >= spawnInterval)
         {
             TrySpawnAnimal();
@@ -117,58 +109,58 @@ public class SpeciesSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// �������ɶ���
+    /// 尝试生成动物
     /// </summary>
     private void TrySpawnAnimal()
     {
-        // �����ù�������ȡ�������
+        // 从配置管理器获取随机物种
         var (specie, stayTime) = HuntingGameConfigManager.Instance.GetRandomSpecieForMap(currentMapId);
 
         if (specie == null)
         {
-            Debug.LogError($"[SpeciesSpawner] �޷���ȡ�������ݣ���ͼID: {currentMapId}");
+            Debug.LogError($"[SpeciesSpawner] 无法获取物种数据，地图ID: {currentMapId}");
             return;
         }
 
-        // ���ɶ���
+        // 生成动物
         SpawnAnimal(specie, stayTime);
     }
 
     /// <summary>
-    /// ���ɶ���ʵ��
+    /// 生成动物实例
     /// </summary>
-    /// <param name="specie">��������</param>
-    /// <param name="stayTime">פ��ʱ��</param>
+    /// <param name="specie">物种数据</param>
+    /// <param name="stayTime">驻场时间</param>
     private void SpawnAnimal(Specie specie, float stayTime)
     {
-        // ��������ID��ȡ��Ӧ��Ԥ��������
+        // 根据物种ID获取对应的预制体名称
         string prefabName = GetAnimalPrefabName(specie);
         string prefabPath = $"{ANIMAL_PREFAB_BASE_PATH}{prefabName}";
 
-        // ���ض���Ԥ����
+        // 加载动物预制体
         GameObject animalPrefab = Resources.Load<GameObject>(prefabPath);
         if (animalPrefab == null)
         {
-            Debug.LogError($"[SpeciesSpawner] ����Ԥ���岻����: {prefabPath}");
+            Debug.LogError($"[SpeciesSpawner] 动物预制体不存在: {prefabPath}");
             return;
         }
 
-        // ��������λ�ã������ɷ���λ�ã�
+        // 计算生成位置（基于派发器位置）
         Vector3 spawnPosition = CalculateSpawnPosition();
 
-        // �����ƶ�����
+        // 计算移动方向
         Vector3 moveDirection = CalculateMoveDirection();
 
-        // ʵ��������
+        // 实例化动物
         GameObject animalObj = Instantiate(animalPrefab, spawnPosition, Quaternion.identity);
         AnimalBehavior animal = animalObj.GetComponent<AnimalBehavior>();
 
         if (animal != null)
         {
-            // ��ʼ������
-            animal.Initialize(specie, stayTime, moveDirection);
+            // 初始化动物
+            animal.Init(specie, stayTime, moveDirection);
 
-            // ���ö��ﳯ�����ƶ�����һ��
+            // 设置动物朝向与移动方向一致
             if (moveDirection != Vector3.zero)
             {
                 animalObj.transform.rotation = Quaternion.LookRotation(moveDirection);
@@ -176,75 +168,75 @@ public class SpeciesSpawner : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"[SpeciesSpawner] ����Ԥ����ȱ��Animal���: {prefabName}");
+            Debug.LogError($"[SpeciesSpawner] 动物预制体缺少Animal组件: {prefabName}");
             Destroy(animalObj);
         }
     }
 
     /// <summary>
-    /// �����������ݻ�ȡԤ��������
+    /// 根据物种数据获取预制体名称
     /// </summary>
-    /// <param name="specie">��������</param>
-    /// <returns>Ԥ��������</returns>
+    /// <param name="specie">物种数据</param>
+    /// <returns>预制体名称</returns>
     private string GetAnimalPrefabName(Specie specie)
     {
         return $"Animal_{specie.VolumeType}_{specie.ID}";
     }
 
     /// <summary>
-    /// ��������λ��
+    /// 计算生成位置
     /// </summary>
-    /// <returns>����λ��</returns>
+    /// <returns>生成位置</returns>
     private Vector3 CalculateSpawnPosition()
     {
-        // �����ɷ��������λ��
+        // 基于派发器对象的位置
         Vector3 basePosition = transform.position;
 
-        // ���ݷ������X��ƫ��
+        // 根据方向添加X轴偏移
         float xOffset = spawnDirection == SpawnDirection.Left ? -spawnXOffset : spawnXOffset;
 
-        // ��Z�᷶Χ�����
+        // 在Z轴范围内随机
         float zOffset = Random.Range(spawnZRange.x, spawnZRange.y);
 
         return basePosition + new Vector3(xOffset, 0f, zOffset);
     }
 
     /// <summary>
-    /// �����ƶ�����
+    /// 计算移动方向
     /// </summary>
-    /// <returns>�ƶ���������</returns>
+    /// <returns>移动方向向量</returns>
     private Vector3 CalculateMoveDirection()
     {
-        // �����õĽǶȷ�Χ�����
+        // 在设置的角度范围内随机
         float randomAngle = Random.Range(minAngle, maxAngle);
         return Quaternion.Euler(0f, randomAngle, 0f) * Vector3.forward;
     }
 
     /// <summary>
-    /// ���õ�ǰ��ͼ
+    /// 设置当前地图
     /// </summary>
-    /// <param name="mapId">��ͼID</param>
+    /// <param name="mapId">地图ID</param>
     public void SetCurrentMap(int mapId)
     {
         currentMapId = mapId;
     }
 
     /// <summary>
-    /// �������ɼ��
+    /// 设置生成间隔
     /// </summary>
-    /// <param name="interval">���ɼ�����룩</param>
+    /// <param name="interval">生成间隔（秒）</param>
     public void SetSpawnInterval(float interval)
     {
         spawnInterval = interval;
     }
 
-    #region ����
+    #region 调试
     /// <summary>
-    /// ��Scene��ͼ����ʾ���ɷ�Χ���ƶ�����
+    /// 在Scene视图中显示生成范围和移动方向
     /// </summary>
     private void OnDrawGizmos()
     {
-        // ����λ�÷�Χ
+        // 生成位置范围
         Gizmos.color = spawnDirection == SpawnDirection.Left ? Color.blue : Color.red;
 
         Vector3 center = transform.position;
@@ -256,13 +248,13 @@ public class SpeciesSpawner : MonoBehaviour
         Gizmos.DrawWireSphere(rightPos, 0.5f);
         Gizmos.DrawWireSphere(transform.position, 0.3f);
 
-        // �ƶ�����Χ
+        // 移动方向范围
         Gizmos.color = Color.green;
         DrawDirectionArc(center, minAngle, maxAngle, 3f);
     }
 
     /// <summary>
-    /// ���Ʒ����ߣ������ã�
+    /// 绘制方向弧线（调试用）
     /// </summary>
     private void DrawDirectionArc(Vector3 center, float startAngle, float endAngle, float radius)
     {
@@ -279,7 +271,7 @@ public class SpeciesSpawner : MonoBehaviour
             prevPoint = nextPoint;
         }
 
-        // ������ʼ�ͽ���������
+        // 绘制起始和结束方向线
         Gizmos.DrawLine(center, center + Quaternion.Euler(0f, startAngle, 0f) * Vector3.forward * radius);
         Gizmos.DrawLine(center, center + Quaternion.Euler(0f, endAngle, 0f) * Vector3.forward * radius);
     }

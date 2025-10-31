@@ -16,6 +16,7 @@ public sealed partial class Progress : Luban.BeanBase
 {
     public Progress(ByteBuf _buf) 
     {
+        ID = _buf.ReadInt();
         ProgressType = (EProgressType)_buf.ReadInt();
         IncreasePerSecond = _buf.ReadFloat();
         RequiredPerBar = _buf.ReadFloat();
@@ -28,6 +29,10 @@ public sealed partial class Progress : Luban.BeanBase
         return new HuntingConfig.Progress(_buf);
     }
 
+    /// <summary>
+    /// 进度条ID
+    /// </summary>
+    public readonly int ID;
     /// <summary>
     /// 进度条类型
     /// </summary>
@@ -59,6 +64,7 @@ public sealed partial class Progress : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
+        + "ID:" + ID + ","
         + "ProgressType:" + ProgressType + ","
         + "IncreasePerSecond:" + IncreasePerSecond + ","
         + "RequiredPerBar:" + RequiredPerBar + ","

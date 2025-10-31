@@ -1,4 +1,4 @@
-using cfg;
+﻿using cfg;
 using cfg.HuntingConfig;
 using GameFramework.Manager;
 using System.Collections.Generic;
@@ -19,8 +19,8 @@ namespace Hunting.Manager
         {
             "huntingconfig_tbbullet",
             "huntingconfig_tbspecie",
-            "huntingconfig_tbspeciespawn",
-            "huntingconfig_tbmapspecie",
+            "huntingconfig_tbspawn",
+            "huntingconfig_tbmap",
             "huntingconfig_tbprogress",
             "huntingconfig_tbdynamicquest"
         };
@@ -37,11 +37,11 @@ namespace Hunting.Manager
         /// <summary>
         /// 物种派发数值表
         /// </summary>
-        public TbSpecieSpawn SpeciesSpawnTable => _tables?.TbSpecieSpawn;
+        public TbSpawn SpeciesSpawnTable => _tables?.TbSpawn;
         /// <summary>
         /// 地图与物种映射数值表
         /// </summary>
-        public TbMapSpecie MapSpeciesTable => _tables?.TbMapSpecie;
+        public TbMap MapSpeciesTable => _tables?.TbMap;
         /// <summary>
         /// 全局进度数值表
         /// </summary>
@@ -59,36 +59,65 @@ namespace Hunting.Manager
         /// <param name="id">子弹ID</param>
         /// <returns></returns>
         public Bullet GetBullet(int id) => BulletTable.Get(id);
+
+		/// <summary>
+		/// 通过子弹类型获取单个子弹数据
+		/// </summary>
+		/// <param name="type">子弹类型</param>
+		/// <returns></returns>
+		public Bullet GetBullet(EBulletType type)
+			=> BulletTable?.DataList?.FirstOrDefault(b => b.BulletType == type);
+        
         /// <summary>
         /// 获取单个物种数据
         /// </summary>
         /// <param name="id">物种ID</param>
         /// <returns></returns>
         public Specie GetSpecie(int id) => SpeciesTable.Get(id);
+
         /// <summary>
-        /// 获取单个物种派发数据，如【小型动物怎么派发】。
+        /// 获取单个派发数据
         /// </summary>
-        /// <param name="volumeType">物种体积类型</param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public SpecieSpawn GetSpeciesSpawn(EVolumeType volumeType) => SpeciesSpawnTable.Get(volumeType);
+        public Spawn GetSpawn(int id) => SpeciesSpawnTable.Get(id);
+
         /// <summary>
-        /// 获取单个地图与物种映射数据，如【XX地图有XX动物】
+        /// 获取单个地图数据
         /// </summary>
         /// <param name="id">地图ID</param>
         /// <returns></returns>
-        public MapSpecie GetMapSpecies(int id) => MapSpeciesTable.Get(id);
+        public Map GetMap(int id) => MapSpeciesTable.Get(id);
+
         /// <summary>
-        /// 获取单个全局进度条数据，如【血条包】
+        /// 获取单个全局进度条数据
         /// </summary>
-        /// <param name="progressType">进度条类型</param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public Progress GetProgress(EProgressType progressType) => ProgressTable.Get(progressType);
+        public Progress GetProgress(int id) => ProgressTable.Get(id);
+
+		/// <summary>
+		/// 通过进度条类型获取单个进度条数据
+		/// </summary>
+		/// <param name="type">进度条类型</param>
+		/// <returns></returns>
+		public Progress GetProgress(EProgressType type)
+			=> ProgressTable?.DataList?.FirstOrDefault(p => p.ProgressType == type);
+
         /// <summary>
-        /// 获取单个动态任务数据，如【打猎大型猎物】
+        /// 获取单个动态任务数据
         /// </summary>
         /// <param name="id">动态任务ID</param>
         /// <returns></returns>
         public DynamicQuest GetDynamicQuest(int id) => DynamicQuestTable.Get(id);
+
+		/// <summary>
+		/// 通过任务类型获取单个动态任务数据
+		/// </summary>
+		/// <param name="type">任务类型</param>
+		/// <returns></returns>
+		public DynamicQuest GetDynamicQuest(EDynamicQuestType type)
+			=> DynamicQuestTable?.DataList?.FirstOrDefault(q => q.DynamicQuestType == type);
         #endregion
 
         #region 子弹相关特殊方法
@@ -110,149 +139,169 @@ namespace Hunting.Manager
         }
         #endregion
 
-        #region 物种派发相关特殊方法
-
+        #region 物种相关特殊方法
         /// <summary>
-        /// 根据体型随机选择一种体型（考虑派发比例）
-        /// </summary>
-        /// <returns>选中的体型类型</returns>
-        public EVolumeType GetRandomVolumeTypeByRatio()
-        {
-            var spawnConfigs = SpeciesSpawnTable?.DataList;
-            if (spawnConfigs == null || spawnConfigs.Count == 0)
-                return EVolumeType.Small;
-
-            // 计算总权重
-            float totalWeight = spawnConfigs.Sum(config => config.SpawnRatio);
-
-            // 随机选择
-            float randomValue = Random.Range(0f, totalWeight);
-            float currentWeight = 0f;
-
-            foreach (var config in spawnConfigs)
-            {
-                currentWeight += config.SpawnRatio;
-                if (randomValue <= currentWeight)
-                {
-                    return config.VolumeType;
-                }
-            }
-
-            return EVolumeType.Small; // 默认返回小型
-        }
-
-        /// <summary>
-        /// 根据地图和体型获取该体型下所有可能的物种ID
+        /// 根据地图与体型，在对应物种池内按权重随机选择一个物种
         /// </summary>
         /// <param name="mapId">地图ID</param>
-        /// <param name="volumeType">体型类型</param>
-        /// <returns>物种ID数组</returns>
-        public int[] GetSpecieIdsByMapAndVolume(int mapId, EVolumeType volumeType)
-        {
-            var mapSpecie = GetMapSpecies(mapId);
-            if (mapSpecie?.SpeciesByVolume == null)
-                return new int[0];
-
-            return mapSpecie.SpeciesByVolume.TryGetValue(volumeType, out var specieIds)
-                ? specieIds
-                : new int[0];
-        }
-
-        /// <summary>
-        /// 根据地图和体型随机选择一个物种（考虑出现概率）
-        /// </summary>
-        /// <param name="mapId">地图ID</param>
-        /// <param name="volumeType">体型类型</param>
-        /// <returns>选中的物种数据</returns>
+        /// <param name="volumeType">体型</param>
+        /// <returns>选中的物种</returns>
         public Specie GetRandomSpecieByMapAndVolume(int mapId, EVolumeType volumeType)
         {
-            var specieIds = GetSpecieIdsByMapAndVolume(mapId, volumeType);
-            if (specieIds.Length == 0)
-                return null;
+			var map = GetMap(mapId);
+			if (map == null)
+			{
+				Debug.LogError($"[HuntingGameConfigManager] GetRandomSpecieByMapAndVolume: 地图不存在 mapId={mapId}");
+				return null;
+			}
+			if (map.SpeciesByVolume == null)
+			{
+				Debug.LogError($"[HuntingGameConfigManager] GetRandomSpecieByMapAndVolume: 地图未配置物种池 mapId={mapId}");
+				return null;
+			}
+			if (!map.SpeciesByVolume.TryGetValue(volumeType, out var specieWeights) || specieWeights == null || specieWeights.Length == 0)
+			{
+				Debug.LogWarning($"[HuntingGameConfigManager] GetRandomSpecieByMapAndVolume: 该体型在地图下无候选物种 mapId={mapId}, volumeType={volumeType}");
+				return null;
+			}
 
-            // 获取所有可能的物种数据
-            var possibleSpecies = specieIds
-                .Select(id => GetSpecie(id))
-                .Where(specie => specie != null)
-                .ToList();
+			// 计算该体型物种池的总权重
+			float totalWeight = 0f;
+			for (int i = 0; i < specieWeights.Length; i++)
+			{
+				float w = specieWeights[i].Weight;
+				if (w > 0f) totalWeight += w;
+			}
+			if (totalWeight <= 0f)
+			{
+				Debug.LogWarning($"[HuntingGameConfigManager] GetRandomSpecieByMapAndVolume: 该体型所有权重<=0 mapId={mapId}, volumeType={volumeType}");
+				// 返回第一个有效物种以避免中断
+				for (int i = 0; i < specieWeights.Length; i++)
+				{
+					var fallback = GetSpecie(specieWeights[i].SpecieId);
+					if (fallback != null) return fallback;
+				}
+				return null;
+			}
 
-            if (possibleSpecies.Count == 0)
-                return null;
+			// 在 [0, totalWeight] 上取随机点并累加命中
+			float randomPoint = Random.Range(0f, totalWeight);
+			float cumulative = 0f;
+			for (int i = 0; i < specieWeights.Length; i++)
+			{
+				float w = specieWeights[i].Weight;
+				if (w <= 0f) continue;
+				cumulative += w;
+				if (randomPoint <= cumulative)
+				{
+					return GetSpecie(specieWeights[i].SpecieId);
+				}
+			}
 
-            // 计算总权重
-            float totalWeight = possibleSpecies.Sum(specie => specie.SpawnWeight);
-
-            // 随机选择
-            float randomValue = Random.Range(0f, totalWeight);
-            float currentWeight = 0f;
-
-            foreach (var specie in possibleSpecies)
-            {
-                currentWeight += specie.SpawnWeight;
-                if (randomValue <= currentWeight)
-                {
-                    return specie;
-                }
-            }
-
-            return possibleSpecies[0]; // 默认返回第一个
+			// 理论上不会到这里，兜底返回首个有效
+			Debug.LogWarning($"[HuntingGameConfigManager] GetRandomSpecieByMapAndVolume: 未命中加权范围，使用首个有效作为兜底 mapId={mapId}, volumeType={volumeType}");
+			return GetSpecie(specieWeights[0].SpecieId);
         }
+        #endregion
 
+        #region 派发相关特殊方法
         /// <summary>
-        /// 获取体型的驻场时间
-        /// </summary>
-        /// <param name="volumeType">体型类型</param>
-        /// <returns>驻场时间（秒）</returns>
-        public float GetStayTimeByVolumeType(EVolumeType volumeType)
-        {
-            var spawnConfig = GetSpeciesSpawn(volumeType);
-            return spawnConfig?.StayTime ?? 10f; // 默认10秒
-        }
-
-        /// <summary>
-        /// 综合方法：随机生成一个物种数据（考虑地图、体型比例、物种概率）
+        /// 根据地图的体型策略按比例随机选择一种体型
         /// </summary>
         /// <param name="mapId">地图ID</param>
-        /// <returns>物种数据和驻场时间</returns>
-        public (Specie specie, float stayTime) GetRandomSpecieForMap(int mapId)
+        /// <returns>选中的体型</returns>
+        public EVolumeType GetRandomVolumeTypeByStrategy(int mapId)
         {
-            // 1. 随机选择体型（考虑派发比例）
-            EVolumeType volumeType = GetRandomVolumeTypeByRatio();
+			var strategy = GetMapSpawnStrategy(mapId);
+			if (strategy == null)
+			{
+				Debug.LogError($"[HuntingGameConfigManager] GetRandomVolumeTypeByStrategy: 体型策略不存在 mapId={mapId}");
+				return EVolumeType.Small;
+			}
+			if (strategy.VolumeRatios == null || strategy.VolumeRatios.Count == 0)
+			{
+				Debug.LogError($"[HuntingGameConfigManager] GetRandomVolumeTypeByStrategy: 策略未配置体型比例 mapId={mapId}");
+				return EVolumeType.Small;
+			}
 
-            // 2. 根据体型和地图随机选择物种
-            Specie specie = GetRandomSpecieByMapAndVolume(mapId, volumeType);
+			// 仅对策略中配置的体型做加权
+			float totalRatio = 0f;
+			foreach (var kv in strategy.VolumeRatios)
+			{
+				if (kv.Value > 0f) totalRatio += kv.Value;
+			}
+			if (totalRatio <= 0f)
+			{
+				Debug.LogError($"[HuntingGameConfigManager] GetRandomVolumeTypeByStrategy: 所有体型比例<=0 mapId={mapId}");
+				return EVolumeType.Small;
+			}
 
-            // 3. 获取该体型的驻场时间
-            float stayTime = GetStayTimeByVolumeType(volumeType);
+			float randomPoint = Random.Range(0f, totalRatio);
+			float cumulative = 0f;
+			foreach (var kv in strategy.VolumeRatios)
+			{
+				float ratio = kv.Value;
+				if (ratio <= 0f) continue;
+				cumulative += ratio;
+				if (randomPoint <= cumulative)
+					return kv.Key;
+			}
 
-            return (specie, stayTime);
+			// 兜底选择第一个键
+			Debug.LogWarning($"[HuntingGameConfigManager] GetRandomVolumeTypeByStrategy: 未命中加权范围，使用第一个体型兜底 mapId={mapId}");
+			foreach (var kv in strategy.VolumeRatios)
+				return kv.Key;
+			return EVolumeType.Small;
         }
-
-        #endregion
-
-        #region 地图与物种映射相关特殊方法
 
         /// <summary>
-        /// 获取所有地图数据
+        /// 获取地图下某体型的驻场时间
         /// </summary>
-        /// <returns>地图数据列表</returns>
-        public List<MapSpecie> GetAllMaps()
+        /// <param name="mapId">地图ID</param>
+        /// <param name="volumeType">体型</param>
+        /// <returns>驻场时间（秒）</returns>
+        public float GetStayTimeByVolumeType(int mapId, EVolumeType volumeType)
         {
-            return MapSpeciesTable?.DataList?.ToList() ?? new List<MapSpecie>();
-        }
+			var strategy = GetMapSpawnStrategy(mapId);
+			if (strategy == null)
+			{
+				Debug.LogError($"[HuntingGameConfigManager] GetStayTimeByVolumeType: 体型策略不存在 mapId={mapId}");
+				return 10f;
+			}
+			if (strategy.StayTimes == null)
+			{
+				Debug.LogError($"[HuntingGameConfigManager] GetStayTimeByVolumeType: 策略未配置驻场时间 mapId={mapId}");
+				return 10f;
+			}
+			if (strategy.StayTimes.TryGetValue(volumeType, out var stayTime))
+				return stayTime;
 
-        /// <summary>
-        /// 获取默认地图（ID为1的地图）
-        /// </summary>
-        /// <returns>默认地图数据</returns>
-        public MapSpecie GetDefaultMap()
-        {
-            return GetMapSpecies(1);
+			Debug.LogWarning($"[HuntingGameConfigManager] GetStayTimeByVolumeType: 该体型未配置驻场时间 mapId={mapId}, volumeType={volumeType}，使用默认值");
+			return 10f;
         }
-
         #endregion
 
-        #region 地图与物种映射相关特殊方法
+        #region 地图相关特殊方法
+        /// <summary>
+        /// 获取地图使用的体型策略（体型比例与驻场时间）
+        /// </summary>
+        /// <param name="mapId">地图ID</param>
+        /// <returns>体型策略</returns>
+        public Spawn GetMapSpawnStrategy(int mapId)
+        {
+			var map = GetMap(mapId);
+			if (map == null)
+			{
+				Debug.LogError($"[HuntingGameConfigManager] GetMapSpawnStrategy: 地图不存在 mapId={mapId}");
+				return null;
+			}
+			var strategy = GetSpawn(map.SpawnStrategyId);
+			if (strategy == null)
+			{
+				Debug.LogError($"[HuntingGameConfigManager] GetMapSpawnStrategy: 体型策略不存在 mapId={mapId}, strategyId={map.SpawnStrategyId}");
+			}
+			return strategy;
+        }
         #endregion
 
         #region 全局进度相关特殊方法
@@ -261,6 +310,29 @@ namespace Hunting.Manager
         #region 动态任务相关特殊方法
         #endregion
 
+        #region 业务需求方法
+        /// <summary>
+        /// 综合方法：随机派发一只物种（基于地图、体型策略、体型内物种权重）
+        /// </summary>
+        /// <param name="mapId">地图ID</param>
+        /// <returns>物种数据与驻场时间</returns>
+        public (Specie specie, float stayTime) GetRandomSpecieForMap(int mapId)
+        {
+			// 1) 体型：按地图体型策略的比例加权随机
+			EVolumeType volumeType = GetRandomVolumeTypeByStrategy(mapId);
 
+			// 2) 物种：在该体型下按权重随机选一个
+			var specie = GetRandomSpecieByMapAndVolume(mapId, volumeType);
+			if (specie == null)
+			{
+				Debug.LogWarning($"[HuntingGameConfigManager] GetRandomSpecieForMap: 未选出物种 mapId={mapId}, volumeType={volumeType}");
+			}
+
+			// 3) 驻场：从地图的体型策略获取
+			float stayTime = GetStayTimeByVolumeType(mapId, volumeType);
+
+			return (specie, stayTime);
+        }
+        #endregion
     }
 }

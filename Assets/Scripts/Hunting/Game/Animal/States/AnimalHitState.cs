@@ -1,16 +1,16 @@
-using Hunting.Game.Animal;
+ï»¿using Hunting.Game.Animal;
 using UnityEngine;
 
 
 namespace Hunting.Game.Animal.State
 {
     /// <summary>
-    /// ¶¯Îï±»»÷ÖĞ×´Ì¬
+    /// åŠ¨ç‰©è¢«å‡»ä¸­çŠ¶æ€
     /// </summary>
     public class AnimalHitState : AnimalState
     {
         /// <summary>
-        /// ÊÜÉË×´Ì¬³ÖĞøÊ±¼ä
+        /// å—ä¼¤çŠ¶æ€æŒç»­æ—¶é—´
         /// </summary>
         private float hitDuration = 0.5f;
 
@@ -21,16 +21,15 @@ namespace Hunting.Game.Animal.State
         public override void Enter()
         {
             base.Enter();
-            // ÉèÖÃ×´Ì¬¼ÆÊ±Æ÷
+            // è®¾ç½®çŠ¶æ€è®¡æ—¶å™¨
             stateTimer = hitDuration;
             animal.PlayHitAudio();
-            Debug.Log($"[AnimalHitState] {animal.specieData.Name} ½øÈëÊÜÉË×´Ì¬£¬³ÖĞøÊ±¼ä: {hitDuration}Ãë");
         }
 
         public override void Update()
         {
             base.Update();
-            // ÊÜÉË×´Ì¬½áÊøºó×Ô¶¯»Øµ½ÒÆ¶¯×´Ì¬
+            // å—ä¼¤çŠ¶æ€ç»“æŸåè‡ªåŠ¨å›åˆ°ç§»åŠ¨çŠ¶æ€
             if (stateTimer <= 0f)
                 stateMachine.ChangeState(animal.moveState);
         }
@@ -38,7 +37,6 @@ namespace Hunting.Game.Animal.State
         public override void Exit()
         {
             base.Exit();
-            Debug.Log($"[AnimalHitState] {animal.specieData.Name} ÍË³öÊÜÉË×´Ì¬£¬·µ»ØÒÆ¶¯×´Ì¬");
         }
     }
 }

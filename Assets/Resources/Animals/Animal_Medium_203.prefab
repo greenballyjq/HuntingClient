@@ -479,9 +479,9 @@ GameObject:
   - component: {fileID: 3961114142717461643}
   - component: {fileID: 3701583169001772672}
   - component: {fileID: 7650427297308630770}
-  - component: {fileID: 3578815909876066278}
   - component: {fileID: -7105485755836307988}
   - component: {fileID: 8969605074292503236}
+  - component: {fileID: -7448428529338025622}
   m_Layer: 0
   m_Name: Animal_Medium_203
   m_TagString: Untagged
@@ -582,33 +582,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.5, z: 0.1}
---- !u!54 &3578815909876066278
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4807929556901506227}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 116
-  m_CollisionDetection: 0
 --- !u!82 &-7105485755836307988
 AudioSource:
   m_ObjectHideFlags: 0
@@ -720,7 +693,26 @@ MonoBehaviour:
   hitClip: {fileID: 8300000, guid: f5f2c60655938bd41a899a7f57c106c3, type: 3}
   audioSource: {fileID: 0}
   currentHP: 0
-  moveSpeed: 0
+  currentMoveSpeed: 0
+  currentDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &-7448428529338025622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4807929556901506227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dfdba63c4297040afc57109f832bb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neighborDist: 10
+  maxNeighbors: 6
+  timeHorizon: 8
+  timeHorizonObst: 1000
+  radius: 3
+  rotationSmoothSpeed: 3
 --- !u!1 &5062559287153234616
 GameObject:
   m_ObjectHideFlags: 0

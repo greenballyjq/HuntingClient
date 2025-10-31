@@ -22,13 +22,13 @@ public partial class Tables
     /// </summary>
     public HuntingConfig.TbSpecie TbSpecie {get; }
     /// <summary>
-    /// 物种派发数值表
+    /// 派发数值表
     /// </summary>
-    public HuntingConfig.TbSpecieSpawn TbSpecieSpawn {get; }
+    public HuntingConfig.TbSpawn TbSpawn {get; }
     /// <summary>
-    /// 地图与物种映射数值表
+    /// 地图数值表
     /// </summary>
-    public HuntingConfig.TbMapSpecie TbMapSpecie {get; }
+    public HuntingConfig.TbMap TbMap {get; }
     /// <summary>
     /// 全局进度数值表
     /// </summary>
@@ -42,8 +42,8 @@ public partial class Tables
     {
         TbBullet = new HuntingConfig.TbBullet(loader("huntingconfig_tbbullet"));
         TbSpecie = new HuntingConfig.TbSpecie(loader("huntingconfig_tbspecie"));
-        TbSpecieSpawn = new HuntingConfig.TbSpecieSpawn(loader("huntingconfig_tbspeciespawn"));
-        TbMapSpecie = new HuntingConfig.TbMapSpecie(loader("huntingconfig_tbmapspecie"));
+        TbSpawn = new HuntingConfig.TbSpawn(loader("huntingconfig_tbspawn"));
+        TbMap = new HuntingConfig.TbMap(loader("huntingconfig_tbmap"));
         TbProgress = new HuntingConfig.TbProgress(loader("huntingconfig_tbprogress"));
         TbDynamicQuest = new HuntingConfig.TbDynamicQuest(loader("huntingconfig_tbdynamicquest"));
         ResolveRef();
@@ -53,8 +53,8 @@ public partial class Tables
     {
         TbBullet.ResolveRef(this);
         TbSpecie.ResolveRef(this);
-        TbSpecieSpawn.ResolveRef(this);
-        TbMapSpecie.ResolveRef(this);
+        TbSpawn.ResolveRef(this);
+        TbMap.ResolveRef(this);
         TbProgress.ResolveRef(this);
         TbDynamicQuest.ResolveRef(this);
     }

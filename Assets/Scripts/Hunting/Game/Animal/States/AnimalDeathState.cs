@@ -1,10 +1,10 @@
-using Hunting.Game.Animal;
+ï»¿using Hunting.Game.Animal;
 using UnityEngine;
 
 namespace Hunting.Game.Animal.State 
 {
     /// <summary>
-    /// ¶¯ÎïËÀÍö×´Ì¬
+    /// åŠ¨ç‰©æ­»äº¡çŠ¶æ€
     /// </summary>
     public class AnimalDeathState : AnimalState
     {
@@ -16,29 +16,8 @@ namespace Hunting.Game.Animal.State
         {
             base.Enter();
 
-            // ½ûÓÃÅö×²Ìå
-            if (animal.TryGetComponent<Collider>(out var collider))
-            {
-                collider.enabled = false;
-            }
+            stateTimer = 1f;
 
-            // Í£Ö¹ËùÓĞÎïÀíÔË¶¯
-            if (animal.rb != null)
-            {
-                animal.rb.velocity = Vector3.zero;
-                animal.rb.angularVelocity = Vector3.zero;
-                animal.rb.isKinematic = true; // Ö±½ÓÉèÎªÔË¶¯Ñ§£¬²»ÊÜÎïÀíÓ°Ïì
-            }
-
-            // Í£Ö¹ÒÆ¶¯
-            animal.moveSpeed = 0f;
-
-            // 2ÃëºóÏú»Ù
-            stateTimer = 2f;
-
-            Debug.Log($"[AnimalDeathState] {animal.specieData.Name} ËÀÍö£¬Í£Ö¹ËùÓĞÔË¶¯");
-
-            // ´¦ÀíµôÂä
             animal.HandleDeathDrop();
         }
 
@@ -46,11 +25,8 @@ namespace Hunting.Game.Animal.State
         {
             base.Update();
 
-            // 2ÃëºóÏú»Ù
             if (stateTimer <= 0f)
-            {
                 Object.Destroy(animal.gameObject);
-            }
         }
     }
 }

@@ -24,7 +24,6 @@ public sealed partial class Specie : Luban.BeanBase
         HitRange = _buf.ReadFloat();
         DropType = (EDropType)_buf.ReadInt();
         DropAmount = _buf.ReadInt();
-        SpawnWeight = _buf.ReadFloat();
         Comment = _buf.ReadString();
     }
 
@@ -66,10 +65,6 @@ public sealed partial class Specie : Luban.BeanBase
     /// </summary>
     public readonly int DropAmount;
     /// <summary>
-    /// 出现概率
-    /// </summary>
-    public readonly float SpawnWeight;
-    /// <summary>
     /// 备注
     /// </summary>
     public readonly string Comment;
@@ -92,7 +87,6 @@ public sealed partial class Specie : Luban.BeanBase
         + "HitRange:" + HitRange + ","
         + "DropType:" + DropType + ","
         + "DropAmount:" + DropAmount + ","
-        + "SpawnWeight:" + SpawnWeight + ","
         + "Comment:" + Comment + ","
         + "}";
     }

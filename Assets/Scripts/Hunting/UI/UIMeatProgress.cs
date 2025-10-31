@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using GameFramework.Core;
 using Hunting.Manager;
 using UnityEngine;
@@ -8,28 +8,28 @@ using UnityEngine.UI;
 namespace Hunting.UI
 {
     /// <summary>
-    /// Èâ¶ÈÌõUI¿ØÖÆÆ÷ - ¸ºÔğÏÔÊ¾ºÍ¹ÜÀíÈâ¶ÈÌõµÄUI±íÏÖ
+    /// è‚‰åº¦æ¡UIæ§åˆ¶å™¨ - è´Ÿè´£æ˜¾ç¤ºå’Œç®¡ç†è‚‰åº¦æ¡çš„UIè¡¨ç°
     /// </summary>
     public class UIMeatProgress : UIBase
     {
-        #region UI×é¼şÒıÓÃ
-        [Header("UI×é¼şÒıÓÃ")]
-        [SerializeField] private Slider sliderProgress;    // ½ø¶ÈÌõSlider×é¼ş
-        [SerializeField] private Image fillImage;          // ½ø¶ÈÌõFillÍ¼Ïñ£¨ÓÃÓÚ±äÉ«£©
-        [SerializeField] private Text txtProgress;         // ½ø¶ÈÎÄ×ÖÏÔÊ¾ "µ±Ç°½ø¶È/×ÜĞèÇó"
-        [SerializeField] private Text txtProgressAmount;   // ÌõÊıÎÄ×ÖÏÔÊ¾ "XÌõ"
+        #region UIç»„ä»¶å¼•ç”¨
+        [Header("UIç»„ä»¶å¼•ç”¨")]
+        [SerializeField] private Slider sliderProgress;    // è¿›åº¦æ¡Sliderç»„ä»¶
+        [SerializeField] private Image fillImage;          // è¿›åº¦æ¡Fillå›¾åƒï¼ˆç”¨äºå˜è‰²ï¼‰
+        [SerializeField] private Text txtProgress;         // è¿›åº¦æ–‡å­—æ˜¾ç¤º "å½“å‰è¿›åº¦/æ€»éœ€æ±‚"
+        [SerializeField] private Text txtProgressAmount;   // æ¡æ•°æ–‡å­—æ˜¾ç¤º "Xæ¡"
         #endregion
 
-        #region ½ø¶ÈÌõÑÕÉ«ÅäÖÃ
-        [Header("½ø¶ÈÌõÑÕÉ«ÅäÖÃ")]
-        [SerializeField] private Color colorGreen = Color.green;   // 0-2ÌõÊ±µÄÑÕÉ«
-        [SerializeField] private Color colorYellow = Color.yellow; // µÚ3ÌõÊ±µÄÑÕÉ«  
-        [SerializeField] private Color colorRed = Color.red;       // µÚ4-5ÌõÊ±µÄÑÕÉ«
+        #region è¿›åº¦æ¡é¢œè‰²é…ç½®
+        [Header("è¿›åº¦æ¡é¢œè‰²é…ç½®")]
+        [SerializeField] private Color colorGreen = Color.green;   // 0-2æ¡æ—¶çš„é¢œè‰²
+        [SerializeField] private Color colorYellow = Color.yellow; // ç¬¬3æ¡æ—¶çš„é¢œè‰²  
+        [SerializeField] private Color colorRed = Color.red;       // ç¬¬4-5æ¡æ—¶çš„é¢œè‰²
         #endregion
 
-        #region ³õÊ¼»¯
+        #region åˆå§‹åŒ–
         /// <summary>
-        /// StartÉúÃüÖÜÆÚ - ³õÊ¼»¯UI²¢¶©ÔÄÊÂ¼ş
+        /// Startç”Ÿå‘½å‘¨æœŸ - åˆå§‹åŒ–UIå¹¶è®¢é˜…äº‹ä»¶
         /// </summary>
         private void Start()
         {
@@ -38,126 +38,126 @@ namespace Hunting.UI
         }
 
         /// <summary>
-        /// ³õÊ¼»¯UI×é¼ş×´Ì¬
+        /// åˆå§‹åŒ–UIç»„ä»¶çŠ¶æ€
         /// </summary>
         private void InitializeUI()
         {
-            // È·±£±ØÒªµÄUI×é¼ş¶¼´æÔÚ
+            // ç¡®ä¿å¿…è¦çš„UIç»„ä»¶éƒ½å­˜åœ¨
             if (sliderProgress == null)
             {
-                Debug.LogError("[UIMeatProgress] È±ÉÙsliderProgressÒıÓÃ£¡");
+                Debug.LogError("[UIMeatProgress] ç¼ºå°‘sliderProgresså¼•ç”¨ï¼");
                 return;
             }
 
-            // Èç¹ûÃ»ÓĞµ¥¶ÀÖ¸¶¨fillImage£¬³¢ÊÔ´ÓsliderProgressÖĞ»ñÈ¡
+            // å¦‚æœæ²¡æœ‰å•ç‹¬æŒ‡å®šfillImageï¼Œå°è¯•ä»sliderProgressä¸­è·å–
             if (fillImage == null)
             {
                 fillImage = sliderProgress.fillRect?.GetComponent<Image>();
                 if (fillImage == null)
                 {
-                    Debug.LogError("[UIMeatProgress] ÎŞ·¨ÕÒµ½½ø¶ÈÌõFillÍ¼Ïñ×é¼ş£¡");
+                    Debug.LogError("[UIMeatProgress] æ— æ³•æ‰¾åˆ°è¿›åº¦æ¡Fillå›¾åƒç»„ä»¶ï¼");
                 }
             }
 
-            // ÉèÖÃ½ø¶ÈÌõ³õÊ¼Öµ
+            // è®¾ç½®è¿›åº¦æ¡åˆå§‹å€¼
             sliderProgress.minValue = 0f;
             sliderProgress.maxValue = 1f;
             sliderProgress.value = 0f;
 
-            // ³õÊ¼»¯ÎÄ×ÖÏÔÊ¾
-            UpdateProgressText(0f, 200f); // Ä¬ÈÏÖµ£¬Êµ¼Ê»á´ÓÅäÖÃ¶ÁÈ¡
+            // åˆå§‹åŒ–æ–‡å­—æ˜¾ç¤º
+            UpdateProgressText(0f, 200f); // é»˜è®¤å€¼ï¼Œå®é™…ä¼šä»é…ç½®è¯»å–
             UpdateAmountText(0);
         }
 
         /// <summary>
-        /// ¶©ÔÄÈâ¶ÈÌõ¹ÜÀíÆ÷µÄÊÂ¼ş
+        /// è®¢é˜…è‚‰åº¦æ¡ç®¡ç†å™¨çš„äº‹ä»¶
         /// </summary>
         private void SubscribeToEvents()
         {
-            // µÈ´ıÈâ¶ÈÌõ¹ÜÀíÆ÷³õÊ¼»¯Íê³ÉºóÔÙ¶©ÔÄÊÂ¼ş
+            // ç­‰å¾…è‚‰åº¦æ¡ç®¡ç†å™¨åˆå§‹åŒ–å®Œæˆåå†è®¢é˜…äº‹ä»¶
             if (MeatProgressManager.Instance != null)
             {
                 MeatProgressManager.Instance.OnProgressChanged += OnProgressChanged;
                 MeatProgressManager.Instance.OnBarsChanged += OnBarsChanged;
                 MeatProgressManager.Instance.OnMaxBarsReached += OnMaxBarsReached;
 
-                // ³õÊ¼»¯Ê±Á¢¼´¸üĞÂÒ»´ÎÏÔÊ¾
+                // åˆå§‹åŒ–æ—¶ç«‹å³æ›´æ–°ä¸€æ¬¡æ˜¾ç¤º
                 var (currentProgress, completedBars, isMax) = MeatProgressManager.Instance.GetProgressInfo();
                 UpdateDisplay(currentProgress, completedBars);
             }
             else
             {
-                //Debug.LogWarning("[UIMeatProgress] Èâ¶ÈÌõ¹ÜÀíÆ÷Î´³õÊ¼»¯£¬ÑÓ³Ù¶©ÔÄÊÂ¼ş");
-                // Èç¹û¹ÜÀíÆ÷»¹Ã»³õÊ¼»¯£¬ÑÓ³Ù¶©ÔÄ
+                //Debug.LogWarning("[UIMeatProgress] è‚‰åº¦æ¡ç®¡ç†å™¨æœªåˆå§‹åŒ–ï¼Œå»¶è¿Ÿè®¢é˜…äº‹ä»¶");
+                // å¦‚æœç®¡ç†å™¨è¿˜æ²¡åˆå§‹åŒ–ï¼Œå»¶è¿Ÿè®¢é˜…
                 Invoke(nameof(SubscribeToEvents), 0.1f);
             }
         }
         #endregion
 
-        #region ÊÂ¼ş´¦Àí
+        #region äº‹ä»¶å¤„ç†
         /// <summary>
-        /// ´¦Àí½ø¶È±ä»¯ÊÂ¼ş
+        /// å¤„ç†è¿›åº¦å˜åŒ–äº‹ä»¶
         /// </summary>
-        /// <param name="currentProgress">µ±Ç°Ìõ½ø¶ÈÖµ</param>
-        /// <param name="completedBars">ÒÑÍê³ÉÌõÊı</param>
-        /// <param name="newBarCompleted">ÊÇ·ñĞÂÍê³ÉÁËÒ»Ìõ</param>
+        /// <param name="currentProgress">å½“å‰æ¡è¿›åº¦å€¼</param>
+        /// <param name="completedBars">å·²å®Œæˆæ¡æ•°</param>
+        /// <param name="newBarCompleted">æ˜¯å¦æ–°å®Œæˆäº†ä¸€æ¡</param>
         private void OnProgressChanged(float currentProgress, int completedBars, bool newBarCompleted)
         {
             UpdateDisplay(currentProgress, completedBars);
         }
 
         /// <summary>
-        /// ´¦ÀíÌõÊı±ä»¯ÊÂ¼ş
+        /// å¤„ç†æ¡æ•°å˜åŒ–äº‹ä»¶
         /// </summary>
-        /// <param name="newBarCount">ĞÂµÄÌõÊı</param>
-        /// <param name="changeAmount">±ä»¯ÊıÁ¿</param>
+        /// <param name="newBarCount">æ–°çš„æ¡æ•°</param>
+        /// <param name="changeAmount">å˜åŒ–æ•°é‡</param>
         private void OnBarsChanged(int newBarCount, int changeAmount)
         {
-            // ÌõÊı±ä»¯Ê±¸üĞÂÌõÊıÏÔÊ¾
+            // æ¡æ•°å˜åŒ–æ—¶æ›´æ–°æ¡æ•°æ˜¾ç¤º
             UpdateAmountText(newBarCount);
 
-            // ¸ù¾İĞÂµÄÌõÊı¸üĞÂ½ø¶ÈÌõÑÕÉ«
+            // æ ¹æ®æ–°çš„æ¡æ•°æ›´æ–°è¿›åº¦æ¡é¢œè‰²
             UpdateProgressBarColor(newBarCount);
         }
 
         /// <summary>
-        /// ´¦Àí´ïµ½×î´óÌõÊıÊÂ¼ş
+        /// å¤„ç†è¾¾åˆ°æœ€å¤§æ¡æ•°äº‹ä»¶
         /// </summary>
         private void OnMaxBarsReached()
         {
-            Debug.Log("[UIMeatProgress] Èâ¶ÈÌõÒÑÂú£¡");
+            Debug.Log("[UIMeatProgress] è‚‰åº¦æ¡å·²æ»¡ï¼");
         }
         #endregion
 
-        #region UI¸üĞÂ·½·¨
+        #region UIæ›´æ–°æ–¹æ³•
         /// <summary>
-        /// ¸üĞÂÕûÌåÏÔÊ¾
+        /// æ›´æ–°æ•´ä½“æ˜¾ç¤º
         /// </summary>
-        /// <param name="currentProgress">µ±Ç°Ìõ½ø¶ÈÖµ</param>
-        /// <param name="completedBars">ÒÑÍê³ÉÌõÊı</param>
+        /// <param name="currentProgress">å½“å‰æ¡è¿›åº¦å€¼</param>
+        /// <param name="completedBars">å·²å®Œæˆæ¡æ•°</param>
         private void UpdateDisplay(float currentProgress, int completedBars)
         {
-            // »ñÈ¡ÅäÖÃµÄµ¥ÌõËùĞèÖµ
+            // è·å–é…ç½®çš„å•æ¡æ‰€éœ€å€¼
             float requiredPerBar = MeatProgressManager.Instance?.RequiredPerBar ?? 200f;
 
-            // ¸üĞÂ½ø¶ÈÌõ
+            // æ›´æ–°è¿›åº¦æ¡
             UpdateProgressBar(currentProgress, requiredPerBar);
 
-            // ¸üĞÂ½ø¶ÈÎÄ×Ö
+            // æ›´æ–°è¿›åº¦æ–‡å­—
             UpdateProgressText(currentProgress, requiredPerBar);
 
-            // ¸üĞÂÌõÊıÎÄ×Ö
+            // æ›´æ–°æ¡æ•°æ–‡å­—
             UpdateAmountText(completedBars);
 
-            // ¸üĞÂ½ø¶ÈÌõÑÕÉ«£¨»ùÓÚÒÑÍê³ÉÌõÊı£©
+            // æ›´æ–°è¿›åº¦æ¡é¢œè‰²ï¼ˆåŸºäºå·²å®Œæˆæ¡æ•°ï¼‰
             UpdateProgressBarColor(completedBars);
         }
 
         /// <summary>
-        /// ¸üĞÂ½ø¶ÈÌõSliderµÄÖµ
+        /// æ›´æ–°è¿›åº¦æ¡Sliderçš„å€¼
         /// </summary>
-        /// <param name="currentProgress">µ±Ç°½ø¶ÈÖµ</param>
-        /// <param name="requiredPerBar">µ¥ÌõËùĞèÖµ</param>
+        /// <param name="currentProgress">å½“å‰è¿›åº¦å€¼</param>
+        /// <param name="requiredPerBar">å•æ¡æ‰€éœ€å€¼</param>
         private void UpdateProgressBar(float currentProgress, float requiredPerBar)
         {
             if (sliderProgress != null)
@@ -168,58 +168,58 @@ namespace Hunting.UI
         }
 
         /// <summary>
-        /// ¸üĞÂ½ø¶ÈÎÄ×ÖÏÔÊ¾
+        /// æ›´æ–°è¿›åº¦æ–‡å­—æ˜¾ç¤º
         /// </summary>
-        /// <param name="currentProgress">µ±Ç°½ø¶ÈÖµ</param>
-        /// <param name="requiredPerBar">µ¥ÌõËùĞèÖµ</param>
+        /// <param name="currentProgress">å½“å‰è¿›åº¦å€¼</param>
+        /// <param name="requiredPerBar">å•æ¡æ‰€éœ€å€¼</param>
         private void UpdateProgressText(float currentProgress, float requiredPerBar)
         {
             if (txtProgress != null)
             {
-                // ÏÔÊ¾¸ñÊ½£º"µ±Ç°½ø¶È/×ÜĞèÇó"£¬ÀıÈç£º"150/200"
+                // æ˜¾ç¤ºæ ¼å¼ï¼š"å½“å‰è¿›åº¦/æ€»éœ€æ±‚"ï¼Œä¾‹å¦‚ï¼š"150/200"
                 txtProgress.text = $"{currentProgress:F0}/{requiredPerBar:F0}";
             }
         }
 
         /// <summary>
-        /// ¸üĞÂÌõÊıÎÄ×ÖÏÔÊ¾
+        /// æ›´æ–°æ¡æ•°æ–‡å­—æ˜¾ç¤º
         /// </summary>
-        /// <param name="completedBars">ÒÑÍê³ÉÌõÊı</param>
+        /// <param name="completedBars">å·²å®Œæˆæ¡æ•°</param>
         private void UpdateAmountText(int completedBars)
         {
             if (txtProgressAmount != null)
             {
-                // ÏÔÊ¾¸ñÊ½£º"XÌõ"£¬ÀıÈç£º"3Ìõ"
-                txtProgressAmount.text = $"{completedBars}Ìõ";
+                // æ˜¾ç¤ºæ ¼å¼ï¼š"Xæ¡"ï¼Œä¾‹å¦‚ï¼š"3æ¡"
+                txtProgressAmount.text = $"{completedBars}æ¡";
             }
         }
 
         /// <summary>
-        /// ¸ù¾İÒÑÍê³ÉÌõÊı¸üĞÂ½ø¶ÈÌõÑÕÉ«
+        /// æ ¹æ®å·²å®Œæˆæ¡æ•°æ›´æ–°è¿›åº¦æ¡é¢œè‰²
         /// </summary>
-        /// <param name="completedBars">ÒÑÍê³ÉÌõÊı</param>
+        /// <param name="completedBars">å·²å®Œæˆæ¡æ•°</param>
         private void UpdateProgressBarColor(int completedBars)
         {
             if (fillImage == null) return;
 
-            // ¸ù¾İÌõÊı¾ö¶¨ÑÕÉ«£º
-            // 0-2Ìõ£ºÂÌÉ«
-            // µÚ3Ìõ£º»ÆÉ«  
-            // µÚ4-5Ìõ£ººìÉ«
+            // æ ¹æ®æ¡æ•°å†³å®šé¢œè‰²ï¼š
+            // 0-2æ¡ï¼šç»¿è‰²
+            // ç¬¬3æ¡ï¼šé»„è‰²  
+            // ç¬¬4-5æ¡ï¼šçº¢è‰²
             Color targetColor = completedBars switch
             {
-                < 2 => colorGreen,   // 0,1,Ìõ - ÂÌÉ«
-                < 4 => colorYellow,    // µÚ3Ìõ - »ÆÉ«
-                _ => colorRed        // 4,5Ìõ - ºìÉ«
+                < 2 => colorGreen,   // 0,1,æ¡ - ç»¿è‰²
+                < 4 => colorYellow,    // ç¬¬3æ¡ - é»„è‰²
+                _ => colorRed        // 4,5æ¡ - çº¢è‰²
             };
 
             fillImage.color = targetColor;
         }
         #endregion
 
-        #region ÇåÀí
+        #region æ¸…ç†
         /// <summary>
-        /// OnDestroyÉúÃüÖÜÆÚ - È¡ÏûÊÂ¼ş¶©ÔÄ
+        /// OnDestroyç”Ÿå‘½å‘¨æœŸ - å–æ¶ˆäº‹ä»¶è®¢é˜…
         /// </summary>
         private void OnDestroy()
         {

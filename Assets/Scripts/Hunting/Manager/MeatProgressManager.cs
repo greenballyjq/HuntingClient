@@ -1,4 +1,4 @@
-using cfg;
+ï»¿using cfg;
 using Cysharp.Threading.Tasks;
 using Hunting.Game.Animal;
 using Hunting.Manager;
@@ -10,11 +10,11 @@ using UnityEngine;
 namespace Hunting.Manager
 {
     /// <summary>
-    /// »ØÑªÈâ½ø¶ÈÌõ¹ÜÀíÆ÷
+    /// å›è¡€è‚‰è¿›åº¦æ¡ç®¡ç†å™¨
     /// </summary>
     public class MeatProgressManager : MonoBehaviour
     {
-        #region µ¥ÀıÄ£Ê½
+        #region å•ä¾‹æ¨¡å¼
         private static MeatProgressManager _instance;
         public static MeatProgressManager Instance => _instance;
         private void Awake()
@@ -28,67 +28,67 @@ namespace Hunting.Manager
         }
         #endregion
 
-        #region ÅäÖÃÊı¾İ
+        #region é…ç½®æ•°æ®
         /// <summary>
-        /// Èâ¶ÈÌõÅäÖÃÊı¾İ
+        /// è‚‰åº¦æ¡é…ç½®æ•°æ®
         /// </summary>
         private cfg.HuntingConfig.Progress meatProgressData;
         /// <summary>
-        /// µ¥ÌõËùĞèÖµ
+        /// å•æ¡æ‰€éœ€å€¼
         /// </summary>
         public float RequiredPerBar => meatProgressData?.RequiredPerBar ?? 200f;
         /// <summary>
-        /// ×î´óÌõÊı
+        /// æœ€å¤§æ¡æ•°
         /// </summary>
         public int MaxBars => meatProgressData?.MaxBars ?? 5;
         #endregion
 
-        #region ÔËĞĞÊ±×´Ì¬
+        #region è¿è¡Œæ—¶çŠ¶æ€
         /// <summary>
-        /// µ±Ç°Ìõ»ıÔÜÁ¿
+        /// å½“å‰æ¡ç§¯æ”’é‡
         /// </summary>
         private float currentBarProgress;
         /// <summary>
-        /// µ±Ç°ÒÑÔÜÂúµÄÌõÊı
+        /// å½“å‰å·²æ”’æ»¡çš„æ¡æ•°
         /// </summary>
         private int currentCompletedBars;
         /// <summary>
-        /// ÊÇ·ñ´ïµ½ÌõÊıÉÏÏŞ
+        /// æ˜¯å¦è¾¾åˆ°æ¡æ•°ä¸Šé™
         /// </summary>
         public bool IsMaxBarsReached => currentCompletedBars >= MaxBars;
         /// <summary>
-        /// µ±Ç°½ø¶È°Ù·Ö±È
+        /// å½“å‰è¿›åº¦ç™¾åˆ†æ¯”
         /// </summary>
         public float CurrentProgressPercent => currentBarProgress / RequiredPerBar;
         #endregion
 
-        #region ÊÂ¼şÏµÍ³
+        #region äº‹ä»¶ç³»ç»Ÿ
         /// <summary>
-        /// ½ø¶È±ä»¯ÊÂ¼ş - µ±Èâ¶ÈÌõ½ø¶È·¢Éú±ä»¯Ê±´¥·¢
-        ///   float - µ±Ç°Ìõ½ø¶ÈÖµ
-        ///   int - µ±Ç°ÒÑÍê³ÉÌõÊı
-        ///   bool - ÊÇ·ñĞÂÍê³ÉÁËÒ»Ìõ
+        /// è¿›åº¦å˜åŒ–äº‹ä»¶ - å½“è‚‰åº¦æ¡è¿›åº¦å‘ç”Ÿå˜åŒ–æ—¶è§¦å‘
+        ///   float - å½“å‰æ¡è¿›åº¦å€¼
+        ///   int - å½“å‰å·²å®Œæˆæ¡æ•°
+        ///   bool - æ˜¯å¦æ–°å®Œæˆäº†ä¸€æ¡
         /// </summary>
         public event Action<float, int, bool> OnProgressChanged;
         /// <summary>
-        /// ÌõÊı±ä»¯ÊÂ¼ş - µ±Èâ¶ÈÌõÊıÁ¿·¢Éú±ä»¯Ê±´¥·¢
-        ///   int - ĞÂµÄÌõÊı
-        ///   int - ±ä»¯µÄÊıÁ¿£¨ÕıÊı±íÊ¾Ôö¼Ó£¬¸ºÊı±íÊ¾¼õÉÙ£©
+        /// æ¡æ•°å˜åŒ–äº‹ä»¶ - å½“è‚‰åº¦æ¡æ•°é‡å‘ç”Ÿå˜åŒ–æ—¶è§¦å‘
+        ///   int - æ–°çš„æ¡æ•°
+        ///   int - å˜åŒ–çš„æ•°é‡ï¼ˆæ­£æ•°è¡¨ç¤ºå¢åŠ ï¼Œè´Ÿæ•°è¡¨ç¤ºå‡å°‘ï¼‰
         /// </summary>
         public event Action<int, int> OnBarsChanged;
         /// <summary>
-        /// ´ïµ½×î´óÌõÊıÊÂ¼ş - µ±Èâ¶ÈÌõ´ïµ½×î´óÊıÁ¿Ê±´¥·¢
+        /// è¾¾åˆ°æœ€å¤§æ¡æ•°äº‹ä»¶ - å½“è‚‰åº¦æ¡è¾¾åˆ°æœ€å¤§æ•°é‡æ—¶è§¦å‘
         /// </summary>
         public event Action OnMaxBarsReached;
         #endregion
 
         /// <summary>
-        /// ³õÊ¼»¯×´Ì¬±êÖ¾
+        /// åˆå§‹åŒ–çŠ¶æ€æ ‡å¿—
         /// </summary>
         private bool initialized;
 
         /// <summary>
-        /// StartÉúÃüÖÜÆÚ - ¿ªÊ¼Òì²½³õÊ¼»¯
+        /// Startç”Ÿå‘½å‘¨æœŸ - å¼€å§‹å¼‚æ­¥åˆå§‹åŒ–
         /// </summary>
         private void Start()
         {
@@ -96,41 +96,41 @@ namespace Hunting.Manager
         }
     
         /// <summary>
-        /// Òì²½³õÊ¼»¯·½·¨ - µÈ´ıÅäÖÃ¹ÜÀíÆ÷¾ÍĞ÷ºóÍê³É³õÊ¼»¯
+        /// å¼‚æ­¥åˆå§‹åŒ–æ–¹æ³• - ç­‰å¾…é…ç½®ç®¡ç†å™¨å°±ç»ªåå®Œæˆåˆå§‹åŒ–
         /// </summary>
         private async UniTask InitializeAsync()
         {
-            // µÈ´ıÅäÖÃ¹ÜÀíÆ÷³õÊ¼»¯Íê³É
+            // ç­‰å¾…é…ç½®ç®¡ç†å™¨åˆå§‹åŒ–å®Œæˆ
             while (HuntingGameConfigManager.Instance == null || !HuntingGameConfigManager.Instance.Initialized)
             {
                 await UniTask.Delay(10);
             }
 
-            // ´ÓÅäÖÃ¹ÜÀíÆ÷»ñÈ¡Èâ¶ÈÌõÅäÖÃÊı¾İ
+            // ä»é…ç½®ç®¡ç†å™¨è·å–è‚‰åº¦æ¡é…ç½®æ•°æ®
             meatProgressData = HuntingGameConfigManager.Instance.GetProgress(EProgressType.MeatProgress);
             if (meatProgressData == null)
             {
-                Debug.LogError("[MeatProgressManager] ÎŞ·¨»ñÈ¡Èâ¶ÈÌõÅäÖÃÊı¾İ");
+                Debug.LogError("[MeatProgressManager] æ— æ³•è·å–è‚‰åº¦æ¡é…ç½®æ•°æ®");
                 return;
             }
 
-            // ¶©ÔÄ¶¯ÎïµôÂäÊÂ¼ş£¬¼àÌıÈâÀàµôÂä
+            // è®¢é˜…åŠ¨ç‰©æ‰è½äº‹ä»¶ï¼Œç›‘å¬è‚‰ç±»æ‰è½
             AnimalBehavior.OnAnimalDropReward += OnAnimalDropReward;
 
-            // ±ê¼Ç³õÊ¼»¯Íê³É
+            // æ ‡è®°åˆå§‹åŒ–å®Œæˆ
             initialized = true;
-            Debug.Log($"[MeatProgressManager] ³õÊ¼»¯Íê³É£¬µ¥ÌõËùĞè: {RequiredPerBar}£¬×î´óÌõÊı: {MaxBars}");
+            Debug.Log($"[MeatProgressManager] åˆå§‹åŒ–å®Œæˆï¼Œå•æ¡æ‰€éœ€: {RequiredPerBar}ï¼Œæœ€å¤§æ¡æ•°: {MaxBars}");
 
-            // ´¥·¢³õÊ¼×´Ì¬ÊÂ¼ş£¬Í¨ÖªUI¸üĞÂ
+            // è§¦å‘åˆå§‹çŠ¶æ€äº‹ä»¶ï¼Œé€šçŸ¥UIæ›´æ–°
             OnProgressChanged?.Invoke(currentBarProgress, currentCompletedBars, false);
         }
 
         /// <summary>
-        /// OnDestroyÉúÃüÖÜÆÚ - ÇåÀí×ÊÔ´£¬È¡ÏûÊÂ¼ş¶©ÔÄ
+        /// OnDestroyç”Ÿå‘½å‘¨æœŸ - æ¸…ç†èµ„æºï¼Œå–æ¶ˆäº‹ä»¶è®¢é˜…
         /// </summary>
         private void OnDestroy()
         {
-            // È¡Ïû¶©ÔÄ¶¯ÎïµôÂäÊÂ¼ş£¬·ÀÖ¹ÄÚ´æĞ¹Â©
+            // å–æ¶ˆè®¢é˜…åŠ¨ç‰©æ‰è½äº‹ä»¶ï¼Œé˜²æ­¢å†…å­˜æ³„æ¼
             if (initialized)
             {
                 AnimalBehavior.OnAnimalDropReward -= OnAnimalDropReward;
@@ -138,80 +138,80 @@ namespace Hunting.Manager
         }
 
         /// <summary>
-        /// ´¦Àí¶¯ÎïµôÂä½±Àø
+        /// å¤„ç†åŠ¨ç‰©æ‰è½å¥–åŠ±
         /// </summary>
-        /// <param name="animal">µôÂä½±ÀøµÄ¶¯ÎïÊµÀı</param>
-        /// <param name="dropType">µôÂäÀàĞÍ</param>
-        /// <param name="amount">µôÂäÊıÁ¿</param>
+        /// <param name="animal">æ‰è½å¥–åŠ±çš„åŠ¨ç‰©å®ä¾‹</param>
+        /// <param name="dropType">æ‰è½ç±»å‹</param>
+        /// <param name="amount">æ‰è½æ•°é‡</param>
         private void OnAnimalDropReward(AnimalBehavior animal, EDropType dropType, int amount)
         {
-            // ¼ì²é³õÊ¼»¯×´Ì¬ºÍµôÂäÀàĞÍ
+            // æ£€æŸ¥åˆå§‹åŒ–çŠ¶æ€å’Œæ‰è½ç±»å‹
             if (!initialized || dropType != EDropType.Meat) return;
 
-            // ´¦ÀíÈâÀàµôÂä£¬Ôö¼ÓÈâ¶ÈÌõ½ø¶È
+            // å¤„ç†è‚‰ç±»æ‰è½ï¼Œå¢åŠ è‚‰åº¦æ¡è¿›åº¦
             AddMeatProgress(amount);
         }
 
         /// <summary>
-        /// Ìí¼ÓÈâÀà½ø¶È
+        /// æ·»åŠ è‚‰ç±»è¿›åº¦
         /// </summary>
-        /// <param name="amount">ÒªÌí¼ÓµÄ½ø¶ÈÖµ</param>
+        /// <param name="amount">è¦æ·»åŠ çš„è¿›åº¦å€¼</param>
         public void AddMeatProgress(float amount)
         {
-            // Ç°ÖÃ¼ì²é£ºÎ´³õÊ¼»¯»òÒÑ´ïµ½×î´óÌõÊıÊ±²»´¦Àí
+            // å‰ç½®æ£€æŸ¥ï¼šæœªåˆå§‹åŒ–æˆ–å·²è¾¾åˆ°æœ€å¤§æ¡æ•°æ—¶ä¸å¤„ç†
             if (!initialized || IsMaxBarsReached) return;
 
-            // ¼ÇÂ¼Ìí¼ÓÇ°µÄÌõÊı£¬ÓÃÓÚ±È½Ï
+            // è®°å½•æ·»åŠ å‰çš„æ¡æ•°ï¼Œç”¨äºæ¯”è¾ƒ
             int oldBars = currentCompletedBars;
 
-            // Ìí¼Ó½ø¶Èµ½µ±Ç°Ìõ
+            // æ·»åŠ è¿›åº¦åˆ°å½“å‰æ¡
             currentBarProgress += amount;
 
-            // ¼ì²éÊÇ·ñÍê³ÉÁËÒ»Ìõ»ò¶àÌõ
+            // æ£€æŸ¥æ˜¯å¦å®Œæˆäº†ä¸€æ¡æˆ–å¤šæ¡
             bool newBarCompleted = false;
             while (currentBarProgress >= RequiredPerBar && !IsMaxBarsReached)
             {
-                // Íê³ÉÒ»Ìõ£º¿Û³ıËùĞè½ø¶È£¬Ôö¼ÓÍê³ÉÌõÊı
+                // å®Œæˆä¸€æ¡ï¼šæ‰£é™¤æ‰€éœ€è¿›åº¦ï¼Œå¢åŠ å®Œæˆæ¡æ•°
                 currentBarProgress -= RequiredPerBar;
                 currentCompletedBars++;
                 newBarCompleted = true;
 
-                Debug.Log($"[MeatProgressManager] Íê³ÉÒ»ÌõÈâ¶ÈÌõ£¡µ±Ç°ÌõÊı: {currentCompletedBars}/{MaxBars}");
+                Debug.Log($"[MeatProgressManager] å®Œæˆä¸€æ¡è‚‰åº¦æ¡ï¼å½“å‰æ¡æ•°: {currentCompletedBars}/{MaxBars}");
             }
 
-            // ´¥·¢½ø¶È±ä»¯ÊÂ¼ş£¬Í¨ÖªËùÓĞ¼àÌıÕß
+            // è§¦å‘è¿›åº¦å˜åŒ–äº‹ä»¶ï¼Œé€šçŸ¥æ‰€æœ‰ç›‘å¬è€…
             OnProgressChanged?.Invoke(currentBarProgress, currentCompletedBars, newBarCompleted);
 
-            // Èç¹ûÍê³ÉÁËĞÂÌõ£¬´¥·¢ÌõÊı±ä»¯ÊÂ¼ş
+            // å¦‚æœå®Œæˆäº†æ–°æ¡ï¼Œè§¦å‘æ¡æ•°å˜åŒ–äº‹ä»¶
             if (newBarCompleted)
             {
                 int barsChange = currentCompletedBars - oldBars;
                 OnBarsChanged?.Invoke(currentCompletedBars, barsChange);
             }
 
-            // ¼ì²éÊÇ·ñÊ×´Î´ïµ½×î´óÌõÊı
+            // æ£€æŸ¥æ˜¯å¦é¦–æ¬¡è¾¾åˆ°æœ€å¤§æ¡æ•°
             if (IsMaxBarsReached && oldBars < MaxBars)
             {
                 OnMaxBarsReached?.Invoke();
-                Debug.LogWarning("[MeatProgressManager] ÒÑ´ïµ½×î´óÈâ¶ÈÌõÊı£¡");
+                Debug.LogWarning("[MeatProgressManager] å·²è¾¾åˆ°æœ€å¤§è‚‰åº¦æ¡æ•°ï¼");
             }
         }
 
         /// <summary>
-        /// ½áËãÒ»ÌõÈâ¶ÈÌõ
+        /// ç»“ç®—ä¸€æ¡è‚‰åº¦æ¡
         /// </summary>
-        /// <returns>½áËãÊÇ·ñ³É¹¦</returns>
+        /// <returns>ç»“ç®—æ˜¯å¦æˆåŠŸ</returns>
         public bool SettleOneBar()
         {
-            // ¼ì²éÊÇ·ñÓĞ¿É½áËãµÄÌõ
+            // æ£€æŸ¥æ˜¯å¦æœ‰å¯ç»“ç®—çš„æ¡
             if (!initialized || currentCompletedBars <= 0) return false;
 
-            // ¼õÉÙÒ»ÌõÍê³ÉÌõÊı
+            // å‡å°‘ä¸€æ¡å®Œæˆæ¡æ•°
             currentCompletedBars--;
 
-            Debug.Log($"[MeatProgressManager] ½áËãÒ»ÌõÈâ¶ÈÌõ£¬Ê£ÓàÌõÊı: {currentCompletedBars}");
+            Debug.Log($"[MeatProgressManager] ç»“ç®—ä¸€æ¡è‚‰åº¦æ¡ï¼Œå‰©ä½™æ¡æ•°: {currentCompletedBars}");
 
-            // ´¥·¢ÊÂ¼şÍ¨ÖªUI¸üĞÂ
+            // è§¦å‘äº‹ä»¶é€šçŸ¥UIæ›´æ–°
             OnBarsChanged?.Invoke(currentCompletedBars, -1);
             OnProgressChanged?.Invoke(currentBarProgress, currentCompletedBars, false);
 
@@ -219,38 +219,38 @@ namespace Hunting.Manager
         }
 
         /// <summary>
-        /// ½áËãËùÓĞÈâ¶ÈÌõ
+        /// ç»“ç®—æ‰€æœ‰è‚‰åº¦æ¡
         /// </summary>
-        /// <returns>Êµ¼Ê½áËãµÄÌõÊı</returns>
+        /// <returns>å®é™…ç»“ç®—çš„æ¡æ•°</returns>
         public int SettleAllBars()
         {
-            // ¼ì²éÊÇ·ñÓĞ¿É½áËãµÄÌõ
+            // æ£€æŸ¥æ˜¯å¦æœ‰å¯ç»“ç®—çš„æ¡
             if (!initialized || currentCompletedBars <= 0) return 0;
 
-            // ¼ÇÂ¼½áËãÇ°µÄÌõÊı
+            // è®°å½•ç»“ç®—å‰çš„æ¡æ•°
             int settledBars = currentCompletedBars;
 
-            // Çå¿ÕËùÓĞÍê³ÉÌõÊı
+            // æ¸…ç©ºæ‰€æœ‰å®Œæˆæ¡æ•°
             currentCompletedBars = 0;
 
-            Debug.Log($"[MeatProgressManager] ½áËãËùÓĞÈâ¶ÈÌõ£¬¹² {settledBars} Ìõ");
+            Debug.Log($"[MeatProgressManager] ç»“ç®—æ‰€æœ‰è‚‰åº¦æ¡ï¼Œå…± {settledBars} æ¡");
 
-            // ´¥·¢ÊÂ¼şÍ¨ÖªUI¸üĞÂ
+            // è§¦å‘äº‹ä»¶é€šçŸ¥UIæ›´æ–°
             OnBarsChanged?.Invoke(0, -settledBars);
             OnProgressChanged?.Invoke(currentBarProgress, 0, false);
 
             return settledBars;
         }
 
-        #region ×´Ì¬²éÑ¯·½·¨
+        #region çŠ¶æ€æŸ¥è¯¢æ–¹æ³•
         /// <summary>
-        /// »ñÈ¡µ±Ç°½ø¶ÈĞÅÏ¢ - »ñÈ¡ÍêÕûµÄ½ø¶È×´Ì¬
+        /// è·å–å½“å‰è¿›åº¦ä¿¡æ¯ - è·å–å®Œæ•´çš„è¿›åº¦çŠ¶æ€
         /// </summary>
         /// <returns>
-        /// Ôª×é°üº¬£º
-        ///   currentProgress - µ±Ç°Ìõ½ø¶È
-        ///   completedBars - ÒÑÍê³ÉÌõÊı  
-        ///   isMax - ÊÇ·ñ´ïµ½×î´óÌõÊı
+        /// å…ƒç»„åŒ…å«ï¼š
+        ///   currentProgress - å½“å‰æ¡è¿›åº¦
+        ///   completedBars - å·²å®Œæˆæ¡æ•°  
+        ///   isMax - æ˜¯å¦è¾¾åˆ°æœ€å¤§æ¡æ•°
         /// </returns>
         public (float currentProgress, int completedBars, bool isMax) GetProgressInfo()
         {
@@ -258,55 +258,55 @@ namespace Hunting.Manager
         }
 
         /// <summary>
-        /// »ñÈ¡µ±Ç°ÌõÊı
+        /// è·å–å½“å‰æ¡æ•°
         /// </summary>
-        /// <returns>µ±Ç°ÒÑÍê³ÉÌõÊı</returns>
+        /// <returns>å½“å‰å·²å®Œæˆæ¡æ•°</returns>
         public int GetCurrentBarCount() => currentCompletedBars;
 
         /// <summary>
-        /// »ñÈ¡µ±Ç°µ¥Ìõ½ø¶È
+        /// è·å–å½“å‰å•æ¡è¿›åº¦
         /// </summary>
-        /// <returns>µ±Ç°Ìõ½ø¶ÈÖµ</returns>
+        /// <returns>å½“å‰æ¡è¿›åº¦å€¼</returns>
         public float GetCurrentProgress() => currentBarProgress;
 
         /// <summary>
-        /// ¼ì²éÊÇ·ñ¿ÉÒÔ½áËã
+        /// æ£€æŸ¥æ˜¯å¦å¯ä»¥ç»“ç®—
         /// </summary>
-        /// <returns>ÓĞ¿É½áËãÌõÊ±·µ»Øtrue</returns>
+        /// <returns>æœ‰å¯ç»“ç®—æ¡æ—¶è¿”å›true</returns>
         public bool CanSettle() => currentCompletedBars > 0;
         #endregion
 
-        #region ²âÊÔºÍµ÷ÊÔ·½·¨
+        #region æµ‹è¯•å’Œè°ƒè¯•æ–¹æ³•
         /// <summary>
-        /// ²âÊÔ·½·¨£ºÌí¼ÓÖ¸¶¨½ø¶È
+        /// æµ‹è¯•æ–¹æ³•ï¼šæ·»åŠ æŒ‡å®šè¿›åº¦
         /// </summary>
-        [ContextMenu("²âÊÔÌí¼Ó50½ø¶È")]
+        [ContextMenu("æµ‹è¯•æ·»åŠ 50è¿›åº¦")]
         public void TestAddProgress()
         {
             AddMeatProgress(50);
         }
 
         /// <summary>
-        /// ²âÊÔ·½·¨£º½áËãÒ»Ìõ
+        /// æµ‹è¯•æ–¹æ³•ï¼šç»“ç®—ä¸€æ¡
         /// </summary>
-        [ContextMenu("²âÊÔ½áËãÒ»Ìõ")]
+        [ContextMenu("æµ‹è¯•ç»“ç®—ä¸€æ¡")]
         public void TestSettleOne()
         {
             SettleOneBar();
         }
 
         /// <summary>
-        /// ²âÊÔ·½·¨£ºÖØÖÃ½ø¶È
+        /// æµ‹è¯•æ–¹æ³•ï¼šé‡ç½®è¿›åº¦
         /// </summary>
-        [ContextMenu("²âÊÔÖØÖÃ½ø¶È")]
+        [ContextMenu("æµ‹è¯•é‡ç½®è¿›åº¦")]
         public void TestResetProgress()
         {
             currentBarProgress = 0;
             currentCompletedBars = 0;
-            // ´¥·¢ÊÂ¼şÍ¨ÖªUIÖØÖÃÏÔÊ¾
+            // è§¦å‘äº‹ä»¶é€šçŸ¥UIé‡ç½®æ˜¾ç¤º
             OnProgressChanged?.Invoke(0, 0, false);
             OnBarsChanged?.Invoke(0, 0);
-            Debug.Log("[MeatProgressManager] ½ø¶ÈÒÑÖØÖÃ");
+            Debug.Log("[MeatProgressManager] è¿›åº¦å·²é‡ç½®");
         }
         #endregion
     }

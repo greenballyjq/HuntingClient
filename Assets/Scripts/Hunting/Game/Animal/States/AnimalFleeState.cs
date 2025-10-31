@@ -1,10 +1,10 @@
-using Hunting.Game.Animal;
+ï»¿using Hunting.Game.Animal;
 using UnityEngine;
 
 namespace Hunting.Game.Animal.State
 {
     /// <summary>
-    /// ¶¯ÎïÌÓÅÜ×´Ì¬
+    /// åŠ¨ç‰©é€ƒè·‘çŠ¶æ€
     /// </summary>
     public class AnimalFleeState : AnimalState
     {
@@ -16,23 +16,23 @@ namespace Hunting.Game.Animal.State
         {
             base.Enter();
 
-            // ËÙ¶È·­±¶
-            animal.moveSpeed *= 2f;
+            // é€Ÿåº¦ç¿»å€
+            animal.currentMoveSpeed *= 2f;
 
-            // 10ÃëºóÏú»Ù
+            // 10ç§’åé”€æ¯
             stateTimer = 20f;
 
-            Debug.LogWarning($"[AnimalFleeState] {animal.specieData.Name} ÌÓÅÜ£¬ËÙ¶È: {animal.moveSpeed}");
+            Debug.LogWarning($"[AnimalFleeState] {animal.specieData.Name} é€ƒè·‘ï¼Œé€Ÿåº¦: {animal.currentMoveSpeed}");
         }
 
         public override void Update()
         {
             base.Update();
 
-            // ÌÓÅÜ×´Ì¬ÏÂÒÆ¶¯
-            animal.transform.Translate(animal.transform.forward * animal.moveSpeed * Time.deltaTime, Space.World);
+            // é€ƒè·‘çŠ¶æ€ä¸‹ç§»åŠ¨
+            animal.transform.Translate(animal.transform.forward * animal.currentMoveSpeed * Time.deltaTime, Space.World);
 
-            // 20ÃëºóÏú»Ù
+            // 20ç§’åé”€æ¯
             if (stateTimer <= 0f)
             {
                 Object.Destroy(animal.gameObject);

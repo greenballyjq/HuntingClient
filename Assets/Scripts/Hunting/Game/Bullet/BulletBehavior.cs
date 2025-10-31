@@ -1,4 +1,4 @@
-using cfg;
+ï»¿using cfg;
 using cfg.HuntingConfig;
 using GameFramework.Core;
 using Hunting.Game.Animal;
@@ -10,46 +10,46 @@ namespace Hunting.Game.Bullet
     public class BulletBehavior : MonoBehaviour
     {
         /// <summary>
-        /// ×Óµ¯ÅäÖÃÊı¾İ
+        /// å­å¼¹é…ç½®æ•°æ®
         /// </summary>
         private cfg.HuntingConfig.Bullet bulletData;
         /// <summary>
-        /// ×Óµ¯µ±Ç°ÉËº¦
+        /// å­å¼¹å½“å‰ä¼¤å®³
         /// </summary>
         private float currentDamage;
         /// <summary>
-        /// ×Óµ¯µ±Ç°ÒÆ¶¯ËÙ¶È
+        /// å­å¼¹å½“å‰ç§»åŠ¨é€Ÿåº¦
         /// </summary>
         private float currentMoveSpeed;
         /// <summary>
-        /// ×Óµ¯ÒÆ¶¯·½Ïò
+        /// å­å¼¹ç§»åŠ¨æ–¹å‘
         /// </summary>
         private Vector3 moveDirection;
 
         /// <summary>
-        /// ×Óµ¯³õÊ¼»¯
+        /// å­å¼¹åˆå§‹åŒ–
         /// </summary>
-        /// <param name="config">×Óµ¯ÅäÖÃÊı¾İ</param>
-        /// <param name="startPosition">×Óµ¯ÆğÊ¼Î»ÖÃ</param>
-        /// <param name="direction">×Óµ¯·½Ïò</param>
+        /// <param name="config">å­å¼¹é…ç½®æ•°æ®</param>
+        /// <param name="startPosition">å­å¼¹èµ·å§‹ä½ç½®</param>
+        /// <param name="direction">å­å¼¹æ–¹å‘</param>
         public void Initialize(cfg.HuntingConfig.Bullet config, Vector3 startPosition, Vector3 direction)
         {
-            // ³õÊ¼»¯×Óµ¯ÊôĞÔ
+            // åˆå§‹åŒ–å­å¼¹å±æ€§
             this.bulletData = config;
             this.currentDamage = config.BaseDamage;
             this.currentMoveSpeed = config.MoveSpeed;
             this.moveDirection = direction.normalized;
 
-            // ÉèÖÃ×Óµ¯Î»ÖÃºÍ·½Ïò
+            // è®¾ç½®å­å¼¹ä½ç½®å’Œæ–¹å‘
             transform.position = startPosition;
             transform.rotation = Quaternion.LookRotation(direction);
 
-            // 10Ãëºó×Ô¶¯Ïú»Ù
+            // 10ç§’åè‡ªåŠ¨é”€æ¯
             Invoke(nameof(DestroyBullet), 10f);
         }
 
         /// <summary>
-        /// ×Óµ¯ÒÆ¶¯
+        /// å­å¼¹ç§»åŠ¨
         /// </summary>
         private void UpdateMovement()
         {
@@ -57,31 +57,31 @@ namespace Hunting.Game.Bullet
         }
 
         /// <summary>
-        /// Åö×²¼ì²â
+        /// ç¢°æ’æ£€æµ‹
         /// </summary>
         private void CheckCollision()
         {
-            // ¼ÆËã×Óµ¯ÒÆ¶¯µÄ¾àÀë
+            // è®¡ç®—å­å¼¹ç§»åŠ¨çš„è·ç¦»
             float moveDistance = currentMoveSpeed * Time.deltaTime;
             RaycastHit hit;
 
-            // ÉäÏß¼ì²â£¬¼ì²â×Óµ¯ÊÇ·ñ»÷ÖĞ¶¯Îï
+            // å°„çº¿æ£€æµ‹ï¼Œæ£€æµ‹å­å¼¹æ˜¯å¦å‡»ä¸­åŠ¨ç‰©
             if (Physics.Raycast(transform.position, moveDirection, out hit, moveDistance))
             {
                 if (hit.collider.TryGetComponent<AnimalBehavior>(out var animal))
                 {
                     if (animal != null)
                     {
-                        animal.TakeDamage(currentDamage, hit.point); // ¶Ô¶¯ÎïÔì³ÉÉËº¦
+                        animal.TakeDamage(currentDamage, hit.point); // å¯¹åŠ¨ç‰©é€ æˆä¼¤å®³
                     }
 
-                    DestroyBullet(); // »÷ÖĞ¶¯ÎïÁ¢¼´Ïú»Ù
+                    DestroyBullet(); // å‡»ä¸­åŠ¨ç‰©ç«‹å³é”€æ¯
                 }
             }
         }
 
         /// <summary>
-        /// Ïú»Ù×Óµ¯
+        /// é”€æ¯å­å¼¹
         /// </summary>
         private void DestroyBullet()
         {

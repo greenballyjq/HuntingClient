@@ -1,12 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using GameFramework.Core;
 using GameFramework.Manager;
 using Hunting.Manager;
 using UnityEngine;
 
-namespace Hunting
+namespace GameFramework.Core
 {
     public abstract class GameLogic : MonoBehaviour
     {
@@ -52,7 +51,7 @@ namespace Hunting
 
         protected virtual async void Start()
         {
-            await InitGameAsync();
+            await InitializeGameAsync();
         }
 
         protected virtual void Update()
@@ -82,7 +81,7 @@ namespace Hunting
         /// <summary>
         /// 异步初始化游戏
         /// </summary>
-        private async UniTask InitGameAsync()
+        private async UniTask InitializeGameAsync()
         {
             Debug.Log("[GameLogic] 开始初始化游戏");
             CurrentState = GameState.Initializing;
@@ -97,7 +96,7 @@ namespace Hunting
             RegisterGameManagers();
 
             // 初始化游戏业务管理器
-            InitGameManagers();
+            InitializeGameManagers();
 
             // 调用子类初始化
             await OnGameInit();
@@ -173,7 +172,7 @@ namespace Hunting
         /// <summary>
         /// 初始化所有游戏业务管理器
         /// </summary>
-        private void InitGameManagers()
+        private void InitializeGameManagers()
         {
             Debug.Log("[GameLogic] 初始化游戏业务管理器");
 
@@ -225,7 +224,7 @@ namespace Hunting
             OnGameStart();
 
             // 触发游戏开始事件
-            GetFrameworkManager<EventManager>().Trigger(HuntingEvents.GameStarted);
+            GetFrameworkManager<EventManager>().Trigger("GameStarted");
         }
 
         public virtual void PauseGame()
@@ -240,7 +239,7 @@ namespace Hunting
             OnGamePause();
 
             // 触发游戏暂停事件
-            GetFrameworkManager<EventManager>().Trigger(HuntingEvents.GamePaused);
+            GetFrameworkManager<EventManager>().Trigger("GamePaused");
         }
 
         public virtual void ResumeGame()
@@ -255,7 +254,7 @@ namespace Hunting
             OnGameResume();
 
             // 触发游戏恢复事件
-            GetFrameworkManager<EventManager>().Trigger(HuntingEvents.GameResumed);
+            GetFrameworkManager<EventManager>().Trigger("GameResumed");
         }
 
         public virtual void EndGame()
@@ -270,7 +269,7 @@ namespace Hunting
             OnGameEnd();
 
             // 触发游戏结束事件
-            GetFrameworkManager<EventManager>().Trigger(HuntingEvents.GameEnded);
+            GetFrameworkManager<EventManager>().Trigger("GameEnded");
         }
         #endregion
 
