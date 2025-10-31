@@ -1,6 +1,12 @@
 ﻿using cfg.HuntingConfig;
+<<<<<<< HEAD
 using GameFramework.Core;
 using Hunting;
+=======
+using Cysharp.Threading.Tasks;
+using Hunting;
+using Hunting.Game.Animal;
+>>>>>>> 1371355b3ecf49dbc4f17683cf8de3f94519a339
 using Hunting.Manager;
 using UnityEngine;
 
@@ -58,7 +64,54 @@ namespace Hunting.Game.Animal
 
         private void Start()
         {
+<<<<<<< HEAD
             _lastSpawnTime = Time.time;
+=======
+            await UniTask.Delay(10);
+        }
+        initialized = true;
+
+        Debug.Log($"[SpeciesSpawner] {spawnDirection}方向派发器初始化完成，地图ID: {currentMapId}");
+    }
+    #endregion
+
+    private async void Start()
+    {
+        EventManager eventManager = await GameServiceLocator.GetFrameworkManagerAsync<EventManager>();
+        eventManager.AddListener(HuntingEvents.HuntingGameStarted, OnHuntingGameStarted);
+    }
+
+    private async void OnHuntingGameStarted()
+    {
+        await Init();
+        lastSpawnTime = Time.time;
+    }
+
+    private void Update()
+    {
+        if (!initialized) return;
+
+        // 检查生成间隔
+        if (Time.time - lastSpawnTime >= spawnInterval)
+        {
+            TrySpawnAnimal();
+            lastSpawnTime = Time.time;
+        }
+    }
+
+    /// <summary>
+    /// 尝试生成动物
+    /// </summary>
+    private void TrySpawnAnimal()
+    {
+        // 从配置管理器获取随机物种
+        var (specie, stayTime) = HuntingGameConfigManager.Instance.GetRandomSpecieForMap(currentMapId);
+
+        if (specie == null)
+        {
+            Debug.LogError($"[SpeciesSpawner] 无法获取物种数据，地图ID: {currentMapId}");
+            return;
+>>>>>>> 1371355b3ecf49dbc4f17683cf8de3f94519a339
         }
 
         private void Update()

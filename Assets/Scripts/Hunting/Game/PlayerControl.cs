@@ -130,7 +130,7 @@ namespace Hunting.Game
 
 
             // 测试用
-            await Init();
+            // await Init();
 
             // 获取组件
             audioSource = GetComponent<AudioSource>();
@@ -138,10 +138,21 @@ namespace Hunting.Game
             // 初始化组件
             InitializeMuzzlePoint();
             InitializeAimLine();
-            UpdateFireInterval();
 
             // 订阅事件
             Animal.AnimalBehavior.OnAnimalDropReward += OnAnimalDropReward;
+        }
+
+        private async void Start()
+        {
+            EventManager eventManager = await GameServiceLocator.GetFrameworkManagerAsync<EventManager>();
+            eventManager.AddListener(HuntingEvents.HuntingGameStarted, OnHuntingGameStarted);
+        }
+
+        private async void OnHuntingGameStarted()
+        {
+            await Init();
+            UpdateFireInterval();
         }
 
         private void OnAnimalDropReward(Animal.AnimalBehavior animal, EDropType dropType, int arg3)
@@ -201,6 +212,7 @@ namespace Hunting.Game
         private void UpdateFireInterval()
         {
             var bulletConfig = HuntingGameConfigManager.Instance.GetBullet(currentBulletId);
+            Debug.Log($"[PlayerControl] BulletConfig is null? {bulletConfig == null}");
             if (bulletConfig != null)
             {
                 // 射击间隔 = 1 / 射速（发/秒）

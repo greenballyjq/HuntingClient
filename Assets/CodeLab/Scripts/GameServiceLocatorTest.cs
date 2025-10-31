@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using cfg.HuntingConfig;
 using Hunting;
 using Hunting.Game;
 using Hunting.Game.Animal;
@@ -53,6 +54,9 @@ public class GameServiceLocatorTest : MonoBehaviour
             GameObject obj = await GameServiceLocator.Pool.PullAsync("Animals/Animal_Large_301");
             animals.Enqueue(obj);
             obj.GetComponent<AnimalBehavior>().Init(GameServiceLocator.Config.GetSpecie(301),10,transform.forward);
+
+            Bullet bullet = GameServiceLocator.Config.GetBullet(1);
+            Debug.Log($"[GameServiceLocatorTest] Bullet: {bullet.ID}");
         }
 
         if (Input.GetMouseButtonDown(1))
