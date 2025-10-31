@@ -83,7 +83,7 @@ namespace Hunting.Game.Animal.State
                 !(this is AnimalDeathState) &&
                 !(this is AnimalFleeState))
             {
-                //stateMachine.ChangeState(animal.fleeState);
+                stateMachine.ChangeState(animal.fleeState);
             }
         }
 

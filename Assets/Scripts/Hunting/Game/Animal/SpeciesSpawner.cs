@@ -1,12 +1,7 @@
 ﻿using cfg.HuntingConfig;
-<<<<<<< HEAD
+using Cysharp.Threading.Tasks;
 using GameFramework.Core;
 using Hunting;
-=======
-using Cysharp.Threading.Tasks;
-using Hunting;
-using Hunting.Game.Animal;
->>>>>>> 1371355b3ecf49dbc4f17683cf8de3f94519a339
 using Hunting.Manager;
 using UnityEngine;
 
@@ -50,7 +45,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 派发器是否处于启用状态。
         /// </summary>
-        private bool _isActive = true;
+        private bool _isActive = false;
 
         /// <summary>
         /// 配置管理器
@@ -62,56 +57,15 @@ namespace Hunting.Game.Animal
         /// </summary>
         private EventManager Events => GameServiceLocator.Event;
 
+        /// <summary>
+        /// 对象池管理器
+        /// </summary>
+        private GameObjectPoolManager Pool => GameServiceLocator.Pool;
+
         private void Start()
         {
-<<<<<<< HEAD
             _lastSpawnTime = Time.time;
-=======
-            await UniTask.Delay(10);
-        }
-        initialized = true;
-
-        Debug.Log($"[SpeciesSpawner] {spawnDirection}方向派发器初始化完成，地图ID: {currentMapId}");
-    }
-    #endregion
-
-    private async void Start()
-    {
-        EventManager eventManager = await GameServiceLocator.GetFrameworkManagerAsync<EventManager>();
-        eventManager.AddListener(HuntingEvents.HuntingGameStarted, OnHuntingGameStarted);
-    }
-
-    private async void OnHuntingGameStarted()
-    {
-        await Init();
-        lastSpawnTime = Time.time;
-    }
-
-    private void Update()
-    {
-        if (!initialized) return;
-
-        // 检查生成间隔
-        if (Time.time - lastSpawnTime >= spawnInterval)
-        {
-            TrySpawnAnimal();
-            lastSpawnTime = Time.time;
-        }
-    }
-
-    /// <summary>
-    /// 尝试生成动物
-    /// </summary>
-    private void TrySpawnAnimal()
-    {
-        // 从配置管理器获取随机物种
-        var (specie, stayTime) = HuntingGameConfigManager.Instance.GetRandomSpecieForMap(currentMapId);
-
-        if (specie == null)
-        {
-            Debug.LogError($"[SpeciesSpawner] 无法获取物种数据，地图ID: {currentMapId}");
-            return;
->>>>>>> 1371355b3ecf49dbc4f17683cf8de3f94519a339
+            Events.AddListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
         }
 
         private void Update()
@@ -124,6 +78,11 @@ namespace Hunting.Game.Animal
 
             TrySpawn();
             _lastSpawnTime = Time.time;
+        }
+
+        private void OnDestroy()
+        {
+            Events.RemoveListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
         }
 
         #region 私有方法
@@ -183,6 +142,55 @@ namespace Hunting.Game.Animal
             Events.Trigger(SpawnEvents.SpeciesSpawned, args);
             Debug.Log($"[SpeciesSpawner] 发起派发：物种 {args.SpecieData.ID}，位置 {args.Position}");
         }
+
+        /// <summary>
+        /// 派发事件回调
+        /// </summary>
+        private void OnSpeciesSpawned(SpeciesSpawnEventArgs args)
+        {
+            if (args.Spawner != this)
+            {
+                return;
+            }
+
+            string prefabName = GetPrefabName(args.SpecieData);
+            string prefabPath = string.Concat("Animals/", prefabName);
+
+            var task = Pool.PullAsync(prefabPath);
+            task.ContinueWith(instance =>
+            {
+                if (instance == null)
+                {
+                    Debug.LogError($"[SpeciesSpawner] 对象池获取失败：{prefabPath}");
+                    return;
+                }
+
+                instance.transform.position = args.Position;
+                if (args.Direction != Vector3.zero)
+                {
+                    instance.transform.rotation = Quaternion.LookRotation(args.Direction);
+                }
+
+                var behavior = instance.GetComponent<AnimalBehavior>();
+                if (behavior == null)
+                {
+                    Debug.LogError("[SpeciesSpawner] 实例缺少 AnimalBehavior 组件");
+                    Pool.Push(instance);
+                    return;
+                }
+
+                behavior.Init(args.SpecieData, args.StayTime, args.Direction);
+            });
+        }
+
+        /// <summary>
+        /// 构建动物预制体名称
+        /// </summary>
+        private string GetPrefabName(Specie specie)
+        {
+            return $"Animal_{specie.VolumeType}_{specie.ID}";
+        }
+
         #endregion
 
         #region 公共方法

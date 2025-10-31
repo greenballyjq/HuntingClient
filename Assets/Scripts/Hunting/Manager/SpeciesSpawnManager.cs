@@ -150,6 +150,7 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
+            Events.AddListener(HuntingEvents.HuntingGameStarted,OnHuntingGameStarted);
             Events.AddListener("GameStarted", OnGameStarted);
             Events.AddListener("GamePaused", OnGamePaused);
             Events.AddListener("GameResumed", OnGameResumed);
@@ -165,6 +166,12 @@ namespace Hunting.Manager
             Events.RemoveListener("GamePaused", OnGamePaused);
             Events.RemoveListener("GameResumed", OnGameResumed);
             Events.RemoveListener("GameEnded", OnGameEnded);
+        }
+
+        private void OnHuntingGameStarted()
+        {
+            CollectSpawners();
+            SetAllActive(true);
         }
 
         /// <summary>

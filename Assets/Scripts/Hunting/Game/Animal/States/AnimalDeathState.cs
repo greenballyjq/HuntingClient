@@ -19,6 +19,13 @@ namespace Hunting.Game.Animal.State
             stateTimer = 1f;
 
             animal.HandleDeathDrop();
+
+            Collider collider = animal.GetComponent<Collider>();
+            if (collider != null)
+            {
+                GameObject.Destroy(collider);
+            }
+            
         }
 
         public override void Update()

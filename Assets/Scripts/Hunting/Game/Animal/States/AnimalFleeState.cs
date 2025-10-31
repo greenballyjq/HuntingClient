@@ -17,10 +17,10 @@ namespace Hunting.Game.Animal.State
             base.Enter();
 
             // 速度翻倍
-            animal.currentMoveSpeed *= 2f;
+            animal.rvo.SetMaxSpeed(animal.currentMoveSpeed * 2);
 
             // 10秒后销毁
-            stateTimer = 20f;
+            stateTimer = 10f;
 
             Debug.LogWarning($"[AnimalFleeState] {animal.specieData.Name} 逃跑，速度: {animal.currentMoveSpeed}");
         }
@@ -32,7 +32,7 @@ namespace Hunting.Game.Animal.State
             // 逃跑状态下移动
             animal.transform.Translate(animal.transform.forward * animal.currentMoveSpeed * Time.deltaTime, Space.World);
 
-            // 20秒后销毁
+            // 10秒后销毁
             if (stateTimer <= 0f)
             {
                 Object.Destroy(animal.gameObject);
