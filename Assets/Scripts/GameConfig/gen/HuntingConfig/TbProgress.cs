@@ -17,12 +17,12 @@ namespace cfg.HuntingConfig
 /// </summary>
 public partial class TbProgress
 {
-    private readonly System.Collections.Generic.Dictionary<EProgressType, HuntingConfig.Progress> _dataMap;
+    private readonly System.Collections.Generic.Dictionary<int, HuntingConfig.Progress> _dataMap;
     private readonly System.Collections.Generic.List<HuntingConfig.Progress> _dataList;
     
     public TbProgress(ByteBuf _buf)
     {
-        _dataMap = new System.Collections.Generic.Dictionary<EProgressType, HuntingConfig.Progress>();
+        _dataMap = new System.Collections.Generic.Dictionary<int, HuntingConfig.Progress>();
         _dataList = new System.Collections.Generic.List<HuntingConfig.Progress>();
         
         for(int n = _buf.ReadSize() ; n > 0 ; --n)
@@ -30,16 +30,16 @@ public partial class TbProgress
             HuntingConfig.Progress _v;
             _v = global::cfg.HuntingConfig.Progress.DeserializeProgress(_buf);
             _dataList.Add(_v);
-            _dataMap.Add(_v.ProgressType, _v);
+            _dataMap.Add(_v.ID, _v);
         }
     }
 
-    public System.Collections.Generic.Dictionary<EProgressType, HuntingConfig.Progress> DataMap => _dataMap;
+    public System.Collections.Generic.Dictionary<int, HuntingConfig.Progress> DataMap => _dataMap;
     public System.Collections.Generic.List<HuntingConfig.Progress> DataList => _dataList;
 
-    public HuntingConfig.Progress GetOrDefault(EProgressType key) => _dataMap.TryGetValue(key, out var v) ? v : null;
-    public HuntingConfig.Progress Get(EProgressType key) => _dataMap[key];
-    public HuntingConfig.Progress this[EProgressType key] => _dataMap[key];
+    public HuntingConfig.Progress GetOrDefault(int key) => _dataMap.TryGetValue(key, out var v) ? v : null;
+    public HuntingConfig.Progress Get(int key) => _dataMap[key];
+    public HuntingConfig.Progress this[int key] => _dataMap[key];
 
     public void ResolveRef(Tables tables)
     {

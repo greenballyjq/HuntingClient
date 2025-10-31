@@ -12,20 +12,21 @@ using Luban;
 
 namespace cfg.HuntingConfig
 {
-public sealed partial class MapSpecie : Luban.BeanBase
+public sealed partial class Map : Luban.BeanBase
 {
-    public MapSpecie(ByteBuf _buf) 
+    public Map(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
         Name = _buf.ReadString();
         Description = _buf.ReadString();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SpeciesByVolume = new System.Collections.Generic.Dictionary<EVolumeType, int[]>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { EVolumeType _k0;  _k0 = (EVolumeType)_buf.ReadInt(); int[] _v0;  {int __n1 = System.Math.Min(_buf.ReadSize(), _buf.Size);_v0 = new int[__n1];for(var __index1 = 0 ; __index1 < __n1 ; __index1++) { int __e1;__e1 = _buf.ReadInt(); _v0[__index1] = __e1;}}     SpeciesByVolume.Add(_k0, _v0);}}
+        SpawnStrategyId = _buf.ReadInt();
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SpeciesByVolume = new System.Collections.Generic.Dictionary<EVolumeType, HuntingConfig.SpecieWeight[]>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { EVolumeType _k0;  _k0 = (EVolumeType)_buf.ReadInt(); HuntingConfig.SpecieWeight[] _v0;  {int __n1 = System.Math.Min(_buf.ReadSize(), _buf.Size);_v0 = new HuntingConfig.SpecieWeight[__n1];for(var __index1 = 0 ; __index1 < __n1 ; __index1++) { HuntingConfig.SpecieWeight __e1;__e1 = global::cfg.HuntingConfig.SpecieWeight.DeserializeSpecieWeight(_buf); _v0[__index1] = __e1;}}     SpeciesByVolume.Add(_k0, _v0);}}
         Comment = _buf.ReadString();
     }
 
-    public static MapSpecie DeserializeMapSpecie(ByteBuf _buf)
+    public static Map DeserializeMap(ByteBuf _buf)
     {
-        return new HuntingConfig.MapSpecie(_buf);
+        return new HuntingConfig.Map(_buf);
     }
 
     /// <summary>
@@ -41,15 +42,19 @@ public sealed partial class MapSpecie : Luban.BeanBase
     /// </summary>
     public readonly string Description;
     /// <summary>
-    /// 体型-物种映射
+    /// 体型策略ID
     /// </summary>
-    public readonly System.Collections.Generic.Dictionary<EVolumeType, int[]> SpeciesByVolume;
+    public readonly int SpawnStrategyId;
+    /// <summary>
+    /// 体型-物种权重映射（每个元素为SpecieWeight的Bean，Bean有SpecieId与Weight，元素之间用&quot;;&quot;分隔，键之间用&quot;|&quot;分隔）
+    /// </summary>
+    public readonly System.Collections.Generic.Dictionary<EVolumeType, HuntingConfig.SpecieWeight[]> SpeciesByVolume;
     /// <summary>
     /// 备注
     /// </summary>
     public readonly string Comment;
    
-    public const int __ID__ = -1249163210;
+    public const int __ID__ = 1855882559;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
@@ -62,6 +67,7 @@ public sealed partial class MapSpecie : Luban.BeanBase
         + "ID:" + ID + ","
         + "Name:" + Name + ","
         + "Description:" + Description + ","
+        + "SpawnStrategyId:" + SpawnStrategyId + ","
         + "SpeciesByVolume:" + Luban.StringUtil.CollectionToString(SpeciesByVolume) + ","
         + "Comment:" + Comment + ","
         + "}";

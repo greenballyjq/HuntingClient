@@ -816,8 +816,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   neighborDist: 10
   maxNeighbors: 6
-  timeHorizon: 10
-  timeHorizonObst: 10
+  timeHorizon: 8
+  timeHorizonObst: 1000
   radius: 3
   rotationSmoothSpeed: 3
 --- !u!1 &7853299950699460719

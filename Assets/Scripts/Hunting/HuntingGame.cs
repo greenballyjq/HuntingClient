@@ -1,3 +1,4 @@
+﻿using GameFramework.Core;
 using GameFramework.Manager;
 using Hunting.Manager;
 using UnityEngine;

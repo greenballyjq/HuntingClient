@@ -11,12 +11,7 @@ namespace Hunting
     /// </summary>
     public static class HuntingEvents
     {
-        #region 游戏逻辑类事件
-        public static readonly EventKey GameStarted = new EventKey();
-        public static readonly EventKey GamePaused = new EventKey();
-        public static readonly EventKey GameResumed = new EventKey();
-        public static readonly EventKey GameEnded = new EventKey();
-
+        #region Hunting游戏类事件
         public static readonly EventKey HuntingGameStarted = new EventKey();
         public static readonly EventKey HuntingGameEnded = new EventKey();
         #endregion

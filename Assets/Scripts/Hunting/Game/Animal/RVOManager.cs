@@ -451,9 +451,28 @@ public class RVOManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 注册矩形障碍
+    /// </summary>
+    public int RegisterObstacleRect(Vector3 center, Vector2 size, bool ccw = true, object owner = null)
+    {
+        float hx = size.x * 0.5f;
+        float hz = size.y * 0.5f;
+
+        // 以Unity的x,z作为RVO的x,y
+        var p0 = new Vector3(center.x - hx, center.y, center.z - hz);
+        var p1 = new Vector3(center.x + hx, center.y, center.z - hz);
+        var p2 = new Vector3(center.x + hx, center.y, center.z + hz);
+        var p3 = new Vector3(center.x - hx, center.y, center.z + hz);
+
+        List<Vector3> vertices = ccw ? new List<Vector3> { p0, p1, p2, p3 } : new List<Vector3> { p0, p3, p2, p1 };
+
+        return RegisterObstaclePolygon(vertices, owner);
+    }
+
+    /// <summary>
     /// 注册多边形障碍
     /// </summary>
-    public int RegisterObstaclePolygon(List<Vector3> vertices, object owner = null)
+    public int RegisterObstaclePolygon(List<Vector3> vertices, object owner = null, bool ccw = true)
     {
         if (vertices == null || vertices.Count < 2)
         {
@@ -466,7 +485,21 @@ public class RVOManager : MonoBehaviour
             owner = owner,
             active = true,
         };
-        po.verticesUnity.AddRange(vertices);
+
+        // 根据顶点顺序复制顶点
+        if (ccw)
+        {
+            po.verticesUnity.AddRange(vertices);
+        }
+        else
+        {
+            // 顺时针需要反转顶点顺序
+            for (int i = vertices.Count - 1; i >= 0; i--)
+            {
+                po.verticesUnity.Add(vertices[i]);
+            }
+        }
+
         _pendingObstacles.Add(po);
         return _pendingObstacles.Count - 1;
     }
