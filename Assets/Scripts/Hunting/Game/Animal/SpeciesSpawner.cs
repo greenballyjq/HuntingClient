@@ -1,96 +1,104 @@
 using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
+using Hunting;
 using Hunting.Game.Animal;
 using Hunting.Manager;
 using UnityEngine;
 
 /// <summary>
-/// ÎïÖÖÅÉ·¢Æ÷
+/// ï¿½ï¿½ï¿½ï¿½ï¿½É·ï¿½ï¿½ï¿½
 /// </summary>
 public class SpeciesSpawner : MonoBehaviour
 {
     /// <summary>
-    /// ÎïÖÖÅÉ·¢·½Ïò
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½É·ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public enum SpawnDirection
     {
         /// <summary>
-        /// ´Ó×ó²àÉú³É£¬ÏòÓÒÒÆ¶¯
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
         /// </summary>
         Left,
 
         /// <summary>
-        /// ´ÓÓÒ²àÉú³É£¬Ïò×óÒÆ¶¯
+        /// ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
         /// </summary>
         Right
     }
 
-    #region ±à¼­Æ÷²ÎÊý
+    #region ï¿½à¼­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// <summary>
-    /// ÅÉ·¢·½Ïò
+    /// ï¿½É·ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     [SerializeField] private SpawnDirection spawnDirection;
 
     /// <summary>
-    /// µ±Ç°µØÍ¼ID
+    /// ï¿½ï¿½Ç°ï¿½ï¿½Í¼ID
     /// </summary>
     [SerializeField] private int currentMapId = 1;
 
     /// <summary>
-    /// Éú³É¼ä¸ô£¨Ãë£©
+    /// ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½ï¿½ï¿½ë£©
     /// </summary>
     [SerializeField] private float spawnInterval = 2f;
 
     /// <summary>
-    /// Éú³ÉÎ»ÖÃZ×ø±ê·¶Î§£¨Ç°ºóÎ»ÖÃ£©
+    /// ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½Zï¿½ï¿½ï¿½ê·¶Î§ï¿½ï¿½Ç°ï¿½ï¿½Î»ï¿½Ã£ï¿½
     /// </summary>
     [SerializeField] private Vector2 spawnZRange = new Vector2(-3f, 3f);
 
     /// <summary>
-    /// Éú³ÉÎ»ÖÃXÆ«ÒÆ£¨¸ù¾Ý·½Ïò¹Ì¶¨£©
+    /// ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½XÆ«ï¿½Æ£ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½
     /// </summary>
     [SerializeField] private float spawnXOffset = 2f;
 
-    [Header("ÒÆ¶¯·½ÏòÉèÖÃ")]
-    [Tooltip("×îÐ¡½Ç¶È£¨¶È£©")]
+    [Header("ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("ï¿½ï¿½Ð¡ï¿½Ç¶È£ï¿½ï¿½È£ï¿½")]
     [SerializeField] private float minAngle = 0f;
 
-    [Tooltip("×î´ó½Ç¶È£¨¶È£©")]
+    [Tooltip("ï¿½ï¿½ï¿½Ç¶È£ï¿½ï¿½È£ï¿½")]
     [SerializeField] private float maxAngle = 60f;
     #endregion
 
-    #region ÔËÐÐÊ±±äÁ¿
+    #region ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
     /// <summary>
-    /// ÉÏ´ÎÉú³ÉÊ±¼ä
+    /// ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
     /// </summary>
     private float lastSpawnTime;
 
     /// <summary>
-    /// ¶¯ÎïÔ¤ÖÆÌå»ù´¡Â·¾¶
+    /// ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
     /// </summary>
     private const string ANIMAL_PREFAB_BASE_PATH = "Animals/";
     #endregion
 
-    #region ³õÊ¼»¯Ïà¹Ø
+    #region ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½
     private bool initialized;
 
     /// <summary>
-    /// Òì²½³õÊ¼»¯
+    /// ï¿½ì²½ï¿½ï¿½Ê¼ï¿½ï¿½
     /// </summary>
     private async UniTask Init()
     {
-        // µÈ´ý HuntingGameConfigManager ³õÊ¼»¯Íê³É
+        // ï¿½È´ï¿½ HuntingGameConfigManager ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½
         while (HuntingGameConfigManager.Instance == null || !HuntingGameConfigManager.Instance.Initialized)
         {
             await UniTask.Delay(10);
         }
         initialized = true;
 
-        Debug.Log($"[SpeciesSpawner] {spawnDirection}·½ÏòÅÉ·¢Æ÷³õÊ¼»¯Íê³É£¬µØÍ¼ID: {currentMapId}");
+        Debug.Log($"[SpeciesSpawner] {spawnDirection}ï¿½ï¿½ï¿½ï¿½ï¿½É·ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½É£ï¿½ï¿½ï¿½Í¼ID: {currentMapId}");
     }
     #endregion
 
     private async void Start()
+    {
+        EventManager eventManager = await GameServiceLocator.GetFrameworkManagerAsync<EventManager>();
+        
+        eventManager.AddListener(HuntingEvents.GameStarted, OnGameStarted);
+    }
+
+    private async void OnGameStarted()
     {
         await Init();
         lastSpawnTime = Time.time;
@@ -100,7 +108,7 @@ public class SpeciesSpawner : MonoBehaviour
     {
         if (!initialized) return;
 
-        // ¼ì²éÉú³É¼ä¸ô
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½ï¿½
         if (Time.time - lastSpawnTime >= spawnInterval)
         {
             TrySpawnAnimal();
@@ -109,58 +117,58 @@ public class SpeciesSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// ³¢ÊÔÉú³É¶¯Îï
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½
     /// </summary>
     private void TrySpawnAnimal()
     {
-        // ´ÓÅäÖÃ¹ÜÀíÆ÷»ñÈ¡Ëæ»úÎïÖÖ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         var (specie, stayTime) = HuntingGameConfigManager.Instance.GetRandomSpecieForMap(currentMapId);
 
         if (specie == null)
         {
-            Debug.LogError($"[SpeciesSpawner] ÎÞ·¨»ñÈ¡ÎïÖÖÊý¾Ý£¬µØÍ¼ID: {currentMapId}");
+            Debug.LogError($"[SpeciesSpawner] ï¿½Þ·ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½Í¼ID: {currentMapId}");
             return;
         }
 
-        // Éú³É¶¯Îï
+        // ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½
         SpawnAnimal(specie, stayTime);
     }
 
     /// <summary>
-    /// Éú³É¶¯ÎïÊµÀý
+    /// ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½Êµï¿½ï¿½
     /// </summary>
-    /// <param name="specie">ÎïÖÖÊý¾Ý</param>
-    /// <param name="stayTime">×¤³¡Ê±¼ä</param>
+    /// <param name="specie">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="stayTime">×¤ï¿½ï¿½Ê±ï¿½ï¿½</param>
     private void SpawnAnimal(Specie specie, float stayTime)
     {
-        // ¸ù¾ÝÎïÖÖID»ñÈ¡¶ÔÓ¦µÄÔ¤ÖÆÌåÃû³Æ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IDï¿½ï¿½È¡ï¿½ï¿½Ó¦ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         string prefabName = GetAnimalPrefabName(specie);
         string prefabPath = $"{ANIMAL_PREFAB_BASE_PATH}{prefabName}";
 
-        // ¼ÓÔØ¶¯ÎïÔ¤ÖÆÌå
+        // ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½
         GameObject animalPrefab = Resources.Load<GameObject>(prefabPath);
         if (animalPrefab == null)
         {
-            Debug.LogError($"[SpeciesSpawner] ¶¯ÎïÔ¤ÖÆÌå²»´æÔÚ: {prefabPath}");
+            Debug.LogError($"[SpeciesSpawner] ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½å²»ï¿½ï¿½ï¿½ï¿½: {prefabPath}");
             return;
         }
 
-        // ¼ÆËãÉú³ÉÎ»ÖÃ£¨»ùÓÚÅÉ·¢Æ÷Î»ÖÃ£©
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É·ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½
         Vector3 spawnPosition = CalculateSpawnPosition();
 
-        // ¼ÆËãÒÆ¶¯·½Ïò
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
         Vector3 moveDirection = CalculateMoveDirection();
 
-        // ÊµÀý»¯¶¯Îï
+        // Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         GameObject animalObj = Instantiate(animalPrefab, spawnPosition, Quaternion.identity);
         AnimalBehavior animal = animalObj.GetComponent<AnimalBehavior>();
 
         if (animal != null)
         {
-            // ³õÊ¼»¯¶¯Îï
+            // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             animal.Initialize(specie, stayTime, moveDirection);
 
-            // ÉèÖÃ¶¯Îï³¯ÏòÓëÒÆ¶¯·½ÏòÒ»ÖÂ
+            // ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï³¯ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
             if (moveDirection != Vector3.zero)
             {
                 animalObj.transform.rotation = Quaternion.LookRotation(moveDirection);
@@ -168,75 +176,75 @@ public class SpeciesSpawner : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"[SpeciesSpawner] ¶¯ÎïÔ¤ÖÆÌåÈ±ÉÙAnimal×é¼þ: {prefabName}");
+            Debug.LogError($"[SpeciesSpawner] ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½È±ï¿½ï¿½Animalï¿½ï¿½ï¿½: {prefabName}");
             Destroy(animalObj);
         }
     }
 
     /// <summary>
-    /// ¸ù¾ÝÎïÖÖÊý¾Ý»ñÈ¡Ô¤ÖÆÌåÃû³Æ
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý»ï¿½È¡Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
-    /// <param name="specie">ÎïÖÖÊý¾Ý</param>
-    /// <returns>Ô¤ÖÆÌåÃû³Æ</returns>
+    /// <param name="specie">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</param>
+    /// <returns>Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</returns>
     private string GetAnimalPrefabName(Specie specie)
     {
         return $"Animal_{specie.VolumeType}_{specie.ID}";
     }
 
     /// <summary>
-    /// ¼ÆËãÉú³ÉÎ»ÖÃ
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
     /// </summary>
-    /// <returns>Éú³ÉÎ»ÖÃ</returns>
+    /// <returns>ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½</returns>
     private Vector3 CalculateSpawnPosition()
     {
-        // »ùÓÚÅÉ·¢Æ÷¶ÔÏóµÄÎ»ÖÃ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½É·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
         Vector3 basePosition = transform.position;
 
-        // ¸ù¾Ý·½ÏòÌí¼ÓXÖáÆ«ÒÆ
+        // ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½Æ«ï¿½ï¿½
         float xOffset = spawnDirection == SpawnDirection.Left ? -spawnXOffset : spawnXOffset;
 
-        // ÔÚZÖá·¶Î§ÄÚËæ»ú
+        // ï¿½ï¿½Zï¿½á·¶Î§ï¿½ï¿½ï¿½ï¿½ï¿½
         float zOffset = Random.Range(spawnZRange.x, spawnZRange.y);
 
         return basePosition + new Vector3(xOffset, 0f, zOffset);
     }
 
     /// <summary>
-    /// ¼ÆËãÒÆ¶¯·½Ïò
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
-    /// <returns>ÒÆ¶¯·½ÏòÏòÁ¿</returns>
+    /// <returns>ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</returns>
     private Vector3 CalculateMoveDirection()
     {
-        // ÔÚÉèÖÃµÄ½Ç¶È·¶Î§ÄÚËæ»ú
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ½Ç¶È·ï¿½Î§ï¿½ï¿½ï¿½ï¿½ï¿½
         float randomAngle = Random.Range(minAngle, maxAngle);
         return Quaternion.Euler(0f, randomAngle, 0f) * Vector3.forward;
     }
 
     /// <summary>
-    /// ÉèÖÃµ±Ç°µØÍ¼
+    /// ï¿½ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½Í¼
     /// </summary>
-    /// <param name="mapId">µØÍ¼ID</param>
+    /// <param name="mapId">ï¿½ï¿½Í¼ID</param>
     public void SetCurrentMap(int mapId)
     {
         currentMapId = mapId;
     }
 
     /// <summary>
-    /// ÉèÖÃÉú³É¼ä¸ô
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½ï¿½
     /// </summary>
-    /// <param name="interval">Éú³É¼ä¸ô£¨Ãë£©</param>
+    /// <param name="interval">ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½ï¿½ï¿½ë£©</param>
     public void SetSpawnInterval(float interval)
     {
         spawnInterval = interval;
     }
 
-    #region µ÷ÊÔ
+    #region ï¿½ï¿½ï¿½ï¿½
     /// <summary>
-    /// ÔÚSceneÊÓÍ¼ÖÐÏÔÊ¾Éú³É·¶Î§ºÍÒÆ¶¯·½Ïò
+    /// ï¿½ï¿½Sceneï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½É·ï¿½Î§ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void OnDrawGizmos()
     {
-        // Éú³ÉÎ»ÖÃ·¶Î§
+        // ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã·ï¿½Î§
         Gizmos.color = spawnDirection == SpawnDirection.Left ? Color.blue : Color.red;
 
         Vector3 center = transform.position;
@@ -248,13 +256,13 @@ public class SpeciesSpawner : MonoBehaviour
         Gizmos.DrawWireSphere(rightPos, 0.5f);
         Gizmos.DrawWireSphere(transform.position, 0.3f);
 
-        // ÒÆ¶¯·½Ïò·¶Î§
+        // ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½Î§
         Gizmos.color = Color.green;
         DrawDirectionArc(center, minAngle, maxAngle, 3f);
     }
 
     /// <summary>
-    /// »æÖÆ·½Ïò»¡Ïß£¨µ÷ÊÔÓÃ£©
+    /// ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ß£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½
     /// </summary>
     private void DrawDirectionArc(Vector3 center, float startAngle, float endAngle, float radius)
     {
@@ -271,7 +279,7 @@ public class SpeciesSpawner : MonoBehaviour
             prevPoint = nextPoint;
         }
 
-        // »æÖÆÆðÊ¼ºÍ½áÊø·½ÏòÏß
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Í½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Gizmos.DrawLine(center, center + Quaternion.Euler(0f, startAngle, 0f) * Vector3.forward * radius);
         Gizmos.DrawLine(center, center + Quaternion.Euler(0f, endAngle, 0f) * Vector3.forward * radius);
     }

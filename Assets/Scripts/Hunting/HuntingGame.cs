@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using Hunting.Manager;
+using Hunting.UI;
 using UnityEngine;
 
 namespace Hunting
@@ -16,6 +18,13 @@ namespace Hunting
         protected override BaseConfigManager GetConfigManager()
         {
             return HuntingGameConfigManager.Instance;
+        }
+
+        protected override async UniTask OnGameInit()
+        {
+            UIHuntingPrepare uiHuntingPrepare = await GetFrameworkManager<UIManager>()
+                .OpenUIAsync<UIHuntingPrepare>("UIHuntingPrepare", UIManager.UILayer.Normal);
+            uiHuntingPrepare.SetGameLogic(this);
         }
 
         protected override void OnGameStart()

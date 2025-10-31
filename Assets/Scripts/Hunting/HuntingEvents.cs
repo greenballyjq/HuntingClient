@@ -7,11 +7,11 @@ using UnityEngine;
 namespace Hunting
 {
     /// <summary>
-    /// ´òÁÔÓÎÏ·ÊÂ¼ş¼ü¼¯ÖĞ¹ÜÀíÀà
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public static class HuntingEvents
     {
-        #region ÓÎÏ·Âß¼­ÀàÊÂ¼ş
+        #region ï¿½ï¿½Ï·ï¿½ß¼ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
         public static readonly EventKey GameStarted = new EventKey();
         public static readonly EventKey GamePaused = new EventKey();
         public static readonly EventKey GameResumed = new EventKey();

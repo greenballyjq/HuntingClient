@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44402316, g: 0.49316597, b: 0.57223195, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.4964137, b: 0.57481897, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2186,7 +2186,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 215
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4569,6 +4569,10 @@ PrefabInstance:
     - target: {fileID: 193414854309454283, guid: adea006abcd042442b6e96cc541851fa, type: 3}
       propertyPath: m_Name
       value: UIMeatProgress
+      objectReference: {fileID: 0}
+    - target: {fileID: 193414854309454283, guid: adea006abcd042442b6e96cc541851fa, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 390609171625110374, guid: adea006abcd042442b6e96cc541851fa, type: 3}
       propertyPath: m_Pivot.x
