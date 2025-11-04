@@ -21,6 +21,7 @@ namespace Hunting.Manager
             "huntingconfig_tbspecie",
             "huntingconfig_tbspawn",
             "huntingconfig_tbmap",
+            "huntingconfig_tbrole",
             "huntingconfig_tbprogress",
             "huntingconfig_tbdynamicquest"
         };

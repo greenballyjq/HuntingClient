@@ -146,10 +146,10 @@ namespace Hunting.Game
         private async void Start()
         {
             EventManager eventManager = await GameServiceLocator.GetFrameworkManagerAsync<EventManager>();
-            eventManager.AddListener(HuntingEvents.HuntingGameStarted, OnHuntingGameStarted);
+            eventManager.AddListener("GameStarted", OnGameStarted);
         }
 
-        private async void OnHuntingGameStarted()
+        private async void OnGameStarted()
         {
             await Init();
             UpdateFireInterval();

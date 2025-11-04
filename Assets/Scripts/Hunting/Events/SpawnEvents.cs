@@ -32,7 +32,7 @@ public sealed class SpeciesSpawnEventArgs : EventArgs
     /// <summary>
     /// 触发派发的派发器
     /// </summary>
-    public SpeciesSpawner Spawner { get; set; }
+    public SpecieSpawner Spawner { get; set; }
 
     /// <summary>
     /// 物种配置数据
@@ -79,7 +79,7 @@ public sealed class SpawnerActiveChangedEventArgs : EventArgs
     /// <summary>
     /// 目标派发器
     /// </summary>
-    public SpeciesSpawner Spawner { get; set; }
+    public SpecieSpawner Spawner { get; set; }
 
     /// <summary>
     /// 当前启用状态

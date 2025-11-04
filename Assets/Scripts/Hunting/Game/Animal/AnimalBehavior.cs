@@ -123,7 +123,7 @@ namespace Hunting.Game.Animal
             hitState = new AnimalHitState(this, stateMachine, "Hit");
             deathState = new AnimalDeathState(this, stateMachine, "Death");
             fleeState = new AnimalFleeState(this, stateMachine, "Flee");
-
+            
             
         }
 
@@ -186,17 +186,42 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
-        /// 动物死亡
+        /// 动物死亡：切入死亡状态并做资源清理
         /// </summary>
         public void Die()
         {
-            // 切换到死亡状态/暂时写道这里
+            // 切换到死亡状态
             stateMachine.ChangeState(deathState);
+            // 可在此停止移动组件等（示例：RVO释放）
             rvo.Release();
         }
 
         /// <summary>
-        /// 处理死亡掉落
+        /// 通知管理器：该动物已死亡（由死亡状态在动画播放完成后调用）
+        /// </summary>
+        public void NotifyDeath()
+        {
+            var mgr = GameServiceLocator.GetGameManager<AnimalManager>();
+            if (mgr != null)
+            {
+                mgr.OnAnimalDiedNotice(this, specieData != null ? specieData.DropType : EDropType.Meat, specieData != null ? specieData.DropAmount : 0);
+            }
+        }
+
+        /// <summary>
+        /// 通知管理器：该动物已逃离场景（由逃跑状态到时调用）
+        /// </summary>
+        public void NotifyFled()
+        {
+            var mgr = GameServiceLocator.GetGameManager<AnimalManager>();
+            if (mgr != null)
+            {
+                mgr.OnAnimalFledNotice(this);
+            }
+        }
+
+        /// <summary>
+        /// 处理死亡掉落（已不直接使用，掉落由管理器在接收通知后统一触发）
         /// </summary>
         public void HandleDeathDrop()
         {

@@ -8,22 +8,17 @@ namespace Hunting.Manager
     /// <summary>
     /// 物种派发管理器
     /// </summary>
-    public class SpeciesSpawnManager : BaseGameManager
+    public class SpecieSpawnManager : BaseGameManager
     {
         /// <summary>
         /// 派发器列表
         /// </summary>
-        private readonly List<SpeciesSpawner> _spawners = new List<SpeciesSpawner>();
-
-        /// <summary>
-        /// 派发器列表
-        /// </summary>
-        public List<SpeciesSpawner> Spawners => _spawners;
+        private readonly List<SpecieSpawner> _spawners = new List<SpecieSpawner>();
 
         /// <summary>
         /// 事件中心
         /// </summary>
-        private EventManager Events => GameServiceLocator.Event;
+        private EventManager Event => GameServiceLocator.Event;
 
         /// <summary>
         /// 初始化管理器
@@ -31,10 +26,11 @@ namespace Hunting.Manager
         public override void Init()
         {
             RegisterEvents();
+            Debug.Log("[SpecieSpawnManager] 初始化完成");
         }
 
         /// <summary>
-        /// 每帧更新（当前无需求）
+        /// 每帧更新
         /// </summary>
         public override void Update()
         {
@@ -47,17 +43,18 @@ namespace Hunting.Manager
         {
             UnregisterEvents();
             _spawners.Clear();
+            Debug.Log("[SpecieSpawnManager] 已释放");
         }
 
+        #region 公共方法
         /// <summary>
         /// 根据索引获取派发器
         /// </summary>
-        public SpeciesSpawner GetSpawner(int index)
+        public SpecieSpawner GetSpawner(int index)
         {
             if (index < 0 || index >= _spawners.Count)
-            {
                 return null;
-            }
+
             return _spawners[index];
         }
 
@@ -68,7 +65,33 @@ namespace Hunting.Manager
         {
             _spawners.Clear();
             CollectSpawners();
-            OnSpawnManagerReady();
+            TriggerSpawnManagerReady(new SpawnManagerReadyEventArgs
+            {
+                Sender = this,
+                SpawnerCount = _spawners.Count
+            });
+        }
+
+        /// <summary>
+        /// 设置单个派发器的启用状态
+        /// </summary>
+        public void SetSpawnerActive(SpecieSpawner spawner, bool active)
+        {
+            if (spawner == null)
+                return;
+
+            if (spawner.IsActive == active)
+                return;
+
+            Debug.Log($"[SpeciesSpawnManager] 设置派发器 {spawner.name} 的启用状态为 {active}");
+
+            spawner.SetActive(active);
+            TriggerSpawnerActiveChanged(new SpawnerActiveChangedEventArgs
+            {
+                Sender = this,
+                Spawner = spawner,
+                IsActive = active
+            });
         }
 
         /// <summary>
@@ -81,25 +104,14 @@ namespace Hunting.Manager
         }
 
         /// <summary>
-        /// 设置单个派发器的启用状态
+        /// 设置单个派发器的地图 ID
         /// </summary>
-        public void SetSpawnerActive(SpeciesSpawner spawner, bool active)
+        public void SetSpawnerMap(SpecieSpawner spawner, int mapId)
         {
             if (spawner == null)
                 return;
 
-            if (spawner.IsActive == active)
-                return;
-
-            spawner.SetActive(active);
-
-            var args = new SpawnerActiveChangedEventArgs
-            {
-                Sender = this,
-                Spawner = spawner,
-                IsActive = active
-            };
-            Events.Trigger(SpawnEvents.SpawnerActiveChanged, args);
+            spawner.SetMap(mapId);
         }
 
         /// <summary>
@@ -110,74 +122,51 @@ namespace Hunting.Manager
             for (int i = 0; i < _spawners.Count; i++)
                 _spawners[i].SetMap(mapId);
         }
+        #endregion
 
-        /// <summary>
-        /// 设置单个派发器的地图 ID
-        /// </summary>
-        public void SetSpawnerMap(SpeciesSpawner spawner, int mapId)
-        {
-            if (spawner == null)
-                return;
-
-            spawner.SetMap(mapId);
-        }
-
-        /// <summary>
-        /// 管理器准备完成事件
-        /// </summary>
-        private void OnSpawnManagerReady()
-        {
-            var args = new SpawnManagerReadyEventArgs
-            {
-                Sender = this,
-                SpawnerCount = _spawners.Count
-            };
-            Events.Trigger(SpawnEvents.SpawnManagerReady, args);
-        }
-
+        #region 私有方法
         /// <summary>
         /// 收集场景中的派发器
         /// </summary>
         private void CollectSpawners()
         {
-            SpeciesSpawner[] found = Object.FindObjectsOfType<SpeciesSpawner>(true);
+            SpecieSpawner[] found = Object.FindObjectsOfType<SpecieSpawner>(true);
             _spawners.AddRange(found);
             Debug.Log($"[SpeciesSpawnManager] 收集到派发器数量：{_spawners.Count}");
         }
+        #endregion
 
+        #region 事件相关
         /// <summary>
-        /// 注册游戏生命周期事件
+        /// 注册事件
         /// </summary>
         private void RegisterEvents()
         {
-            Events.AddListener(HuntingEvents.HuntingGameStarted,OnHuntingGameStarted);
-            Events.AddListener("GameStarted", OnGameStarted);
-            Events.AddListener("GamePaused", OnGamePaused);
-            Events.AddListener("GameResumed", OnGameResumed);
-            Events.AddListener("GameEnded", OnGameEnded);
+            Event.AddListener("GameStarted", OnGameStarted);
+            Event.AddListener("GamePaused", OnGamePaused);
+            Event.AddListener("GameResumed", OnGameResumed);
+            Event.AddListener("GameEnded", OnGameEnded);
         }
 
         /// <summary>
-        /// 注销游戏生命周期事件
+        /// 注销事件
         /// </summary>
         private void UnregisterEvents()
         {
-            Events.RemoveListener("GameStarted", OnGameStarted);
-            Events.RemoveListener("GamePaused", OnGamePaused);
-            Events.RemoveListener("GameResumed", OnGameResumed);
-            Events.RemoveListener("GameEnded", OnGameEnded);
-        }
-
-        private void OnHuntingGameStarted()
-        {
-            CollectSpawners();
-            SetAllActive(true);
+            Event.RemoveListener("GameStarted", OnGameStarted);
+            Event.RemoveListener("GamePaused", OnGamePaused);
+            Event.RemoveListener("GameResumed", OnGameResumed);
+            Event.RemoveListener("GameEnded", OnGameEnded);
         }
 
         /// <summary>
         /// 游戏开始回调
         /// </summary>
-        private void OnGameStarted(){}
+        private void OnGameStarted()
+        {
+            CollectSpawners();
+            SetAllActive(true);
+        }
 
         /// <summary>
         /// 游戏暂停回调
@@ -202,6 +191,23 @@ namespace Hunting.Manager
         {
             SetAllActive(false);
         }
+
+        /// <summary>
+        /// 触发管理器准备完成事件
+        /// </summary>
+        private void TriggerSpawnManagerReady(SpawnManagerReadyEventArgs args)
+        {
+            Event.Trigger(SpawnEvents.SpawnManagerReady, args);
+        }
+
+        /// <summary>
+        /// 触发派发器启用状态变更事件
+        /// </summary>
+        private void TriggerSpawnerActiveChanged(SpawnerActiveChangedEventArgs args)
+        {
+            Event.Trigger(SpawnEvents.SpawnerActiveChanged, args);
+        }
+        #endregion
     }
 }
 
