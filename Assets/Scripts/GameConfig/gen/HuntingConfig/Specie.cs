@@ -49,7 +49,7 @@ public sealed partial class Specie : Luban.BeanBase
     /// </summary>
     public readonly float HP;
     /// <summary>
-    /// 移速
+    /// 移动速度
     /// </summary>
     public readonly float MoveSpeed;
     /// <summary>

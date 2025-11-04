@@ -17,6 +17,7 @@ public sealed partial class Map : Luban.BeanBase
     public Map(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
+        MapType = (EMapType)_buf.ReadInt();
         Name = _buf.ReadString();
         Description = _buf.ReadString();
         SpawnStrategyId = _buf.ReadInt();
@@ -33,6 +34,10 @@ public sealed partial class Map : Luban.BeanBase
     /// 地图ID
     /// </summary>
     public readonly int ID;
+    /// <summary>
+    /// 地图类型
+    /// </summary>
+    public readonly EMapType MapType;
     /// <summary>
     /// 地图名称
     /// </summary>
@@ -65,6 +70,7 @@ public sealed partial class Map : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
+        + "MapType:" + MapType + ","
         + "Name:" + Name + ","
         + "Description:" + Description + ","
         + "SpawnStrategyId:" + SpawnStrategyId + ","

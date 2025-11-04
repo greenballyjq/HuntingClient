@@ -66,7 +66,7 @@ public sealed partial class Bullet : Luban.BeanBase
     /// </summary>
     public readonly float DamageRange;
     /// <summary>
-    /// 移动速度
+    /// 飞行速度
     /// </summary>
     public readonly float MoveSpeed;
     /// <summary>
