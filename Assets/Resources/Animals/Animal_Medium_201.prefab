@@ -593,7 +593,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
@@ -692,9 +692,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitClip: {fileID: 8300000, guid: f5f2c60655938bd41a899a7f57c106c3, type: 3}
   audioSource: {fileID: 0}
-  currentHP: 0
-  currentMoveSpeed: 0
-  currentDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &-7448428529338025622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -712,7 +709,9 @@ MonoBehaviour:
   timeHorizon: 8
   timeHorizonObst: 1000
   radius: 3
+  enableAutoRotation: 1
   rotationSmoothSpeed: 3
+  minRotationSpeed: 0.1
 --- !u!1 &5062559287153234616
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,6 +24,7 @@ public sealed partial class Specie : Luban.BeanBase
         HitRange = _buf.ReadFloat();
         DropType = (EDropType)_buf.ReadInt();
         DropAmount = _buf.ReadInt();
+        DropEnergy = _buf.ReadInt();
         Comment = _buf.ReadString();
     }
 
@@ -65,6 +66,10 @@ public sealed partial class Specie : Luban.BeanBase
     /// </summary>
     public readonly int DropAmount;
     /// <summary>
+    /// 掉落丰收能量值
+    /// </summary>
+    public readonly int DropEnergy;
+    /// <summary>
     /// 备注
     /// </summary>
     public readonly string Comment;
@@ -87,6 +92,7 @@ public sealed partial class Specie : Luban.BeanBase
         + "HitRange:" + HitRange + ","
         + "DropType:" + DropType + ","
         + "DropAmount:" + DropAmount + ","
+        + "DropEnergy:" + DropEnergy + ","
         + "Comment:" + Comment + ","
         + "}";
     }

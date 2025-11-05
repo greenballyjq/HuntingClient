@@ -16,7 +16,7 @@ public class StateMachine
     /// 初始化状态机
     /// </summary>
     /// <param name="startState"></param>
-    public void Initialize(IState startState)
+    public void Init(IState startState)
     {
         currentState = startState;
         startState.Enter();
@@ -28,9 +28,9 @@ public class StateMachine
     /// <param name="newState"></param>
     public void ChangeState(IState newState)
     {
-        currentState?.Exit();
+        currentState.Exit();
         currentState = newState;
-        currentState?.Enter();
+        currentState.Enter();
     }
 
     /// <summary>

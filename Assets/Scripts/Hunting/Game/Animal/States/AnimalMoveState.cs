@@ -1,26 +1,48 @@
-﻿namespace Hunting.Game.Animal.State
+﻿using UnityEngine;
+
+namespace Hunting.Game.Animal.State
 {
     /// <summary>
     /// 动物移动状态
     /// </summary>
     public class AnimalMoveState : AnimalState
     {
-        public AnimalMoveState(AnimalBehavior animal, StateMachine stateMachine, string animName) : base(animal, stateMachine, animName) { }
+        public AnimalMoveState(AnimalBehavior animal, StateMachine stateMachine, string animationName) 
+            : base(animal, stateMachine, animationName) 
+        {
+        }
 
         public override void Enter()
         {
-            base.Enter();            
+            base.Enter();
+            
+            // 确保正常速度
+            animal.ApplySpeedMultiplier(1f);
         }
 
         public override void Update()
         {
             base.Update();
+
+            // 受击判断
+            if (animal.IsHit)
+            {
+                stateMachine.ChangeState(animal.GetHitState());
+                animal.ResetHitFlag();
+                return;
+            }
+
+            // 驻场时间到，进入逃跑
+            if (animal.TimeInScene >= animal.StayTime)
+            {
+                stateMachine.ChangeState(animal.GetFleeState());
+                return;
+            }
         }
 
         public override void Exit()
         {
             base.Exit();
         }
- 
     }
 }

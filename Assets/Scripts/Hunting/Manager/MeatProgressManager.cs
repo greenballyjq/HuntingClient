@@ -28,6 +28,13 @@ namespace Hunting.Manager
         }
         #endregion
 
+        #region 服务引用
+        /// <summary>
+        /// 事件中心
+        /// </summary>
+        private EventManager Event => GameServiceLocator.Event;
+        #endregion
+
         #region 配置数据
         /// <summary>
         /// 肉度条配置数据
@@ -114,8 +121,8 @@ namespace Hunting.Manager
                 return;
             }
 
-            // 订阅动物掉落事件，监听肉类掉落
-            AnimalBehavior.OnAnimalDropReward += OnAnimalDropReward;
+            // 订阅动物掉落奖励事件
+            Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
 
             // 标记初始化完成
             initialized = true;
@@ -130,26 +137,24 @@ namespace Hunting.Manager
         /// </summary>
         private void OnDestroy()
         {
-            // 取消订阅动物掉落事件，防止内存泄漏
+            // 取消订阅动物掉落奖励事件
             if (initialized)
             {
-                AnimalBehavior.OnAnimalDropReward -= OnAnimalDropReward;
+                Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
             }
         }
 
         /// <summary>
         /// 处理动物掉落奖励
         /// </summary>
-        /// <param name="animal">掉落奖励的动物实例</param>
-        /// <param name="dropType">掉落类型</param>
-        /// <param name="amount">掉落数量</param>
-        private void OnAnimalDropReward(AnimalBehavior animal, EDropType dropType, int amount)
+        private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
         {
             // 检查初始化状态和掉落类型
-            if (!initialized || dropType != EDropType.Meat) return;
+            if (!initialized || args.DropType != EDropType.Meat) 
+                return;
 
             // 处理肉类掉落，增加肉度条进度
-            AddMeatProgress(amount);
+            AddMeatProgress(args.Amount);
         }
 
         /// <summary>

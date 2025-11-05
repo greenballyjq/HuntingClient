@@ -110,6 +110,8 @@ namespace Hunting.Manager
         private void RegisterEvents()
         {
             Events.AddListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
+            Events.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
+            Events.AddListener(AnimalEvents.AnimalFled, OnAnimalFled);
         }
 
         /// <summary>
@@ -118,6 +120,8 @@ namespace Hunting.Manager
         private void UnregisterEvents()
         {
             Events.RemoveListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
+            Events.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
+            Events.RemoveListener(AnimalEvents.AnimalFled, OnAnimalFled);
         }
         
         /// <summary>
@@ -167,84 +171,33 @@ namespace Hunting.Manager
         /// <summary>
         /// 触发动物生成完成事件
         /// </summary>
-        /// <param name="args"></param>
         private void TriggerAnimalSpawned(AnimalSpawnedEventArgs args)
         {
             Events.Trigger(AnimalEvents.AnimalSpawned, args);
         }
 
         /// <summary>
-        /// 触发动物死亡事件
+        /// 动物死亡事件回调
         /// </summary>
-        /// <param name="args"></param>
-        private void TriggerAnimalDied(AnimalDiedEventArgs args)
+        private void OnAnimalDied(AnimalDiedEventArgs args)
         {
-            Events.Trigger(AnimalEvents.AnimalDied, args);
-        }
-
-        /// <summary>
-        /// 触发动物逃跑事件
-        /// </summary>
-        /// <param name="args"></param>
-        private void TriggerAnimalFled(AnimalFledEventArgs args)
-        {
-            Events.Trigger(AnimalEvents.AnimalFled, args);
-        }
-
-        /// <summary>
-        /// 触发动物掉落奖励事件
-        /// </summary>
-        /// <param name="args"></param>
-        private void TriggerAnimalDropReward(AnimalDropRewardEventArgs args)
-        {
-            Events.Trigger(AnimalEvents.AnimalDropReward, args);
-        }
-
-        /// <summary>
-        /// 动物死亡预告回调
-        /// </summary>
-        public void OnAnimalDiedNotice(AnimalBehavior animal, EDropType dropType, int dropAmount)
-        {
-            if (animal == null)
+            if (args.Animal == null)
                 return;
 
-            // 先广播掉落，再广播死亡
-            TriggerAnimalDropReward(new AnimalDropRewardEventArgs
-            {
-                Sender = this,
-                Animal = animal,
-                DropType = dropType,
-                Amount = dropAmount
-            });
-
-            TriggerAnimalDied(new AnimalDiedEventArgs
-            {
-                Sender = this,
-                Animal = animal,
-                SpecieData = animal.specieData,
-                DropType = dropType,
-                DropAmount = dropAmount
-            });
-
-            ReturnAnimal(animal);
+            // 回收动物到对象池
+            ReturnAnimal(args.Animal);
         }
 
         /// <summary>
-        /// 动物逃跑预告回调
+        /// 动物逃跑事件回调
         /// </summary>
-        public void OnAnimalFledNotice(AnimalBehavior animal)
+        private void OnAnimalFled(AnimalFledEventArgs args)
         {
-            if (animal == null)
+            if (args.Animal == null)
                 return;
 
-            TriggerAnimalFled(new AnimalFledEventArgs
-            {
-                Sender = this,
-                Animal = animal,
-                SpecieData = animal.specieData,
-            });
-
-            ReturnAnimal(animal);
+            // 回收动物到对象池
+            ReturnAnimal(args.Animal);
         }
         #endregion     
     }

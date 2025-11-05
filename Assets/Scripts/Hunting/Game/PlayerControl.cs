@@ -122,12 +122,19 @@ namespace Hunting.Game
         [SerializeField] private AudioClip audioClip;
         private AudioSource audioSource;
         #endregion
+
+        #region 服务引用
+        /// <summary>
+        /// 事件中心
+        /// </summary>
+        private EventManager Event => GameServiceLocator.Event;
+        #endregion
+
         private async void Awake()
         {
             // 初始化输入系统
             input = new PlayerInputSet();
             mainCamera = Camera.main;
-
 
             // 测试用
             // await Init();
@@ -138,15 +145,15 @@ namespace Hunting.Game
             // 初始化组件
             InitializeMuzzlePoint();
             InitializeAimLine();
-
-            // 订阅事件
-            Animal.AnimalBehavior.OnAnimalDropReward += OnAnimalDropReward;
         }
 
         private async void Start()
         {
             EventManager eventManager = await GameServiceLocator.GetFrameworkManagerAsync<EventManager>();
             eventManager.AddListener("GameStarted", OnGameStarted);
+            
+            // 订阅动物掉落奖励事件
+            Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
         private async void OnGameStarted()
@@ -155,9 +162,12 @@ namespace Hunting.Game
             UpdateFireInterval();
         }
 
-        private void OnAnimalDropReward(Animal.AnimalBehavior animal, EDropType dropType, int arg3)
+        /// <summary>
+        /// 处理动物掉落奖励
+        /// </summary>
+        private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
         {
-            if (dropType == EDropType.Bullet)
+            if (args.DropType == EDropType.Bullet)
             {
                 // 掉落子弹奖励，获取随机特殊子弹
                 var specialBullet = HuntingGameConfigManager.Instance.GetRandomSpecialBullet();
@@ -379,8 +389,7 @@ namespace Hunting.Game
         private void OnDestroy()
         {
             // 取消订阅事件
-            Animal.AnimalBehavior.OnAnimalDropReward -= OnAnimalDropReward;
-
+            Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
 
             // 销毁击中点标记
             if (hitMarker != null)

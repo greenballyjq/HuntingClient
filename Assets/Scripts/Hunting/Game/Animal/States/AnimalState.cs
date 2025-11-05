@@ -7,49 +7,38 @@ using UnityEngine;
 namespace Hunting.Game.Animal.State
 {
     /// <summary>
-    /// 动物状态
+    /// 动物状态基类
     /// </summary>
     public class AnimalState : IState
     {
         /// <summary>
-        /// 状态机
+        /// 状态机引用
         /// </summary>
         protected StateMachine stateMachine;
 
         /// <summary>
-        /// 状态动画名称
+        /// 动画名称
         /// </summary>
-        protected string animName;
+        protected string animationName;
 
         /// <summary>
-        /// 动物自身
+        /// 动物Owner引用
         /// </summary>
         protected AnimalBehavior animal;
 
         /// <summary>
-        /// 状态计时器
+        /// 状态计时器（子类按需使用）
         /// </summary>
         protected float stateTimer;
 
         /// <summary>
-        /// 动画组件
+        /// 构造函数
         /// </summary>
-        protected Animator animator;
-
-        /// <summary>
-        /// 移动避障组件
-        /// </summary>
-        protected RVOMovement rvo;
-
-        public AnimalState(AnimalBehavior animal, StateMachine stateMachine, string animName)
+        public AnimalState(AnimalBehavior animal, StateMachine stateMachine, string animationName)
         {
             this.animal = animal;
             this.stateMachine = stateMachine;
-            this.animName = animName;
-
-            // 获取animal上的组件，方便使用
-            animator = animal.animator;
-            rvo = animal.rvo;
+            this.animationName = animationName;
         }
 
         /// <summary>
@@ -57,37 +46,29 @@ namespace Hunting.Game.Animal.State
         /// </summary>
         public virtual void Enter()
         {
-            animator.SetBool(animName, true);
+            animal.PlayAnimation(animationName);
         }
 
         /// <summary>
         /// 退出状态
         /// </summary>
-
         public virtual void Exit()
         {
-            animator.SetBool(animName, false);
+            animal.StopAnimation(animationName);
         }
 
         /// <summary>
         /// 状态更新
         /// </summary>
-
         public virtual void Update()
         {
-            // 当前状态倒计时
-            stateTimer -= Time.deltaTime;
-
-            // 任何状态都可以进入逃跑状态（除了死亡和逃跑状态本身）
-            if (animal.timeInScene >= animal.stayTime &&
-                !(this is AnimalDeathState) &&
-                !(this is AnimalFleeState))
+            // 死亡判断（从任意状态转换）
+            if (animal.CurrentHP <= 0 && !(this is AnimalDeathState))
             {
-                stateMachine.ChangeState(animal.fleeState);
+                stateMachine.ChangeState(animal.GetDeathState());
+                return;
             }
         }
-
-
     }
 
 

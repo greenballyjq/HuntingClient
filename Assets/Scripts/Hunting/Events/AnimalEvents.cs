@@ -71,9 +71,24 @@ public sealed class AnimalSpawnedEventArgs : EventArgs
 /// </summary>
 public sealed class AnimalDiedEventArgs : EventArgs
 {
+    /// <summary>
+    /// 死亡的动物实例
+    /// </summary>
     public AnimalBehavior Animal { get; set; }
+
+    /// <summary>
+    /// 物种配置
+    /// </summary>
     public Specie SpecieData { get; set; }
+
+    /// <summary>
+    /// 掉落类型
+    /// </summary>
     public EDropType DropType { get; set; }
+
+    /// <summary>
+    /// 掉落数量
+    /// </summary>
     public int DropAmount { get; set; }
 }
 
@@ -82,7 +97,14 @@ public sealed class AnimalDiedEventArgs : EventArgs
 /// </summary>
 public sealed class AnimalFledEventArgs : EventArgs
 {
+    /// <summary>
+    /// 逃跑的动物实例
+    /// </summary>
     public AnimalBehavior Animal { get; set; }
+
+    /// <summary>
+    /// 物种配置
+    /// </summary>
     public Specie SpecieData { get; set; }
 }
 
