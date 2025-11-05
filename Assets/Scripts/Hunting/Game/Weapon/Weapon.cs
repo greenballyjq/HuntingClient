@@ -53,12 +53,8 @@ namespace Hunting.Game.Weapon
 
         private async void Start()
         {
-            EventManager eventManager = await GameServiceLocator.GetFrameworkManagerAsync<EventManager>();
-            eventManager.AddListener(HuntingEvents.HuntingGameStarted, OnHuntingGameStarted);
-        }
-
-        private void OnHuntingGameStarted()
-        {
+            await GameServiceLocator.WaitForInitialization();
+            ChangeBullet(currentBulletId);
             UpdateFireIntervalFromConfig();
         }
 
