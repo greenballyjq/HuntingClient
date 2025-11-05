@@ -30,6 +30,10 @@ public partial class Tables
     /// </summary>
     public HuntingConfig.TbMap TbMap {get; }
     /// <summary>
+    /// 角色数值表
+    /// </summary>
+    public HuntingConfig.TbRole TbRole {get; }
+    /// <summary>
     /// 全局进度数值表
     /// </summary>
     public HuntingConfig.TbProgress TbProgress {get; }
@@ -44,6 +48,7 @@ public partial class Tables
         TbSpecie = new HuntingConfig.TbSpecie(loader("huntingconfig_tbspecie"));
         TbSpawn = new HuntingConfig.TbSpawn(loader("huntingconfig_tbspawn"));
         TbMap = new HuntingConfig.TbMap(loader("huntingconfig_tbmap"));
+        TbRole = new HuntingConfig.TbRole(loader("huntingconfig_tbrole"));
         TbProgress = new HuntingConfig.TbProgress(loader("huntingconfig_tbprogress"));
         TbDynamicQuest = new HuntingConfig.TbDynamicQuest(loader("huntingconfig_tbdynamicquest"));
         ResolveRef();
@@ -55,6 +60,7 @@ public partial class Tables
         TbSpecie.ResolveRef(this);
         TbSpawn.ResolveRef(this);
         TbMap.ResolveRef(this);
+        TbRole.ResolveRef(this);
         TbProgress.ResolveRef(this);
         TbDynamicQuest.ResolveRef(this);
     }

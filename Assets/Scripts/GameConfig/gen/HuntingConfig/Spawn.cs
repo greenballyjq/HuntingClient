@@ -17,8 +17,8 @@ public sealed partial class Spawn : Luban.BeanBase
     public Spawn(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);VolumeRatios = new System.Collections.Generic.Dictionary<EVolumeType, float>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { EVolumeType _k0;  _k0 = (EVolumeType)_buf.ReadInt(); float _v0;  _v0 = _buf.ReadFloat();     VolumeRatios.Add(_k0, _v0);}}
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);StayTimes = new System.Collections.Generic.Dictionary<EVolumeType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { EVolumeType _k0;  _k0 = (EVolumeType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     StayTimes.Add(_k0, _v0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);VolumeRatio = new System.Collections.Generic.Dictionary<EVolumeType, float>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { EVolumeType _k0;  _k0 = (EVolumeType)_buf.ReadInt(); float _v0;  _v0 = _buf.ReadFloat();     VolumeRatio.Add(_k0, _v0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);StayTime = new System.Collections.Generic.Dictionary<EVolumeType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { EVolumeType _k0;  _k0 = (EVolumeType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     StayTime.Add(_k0, _v0);}}
         Comment = _buf.ReadString();
     }
 
@@ -34,11 +34,11 @@ public sealed partial class Spawn : Luban.BeanBase
     /// <summary>
     /// 体型比例(小/中/大/特殊)
     /// </summary>
-    public readonly System.Collections.Generic.Dictionary<EVolumeType, float> VolumeRatios;
+    public readonly System.Collections.Generic.Dictionary<EVolumeType, float> VolumeRatio;
     /// <summary>
     /// 体型驻场时间(小/中/大/特殊)
     /// </summary>
-    public readonly System.Collections.Generic.Dictionary<EVolumeType, int> StayTimes;
+    public readonly System.Collections.Generic.Dictionary<EVolumeType, int> StayTime;
     /// <summary>
     /// 备注
     /// </summary>
@@ -55,8 +55,8 @@ public sealed partial class Spawn : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
-        + "VolumeRatios:" + Luban.StringUtil.CollectionToString(VolumeRatios) + ","
-        + "StayTimes:" + Luban.StringUtil.CollectionToString(StayTimes) + ","
+        + "VolumeRatio:" + Luban.StringUtil.CollectionToString(VolumeRatio) + ","
+        + "StayTime:" + Luban.StringUtil.CollectionToString(StayTime) + ","
         + "Comment:" + Comment + ","
         + "}";
     }

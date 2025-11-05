@@ -21,6 +21,7 @@ namespace Hunting.Manager
             "huntingconfig_tbspecie",
             "huntingconfig_tbspawn",
             "huntingconfig_tbmap",
+            "huntingconfig_tbrole",
             "huntingconfig_tbprogress",
             "huntingconfig_tbdynamicquest"
         };
@@ -30,22 +31,32 @@ namespace Hunting.Manager
         /// 子弹数值表
         /// </summary>
         public TbBullet BulletTable => _tables?.TbBullet;
+
         /// <summary>
         /// 物种数值表
         /// </summary>
-        public TbSpecie SpeciesTable => _tables?.TbSpecie;
+        public TbSpecie SpecieTable => _tables?.TbSpecie;
+
         /// <summary>
-        /// 物种派发数值表
+        /// 派发数值表
         /// </summary>
-        public TbSpawn SpeciesSpawnTable => _tables?.TbSpawn;
+        public TbSpawn SpawnTable => _tables?.TbSpawn;
+
         /// <summary>
-        /// 地图与物种映射数值表
+        /// 地图数值表
         /// </summary>
-        public TbMap MapSpeciesTable => _tables?.TbMap;
+        public TbMap MapTable => _tables?.TbMap; 
+
+        /// <summary>
+        /// 角色数值表
+        /// </summary>
+        public TbRole RoleTable => _tables?.TbRole;
+
         /// <summary>
         /// 全局进度数值表
         /// </summary>
         public TbProgress ProgressTable => _tables?.TbProgress;
+
         /// <summary>
         /// 动态任务数值表
         /// </summary>
@@ -73,26 +84,49 @@ namespace Hunting.Manager
         /// </summary>
         /// <param name="id">物种ID</param>
         /// <returns></returns>
-        public Specie GetSpecie(int id) => SpeciesTable.Get(id);
+        public Specie GetSpecie(int id) => SpecieTable.Get(id);
 
         /// <summary>
         /// 获取单个派发数据
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">派发ID</param>
         /// <returns></returns>
-        public Spawn GetSpawn(int id) => SpeciesSpawnTable.Get(id);
+        public Spawn GetSpawn(int id) => SpawnTable.Get(id);
 
         /// <summary>
         /// 获取单个地图数据
         /// </summary>
         /// <param name="id">地图ID</param>
         /// <returns></returns>
-        public Map GetMap(int id) => MapSpeciesTable.Get(id);
+        public Map GetMap(int id) => MapTable.Get(id);
+
+        /// <summary>
+        /// 通过地图类型获取单个地图数据
+        /// </summary>
+        /// <param name="type">地图类型</param>
+        /// <returns></returns>
+        public Map GetMap(EMapType type)
+             => MapTable?.DataList?.FirstOrDefault(p => p.MapType == type);
+
+        /// <summary>
+        /// 获取单个角色数据
+        /// </summary>
+        /// <param name="id">角色ID</param>
+        /// <returns></returns>
+        public Role GetRole(int id) => RoleTable.Get(id);
+
+        /// <summary>
+        /// 通过角色类型获取单个角色数据
+        /// </summary>
+        /// <param name="type">角色类型</param>
+        /// <returns></returns>
+        public Role GetRole(ERoleType type)
+            => RoleTable?.DataList?.FirstOrDefault(p => p.RoleType == type);
 
         /// <summary>
         /// 获取单个全局进度条数据
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">进度条ID</param>
         /// <returns></returns>
         public Progress GetProgress(int id) => ProgressTable.Get(id);
 
@@ -107,7 +141,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 获取单个动态任务数据
         /// </summary>
-        /// <param name="id">动态任务ID</param>
+        /// <param name="id">任务ID</param>
         /// <returns></returns>
         public DynamicQuest GetDynamicQuest(int id) => DynamicQuestTable.Get(id);
 
@@ -218,7 +252,7 @@ namespace Hunting.Manager
 				Debug.LogError($"[HuntingGameConfigManager] GetRandomVolumeTypeByStrategy: 体型策略不存在 mapId={mapId}");
 				return EVolumeType.Small;
 			}
-			if (strategy.VolumeRatios == null || strategy.VolumeRatios.Count == 0)
+			if (strategy.VolumeRatio == null || strategy.VolumeRatio.Count == 0)
 			{
 				Debug.LogError($"[HuntingGameConfigManager] GetRandomVolumeTypeByStrategy: 策略未配置体型比例 mapId={mapId}");
 				return EVolumeType.Small;
@@ -226,7 +260,7 @@ namespace Hunting.Manager
 
 			// 仅对策略中配置的体型做加权
 			float totalRatio = 0f;
-			foreach (var kv in strategy.VolumeRatios)
+			foreach (var kv in strategy.VolumeRatio)
 			{
 				if (kv.Value > 0f) totalRatio += kv.Value;
 			}
@@ -238,7 +272,7 @@ namespace Hunting.Manager
 
 			float randomPoint = Random.Range(0f, totalRatio);
 			float cumulative = 0f;
-			foreach (var kv in strategy.VolumeRatios)
+			foreach (var kv in strategy.VolumeRatio)
 			{
 				float ratio = kv.Value;
 				if (ratio <= 0f) continue;
@@ -249,7 +283,7 @@ namespace Hunting.Manager
 
 			// 兜底选择第一个键
 			Debug.LogWarning($"[HuntingGameConfigManager] GetRandomVolumeTypeByStrategy: 未命中加权范围，使用第一个体型兜底 mapId={mapId}");
-			foreach (var kv in strategy.VolumeRatios)
+			foreach (var kv in strategy.VolumeRatio)
 				return kv.Key;
 			return EVolumeType.Small;
         }
@@ -268,12 +302,12 @@ namespace Hunting.Manager
 				Debug.LogError($"[HuntingGameConfigManager] GetStayTimeByVolumeType: 体型策略不存在 mapId={mapId}");
 				return 10f;
 			}
-			if (strategy.StayTimes == null)
+			if (strategy.StayTime == null)
 			{
 				Debug.LogError($"[HuntingGameConfigManager] GetStayTimeByVolumeType: 策略未配置驻场时间 mapId={mapId}");
 				return 10f;
 			}
-			if (strategy.StayTimes.TryGetValue(volumeType, out var stayTime))
+			if (strategy.StayTime.TryGetValue(volumeType, out var stayTime))
 				return stayTime;
 
 			Debug.LogWarning($"[HuntingGameConfigManager] GetStayTimeByVolumeType: 该体型未配置驻场时间 mapId={mapId}, volumeType={volumeType}，使用默认值");

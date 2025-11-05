@@ -1,8 +1,4 @@
-﻿using cfg.HuntingConfig;
-using Cysharp.Threading.Tasks;
-using GameFramework.Core;
-using Hunting;
-using Hunting.Manager;
+﻿using Hunting.Manager;
 using UnityEngine;
 
 namespace Hunting.Game.Animal
@@ -10,7 +6,7 @@ namespace Hunting.Game.Animal
     /// <summary>
     /// 物种派发器
     /// </summary>
-    public class SpeciesSpawner : MonoBehaviour
+    public class SpecieSpawner : MonoBehaviour
     {
         /// <summary>
         /// 初始地图 ID
@@ -48,6 +44,11 @@ namespace Hunting.Game.Animal
         private bool _isActive = false;
 
         /// <summary>
+        /// 当前派发是否启用
+        /// </summary>
+        public bool IsActive => _isActive;
+
+        /// <summary>
         /// 配置管理器
         /// </summary>
         private HuntingGameConfigManager Config => GameServiceLocator.Config;
@@ -55,17 +56,11 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 事件中心
         /// </summary>
-        private EventManager Events => GameServiceLocator.Event;
-
-        /// <summary>
-        /// 对象池管理器
-        /// </summary>
-        private GameObjectPoolManager Pool => GameServiceLocator.Pool;
+        private EventManager Event => GameServiceLocator.Event;
 
         private void Start()
         {
             _lastSpawnTime = Time.time;
-            Events.AddListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
         }
 
         private void Update()
@@ -80,17 +75,13 @@ namespace Hunting.Game.Animal
             _lastSpawnTime = Time.time;
         }
 
-        private void OnDestroy()
-        {
-            Events.RemoveListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
-        }
-
         #region 私有方法
         /// <summary>
         /// 尝试派发
         /// </summary>
         private void TrySpawn()
         {
+            // 从配置按地图与体型策略选出物种与驻场时间
             var (specie, stayTime) = Config.GetRandomSpecieForMap(mapId);
             if (specie == null)
             {
@@ -98,10 +89,12 @@ namespace Hunting.Game.Animal
                 return;
             }
 
+            // 计算生成位置与移动方向
             Vector3 spawnPosition = CalculateSpawnPosition();
             Vector3 moveDirection = CalculateMoveDirection();
 
-            var args = new SpeciesSpawnEventArgs
+            // 触发派发事件
+            TriggerSpecieSpawn(new SpeciesSpawnEventArgs
             {
                 Sender = this,
                 Spawner = this,
@@ -110,9 +103,7 @@ namespace Hunting.Game.Animal
                 Position = spawnPosition,
                 Direction = moveDirection,
                 SpawnTime = Time.time
-            };
-
-            OnSpeciesSpawn(args);
+            }); 
         }
 
         /// <summary>
@@ -137,60 +128,10 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 触发派发事件
         /// </summary>
-        private void OnSpeciesSpawn(SpeciesSpawnEventArgs args)
+        private void TriggerSpecieSpawn(SpeciesSpawnEventArgs args)
         {
-            Events.Trigger(SpawnEvents.SpeciesSpawned, args);
-            Debug.Log($"[SpeciesSpawner] 发起派发：物种 {args.SpecieData.ID}，位置 {args.Position}");
+            Event.Trigger(SpawnEvents.SpeciesSpawned, args);
         }
-
-        /// <summary>
-        /// 派发事件回调
-        /// </summary>
-        private void OnSpeciesSpawned(SpeciesSpawnEventArgs args)
-        {
-            if (args.Spawner != this)
-            {
-                return;
-            }
-
-            string prefabName = GetPrefabName(args.SpecieData);
-            string prefabPath = string.Concat("Animals/", prefabName);
-
-            var task = Pool.PullAsync(prefabPath);
-            task.ContinueWith(instance =>
-            {
-                if (instance == null)
-                {
-                    Debug.LogError($"[SpeciesSpawner] 对象池获取失败：{prefabPath}");
-                    return;
-                }
-
-                instance.transform.position = args.Position;
-                if (args.Direction != Vector3.zero)
-                {
-                    instance.transform.rotation = Quaternion.LookRotation(args.Direction);
-                }
-
-                var behavior = instance.GetComponent<AnimalBehavior>();
-                if (behavior == null)
-                {
-                    Debug.LogError("[SpeciesSpawner] 实例缺少 AnimalBehavior 组件");
-                    Pool.Push(instance);
-                    return;
-                }
-
-                behavior.Init(args.SpecieData, args.StayTime, args.Direction);
-            });
-        }
-
-        /// <summary>
-        /// 构建动物预制体名称
-        /// </summary>
-        private string GetPrefabName(Specie specie)
-        {
-            return $"Animal_{specie.VolumeType}_{specie.ID}";
-        }
-
         #endregion
 
         #region 公共方法
@@ -211,21 +152,6 @@ namespace Hunting.Game.Animal
             _isActive = value;
             Debug.Log($"[SpeciesSpawner] 派发启用状态改为 {_isActive}");
         }
-
-        /// <summary>
-        /// 当前地图 ID
-        /// </summary>
-        public int MapId => mapId;
-
-        /// <summary>
-        /// 当前派发是否启用
-        /// </summary>
-        public bool IsActive => _isActive;
-
-        /// <summary>
-        /// 当前派发间隔（秒）
-        /// </summary>
-        public float SpawnInterval => spawnInterval;
         #endregion
 
         #region 编辑器可视化
@@ -254,5 +180,5 @@ namespace Hunting.Game.Animal
         #endregion
     }
 
-  
+
 }

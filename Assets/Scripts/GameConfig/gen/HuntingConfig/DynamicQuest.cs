@@ -75,7 +75,7 @@ public sealed partial class DynamicQuest : Luban.BeanBase
         + "Duration:" + Duration + ","
         + "RewardType:" + RewardType + ","
         + "RewardRange:" + Luban.StringUtil.CollectionToString(RewardRange) + ","
-        + "comment:" + Comment + ","
+        + "Comment:" + Comment + ","
         + "}";
     }
 }

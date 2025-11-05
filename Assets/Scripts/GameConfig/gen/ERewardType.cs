@@ -12,7 +12,7 @@
 namespace cfg
 { 
     /// <summary>
-    /// 奖励类型
+    /// 任务奖励类型
     /// </summary>
     public enum ERewardType
     {

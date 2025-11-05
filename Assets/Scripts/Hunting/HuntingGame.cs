@@ -13,7 +13,8 @@ namespace Hunting
         protected override void RegisterGameManagers()
         {
             Debug.Log("[HuntingGame] 开始注册游戏业务管理器");
-            RegisterManager<SpeciesSpawnManager>();
+            RegisterManager<SpecieSpawnManager>();
+            RegisterManager<AnimalManager>();
             Debug.Log("[HuntingGame] 注册游戏业务管理器完成");
         }
 
@@ -32,7 +33,6 @@ namespace Hunting
         protected override void OnGameStart()
         {
             Debug.Log("[HuntingGame] 游戏开始");
-            GameServiceLocator.Event.Trigger(HuntingEvents.HuntingGameStarted);
         }
 
         protected override void OnGamePause()
