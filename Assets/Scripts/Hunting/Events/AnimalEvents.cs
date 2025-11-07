@@ -10,22 +10,22 @@ using UnityEngine;
 public static class AnimalEvents
 {
     /// <summary>
-    /// 当动物生成完成时触发
+    /// 动物生成事件
     /// </summary>
     public static readonly EventKey<AnimalSpawnedEventArgs> AnimalSpawned = new EventKey<AnimalSpawnedEventArgs>();
 
     /// <summary>
-    /// 当动物死亡时触发
+    /// 动物死亡事件
     /// </summary>
     public static readonly EventKey<AnimalDiedEventArgs> AnimalDied = new EventKey<AnimalDiedEventArgs>();
 
     /// <summary>
-    /// 当动物逃跑离场时触发
+    /// 动物逃跑事件
     /// </summary>
     public static readonly EventKey<AnimalFledEventArgs> AnimalFled = new EventKey<AnimalFledEventArgs>();
 
     /// <summary>
-    /// 当动物掉落奖励时触发
+    /// 动物掉落奖励事件
     /// </summary>
     public static readonly EventKey<AnimalDropRewardEventArgs> AnimalDropReward = new EventKey<AnimalDropRewardEventArgs>();
 }
@@ -80,16 +80,6 @@ public sealed class AnimalDiedEventArgs : EventArgs
     /// 物种配置
     /// </summary>
     public Specie SpecieData { get; set; }
-
-    /// <summary>
-    /// 掉落类型
-    /// </summary>
-    public EDropType DropType { get; set; }
-
-    /// <summary>
-    /// 掉落数量
-    /// </summary>
-    public int DropAmount { get; set; }
 }
 
 /// <summary>
@@ -113,8 +103,17 @@ public sealed class AnimalFledEventArgs : EventArgs
 /// </summary>
 public sealed class AnimalDropRewardEventArgs : EventArgs
 {
+    /// <summary>
+    /// 掉落奖励的动物实例
+    /// </summary>
     public AnimalBehavior Animal { get; set; }
+    /// <summary>
+    /// 掉落类型
+    /// </summary>
     public EDropType DropType { get; set; }
+    /// <summary>
+    /// 掉落数量
+    /// </summary>
     public int Amount { get; set; }
 }
 

@@ -13,10 +13,10 @@ public class RVOMovement : MonoBehaviour
     public int maxNeighbors = 6;
 
     [Tooltip("预测与代理碰撞的时间")]
-    public float timeHorizon = 3f;
+    public float timeHorizon = 8.0f;
 
     [Tooltip("预测与障碍物碰撞的时间")]
-    public float timeHorizonObst = 3f;
+    public float timeHorizonObst = 1000.0f;
 
     [Tooltip("代理半径")]
     public float radius = 3.0f;
@@ -27,9 +27,6 @@ public class RVOMovement : MonoBehaviour
 
     [Tooltip("旋转平滑速度")]
     public float rotationSmoothSpeed = 5.0f;
-
-    [Tooltip("最小旋转速度阈值（低于此速度不旋转）")]
-    public float minRotationSpeed = 0.1f;
 
     /// <summary>
     /// RVO代理ID
@@ -47,6 +44,11 @@ public class RVOMovement : MonoBehaviour
     private Vector3 _targetDirection;
 
     /// <summary>
+    /// 实际移动速度（RVO计算后的）
+    /// </summary>
+    private Vector3 _actualVelocity;
+
+    /// <summary>
     /// 是否已初始化
     /// </summary>
     private bool _isInitialized = false;
@@ -55,11 +57,6 @@ public class RVOMovement : MonoBehaviour
     /// 是否已暂停
     /// </summary>
     private bool _isPaused = false;
-
-    /// <summary>
-    /// 实际移动速度（RVO计算后的）
-    /// </summary>
-    private Vector3 _actualVelocity;
 
     /// <summary>
     /// RVO管理器
@@ -84,6 +81,7 @@ public class RVOMovement : MonoBehaviour
             radius = radius,
             maxSpeed = _maxSpeed,
         };
+
         _agentId = _rvoManager.AddAgent(transform.position, config, owner: this);
         if (_agentId < 0)
         {
@@ -110,10 +108,11 @@ public class RVOMovement : MonoBehaviour
     /// <param name="initialDirection">初始朝向</param>
     public void Init(Vector3 initialDirection, float initialMaxSpeed)
     {
+        Init();
+
         // 设置初始方向和速度
         SetMoveDirection(initialDirection);
         SetMaxSpeed(initialMaxSpeed);
-        Init();
 
         // 设置依附对象初始朝向
         if (initialDirection.sqrMagnitude > 0.001f)
@@ -177,9 +176,12 @@ public class RVOMovement : MonoBehaviour
     /// </summary>
     public void SetMaxSpeed(float speed)
     {
-        _maxSpeed = speed;
-        if (_agentId >= 0 && !_isPaused)
+        if (!_isPaused)
+        {
+            _maxSpeed = speed;
             _rvoManager.SetAgentMaxSpeed(_agentId, speed);
+        }
+            
     }
 
     /// <summary>
@@ -193,11 +195,8 @@ public class RVOMovement : MonoBehaviour
         _isPaused = true;
 
         // 将速度设为0
-        if (_agentId >= 0)
-        {
-            _rvoManager.SetAgentMaxSpeed(_agentId, 0);
-            _rvoManager.SetAgentPrefVelocity(_agentId, Vector3.zero);
-        }
+        _rvoManager.SetAgentMaxSpeed(_agentId, 0);
+        _rvoManager.SetAgentPrefVelocity(_agentId, Vector3.zero);
 
         Debug.Log($"[RVOMovement] {gameObject.name} 暂停移动");
     }
@@ -213,8 +212,7 @@ public class RVOMovement : MonoBehaviour
         _isPaused = false;
 
         // 恢复速度
-        if (_agentId >= 0)
-            _rvoManager.SetAgentMaxSpeed(_agentId, _maxSpeed);
+        _rvoManager.SetAgentMaxSpeed(_agentId, _maxSpeed);
 
         Debug.Log($"[RVOMovement] {gameObject.name} 恢复移动");
     }
@@ -225,14 +223,6 @@ public class RVOMovement : MonoBehaviour
     public bool IsPaused()
     {
         return _isPaused;
-    }
-
-    /// <summary>
-    /// 获取实际移动速度（RVO计算后的）
-    /// </summary>
-    public Vector3 GetActualVelocity()
-    {
-        return _actualVelocity;
     }
     #endregion
 
@@ -255,10 +245,6 @@ public class RVOMovement : MonoBehaviour
     /// </summary>
     private void UpdateRotation()
     {
-        // 如果实际速度太小，不旋转
-        if (_actualVelocity.sqrMagnitude < minRotationSpeed * minRotationSpeed)
-            return;
-
         // 计算目标朝向（基于实际移动方向）
         Vector3 targetDirection = _actualVelocity.normalized;
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
@@ -306,24 +292,13 @@ public class RVOMovement : MonoBehaviour
             Gizmos.DrawSphere(targetEnd, 0.1f);
         }
 
-        // 实际移动方向（青色箭头，更粗）
+        // 实际移动方向（青色箭头）
         if (_actualVelocity.sqrMagnitude > 0.001f)
         {
             Gizmos.color = Color.cyan;
             Vector3 actualEnd = pos + _actualVelocity.normalized * 2.5f;
             Gizmos.DrawLine(pos, actualEnd);
             Gizmos.DrawSphere(actualEnd, 0.15f);
-            
-            // 绘制速度大小文本（通过线段密度表示）
-            float speedRatio = _actualVelocity.magnitude / Mathf.Max(_maxSpeed, 0.1f);
-            for (int i = 1; i <= 3; i++)
-            {
-                if (speedRatio >= i * 0.25f)
-                {
-                    Vector3 marker = pos + _actualVelocity.normalized * (0.5f * i);
-                    Gizmos.DrawWireSphere(marker, 0.08f);
-                }
-            }
         }
 
         // 代理半径（绿色圈）

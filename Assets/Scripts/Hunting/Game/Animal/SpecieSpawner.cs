@@ -102,7 +102,6 @@ namespace Hunting.Game.Animal
                 StayTime = stayTime,
                 Position = spawnPosition,
                 Direction = moveDirection,
-                SpawnTime = Time.time
             }); 
         }
 

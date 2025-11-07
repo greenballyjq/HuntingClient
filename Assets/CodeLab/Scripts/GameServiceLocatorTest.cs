@@ -90,6 +90,21 @@ public class GameServiceLocatorTest : MonoBehaviour
             GameServiceLocator.Pool.Release();
         }
 
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            foreach (var obj in animals) 
+            {
+                obj.GetComponent<AnimalBehavior>().PauseMovement();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            foreach (var obj in animals)
+            {
+                obj.GetComponent<AnimalBehavior>().ResumeMovement();
+            }
+        }
 
     }
 }

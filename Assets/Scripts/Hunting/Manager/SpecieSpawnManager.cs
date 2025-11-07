@@ -16,7 +16,7 @@ namespace Hunting.Manager
         private readonly List<SpecieSpawner> _spawners = new List<SpecieSpawner>();
 
         /// <summary>
-        /// 事件中心
+        /// 事件管理器
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
@@ -57,21 +57,6 @@ namespace Hunting.Manager
 
             return _spawners[index];
         }
-
-        /// <summary>
-        /// 重新收集场景中的派发器
-        /// </summary>
-        public void RefreshSpawners()
-        {
-            _spawners.Clear();
-            CollectSpawners();
-            TriggerSpawnManagerReady(new SpawnManagerReadyEventArgs
-            {
-                Sender = this,
-                SpawnerCount = _spawners.Count
-            });
-        }
-
         /// <summary>
         /// 设置单个派发器的启用状态
         /// </summary>
@@ -86,12 +71,6 @@ namespace Hunting.Manager
             Debug.Log($"[SpeciesSpawnManager] 设置派发器 {spawner.name} 的启用状态为 {active}");
 
             spawner.SetActive(active);
-            TriggerSpawnerActiveChanged(new SpawnerActiveChangedEventArgs
-            {
-                Sender = this,
-                Spawner = spawner,
-                IsActive = active
-            });
         }
 
         /// <summary>
@@ -190,22 +169,6 @@ namespace Hunting.Manager
         private void OnGameEnded()
         {
             SetAllActive(false);
-        }
-
-        /// <summary>
-        /// 触发管理器准备完成事件
-        /// </summary>
-        private void TriggerSpawnManagerReady(SpawnManagerReadyEventArgs args)
-        {
-            Event.Trigger(SpawnEvents.SpawnManagerReady, args);
-        }
-
-        /// <summary>
-        /// 触发派发器启用状态变更事件
-        /// </summary>
-        private void TriggerSpawnerActiveChanged(SpawnerActiveChangedEventArgs args)
-        {
-            Event.Trigger(SpawnEvents.SpawnerActiveChanged, args);
         }
         #endregion
     }

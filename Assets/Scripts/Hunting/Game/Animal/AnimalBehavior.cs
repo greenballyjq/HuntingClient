@@ -402,8 +402,6 @@ namespace Hunting.Game.Animal
                 Sender = this,
                 Animal = this,
                 SpecieData = SpecieData,
-                DropType = SpecieData.DropType,
-                DropAmount = SpecieData.DropAmount
             });
         }
 
