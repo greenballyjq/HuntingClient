@@ -22,8 +22,10 @@ namespace Hunting.Manager
             "huntingconfig_tbspawn",
             "huntingconfig_tbmap",
             "huntingconfig_tbrole",
-            "huntingconfig_tbprogress",
-            "huntingconfig_tbdynamicquest"
+            "huntingconfig_tbmeatprogress",
+            "huntingconfig_tbenergyprogress",
+            "huntingconfig_tbquest"
+            
         };
 
         #region 数值表访问
@@ -53,14 +55,19 @@ namespace Hunting.Manager
         public TbRole RoleTable => _tables?.TbRole;
 
         /// <summary>
-        /// 全局进度数值表
+        /// 肉度条数值表
         /// </summary>
-        public TbProgress ProgressTable => _tables?.TbProgress;
+        public TbMeatProgress MeatProgressTable => _tables?.TbMeatProgress;
 
         /// <summary>
-        /// 动态任务数值表
+        /// 丰收能量条数值表
         /// </summary>
-        public TbDynamicQuest DynamicQuestTable => _tables?.TbDynamicQuest;
+        public TbEnergyProgress EnergyProgressTable => _tables?.TbEnergyProgress;
+
+        /// <summary>
+        /// 任务数值表
+        /// </summary>
+        public TbQuest QuestTable => _tables?.TbQuest;
         #endregion
 
         #region 数值表单个数据项访问
@@ -124,34 +131,33 @@ namespace Hunting.Manager
             => RoleTable?.DataList?.FirstOrDefault(p => p.RoleType == type);
 
         /// <summary>
-        /// 获取单个全局进度条数据
+        /// 获取单个肉度条数据
         /// </summary>
-        /// <param name="id">进度条ID</param>
+        /// <param name="id">肉度条ID</param>
         /// <returns></returns>
-        public Progress GetProgress(int id) => ProgressTable.Get(id);
-
-		/// <summary>
-		/// 通过进度条类型获取单个进度条数据
-		/// </summary>
-		/// <param name="type">进度条类型</param>
-		/// <returns></returns>
-		public Progress GetProgress(EProgressType type)
-			=> ProgressTable?.DataList?.FirstOrDefault(p => p.ProgressType == type);
+        public MeatProgress GetMeatProgress(int id) => MeatProgressTable.Get(id);
 
         /// <summary>
-        /// 获取单个动态任务数据
+        /// 获取单个丰收能量条数据
+        /// </summary>
+        /// <param name="id">丰收能量条ID</param>
+        /// <returns></returns>
+        public EnergyProgress GetEnergyProgress(int id) => EnergyProgressTable.Get(id);
+
+        /// <summary>
+        /// 获取单个任务数据
         /// </summary>
         /// <param name="id">任务ID</param>
         /// <returns></returns>
-        public DynamicQuest GetDynamicQuest(int id) => DynamicQuestTable.Get(id);
+        public Quest GetDynamicQuest(int id) => QuestTable.Get(id);
 
 		/// <summary>
-		/// 通过任务类型获取单个动态任务数据
+		/// 通过任务类型获取单个任务数据
 		/// </summary>
 		/// <param name="type">任务类型</param>
 		/// <returns></returns>
-		public DynamicQuest GetDynamicQuest(EDynamicQuestType type)
-			=> DynamicQuestTable?.DataList?.FirstOrDefault(q => q.DynamicQuestType == type);
+		public Quest GetDynamicQuest(EQuestType type)
+			=> QuestTable?.DataList?.FirstOrDefault(q => q.QuestType == type);
         #endregion
 
         #region 子弹相关特殊方法
@@ -338,10 +344,49 @@ namespace Hunting.Manager
         }
         #endregion
 
-        #region 全局进度相关特殊方法
+        #region 肉度条相关特殊方法
+        /// <summary>
+        /// 根据完成的肉度条数量获取默认肉度条奖励
+        /// </summary>
+        /// <param name="completedBars">已完成的肉度条数量</param>
+        /// <returns>对应的奖励配置，未达到时返回null</returns>
+        public MeatProgressReward GetMeatProgressReward(int completedBars)
+        {
+            const int defaultProgressId = 1;
+
+            var meatProgress = GetMeatProgress(defaultProgressId);
+            if (meatProgress == null)
+            {
+                Debug.LogError("[HuntingGameConfigManager] GetMeatProgressReward: 默认肉度条配置不存在");
+                return null;
+            }
+
+            if (meatProgress.RewardSteps == null || meatProgress.RewardSteps.Count == 0)
+            {
+                Debug.LogError("[HuntingGameConfigManager] GetMeatProgressReward: 默认肉度条配置未设置奖励");
+                return null;
+            }
+
+            if (completedBars <= 0)
+            {
+                return null;
+            }
+
+            int clampedBars = Mathf.Clamp(completedBars, 1, meatProgress.MaxBar);
+            if (!meatProgress.RewardSteps.TryGetValue(clampedBars, out var reward))
+            {
+                Debug.LogWarning($"[HuntingGameConfigManager] GetMeatProgressReward: 未找到奖励 bars={clampedBars}");
+                return null;
+            }
+
+            return reward;
+        }
         #endregion
 
-        #region 动态任务相关特殊方法
+        #region 丰收能量条相关特殊方法
+        #endregion
+
+        #region 任务相关特殊方法
         #endregion
 
         #region 业务需求方法

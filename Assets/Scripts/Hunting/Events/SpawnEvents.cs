@@ -22,7 +22,7 @@ public sealed class SpeciesSpawnEventArgs : EventArgs
     /// <summary>
     /// 触发派发的派发器
     /// </summary>
-    public SpecieSpawner Spawner { get; set; }
+    public Spawner Spawner { get; set; }
 
     /// <summary>
     /// 物种配置数据

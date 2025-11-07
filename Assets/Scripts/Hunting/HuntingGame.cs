@@ -13,8 +13,9 @@ namespace Hunting
         protected override void RegisterGameManagers()
         {
             Debug.Log("[HuntingGame] 开始注册游戏业务管理器");
-            RegisterManager<SpecieSpawnManager>();
+            RegisterManager<SpawnerManager>();
             RegisterManager<AnimalManager>();
+            RegisterManager<SettlementRewardManager>();
             Debug.Log("[HuntingGame] 注册游戏业务管理器完成");
         }
 

@@ -3291,7 +3291,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1501949003}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 973470930d64f8e4bab1ef994413ff60, type: 3}
+  m_Script: {fileID: 11500000, guid: c94da678f5885b04c97527f3f9bb714e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spawnInterval: 1
@@ -3354,7 +3354,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1578751594}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 973470930d64f8e4bab1ef994413ff60, type: 3}
+  m_Script: {fileID: 11500000, guid: c94da678f5885b04c97527f3f9bb714e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spawnInterval: 2
@@ -3465,8 +3465,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aimDistance: 10
-  currentBulletId: 1
-  audioClip: {fileID: 8300000, guid: 24512ee4aa7451745974b27c89028038, type: 3}
 --- !u!4 &1610268485
 Transform:
   m_ObjectHideFlags: 0
@@ -4602,6 +4600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623a7c2a053d9994488d81129ed9b115, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meatProgressConfigId: 1
 --- !u!4 &2074413941
 Transform:
   m_ObjectHideFlags: 0
@@ -4960,10 +4959,10 @@ SceneRoots:
   - {fileID: 1685133876}
   - {fileID: 1578751596}
   - {fileID: 1501949005}
-  - {fileID: 2074413941}
   - {fileID: 578843783}
   - {fileID: 1264060395}
   - {fileID: 931074381}
   - {fileID: 1311946743}
   - {fileID: 427017148}
   - {fileID: 1610268485}
+  - {fileID: 2074413941}

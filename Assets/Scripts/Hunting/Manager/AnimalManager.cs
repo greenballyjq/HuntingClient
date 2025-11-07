@@ -17,12 +17,12 @@ namespace Hunting.Manager
         private readonly List<AnimalBehavior> _animals = new List<AnimalBehavior>();
 
         /// <summary>
-        /// 事件中心
+        /// 事件管理器
         /// </summary>
         private EventManager Events => GameServiceLocator.Event;
 
         /// <summary>
-        /// 对象池
+        /// 对象池管理器
         /// </summary>
         private GameObjectPoolManager Pool => GameServiceLocator.Pool;
 
@@ -32,13 +32,8 @@ namespace Hunting.Manager
             Debug.Log("[AnimalManager] 初始化完成");
         }
 
-        public override void Update()
-        {
-        }
+        public override void Update(){}
 
-        /// <summary>
-        /// 释放
-        /// </summary>
         public override void Release()
         {
             UnregisterEvents();

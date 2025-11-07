@@ -2,9 +2,6 @@
 using Cysharp.Threading.Tasks;
 using Hunting.Game.Animal;
 using Hunting.Manager;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -32,14 +29,20 @@ namespace Hunting.Manager
         /// <summary>
         /// 事件中心
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        private EventManager _eventManager;
         #endregion
 
         #region 配置数据
         /// <summary>
+        /// 默认使用的肉度条配置ID
+        /// </summary>
+        [SerializeField]
+        private int meatProgressConfigId = 1;
+
+        /// <summary>
         /// 肉度条配置数据
         /// </summary>
-        private cfg.HuntingConfig.Progress meatProgressData;
+        private cfg.HuntingConfig.MeatProgress meatProgressData;
         /// <summary>
         /// 单条所需值
         /// </summary>
@@ -47,7 +50,9 @@ namespace Hunting.Manager
         /// <summary>
         /// 最大条数
         /// </summary>
-        public int MaxBars => meatProgressData?.MaxBars ?? 5;
+        public int MaxBars => meatProgressData?.MaxBar ?? 5;
+
+
         #endregion
 
         #region 运行时状态
@@ -69,26 +74,6 @@ namespace Hunting.Manager
         public float CurrentProgressPercent => currentBarProgress / RequiredPerBar;
         #endregion
 
-        #region 事件系统
-        /// <summary>
-        /// 进度变化事件 - 当肉度条进度发生变化时触发
-        ///   float - 当前条进度值
-        ///   int - 当前已完成条数
-        ///   bool - 是否新完成了一条
-        /// </summary>
-        public event Action<float, int, bool> OnProgressChanged;
-        /// <summary>
-        /// 条数变化事件 - 当肉度条数量发生变化时触发
-        ///   int - 新的条数
-        ///   int - 变化的数量（正数表示增加，负数表示减少）
-        /// </summary>
-        public event Action<int, int> OnBarsChanged;
-        /// <summary>
-        /// 达到最大条数事件 - 当肉度条达到最大数量时触发
-        /// </summary>
-        public event Action OnMaxBarsReached;
-        #endregion
-
         /// <summary>
         /// 初始化状态标志
         /// </summary>
@@ -107,6 +92,11 @@ namespace Hunting.Manager
         /// </summary>
         private async UniTask InitializeAsync()
         {
+            // 等待框架与服务初始化
+            await GameServiceLocator.WaitForInitialization();
+
+            _eventManager = GameServiceLocator.Event;
+
             // 等待配置管理器初始化完成
             while (HuntingGameConfigManager.Instance == null || !HuntingGameConfigManager.Instance.Initialized)
             {
@@ -114,7 +104,7 @@ namespace Hunting.Manager
             }
 
             // 从配置管理器获取肉度条配置数据
-            meatProgressData = HuntingGameConfigManager.Instance.GetProgress(EProgressType.MeatProgress);
+            meatProgressData = HuntingGameConfigManager.Instance.GetMeatProgress(meatProgressConfigId);
             if (meatProgressData == null)
             {
                 Debug.LogError("[MeatProgressManager] 无法获取肉度条配置数据");
@@ -122,14 +112,19 @@ namespace Hunting.Manager
             }
 
             // 订阅动物掉落奖励事件
-            Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+            _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
 
             // 标记初始化完成
             initialized = true;
             Debug.Log($"[MeatProgressManager] 初始化完成，单条所需: {RequiredPerBar}，最大条数: {MaxBars}");
 
             // 触发初始状态事件，通知UI更新
-            OnProgressChanged?.Invoke(currentBarProgress, currentCompletedBars, false);
+            TriggerMeatProgressChanged(new MeatProgressChangedEventArgs
+            {
+                Sender = this,
+                CurrentProgress = currentBarProgress,
+                CompletedBars = currentCompletedBars
+            });
         }
 
         /// <summary>
@@ -138,9 +133,9 @@ namespace Hunting.Manager
         private void OnDestroy()
         {
             // 取消订阅动物掉落奖励事件
-            if (initialized)
+            if (initialized && _eventManager != null)
             {
-                Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+                _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
             }
         }
 
@@ -173,81 +168,41 @@ namespace Hunting.Manager
             currentBarProgress += amount;
 
             // 检查是否完成了一条或多条
-            bool newBarCompleted = false;
             while (currentBarProgress >= RequiredPerBar && !IsMaxBarsReached)
             {
                 // 完成一条：扣除所需进度，增加完成条数
                 currentBarProgress -= RequiredPerBar;
                 currentCompletedBars++;
-                newBarCompleted = true;
 
                 Debug.Log($"[MeatProgressManager] 完成一条肉度条！当前条数: {currentCompletedBars}/{MaxBars}");
             }
 
             // 触发进度变化事件，通知所有监听者
-            OnProgressChanged?.Invoke(currentBarProgress, currentCompletedBars, newBarCompleted);
+            TriggerMeatProgressChanged(new MeatProgressChangedEventArgs
+            {
+                Sender = this,
+                CurrentProgress = currentBarProgress,
+                CompletedBars = currentCompletedBars
+            });
 
             // 如果完成了新条，触发条数变化事件
-            if (newBarCompleted)
+            if (currentCompletedBars != oldBars)
             {
-                int barsChange = currentCompletedBars - oldBars;
-                OnBarsChanged?.Invoke(currentCompletedBars, barsChange);
+                TriggerMeatBarCountChanged(new MeatBarCountChangedEventArgs
+                {
+                    Sender = this,
+                    CurrentBars = currentCompletedBars
+                });
             }
 
             // 检查是否首次达到最大条数
             if (IsMaxBarsReached && oldBars < MaxBars)
             {
-                OnMaxBarsReached?.Invoke();
+                TriggerMeatMaxBarsReached();
                 Debug.LogWarning("[MeatProgressManager] 已达到最大肉度条数！");
             }
         }
 
-        /// <summary>
-        /// 结算一条肉度条
-        /// </summary>
-        /// <returns>结算是否成功</returns>
-        public bool SettleOneBar()
-        {
-            // 检查是否有可结算的条
-            if (!initialized || currentCompletedBars <= 0) return false;
-
-            // 减少一条完成条数
-            currentCompletedBars--;
-
-            Debug.Log($"[MeatProgressManager] 结算一条肉度条，剩余条数: {currentCompletedBars}");
-
-            // 触发事件通知UI更新
-            OnBarsChanged?.Invoke(currentCompletedBars, -1);
-            OnProgressChanged?.Invoke(currentBarProgress, currentCompletedBars, false);
-
-            return true;
-        }
-
-        /// <summary>
-        /// 结算所有肉度条
-        /// </summary>
-        /// <returns>实际结算的条数</returns>
-        public int SettleAllBars()
-        {
-            // 检查是否有可结算的条
-            if (!initialized || currentCompletedBars <= 0) return 0;
-
-            // 记录结算前的条数
-            int settledBars = currentCompletedBars;
-
-            // 清空所有完成条数
-            currentCompletedBars = 0;
-
-            Debug.Log($"[MeatProgressManager] 结算所有肉度条，共 {settledBars} 条");
-
-            // 触发事件通知UI更新
-            OnBarsChanged?.Invoke(0, -settledBars);
-            OnProgressChanged?.Invoke(currentBarProgress, 0, false);
-
-            return settledBars;
-        }
-
-        #region 状态查询方法
         /// <summary>
         /// 获取当前进度信息 - 获取完整的进度状态
         /// </summary>
@@ -274,13 +229,6 @@ namespace Hunting.Manager
         /// <returns>当前条进度值</returns>
         public float GetCurrentProgress() => currentBarProgress;
 
-        /// <summary>
-        /// 检查是否可以结算
-        /// </summary>
-        /// <returns>有可结算条时返回true</returns>
-        public bool CanSettle() => currentCompletedBars > 0;
-        #endregion
-
         #region 测试和调试方法
         /// <summary>
         /// 测试方法：添加指定进度
@@ -292,15 +240,6 @@ namespace Hunting.Manager
         }
 
         /// <summary>
-        /// 测试方法：结算一条
-        /// </summary>
-        [ContextMenu("测试结算一条")]
-        public void TestSettleOne()
-        {
-            SettleOneBar();
-        }
-
-        /// <summary>
         /// 测试方法：重置进度
         /// </summary>
         [ContextMenu("测试重置进度")]
@@ -309,9 +248,51 @@ namespace Hunting.Manager
             currentBarProgress = 0;
             currentCompletedBars = 0;
             // 触发事件通知UI重置显示
-            OnProgressChanged?.Invoke(0, 0, false);
-            OnBarsChanged?.Invoke(0, 0);
+            TriggerMeatProgressChanged(new MeatProgressChangedEventArgs
+            {
+                Sender = this,
+                CurrentProgress = currentBarProgress,
+                CompletedBars = currentCompletedBars
+            });
+
+            TriggerMeatBarCountChanged(new MeatBarCountChangedEventArgs
+            {
+                Sender = this,
+                CurrentBars = currentCompletedBars
+            });
             Debug.Log("[MeatProgressManager] 进度已重置");
+        }
+        #endregion
+
+        #region 事件触发
+        /// <summary>
+        /// 触发肉度条进度变化事件
+        /// </summary>
+        private void TriggerMeatProgressChanged(MeatProgressChangedEventArgs args)
+        {
+            if (_eventManager == null) return;
+
+            _eventManager.Trigger(MeatEvents.MeatProgressChanged, args);
+        }
+
+        /// <summary>
+        /// 触发肉度条数量变化事件
+        /// </summary>
+        private void TriggerMeatBarCountChanged(MeatBarCountChangedEventArgs args)
+        {
+            if (_eventManager == null) return;
+
+            _eventManager.Trigger(MeatEvents.MeatBarCountChanged, args);
+        }
+
+        /// <summary>
+        /// 触发肉度条达到上限事件
+        /// </summary>
+        private void TriggerMeatMaxBarsReached()
+        {
+            if (_eventManager == null) return;
+
+            _eventManager.Trigger(MeatEvents.MeatMaxBarsReached);
         }
         #endregion
     }

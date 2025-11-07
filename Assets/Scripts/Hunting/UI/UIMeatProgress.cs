@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
 using GameFramework.Core;
 using Hunting.Manager;
 using UnityEngine;
@@ -29,12 +29,17 @@ namespace Hunting.UI
 
         #region 初始化
         /// <summary>
+        /// 事件中心
+        /// </summary>
+        private EventManager _eventManager;
+
+        /// <summary>
         /// Start生命周期 - 初始化UI并订阅事件
         /// </summary>
-        private void Start()
+        private async void Start()
         {
             InitializeUI();
-            SubscribeToEvents();
+            await SubscribeToEventsAsync();
         }
 
         /// <summary>
@@ -70,26 +75,28 @@ namespace Hunting.UI
         }
 
         /// <summary>
-        /// 订阅肉度条管理器的事件
+        /// 订阅肉度条事件
         /// </summary>
-        private void SubscribeToEvents()
+        private async UniTask SubscribeToEventsAsync()
         {
-            // 等待肉度条管理器初始化完成后再订阅事件
+            await GameServiceLocator.WaitForInitialization();
+
+            _eventManager = GameServiceLocator.Event;
+
+            if (_eventManager == null)
+            {
+                Debug.LogError("[UIMeatProgress] 事件中心未准备好，无法订阅肉度条事件");
+                return;
+            }
+
+            _eventManager.AddListener(MeatEvents.MeatProgressChanged, OnMeatProgressChanged);
+            _eventManager.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
+            _eventManager.AddListener(MeatEvents.MeatMaxBarsReached, OnMeatMaxBarsReached);
+
             if (MeatProgressManager.Instance != null)
             {
-                MeatProgressManager.Instance.OnProgressChanged += OnProgressChanged;
-                MeatProgressManager.Instance.OnBarsChanged += OnBarsChanged;
-                MeatProgressManager.Instance.OnMaxBarsReached += OnMaxBarsReached;
-
-                // 初始化时立即更新一次显示
-                var (currentProgress, completedBars, isMax) = MeatProgressManager.Instance.GetProgressInfo();
+                var (currentProgress, completedBars, _) = MeatProgressManager.Instance.GetProgressInfo();
                 UpdateDisplay(currentProgress, completedBars);
-            }
-            else
-            {
-                //Debug.LogWarning("[UIMeatProgress] 肉度条管理器未初始化，延迟订阅事件");
-                // 如果管理器还没初始化，延迟订阅
-                Invoke(nameof(SubscribeToEvents), 0.1f);
             }
         }
         #endregion
@@ -98,32 +105,24 @@ namespace Hunting.UI
         /// <summary>
         /// 处理进度变化事件
         /// </summary>
-        /// <param name="currentProgress">当前条进度值</param>
-        /// <param name="completedBars">已完成条数</param>
-        /// <param name="newBarCompleted">是否新完成了一条</param>
-        private void OnProgressChanged(float currentProgress, int completedBars, bool newBarCompleted)
+        private void OnMeatProgressChanged(MeatProgressChangedEventArgs args)
         {
-            UpdateDisplay(currentProgress, completedBars);
+            UpdateDisplay(args.CurrentProgress, args.CompletedBars);
         }
 
         /// <summary>
         /// 处理条数变化事件
         /// </summary>
-        /// <param name="newBarCount">新的条数</param>
-        /// <param name="changeAmount">变化数量</param>
-        private void OnBarsChanged(int newBarCount, int changeAmount)
+        private void OnMeatBarCountChanged(MeatBarCountChangedEventArgs args)
         {
-            // 条数变化时更新条数显示
-            UpdateAmountText(newBarCount);
-
-            // 根据新的条数更新进度条颜色
-            UpdateProgressBarColor(newBarCount);
+            UpdateAmountText(args.CurrentBars);
+            UpdateProgressBarColor(args.CurrentBars);
         }
 
         /// <summary>
         /// 处理达到最大条数事件
         /// </summary>
-        private void OnMaxBarsReached()
+        private void OnMeatMaxBarsReached()
         {
             Debug.Log("[UIMeatProgress] 肉度条已满！");
         }
@@ -223,11 +222,11 @@ namespace Hunting.UI
         /// </summary>
         private void OnDestroy()
         {
-            if (MeatProgressManager.Instance != null)
+            if (_eventManager != null)
             {
-                MeatProgressManager.Instance.OnProgressChanged -= OnProgressChanged;
-                MeatProgressManager.Instance.OnBarsChanged -= OnBarsChanged;
-                MeatProgressManager.Instance.OnMaxBarsReached -= OnMaxBarsReached;
+                _eventManager.RemoveListener(MeatEvents.MeatProgressChanged, OnMeatProgressChanged);
+                _eventManager.RemoveListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
+                _eventManager.RemoveListener(MeatEvents.MeatMaxBarsReached, OnMeatMaxBarsReached);
             }
         }
         #endregion

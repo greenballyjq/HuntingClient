@@ -34,13 +34,17 @@ public partial class Tables
     /// </summary>
     public HuntingConfig.TbRole TbRole {get; }
     /// <summary>
-    /// 全局进度数值表
+    /// 肉度条数值表
     /// </summary>
-    public HuntingConfig.TbProgress TbProgress {get; }
+    public HuntingConfig.TbMeatProgress TbMeatProgress {get; }
     /// <summary>
-    /// 动态任务数值表
+    /// 丰收能量条数值表
     /// </summary>
-    public HuntingConfig.TbDynamicQuest TbDynamicQuest {get; }
+    public HuntingConfig.TbEnergyProgress TbEnergyProgress {get; }
+    /// <summary>
+    /// 任务数值表
+    /// </summary>
+    public HuntingConfig.TbQuest TbQuest {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
@@ -49,8 +53,9 @@ public partial class Tables
         TbSpawn = new HuntingConfig.TbSpawn(loader("huntingconfig_tbspawn"));
         TbMap = new HuntingConfig.TbMap(loader("huntingconfig_tbmap"));
         TbRole = new HuntingConfig.TbRole(loader("huntingconfig_tbrole"));
-        TbProgress = new HuntingConfig.TbProgress(loader("huntingconfig_tbprogress"));
-        TbDynamicQuest = new HuntingConfig.TbDynamicQuest(loader("huntingconfig_tbdynamicquest"));
+        TbMeatProgress = new HuntingConfig.TbMeatProgress(loader("huntingconfig_tbmeatprogress"));
+        TbEnergyProgress = new HuntingConfig.TbEnergyProgress(loader("huntingconfig_tbenergyprogress"));
+        TbQuest = new HuntingConfig.TbQuest(loader("huntingconfig_tbquest"));
         ResolveRef();
     }
     
@@ -61,8 +66,9 @@ public partial class Tables
         TbSpawn.ResolveRef(this);
         TbMap.ResolveRef(this);
         TbRole.ResolveRef(this);
-        TbProgress.ResolveRef(this);
-        TbDynamicQuest.ResolveRef(this);
+        TbMeatProgress.ResolveRef(this);
+        TbEnergyProgress.ResolveRef(this);
+        TbQuest.ResolveRef(this);
     }
 }
 

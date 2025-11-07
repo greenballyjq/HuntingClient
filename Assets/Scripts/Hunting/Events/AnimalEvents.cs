@@ -38,7 +38,7 @@ public sealed class AnimalSpawnedEventArgs : EventArgs
     /// <summary>
     /// 触发派发的派发器
     /// </summary>
-    public SpecieSpawner Spawner { get; set; }
+    public Spawner Spawner { get; set; }
 
     /// <summary>
     /// 生成的动物实例

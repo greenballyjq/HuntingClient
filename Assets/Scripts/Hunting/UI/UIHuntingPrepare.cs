@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using GameFramework.Core;
 using Hunting.Data;
 using TMPro;
@@ -25,6 +25,8 @@ namespace Hunting.UI
         [SerializeField] private Button startButton;
 
         private GameLogic _gameLogic;
+
+        private UIManager UI => GameServiceLocator.UI;
         
         private void Start()
         {
@@ -32,9 +34,10 @@ namespace Hunting.UI
             characterFemailButton.onClick.AddListener(() => ChooseCharacter(CharacterData.CharacterType.Base_Femail));
             characterIpButton.onClick.AddListener(ChooseRandomCharacter);
             
-            startButton.onClick.AddListener(() =>
+            startButton.onClick.AddListener(async() =>
             {
                 _gameLogic.StartGame();
+                await UI.OpenUIAsync<UIHuntingGamePlay>("UIHuntingGamePlay");
                 Hide();
             });
             
