@@ -28,6 +28,10 @@ namespace cfg
         /// 3KP金币
         /// </summary>
         Coin = 2,
+        /// <summary>
+        /// 丰收能量
+        /// </summary>
+        Energy = 3,
     }
 
 } 

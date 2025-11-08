@@ -721,10 +721,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb16785ddb004384d8a7fd5dd58ad02b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textCoin: {fileID: 8563656566971671611}
-  _textMastery: {fileID: 5830537599080612208}
-  _buttonSettlement: {fileID: 5000584318785428161}
-  _buttonDoubleSettlement: {fileID: 7906365491847478973}
+  textCoin: {fileID: 8563656566971671611}
+  textMastery: {fileID: 5830537599080612208}
+  buttonSettlement: {fileID: 5000584318785428161}
+  buttonDoubleSettlement: {fileID: 7906365491847478973}
 --- !u!1 &4191953747078860003
 GameObject:
   m_ObjectHideFlags: 0

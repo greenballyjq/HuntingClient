@@ -68,8 +68,6 @@ namespace Hunting.Manager
             if (spawner.IsActive == active)
                 return;
 
-            Debug.Log($"[SpeciesSpawnManager] 设置派发器 {spawner.name} 的启用状态为 {active}");
-
             spawner.SetActive(active);
         }
 
@@ -80,6 +78,8 @@ namespace Hunting.Manager
         {
             for (int i = 0; i < _spawners.Count; i++)
                 SetSpawnerActive(_spawners[i], active);
+
+            Debug.Log($"[SpeciesSpawnManager] 设置所有派发器的启用状态为 {active}");
         }
 
         /// <summary>

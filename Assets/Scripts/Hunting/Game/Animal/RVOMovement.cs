@@ -66,7 +66,7 @@ public class RVOMovement : MonoBehaviour
     /// <summary>
     /// 初始化组件
     /// </summary>
-    public void Init()
+    public void Init(Vector3 initialDirection, float initialMaxSpeed)
     {
         if (_isInitialized)
             return;
@@ -79,9 +79,9 @@ public class RVOMovement : MonoBehaviour
             timeHorizon = timeHorizon,
             timeHorizonObst = timeHorizonObst,
             radius = radius,
-            maxSpeed = _maxSpeed,
+            maxSpeed = initialMaxSpeed,
         };
-
+        
         _agentId = _rvoManager.AddAgent(transform.position, config, owner: this);
         if (_agentId < 0)
         {
@@ -95,28 +95,14 @@ public class RVOMovement : MonoBehaviour
         // 初始化状态
         _isPaused = false;
         _actualVelocity = Vector3.zero;
+        _maxSpeed = initialMaxSpeed;
+        _targetDirection = initialDirection;
+        transform.rotation = Quaternion.LookRotation(initialDirection);
 
         // 设置初始化标识
         _isInitialized = true;
 
         Debug.Log($"[RVOMovement] {gameObject.name} 初始化完成，代理 ID: {_agentId}");
-    }
-
-    /// <summary>
-    /// 初始化组件并设置初始朝向
-    /// </summary>
-    /// <param name="initialDirection">初始朝向</param>
-    public void Init(Vector3 initialDirection, float initialMaxSpeed)
-    {
-        Init();
-
-        // 设置初始方向和速度
-        SetMoveDirection(initialDirection);
-        SetMaxSpeed(initialMaxSpeed);
-
-        // 设置依附对象初始朝向
-        if (initialDirection.sqrMagnitude > 0.001f)
-            transform.rotation = Quaternion.LookRotation(initialDirection);
     }
 
     /// <summary>
@@ -194,7 +180,6 @@ public class RVOMovement : MonoBehaviour
 
         _isPaused = true;
 
-        // 将速度设为0
         _rvoManager.SetAgentMaxSpeed(_agentId, 0);
         _rvoManager.SetAgentPrefVelocity(_agentId, Vector3.zero);
 
@@ -211,7 +196,6 @@ public class RVOMovement : MonoBehaviour
 
         _isPaused = false;
 
-        // 恢复速度
         _rvoManager.SetAgentMaxSpeed(_agentId, _maxSpeed);
 
         Debug.Log($"[RVOMovement] {gameObject.name} 恢复移动");
@@ -247,14 +231,17 @@ public class RVOMovement : MonoBehaviour
     {
         // 计算目标朝向（基于实际移动方向）
         Vector3 targetDirection = _actualVelocity.normalized;
-        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
 
         // 平滑旋转
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            rotationSmoothSpeed * Time.deltaTime
-        );
+        if (targetDirection.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                rotationSmoothSpeed * Time.deltaTime
+            );
+        }
     }
 
     /// <summary>

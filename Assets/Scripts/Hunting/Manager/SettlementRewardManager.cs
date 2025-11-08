@@ -100,7 +100,8 @@ namespace Hunting.Manager
                 CoinFromQuest = _coinFromQuest,
                 ExtraMultiplier = _extraMultiplier,
                 IsDoubleApplied = _isDoubleApplied,
-                TotalCoin = GetTotalCoin()
+                TotalCoin = GetTotalCoin(),
+                TotalMastery = GetTotalMastery()
             });
         }
 
@@ -123,7 +124,8 @@ namespace Hunting.Manager
                 CoinFromQuest = _coinFromQuest,
                 ExtraMultiplier = _extraMultiplier,
                 IsDoubleApplied = _isDoubleApplied,
-                TotalCoin = GetTotalCoin()
+                TotalCoin = GetTotalCoin(),
+                TotalMastery = GetTotalMastery()
             });
         }
 
@@ -138,14 +140,8 @@ namespace Hunting.Manager
             TriggerSettlementCompleted(new SettlementCompletedEventArgs
             {
                 Sender = this,
-                CompletedMeatBars = _completedMeatBars,
-                BaseCoin = _baseCoin,
-                BaseMastery = _baseMastery,
-                CoinFromSpecie = _coinFromSpecie,
-                CoinFromQuest = _coinFromQuest,
-                ExtraMultiplier = _extraMultiplier,
-                IsDoubleApplied = _isDoubleApplied,
-                TotalCoin = GetTotalCoin()
+                TotalCoin = GetTotalCoin(),
+                TotalMastery = GetTotalMastery()
             });
             ClearRoundData();
         }
@@ -196,6 +192,19 @@ namespace Hunting.Manager
                 total *= 2;
             }
             return total;
+        }
+
+        /// <summary>
+        /// 计算包含翻倍后的熟练度
+        /// </summary>
+        private int GetTotalMastery()
+        {
+            int mastery = _baseMastery;
+            if (_isDoubleApplied)
+            {
+                mastery *= 2;
+            }
+            return mastery;
         }
         #endregion
 
@@ -267,18 +276,18 @@ namespace Hunting.Manager
         }
 
         /// <summary>
-        /// 金币掉落事件回调
+        /// 掉落奖励回调
         /// </summary>
         private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
         {
-            if (args.DropType != EDropType.Coin)
+            if (!args.DropRewards.TryGetValue(EDropType.Coin, out var coinAmount) || coinAmount < 0)
                 return;
 
-            _coinFromSpecie += args.Amount;
+            _coinFromSpecie += coinAmount;
         }
 
         /// <summary>
-        /// 肉度条数量变化事件回调
+        /// 肉度条数量变化回调
         /// </summary>
         private void OnMeatBarCountChanged(MeatBarCountChangedEventArgs args)
         {
@@ -286,7 +295,7 @@ namespace Hunting.Manager
         }
 
         /// <summary>
-        /// 动态任务完成事件回调
+        /// 任务完成回调
         /// </summary>
         private void OnQuestCompleted(QuestCompletedEventArgs args)
         {

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 390609171625110374}
-  - component: {fileID: 2577075850824354079}
+  - component: {fileID: 3024330419573043102}
   m_Layer: 5
   m_Name: UIMeatProgress
   m_TagString: Untagged
@@ -32,16 +32,15 @@ RectTransform:
   - {fileID: 7133972075005104064}
   - {fileID: 7935551999281232268}
   - {fileID: 1488091021119187732}
-  - {fileID: 9058295148634781642}
   - {fileID: 7019878325560932901}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25.948, y: 452.742}
-  m_SizeDelta: {x: 1031.557, y: 211.789}
+  m_AnchoredPosition: {x: 25.948, y: 443.42}
+  m_SizeDelta: {x: 1031.557, y: 193.15}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2577075850824354079
+--- !u!114 &3024330419573043102
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -53,13 +52,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368b6a3e5e4d3d8469133d17b2e222c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sliderProgress: {fileID: 8556989939617998349}
-  fillImage: {fileID: 8465816796584066978}
-  txtProgress: {fileID: 4960954769798012450}
-  txtProgressAmount: {fileID: 5553984577594271961}
-  colorGreen: {r: 0.5990566, g: 1, b: 0.5990566, a: 1}
-  colorYellow: {r: 1, g: 0.64164996, b: 0.11792451, a: 1}
-  colorRed: {r: 1, g: 0.36956525, b: 0.25, a: 1}
+  sliderMeatProgress: {fileID: 8556989939617998349}
+  imageFill: {fileID: 8465816796584066978}
+  textMeatValue: {fileID: 4960954769798012450}
+  textMeatBars: {fileID: 5553984577594271961}
+  colorLow: {r: 0.7028302, g: 1, b: 0.7028302, a: 1}
+  colorMid: {r: 1, g: 0.97105914, b: 0.6367924, a: 1}
+  colorHigh: {r: 1, g: 0.7358491, b: 0.43867922, a: 1}
 --- !u!1 &851195743867410991
 GameObject:
   m_ObjectHideFlags: 0
@@ -72,7 +71,7 @@ GameObject:
   - component: {fileID: 1952173103210768823}
   - component: {fileID: 873864100496930130}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: ImageBackgroundCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94,7 +93,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.35300002, y: 1}
-  m_AnchoredPosition: {x: 9.999939, y: 0}
+  m_AnchoredPosition: {x: 9.999512, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1952173103210768823
@@ -147,7 +146,7 @@ GameObject:
   - component: {fileID: 2035485268899123182}
   - component: {fileID: 8713859973868696444}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: ImageBackgroundRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -239,8 +238,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8892330428941403520}
-  - {fileID: 1248879585662747751}
   - {fileID: 9023709717045452581}
+  - {fileID: 1248879585662747751}
   m_Father: {fileID: 7133972075005104064}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -260,7 +259,7 @@ GameObject:
   - component: {fileID: 2014338052066201829}
   - component: {fileID: 8465816796584066978}
   m_Layer: 5
-  m_Name: Fill
+  m_Name: ImageFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -334,7 +333,7 @@ GameObject:
   - component: {fileID: 1488091021119187732}
   - component: {fileID: 8556989939617998349}
   m_Layer: 5
-  m_Name: sliderProgress
+  m_Name: SliderMeatProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -354,6 +353,7 @@ RectTransform:
   m_Children:
   - {fileID: 9059460615193550618}
   - {fileID: 7916412291576569639}
+  - {fileID: 9058295148634781642}
   m_Father: {fileID: 390609171625110374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 2069455026961812736}
   - component: {fileID: 5553984577594271961}
   m_Layer: 5
-  m_Name: txtProgressAmount
+  m_Name: TextMeatBars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -522,7 +522,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 284, y: 2.3079}
-  m_SizeDelta: {x: 117.602, y: 63.124}
+  m_SizeDelta: {x: 117.60199, y: 63.124}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2069455026961812736
 CanvasRenderer:
@@ -565,7 +565,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "0 \u7BA1"
+  m_Text: "0\u6761"
 --- !u!1 &5527399949826732185
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,7 +599,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5.0000153, y: 0}
+  m_AnchoredPosition: {x: -5.0000305, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5644232023396565326
@@ -614,7 +614,7 @@ GameObject:
   - component: {fileID: 3959584877880842070}
   - component: {fileID: 8935268736950941334}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ImageBackgroundLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -708,10 +708,10 @@ RectTransform:
   - {fileID: 8223348145027231837}
   m_Father: {fileID: 390609171625110374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.052002, y: -0.005004883}
-  m_SizeDelta: {x: 985.691, y: 181.259}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6574594148676833994
 GameObject:
@@ -725,7 +725,7 @@ GameObject:
   - component: {fileID: 861200454347514422}
   - component: {fileID: 8282528965729416189}
   m_Layer: 5
-  m_Name: imgMeat
+  m_Name: ImageMeat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -748,7 +748,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -309, y: 0}
-  m_SizeDelta: {x: 149.023, y: 149.023}
+  m_SizeDelta: {x: 149.02301, y: 149.023}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &861200454347514422
 CanvasRenderer:
@@ -800,7 +800,7 @@ GameObject:
   - component: {fileID: 6630456540673825242}
   - component: {fileID: 4960954769798012450}
   m_Layer: 5
-  m_Name: txtProgress
+  m_Name: TextMeatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -813,17 +813,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8416851410400099783}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 390609171625110374}
+  m_Father: {fileID: 1488091021119187732}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.052, y: 2.3079}
-  m_SizeDelta: {x: 262.021, y: 63.124}
+  m_AnchoredPosition: {x: -8.6315, y: -0.0000834465}
+  m_SizeDelta: {x: 244.7579, y: 63.124}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6630456540673825242
 CanvasRenderer:

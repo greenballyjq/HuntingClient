@@ -349,7 +349,7 @@ namespace Hunting.Manager
         /// 根据完成的肉度条数量获取默认肉度条奖励
         /// </summary>
         /// <param name="completedBars">已完成的肉度条数量</param>
-        /// <returns>对应的奖励配置，未达到时返回null</returns>
+        /// <returns>对应的奖励配置</returns>
         public MeatProgressReward GetMeatProgressReward(int completedBars)
         {
             const int defaultProgressId = 1;

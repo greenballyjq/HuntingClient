@@ -17,7 +17,7 @@ public sealed partial class MeatProgress : Luban.BeanBase
     public MeatProgress(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        RequiredPerBar = _buf.ReadFloat();
+        RequiredPerBar = _buf.ReadInt();
         MaxBar = _buf.ReadInt();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);RewardSteps = new System.Collections.Generic.Dictionary<int, HuntingConfig.MeatProgressReward>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { int _k0;  _k0 = _buf.ReadInt(); HuntingConfig.MeatProgressReward _v0;  _v0 = global::cfg.HuntingConfig.MeatProgressReward.DeserializeMeatProgressReward(_buf);     RewardSteps.Add(_k0, _v0);}}
         Comment = _buf.ReadString();
@@ -35,7 +35,7 @@ public sealed partial class MeatProgress : Luban.BeanBase
     /// <summary>
     /// 单条所需值
     /// </summary>
-    public readonly float RequiredPerBar;
+    public readonly int RequiredPerBar;
     /// <summary>
     /// 最大条数
     /// </summary>

@@ -37,7 +37,7 @@ namespace Hunting.UI
             startButton.onClick.AddListener(async() =>
             {
                 _gameLogic.StartGame();
-                await UI.OpenUIAsync<UIHuntingGamePlay>("UIHuntingGamePlay");
+                await UI.OpenUIAsync<UIHuntingGameplay>("UIHuntingGamePlay");
                 Hide();
             });
             

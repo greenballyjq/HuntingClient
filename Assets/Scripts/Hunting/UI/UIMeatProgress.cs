@@ -1,234 +1,164 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
 using GameFramework.Core;
 using Hunting.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 namespace Hunting.UI
 {
     /// <summary>
-    /// 肉度条UI控制器 - 负责显示和管理肉度条的UI表现
+    /// 肉度条展示组件
     /// </summary>
-    public class UIMeatProgress : UIBase
+    public class UIMeatProgress : MonoBehaviour
     {
-        #region UI组件引用
-        [Header("UI组件引用")]
-        [SerializeField] private Slider sliderProgress;    // 进度条Slider组件
-        [SerializeField] private Image fillImage;          // 进度条Fill图像（用于变色）
-        [SerializeField] private Text txtProgress;         // 进度文字显示 "当前进度/总需求"
-        [SerializeField] private Text txtProgressAmount;   // 条数文字显示 "X条"
-        #endregion
-
-        #region 进度条颜色配置
-        [Header("进度条颜色配置")]
-        [SerializeField] private Color colorGreen = Color.green;   // 0-2条时的颜色
-        [SerializeField] private Color colorYellow = Color.yellow; // 第3条时的颜色  
-        [SerializeField] private Color colorRed = Color.red;       // 第4-5条时的颜色
-        #endregion
-
-        #region 初始化
         /// <summary>
-        /// 事件中心
+        /// 肉度进度条
         /// </summary>
-        private EventManager _eventManager;
+        [SerializeField] private Slider sliderMeatProgress;
 
         /// <summary>
-        /// Start生命周期 - 初始化UI并订阅事件
+        /// 进度填充图像
         /// </summary>
-        private async void Start()
+        [SerializeField] private Image imageFill;
+
+        /// <summary>
+        /// 肉度值文本
+        /// </summary>
+        [SerializeField] private Text textMeatValue;
+
+        /// <summary>
+        /// 肉度条文本
+        /// </summary>
+        [SerializeField] private Text textMeatBars;
+
+        /// <summary>
+        /// 低档颜色
+        /// </summary>
+        [SerializeField] private Color colorLow = Color.green;
+
+        /// <summary>
+        /// 中档颜色
+        /// </summary>
+        [SerializeField] private Color colorMid = Color.yellow;
+
+        /// <summary>
+        /// 高档颜色
+        /// </summary>
+        [SerializeField] private Color colorHigh = new Color(1f, 0.85f, 0f);
+
+        /// <summary>
+        /// 肉度条管理器
+        /// </summary>
+        private MeatProgressManager MeatProgressManager => GameServiceLocator.GetGameManager<MeatProgressManager>();
+
+        /// <summary>
+        /// 事件管理器
+        /// </summary>
+        private EventManager Event => GameServiceLocator.Event;
+
+        /// <summary>
+        /// 初始化组件
+        /// </summary>
+        public void Init()
         {
-            InitializeUI();
-            await SubscribeToEventsAsync();
+            Event.AddListener(MeatEvents.MeatProgressChanged, OnMeatProgressChanged);
+            Event.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
+            Event.AddListener(MeatEvents.MeatMaxBarsReached, OnMeatMaxBarsReached);
+
+            UpdateMeatValue(MeatProgressManager.GetCurrentMeatValue(), MeatProgressManager.GetRequiredPerBar());
+            UpdateMeatBars(MeatProgressManager.GetCurrentMeatBars());
         }
 
         /// <summary>
-        /// 初始化UI组件状态
+        /// 清理组件
         /// </summary>
-        private void InitializeUI()
+        public void CleanUp()
         {
-            // 确保必要的UI组件都存在
-            if (sliderProgress == null)
+            Event.RemoveListener(MeatEvents.MeatProgressChanged, OnMeatProgressChanged);
+            Event.RemoveListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
+            Event.RemoveListener(MeatEvents.MeatMaxBarsReached, OnMeatMaxBarsReached);
+        }
+
+        private void OnDestroy()
+        {
+            CleanUp();
+        }
+
+        #region 私有方法
+        /// <summary>
+        /// 更新肉度值显示
+        /// </summary>
+        private void UpdateMeatValue(int value, int required)
+        {
+            int currentBars = MeatProgressManager.GetCurrentMeatBars();
+            int maxBars = MeatProgressManager.GetMaxMeatBars();
+
+            if (currentBars >= maxBars)
             {
-                Debug.LogError("[UIMeatProgress] 缺少sliderProgress引用！");
+                sliderMeatProgress.value = 1f;
+                textMeatValue.text = "∞";
                 return;
             }
 
-            // 如果没有单独指定fillImage，尝试从sliderProgress中获取
-            if (fillImage == null)
-            {
-                fillImage = sliderProgress.fillRect?.GetComponent<Image>();
-                if (fillImage == null)
-                {
-                    Debug.LogError("[UIMeatProgress] 无法找到进度条Fill图像组件！");
-                }
-            }
-
-            // 设置进度条初始值
-            sliderProgress.minValue = 0f;
-            sliderProgress.maxValue = 1f;
-            sliderProgress.value = 0f;
-
-            // 初始化文字显示
-            UpdateProgressText(0f, 200f); // 默认值，实际会从配置读取
-            UpdateAmountText(0);
+            float ratio = required > 0 ? Mathf.Clamp01((float)value / required) : 0f;
+            sliderMeatProgress.value = ratio;
+            textMeatValue.text = $"{value}/{required}";
         }
 
         /// <summary>
-        /// 订阅肉度条事件
+        /// 更新肉度条显示
         /// </summary>
-        private async UniTask SubscribeToEventsAsync()
+        private void UpdateMeatBars(int bars)
         {
-            await GameServiceLocator.WaitForInitialization();
+            textMeatBars.text = $"{bars}条";
+            UpdateFillColor(bars);
+        }
 
-            _eventManager = GameServiceLocator.Event;
+        /// <summary>
+        /// 更新填充颜色
+        /// </summary>
+        private void UpdateFillColor(int bars)
+        {
+            if (imageFill == null) return;
 
-            if (_eventManager == null)
-            {
-                Debug.LogError("[UIMeatProgress] 事件中心未准备好，无法订阅肉度条事件");
-                return;
-            }
-
-            _eventManager.AddListener(MeatEvents.MeatProgressChanged, OnMeatProgressChanged);
-            _eventManager.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
-            _eventManager.AddListener(MeatEvents.MeatMaxBarsReached, OnMeatMaxBarsReached);
-
-            if (MeatProgressManager.Instance != null)
-            {
-                var (currentProgress, completedBars, _) = MeatProgressManager.Instance.GetProgressInfo();
-                UpdateDisplay(currentProgress, completedBars);
-            }
+            if (bars < 3)
+                imageFill.color = colorLow;
+            else if (bars < 5)
+                imageFill.color = colorMid;
+            else
+                imageFill.color = colorHigh;
         }
         #endregion
 
-        #region 事件处理
+        #region 事件相关
         /// <summary>
-        /// 处理进度变化事件
+        /// 肉度值变化回调
         /// </summary>
         private void OnMeatProgressChanged(MeatProgressChangedEventArgs args)
         {
-            UpdateDisplay(args.CurrentProgress, args.CompletedBars);
+            UpdateMeatValue(args.CurrentProgress, MeatProgressManager.GetRequiredPerBar());
         }
 
         /// <summary>
-        /// 处理条数变化事件
+        /// 肉度条变化回调
         /// </summary>
         private void OnMeatBarCountChanged(MeatBarCountChangedEventArgs args)
         {
-            UpdateAmountText(args.CurrentBars);
-            UpdateProgressBarColor(args.CurrentBars);
+            UpdateMeatBars(args.CurrentBars);
         }
 
         /// <summary>
-        /// 处理达到最大条数事件
+        /// 肉度条满回调
         /// </summary>
         private void OnMeatMaxBarsReached()
         {
-            Debug.Log("[UIMeatProgress] 肉度条已满！");
+            UpdateMeatValue(0, 0);
+            UpdateMeatBars(MeatProgressManager.GetMaxMeatBars());
         }
         #endregion
 
-        #region UI更新方法
-        /// <summary>
-        /// 更新整体显示
-        /// </summary>
-        /// <param name="currentProgress">当前条进度值</param>
-        /// <param name="completedBars">已完成条数</param>
-        private void UpdateDisplay(float currentProgress, int completedBars)
-        {
-            // 获取配置的单条所需值
-            float requiredPerBar = MeatProgressManager.Instance?.RequiredPerBar ?? 200f;
-
-            // 更新进度条
-            UpdateProgressBar(currentProgress, requiredPerBar);
-
-            // 更新进度文字
-            UpdateProgressText(currentProgress, requiredPerBar);
-
-            // 更新条数文字
-            UpdateAmountText(completedBars);
-
-            // 更新进度条颜色（基于已完成条数）
-            UpdateProgressBarColor(completedBars);
-        }
-
-        /// <summary>
-        /// 更新进度条Slider的值
-        /// </summary>
-        /// <param name="currentProgress">当前进度值</param>
-        /// <param name="requiredPerBar">单条所需值</param>
-        private void UpdateProgressBar(float currentProgress, float requiredPerBar)
-        {
-            if (sliderProgress != null)
-            {
-                float progressPercent = currentProgress / requiredPerBar;
-                sliderProgress.value = progressPercent;
-            }
-        }
-
-        /// <summary>
-        /// 更新进度文字显示
-        /// </summary>
-        /// <param name="currentProgress">当前进度值</param>
-        /// <param name="requiredPerBar">单条所需值</param>
-        private void UpdateProgressText(float currentProgress, float requiredPerBar)
-        {
-            if (txtProgress != null)
-            {
-                // 显示格式："当前进度/总需求"，例如："150/200"
-                txtProgress.text = $"{currentProgress:F0}/{requiredPerBar:F0}";
-            }
-        }
-
-        /// <summary>
-        /// 更新条数文字显示
-        /// </summary>
-        /// <param name="completedBars">已完成条数</param>
-        private void UpdateAmountText(int completedBars)
-        {
-            if (txtProgressAmount != null)
-            {
-                // 显示格式："X条"，例如："3条"
-                txtProgressAmount.text = $"{completedBars}条";
-            }
-        }
-
-        /// <summary>
-        /// 根据已完成条数更新进度条颜色
-        /// </summary>
-        /// <param name="completedBars">已完成条数</param>
-        private void UpdateProgressBarColor(int completedBars)
-        {
-            if (fillImage == null) return;
-
-            // 根据条数决定颜色：
-            // 0-2条：绿色
-            // 第3条：黄色  
-            // 第4-5条：红色
-            Color targetColor = completedBars switch
-            {
-                < 2 => colorGreen,   // 0,1,条 - 绿色
-                < 4 => colorYellow,    // 第3条 - 黄色
-                _ => colorRed        // 4,5条 - 红色
-            };
-
-            fillImage.color = targetColor;
-        }
-        #endregion
-
-        #region 清理
-        /// <summary>
-        /// OnDestroy生命周期 - 取消事件订阅
-        /// </summary>
-        private void OnDestroy()
-        {
-            if (_eventManager != null)
-            {
-                _eventManager.RemoveListener(MeatEvents.MeatProgressChanged, OnMeatProgressChanged);
-                _eventManager.RemoveListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
-                _eventManager.RemoveListener(MeatEvents.MeatMaxBarsReached, OnMeatMaxBarsReached);
-            }
-        }
-        #endregion
+        
     }
 }
+
+

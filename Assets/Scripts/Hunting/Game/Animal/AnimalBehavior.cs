@@ -1,6 +1,8 @@
-﻿using cfg.HuntingConfig;
+﻿using cfg;
+using cfg.HuntingConfig;
 using DG.Tweening;
 using Hunting.Game.Animal.State;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -46,6 +48,11 @@ namespace Hunting.Game.Animal
         /// 逃跑状态
         /// </summary>
         private AnimalFleeState _fleeState;
+
+        /// <summary>
+        /// 是否已初始化
+        /// </summary>
+        public bool IsInitialized { get; private set; }
 
         /// <summary>
         /// 配置数据
@@ -177,9 +184,9 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 初始化
         /// </summary>
-        /// <param name="data">动物配置数据</param>
-        /// <param name="stayTime">驻场时间</param>
-        /// <param name="initialDirection">初始方向</param>
+        /// <param name="data"></param>
+        /// <param name="stayTime"></param>
+        /// <param name="initialDirection"></param>
         public void Init(Specie data, float stayTime, Vector3 initialDirection)
         {
             // 初始化数据
@@ -202,15 +209,22 @@ namespace Hunting.Game.Animal
 
             // 初始化状态机
             _stateMachine.Init(_moveState);
+
+            IsInitialized = true;
         }
 
         private void Update()
         {
+            if(!IsInitialized)
+                return;
+
             // 更新驻场时间
             TimeInScene += Time.deltaTime;
 
             // 更新状态机
             _stateMachine.Update();
+
+
         }
 
         #region 公共方法
@@ -392,8 +406,7 @@ namespace Hunting.Game.Animal
             {
                 Sender = this,
                 Animal = this,
-                DropType = SpecieData.DropType,
-                Amount = SpecieData.DropAmount
+                DropRewards = new Dictionary<EDropType, int>(SpecieData.DropRewards)
             });
 
             // 触发死亡事件
@@ -442,6 +455,8 @@ namespace Hunting.Game.Animal
             IsHit = false;
             IsFleeing = false;
             FleeTimeRemaining = 0;
+
+            IsInitialized = false;
         }
             
         public void OnPoolDestroy()

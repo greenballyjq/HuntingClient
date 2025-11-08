@@ -22,9 +22,7 @@ public sealed partial class Specie : Luban.BeanBase
         HP = _buf.ReadFloat();
         MoveSpeed = _buf.ReadFloat();
         HitRange = _buf.ReadFloat();
-        DropType = (EDropType)_buf.ReadInt();
-        DropAmount = _buf.ReadInt();
-        DropEnergy = _buf.ReadInt();
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DropRewards = new System.Collections.Generic.Dictionary<EDropType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { EDropType _k0;  _k0 = (EDropType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     DropRewards.Add(_k0, _v0);}}
         Comment = _buf.ReadString();
     }
 
@@ -58,17 +56,9 @@ public sealed partial class Specie : Luban.BeanBase
     /// </summary>
     public readonly float HitRange;
     /// <summary>
-    /// 掉落类型
+    /// 掉落奖励
     /// </summary>
-    public readonly EDropType DropType;
-    /// <summary>
-    /// 掉落数量
-    /// </summary>
-    public readonly int DropAmount;
-    /// <summary>
-    /// 掉落丰收能量值
-    /// </summary>
-    public readonly int DropEnergy;
+    public readonly System.Collections.Generic.Dictionary<EDropType, int> DropRewards;
     /// <summary>
     /// 备注
     /// </summary>
@@ -90,9 +80,7 @@ public sealed partial class Specie : Luban.BeanBase
         + "HP:" + HP + ","
         + "MoveSpeed:" + MoveSpeed + ","
         + "HitRange:" + HitRange + ","
-        + "DropType:" + DropType + ","
-        + "DropAmount:" + DropAmount + ","
-        + "DropEnergy:" + DropEnergy + ","
+        + "DropRewards:" + Luban.StringUtil.CollectionToString(DropRewards) + ","
         + "Comment:" + Comment + ","
         + "}";
     }

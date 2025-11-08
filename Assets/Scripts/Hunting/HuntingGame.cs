@@ -15,6 +15,7 @@ namespace Hunting
             Debug.Log("[HuntingGame] 开始注册游戏业务管理器");
             RegisterManager<SpawnerManager>();
             RegisterManager<AnimalManager>();
+            RegisterManager<MeatProgressManager>();
             RegisterManager<SettlementRewardManager>();
             Debug.Log("[HuntingGame] 注册游戏业务管理器完成");
         }

@@ -27,9 +27,9 @@ public static class MeatEvents
 public sealed class MeatProgressChangedEventArgs : EventArgs
 {
     /// <summary>
-    /// 当前条内进度
+    /// 当前进度
     /// </summary>
-    public float CurrentProgress { get; set; }
+    public int CurrentProgress { get; set; }
 
     /// <summary>
     /// 已完成的条数

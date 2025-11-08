@@ -36,7 +36,7 @@ public class GameServiceLocatorTest : MonoBehaviour
         Debug.Log(await GameServiceLocator.Resource.LoadAssetAsync<GameObject>("Arts/Prefabs/UI/UIMeatProgress"));
 
         // UI管理器测试
-        UIMeatProgress uIMeatProgress = await GameServiceLocator.UI.OpenUIAsync<UIMeatProgress>("UIMeatProgress");
+        //UIMeatProgress uIMeatProgress = await GameServiceLocator.UI.OpenUIAsync<UIMeatProgress>("UIMeatProgress");
 
         // 网络管理器测试
         GameServiceLocator.GetFrameworkManager<HttpManager>().SetDefaultHeader("username", "zhangsan");
@@ -56,7 +56,6 @@ public class GameServiceLocatorTest : MonoBehaviour
             obj.GetComponent<AnimalBehavior>().Init(GameServiceLocator.Config.GetSpecie(301),10,transform.forward);
 
             Bullet bullet = GameServiceLocator.Config.GetBullet(1);
-            Debug.Log($"[GameServiceLocatorTest] Bullet: {bullet.ID}");
         }
 
         if (Input.GetMouseButtonDown(1))

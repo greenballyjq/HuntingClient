@@ -10,64 +10,80 @@ namespace Hunting.UI
     /// </summary>
     public class UISettlement : UIBase
     {
-        [SerializeField] private Text _textCoin;
-        [SerializeField] private Text _textMastery;
-        [SerializeField] private Button _buttonSettlement;
-        [SerializeField] private Button _buttonDoubleSettlement;
-
-        private SettlementCalculatedEventArgs _currentData;
         /// <summary>
-        /// 事件管理器
+        /// 金币文本
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        [SerializeField] private Text textCoin;
+
+        /// <summary>
+        /// 熟练度文本
+        /// </summary>
+        [SerializeField] private Text textMastery;
+
+        /// <summary>
+        /// 普通结算按钮
+        /// </summary>
+        [SerializeField] private Button buttonSettlement;
+
+        /// <summary>
+        /// 翻倍结算按钮
+        /// </summary>
+        [SerializeField] private Button buttonDoubleSettlement;
 
         /// <summary>
         /// 结算管理器
         /// </summary>
         private SettlementRewardManager SettlementManager => GameServiceLocator.GetGameManager<SettlementRewardManager>();
 
+        /// <summary>
+        /// 事件中心
+        /// </summary>
+        private EventManager Event => GameServiceLocator.Event;
+
         private void Awake()
         {
-            _buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
-            _buttonDoubleSettlement.onClick.AddListener(OnDoubleSettlementButtonClicked);
-        }
-
-        private void OnEnable()
-        {
-            Event.AddListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
-            Event.AddListener(SettlementEvents.SettlementCompleted, OnSettlementCompleted);
-
-            // 开始结算
-            SettlementManager.StartSettlement();
-        }
-
-        private void OnDisable()
-        {
-            Event.RemoveListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
-            Event.RemoveListener(SettlementEvents.SettlementCompleted, OnSettlementCompleted);
+            buttonSettlement.onClick.AddListener(OnClickSettlement);
+            buttonDoubleSettlement.onClick.AddListener(OnClickDoubleSettlement);
         }
 
         private void OnDestroy()
         {
-            _buttonSettlement.onClick.RemoveListener(OnSettlementButtonClicked);
-            _buttonDoubleSettlement.onClick.RemoveListener(OnDoubleSettlementButtonClicked);
+            buttonSettlement.onClick.RemoveListener(OnClickSettlement);
+            buttonDoubleSettlement.onClick.RemoveListener(OnClickDoubleSettlement);
+        }
+
+        public override void OnInit(object userData)
+        {
+            base.OnInit(userData);
+            Event.AddListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
+            Event.AddListener(SettlementEvents.SettlementCompleted, OnSettlementCompleted);
+        }
+
+        public override void OnClose()
+        {
+            Event.RemoveListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
+            Event.RemoveListener(SettlementEvents.SettlementCompleted, OnSettlementCompleted);
+            base.OnClose();
         }
 
         #region UI回调
         /// <summary>
-        /// 普通结算按钮
+        /// 普通结算按钮回调
         /// </summary>
-        private void OnSettlementButtonClicked()
+        private void OnClickSettlement()
         {
+            Debug.Log("[UISettlement] 玩家选择普通结算");
             SettlementManager.CompleteSettlement();
+            Close();
         }
 
         /// <summary>
-        /// 看广告翻倍按钮
+        /// 翻倍结算按钮回调
         /// </summary>
-        private void OnDoubleSettlementButtonClicked()
+        private void OnClickDoubleSettlement()
         {
             SettlementManager.ApplyDouble();
+            buttonDoubleSettlement.gameObject.SetActive(false);
         }
         #endregion
 
@@ -77,9 +93,9 @@ namespace Hunting.UI
         /// </summary>
         private void OnSettlementCalculated(SettlementCalculatedEventArgs args)
         {
-            _currentData = args;
-            UpdateDisplay(args);
-            UpdateDoubleButtonState(args);
+            // 更新界面上的金币与熟练度
+            textCoin.text = args.TotalCoin.ToString();
+            textMastery.text = args.TotalMastery.ToString();
         }
 
         /// <summary>
@@ -87,26 +103,7 @@ namespace Hunting.UI
         /// </summary>
         private void OnSettlementCompleted(SettlementCompletedEventArgs args)
         {
-            Close();
-        }
-        #endregion
-
-        #region 私有方法
-        /// <summary>
-        /// 更新界面显示
-        /// </summary>
-        private void UpdateDisplay(SettlementCalculatedEventArgs args)
-        {
-            _textCoin.text = args.TotalCoin.ToString();
-            _textMastery.text = args.BaseMastery.ToString();
-        }
-
-        /// <summary>
-        /// 根据结算状态更新翻倍按钮显示
-        /// </summary>
-        private void UpdateDoubleButtonState(SettlementCalculatedEventArgs args)
-        {
-            _buttonDoubleSettlement.gameObject.SetActive(!args.IsDoubleApplied);
+            Debug.Log($"[UISettlement] 结算完成 金币:{args.TotalCoin} 熟练度:{args.TotalMastery}");
         }
         #endregion
     }

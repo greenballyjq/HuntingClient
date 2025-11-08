@@ -2,6 +2,7 @@
 using cfg.HuntingConfig;
 using GameFramework.Core;
 using Hunting.Game.Animal;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -107,14 +108,11 @@ public sealed class AnimalDropRewardEventArgs : EventArgs
     /// 掉落奖励的动物实例
     /// </summary>
     public AnimalBehavior Animal { get; set; }
+
     /// <summary>
-    /// 掉落类型
+    /// 掉落奖励
     /// </summary>
-    public EDropType DropType { get; set; }
-    /// <summary>
-    /// 掉落数量
-    /// </summary>
-    public int Amount { get; set; }
+    public Dictionary<EDropType, int> DropRewards { get; set; }
 }
 
 

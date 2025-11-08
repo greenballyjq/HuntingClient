@@ -51,7 +51,7 @@ public sealed partial class Map : Luban.BeanBase
     /// </summary>
     public readonly int SpawnStrategyId;
     /// <summary>
-    /// 体型-物种权重映射（每个元素为SpecieWeight的Bean，Bean有SpecieId与Weight，元素之间用&quot;;&quot;分隔，键之间用&quot;|&quot;分隔）
+    /// 体型-物种权重映射
     /// </summary>
     public readonly System.Collections.Generic.Dictionary<EVolumeType, HuntingConfig.SpecieWeight[]> SpeciesByVolume;
     /// <summary>

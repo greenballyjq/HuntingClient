@@ -60,6 +60,11 @@ public sealed class SettlementCalculatedEventArgs : EventArgs
     /// 结算后的总金币
     /// </summary>
     public int TotalCoin { get; set; }
+
+    /// <summary>
+    /// 结算后的熟练度
+    /// </summary>
+    public int TotalMastery { get; set; }
 }
 
 /// <summary>
@@ -68,43 +73,13 @@ public sealed class SettlementCalculatedEventArgs : EventArgs
 public sealed class SettlementCompletedEventArgs : EventArgs
 {
     /// <summary>
-    /// 本局完成的肉度条数量
-    /// </summary>
-    public int CompletedMeatBars { get; set; }
-
-    /// <summary>
-    /// 肉度条基础金币
-    /// </summary>
-    public int BaseCoin { get; set; }
-
-    /// <summary>
-    /// 肉度条基础熟练度
-    /// </summary>
-    public int BaseMastery { get; set; }
-
-    /// <summary>
-    /// 金币物种掉落金币
-    /// </summary>
-    public int CoinFromSpecie { get; set; }
-
-    /// <summary>
-    /// 动态任务奖励金币
-    /// </summary>
-    public int CoinFromQuest { get; set; }
-
-    /// <summary>
-    /// 额外结算倍率
-    /// </summary>
-    public float ExtraMultiplier { get; set; }
-
-    /// <summary>
-    /// 是否已应用广告翻倍
-    /// </summary>
-    public bool IsDoubleApplied { get; set; }
-
-    /// <summary>
     /// 结算后的总金币
     /// </summary>
     public int TotalCoin { get; set; }
+
+    /// <summary>
+    /// 结算后的总熟练度
+    /// </summary>
+    public int TotalMastery { get; set; }
 }
 

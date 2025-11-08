@@ -1,4 +1,4 @@
-using cfg;
+﻿using cfg;
 using Hunting.Game.Animal;
 using Hunting.Game.Bullet;
 using Hunting.Manager;
@@ -68,16 +68,16 @@ namespace Hunting.Game.Weapon
         /// </summary>
         private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
         {
-            if (args.DropType == EDropType.Bullet)
+            if (!args.DropRewards.TryGetValue(EDropType.Bullet, out var bulletAmount) || bulletAmount <= 0)
+                return;
+
+            // 掉落子弹奖励，获取随机特殊子弹
+            var specialBullet = HuntingGameConfigManager.Instance.GetRandomSpecialBullet();
+            if (specialBullet != null)
             {
-                // 掉落子弹奖励，获取随机特殊子弹
-                var specialBullet = HuntingGameConfigManager.Instance.GetRandomSpecialBullet();
-                if (specialBullet != null)
-                {
-                    // 切换到特殊子弹
-                    ChangeBullet(specialBullet.ID);
-                    Debug.LogWarning($"[Weapon] 获得特殊子弹: {specialBullet.Name}，持续时间: {specialBullet.Duration}秒");
-                }
+                // 切换到特殊子弹
+                ChangeBullet(specialBullet.ID);
+                Debug.LogWarning($"[Weapon] 获得特殊子弹: {specialBullet.Name}，持续时间: {specialBullet.Duration}秒");
             }
         }
 
@@ -99,7 +99,6 @@ namespace Hunting.Game.Weapon
         private void UpdateFireIntervalFromConfig()
         {
             var bulletConfig = HuntingGameConfigManager.Instance.GetBullet(currentBulletId);
-            Debug.Log($"[PlayerControl] BulletConfig is null? {bulletConfig == null}");
             if (bulletConfig != null)
             {
                 // 射击间隔 = 1 / 射速（发/秒）

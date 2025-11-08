@@ -140,7 +140,6 @@ namespace Hunting.Game.Animal
         public void SetMap(int value)
         {
             mapId = value;
-            Debug.Log($"[SpeciesSpawner] 设置地图 ID 为 {mapId}");
         }
 
         /// <summary>
@@ -149,7 +148,6 @@ namespace Hunting.Game.Animal
         public void SetActive(bool value)
         {
             _isActive = value;
-            Debug.Log($"[SpeciesSpawner] 派发启用状态改为 {_isActive}");
         }
         #endregion
 
