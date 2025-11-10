@@ -9,7 +9,7 @@ namespace Hunting.UI
     /// <summary>
     /// 肉度条展示组件
     /// </summary>
-    public class UIMeatProgress : MonoBehaviour
+    public class UIMeatProgress : MonoBehaviour, IUIComponent
     {
         /// <summary>
         /// 肉度进度条

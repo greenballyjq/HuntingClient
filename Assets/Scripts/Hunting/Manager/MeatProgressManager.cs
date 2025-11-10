@@ -80,11 +80,6 @@ namespace Hunting.Manager
         /// 获取肉度条上限
         /// </summary>
         public int GetMaxMeatBars() => _maxMeatBars;
-
-        /// <summary>
-        /// 获取当前肉度条奖励
-        /// </summary>
-        public MeatProgressReward GetCurrentReward() => Config.GetMeatProgressReward(_currentMeatBars);
         #endregion
 
         #region 私有方法
@@ -109,7 +104,7 @@ namespace Hunting.Manager
             {
                 Sender = this,
                 CurrentProgress = _currentMeatValue,
-                CompletedBars = _currentMeatBars
+                CurrentBars = _currentMeatBars
             });
             TriggerBarCountChanged(new MeatBarCountChangedEventArgs
             {
@@ -149,7 +144,7 @@ namespace Hunting.Manager
             {
                 Sender = this,
                 CurrentProgress = _currentMeatValue,
-                CompletedBars = _currentMeatBars
+                CurrentBars = _currentMeatBars
             });
             if (barIncreased)
             {

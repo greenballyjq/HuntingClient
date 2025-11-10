@@ -22,6 +22,11 @@ namespace Hunting.UI
         [SerializeField] private UIMeatProgress uiComponentMeatProgress;
 
         /// <summary>
+        /// 能量条组件
+        /// </summary>
+        [SerializeField] private UIEnergyProgress uiComponentEnergyProgress;
+
+        /// <summary>
         /// UI管理器
         /// </summary>
         private UIManager UI => GameServiceLocator.UI;
@@ -40,10 +45,12 @@ namespace Hunting.UI
         {
             base.OnInit(userData);
             uiComponentMeatProgress.Init();
+            uiComponentEnergyProgress.Init();
         }
 
         public override void OnClose()
         {
+            uiComponentEnergyProgress.CleanUp();
             uiComponentMeatProgress.CleanUp();
             base.OnClose();
         }

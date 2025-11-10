@@ -32,9 +32,9 @@ public sealed class MeatProgressChangedEventArgs : EventArgs
     public int CurrentProgress { get; set; }
 
     /// <summary>
-    /// 已完成的条数
+    /// 当前条数
     /// </summary>
-    public int CompletedBars { get; set; }
+    public int CurrentBars { get; set; }
 }
 
 /// <summary>
