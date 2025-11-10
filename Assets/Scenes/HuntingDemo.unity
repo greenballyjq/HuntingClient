@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44402316, g: 0.49316597, b: 0.57223195, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.4964137, b: 0.57481897, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1272,7 +1272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 467795856}
   m_Layer: 0
-  m_Name: Terrain
+  m_Name: Terrain(Test)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1383,7 +1383,7 @@ GameObject:
   - component: {fileID: 578843783}
   - component: {fileID: 578843782}
   m_Layer: 0
-  m_Name: BGM
+  m_Name: BGMManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3293,7 +3293,7 @@ GameObject:
   - component: {fileID: 1501949005}
   - component: {fileID: 1501949004}
   m_Layer: 0
-  m_Name: Left
+  m_Name: Spawner2
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3341,7 +3341,7 @@ GameObject:
   - component: {fileID: 1578751596}
   - component: {fileID: 1578751597}
   m_Layer: 0
-  m_Name: Right
+  m_Name: Spawner1
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -4925,9 +4925,9 @@ SceneRoots:
   - {fileID: 467795856}
   - {fileID: 1578751596}
   - {fileID: 1501949005}
-  - {fileID: 578843783}
   - {fileID: 1264060395}
   - {fileID: 931074381}
+  - {fileID: 578843783}
   - {fileID: 1685133876}
   - {fileID: 1311946743}
   - {fileID: 427017148}

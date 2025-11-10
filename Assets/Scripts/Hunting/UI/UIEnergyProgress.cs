@@ -26,19 +26,24 @@ namespace Hunting.UI
         [SerializeField] private Text textEnergyBars;
 
         /// <summary>
+        /// 消耗按钮
+        /// </summary>
+        [SerializeField] private Button buttonConsume;
+
+        /// <summary>
         /// 前段颜色
         /// </summary>
-        [SerializeField] private Color colorTierA = new Color(0.17f, 0.87f, 0.52f);
+        [SerializeField] private Color colorTierA;
 
         /// <summary>
         /// 中段颜色
         /// </summary>
-        [SerializeField] private Color colorTierB = new Color(0.98f, 0.78f, 0.29f);
+        [SerializeField] private Color colorTierB;
 
         /// <summary>
         /// 后段颜色
         /// </summary>
-        [SerializeField] private Color colorTierC = new Color(0.98f, 0.36f, 0.29f);
+        [SerializeField] private Color colorTierC;
 
         /// <summary>
         /// 同段内亮度提升因子
@@ -55,13 +60,18 @@ namespace Hunting.UI
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
+        private void Awake()
+        {
+            buttonConsume.onClick.AddListener(OnConsumeButtonClicked);
+        }
+
         public void Init()
         {
             Event.AddListener(EnergyEvents.EnergyProgressChanged, OnEnergyProgressChanged);
             Event.AddListener(EnergyEvents.EnergyBarCountChanged, OnEnergyBarCountChanged);
             Event.AddListener(EnergyEvents.EnergyMaxBarsReached, OnEnergyMaxBarsReached);
 
-            UpdateAll(EnergyManager.GetCurrentEnergyValue(), EnergyManager.GetCurrentBars(), EnergyManager.GetRequiredPerBar());
+            UpdateAll(EnergyManager.GetCurrentEnergyValue(), EnergyManager.GetCurrentBars());
         }
 
         public void CleanUp()
@@ -73,6 +83,7 @@ namespace Hunting.UI
 
         private void OnDestroy()
         {
+            buttonConsume.onClick.RemoveListener(OnConsumeButtonClicked);
             CleanUp();
         }
 
@@ -80,10 +91,9 @@ namespace Hunting.UI
         /// <summary>
         /// 更新整体显示
         /// </summary>
-        private void UpdateAll(float currentEnergy, int currentBars, float requiredPerBar)
+        private void UpdateAll(float currentEnergy, int currentBars)
         {
-            // 刷新进度、文本与颜色
-            UpdateFill(currentEnergy, requiredPerBar, currentBars);
+            UpdateFill(currentEnergy, currentBars);
             UpdateBarText(currentBars, EnergyManager.GetMaxBars());
             UpdateBackgroundColor(currentBars);
         }
@@ -91,11 +101,14 @@ namespace Hunting.UI
         /// <summary>
         /// 更新填充图像
         /// </summary>
-        private void UpdateFill(float currentEnergy, float requiredPerBar, int currentBars)
+        private void UpdateFill(float currentEnergy, int currentBars)
         {
-            float normalized = requiredPerBar > 0f ? Mathf.Clamp01(currentEnergy / requiredPerBar) : 0f;
+            // 计算当前条的填充比例
+            float requiredPerBar = EnergyManager.GetRequiredPerBar();
+            float normalized = Mathf.Clamp01(currentEnergy / requiredPerBar);
             imageEnergyFill.fillAmount = normalized;
 
+            // 根据当前条决定填充颜色
             int maxBars = EnergyManager.GetMaxBars();
             int nextBarIndex = currentBars >= maxBars ? maxBars : Mathf.Clamp(currentBars + 1, 1, maxBars);
             imageEnergyFill.color = EvaluateBarColor(nextBarIndex);
@@ -108,11 +121,16 @@ namespace Hunting.UI
         {
             if (maxBars > 0 && currentBars >= maxBars)
             {
+                // 满条时显示无穷并与最终颜色同步
                 textEnergyBars.text = "∞";
+                textEnergyBars.color = EvaluateBarColor(maxBars);
                 return;
             }
 
-            textEnergyBars.text = $"{currentBars}条";
+            // 非满条时显示 当前/总条
+            textEnergyBars.text = $"{currentBars}/{maxBars}";
+            int displayIndex = Mathf.Clamp(Mathf.Max(1, currentBars), 1, maxBars);
+            textEnergyBars.color = EvaluateBarColor(displayIndex);
         }
 
         /// <summary>
@@ -122,10 +140,12 @@ namespace Hunting.UI
         {
             if (currentBars <= 0)
             {
+                // 没有任何条时保持透明
                 imageEnergyBackground.color = Color.clear;
                 return;
             }
 
+            // 使用当前条的颜色渲染底图
             imageEnergyBackground.color = EvaluateBarColor(currentBars);
         }
 
@@ -134,9 +154,11 @@ namespace Hunting.UI
         /// </summary>
         private Color EvaluateBarColor(int barIndex)
         {
+            // 依据总条数将条索引限制在有效范围内
             int maxBars = Mathf.Max(1, EnergyManager.GetMaxBars());
             int clampedIndex = Mathf.Clamp(barIndex, 1, maxBars);
 
+            // 划分三个颜色区间并定位当前条所在区间
             int group1End = Mathf.Max(1, Mathf.CeilToInt(maxBars / 3f));
             int group2End = Mathf.Max(group1End, Mathf.CeilToInt(maxBars * 2f / 3f));
 
@@ -183,9 +205,7 @@ namespace Hunting.UI
         /// </summary>
         private Color AdjustBrightness(Color baseColor, int step)
         {
-            if (step <= 0 || brightnessMultiplier <= 1f)
-                return baseColor;
-
+            // 提升亮度使同组后续条更亮
             Color.RGBToHSV(baseColor, out float h, out float s, out float v);
             float boostedV = Mathf.Clamp01(v * Mathf.Pow(brightnessMultiplier, step));
             Color result = Color.HSVToRGB(h, s, boostedV);
@@ -200,8 +220,7 @@ namespace Hunting.UI
         /// </summary>
         private void OnEnergyProgressChanged(EnergyProgressChangedEventArgs args)
         {
-            // 能量值变化时刷新填充即可
-            UpdateFill(args.CurrentEnergy, args.RequiredPerBar, args.CurrentBars);
+            UpdateFill(args.CurrentEnergy, args.CurrentBars);
         }
 
         /// <summary>
@@ -209,10 +228,9 @@ namespace Hunting.UI
         /// </summary>
         private void OnEnergyBarCountChanged(EnergyBarCountChangedEventArgs args)
         {
-            // 顺序刷新文本、颜色与当前进度
             UpdateBarText(args.CurrentBars, EnergyManager.GetMaxBars());
             UpdateBackgroundColor(args.CurrentBars);
-            UpdateFill(EnergyManager.GetCurrentEnergyValue(), EnergyManager.GetRequiredPerBar(), args.CurrentBars);
+            UpdateFill(EnergyManager.GetCurrentEnergyValue(), args.CurrentBars);
         }
 
         /// <summary>
@@ -221,11 +239,18 @@ namespace Hunting.UI
         private void OnEnergyMaxBarsReached()
         {
             int maxBars = EnergyManager.GetMaxBars();
-            // 满条后直接显示无穷并锁定最终色
             UpdateBarText(maxBars, maxBars);
             imageEnergyBackground.color = EvaluateBarColor(maxBars);
             imageEnergyFill.fillAmount = 1f;
             imageEnergyFill.color = EvaluateBarColor(maxBars);
+        }
+
+        /// <summary>
+        /// 点击消耗按钮回调
+        /// </summary>
+        private void OnConsumeButtonClicked()
+        {
+            EnergyManager.TryConsumeOneBar();
         }
         #endregion
     }

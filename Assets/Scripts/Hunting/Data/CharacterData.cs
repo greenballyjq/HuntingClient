@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,8 +28,6 @@ namespace Hunting.Data
             DML
         }
 
-        public List<CharacterInfo> characterInfoList;
-
         [Serializable]
         public class CharacterInfo
         {
@@ -38,6 +36,8 @@ namespace Hunting.Data
             public Sprite characterSprite;
             [TextArea] public string characterDescription;
         }
+
+        public List<CharacterInfo> characterInfoList;
 
         public CharacterInfo GetCharacterInfoFromType(CharacterType characterType)
         {

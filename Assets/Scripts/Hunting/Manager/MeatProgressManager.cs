@@ -17,7 +17,7 @@ namespace Hunting.Manager
         private int _currentMeatValue;
 
         /// <summary>
-        /// 当前肉度条
+        /// 当前肉度条条数
         /// </summary>
         private int _currentMeatBars;
 
@@ -67,7 +67,7 @@ namespace Hunting.Manager
         public int GetCurrentMeatValue() => _currentMeatValue;
 
         /// <summary>
-        /// 获取当前肉度条
+        /// 获取当前肉度条条数
         /// </summary>
         public int GetCurrentMeatBars() => _currentMeatBars;
 
@@ -103,7 +103,7 @@ namespace Hunting.Manager
             TriggerProgressChanged(new MeatProgressChangedEventArgs
             {
                 Sender = this,
-                CurrentProgress = _currentMeatValue,
+                CurrentMeat = _currentMeatValue,
                 CurrentBars = _currentMeatBars
             });
             TriggerBarCountChanged(new MeatBarCountChangedEventArgs
@@ -121,7 +121,7 @@ namespace Hunting.Manager
             if (amount <= 0 || _currentMeatBars >= _maxMeatBars)
                 return;
 
-            // 累计肉度值
+            // 累加肉度值
             _currentMeatValue += amount;
             bool barIncreased = false;
 
@@ -143,7 +143,7 @@ namespace Hunting.Manager
             TriggerProgressChanged(new MeatProgressChangedEventArgs
             {
                 Sender = this,
-                CurrentProgress = _currentMeatValue,
+                CurrentMeat = _currentMeatValue,
                 CurrentBars = _currentMeatBars
             });
             if (barIncreased)

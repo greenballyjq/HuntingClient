@@ -18,9 +18,13 @@ public sealed partial class Role : Luban.BeanBase
     {
         ID = _buf.ReadInt();
         RoleType = (ERoleType)_buf.ReadInt();
-        Name = _buf.ReadString();
-        RoleDescription = _buf.ReadString();
-        SkillID = _buf.ReadInt();
+        RoleProfile = global::cfg.HuntingConfig.RoleProfile.DeserializeRoleProfile(_buf);
+        Traits = _buf.ReadString();
+        Personality = _buf.ReadString();
+        BackgroundStory = _buf.ReadString();
+        LinkedSkillId = _buf.ReadInt();
+        LinkedMapId = _buf.ReadInt();
+        RoleResourcePath = _buf.ReadString();
     }
 
     public static Role DeserializeRole(ByteBuf _buf)
@@ -37,23 +41,40 @@ public sealed partial class Role : Luban.BeanBase
     /// </summary>
     public readonly ERoleType RoleType;
     /// <summary>
-    /// 角色名称
+    /// 角色档案
     /// </summary>
-    public readonly string Name;
+    public readonly HuntingConfig.RoleProfile RoleProfile;
     /// <summary>
-    /// 角色描述
+    /// 特征描述
     /// </summary>
-    public readonly string RoleDescription;
+    public readonly string Traits;
     /// <summary>
-    /// 关联丰收技ID
+    /// 个性描述
     /// </summary>
-    public readonly int SkillID;
+    public readonly string Personality;
+    /// <summary>
+    /// 背景故事
+    /// </summary>
+    public readonly string BackgroundStory;
+    /// <summary>
+    /// 关联技能ID
+    /// </summary>
+    public readonly int LinkedSkillId;
+    /// <summary>
+    /// 关联地图ID
+    /// </summary>
+    public readonly int LinkedMapId;
+    /// <summary>
+    /// 角色资源路径
+    /// </summary>
+    public readonly string RoleResourcePath;
    
     public const int __ID__ = 1697946867;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
+        RoleProfile?.ResolveRef(tables);
     }
 
     public override string ToString()
@@ -61,9 +82,13 @@ public sealed partial class Role : Luban.BeanBase
         return "{ "
         + "ID:" + ID + ","
         + "RoleType:" + RoleType + ","
-        + "Name:" + Name + ","
-        + "RoleDescription:" + RoleDescription + ","
-        + "SkillID:" + SkillID + ","
+        + "RoleProfile:" + RoleProfile + ","
+        + "Traits:" + Traits + ","
+        + "Personality:" + Personality + ","
+        + "BackgroundStory:" + BackgroundStory + ","
+        + "LinkedSkillId:" + LinkedSkillId + ","
+        + "LinkedMapId:" + LinkedMapId + ","
+        + "RoleResourcePath:" + RoleResourcePath + ","
         + "}";
     }
 }

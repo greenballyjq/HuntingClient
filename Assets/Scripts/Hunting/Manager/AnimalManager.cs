@@ -94,7 +94,7 @@ namespace Hunting.Manager
         /// <returns></returns>
         private string GetPrefabPath(Specie specie)
         {
-            return $"Animals/Animal_{specie.VolumeType}_{specie.ID}";
+            return $"Arts/Animals/Animal_{specie.VolumeType}_{specie.ID}";
         }
         #endregion
 

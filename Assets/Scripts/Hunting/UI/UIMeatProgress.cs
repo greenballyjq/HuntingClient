@@ -1,5 +1,4 @@
-﻿using System;
-using GameFramework.Core;
+﻿using GameFramework.Core;
 using Hunting.Manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,14 +11,14 @@ namespace Hunting.UI
     public class UIMeatProgress : MonoBehaviour, IUIComponent
     {
         /// <summary>
-        /// 肉度进度条
+        /// 肉度填充图像
         /// </summary>
-        [SerializeField] private Slider sliderMeatProgress;
+        [SerializeField] private Image imageMeatFill;
 
         /// <summary>
-        /// 进度填充图像
+        /// 肉度底图
         /// </summary>
-        [SerializeField] private Image imageFill;
+        [SerializeField] private Image imageMeatBackground;
 
         /// <summary>
         /// 肉度值文本
@@ -32,19 +31,24 @@ namespace Hunting.UI
         [SerializeField] private Text textMeatBars;
 
         /// <summary>
-        /// 低档颜色
+        /// 前段颜色
         /// </summary>
-        [SerializeField] private Color colorLow = Color.green;
+        [SerializeField] private Color colorTierA;
 
         /// <summary>
-        /// 中档颜色
+        /// 中段颜色
         /// </summary>
-        [SerializeField] private Color colorMid = Color.yellow;
+        [SerializeField] private Color colorTierB;
 
         /// <summary>
-        /// 高档颜色
+        /// 后段颜色
         /// </summary>
-        [SerializeField] private Color colorHigh = new Color(1f, 0.85f, 0f);
+        [SerializeField] private Color colorTierC;
+
+        /// <summary>
+        /// 同段内亮度提升因子
+        /// </summary>
+        [SerializeField, Range(1.0f, 2.0f)] private float brightnessMultiplier = 1.1f;
 
         /// <summary>
         /// 肉度条管理器
@@ -65,8 +69,7 @@ namespace Hunting.UI
             Event.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
             Event.AddListener(MeatEvents.MeatMaxBarsReached, OnMeatMaxBarsReached);
 
-            UpdateMeatValue(MeatProgressManager.GetCurrentMeatValue(), MeatProgressManager.GetRequiredPerBar());
-            UpdateMeatBars(MeatProgressManager.GetCurrentMeatBars());
+            UpdateAll(MeatProgressManager.GetCurrentMeatValue(), MeatProgressManager.GetCurrentMeatBars());
         }
 
         /// <summary>
@@ -86,47 +89,146 @@ namespace Hunting.UI
 
         #region 私有方法
         /// <summary>
-        /// 更新肉度值显示
+        /// 更新整体显示
         /// </summary>
-        private void UpdateMeatValue(int value, int required)
+        private void UpdateAll(int currentMeat, int currentBars)
         {
-            int currentBars = MeatProgressManager.GetCurrentMeatBars();
-            int maxBars = MeatProgressManager.GetMaxMeatBars();
+            UpdateFill(currentMeat, currentBars);
+            UpdateBarText(currentBars, MeatProgressManager.GetMaxMeatBars());
+            UpdateValueText(currentMeat, currentBars);
+            UpdateBackgroundColor(currentBars);
+        }
 
+        /// <summary>
+        /// 更新填充图像
+        /// </summary>
+        private void UpdateFill(int currentMeat, int currentBars)
+        {
+            // 计算当前条的填充值
+            int requiredPerBar = MeatProgressManager.GetRequiredPerBar();
+            int maxBars = MeatProgressManager.GetMaxMeatBars();
+            bool reachedMax = currentBars >= maxBars;
+
+            float normalized = Mathf.Clamp01((float)currentMeat / requiredPerBar);
+            imageMeatFill.fillAmount = reachedMax ? 1f : normalized;
+
+            // 根据当前条决定填充颜色
+            int nextBarIndex = reachedMax ? maxBars : Mathf.Clamp(currentBars + 1, 1, maxBars);
+            imageMeatFill.color = EvaluateBarColor(nextBarIndex);
+        }
+
+        /// <summary>
+        /// 更新条数文本
+        /// </summary>
+        private void UpdateBarText(int currentBars, int maxBars)
+        {
             if (currentBars >= maxBars)
             {
-                sliderMeatProgress.value = 1f;
-                textMeatValue.text = "∞";
+                // 达到上限时显示无穷
+                textMeatBars.text = "∞";
+                textMeatBars.color = EvaluateBarColor(maxBars);
                 return;
             }
 
-            float ratio = required > 0 ? Mathf.Clamp01((float)value / required) : 0f;
-            sliderMeatProgress.value = ratio;
-            textMeatValue.text = $"{value}/{required}";
+            // 非满条时显示 当前/总条
+            textMeatBars.text = $"{currentBars}/{maxBars}";
+            int displayIndex = Mathf.Clamp(Mathf.Max(1, currentBars), 1, maxBars);
+            textMeatBars.color = EvaluateBarColor(displayIndex);
         }
 
         /// <summary>
-        /// 更新肉度条显示
+        /// 更新肉度值文本
         /// </summary>
-        private void UpdateMeatBars(int bars)
+        private void UpdateValueText(int currentMeat, int currentBars)
         {
-            textMeatBars.text = $"{bars}条";
-            UpdateFillColor(bars);
+            // 显示肉度值的当前/单条需求
+            int requiredPerBar = MeatProgressManager.GetRequiredPerBar();
+            int maxBars = MeatProgressManager.GetMaxMeatBars();
+            if (currentBars >= maxBars)
+            {
+                textMeatValue.text = $"{requiredPerBar}/{requiredPerBar}";
+                return;
+            }
+
+            textMeatValue.text = $"{currentMeat}/{requiredPerBar}";
         }
 
         /// <summary>
-        /// 更新填充颜色
+        /// 更新底图颜色
         /// </summary>
-        private void UpdateFillColor(int bars)
+        private void UpdateBackgroundColor(int currentBars)
         {
-            if (imageFill == null) return;
+            if (currentBars <= 0)
+            {
+                // 没有任何条时隐藏底图
+                imageMeatBackground.color = Color.clear;
+                return;
+            }
 
-            if (bars < 3)
-                imageFill.color = colorLow;
-            else if (bars < 5)
-                imageFill.color = colorMid;
+            // 使用当前条颜色作为底图
+            imageMeatBackground.color = EvaluateBarColor(currentBars);
+        }
+
+        /// <summary>
+        /// 计算指定条数对应的颜色
+        /// </summary>
+        private Color EvaluateBarColor(int barIndex)
+        {
+            // 依据总条数将条索引限制在有效范围内
+            int maxBars = Mathf.Max(1, MeatProgressManager.GetMaxMeatBars());
+            int clampedIndex = Mathf.Clamp(barIndex, 1, maxBars);
+
+            // 划分三个颜色区间并定位当前条所在区间
+            int group1End = Mathf.Max(1, Mathf.CeilToInt(maxBars / 3f));
+            int group2End = Mathf.Max(group1End, Mathf.CeilToInt(maxBars * 2f / 3f));
+
+            int groupIndex;
+            int groupStart;
+            if (clampedIndex <= group1End)
+            {
+                groupIndex = 0;
+                groupStart = 1;
+            }
+            else if (clampedIndex <= group2End)
+            {
+                groupIndex = 1;
+                groupStart = group1End + 1;
+            }
             else
-                imageFill.color = colorHigh;
+            {
+                groupIndex = 2;
+                groupStart = group2End + 1;
+            }
+
+            int stepInGroup = Mathf.Max(0, clampedIndex - groupStart);
+            Color baseColor = GetGroupBaseColor(groupIndex);
+            return AdjustBrightness(baseColor, stepInGroup);
+        }
+
+        /// <summary>
+        /// 获取组基础颜色
+        /// </summary>
+        private Color GetGroupBaseColor(int groupIndex)
+        {
+            return groupIndex switch
+            {
+                0 => colorTierA,
+                1 => colorTierB,
+                _ => colorTierC
+            };
+        }
+
+        /// <summary>
+        /// 调整亮度
+        /// </summary>
+        private Color AdjustBrightness(Color baseColor, int step)
+        {
+            // 提升亮度使同组后续条更亮
+            Color.RGBToHSV(baseColor, out float h, out float s, out float v);
+            float boostedV = Mathf.Clamp01(v * Mathf.Pow(brightnessMultiplier, step));
+            Color result = Color.HSVToRGB(h, s, boostedV);
+            result.a = baseColor.a;
+            return result;
         }
         #endregion
 
@@ -136,7 +238,9 @@ namespace Hunting.UI
         /// </summary>
         private void OnMeatProgressChanged(MeatProgressChangedEventArgs args)
         {
-            UpdateMeatValue(args.CurrentProgress, MeatProgressManager.GetRequiredPerBar());
+            int currentBars = MeatProgressManager.GetCurrentMeatBars();
+            UpdateValueText(args.CurrentMeat, currentBars);
+            UpdateFill(args.CurrentMeat, currentBars);
         }
 
         /// <summary>
@@ -144,7 +248,11 @@ namespace Hunting.UI
         /// </summary>
         private void OnMeatBarCountChanged(MeatBarCountChangedEventArgs args)
         {
-            UpdateMeatBars(args.CurrentBars);
+            int currentMeat = MeatProgressManager.GetCurrentMeatValue();
+            UpdateBarText(args.CurrentBars, MeatProgressManager.GetMaxMeatBars());
+            UpdateBackgroundColor(args.CurrentBars);
+            UpdateFill(currentMeat, args.CurrentBars);
+            UpdateValueText(currentMeat, args.CurrentBars);
         }
 
         /// <summary>
@@ -152,12 +260,14 @@ namespace Hunting.UI
         /// </summary>
         private void OnMeatMaxBarsReached()
         {
-            UpdateMeatValue(0, 0);
-            UpdateMeatBars(MeatProgressManager.GetMaxMeatBars());
+            int maxBars = MeatProgressManager.GetMaxMeatBars();
+            UpdateBarText(maxBars, maxBars);
+            imageMeatBackground.color = EvaluateBarColor(maxBars);
+            imageMeatFill.fillAmount = 1f;
+            imageMeatFill.color = EvaluateBarColor(maxBars);
+            UpdateValueText(MeatProgressManager.GetRequiredPerBar(), maxBars);
         }
         #endregion
-
-        
     }
 }
 

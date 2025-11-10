@@ -140,7 +140,7 @@ namespace Hunting.Game.Weapon
             // 根据子弹类型获取预制体名称
             string bulletName = GetBulletPrefabName(bulletConfig.BulletType);
             // 从Resources加载子弹预制体
-            GameObject bulletPrefab = Resources.Load<GameObject>($"Bullets/{bulletName}");
+            GameObject bulletPrefab = Resources.Load<GameObject>($"Arts/Bullets/{bulletName}");
 
             if (bulletPrefab == null)
             {

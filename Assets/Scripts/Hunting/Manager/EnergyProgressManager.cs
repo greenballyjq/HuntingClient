@@ -16,7 +16,7 @@ namespace Hunting.Manager
         private float _currentEnergyValue;
 
         /// <summary>
-        /// 当前能量条数
+        /// 当前能量条条数
         /// </summary>
         private int _currentBars;
 
@@ -83,7 +83,7 @@ namespace Hunting.Manager
         public float GetCurrentEnergyValue() => _currentEnergyValue;
 
         /// <summary>
-        /// 获取当前能量条数
+        /// 获取当前能量条条数
         /// </summary>
         public int GetCurrentBars() => _currentBars;
 
@@ -126,8 +126,7 @@ namespace Hunting.Manager
             {
                 Sender = this,
                 CurrentEnergy = _currentEnergyValue,
-                CurrentBars = _currentBars,
-                RequiredPerBar = _requiredPerBar
+                CurrentBars = _currentBars
             });
             return true;
         }
@@ -140,12 +139,6 @@ namespace Hunting.Manager
         private void LoadConfig()
         {
             EnergyProgress energyProgress = Config.GetEnergyProgress(1);
-            if (energyProgress == null)
-            {
-                Debug.LogError("[EnergyProgressManager] LoadConfig: 无法读取能量配置");
-                return;
-            }
-
             _requiredPerBar = energyProgress.RequiredPerBar;
             _maxBars = energyProgress.MaxBar;
             _increasePerSecond = energyProgress.IncreasePerSecond;
@@ -163,8 +156,7 @@ namespace Hunting.Manager
             {
                 Sender = this,
                 CurrentEnergy = _currentEnergyValue,
-                CurrentBars = _currentBars,
-                RequiredPerBar = _requiredPerBar
+                CurrentBars = _currentBars
             });
             TriggerBarCountChanged(new EnergyBarCountChangedEventArgs
             {
@@ -176,10 +168,9 @@ namespace Hunting.Manager
         /// <summary>
         /// 增加能量
         /// </summary>
-        /// <param name="amount"></param>
         private void AddEnergy(float amount)
         {
-            if (amount <= 0f || _currentBars >= _maxBars && Mathf.Approximately(_currentEnergyValue, 0f))
+            if (amount <= 0f || _currentBars >= _maxBars)
                 return;
 
             // 累加能量值，并在超过单条阈值时转换成完整能量条
@@ -204,7 +195,6 @@ namespace Hunting.Manager
                 Sender = this,
                 CurrentEnergy = _currentEnergyValue,
                 CurrentBars = _currentBars,
-                RequiredPerBar = _requiredPerBar
             });
             if (barIncreased)
             {

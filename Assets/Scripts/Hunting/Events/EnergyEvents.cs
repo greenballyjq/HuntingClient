@@ -40,11 +40,6 @@ public sealed class EnergyProgressChangedEventArgs : EventArgs
     /// 当前能量条数
     /// </summary>
     public int CurrentBars { get; set; }
-
-    /// <summary>
-    /// 单条所需能量值
-    /// </summary>
-    public float RequiredPerBar { get; set; }
 }
 
 /// <summary>

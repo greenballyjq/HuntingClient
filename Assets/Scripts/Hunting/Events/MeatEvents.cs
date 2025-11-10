@@ -27,12 +27,12 @@ public static class MeatEvents
 public sealed class MeatProgressChangedEventArgs : EventArgs
 {
     /// <summary>
-    /// 当前进度
+    /// 当前肉度值
     /// </summary>
-    public int CurrentProgress { get; set; }
+    public int CurrentMeat { get; set; }
 
     /// <summary>
-    /// 当前条数
+    /// 当前肉度条条数
     /// </summary>
     public int CurrentBars { get; set; }
 }
@@ -43,7 +43,7 @@ public sealed class MeatProgressChangedEventArgs : EventArgs
 public sealed class MeatBarCountChangedEventArgs : EventArgs
 {
     /// <summary>
-    /// 当前条数
+    /// 当前肉度条条数
     /// </summary>
     public int CurrentBars { get; set; }
 }
