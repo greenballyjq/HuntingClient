@@ -1,5 +1,4 @@
-﻿using System;
-using GameFramework.Core;
+﻿using GameFramework.Core;
 using Hunting.Data;
 using TMPro;
 using UnityEngine;
@@ -11,18 +10,19 @@ namespace Hunting.UI
     {
         [SerializeField] private CharacterData characterData;
         [SerializeField] private HuntMapData huntMapData;
-        [SerializeField] private Button characterMailButton;
-        [SerializeField] private Button characterFemailButton;
-        [SerializeField] private Button characterIpButton;
-        [SerializeField] private Image characterIpImage;
-        [SerializeField] private TextMeshProUGUI characterNameText;
-        [SerializeField] private TextMeshProUGUI characterDescText;
-        [SerializeField] private Image mapImage;
-        [SerializeField] private TextMeshProUGUI mapNameText;
-        [SerializeField] private TextMeshProUGUI mapDescText;
 
-        [SerializeField] private Button luckButton;
-        [SerializeField] private Button startButton;
+
+        [SerializeField] private Button _buttonRoleMail;
+        [SerializeField] private Button _buttonRoleFemail;
+        [SerializeField] private Button _buttonRoleRandom;
+        [SerializeField] private TextMeshProUGUI _textRoleName;
+        [SerializeField] private TextMeshProUGUI _textRoleProfile;
+        [SerializeField] private Image _imageRole;
+        [SerializeField] private TextMeshProUGUI _textMapName;
+        [SerializeField] private TextMeshProUGUI _textMapDescription;
+        [SerializeField] private Image _imageMap;
+        [SerializeField] private Button _buttonLuckyRitual;
+        [SerializeField] private Button _buttonStartGame;
 
         private GameLogic _gameLogic;
 
@@ -30,11 +30,11 @@ namespace Hunting.UI
         
         private void Start()
         {
-            characterMailButton.onClick.AddListener(() => ChooseCharacter(CharacterData.CharacterType.Base_Mail));
-            characterFemailButton.onClick.AddListener(() => ChooseCharacter(CharacterData.CharacterType.Base_Femail));
-            characterIpButton.onClick.AddListener(ChooseRandomCharacter);
+            _buttonRoleMail.onClick.AddListener(() => ChooseCharacter(CharacterData.CharacterType.Base_Mail));
+            _buttonRoleFemail.onClick.AddListener(() => ChooseCharacter(CharacterData.CharacterType.Base_Femail));
+            _buttonRoleRandom.onClick.AddListener(ChooseRandomCharacter);
             
-            startButton.onClick.AddListener(async() =>
+            _buttonStartGame.onClick.AddListener(async() =>
             {
                 _gameLogic.StartGame();
                 await UI.OpenUIAsync<UIHuntingGameplay>("UIHuntingGamePlay");
@@ -53,24 +53,24 @@ namespace Hunting.UI
         private void ChooseCharacter(CharacterData.CharacterType characterType)
         {
             CharacterData.CharacterInfo characterInfo = characterData.GetCharacterInfoFromType(characterType);
-            characterNameText.text = characterInfo.characterName;
-            characterDescText.text = characterInfo.characterDescription;
+            _textRoleName.text = characterInfo.characterName;
+            _textRoleProfile.text = characterInfo.characterDescription;
         }
 
         private void ChooseRandomCharacter()
         {
             CharacterData.CharacterInfo randomCharacterInfo = characterData.GetRandomCharacterInfo();
-            characterNameText.text = randomCharacterInfo.characterName;
-            characterDescText.text = randomCharacterInfo.characterDescription;
-            characterIpImage.sprite = randomCharacterInfo.characterSprite;
+            _textRoleName.text = randomCharacterInfo.characterName;
+            _textRoleProfile.text = randomCharacterInfo.characterDescription;
+            _imageRole.sprite = randomCharacterInfo.characterSprite;
         }
 
         private void ChooseRandomMap()
         {
             HuntMapData.HuntMapInfo randomMapInfo = huntMapData.GetRandomMapInfo();
-            mapNameText.text = randomMapInfo.mapName;
-            mapDescText.text = randomMapInfo.mapDescription;
-            mapImage.sprite = randomMapInfo.mapSprite;
+            _textMapName.text = randomMapInfo.mapName;
+            _textMapDescription.text = randomMapInfo.mapDescription;
+            _imageMap.sprite = randomMapInfo.mapSprite;
         }
     }
 }

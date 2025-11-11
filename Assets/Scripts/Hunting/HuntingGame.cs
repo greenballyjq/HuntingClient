@@ -30,7 +30,6 @@ namespace Hunting
         {
             UIHuntingPrepare uiHuntingPrepare = await GetFrameworkManager<UIManager>().OpenUIAsync<UIHuntingPrepare>("UIHuntingPrepare");
             GameLauncher.Instance.OnCompleteLauncher();
-            uiHuntingPrepare.SetGameLogic(this);
         }
 
         protected override void OnGameStart()

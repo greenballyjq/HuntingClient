@@ -20,6 +20,9 @@ public sealed partial class RoleProfile : Luban.BeanBase
         Birthplace = _buf.ReadString();
         Height = _buf.ReadFloat();
         Gender = _buf.ReadString();
+        Traits = _buf.ReadString();
+        Personality = _buf.ReadString();
+        BackgroundStory = _buf.ReadString();
     }
 
     public static RoleProfile DeserializeRoleProfile(ByteBuf _buf)
@@ -43,6 +46,18 @@ public sealed partial class RoleProfile : Luban.BeanBase
     /// 性别
     /// </summary>
     public readonly string Gender;
+    /// <summary>
+    /// 特征描述
+    /// </summary>
+    public readonly string Traits;
+    /// <summary>
+    /// 个性描述
+    /// </summary>
+    public readonly string Personality;
+    /// <summary>
+    /// 背景故事
+    /// </summary>
+    public readonly string BackgroundStory;
    
     public const int __ID__ = 1617888242;
     public override int GetTypeId() => __ID__;
@@ -58,6 +73,9 @@ public sealed partial class RoleProfile : Luban.BeanBase
         + "Birthplace:" + Birthplace + ","
         + "Height:" + Height + ","
         + "Gender:" + Gender + ","
+        + "Traits:" + Traits + ","
+        + "Personality:" + Personality + ","
+        + "BackgroundStory:" + BackgroundStory + ","
         + "}";
     }
 }

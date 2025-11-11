@@ -19,9 +19,6 @@ public sealed partial class Role : Luban.BeanBase
         ID = _buf.ReadInt();
         RoleType = (HuntingConfig.Enum.ERoleType)_buf.ReadInt();
         RoleProfile = global::cfg.HuntingConfig.Bean.RoleProfile.DeserializeRoleProfile(_buf);
-        Traits = _buf.ReadString();
-        Personality = _buf.ReadString();
-        BackgroundStory = _buf.ReadString();
         LinkedSkillId = _buf.ReadInt();
         LinkedMapId = _buf.ReadInt();
         RoleImageResourcePath = _buf.ReadString();
@@ -45,18 +42,6 @@ public sealed partial class Role : Luban.BeanBase
     /// 角色档案
     /// </summary>
     public readonly HuntingConfig.Bean.RoleProfile RoleProfile;
-    /// <summary>
-    /// 特征描述
-    /// </summary>
-    public readonly string Traits;
-    /// <summary>
-    /// 个性描述
-    /// </summary>
-    public readonly string Personality;
-    /// <summary>
-    /// 背景故事
-    /// </summary>
-    public readonly string BackgroundStory;
     /// <summary>
     /// 关联技能ID
     /// </summary>
@@ -88,9 +73,6 @@ public sealed partial class Role : Luban.BeanBase
         + "ID:" + ID + ","
         + "RoleType:" + RoleType + ","
         + "RoleProfile:" + RoleProfile + ","
-        + "Traits:" + Traits + ","
-        + "Personality:" + Personality + ","
-        + "BackgroundStory:" + BackgroundStory + ","
         + "LinkedSkillId:" + LinkedSkillId + ","
         + "LinkedMapId:" + LinkedMapId + ","
         + "RoleImageResourcePath:" + RoleImageResourcePath + ","
