@@ -1,5 +1,6 @@
 ﻿using cfg;
 using cfg.HuntingConfig;
+using cfg.HuntingConfig.Enum;
 using DG.Tweening;
 using Hunting.Game.Animal.State;
 using System.Collections.Generic;

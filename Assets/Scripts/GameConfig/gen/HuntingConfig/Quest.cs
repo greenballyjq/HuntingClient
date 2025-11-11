@@ -17,7 +17,7 @@ public sealed partial class Quest : Luban.BeanBase
     public Quest(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        QuestType = (EQuestType)_buf.ReadInt();
+        QuestType = (HuntingConfig.Enum.EQuestType)_buf.ReadInt();
         {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);TargetRange = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); TargetRange[__index0] = __e0;}}
         Duration = _buf.ReadFloat();
         {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);RewardRange = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); RewardRange[__index0] = __e0;}}
@@ -36,7 +36,7 @@ public sealed partial class Quest : Luban.BeanBase
     /// <summary>
     ///  任务类型
     /// </summary>
-    public readonly EQuestType QuestType;
+    public readonly HuntingConfig.Enum.EQuestType QuestType;
     /// <summary>
     /// 任务目标数值范围
     /// </summary>

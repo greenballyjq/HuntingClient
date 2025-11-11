@@ -17,14 +17,15 @@ public sealed partial class Role : Luban.BeanBase
     public Role(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        RoleType = (ERoleType)_buf.ReadInt();
-        RoleProfile = global::cfg.HuntingConfig.RoleProfile.DeserializeRoleProfile(_buf);
+        RoleType = (HuntingConfig.Enum.ERoleType)_buf.ReadInt();
+        RoleProfile = global::cfg.HuntingConfig.Bean.RoleProfile.DeserializeRoleProfile(_buf);
         Traits = _buf.ReadString();
         Personality = _buf.ReadString();
         BackgroundStory = _buf.ReadString();
         LinkedSkillId = _buf.ReadInt();
         LinkedMapId = _buf.ReadInt();
-        RoleResourcePath = _buf.ReadString();
+        RoleImageResourcePath = _buf.ReadString();
+        Comment = _buf.ReadString();
     }
 
     public static Role DeserializeRole(ByteBuf _buf)
@@ -39,11 +40,11 @@ public sealed partial class Role : Luban.BeanBase
     /// <summary>
     /// 角色类型
     /// </summary>
-    public readonly ERoleType RoleType;
+    public readonly HuntingConfig.Enum.ERoleType RoleType;
     /// <summary>
     /// 角色档案
     /// </summary>
-    public readonly HuntingConfig.RoleProfile RoleProfile;
+    public readonly HuntingConfig.Bean.RoleProfile RoleProfile;
     /// <summary>
     /// 特征描述
     /// </summary>
@@ -65,9 +66,13 @@ public sealed partial class Role : Luban.BeanBase
     /// </summary>
     public readonly int LinkedMapId;
     /// <summary>
-    /// 角色资源路径
+    /// 角色图片资源路径
     /// </summary>
-    public readonly string RoleResourcePath;
+    public readonly string RoleImageResourcePath;
+    /// <summary>
+    /// 注释
+    /// </summary>
+    public readonly string Comment;
    
     public const int __ID__ = 1697946867;
     public override int GetTypeId() => __ID__;
@@ -88,7 +93,8 @@ public sealed partial class Role : Luban.BeanBase
         + "BackgroundStory:" + BackgroundStory + ","
         + "LinkedSkillId:" + LinkedSkillId + ","
         + "LinkedMapId:" + LinkedMapId + ","
-        + "RoleResourcePath:" + RoleResourcePath + ","
+        + "RoleImageResourcePath:" + RoleImageResourcePath + ","
+        + "Comment:" + Comment + ","
         + "}";
     }
 }

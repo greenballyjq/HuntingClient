@@ -1,5 +1,7 @@
-﻿using cfg;
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig.Bean;
+using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Skill;
 using GameFramework.Manager;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +26,14 @@ namespace Hunting.Manager
             "huntingconfig_tbrole",
             "huntingconfig_tbmeatprogress",
             "huntingconfig_tbenergyprogress",
-            "huntingconfig_tbquest"
-            
+            "huntingconfig_tbquest",
+            "huntingconfig_skill_tbskill",
+            "huntingconfig_skill_tbskill3kp",
+            "huntingconfig_skill_tbskillziwei",
+            "huntingconfig_skill_tbskilldameili",
+            "huntingconfig_skill_tbskilljinzhuangyuan",
+            "huntingconfig_skill_tbskillyakedong",
+            "huntingconfig_tblucky",
         };
 
         #region 数值表访问
@@ -68,6 +76,41 @@ namespace Hunting.Manager
         /// 任务数值表
         /// </summary>
         public TbQuest QuestTable => _tables.TbQuest;
+
+        /// <summary>
+        /// 技能主表
+        /// </summary>
+        public TbSkill SkillTable => _tables.TbSkill;
+
+        /// <summary>
+        /// 色块人技能数值表
+        /// </summary>
+        public TbSkill3KP Skill3KPTable => _tables.TbSkill3KP;
+
+        /// <summary>
+        /// 紫薇技能数值表
+        /// </summary>
+        public TbSkillZiWei SkillZiWeiTable => _tables.TbSkillZiWei;
+
+        /// <summary>
+        /// 大美丽技能数值表
+        /// </summary>
+        public TbSkillDaMeiLi SkillDaMeiLiTable => _tables.TbSkillDaMeiLi;
+
+        /// <summary>
+        /// 金状元技能数值表
+        /// </summary>
+        public TbSkillJinZhuangYuan SkillJinZhuangYuanTable => _tables.TbSkillJinZhuangYuan;
+
+        /// <summary>
+        /// 亚克东技能数值表
+        /// </summary>
+        public TbSkillYaKeDong SkillYaKeDongTable => _tables.TbSkillYaKeDong;
+
+        /// <summary>
+        /// 幸运仪式数值表
+        /// </summary>
+        public TbLucky LuckyTable => _tables.TbLucky;
         #endregion
 
         #region 数值表单个数据项访问
@@ -151,6 +194,72 @@ namespace Hunting.Manager
         /// <returns></returns>
         public Quest GetDynamicQuest(int id) => QuestTable.Get(id);
 
+        /// <summary>
+        /// 获取单个幸运仪式配置
+        /// </summary>
+        /// <param name="id">增益ID</param>
+        /// <returns></returns>
+        public Lucky GetLucky(int id) => LuckyTable.Get(id);
+
+        /// <summary>
+        /// 通过幸运仪式类型获取单个配置
+        /// </summary>
+        /// <param name="type">增益类型</param>
+        /// <returns></returns>
+        public Lucky GetLucky(ELuckyType type)
+            => LuckyTable.DataList.FirstOrDefault(p => p.LuckyType == type);
+
+		/// <summary>
+        /// 获取单个技能配置
+        /// </summary>
+        /// <param name="id">技能ID</param>
+        /// <returns></returns>
+        public Skill GetSkill(int id) => SkillTable.Get(id);
+
+        /// <summary>
+        /// 通过技能类型获取单个技能配置
+        /// </summary>
+        /// <param name="type">技能类型</param>
+        /// <returns></returns>
+        public Skill GetSkill(ESkillType type)
+            => SkillTable.DataList.FirstOrDefault(p => p.SkillType == type);
+
+        /// <summary>
+        /// 获取色块人技能参数
+        /// </summary>
+        /// <param name="id">参数ID</param>
+        /// <returns></returns>
+        public Skill3KP GetSkill3KP(int id) => Skill3KPTable.Get(id);
+
+        /// <summary>
+        /// 获取紫薇技能参数
+        /// </summary>
+        /// <param name="id">参数ID</param>
+        /// <returns></returns>
+        public SkillZiWei GetSkillZiWei(int id) => SkillZiWeiTable.Get(id);
+
+        /// <summary>
+        /// 获取大美丽技能参数
+        /// </summary>
+        /// <param name="id">参数ID</param>
+        /// <returns></returns>
+        public SkillDaMeiLi GetSkillDaMeiLi(int id) => SkillDaMeiLiTable.Get(id);
+
+        /// <summary>
+        /// 获取金状元技能参数
+        /// </summary>
+        /// <param name="id">参数ID</param>
+        /// <returns></returns>
+        public SkillJinZhuangYuan GetSkillJinZhuangYuan(int id)
+            => SkillJinZhuangYuanTable.Get(id);
+
+        /// <summary>
+        /// 获取亚克东技能参数
+        /// </summary>
+        /// <param name="id">参数ID</param>
+        /// <returns></returns>
+        public SkillYaKeDong GetSkillYaKeDong(int id) => SkillYaKeDongTable.Get(id);
+
 		/// <summary>
 		/// 通过任务类型获取单个任务数据
 		/// </summary>
@@ -160,13 +269,26 @@ namespace Hunting.Manager
 			=> QuestTable.DataList.FirstOrDefault(q => q.QuestType == type);
         #endregion
 
+        #region 角色相关特殊方法
+        #endregion
+
+        #region 地图相关特殊方法
+        /// <summary>
+        /// 获取地图使用的体型策略（体型比例与驻场时间）
+        /// </summary>
+        /// <param name="mapId">地图ID</param>
+        /// <returns>体型策略</returns>
+        public Spawn GetMapSpawnStrategy(int mapId)
+        => GetSpawn(GetMap(mapId).SpawnStrategyId);
+        #endregion
+
         #region 子弹相关特殊方法
         /// <summary>
         /// 获取所有特殊子弹的数据
         /// </summary>
         /// <returns></returns>
         public List<Bullet> GetAllSpecialBullets()
-        => _tables.TbBullet.DataList.Where(b => b.BulletType != EBulletType.Normal).ToList();
+        => BulletTable.DataList.Where(b => b.BulletType != EBulletType.Normal).ToList();
 
         /// <summary>
         /// 随机获取一个特殊子弹的数据
@@ -213,6 +335,25 @@ namespace Hunting.Manager
 			}
 			return null;
         }
+
+        /// <summary>
+        /// 随机派发一只物种（基于地图、体型策略、体型内物种权重）
+        /// </summary>
+        /// <param name="mapId">地图ID</param>
+        /// <returns>物种数据与驻场时间</returns>
+        public (Specie specie, float stayTime) GetRandomSpecieForMap(int mapId)
+        {
+            // 1) 体型：按地图体型策略的比例加权随机
+            EVolumeType volumeType = GetRandomVolumeTypeByStrategy(mapId);
+
+            // 2) 物种：在该体型下按权重随机选一个
+            var specie = GetRandomSpecieByMapAndVolume(mapId, volumeType);
+
+            // 3) 驻场：从地图的体型策略获取
+            float stayTime = GetStayTimeByVolumeType(mapId, volumeType);
+
+            return (specie, stayTime);
+        }
         #endregion
 
         #region 派发相关特殊方法
@@ -253,20 +394,6 @@ namespace Hunting.Manager
         => GetMapSpawnStrategy(mapId).StayTime[volumeType];
         #endregion
 
-        #region 地图相关特殊方法
-        /// <summary>
-        /// 获取地图使用的体型策略（体型比例与驻场时间）
-        /// </summary>
-        /// <param name="mapId">地图ID</param>
-        /// <returns>体型策略</returns>
-        public Spawn GetMapSpawnStrategy(int mapId)
-        {
-			// 根据地图配置找到对应的体型派发策略
-			var map = GetMap(mapId);
-			return GetSpawn(map.SpawnStrategyId);
-        }
-        #endregion
-
         #region 肉度条相关特殊方法
         /// <summary>
         /// 根据完成的肉度条数量获取默认肉度条奖励
@@ -274,42 +401,16 @@ namespace Hunting.Manager
         /// <param name="completedBars">已完成的肉度条数量</param>
         /// <returns>对应的奖励配置</returns>
         public MeatProgressReward GetMeatProgressReward(int completedBars)
-        {
-            const int defaultProgressId = 1;
-
-            var meatProgress = GetMeatProgress(defaultProgressId);
-            
-            // 将完成数量限制在合法范围内，并返回对应奖励
-            int clampedBars = Mathf.Clamp(completedBars, 1, meatProgress.MaxBar);
-            return meatProgress.RewardSteps[clampedBars];
-        }
+        => GetMeatProgress(1).RewardSteps[completedBars];
         #endregion
 
-        #region 丰收能量条相关特殊方法
+        #region 能量条相关特殊方法
+        #endregion
+
+        #region 技能相关特殊方法
         #endregion
 
         #region 任务相关特殊方法
-        #endregion
-
-        #region 业务需求方法
-        /// <summary>
-        /// 综合方法：随机派发一只物种（基于地图、体型策略、体型内物种权重）
-        /// </summary>
-        /// <param name="mapId">地图ID</param>
-        /// <returns>物种数据与驻场时间</returns>
-        public (Specie specie, float stayTime) GetRandomSpecieForMap(int mapId)
-        {
-			// 1) 体型：按地图体型策略的比例加权随机
-			EVolumeType volumeType = GetRandomVolumeTypeByStrategy(mapId);
-
-			// 2) 物种：在该体型下按权重随机选一个
-			var specie = GetRandomSpecieByMapAndVolume(mapId, volumeType);
-            
-			// 3) 驻场：从地图的体型策略获取
-			float stayTime = GetStayTimeByVolumeType(mapId, volumeType);
-
-			return (specie, stayTime);
-        }
         #endregion
     }
 }

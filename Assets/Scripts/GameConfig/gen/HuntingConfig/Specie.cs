@@ -18,11 +18,11 @@ public sealed partial class Specie : Luban.BeanBase
     {
         ID = _buf.ReadInt();
         Name = _buf.ReadString();
-        VolumeType = (EVolumeType)_buf.ReadInt();
+        VolumeType = (HuntingConfig.Enum.EVolumeType)_buf.ReadInt();
         HP = _buf.ReadFloat();
         MoveSpeed = _buf.ReadFloat();
         HitRange = _buf.ReadFloat();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DropRewards = new System.Collections.Generic.Dictionary<EDropType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { EDropType _k0;  _k0 = (EDropType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     DropRewards.Add(_k0, _v0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DropRewards = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.EDropType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.EDropType _k0;  _k0 = (HuntingConfig.Enum.EDropType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     DropRewards.Add(_k0, _v0);}}
         Comment = _buf.ReadString();
     }
 
@@ -42,7 +42,7 @@ public sealed partial class Specie : Luban.BeanBase
     /// <summary>
     /// 体型
     /// </summary>
-    public readonly EVolumeType VolumeType;
+    public readonly HuntingConfig.Enum.EVolumeType VolumeType;
     /// <summary>
     /// 血量
     /// </summary>
@@ -58,7 +58,7 @@ public sealed partial class Specie : Luban.BeanBase
     /// <summary>
     /// 掉落奖励
     /// </summary>
-    public readonly System.Collections.Generic.Dictionary<EDropType, int> DropRewards;
+    public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.EDropType, int> DropRewards;
     /// <summary>
     /// 备注
     /// </summary>

@@ -45,6 +45,34 @@ public partial class Tables
     /// 任务数值表
     /// </summary>
     public HuntingConfig.TbQuest TbQuest {get; }
+    /// <summary>
+    /// 技能数值表
+    /// </summary>
+    public HuntingConfig.Skill.TbSkill TbSkill {get; }
+    /// <summary>
+    /// 色块人技能数值表
+    /// </summary>
+    public HuntingConfig.Skill.TbSkill3KP TbSkill3KP {get; }
+    /// <summary>
+    /// 紫薇技能数值表
+    /// </summary>
+    public HuntingConfig.Skill.TbSkillZiWei TbSkillZiWei {get; }
+    /// <summary>
+    /// 大美丽技能数值表
+    /// </summary>
+    public HuntingConfig.Skill.TbSkillDaMeiLi TbSkillDaMeiLi {get; }
+    /// <summary>
+    /// 金状元技能数值表
+    /// </summary>
+    public HuntingConfig.Skill.TbSkillJinZhuangYuan TbSkillJinZhuangYuan {get; }
+    /// <summary>
+    /// 亚克东技能数值表
+    /// </summary>
+    public HuntingConfig.Skill.TbSkillYaKeDong TbSkillYaKeDong {get; }
+    /// <summary>
+    /// 幸运仪式数值表
+    /// </summary>
+    public HuntingConfig.TbLucky TbLucky {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
@@ -56,6 +84,13 @@ public partial class Tables
         TbMeatProgress = new HuntingConfig.TbMeatProgress(loader("huntingconfig_tbmeatprogress"));
         TbEnergyProgress = new HuntingConfig.TbEnergyProgress(loader("huntingconfig_tbenergyprogress"));
         TbQuest = new HuntingConfig.TbQuest(loader("huntingconfig_tbquest"));
+        TbSkill = new HuntingConfig.Skill.TbSkill(loader("huntingconfig_skill_tbskill"));
+        TbSkill3KP = new HuntingConfig.Skill.TbSkill3KP(loader("huntingconfig_skill_tbskill3kp"));
+        TbSkillZiWei = new HuntingConfig.Skill.TbSkillZiWei(loader("huntingconfig_skill_tbskillziwei"));
+        TbSkillDaMeiLi = new HuntingConfig.Skill.TbSkillDaMeiLi(loader("huntingconfig_skill_tbskilldameili"));
+        TbSkillJinZhuangYuan = new HuntingConfig.Skill.TbSkillJinZhuangYuan(loader("huntingconfig_skill_tbskilljinzhuangyuan"));
+        TbSkillYaKeDong = new HuntingConfig.Skill.TbSkillYaKeDong(loader("huntingconfig_skill_tbskillyakedong"));
+        TbLucky = new HuntingConfig.TbLucky(loader("huntingconfig_tblucky"));
         ResolveRef();
     }
     
@@ -69,6 +104,13 @@ public partial class Tables
         TbMeatProgress.ResolveRef(this);
         TbEnergyProgress.ResolveRef(this);
         TbQuest.ResolveRef(this);
+        TbSkill.ResolveRef(this);
+        TbSkill3KP.ResolveRef(this);
+        TbSkillZiWei.ResolveRef(this);
+        TbSkillDaMeiLi.ResolveRef(this);
+        TbSkillJinZhuangYuan.ResolveRef(this);
+        TbSkillYaKeDong.ResolveRef(this);
+        TbLucky.ResolveRef(this);
     }
 }
 

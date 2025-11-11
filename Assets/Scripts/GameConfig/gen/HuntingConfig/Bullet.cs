@@ -17,12 +17,12 @@ public sealed partial class Bullet : Luban.BeanBase
     public Bullet(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        BulletType = (EBulletType)_buf.ReadInt();
+        BulletType = (HuntingConfig.Enum.EBulletType)_buf.ReadInt();
         Name = _buf.ReadString();
         Duration = _buf.ReadFloat();
         BaseDamage = _buf.ReadFloat();
         FireRate = _buf.ReadInt();
-        DamageRangeType = (EBulletDamageRangeType)_buf.ReadInt();
+        DamageRangeType = (HuntingConfig.Enum.EBulletDamageRangeType)_buf.ReadInt();
         DamageRange = _buf.ReadFloat();
         MoveSpeed = _buf.ReadFloat();
         Comment = _buf.ReadString();
@@ -40,7 +40,7 @@ public sealed partial class Bullet : Luban.BeanBase
     /// <summary>
     /// 子弹类型
     /// </summary>
-    public readonly EBulletType BulletType;
+    public readonly HuntingConfig.Enum.EBulletType BulletType;
     /// <summary>
     /// 子弹显示名称
     /// </summary>
@@ -60,7 +60,7 @@ public sealed partial class Bullet : Luban.BeanBase
     /// <summary>
     /// 伤害范围类型
     /// </summary>
-    public readonly EBulletDamageRangeType DamageRangeType;
+    public readonly HuntingConfig.Enum.EBulletDamageRangeType DamageRangeType;
     /// <summary>
     /// 伤害范围
     /// </summary>

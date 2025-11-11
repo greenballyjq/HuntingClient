@@ -1,4 +1,5 @@
 ﻿using cfg;
+using cfg.HuntingConfig.Enum;
 using Hunting.Game.Animal;
 using Hunting.Game.Bullet;
 using Hunting.Manager;
