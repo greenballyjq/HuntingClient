@@ -97,14 +97,16 @@
 	1	100	5	0.5	示例
 
 
-##var	ID	BulletType	Name	Duration	BaseDamage	FireRate	DamageRangeType	DamageRange	MoveSpeed	Comment
-##type	int	EBulletType	string	float	float	int	EBulletDamageRangeType	float	float	string
-##group	c	c	c	c	c	c	c	c	c	c
-##	子弹ID	子弹类型	子弹显示名称	持续时间	基础伤害	射速（发/秒）	伤害范围类型	伤害范围	飞行速度	备注
-	1	Normal	普通子弹	-1	10	3	Single	0	40	示例
-	2	Explosive	爆炸子弹	10	25	1	AOE	2.5	20	示例
-	3	HighDamage	高伤子弹	10	50	1	Single	0	40	示例
-	4	HighSpeed	高速子弹	10	8	8	Single	0	80	示例
+##var	ID	BulletType	Name	Duration	BaseDamage	FireRate	MoveSpeed	EffectParamInt	EffectParamFloat	PrefabResourcePath	Comment
+##type	int	HuntingConfig.Enum.EBulletType	string	float	float	int	float	int	float	string	string
+##group	c	c	c	c	c	c	c	c	c	c	c
+##	子弹ID	子弹类型	子弹显示名称	持续时间	基础伤害	射速（发/秒）	飞行速度	整形效果参数	浮点型效果参数	预制体资源路径	备注
+	1	Normal	普通子弹	-1	10	3	60	-1	-1	Arts/Bullets/Bullet_Normal	示例
+	2	Explosive	爆炸子弹	10	25	1	40	-1	10	Arts/Bullets/Bullet_Explosive	EffectParamFloat:伤害范围
+	3	HighDamage	高伤子弹	10	50	1	60	-1	-1	Arts/Bullets/Bullet_HighDamage	示例
+	4	HighSpeed	高速子弹	10	8	8	100	-1	-1	Arts/Bullets/Bullet_HighSpeed	示例
+
+
 
 
 ##var	full_name	value_type	read_schema_from_file	input	index	mode	group	comment	tags	output

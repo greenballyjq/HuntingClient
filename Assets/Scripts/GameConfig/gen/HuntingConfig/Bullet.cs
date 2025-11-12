@@ -22,9 +22,10 @@ public sealed partial class Bullet : Luban.BeanBase
         Duration = _buf.ReadFloat();
         BaseDamage = _buf.ReadFloat();
         FireRate = _buf.ReadInt();
-        DamageRangeType = (HuntingConfig.Enum.EBulletDamageRangeType)_buf.ReadInt();
-        DamageRange = _buf.ReadFloat();
         MoveSpeed = _buf.ReadFloat();
+        EffectParamInt = _buf.ReadInt();
+        EffectParamFloat = _buf.ReadFloat();
+        PrefabResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -58,17 +59,21 @@ public sealed partial class Bullet : Luban.BeanBase
     /// </summary>
     public readonly int FireRate;
     /// <summary>
-    /// 伤害范围类型
-    /// </summary>
-    public readonly HuntingConfig.Enum.EBulletDamageRangeType DamageRangeType;
-    /// <summary>
-    /// 伤害范围
-    /// </summary>
-    public readonly float DamageRange;
-    /// <summary>
     /// 飞行速度
     /// </summary>
     public readonly float MoveSpeed;
+    /// <summary>
+    /// 整形效果参数
+    /// </summary>
+    public readonly int EffectParamInt;
+    /// <summary>
+    /// 浮点型效果参数
+    /// </summary>
+    public readonly float EffectParamFloat;
+    /// <summary>
+    /// 预制体资源路径
+    /// </summary>
+    public readonly string PrefabResourcePath;
     /// <summary>
     /// 备注
     /// </summary>
@@ -90,9 +95,10 @@ public sealed partial class Bullet : Luban.BeanBase
         + "Duration:" + Duration + ","
         + "BaseDamage:" + BaseDamage + ","
         + "FireRate:" + FireRate + ","
-        + "DamageRangeType:" + DamageRangeType + ","
-        + "DamageRange:" + DamageRange + ","
         + "MoveSpeed:" + MoveSpeed + ","
+        + "EffectParamInt:" + EffectParamInt + ","
+        + "EffectParamFloat:" + EffectParamFloat + ","
+        + "PrefabResourcePath:" + PrefabResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

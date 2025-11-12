@@ -8,12 +8,7 @@ namespace Tool.Extensions
     /// </summary>
     public static class BulletConfigExtensions
     {
-        /// <summary>
-        /// 是否是范围伤害
-        /// </summary>
-        public static bool IsAOE(this cfg.HuntingConfig.Bullet bullet)
-            => bullet.DamageRangeType == EBulletDamageRangeType.AOE;
-
+        
     }
 }
 

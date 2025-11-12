@@ -1,11 +1,11 @@
 ﻿using cfg;
 using cfg.HuntingConfig.Enum;
+using Cysharp.Threading.Tasks;
 using Hunting.Game.Animal;
-using Hunting.Game.Bullet;
 using Hunting.Manager;
 using UnityEngine;
 
-namespace Hunting.Game.Weapon
+namespace Hunting.Game.Weapons
 {
     /// <summary>
     /// 武器实现
@@ -121,7 +121,7 @@ namespace Hunting.Game.Weapon
             // 检查射击间隔
             if (Time.time - _lastFireTime >= _fireInterval)
             {
-                SpawnBullet();
+                SpawnBulletAsync().Forget();
                 _lastFireTime = Time.time;
 
                 _audioSource.clip = fireAudioClip;
@@ -132,48 +132,12 @@ namespace Hunting.Game.Weapon
         /// <summary>
         /// 生成并初始化子弹
         /// </summary>
-        private void SpawnBullet()
+        private async UniTaskVoid SpawnBulletAsync()
         {
-            // 从配置管理器获取子弹数据
-            var bulletConfig = HuntingGameConfigManager.Instance.GetBullet(currentBulletId);
-            if (bulletConfig == null) return;
+            var bulletManager = GameServiceLocator.GetGameManager<BulletManager>();
+            Transform muzzlePoint = weaponVisual.MuzzlePoint;
 
-            // 根据子弹类型获取预制体名称
-            string bulletName = GetBulletPrefabName(bulletConfig.BulletType);
-            // 从Resources加载子弹预制体
-            GameObject bulletPrefab = Resources.Load<GameObject>($"Arts/Bullets/{bulletName}");
-
-            if (bulletPrefab == null)
-            {
-                Debug.LogError($"子弹预制体不存在: {bulletName}");
-                return;
-            }
-
-            // 实例化子弹对象
-            Transform muzzlePoint = weaponVisual.MuzzlePoint; 
-            GameObject bulletObj = Instantiate(bulletPrefab, muzzlePoint.position, muzzlePoint.rotation);
-            BulletBehavior bullet = bulletObj.GetComponent<BulletBehavior>();
-
-            // 初始化子弹行为
-            if (bullet != null)
-            {
-                bullet.Initialize(bulletConfig, muzzlePoint.position, muzzlePoint.forward);
-            }
-        }
-        
-        /// <summary>
-        /// 根据子弹类型枚举获取预制体资源名称
-        /// </summary>
-        private string GetBulletPrefabName(EBulletType bulletType)
-        {
-            return bulletType switch
-            {
-                EBulletType.Normal => "Bullet_Normal",
-                EBulletType.Explosive => "Bullet_Explosive",
-                EBulletType.HighDamage => "Bullet_HighDamage",
-                EBulletType.HighSpeed => "Bullet_HighSpeed",
-                _ => "Bullet_Normal"
-            };
+            await bulletManager.SpawnBullet(currentBulletId, muzzlePoint.position, muzzlePoint.forward, gameObject);
         }
         
         /// <summary>

@@ -217,13 +217,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            // TODO: 将来替换为 RoundEvents.RoundStarted / RoundEvents.RoundEnded
-            Event.AddListener("GameStarted", OnGameStarted);
-            Event.AddListener("GameEnded", OnGameEnded);
-            // ↓
             Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
             Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
-
             Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
@@ -232,38 +227,15 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            // TODO: 将来替换为 RoundEvents.RoundStarted / RoundEvents.RoundEnded
-            Event.RemoveListener("GameStarted", OnGameStarted);
-            Event.RemoveListener("GameEnded", OnGameEnded);
-            // ↓
             Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
             Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
-
             Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        }
-
-        /// <summary>
-        /// 游戏开始回调 TODO: 将来将来替换为 RoundEvents.RoundStarted / RoundEvents.RoundEnded时删掉
-        /// </summary>
-        private void OnGameStarted()
-        {
-            ResetProgress();
-            _isAutoAccumulating = true;
-        }
-
-        /// <summary>
-        /// 游戏结束回调 TODO: 将来将来替换为 RoundEvents.RoundStarted / RoundEvents.RoundEnded时删掉
-        /// </summary>
-        private void OnGameEnded()
-        {
-            _isAutoAccumulating = false;
-            ResetProgress();
         }
 
         /// <summary>
         /// 单局开始回调
         /// </summary>
-        private void OnRoundStarted()
+        private void OnRoundStarted(RoundStartedEventArgs args)
         {
             ResetProgress();
             _isAutoAccumulating = true;
@@ -272,7 +244,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 单局结束回调
         /// </summary>
-        private void OnRoundEnded()
+        private void OnRoundEnded(RoundEndedEventArgs args)
         {
             _isAutoAccumulating = false;
             ResetProgress();

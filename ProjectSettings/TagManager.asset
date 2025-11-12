@@ -6,7 +6,7 @@ TagManager:
   tags:
   - Obstacle
   - Animal
-  - AI
+  - Bullet
   layers:
   - Default
   - TransparentFX

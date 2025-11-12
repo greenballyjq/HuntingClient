@@ -6,23 +6,7 @@ using UnityEngine.InputSystem;
 namespace Hunting.Game
 {
     public class PlayerControl : MonoSingleton<PlayerControl>
-    {
-        #region 测试用
-
-        private bool initialized;
-
-        private async UniTask Init()
-        {
-            // 等待 HuntingGameConfigManager 初始化完成
-            while (HuntingGameConfigManager.Instance == null || !HuntingGameConfigManager.Instance.Initialized)
-            {
-                await UniTask.Delay(10);
-            }
-            initialized = true;
-        }
-
-        #endregion
-        
+    {     
         #region 输入系统相关
         /// <summary>
         /// 输入系统
@@ -107,9 +91,6 @@ namespace Hunting.Game
 
         private void Update()
         {
-            // 测试用
-            if (!initialized) return;
-            
             // 检查操作区域
             CheckValidArea();
         }

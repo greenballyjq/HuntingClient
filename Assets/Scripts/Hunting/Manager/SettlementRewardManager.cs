@@ -1,5 +1,4 @@
-﻿using cfg;
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -215,13 +214,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            // TODO: 将来替换为 RoundEvents.RoundStarted / RoundEvents.RoundEnded
-            Event.AddListener("GameStarted", OnGameStarted);
-            Event.AddListener("GameEnded", OnGameEnded);
-            // ↓
             Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
             Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
-
             Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
             Event.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
             Event.AddListener(QuestEvents.QuestCompleted, OnQuestCompleted);
@@ -232,38 +226,17 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            // TODO: 将来替换为 RoundEvents.RoundStarted / RoundEvents.RoundEnded
-            Event.RemoveListener("GameStarted", OnGameStarted);
-            Event.RemoveListener("GameEnded", OnGameEnded);
-            // ↓
             Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
             Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
-
             Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
             Event.RemoveListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
             Event.RemoveListener(QuestEvents.QuestCompleted, OnQuestCompleted);
         }
 
         /// <summary>
-        /// 游戏开始回调
-        /// </summary>
-        private void OnGameStarted()
-        {
-            ClearRoundData();
-        }
-
-        /// <summary>
-        /// 游戏结束回调
-        /// </summary>
-        private void OnGameEnded()
-        {
-            ClearRoundData();
-        }
-
-        /// <summary>
         /// 本局开始回调
         /// </summary>
-        private void OnRoundStarted()
+        private void OnRoundStarted(RoundStartedEventArgs args)
         {
             ClearRoundData();
         }
@@ -271,7 +244,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 本局结束回调
         /// </summary>
-        private void OnRoundEnded()
+        private void OnRoundEnded(RoundEndedEventArgs args)
         {
             ClearRoundData();
         }

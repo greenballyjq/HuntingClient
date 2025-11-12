@@ -270,6 +270,19 @@ namespace Hunting.Manager
         #endregion
 
         #region 角色相关特殊方法
+        /// <summary>
+        /// 获取默认角色（小蓝人）
+        /// </summary>
+        /// <returns>默认角色配置</returns>
+        public Role GetDefaultRole()
+        => GetRole(ERoleType.Bule);
+
+        /// <summary>
+        /// 随机获取一个角色
+        /// </summary>
+        /// <returns>随机角色配置</returns>
+        public Role GetRandomRole()
+        => RoleTable.DataList[Random.Range(0, RoleTable.DataList.Count)];
         #endregion
 
         #region 地图相关特殊方法
@@ -280,6 +293,13 @@ namespace Hunting.Manager
         /// <returns>体型策略</returns>
         public Spawn GetMapSpawnStrategy(int mapId)
         => GetSpawn(GetMap(mapId).SpawnStrategyId);
+
+        /// <summary>
+        /// 随机获取一个地图
+        /// </summary>
+        /// <returns>随机地图配置</returns>
+        public Map GetRandomMap()
+        => MapTable.DataList[Random.Range(0, MapTable.DataList.Count)];
         #endregion
 
         #region 子弹相关特殊方法
@@ -401,7 +421,12 @@ namespace Hunting.Manager
         /// <param name="completedBars">已完成的肉度条数量</param>
         /// <returns>对应的奖励配置</returns>
         public MeatProgressReward GetMeatProgressReward(int completedBars)
-        => GetMeatProgress(1).RewardSteps[completedBars];
+        {
+            if (completedBars == 0)
+                return null;
+            return GetMeatProgress(1).RewardSteps[completedBars];
+        }
+        
         #endregion
 
         #region 能量条相关特殊方法

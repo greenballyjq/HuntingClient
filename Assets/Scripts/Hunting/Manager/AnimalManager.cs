@@ -12,14 +12,9 @@ namespace Hunting.Manager
     public class AnimalManager : BaseGameManager
     {
         /// <summary>
-        /// 动物列表
-        /// </summary>
-        private readonly List<AnimalBehavior> _animals = new List<AnimalBehavior>();
-
-        /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Events => GameServiceLocator.Event;
+        private EventManager Event => GameServiceLocator.Event;
 
         /// <summary>
         /// 对象池管理器
@@ -37,61 +32,21 @@ namespace Hunting.Manager
         public override void Release()
         {
             UnregisterEvents();
-            ClearAll();
             Debug.Log("[AnimalManager] 已释放");
         }
 
-        #region 公共方法
-        /// <summary>
-        /// 获取所有动物
-        /// </summary>
-        public List<AnimalBehavior> GetAllAnimals() => _animals;
-
-        /// <summary>
-        /// 批量暂停/恢复
-        /// </summary>
-        public void SetAllPaused(bool paused)
-        {
-
-        }
-
-        /// <summary>
-        /// 清空并回收全部动物
-        /// </summary>
-        public void ClearAll()
-        {
-            for (int i = _animals.Count - 1; i >= 0; i--)
-            {
-                var a = _animals[i];
-                if (a != null)
-                {
-                    // 回收到对象池
-                    Pool.Push(a.gameObject);
-                }
-            }
-            _animals.Clear();
-        }
-        #endregion
-
         #region 私有方法
         /// <summary>
-        /// 回收指定动物到对象池并从管理列表移除
+        /// 回收动物到对象池并从管理列表移除
         /// </summary>
-        /// <param name="animal"></param>
-        private void ReturnAnimal(AnimalBehavior animal)
+        private void RecycleAnimal(AnimalBehavior animal)
         {
-            if (animal == null)
-                return;
-
-            _animals.Remove(animal);
             Pool.Push(animal.gameObject);
         }
 
         /// <summary>
         /// 根据物种配置生成预制体路径
         /// </summary>
-        /// <param name="specie"></param>
-        /// <returns></returns>
         private string GetPrefabPath(Specie specie)
         {
             return $"Arts/Animals/Animal_{specie.VolumeType}_{specie.ID}";
@@ -104,9 +59,9 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Events.AddListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
-            Events.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
-            Events.AddListener(AnimalEvents.AnimalFled, OnAnimalFled);
+            Event.AddListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
+            Event.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
+            Event.AddListener(AnimalEvents.AnimalFled, OnAnimalFled);
         }
 
         /// <summary>
@@ -114,9 +69,9 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Events.RemoveListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
-            Events.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
-            Events.RemoveListener(AnimalEvents.AnimalFled, OnAnimalFled);
+            Event.RemoveListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
+            Event.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
+            Event.RemoveListener(AnimalEvents.AnimalFled, OnAnimalFled);
         }
         
         /// <summary>
@@ -133,11 +88,6 @@ namespace Hunting.Manager
                 return;
             }
 
-            // 设置初始位置与方向
-            go.transform.position = args.Position;
-            if (args.Direction != Vector3.zero)
-                go.transform.rotation = Quaternion.LookRotation(args.Direction);
-
             // 绑定并初始化动物行为组件
             var animal = go.GetComponent<AnimalBehavior>();
             if (animal == null)
@@ -147,8 +97,12 @@ namespace Hunting.Manager
                 return;
             }
 
+            // 设置派发位置与派发方向
+            go.transform.position = args.Position;
+            if (args.Direction != Vector3.zero)
+                go.transform.rotation = Quaternion.LookRotation(args.Direction);
+
             animal.Init(args.SpecieData, args.StayTime, args.Direction);
-            _animals.Add(animal);
 
             // 对外通知动物已生成
             TriggerAnimalSpawned(new AnimalSpawnedEventArgs
@@ -162,14 +116,6 @@ namespace Hunting.Manager
                 StayTime = args.StayTime
             });
         }
- 
-        /// <summary>
-        /// 触发动物生成完成事件
-        /// </summary>
-        private void TriggerAnimalSpawned(AnimalSpawnedEventArgs args)
-        {
-            Events.Trigger(AnimalEvents.AnimalSpawned, args);
-        }
 
         /// <summary>
         /// 动物死亡事件回调
@@ -180,7 +126,7 @@ namespace Hunting.Manager
                 return;
 
             // 回收动物到对象池
-            ReturnAnimal(args.Animal);
+            RecycleAnimal(args.Animal);
         }
 
         /// <summary>
@@ -192,7 +138,15 @@ namespace Hunting.Manager
                 return;
 
             // 回收动物到对象池
-            ReturnAnimal(args.Animal);
+            RecycleAnimal(args.Animal);
+        }
+
+        /// <summary>
+        /// 触发动物生成完成事件
+        /// </summary>
+        private void TriggerAnimalSpawned(AnimalSpawnedEventArgs args)
+        {
+            Event.Trigger(AnimalEvents.AnimalSpawned, args);
         }
         #endregion     
     }

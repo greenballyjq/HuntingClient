@@ -1,6 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Hunting.Game.Weapon
+namespace Hunting.Game.Weapons
 {
     /// <summary>
     /// 武器视觉效果

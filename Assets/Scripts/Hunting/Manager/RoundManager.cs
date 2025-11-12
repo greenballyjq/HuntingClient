@@ -1,6 +1,9 @@
 ﻿using cfg.HuntingConfig.Enum;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core;
+using Hunting.UI;
 using UnityEngine;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 namespace Hunting.Manager
 {
@@ -65,6 +68,11 @@ namespace Hunting.Manager
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
+        /// <summary>
+        /// UI管理器
+        /// </summary>
+        private UIManager UI => GameServiceLocator.UI;
+
         public override void Init()
         {
             Debug.Log("[RoundManager] 初始化");
@@ -77,6 +85,7 @@ namespace Hunting.Manager
         public override void Release()
         {
             Debug.Log("[RoundManager] 释放");
+            CloseGameplayUI();
             ResetState();
         }
 
@@ -107,13 +116,14 @@ namespace Hunting.Manager
             IsPaused = false;
 
             Debug.Log($"[RoundManager] 单局开始，角色:{CurrentContext.RoleId}，地图:{CurrentContext.MapId}");
+            OpenGameplayUIAsync().Forget();
+
+            // 调用局内管理器执行开局初始化（刷怪、重置进度、应用增益等）
             TriggerRoundStarted(new RoundStartedEventArgs
             {
                 Sender = this,
                 Context = CurrentContext
             });
-
-            // TODO: 调用局内管理器执行开局初始化（刷怪、重置进度、应用增益等）
         }
 
         /// <summary>
@@ -126,10 +136,10 @@ namespace Hunting.Manager
 
             IsPaused = true;
 
-            Debug.Log("[RoundManager] 单局已暂停");
+            // 通知局内管理器暂停运行（停止AI、暂停计时器等）
             Event.Trigger(RoundEvents.RoundPaused);
 
-            // TODO: 通知局内管理器暂停运行（停止AI、暂停计时器等）
+            Debug.Log("[RoundManager] 单局已暂停");
         }
 
         /// <summary>
@@ -142,10 +152,10 @@ namespace Hunting.Manager
 
             IsPaused = false;
 
-            Debug.Log("[RoundManager] 单局已恢复");
+            // 通知局内管理器恢复运行（恢复AI、恢复计时器等）
             Event.Trigger(RoundEvents.RoundResumed);
 
-            // TODO: 通知局内管理器恢复运行（恢复AI、恢复计时器等）
+            Debug.Log("[RoundManager] 单局已恢复");
         }
 
         /// <summary>
@@ -156,7 +166,7 @@ namespace Hunting.Manager
             if (!IsRoundRunning)
                 return;
 
-            Debug.Log($"[RoundManager] 单局结束，是否完成:{isCompleted}");
+            // 通知管理器执行收尾工作（生成结算、清理对象等）
             TriggerRoundEnded(new RoundEndedEventArgs
             {
                 Sender = this,
@@ -164,8 +174,10 @@ namespace Hunting.Manager
                 IsCompleted = isCompleted
             });
 
-            // TODO: 通知管理器执行收尾工作（生成结算、清理对象等）
+            CloseGameplayUI();
             ResetState();
+
+            Debug.Log($"[RoundManager] 单局结束，是否完成:{isCompleted}");
         }
         #endregion
 
@@ -195,6 +207,25 @@ namespace Hunting.Manager
             _nextContext = null;
             IsRoundRunning = false;
             IsPaused = false;
+        }
+        #endregion
+
+        #region TODO: 待转移到专门调度UI的类中
+        /// <summary>
+        /// 打开游玩界面
+        /// </summary>
+        private async UniTask OpenGameplayUIAsync()
+        {
+            await UI.OpenUIAsync<UIHuntingGameplay>("UIHuntingGameplay", UIManager.UILayer.Game);
+        }
+
+        /// <summary>
+        /// 关闭游玩界面
+        /// </summary>
+        private void CloseGameplayUI()
+        {
+            if (UI.IsUIOpened("UIHuntingGameplay"))
+                UI.CloseUI("UIHuntingGameplay");
         }
         #endregion
     }

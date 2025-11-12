@@ -112,10 +112,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener("GameStarted", OnGameStarted);
-            Event.AddListener("GamePaused", OnGamePaused);
-            Event.AddListener("GameResumed", OnGameResumed);
-            Event.AddListener("GameEnded", OnGameEnded);
+            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -123,41 +121,23 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener("GameStarted", OnGameStarted);
-            Event.RemoveListener("GamePaused", OnGamePaused);
-            Event.RemoveListener("GameResumed", OnGameResumed);
-            Event.RemoveListener("GameEnded", OnGameEnded);
+            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
-        /// 游戏开始回调
+        /// 本局开始回调
         /// </summary>
-        private void OnGameStarted()
+        private void OnRoundStarted(RoundStartedEventArgs args)
         {
             CollectSpawners();
             SetAllActive(true);
         }
 
         /// <summary>
-        /// 游戏暂停回调
+        /// 本局结束回调
         /// </summary>
-        private void OnGamePaused()
-        {
-            SetAllActive(false);
-        }
-
-        /// <summary>
-        /// 游戏恢复回调
-        /// </summary>
-        private void OnGameResumed()
-        {
-            SetAllActive(true);
-        }
-
-        /// <summary>
-        /// 游戏结束回调
-        /// </summary>
-        private void OnGameEnded()
+        private void OnRoundEnded(RoundEndedEventArgs args)
         {
             SetAllActive(false);
         }
