@@ -41,7 +41,7 @@ namespace Hunting.Manager
     public sealed class RoundManager : BaseGameManager
     {
         /// <summary>
-        /// 待启动的单局上下文
+        /// 待启动的下一局的上下文
         /// </summary>
         private RoundContext _nextContext;
 

@@ -48,16 +48,19 @@
 	1	Small:0.25|Medium:0.35|Large:0.3|Special:0.1	Small:8|Medium:12|Large:15|Special:10	示例
 	2	Small:0.25|Medium:0.35|Large:0.3|Special:0.1	Small:6|Medium:15|Large:20|Special:15	示例
 
-##var	ID	RoleType	RoleProfile	Traits	Personality	BackgroundStory	LinkedSkillId	LinkedMapId	RoleImageResourcePath	Comment
-##type	int	HuntingConfig.Enum.ERoleType	HuntingConfig.Bean.RoleProfile	string	string	string	int	int	string	string
-##group	c	c	c	c	c	c	c	c	c	c
-##	角色ID	角色类型	角色档案	特征描述	个性描述	背景故事	关联技能ID	关联地图ID	角色图片资源路径	注释
-	1	Bule	小蓝人,小蓝星,170,男	小蓝人的特征描述	小蓝人的个性描述	小蓝人的背景故事	1	-1	/	示例
-	2	Red	小红人,小红星,170,女	小红人的特征描述	小红人的个性描述	小红人的背景故事	2	-1	/	示例
-	3	ZiWei	紫薇,紫薇家乡,170,女	紫薇的特征描述	紫薇的个性描述	紫薇的背景故事	3	1	/	示例
-	4	DaMeiLi	大美丽,大美丽家乡,170,女	大美丽的特征描述	大美丽的个性描述	大美丽的背景故事	4	2	/	示例
-	5	JinZhuangYuan	金状元,金装元家乡,170,男	金状元的特征描述	金状元的个性描述	金状元的背景故事	5	3	/	示例
-	6	YaKeDong	亚克东,亚克东家乡,170,男	亚克东的特征描述	亚克东的个性描述	亚克东的背景故事	6	4	/	示例
+| ID     | RoleType                     | RoleProfile                    | LinkedSkillId | LinkedMapId | RoleImageResourcePath | Comment          |                  |                  |      |      |                                    |      |
+| ------ | ---------------------------- | ------------------------------ | ------------- | ----------- | --------------------- | ---------------- | ---------------- | ---------------- | ---- | ---- | ---------------------------------- | ---- |
+| int    | HuntingConfig.Enum.ERoleType | HuntingConfig.Bean.RoleProfile | int           | int         | string                | string           |                  |                  |      |      |                                    |      |
+| c      | c                            | c                              | c             | c           | c                     | c                |                  |                  |      |      |                                    |      |
+| 角色ID | 角色类型                     | 角色档案                       | 关联技能ID    | 关联地图ID  | 角色图片资源路径      | 注释             |                  |                  |      |      |                                    |      |
+| 1      | Bule                         | 小蓝人                         | 小蓝星        | 170         | 男                    | 小蓝人的特征描述 | 小蓝人的个性描述 | 小蓝人的背景故事 | 1    | -1   | Arts/UI/Prepare/Role_Bule          | 示例 |
+| 2      | Red                          | 小红人                         | 小红星        | 170         | 女                    | 小红人的特征描述 | 小红人的个性描述 | 小红人的背景故事 | 2    | -1   | Arts/UI/Prepare/Role_Red           | 示例 |
+| 3      | ZiWei                        | 紫薇                           | 紫薇家乡      | 170         | 女                    | 紫薇的特征描述   | 紫薇的个性描述   | 紫薇的背景故事   | 3    | 1    | Arts/UI/Prepare/Role_ZiWei         | 示例 |
+| 4      | DaMeiLi                      | 大美丽                         | 大美丽家乡    | 170         | 女                    | 大美丽的特征描述 | 大美丽的个性描述 | 大美丽的背景故事 | 4    | 2    | Arts/UI/Prepare/Role_DaMeiLi       | 示例 |
+| 5      | JinZhuangYuan                | 金状元                         | 金状元家乡    | 170         | 男                    | 金状元的特征描述 | 金状元的个性描述 | 金状元的背景故事 | 5    | 3    | Arts/UI/Prepare/Role_JinZhuangYuan | 示例 |
+| 6      | YaKeDong                     | 亚克东                         | 亚克东家乡    | 170         | 男                    | 亚克东的特征描述 | 亚克东的个性描述 | 亚克东的背景故事 | 6    | 4    | Arts/UI/Prepare/Role_YaKeDong      | 示例 |
+
+
 
 ##var	ID	QuestType	TargetRange	Duration	RewardRange	Comment
 ##type	int	HuntingConfig.Enum.EQuestType	(array#sep=,),int	float	(array#sep=,),int	string
@@ -203,18 +206,21 @@
 |                               | DamageBoost   | 伤害提升     | 4    |              |      |      |        |      |
 |                               | HighTierSpawn | 高阶派发加成 | 5    |              |      |      |        |      |
 
-##var	full_name	parent	valueType	sep	alias	comment	group	tags	*fields						
-##var									name	alias	type	group	comment	tags	variants
-
-##	全名(包含模块和名字)			分割符					字段名	字段别名	类型	分组	注释		字段变体
-	HuntingConfig.Bean.SpecieWeight			,					SpecieId		int		物种ID		
-									Weight		float		出现权重		
-	HuntingConfig.Bean.MeatProgressReward			,					Coin		int		3币奖励		
-									Mastery		int		熟练度奖励		
-	HuntingConfig.Bean.RoleProfile			,					Name		string		角色名称		
-									Birthplace		string		出生地		
-									Height		float		身高		
-									Gender		string		性别		
+| ##var | full_name                             | parent | valueType | sep    | alias | comment | group | tags            | *fields  |          |        |            |          |      |          |
+| ----- | ------------------------------------- | ------ | --------- | ------ | ----- | ------- | ----- | --------------- | -------- | -------- | ------ | ---------- | -------- | ---- | -------- |
+| ##var |                                       |        |           |        |       |         |       |                 | name     | alias    | type   | group      | comment  | tags | variants |
+| ##    | 全名(包含模块和名字)                  |        |           | 分割符 |       |         |       |                 | 字段名   | 字段别名 | 类型   | 分组       | 注释     |      | 字段变体 |
+|       | HuntingConfig.Bean.SpecieWeight       |        |           | ,      |       |         |       |                 | SpecieId |          | int    |            | 物种ID   |      |          |
+|       |                                       |        |           |        |       |         |       | Weight          |          | float    |        | 出现权重   |          |      |          |
+|       | HuntingConfig.Bean.MeatProgressReward |        |           | ,      |       |         |       |                 | Coin     |          | int    |            | 3币奖励  |      |          |
+|       |                                       |        |           |        |       |         |       | Mastery         |          | int      |        | 熟练度奖励 |          |      |          |
+|       | HuntingConfig.Bean.RoleProfile        |        |           |        |       |         |       |                 | Name     |          | string |            | 角色名称 |      |          |
+|       |                                       |        |           |        |       |         |       | Birthplace      |          | string   |        | 出生地     |          |      |          |
+|       |                                       |        |           |        |       |         |       | Height          |          | float    |        | 身高       |          |      |          |
+|       |                                       |        |           |        |       |         |       | Gender          |          | string   |        | 性别       |          |      |          |
+|       |                                       |        |           |        |       |         |       | Traits          |          | string   |        | 特征描述   |          |      |          |
+|       |                                       |        |           |        |       |         |       | Personality     |          | string   |        | 个性描述   |          |      |          |
+|       |                                       |        |           |        |       |         |       | BackgroundStory |          | string   |        | 背景故事   |          |      |          |
 
 | ##var   | ID     | LuckyType                     | Name         | Description             | EffectParamFloat | EffectParamInt | IconResourcePath | Comment                                             |
 | ------- | ------ | ----------------------------- | ------------ | ----------------------- | ---------------- | -------------- | ---------------- | --------------------------------------------------- |

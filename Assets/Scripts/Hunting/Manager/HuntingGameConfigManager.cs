@@ -270,26 +270,6 @@ namespace Hunting.Manager
         #endregion
 
         #region 角色相关特殊方法
-        /// <summary>
-        /// 获取默认角色（小蓝人）
-        /// </summary>
-        public Role GetDefaultRole()
-        {
-            var defaultRole = RoleTable.DataList.FirstOrDefault(r => r.RoleType == ERoleType.Bule);
-            return defaultRole ?? RoleTable.DataList.FirstOrDefault();
-        }
-
-        /// <summary>
-        /// 随机获取一个角色
-        /// </summary>
-        public Role GetRandomRole()
-        {
-            if (RoleTable.DataList.Count == 0)
-                return null;
-
-            int index = Random.Range(0, RoleTable.DataList.Count);
-            return RoleTable.DataList[index];
-        }
         #endregion
 
         #region 地图相关特殊方法
@@ -300,18 +280,6 @@ namespace Hunting.Manager
         /// <returns>体型策略</returns>
         public Spawn GetMapSpawnStrategy(int mapId)
         => GetSpawn(GetMap(mapId).SpawnStrategyId);
-
-        /// <summary>
-        /// 随机获取一个地图
-        /// </summary>
-        public Map GetRandomMap()
-        {
-            if (MapTable.DataList.Count == 0)
-                return null;
-
-            int index = Random.Range(0, MapTable.DataList.Count);
-            return MapTable.DataList[index];
-        }
         #endregion
 
         #region 子弹相关特殊方法

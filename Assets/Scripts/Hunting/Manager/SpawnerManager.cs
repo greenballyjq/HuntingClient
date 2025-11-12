@@ -20,25 +20,16 @@ namespace Hunting.Manager
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
-        /// <summary>
-        /// 初始化管理器
-        /// </summary>
         public override void Init()
         {
             RegisterEvents();
             Debug.Log("[SpecieSpawnManager] 初始化完成");
         }
 
-        /// <summary>
-        /// 每帧更新
-        /// </summary>
         public override void Update()
         {
         }
 
-        /// <summary>
-        /// 释放管理器
-        /// </summary>
         public override void Release()
         {
             UnregisterEvents();
