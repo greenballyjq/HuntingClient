@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using cfg;
 using cfg.HuntingConfig;
 using Hunting.Game.Animal;
@@ -35,6 +36,49 @@ namespace Hunting.Manager
             Debug.Log("[AnimalManager] 已释放");
         }
 
+        #region 公共方法
+        /// <summary>
+        /// 生成动物
+        /// </summary>
+        public async UniTask<AnimalBehavior> SpawnAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, float stayTime, Spawner spawner = null)
+        {
+            var go = await Pool.PullAsync(specieData.PrefabResourcePath);
+            if (go == null)
+            {
+                Debug.LogError($"[AnimalManager] 从对象池获取失败: {specieData.PrefabResourcePath}");
+                return null;
+            }
+
+            var animal = go.GetComponent<AnimalBehavior>();
+            if (animal == null)
+            {
+                Debug.LogError("[AnimalManager] 预制体缺少 AnimalBehavior 组件");
+                Pool.Push(go);
+                return null;
+            }
+
+            go.transform.position = position;
+            if (direction != Vector3.zero)
+                go.transform.rotation = Quaternion.LookRotation(direction);
+
+            animal.Init(specieData, stayTime, direction);
+
+            TriggerAnimalSpawned(new AnimalSpawnedEventArgs
+            {
+                Sender = this,
+                Spawner = spawner,
+                Animal = animal,
+                SpecieData = specieData,
+                Position = position,
+                Direction = direction,
+                StayTime = stayTime
+            });
+
+            return animal;
+        }
+
+        #endregion
+
         #region 私有方法
         /// <summary>
         /// 回收动物到对象池并从管理列表移除
@@ -42,14 +86,6 @@ namespace Hunting.Manager
         private void RecycleAnimal(AnimalBehavior animal)
         {
             Pool.Push(animal.gameObject);
-        }
-
-        /// <summary>
-        /// 根据物种配置生成预制体路径
-        /// </summary>
-        private string GetPrefabPath(Specie specie)
-        {
-            return $"Arts/Animals/Animal_{specie.VolumeType}_{specie.ID}";
         }
         #endregion
 
@@ -80,41 +116,7 @@ namespace Hunting.Manager
         private async void OnSpeciesSpawned(SpeciesSpawnEventArgs args)
         {
             // 从对象池获取对应物种的预制体
-            string prefabPath = GetPrefabPath(args.SpecieData);
-            var go = await Pool.PullAsync(prefabPath);
-            if (go == null)
-            {
-                Debug.LogError($"[AnimalManager] 从对象池获取失败: {prefabPath}");
-                return;
-            }
-
-            // 绑定并初始化动物行为组件
-            var animal = go.GetComponent<AnimalBehavior>();
-            if (animal == null)
-            {
-                Debug.LogError("[AnimalManager] 预制体缺少 AnimalBehavior 组件");
-                Pool.Push(go);
-                return;
-            }
-
-            // 设置派发位置与派发方向
-            go.transform.position = args.Position;
-            if (args.Direction != Vector3.zero)
-                go.transform.rotation = Quaternion.LookRotation(args.Direction);
-
-            animal.Init(args.SpecieData, args.StayTime, args.Direction);
-
-            // 对外通知动物已生成
-            TriggerAnimalSpawned(new AnimalSpawnedEventArgs
-            {
-                Sender = this,
-                Spawner = args.Spawner,
-                Animal = animal,
-                SpecieData = args.SpecieData,
-                Position = args.Position,
-                Direction = args.Direction,
-                StayTime = args.StayTime
-            });
+            await SpawnAnimalAsync(args.SpecieData, args.Position, args.Direction, args.StayTime, args.Spawner);
         }
 
         /// <summary>

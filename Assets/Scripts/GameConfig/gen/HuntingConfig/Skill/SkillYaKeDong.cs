@@ -17,8 +17,8 @@ public sealed partial class SkillYaKeDong : Luban.BeanBase
     public SkillYaKeDong(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        MinSpawnCount = _buf.ReadInt();
-        MaxSpawnCount = _buf.ReadInt();
+        SpawnAnimalID = _buf.ReadInt();
+        {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SpawnCount = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); SpawnCount[__index0] = __e0;}}
         Comment = _buf.ReadString();
     }
 
@@ -32,13 +32,13 @@ public sealed partial class SkillYaKeDong : Luban.BeanBase
     /// </summary>
     public readonly int ID;
     /// <summary>
-    /// 最少生成数量
+    /// 派发动物ID
     /// </summary>
-    public readonly int MinSpawnCount;
+    public readonly int SpawnAnimalID;
     /// <summary>
-    /// 最多生成数量
+    /// 生成数量
     /// </summary>
-    public readonly int MaxSpawnCount;
+    public readonly int[] SpawnCount;
     /// <summary>
     /// 备注
     /// </summary>
@@ -55,8 +55,8 @@ public sealed partial class SkillYaKeDong : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
-        + "MinSpawnCount:" + MinSpawnCount + ","
-        + "MaxSpawnCount:" + MaxSpawnCount + ","
+        + "SpawnAnimalID:" + SpawnAnimalID + ","
+        + "SpawnCount:" + Luban.StringUtil.CollectionToString(SpawnCount) + ","
         + "Comment:" + Comment + ","
         + "}";
     }

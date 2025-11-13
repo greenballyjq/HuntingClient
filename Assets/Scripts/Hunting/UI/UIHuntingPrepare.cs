@@ -145,7 +145,7 @@ namespace Hunting.UI
         {
             // 默认角色选小蓝人
             _selectedRole = Config.GetDefaultRole();
-            
+
             // 进入界面随机地图
             _selectedMap = Config.GetRandomMap();
 
@@ -239,6 +239,7 @@ namespace Hunting.UI
         private void OnClickSelectFemaleRole()
         {
             var role = Config.GetRole(ERoleType.Red);
+  
             UpdateRoleDisplay(role.ID);
             Debug.Log($"[UIHuntingPrepare] 选择角色 {role.RoleProfile.Name}");
         }

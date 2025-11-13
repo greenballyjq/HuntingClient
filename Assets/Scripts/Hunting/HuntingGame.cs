@@ -30,6 +30,7 @@ namespace Hunting
             RegisterManager<MeatProgressManager>();
             RegisterManager<EnergyProgressManager>();
             RegisterManager<SettlementRewardManager>();
+            RegisterManager<SkillManager>();
             Debug.Log("[HuntingGame] 注册游戏业务管理器完成");
         }
 

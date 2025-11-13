@@ -9,7 +9,7 @@ namespace Hunting.Game.Bullets
     /// <summary>
     /// 子弹行为
     /// </summary>
-    public class BulletBehavior : MonoBehaviour, IPoolable
+    public class BulletBehavior : MonoBehaviour
     {
         /// <summary>
         /// 子弹数据
@@ -65,9 +65,7 @@ namespace Hunting.Game.Bullets
         /// <param name="owner">发射者</param>
         public void Init(Bullet bulletData, Vector3 startPosition, Vector3 direction, GameObject owner)
         {
-            Debug.LogWarning (bulletData);
-
-            // 初始化数据
+             // 初始化数据
             _bulletData = bulletData;
             _moveDirection = direction.normalized;
             _lifeTimer = MaxLifetime;
@@ -161,26 +159,7 @@ namespace Hunting.Game.Bullets
         }
         #endregion
 
-        public void OnPull()
-        {
-
-        }
-
-        public void OnPush()
-        {
-            _bulletData = null;
-            _bulletEffectContext = null;
-            _extraEffect = null;
-            _moveDirection = Vector3.zero;
-            _lifeTimer = 0f;
-
-            _isInitialized = false;
-        }
-
-        public void OnPoolDestroy()
-        {
-        
-        }
+       
 
     }
 }

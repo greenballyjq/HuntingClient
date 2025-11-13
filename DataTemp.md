@@ -1,45 +1,47 @@
 ##var	ID	Name	VolumeType	HP	MoveSpeed	HitRange	DropRewards	Comment
-##type	int	string	HuntingConfig.Enum.EVolumeType	float	float	float	(map#sep=:|),HuntingConfig.Enum.EDropType,int	string
-##group	c	c	c	c	c	c	c	c
-##	物种ID	物种名称	体型	血量	移动速度	受击范围	掉落奖励	备注
-	101	SmallAnimal1	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	102	SmallAnimal2	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	103	SmallAnimal3	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	104	SmallAnimal4	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	105	SmallAnimal5	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	106	SmallAnimal6	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	107	SmallAnimal7	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	108	SmallAnimal8	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	109	SmallAnimal9	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	110	SmallAnimal10	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	111	SmallAnimal11	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	112	SmallAnimal12	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	示例
-	201	MediumAnimal1	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	202	MediumAnimal2	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	203	MediumAnimal3	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	204	MediumAnimal4	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	205	MediumAnimal5	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	206	MediumAnimal6	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	207	MediumAnimal7	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	208	MediumAnimal8	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	209	MediumAnimal9	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	210	MediumAnimal10	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	211	MediumAnimal11	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	212	MediumAnimal12	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	213	MediumAnimal13	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	214	MediumAnimal14	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	215	MediumAnimal15	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	216	MediumAnimal16	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	217	MediumAnimal17	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	218	MediumAnimal18	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	示例
-	301	LargeAnimalC1	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	示例
-	302	LargeAnimalC2	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	示例
-	303	LargeAnimalC3	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	示例
-	304	LargeAnimalC4	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	示例
-	305	LargeAnimalC5	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	示例
-	306	LargeAnimalC6	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	示例
-	401	弹药怪	Special	30	6	4	Meat:20|Bullet:1|Coin:0|Energy:50	示例
-	402	金币怪	Special	30	6	2	Meat:20|Bullet:0|Coin:10|Energy:50	示例
+##var	ID	Name	VolumeType	HP	MoveSpeed	HitRange	DropRewards	PrefabResourcePath	Comment
+##type	int	string	HuntingConfig.Enum.EVolumeType	float	float	float	(map#sep=:|),HuntingConfig.Enum.EDropType,int	string	string
+##group	c	c	c	c	c	c	c	c	c
+##	物种ID	物种名称	体型	血量	移动速度	受击范围	掉落奖励	预制体资源路径	备注
+	101	SmallAnimal1	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_101	示例
+	102	SmallAnimal2	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_102	示例
+	103	SmallAnimal3	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_103	示例
+	104	SmallAnimal4	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_104	示例
+	105	SmallAnimal5	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_105	示例
+	106	SmallAnimal6	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_106	示例
+	107	SmallAnimal7	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_107	示例
+	108	SmallAnimal8	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_108	示例
+	109	SmallAnimal9	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_109	示例
+	110	SmallAnimal10	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_110	示例
+	111	SmallAnimal11	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_111	示例
+	112	SmallAnimal12	Small	30	6	1	Meat:5|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Small_112	示例
+	201	MediumAnimal1	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_201	示例
+	202	MediumAnimal2	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_202	示例
+	203	MediumAnimal3	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_203	示例
+	204	MediumAnimal4	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_204	示例
+	205	MediumAnimal5	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_205	示例
+	206	MediumAnimal6	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_206	示例
+	207	MediumAnimal7	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_207	示例
+	208	MediumAnimal8	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_208	示例
+	209	MediumAnimal9	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_209	示例
+	210	MediumAnimal10	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_210	示例
+	211	MediumAnimal11	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_211	示例
+	212	MediumAnimal12	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_212	示例
+	213	MediumAnimal13	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_213	示例
+	214	MediumAnimal14	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_214	示例
+	215	MediumAnimal15	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_215	示例
+	216	MediumAnimal16	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_216	示例
+	217	MediumAnimal17	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_217	示例
+	218	MediumAnimal18	Medium	30	6	2	Meat:15|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Medium_218	示例
+	301	LargeAnimalC1	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Large_301	示例
+	302	LargeAnimalC2	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Large_302	示例
+	303	LargeAnimalC3	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Large_303	示例
+	304	LargeAnimalC4	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Large_304	示例
+	305	LargeAnimalC5	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Large_305	示例
+	306	LargeAnimalC6	Large	30	6	3	Meat:30|Bullet:0|Coin:0|Energy:20	Arts/Animals/Animal_Large_306	示例
+	401	弹药怪	Special	30	6	4	Meat:20|Bullet:1|Coin:0|Energy:50	Arts/Animals/Animal_Special_401	示例
+	402	金币怪	Special	30	6	2	Meat:20|Bullet:0|Coin:10|Energy:50	Arts/Animals/Animal_Special_402	示例
+
 
 ##var	ID	VolumeRatio	StayTime	Comment
 ##type	int	(map#sep=:|),HuntingConfig.Enum.EVolumeType,float	(map#sep=:|),HuntingConfig.Enum.EVolumeType,int	string
@@ -127,13 +129,18 @@
 ##var	ID	MeatPercent	IncreasePerSecond	Comment
 ##type	int	float	float	string
 ##group	c	c	c	c
-##	参数ID	肉量百分比	每秒增加量	备注
-	401	0.2	5	示例
 
-##var	ID	MinSpawnCount	MaxSpawnCount	Comment
-##type	int	int	int	string
-##group	c	c	c	c
+
+
+| ##var   | ID     | SpawnAnimalID | SpawnCount        | Comment                   |
+| ------- | ------ | ------------- | ----------------- | ------------------------- |
+| ##type  | int    | int           | (array#sep=,),int | string                    |
+| ##group | c      | c             | c                 | c                         |
+| ##      | 参数ID | 派发动物ID    | 生成数量          | 备注                      |
+|         | 1      | 402           | 3,6               | 派发随机数量ID为402的物种 |
+
 ##	参数ID	最少生成数量	最多生成数量	备注
+
 	501	1	3	示例
 
 ##var	ID	GunCountPerSide	GunOffsetX	FireInterval	Comment

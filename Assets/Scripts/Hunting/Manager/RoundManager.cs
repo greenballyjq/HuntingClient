@@ -1,9 +1,8 @@
 ﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
-using GameFramework.Core;
 using Hunting.UI;
 using UnityEngine;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
+
 
 namespace Hunting.Manager
 {
