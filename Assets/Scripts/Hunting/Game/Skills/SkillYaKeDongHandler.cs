@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Hunting.Manager;
@@ -11,15 +11,22 @@ namespace Hunting.Game.Skills
     /// </summary>
     public class SkillYaKeDongHandler : ISkillHandler
     {
+        #region TODO：未来可配置化
         /// <summary>
         /// 生成前方距离
         /// </summary>
-        private const float SpawnForwardDistance = 5f;
+        private const float SpawnForwardDistance = 0f;
 
         /// <summary>
         /// 左右偏移距离
         /// </summary>
-        private const float SpawnSideOffset = 2f;
+        private const float SpawnSideOffset = 8f;
+
+        /// <summary>
+        /// 玩家Transform
+        /// </summary>
+        private Transform _playerTransform;
+        #endregion
 
         /// <summary>
         /// 配置管理器
@@ -31,30 +38,37 @@ namespace Hunting.Game.Skills
         /// </summary>
         private AnimalManager Animal => GameServiceLocator.GetGameManager<AnimalManager>();
 
+        #region 接口实现
         /// <summary>
-        /// 玩家Transform
+        /// 技能开始
         /// </summary>
-        private Transform _playerTransform;
-
         public void OnSkillStart(SkillContext context)
         {
             SpawnCoinAnimalsAsync(context).Forget();
         }
 
+        /// <summary>
+        /// 技能更新
+        /// </summary>
         public void OnSkillUpdate(SkillContext context, float deltaTime)
         {
             // 当前技能无需逐帧逻辑
         }
 
+        /// <summary>
+        /// 技能结束
+        /// </summary>
         public void OnSkillEnd(SkillContext context)
         {
             // 当前技能结束时无需额外处理
         }
+        #endregion
 
+        #region 私有方法
         /// <summary>
         /// 生成金币怪
         /// </summary>
-        private async UniTaskVoid SpawnCoinAnimalsAsync(SkillContext context)
+        private async UniTask SpawnCoinAnimalsAsync(SkillContext context)
         {
             var parameter = Config.GetSkillYaKeDong(context.SkillData.ParamTableID);
             if (parameter == null)
@@ -123,6 +137,7 @@ namespace Hunting.Game.Skills
 
             return _playerTransform;
         }
+        #endregion
     }
 }
 

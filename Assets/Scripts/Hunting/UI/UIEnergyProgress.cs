@@ -26,9 +26,9 @@ namespace Hunting.UI
         [SerializeField] private Text textEnergyBars;
 
         /// <summary>
-        /// 消耗按钮
+        /// 技能按钮
         /// </summary>
-        [SerializeField] private Button buttonConsume;
+        [SerializeField] private Button buttonSkill;
 
         /// <summary>
         /// 前段颜色
@@ -62,7 +62,7 @@ namespace Hunting.UI
 
         private void Awake()
         {
-            buttonConsume.onClick.AddListener(OnConsumeButtonClicked);
+            buttonSkill.onClick.AddListener(OnSkillButtonClicked);
         }
 
         public void Init()
@@ -83,7 +83,7 @@ namespace Hunting.UI
 
         private void OnDestroy()
         {
-            buttonConsume.onClick.RemoveListener(OnConsumeButtonClicked);
+            buttonSkill.onClick.RemoveListener(OnSkillButtonClicked);
             CleanUp();
         }
 
@@ -246,11 +246,16 @@ namespace Hunting.UI
         }
 
         /// <summary>
-        /// 点击消耗按钮回调
+        /// 点击技能按钮回调
         /// </summary>
-        private void OnConsumeButtonClicked()
+        private void OnSkillButtonClicked()
         {
-            EnergyManager.TryConsumeOneBar();
+            // 请求技能管理器尝试启动技能
+            var skillManager = GameServiceLocator.GetGameManager<SkillManager>();
+            if (!skillManager.TryStartSkill())
+            {
+                Debug.LogWarning("[UIEnergyProgress] 技能启动失败");
+            }
         }
         #endregion
     }

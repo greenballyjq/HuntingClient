@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1165486411930183828}
-  - component: {fileID: 3655378950216936583}
   - component: {fileID: -3333087269025585371}
   m_Layer: 7
   m_Name: Bullet_HighDamage
@@ -34,27 +33,6 @@ Transform:
   - {fileID: 932011446644539641}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3655378950216936583
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8038580271074239170}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.16063361, y: 0.17150366, z: 1}
-  m_Center: {x: -0.0019265786, y: 0.011773914, z: 0}
 --- !u!114 &-3333087269025585371
 MonoBehaviour:
   m_ObjectHideFlags: 0

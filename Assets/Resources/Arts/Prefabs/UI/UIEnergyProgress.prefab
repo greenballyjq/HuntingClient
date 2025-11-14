@@ -51,7 +51,7 @@ GameObject:
   - component: {fileID: 8046950551365946601}
   - component: {fileID: 3472539407607218480}
   m_Layer: 5
-  m_Name: ButtonConsume
+  m_Name: ButtonSkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -366,7 +366,7 @@ MonoBehaviour:
   imageEnergyFill: {fileID: 5098790004127911149}
   imageEnergyBackground: {fileID: 4583891581119472239}
   textEnergyBars: {fileID: 4635710575096440446}
-  buttonConsume: {fileID: 3472539407607218480}
+  buttonSkill: {fileID: 3472539407607218480}
   colorTierA: {r: 0.39215687, g: 0.78431374, b: 0.5882353, a: 1}
   colorTierB: {r: 0.94509804, g: 0.6901961, b: 0.4392157, a: 1}
   colorTierC: {r: 0.9411765, g: 0.627451, b: 0.78431374, a: 1}

@@ -1,0 +1,338 @@
+﻿using cfg.HuntingConfig.Enum;
+using Cysharp.Threading.Tasks;
+using GameFramework.Core;
+using Hunting.Events;
+using Hunting.Manager;
+using UnityEngine;
+
+namespace Hunting.Game.Weapons
+{
+    /// <summary>
+    /// 武器类
+    /// </summary>
+    public class MainWeapon : MonoBehaviour
+    {
+        /// <summary>
+        /// 武器视觉引用
+        /// </summary>
+        [Header("武器视觉引用")]
+        [SerializeField] private WeaponVisual weaponVisual;
+
+        /// <summary>
+        /// 当前子弹ID
+        /// </summary>
+        private int _currentBulletId = 1;
+
+        /// <summary>
+        /// 上次射击的时间戳
+        /// </summary>
+        private float _lastFireTime;
+
+        /// <summary>
+        /// 射击间隔（秒）
+        /// </summary>
+        private float _fireInterval;
+
+        /// <summary>
+        /// 特殊子弹剩余持续时间（秒）
+        /// </summary>
+        private float _specialBulletRemainingTime;
+
+        /// <summary>
+        /// 是否处于特殊子弹状态
+        /// </summary>
+        private bool _isSpecialBullet;
+
+        /// <summary>
+        /// 武器管理器
+        /// </summary>
+        private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
+
+        /// <summary>
+        /// 子弹管理器
+        /// </summary>
+        private BulletManager Bullet => GameServiceLocator.GetGameManager<BulletManager>();
+
+        /// <summary>
+        /// 事件管理器
+        /// </summary>
+        private EventManager Event => GameServiceLocator.Event;
+
+        /// <summary>
+        /// 配置管理器
+        /// </summary>
+        private HuntingGameConfigManager Config => GameServiceLocator.Config;
+
+        private void Start()
+        {
+            RegisterEvents();
+            InitializeWeapon();
+        }
+
+        private void Update()
+        {
+            UpdateShooting();
+            UpdateSpecialBulletTimer();
+        }
+
+        private void OnDestroy()
+        {
+            UnregisterEvents();
+        }
+
+        #region 公共方法
+        /// <summary>
+        /// 设置当前子弹类型
+        /// </summary>
+        public void SetCurrentBullet(int bulletId)
+        {
+            ChangeBullet(bulletId);
+        }
+
+        /// <summary>
+        /// 获取当前子弹ID
+        /// </summary>
+        public int GetCurrentBulletId()
+        {
+            return _currentBulletId;
+        }
+
+        /// <summary>
+        /// 响应射速变化
+        /// </summary>
+        public void OnFireRateChanged()
+        {
+            UpdateFireInterval();
+        }
+        #endregion
+
+        #region 私有方法
+        /// <summary>
+        /// 初始化武器状态
+        /// </summary>
+        private void InitializeWeapon()
+        {
+            // 设置默认子弹
+            ChangeBullet(_currentBulletId);
+            UpdateFireInterval();
+        }
+
+        /// <summary>
+        /// 更新射击逻辑
+        /// </summary>
+        private void UpdateShooting()
+        {
+            if (!PlayerControl.Instance.ShootingPerformed)
+                return;
+
+            TryShoot();
+        }
+
+        /// <summary>
+        /// 更新射击间隔
+        /// </summary>
+        private void UpdateFireInterval()
+        {
+            float fireRate = Weapon.GetCurrentFireRate(_currentBulletId);
+            _fireInterval = 1f / fireRate;
+        }
+
+        /// <summary>
+        /// 更新特殊子弹倒计时
+        /// </summary>
+        private void UpdateSpecialBulletTimer()
+        {
+            if (!_isSpecialBullet)
+                return;
+
+            _specialBulletRemainingTime -= Time.deltaTime;
+
+            // 获取子弹配置用于触发倒计时事件
+            var bulletConfig = Config.GetBullet(_currentBulletId);
+            if (bulletConfig != null)
+            {
+                // 触发特殊子弹倒计时事件
+                TriggerSpecialBulletCountdown(new SpecialBulletCountdownEventArgs
+                {
+                    BulletId = _currentBulletId,
+                    RemainingTime = _specialBulletRemainingTime,
+                    TotalTime = bulletConfig.Duration
+                });
+            }
+
+            // 检查是否时间到
+            if (_specialBulletRemainingTime <= 0f)
+            {
+                // 触发特殊子弹效果结束事件
+                int endedBulletId = _currentBulletId;
+                TriggerSpecialBulletEffectEnded(new SpecialBulletEffectEndedEventArgs
+                {
+                    BulletId = endedBulletId
+                });
+
+                // 恢复为普通子弹（ID为1）
+                ChangeBullet(1);
+                Debug.Log("[Weapon] 特殊子弹时间到，已切回普通子弹");
+            }
+        }
+
+        /// <summary>
+        /// 尝试射击
+        /// </summary>
+        private void TryShoot()
+        {
+            // 检查射击间隔
+            if (Time.time - _lastFireTime < _fireInterval)
+                return;
+
+            // 执行射击
+            SpawnBulletAsync().Forget();
+            PlayFireSound();
+            _lastFireTime = Time.time;
+        }
+
+        /// <summary>
+        /// 生成子弹
+        /// </summary>
+        private async UniTask SpawnBulletAsync()
+        {
+            if (weaponVisual == null || weaponVisual.MuzzlePoint == null)
+            {
+                Debug.LogError("[Weapon] 武器视觉引用或枪口位置为空");
+                return;
+            }
+
+            Transform muzzlePoint = weaponVisual.MuzzlePoint;
+            await Bullet.SpawnBullet(_currentBulletId, muzzlePoint.position, muzzlePoint.forward, gameObject);
+        }
+
+        /// <summary>
+        /// 切换当前使用的子弹类型
+        /// </summary>
+        private void ChangeBullet(int newBulletId)
+        {
+            int oldBulletId = _currentBulletId;
+            _currentBulletId = newBulletId;
+
+            // 更新射击间隔
+            UpdateFireInterval();
+
+            // 获取子弹配置
+            var bulletConfig = Config.GetBullet(newBulletId);
+            if (bulletConfig == null)
+            {
+                Debug.LogWarning($"[Weapon] 子弹配置不存在: {newBulletId}");
+                return;
+            }
+
+            // 判断是否为特殊子弹（持续时间 > 0）
+            bool isSpecialBullet = bulletConfig.Duration > 0f;
+            if (isSpecialBullet)
+            {
+                _specialBulletRemainingTime = bulletConfig.Duration;
+                _isSpecialBullet = true;
+            }
+            else
+            {
+                _specialBulletRemainingTime = 0f;
+                _isSpecialBullet = false;
+            }
+
+            // 触发子弹切换事件
+            TriggerBulletChanged(new BulletChangedEventArgs
+            {
+                OldBulletId = oldBulletId,
+                NewBulletId = newBulletId,
+                IsSpecialBullet = isSpecialBullet,
+                RemainingTime = _specialBulletRemainingTime
+            });
+
+            Debug.Log($"[Weapon] 切换子弹: {oldBulletId} -> {newBulletId}");
+        }
+        #endregion
+
+        #region 事件相关
+        /// <summary>
+        /// 注册事件
+        /// </summary>
+        private void RegisterEvents()
+        {
+            Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        }
+
+        /// <summary>
+        /// 注销事件
+        /// </summary>
+        private void UnregisterEvents()
+        {
+            Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        }
+
+        /// <summary>
+        /// 动物掉落奖励事件回调
+        /// </summary>
+        private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
+        {
+            // 检查是否掉落子弹奖励
+            if (!args.DropRewards.TryGetValue(EDropType.Bullet, out int bulletAmount) || bulletAmount <= 0)
+                return;
+
+            // 获取随机特殊子弹
+            var specialBullet = Config.GetRandomSpecialBullet();
+
+            // 切换到特殊子弹
+            ChangeBullet(specialBullet.ID);
+            Debug.Log($"[Weapon] 获得特殊子弹: {specialBullet.Name}，持续时间: {specialBullet.Duration}秒");
+        }
+
+        /// <summary>
+        /// 触发子弹切换事件
+        /// </summary>
+        private void TriggerBulletChanged(BulletChangedEventArgs args)
+        {
+            Event.Trigger(BulletEvents.BulletChanged, args);
+        }
+
+        /// <summary>
+        /// 触发特殊子弹倒计时事件
+        /// </summary>
+        private void TriggerSpecialBulletCountdown(SpecialBulletCountdownEventArgs args)
+        {
+            Event.Trigger(BulletEvents.SpecialBulletCountdown, args);
+        }
+
+        /// <summary>
+        /// 触发特殊子弹效果结束事件
+        /// </summary>
+        private void TriggerSpecialBulletEffectEnded(SpecialBulletEffectEndedEventArgs args)
+        {
+            Event.Trigger(BulletEvents.SpecialBulletEffectEnded, args);
+        }
+        #endregion
+
+        #region TODO: 测试代码
+        // TODO: 音效系统待实现
+        [Header("音效")]
+        [SerializeField] private AudioClip fireAudioClip;
+        private AudioSource _audioSource;
+
+        protected virtual void Awake()
+        {
+            _audioSource = GetComponent<AudioSource>();
+            if (_audioSource == null)
+            {
+                _audioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
+
+        private void PlayFireSound()
+        {
+            if (fireAudioClip != null && _audioSource != null)
+            {
+                _audioSource.clip = fireAudioClip;
+                _audioSource.Play();
+            }
+        }
+        #endregion
+    }
+}

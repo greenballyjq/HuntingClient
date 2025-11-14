@@ -1,5 +1,5 @@
-﻿using cfg.HuntingConfig;
-using Hunting.Game.Animal;
+﻿using Hunting.Game.Animal;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Hunting.Game.Bullets.Effects
@@ -12,30 +12,21 @@ namespace Hunting.Game.Bullets.Effects
         /// <summary>
         /// 命中处理
         /// </summary>
-        /// <param name="context">子弹上下文</param>
+        /// <param name="context">子弹运行时上下文</param>
         /// <param name="hitInfo">命中信息</param>
-        void OnHit(BulletEffectContext context, BulletHitInfo hitInfo);
+        /// <returns>命中的所有动物列表</returns>
+        List<AnimalBehavior> OnHit(BulletRuntimeContext context, BulletHitInfo hitInfo);
     }
 
     /// <summary>
-    /// 子弹效果上下文
+    /// 子弹运行时上下文
     /// </summary>
-    public class BulletEffectContext
+    public class BulletRuntimeContext
     {
         /// <summary>
-        /// 子弹数据
+        /// 最终伤害
         /// </summary>
-        public Bullet BulletData { get; set; }
-
-        /// <summary>
-        /// 基础伤害
-        /// </summary>
-        public float BaseDamage { get; set; }
-
-        /// <summary>
-        /// 发射者
-        /// </summary>
-        public GameObject Owner { get; set; }
+        public float FinalDamage { get; set; }
     }
 
     /// <summary>
@@ -49,7 +40,7 @@ namespace Hunting.Game.Bullets.Effects
         public Vector3 HitPoint { get; set; }
 
         /// <summary>
-        /// 命中的动物
+        /// 主要命中目标
         /// </summary>
         public AnimalBehavior PrimaryTarget { get; set; }
     }

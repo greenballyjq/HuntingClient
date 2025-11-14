@@ -1,7 +1,9 @@
 ﻿using cfg.HuntingConfig;
+using GameFramework.Core;
 using Hunting.Events;
 using Hunting.Game.Animal;
 using Hunting.Game.Bullets.Effects;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Hunting.Game.Bullets
@@ -17,19 +19,14 @@ namespace Hunting.Game.Bullets
         private Bullet _bulletData;
 
         /// <summary>
-        /// 子弹效果上下文
+        /// 子弹运行时上下文
         /// </summary>
-        private BulletEffectContext _bulletEffectContext;
+        private BulletRuntimeContext _bulletRuntimeContext;
 
         /// <summary>
-        /// 基础命中效果
+        /// 子弹效果
         /// </summary>
-        private readonly IBulletEffect _baseEffect = new BaseBulletEffect();
-
-        /// <summary>
-        /// 额外命中效果
-        /// </summary>
-        private IBulletEffect _extraEffect;
+        private IBulletEffect _bulletEffect;
 
         /// <summary>
         /// 移动方向
@@ -47,11 +44,6 @@ namespace Hunting.Game.Bullets
         private float _lifeTimer;
 
         /// <summary>
-        /// 是否已初始化
-        /// </summary>
-        private bool _isInitialized;
-
-        /// <summary>
         /// 事件管理器
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
@@ -63,31 +55,25 @@ namespace Hunting.Game.Bullets
         /// <param name="startPosition">起始位置</param>
         /// <param name="direction">子弹方向</param>
         /// <param name="owner">发射者</param>
-        public void Init(Bullet bulletData, Vector3 startPosition, Vector3 direction, GameObject owner)
+        /// <param name="finalDamage">最终伤害（已应用修正）</param>
+        public void Init(Bullet bulletData, Vector3 startPosition, Vector3 direction, GameObject owner, float finalDamage)
         {
-             // 初始化数据
+            // 初始化数据
             _bulletData = bulletData;
             _moveDirection = direction.normalized;
             _lifeTimer = MaxLifetime;
-            _bulletEffectContext = new BulletEffectContext
+            
+            _bulletRuntimeContext = new BulletRuntimeContext
             {
-                BulletData = bulletData,
-                BaseDamage = bulletData.BaseDamage,
-                Owner = owner
+                FinalDamage = finalDamage
             };
 
-            // 根据配置挂载额外效果
-            _extraEffect = BulletEffectFactory.CreateExtraEffect(bulletData.BulletType, bulletData);
-
-            // 设置初始化标识
-            _isInitialized = true;
+            // 根据子弹类型创建效果
+            _bulletEffect = BulletEffectFactory.CreateEffect(bulletData.BulletType, bulletData);
         }
 
         private void Update()
         {
-            if (!_isInitialized)
-                return;
-
             UpdateMovement();
             UpdateLifetime();
             CheckCollision();
@@ -139,9 +125,17 @@ namespace Hunting.Game.Bullets
                 PrimaryTarget = animal
             };
 
-            // 先处理基础命中逻辑，再附加额外效果
-            _baseEffect.OnHit(_bulletEffectContext, hitInfo);
-            _extraEffect?.OnHit(_bulletEffectContext, hitInfo);
+            // 执行效果，获取所有命中的动物
+            List<AnimalBehavior> hitAnimals = _bulletEffect.OnHit(_bulletRuntimeContext, hitInfo);
+
+            // 触发命中事件
+            TriggerBulletHit(new BulletHitEventArgs
+            {
+                Bullet = this,
+                BulletData = _bulletData,
+                HitPoint = hitPoint,
+                Targets = hitAnimals
+            });
 
             DestroyBullet();
         }
@@ -151,15 +145,30 @@ namespace Hunting.Game.Bullets
         /// </summary>
         private void DestroyBullet()
         {
+            TriggerBulletDestroyed();
+        }
+        #endregion
+
+        #region 事件相关
+        /// <summary>
+        /// 触发子弹销毁事件
+        /// </summary>
+        private void TriggerBulletDestroyed()
+        {
             Event.Trigger(BulletEvents.BulletDestroyed, new BulletDestroyedEventArgs
             {
                 BulletData = _bulletData,
                 Bullet = this
             });
         }
+
+        /// <summary>
+        /// 触发子弹命中事件
+        /// </summary>
+        private void TriggerBulletHit(BulletHitEventArgs args)
+        {
+            Event.Trigger(BulletEvents.BulletHit, args);
+        }
         #endregion
-
-       
-
     }
 }

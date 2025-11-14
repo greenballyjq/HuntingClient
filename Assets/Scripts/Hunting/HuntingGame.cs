@@ -27,6 +27,7 @@ namespace Hunting
             RegisterManager<SpawnerManager>();
             RegisterManager<AnimalManager>();
             RegisterManager<BulletManager>();
+            RegisterManager<WeaponManager>();
             RegisterManager<MeatProgressManager>();
             RegisterManager<EnergyProgressManager>();
             RegisterManager<SettlementRewardManager>();

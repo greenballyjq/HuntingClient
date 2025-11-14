@@ -13,7 +13,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 当前技能处理器
         /// </summary>
-        private ISkillHandler _currentHandler;
+        private ISkillHandler _handler;
 
         /// <summary>
         /// 技能上下文
@@ -21,14 +21,14 @@ namespace Hunting.Manager
         private SkillContext _skillContext;
 
         /// <summary>
-        /// 剩余持续时间
-        /// </summary>
-        private float _remainingTime;
-
-        /// <summary>
         /// 技能是否正在运行
         /// </summary>
         private bool _isRunning;
+
+        /// <summary>
+        /// 技能剩余时间
+        /// </summary>
+        private float _remainingTime;
 
         /// <summary>
         /// 事件管理器
@@ -45,7 +45,6 @@ namespace Hunting.Manager
         /// </summary>
         private EnergyProgressManager Energy => GameServiceLocator.GetGameManager<EnergyProgressManager>();
 
-        #region 生命周期
         public override void Init()
         {
             RegisterEvents();
@@ -58,26 +57,76 @@ namespace Hunting.Manager
             if (!_isRunning)
                 return;
 
+            // 逐帧递减持续时间并调用处理器更新
             _remainingTime -= Time.deltaTime;
-            _currentHandler?.OnSkillUpdate(_skillContext, Time.deltaTime);
+            _handler?.OnSkillUpdate(_skillContext, Time.deltaTime);
 
             if (_remainingTime <= 0f)
-            {
                 EndSkill();
-            }
         }
 
         public override void Release()
         {
             UnregisterEvents();
-
-            if (_isRunning)
-            {
-                EndSkill();
-            }
-
+            EndSkill();
             ResetState();
             Debug.Log("[SkillManager] 已释放");
+        }
+
+        #region 公共方法
+        /// <summary>
+        /// 当前是否可以启动技能
+        /// </summary>
+        public bool CanStartSkill()
+        {
+            if (_handler == null)
+                return false;
+
+            if (_isRunning)
+                return false;
+
+            if (!Energy.CanConsume())
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// 尝试启动技能
+        /// </summary>
+        public bool TryStartSkill()
+        {
+            if (!CanStartSkill())
+            {
+                Debug.LogWarning("[SkillManager] 当前无法启动技能");
+                return false;
+            }
+
+            // 只有成功消耗能量条后才启动技能
+            if (!Energy.TryConsumeOneBar())
+            {
+                Debug.LogWarning("[SkillManager] 能量消耗失败，取消启动技能");
+                return false;
+            }
+
+            BeginSkill();
+            return true;
+        }
+
+        /// <summary>
+        /// 当前技能是否正在运行
+        /// </summary>
+        public bool IsRunning()
+        {
+            return _isRunning;
+        }
+
+        /// <summary>
+        /// 获取技能剩余时间
+        /// </summary>
+        public float GetRemainingTime()
+        {
+            return Mathf.Max(0f, _remainingTime);
         }
         #endregion
 
@@ -89,7 +138,6 @@ namespace Hunting.Manager
         {
             Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
             Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
-            Event.AddListener(EnergyEvents.EnergyConsumed, OnEnergyConsumed);
         }
 
         /// <summary>
@@ -99,18 +147,6 @@ namespace Hunting.Manager
         {
             Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
             Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
-            Event.RemoveListener(EnergyEvents.EnergyConsumed, OnEnergyConsumed);
-        }
-
-        /// <summary>
-        /// 重置内部状态
-        /// </summary>
-        private void ResetState()
-        {
-            _currentHandler = null;
-            _skillContext = null;
-            _remainingTime = 0f;
-            _isRunning = false;
         }
 
         /// <summary>
@@ -121,7 +157,8 @@ namespace Hunting.Manager
             _remainingTime = Mathf.Max(0f, _skillContext.SkillData.Duration);
             _isRunning = true;
 
-            _currentHandler.OnSkillStart(_skillContext);
+            // 通知处理器执行开始逻辑
+            _handler.OnSkillStart(_skillContext);
 
             TriggerSkillStarted(new SkillStartedEventArgs
             {
@@ -142,7 +179,11 @@ namespace Hunting.Manager
             if (!_isRunning)
                 return;
 
-            _currentHandler?.OnSkillEnd(_skillContext);
+            // 通知处理器执行结束逻辑
+            _handler?.OnSkillEnd(_skillContext);
+
+            _isRunning = false;
+            _remainingTime = 0f;
 
             TriggerSkillEnded(new SkillEndedEventArgs
             {
@@ -152,6 +193,59 @@ namespace Hunting.Manager
             });
 
             Debug.Log("[SkillManager] 技能结束");
+        }
+
+        /// <summary>
+        /// 重置内部状态
+        /// </summary>
+        private void ResetState()
+        {
+            _handler = null;
+            _skillContext = null;
+            _isRunning = false;
+            _remainingTime = 0f;
+        }
+        #endregion
+
+        #region 事件相关
+        /// <summary>
+        /// 单局开始回调
+        /// </summary>
+        private void OnRoundStarted(RoundStartedEventArgs args)
+        {
+            ResetState();
+
+            // 读取本局技能配置
+            Skill skill = Config.GetSkill(args.Context.SkillId);
+            if (skill == null)
+            {
+                Debug.LogWarning($"[SkillManager] 未找到技能配置，SkillId:{args.Context.SkillId}");
+                return;
+            }
+
+            _handler = SkillHandlerFactory.CreateSkillHandler(skill.SkillType);
+            if (_handler == null)
+            {
+                Debug.LogWarning($"[SkillManager] 未实现的技能类型: {skill.SkillType}");
+                return;
+            }
+
+            _skillContext = new SkillContext
+            {
+                SkillData = skill,
+                RoundContext = args.Context
+            };
+
+            Debug.Log($"[SkillManager] 已准备技能处理器: {skill.SkillType}");
+        }
+
+        /// <summary>
+        /// 单局结束回调
+        /// </summary>
+        private void OnRoundEnded(RoundEndedEventArgs args)
+        {
+            // 确保技能在单局结束时停止
+            EndSkill();
             ResetState();
         }
 
@@ -170,63 +264,6 @@ namespace Hunting.Manager
         {
             Event.Trigger(SkillEvents.SkillEnded, args);
         }
-
-        /// <summary>
-        /// 单局开始回调
-        /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            ResetState();
-
-            var skillData = Config.GetSkill(args.Context.SkillId);
-
-            if (skillData == null)
-            {
-                Debug.LogWarning($"[SkillManager] 无法找到技能数据，SkillId: {args.Context.SkillId}");
-                return;
-            }
-
-            _currentHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
-
-            if (_currentHandler == null)
-            {
-                Debug.LogWarning($"[SkillManager] 未实现的技能类型: {skillData.SkillType}");
-                return;
-            }
-
-            _skillContext = new SkillContext
-            {
-                SkillData = skillData,
-                RoundContext = args.Context
-            };
-
-            Debug.Log($"[SkillManager] 已准备技能处理器: {skillData.SkillType}");
-        }
-
-        /// <summary>
-        /// 单局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            if (_isRunning)
-            {
-                EndSkill();
-            }
-
-            ResetState();
-        }
-        #endregion
-
-        #region 事件相关
-        /// <summary>
-        /// 能量消耗回调
-        /// </summary>
-        private void OnEnergyConsumed(EnergyConsumedEventArgs args)
-        {
-            BeginSkill();
-        }
         #endregion
     }
 }
-
-

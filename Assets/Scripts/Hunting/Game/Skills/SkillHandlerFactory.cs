@@ -16,6 +16,10 @@ namespace Hunting.Game.Skills
         {
             switch (skillType)
             {
+                case ESkillType._3KPSkill:
+                    return new Skill3KPHandler();
+                case ESkillType.ZiWeiSkill:
+                    return new SkillZiWeiHandler();
                 case ESkillType.YaKeDongSkill:
                     return new SkillYaKeDongHandler();
                 default:

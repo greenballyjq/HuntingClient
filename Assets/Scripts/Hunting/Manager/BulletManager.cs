@@ -28,6 +28,11 @@ namespace Hunting.Manager
         /// </summary>
         private GameObjectPoolManager Pool => GameServiceLocator.Pool;
 
+        /// <summary>
+        /// 武器管理器
+        /// </summary>
+        private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
+
         public override void Init()
         {
             RegisterEvents();
@@ -51,7 +56,6 @@ namespace Hunting.Manager
         /// </summary>
         public async UniTask<BulletBehavior> SpawnBullet(int bulletId, Vector3 position, Vector3 direction, GameObject owner)
         {
-            
             Bullet bulletData = Config.GetBullet(bulletId);
             if (bulletData == null)
             {
@@ -59,7 +63,10 @@ namespace Hunting.Manager
                 return null;
             }
 
-            // 从对象池获取对应物种的预制体
+            // 从WeaponManager获取修正后的伤害
+            float finalDamage = Weapon.GetCurrentDamage(bulletId);
+
+            // 从对象池获取子弹预制体
             var go = await Pool.PullAsync(bulletData.PrefabResourcePath);
             if (go == null)
             {
@@ -72,7 +79,7 @@ namespace Hunting.Manager
             if (direction != Vector3.zero)
                 go.transform.rotation = Quaternion.LookRotation(direction);
 
-            // 绑定并初始化动物行为组件
+            // 获取并初始化子弹组件
             var bullet = go.GetComponent<BulletBehavior>();
             if (bullet == null)
             {
@@ -81,7 +88,7 @@ namespace Hunting.Manager
                 return null;
             }
 
-            bullet.Init(bulletData, position, direction, owner);
+            bullet.Init(bulletData, position, direction, owner, finalDamage);
 
             // 对外通知子弹已生成
             TriggerBulletSpawned(new BulletSpawnedEventArgs
