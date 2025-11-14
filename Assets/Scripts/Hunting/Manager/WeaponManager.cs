@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using GameFramework.Core;
 using Hunting.Game.Weapons;
@@ -27,12 +28,26 @@ namespace Hunting.Manager
         private GameObject _weaponPrefabCache;
 
         /// <summary>
-        /// 射速修正倍率
+        /// 射速修正倍率字典
+        /// key: 来源ID
+        /// value: 倍率值
+        /// </summary>
+        private Dictionary<string, float> _fireRateModifiers = new Dictionary<string, float>();
+
+        /// <summary>
+        /// 伤害修正倍率字典
+        /// key: 来源ID
+        /// value: 倍率值
+        /// </summary>
+        private Dictionary<string, float> _damageModifiers = new Dictionary<string, float>();
+
+        /// <summary>
+        /// 当前射速修正倍率
         /// </summary>
         private float _fireRateMultiplier = 1f;
 
         /// <summary>
-        /// 伤害修正倍率
+        /// 当前伤害修正倍率
         /// </summary>
         private float _damageMultiplier = 1f;
 
@@ -82,25 +97,53 @@ namespace Hunting.Manager
         }
 
         /// <summary>
-        /// 设置射速修正倍率
+        /// 注册射速修正倍率
         /// </summary>
-        public void SetFireRateMultiplier(float multiplier)
+        /// <param name="sourceId">修正来源ID（如技能类型、幸运仪式类型等）</param>
+        /// <param name="multiplier">倍率值</param>
+        public void RegisterFireRateModifier(string sourceId, float multiplier)
         {
-            _fireRateMultiplier = multiplier;
-            Debug.Log($"[WeaponManager] 设置射速修正倍率: {_fireRateMultiplier}");
-
-            // 通知主武器更新射速
-            if (_mainWeapon != null)
-                _mainWeapon.OnFireRateChanged();
+            _fireRateModifiers[sourceId] = multiplier;
+            UpdateFireRateMultiplier();
+            Debug.Log($"[WeaponManager] 注册射速修正，来源:{sourceId}，倍率:{multiplier:F2}，当前总倍率:{_fireRateMultiplier:F2}");
         }
 
         /// <summary>
-        /// 设置伤害修正倍率
+        /// 注销射速修正倍率
         /// </summary>
-        public void SetDamageMultiplier(float multiplier)
+        /// <param name="sourceId">修正来源ID</param>
+        public void UnregisterFireRateModifier(string sourceId)
         {
-            _damageMultiplier = multiplier;
-            Debug.Log($"[WeaponManager] 设置伤害修正倍率: {_damageMultiplier}");
+            if (_fireRateModifiers.Remove(sourceId))
+            {
+                UpdateFireRateMultiplier();
+                Debug.Log($"[WeaponManager] 注销射速修正，来源:{sourceId}，当前总倍率:{_fireRateMultiplier:F2}");
+            }
+        }
+
+        /// <summary>
+        /// 注册伤害修正倍率
+        /// </summary>
+        /// <param name="sourceId">修正来源ID（如技能类型、幸运仪式类型等）</param>
+        /// <param name="multiplier">倍率值</param>
+        public void RegisterDamageModifier(string sourceId, float multiplier)
+        {
+            _damageModifiers[sourceId] = multiplier;
+            UpdateDamageMultiplier();
+            Debug.Log($"[WeaponManager] 注册伤害修正，来源:{sourceId}，倍率:{multiplier:F2}，当前总倍率:{_damageMultiplier:F2}");
+        }
+
+        /// <summary>
+        /// 注销伤害修正倍率
+        /// </summary>
+        /// <param name="sourceId">修正来源ID</param>
+        public void UnregisterDamageModifier(string sourceId)
+        {
+            if (_damageModifiers.Remove(sourceId))
+            {
+                UpdateDamageMultiplier();
+                Debug.Log($"[WeaponManager] 注销伤害修正，来源:{sourceId}，当前总倍率:{_damageMultiplier:F2}");
+            }
         }
 
         /// <summary>
@@ -203,10 +246,42 @@ namespace Hunting.Manager
         }
 
         /// <summary>
+        /// 更新射速修正倍率
+        /// </summary>
+        private void UpdateFireRateMultiplier()
+        {
+            float total = 1f;
+            foreach (var modifier in _fireRateModifiers.Values)
+            {
+                total *= modifier;
+            }
+            _fireRateMultiplier = total;
+
+            // 通知主武器更新射速
+            if (_mainWeapon != null)
+                _mainWeapon.OnFireRateChanged();
+        }
+
+        /// <summary>
+        /// 更新伤害修正倍率
+        /// </summary>
+        private void UpdateDamageMultiplier()
+        {
+            float total = 1f;
+            foreach (var modifier in _damageModifiers.Values)
+            {
+                total *= modifier;
+            }
+            _damageMultiplier = total;
+        }
+
+        /// <summary>
         /// 重置状态
         /// </summary>
         private void ResetState()
         {
+            _fireRateModifiers.Clear();
+            _damageModifiers.Clear();
             _fireRateMultiplier = 1f;
             _damageMultiplier = 1f;
         }

@@ -21,22 +21,20 @@ namespace Hunting.Game.Skills
 
         #region 接口实现
         /// <summary>
+        /// 技能修正来源ID
+        /// </summary>
+        private const string ModifierSourceId = "Skill_3KP";
+
+        /// <summary>
         /// 技能开始
         /// </summary>
         public void OnSkillStart(SkillContext context)
         {
             var parameter = Config.GetSkill3KP(context.SkillData.ParamTableID);
-            if (parameter == null)
-            {
-                Debug.LogWarning("[Skill3KPHandler] 未找到技能参数配置");
-                return;
-            }
 
-            // 应用射速和伤害倍率
-            Weapon.SetFireRateMultiplier(parameter.FireRateMultiplier);
-            Weapon.SetDamageMultiplier(parameter.DamageMultiplier);
-
-            Debug.Log($"[Skill3KPHandler] 技能开始，射速倍率: {parameter.FireRateMultiplier}, 伤害倍率: {parameter.DamageMultiplier}");
+            // 注册射速和伤害倍率修正
+            Weapon.RegisterFireRateModifier(ModifierSourceId, parameter.FireRateMultiplier);
+            Weapon.RegisterDamageModifier(ModifierSourceId, parameter.DamageMultiplier);
         }
 
         /// <summary>
@@ -52,11 +50,9 @@ namespace Hunting.Game.Skills
         /// </summary>
         public void OnSkillEnd(SkillContext context)
         {
-            // 重置倍率为1.0
-            Weapon.SetFireRateMultiplier(1f);
-            Weapon.SetDamageMultiplier(1f);
-
-            Debug.Log("[Skill3KPHandler] 技能结束，已重置倍率");
+            // 注销射速和伤害倍率修正
+            Weapon.UnregisterFireRateModifier(ModifierSourceId);
+            Weapon.UnregisterDamageModifier(ModifierSourceId);
         }
         #endregion
     }

@@ -20,6 +20,10 @@ namespace Hunting.Game.Skills
                     return new Skill3KPHandler();
                 case ESkillType.ZiWeiSkill:
                     return new SkillZiWeiHandler();
+                case ESkillType.DaMeiLiSkill:
+                    return null;
+                case ESkillType.JinZhuangYuanSkill:
+                    return new SkillJinZhuangYuanHandler();
                 case ESkillType.YaKeDongSkill:
                     return new SkillYaKeDongHandler();
                 default:

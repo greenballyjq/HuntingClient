@@ -15,7 +15,7 @@ namespace Hunting.Game.Skills
         /// <summary>
         /// 生成前方距离
         /// </summary>
-        private const float SpawnForwardDistance = 0f;
+        private const float SpawnForwardDistance = 20f;
 
         /// <summary>
         /// 左右偏移距离
@@ -71,25 +71,8 @@ namespace Hunting.Game.Skills
         private async UniTask SpawnCoinAnimalsAsync(SkillContext context)
         {
             var parameter = Config.GetSkillYaKeDong(context.SkillData.ParamTableID);
-            if (parameter == null)
-            {
-                Debug.LogWarning("[SkillYaKeDongHandler] 未找到技能参数配置");
-                return;
-            }
-
             var specie = Config.GetSpecie(parameter.SpawnAnimalID);
-            if (specie == null)
-            {
-                Debug.LogWarning($"[SkillYaKeDongHandler] 未找到物种配置: {parameter.SpawnAnimalID}");
-                return;
-            }
-
             var player = FindPlayerTransform();
-            if (player == null)
-            {
-                Debug.LogWarning("[SkillYaKeDongHandler] 未找到玩家Transform");
-                return;
-            }
 
             int spawnCount = GetSpawnCount(parameter);
             float stayTime = Config.GetStayTimeByVolumeType(context.RoundContext.MapId, specie.VolumeType);

@@ -259,11 +259,8 @@ namespace Hunting.UI
         /// </summary>
         private void OnClickLuckyRitual()
         {
-            // 功能待定，先进行占位提示
-            Debug.Log("[UIHuntingPrepare] 幸运仪式暂未开放");
-
-            // 默认为无幸运仪式
-            _selectedLuckyType = ELuckyType.None;
+            // 硬编码测试
+            _selectedLuckyType = ELuckyType.SpecialBullet;
         }
 
         /// <summary>

@@ -71,17 +71,17 @@
 	3	UsePaidItem	1,2	20	3,8	使用付费道具 示例
 	4	Settle	1,1	20	10,20	进行结算 示例
 
-
-##var	ID	RequiredPerBar	MaxBar	RewardSteps	Comment
-##type	int	int	int	(map#sep=:|),int,HuntingConfig.MeatProgressReward	string
-##group	c	c	c	c	c
-##	血条包ID	单条所需值	最大条数	奖励阶梯	备注
-	1	100	5	1:3,2|2:6,4|3:9,6|4:12,8|5:15,10	示例
-
+| ##var   | ID       | RequiredPerBar | MaxBar   | RewardSteps                                             | Comment |
+| ------- | -------- | -------------- | -------- | ------------------------------------------------------- | ------- |
+| ##type  | int      | float          | int      | (map#sep=:\|),int,HuntingConfig.Bean.MeatProgressReward | string  |
+| ##group | c        | c              | c        | c                                                       | c       |
+| ##      | 血条包ID | 单条所需值     | 最大条数 | 奖励阶梯                                                | 备注    |
+|         | 1        | 100            | 5        | 1:3,2\|2:6,4\|3:9,6\|4:12,8\|5:15,10                    | 示例    |
 
 ##var	ID	MapType	Name	Description	SpawnStrategyId	SpeciesByVolume	Comment
 ##type	int	EMapType	string	string	int	(map#sep=:|),EVolumeType,(array#sep=;),HuntingConfig.SpecieWeight	string
 ##group	c	c	c	c	c	c	c
+
 ##	地图ID	地图类型	地图名称	地图描述	体型策略ID	体型-物种权重映射	备注
 	1	Forest	皇家猎场森林	茂密森林，神秘动物	1	Small:101,0.6;102,0.4|Medium:201,0.34;202,0.33;203,0.33|Large:301,1|Special:401,0.8;402,0.2	紫薇主场地图 示例
 	2	Beach	海滨沙滩度假村	阳光沙滩，海洋生物	1	Small:101,0.6;102,0.4|Medium:201,0.34;202,0.33;203,0.33|Large:301,1|Special:401,0.8;402,0.2	大美丽主场地图 示例

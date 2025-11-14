@@ -34,6 +34,12 @@ namespace Hunting.Game.Skills
         private Transform _playerTransform;
 
         /// <summary>
+        /// 技能武器Y轴位置偏移
+        /// </summary>
+        /// <remarks>TODO: 将来可配置化</remarks>
+        private const float WeaponYOffset = 2f;
+
+        /// <summary>
         /// 配置管理器
         /// </summary>
         private HuntingGameConfigManager Config => GameServiceLocator.Config;
@@ -74,29 +80,12 @@ namespace Hunting.Game.Skills
         private async UniTask CreateSkillWeaponsAsync(SkillContext context)
         {
             var parameter = Config.GetSkillZiWei(context.SkillData.ParamTableID);
-            if (parameter == null)
-            {
-                Debug.LogWarning("[SkillZiWeiHandler] 未找到技能参数配置");
-                return;
-            }
 
             var player = FindPlayerTransform();
-            if (player == null)
-            {
-                Debug.LogWarning("[SkillZiWeiHandler] 未找到玩家Transform");
-                return;
-            }
 
             // 加载或使用缓存的武器预制体
             if (_weaponPrefabCache == null)
-            {
                 _weaponPrefabCache = await Resource.LoadAssetAsync<GameObject>(SkillWeaponPrefabPath);
-                if (_weaponPrefabCache == null)
-                {
-                    Debug.LogError($"[SkillZiWeiHandler] 加载技能武器预制体失败: {SkillWeaponPrefabPath}");
-                    return;
-                }
-            }
 
             // 计算生成位置并创建武器
             int gunCountPerSide = Mathf.RoundToInt(parameter.GunCountPerSide);
@@ -130,13 +119,6 @@ namespace Hunting.Game.Skills
             weaponObj.name = "SkillWeapon";
 
             var skillWeapon = weaponObj.GetComponent<SkillWeapon>();
-            if (skillWeapon == null)
-            {
-                Debug.LogError("[SkillZiWeiHandler] 技能武器预制体缺少 SkillWeapon 组件");
-                GameObject.Destroy(weaponObj);
-                return;
-            }
-
             skillWeapon.Init(fireInterval);
             _skillWeapons.Add(skillWeapon);
         }
@@ -154,7 +136,9 @@ namespace Hunting.Game.Skills
             float offset = (index + 1) * offsetX;
             if (isLeft)
                 offset = -offset;
-            return playerPosition + playerRight * offset;
+            Vector3 position = playerPosition + playerRight * offset;
+            position.y += WeaponYOffset;
+            return position;
         }
 
         /// <summary>

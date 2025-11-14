@@ -15,7 +15,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 当前肉度值
         /// </summary>
-        private int _currentMeatValue;
+        private float _currentMeatValue;
 
         /// <summary>
         /// 当前肉度条条数
@@ -25,7 +25,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 单条所需肉度值
         /// </summary>
-        private int _requiredPerBar;
+        private float _requiredPerBar;
 
         /// <summary>
         /// 肉度条上限
@@ -65,7 +65,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 获取当前肉度值
         /// </summary>
-        public int GetCurrentMeatValue() => _currentMeatValue;
+        public float GetCurrentMeatValue() => _currentMeatValue;
 
         /// <summary>
         /// 获取当前肉度条条数
@@ -75,51 +75,19 @@ namespace Hunting.Manager
         /// <summary>
         /// 获取单条所需肉度值
         /// </summary>
-        public int GetRequiredPerBar() => _requiredPerBar;
+        public float GetRequiredPerBar() => _requiredPerBar;
 
         /// <summary>
         /// 获取肉度条上限
         /// </summary>
         public int GetMaxMeatBars() => _maxMeatBars;
-        #endregion
-
-        #region 私有方法
-        /// <summary>
-        /// 加载肉度配置
-        /// </summary>
-        private void LoadConfig()
-        {
-            var meatProgress = Config.GetMeatProgress(1);
-            _requiredPerBar = meatProgress.RequiredPerBar;
-            _maxMeatBars = meatProgress.MaxBar;
-        }
-
-        /// <summary>
-        /// 重置进度
-        /// </summary>
-        private void ResetProgress()
-        {
-            _currentMeatValue = 0;
-            _currentMeatBars = 0;
-            TriggerProgressChanged(new MeatProgressChangedEventArgs
-            {
-                Sender = this,
-                CurrentMeat = _currentMeatValue,
-                CurrentBars = _currentMeatBars
-            });
-            TriggerBarCountChanged(new MeatBarCountChangedEventArgs
-            {
-                Sender = this,
-                CurrentBars = _currentMeatBars
-            });
-        }
 
         /// <summary>
         /// 增加肉度
         /// </summary>
-        private void AddMeat(int amount)
+        public void AddMeat(float amount)
         {
-            if (amount <= 0 || _currentMeatBars >= _maxMeatBars)
+            if (amount <= 0f || _currentMeatBars >= _maxMeatBars)
                 return;
 
             // 累加肉度值
@@ -138,7 +106,7 @@ namespace Hunting.Manager
             {
                 // 达到条数上限时，清空肉度值并封顶条数
                 _currentMeatBars = _maxMeatBars;
-                _currentMeatValue = 0;
+                _currentMeatValue = 0f;
             }
 
             TriggerProgressChanged(new MeatProgressChangedEventArgs
@@ -155,6 +123,38 @@ namespace Hunting.Manager
                     CurrentBars = _currentMeatBars
                 });
             }
+        }
+        #endregion
+
+        #region 私有方法
+        /// <summary>
+        /// 加载肉度配置
+        /// </summary>
+        private void LoadConfig()
+        {
+            var meatProgress = Config.GetMeatProgress(1);
+            _requiredPerBar = meatProgress.RequiredPerBar;
+            _maxMeatBars = meatProgress.MaxBar;
+        }
+
+        /// <summary>
+        /// 重置进度
+        /// </summary>
+        private void ResetProgress()
+        {
+            _currentMeatValue = 0f;
+            _currentMeatBars = 0;
+            TriggerProgressChanged(new MeatProgressChangedEventArgs
+            {
+                Sender = this,
+                CurrentMeat = _currentMeatValue,
+                CurrentBars = _currentMeatBars
+            });
+            TriggerBarCountChanged(new MeatBarCountChangedEventArgs
+            {
+                Sender = this,
+                CurrentBars = _currentMeatBars
+            });
         }
         #endregion
 

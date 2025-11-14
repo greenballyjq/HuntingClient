@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 4323373860891737430}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: -41.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -146,6 +146,7 @@ MonoBehaviour:
   muzzlePoint: {fileID: 6919649304460909702}
   rotationSmooth: 1
   rotationSpeed: 20
+  yOffset: 2
   fireAudioClip: {fileID: 8300000, guid: 24512ee4aa7451745974b27c89028038, type: 3}
 --- !u!1 &7193495885864091364
 GameObject:

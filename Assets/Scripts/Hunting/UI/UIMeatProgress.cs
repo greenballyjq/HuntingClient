@@ -91,7 +91,7 @@ namespace Hunting.UI
         /// <summary>
         /// 更新整体显示
         /// </summary>
-        private void UpdateAll(int currentMeat, int currentBars)
+        private void UpdateAll(float currentMeat, int currentBars)
         {
             UpdateFill(currentMeat, currentBars);
             UpdateBarText(currentBars, MeatProgressManager.GetMaxMeatBars());
@@ -102,14 +102,14 @@ namespace Hunting.UI
         /// <summary>
         /// 更新填充图像
         /// </summary>
-        private void UpdateFill(int currentMeat, int currentBars)
+        private void UpdateFill(float currentMeat, int currentBars)
         {
             // 计算当前条的填充值
-            int requiredPerBar = MeatProgressManager.GetRequiredPerBar();
+            float requiredPerBar = MeatProgressManager.GetRequiredPerBar();
             int maxBars = MeatProgressManager.GetMaxMeatBars();
             bool reachedMax = currentBars >= maxBars;
 
-            float normalized = Mathf.Clamp01((float)currentMeat / requiredPerBar);
+            float normalized = Mathf.Clamp01(currentMeat / requiredPerBar);
             imageMeatFill.fillAmount = reachedMax ? 1f : normalized;
 
             // 根据当前条决定填充颜色
@@ -139,18 +139,18 @@ namespace Hunting.UI
         /// <summary>
         /// 更新肉度值文本
         /// </summary>
-        private void UpdateValueText(int currentMeat, int currentBars)
+        private void UpdateValueText(float currentMeat, int currentBars)
         {
             // 显示肉度值的当前/单条需求
-            int requiredPerBar = MeatProgressManager.GetRequiredPerBar();
+            float requiredPerBar = MeatProgressManager.GetRequiredPerBar();
             int maxBars = MeatProgressManager.GetMaxMeatBars();
             if (currentBars >= maxBars)
             {
-                textMeatValue.text = $"{requiredPerBar}/{requiredPerBar}";
+                textMeatValue.text = $"{Mathf.RoundToInt(requiredPerBar)}/{Mathf.RoundToInt(requiredPerBar)}";
                 return;
             }
 
-            textMeatValue.text = $"{currentMeat}/{requiredPerBar}";
+            textMeatValue.text = $"{Mathf.RoundToInt(currentMeat)}/{Mathf.RoundToInt(requiredPerBar)}";
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Hunting.UI
         /// </summary>
         private void OnMeatBarCountChanged(MeatBarCountChangedEventArgs args)
         {
-            int currentMeat = MeatProgressManager.GetCurrentMeatValue();
+            float currentMeat = MeatProgressManager.GetCurrentMeatValue();
             UpdateBarText(args.CurrentBars, MeatProgressManager.GetMaxMeatBars());
             UpdateBackgroundColor(args.CurrentBars);
             UpdateFill(currentMeat, args.CurrentBars);

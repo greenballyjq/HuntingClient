@@ -29,7 +29,7 @@ public sealed class MeatProgressChangedEventArgs : EventArgs
     /// <summary>
     /// 当前肉度值
     /// </summary>
-    public int CurrentMeat { get; set; }
+    public float CurrentMeat { get; set; }
 
     /// <summary>
     /// 当前肉度条条数

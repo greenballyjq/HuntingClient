@@ -169,7 +169,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 增加能量
         /// </summary>
-        private void AddEnergy(float amount)
+        public void AddEnergy(float amount)
         {
             if (amount <= 0f || _currentBars >= _maxBars)
                 return;
