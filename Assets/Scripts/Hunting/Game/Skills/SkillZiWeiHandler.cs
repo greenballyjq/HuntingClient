@@ -19,18 +19,19 @@ namespace Hunting.Game.Skills
         private const string SkillWeaponPrefabPath = "Arts/Prefabs/Weapons/SkillWeapon";
 
         /// <summary>
-        /// 技能武器列表
-        /// </summary>
-        private List<SkillWeapon> _skillWeapons = new List<SkillWeapon>();
-
-        /// <summary>
         /// 技能武器预制体缓存
         /// </summary>
         private GameObject _weaponPrefabCache;
 
         /// <summary>
+        /// 技能武器列表
+        /// </summary>
+        private List<SkillWeapon> _skillWeapons = new List<SkillWeapon>();
+
+        /// <summary>
         /// 玩家Transform
         /// </summary>
+        /// <remarks>TODO: 将来可配置化</remarks>
         private Transform _playerTransform;
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace Hunting.Game.Skills
         /// </summary>
         public void OnSkillUpdate(SkillContext context, float deltaTime)
         {
-            // 当前技能无需逐帧逻辑
+
         }
 
         /// <summary>

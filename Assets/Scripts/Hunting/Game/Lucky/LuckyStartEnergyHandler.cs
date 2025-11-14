@@ -9,11 +9,6 @@ namespace Hunting.Game.Luckys
     public class LuckyStartEnergyHandler : ILuckyHandler
     {
         /// <summary>
-        /// 配置管理器
-        /// </summary>
-        private HuntingGameConfigManager Config => GameServiceLocator.Config;
-
-        /// <summary>
         /// 能量条管理器
         /// </summary>
         private EnergyProgressManager Energy => GameServiceLocator.GetGameManager<EnergyProgressManager>();
@@ -40,7 +35,7 @@ namespace Hunting.Game.Luckys
         /// </summary>
         public void OnDeactivate(LuckyContext context)
         {
-            // 开局给能量是一次性效果，无需注销逻辑
+
         }
     }
 }

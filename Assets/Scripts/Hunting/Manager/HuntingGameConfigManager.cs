@@ -436,6 +436,36 @@ namespace Hunting.Manager
         #endregion
 
         #region 任务相关特殊方法
+        /// <summary>
+        /// 随机获取一个任务配置
+        /// </summary>
+        /// <returns>随机任务配置</returns>
+        public Quest GetRandomQuest()
+        => QuestTable.DataList[Random.Range(0, QuestTable.DataList.Count)];
+
+        /// <summary>
+        /// 从任务配置中随机获取目标值
+        /// </summary>
+        /// <param name="quest">任务配置</param>
+        /// <returns>随机目标值</returns>
+        public int GetRandomTargetValue(Quest quest)
+        {
+            if (quest.TargetRange.Length == 1)
+                return quest.TargetRange[0];
+            return Random.Range(quest.TargetRange[0], quest.TargetRange[1] + 1);
+        }
+
+        /// <summary>
+        /// 从任务配置中随机获取奖励值
+        /// </summary>
+        /// <param name="quest">任务配置</param>
+        /// <returns>随机奖励值</returns>
+        public int GetRandomRewardValue(Quest quest)
+        {
+            if (quest.RewardRange.Length == 1)
+                return quest.RewardRange[0];
+            return Random.Range(quest.RewardRange[0], quest.RewardRange[1] + 1);
+        }
         #endregion
     }
 }

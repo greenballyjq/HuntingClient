@@ -57,6 +57,18 @@ namespace Hunting.Manager
 
         #region 私有方法
         /// <summary>
+        /// 重置内部状态
+        /// </summary>
+        private void ResetState()
+        {
+            _handler = null;
+            _luckyContext = null;
+            _currentLuckyType = ELuckyType.None;
+        }
+        #endregion
+
+        #region 事件相关
+        /// <summary>
         /// 注册事件
         /// </summary>
         private void RegisterEvents()
@@ -74,18 +86,6 @@ namespace Hunting.Manager
             Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
         }
 
-        /// <summary>
-        /// 重置内部状态
-        /// </summary>
-        private void ResetState()
-        {
-            _handler = null;
-            _luckyContext = null;
-            _currentLuckyType = ELuckyType.None;
-        }
-        #endregion
-
-        #region 事件相关
         /// <summary>
         /// 单局开始回调
         /// </summary>

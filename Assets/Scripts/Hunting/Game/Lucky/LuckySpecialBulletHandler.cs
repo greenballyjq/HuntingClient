@@ -38,7 +38,7 @@ namespace Hunting.Game.Luckys
         /// </summary>
         public void OnDeactivate(LuckyContext context)
         {
-            // 开局特殊子弹是一次性效果，无需注销逻辑
+
         }
     }
 }

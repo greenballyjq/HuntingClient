@@ -6,7 +6,7 @@ namespace Hunting.Game.Skills
     /// <summary>
     /// 技能上下文
     /// </summary>
-    public sealed class SkillContext
+    public class SkillContext
     {
         /// <summary>
         /// 技能数据

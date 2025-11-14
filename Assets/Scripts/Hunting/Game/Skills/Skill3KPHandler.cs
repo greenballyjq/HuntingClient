@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Skill;
+﻿using cfg.HuntingConfig.Skill;
 using Hunting.Manager;
 using UnityEngine;
 
@@ -10,6 +10,11 @@ namespace Hunting.Game.Skills
     public class Skill3KPHandler : ISkillHandler
     {
         /// <summary>
+        /// 技能修正来源ID
+        /// </summary>
+        private const string ModifierSourceId = "Skill_3KP";
+
+        /// <summary>
         /// 配置管理器
         /// </summary>
         private HuntingGameConfigManager Config => GameServiceLocator.Config;
@@ -18,12 +23,6 @@ namespace Hunting.Game.Skills
         /// 武器管理器
         /// </summary>
         private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
-
-        #region 接口实现
-        /// <summary>
-        /// 技能修正来源ID
-        /// </summary>
-        private const string ModifierSourceId = "Skill_3KP";
 
         /// <summary>
         /// 技能开始
@@ -42,7 +41,7 @@ namespace Hunting.Game.Skills
         /// </summary>
         public void OnSkillUpdate(SkillContext context, float deltaTime)
         {
-            // 当前技能无需逐帧逻辑
+
         }
 
         /// <summary>
@@ -54,7 +53,6 @@ namespace Hunting.Game.Skills
             Weapon.UnregisterFireRateModifier(ModifierSourceId);
             Weapon.UnregisterDamageModifier(ModifierSourceId);
         }
-        #endregion
     }
 }
 

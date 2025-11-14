@@ -28,7 +28,6 @@ namespace Hunting.Game.Luckys
 
             // 注册伤害修正倍率
             Weapon.RegisterDamageModifier(ModifierSourceId, damageMultiplier);
-            Debug.Log($"[LuckyDamageBoostHandler] 伤害提升已激活，倍率: {damageMultiplier:F2}");
         }
 
         /// <summary>

@@ -253,9 +253,7 @@ namespace Hunting.UI
             // 请求技能管理器尝试启动技能
             var skillManager = GameServiceLocator.GetGameManager<SkillManager>();
             if (!skillManager.TryStartSkill())
-            {
                 Debug.LogWarning("[UIEnergyProgress] 技能启动失败");
-            }
         }
         #endregion
     }

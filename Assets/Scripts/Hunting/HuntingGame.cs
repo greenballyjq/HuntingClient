@@ -33,6 +33,7 @@ namespace Hunting
             RegisterManager<SettlementRewardManager>();
             RegisterManager<SkillManager>();
             RegisterManager<LuckyManager>();
+            RegisterManager<QuestManager>();
             Debug.Log("[HuntingGame] 注册游戏业务管理器完成");
         }
 

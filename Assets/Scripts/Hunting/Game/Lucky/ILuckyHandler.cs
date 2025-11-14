@@ -6,7 +6,7 @@ namespace Hunting.Game.Luckys
     /// <summary>
     /// 幸运仪式上下文
     /// </summary>
-    public sealed class LuckyContext
+    public class LuckyContext
     {
         /// <summary>
         /// 幸运仪式数据

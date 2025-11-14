@@ -38,7 +38,6 @@ namespace Hunting.Game.Skills
         /// </summary>
         private AnimalManager Animal => GameServiceLocator.GetGameManager<AnimalManager>();
 
-        #region 接口实现
         /// <summary>
         /// 技能开始
         /// </summary>
@@ -52,7 +51,7 @@ namespace Hunting.Game.Skills
         /// </summary>
         public void OnSkillUpdate(SkillContext context, float deltaTime)
         {
-            // 当前技能无需逐帧逻辑
+
         }
 
         /// <summary>
@@ -60,9 +59,8 @@ namespace Hunting.Game.Skills
         /// </summary>
         public void OnSkillEnd(SkillContext context)
         {
-            // 当前技能结束时无需额外处理
+
         }
-        #endregion
 
         #region 私有方法
         /// <summary>
