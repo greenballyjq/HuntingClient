@@ -67,7 +67,7 @@ namespace Hunting.Manager
             float finalDamage = Weapon.GetCurrentDamage(bulletId);
 
             // 从对象池获取子弹预制体
-            var go = await Pool.PullAsync(bulletData.PrefabResourcePath);
+            var go = await Pool.SpawnAsync(bulletData.PrefabResourcePath);
             if (go == null)
             {
                 Debug.LogError($"[BulletManager] 对象池取子弹失败: {bulletData.PrefabResourcePath}");
@@ -84,7 +84,7 @@ namespace Hunting.Manager
             if (bullet == null)
             {
                 Debug.LogError("[BulletManager] 子弹预制体缺少 BulletBehavior 组件");
-                Pool.Push(go);
+                Pool.Despawn(go);
                 return null;
             }
 
@@ -107,9 +107,14 @@ namespace Hunting.Manager
         /// <summary>
         /// 回收指定子弹到对象池
         /// </summary>
-        private void RecycleBullet(BulletBehavior bullet)
+        private void RecycleBullet(BulletDestroyedEventArgs args)
         {
-            Pool.Push(bullet.gameObject);
+            if (args.BulletData == null || args.Bullet == null)
+            {
+                Debug.LogError("[BulletManager] 回收子弹失败：BulletData或Bullet为空");
+                return;
+            }
+            Pool.Despawn(args.Bullet.gameObject);
         }
         #endregion
 
@@ -135,7 +140,7 @@ namespace Hunting.Manager
         /// </summary>
         private void OnBulletDestroyed(BulletDestroyedEventArgs args)
         {
-            RecycleBullet(args.Bullet);
+            RecycleBullet(args);
             Debug.Log("[BulletManager] 子弹已回收");
         }
 

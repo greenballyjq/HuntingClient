@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using GameFramework.Core;
+using GameFramework.Core.Pool;
 using Hunting.Events;
 using Hunting.Game.Animal;
 using Hunting.Game.Bullets.Effects;
@@ -11,7 +12,7 @@ namespace Hunting.Game.Bullets
     /// <summary>
     /// 子弹行为
     /// </summary>
-    public class BulletBehavior : MonoBehaviour
+    public class BulletBehavior : MonoBehaviour, IPoolItem
     {
         /// <summary>
         /// 子弹数据
@@ -44,6 +45,11 @@ namespace Hunting.Game.Bullets
         private float _lifeTimer;
 
         /// <summary>
+        /// 预制体资源路径
+        /// </summary>
+        public string PrefabPath { get; set; }
+
+        /// <summary>
         /// 事件管理器
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
@@ -55,7 +61,7 @@ namespace Hunting.Game.Bullets
         /// <param name="startPosition">起始位置</param>
         /// <param name="direction">子弹方向</param>
         /// <param name="owner">发射者</param>
-        /// <param name="finalDamage">最终伤害（已应用修正）</param>
+        /// <param name="finalDamage">最终伤害</param>
         public void Init(Bullet bulletData, Vector3 startPosition, Vector3 direction, GameObject owner, float finalDamage)
         {
             // 初始化数据
@@ -75,8 +81,8 @@ namespace Hunting.Game.Bullets
         private void Update()
         {
             UpdateMovement();
-            UpdateLifetime();
             CheckCollision();
+            UpdateLifetime();
         }
 
         #region 私有方法
@@ -96,6 +102,7 @@ namespace Hunting.Game.Bullets
             _lifeTimer -= Time.deltaTime;
             if (_lifeTimer <= 0f)
                 DestroyBullet();
+                
         }
 
         /// <summary>
@@ -168,6 +175,24 @@ namespace Hunting.Game.Bullets
         private void TriggerBulletHit(BulletHitEventArgs args)
         {
             Event.Trigger(BulletEvents.BulletHit, args);
+        }
+        #endregion
+
+        #region IPoolItem 实现
+        /// <summary>
+        /// 对象从池子取出后调用
+        /// </summary>
+        public void OnSpawned()
+        {
+
+        }
+
+        /// <summary>
+        /// 对象回收到池子之前调用
+        /// </summary>
+        public void OnDespawned()
+        {
+
         }
         #endregion
     }

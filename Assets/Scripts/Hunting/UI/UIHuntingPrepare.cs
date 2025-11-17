@@ -6,6 +6,7 @@ using Hunting.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using GameFramework.Core.UI;
 
 namespace Hunting.UI
 {

@@ -1,7 +1,7 @@
-﻿using cfg;
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using DG.Tweening;
+using GameFramework.Core.Pool;
 using Hunting.Game.Animal.State;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace Hunting.Game.Animal
     /// <summary>
     /// 动物基类
     /// </summary>
-    public class AnimalBehavior : MonoBehaviour,IPoolable
+    public class AnimalBehavior : MonoBehaviour,IPoolItem
     {
         #region 测试（TODO: 规范化音效系统后移除）
         public AudioClip hitClip;
@@ -432,19 +432,19 @@ namespace Hunting.Game.Animal
             });
         }
 
-        public void OnPull()
+        
+        public void OnSpawned()
         {
-            // 从对象池取出时（初始化在Init中）
         }
 
-        public void OnPush()
+        public void OnDespawned()
         {
             // 释放RVO代理
             RVO.Release();
-            
+
             // 禁用碰撞体
             SetColliderEnabled(false);
-            
+
             // 清理所有数据
             SpecieData = null;
             MaxHP = 0;
@@ -459,11 +459,8 @@ namespace Hunting.Game.Animal
 
             IsInitialized = false;
         }
-            
-        public void OnPoolDestroy()
-        {
-            // 对象池销毁时
-        }
+
+        public string PrefabPath { get; set; }
     }
 }
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using cfg;
+﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using Hunting.Game.Animal;
 using UnityEngine;
@@ -42,7 +40,7 @@ namespace Hunting.Manager
         /// </summary>
         public async UniTask<AnimalBehavior> SpawnAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, float stayTime, Spawner spawner = null)
         {
-            var go = await Pool.PullAsync(specieData.PrefabResourcePath);
+            var go = await Pool.SpawnAsync(specieData.PrefabResourcePath);
             if (go == null)
             {
                 Debug.LogError($"[AnimalManager] 从对象池获取失败: {specieData.PrefabResourcePath}");
@@ -53,7 +51,7 @@ namespace Hunting.Manager
             if (animal == null)
             {
                 Debug.LogError("[AnimalManager] 预制体缺少 AnimalBehavior 组件");
-                Pool.Push(go);
+                Pool.Despawn(go);
                 return null;
             }
 
@@ -77,16 +75,6 @@ namespace Hunting.Manager
             return animal;
         }
 
-        #endregion
-
-        #region 私有方法
-        /// <summary>
-        /// 回收动物到对象池并从管理列表移除
-        /// </summary>
-        private void RecycleAnimal(AnimalBehavior animal)
-        {
-            Pool.Push(animal.gameObject);
-        }
         #endregion
 
         #region 事件相关
@@ -128,7 +116,7 @@ namespace Hunting.Manager
                 return;
 
             // 回收动物到对象池
-            RecycleAnimal(args.Animal);
+            Pool.Despawn(args.Animal.gameObject);
         }
 
         /// <summary>
@@ -140,7 +128,7 @@ namespace Hunting.Manager
                 return;
 
             // 回收动物到对象池
-            RecycleAnimal(args.Animal);
+            Pool.Despawn(args.Animal.gameObject);
         }
 
         /// <summary>
