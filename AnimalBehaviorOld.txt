@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using DG.Tweening;
 using GameFramework.Core.Pool;
@@ -12,7 +12,7 @@ namespace Hunting.Game.Animal
     /// <summary>
     /// 动物基类
     /// </summary>
-    public class AnimalBehavior : MonoBehaviour, IPoolItem
+    public class AnimalBehavior : MonoBehaviour,IPoolItem
     {
         #region 测试（TODO: 规范化音效系统后移除）
         public AudioClip hitClip;
@@ -83,7 +83,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 在场景中的时间
         /// </summary>
-        public float TimeInScene { get; private set; }
+        public float TimeInScene { get; private  set; }
 
         /// <summary>
         /// 最大驻场时间
@@ -146,12 +146,12 @@ namespace Hunting.Game.Animal
         public void OnSpawned()
         {
             gameObject.SetActive(true);
-            RVO.EnableRVO();
         }
 
         public void OnDespawned()
         {
-            RVO.DisableRVO();
+            // 释放RVO代理
+            RVO.Release();
 
             // 禁用碰撞体
             SetColliderEnabled(false);
@@ -191,14 +191,14 @@ namespace Hunting.Game.Animal
             Animator = GetComponent<Animator>();
             RVO = GetComponent<RVOMovement>();
             Collider = GetComponent<Collider>();
-
+            
             // 获取所有渲染器和材质
             _renderers = GetComponentsInChildren<Renderer>();
             if (_renderers != null && _renderers.Length > 0)
             {
                 _materials = new Material[_renderers.Length];
                 _originalColors = new Color[_renderers.Length];
-
+                
                 for (int i = 0; i < _renderers.Length; i++)
                 {
                     _materials[i] = _renderers[i].material;
@@ -208,7 +208,7 @@ namespace Hunting.Game.Animal
 
             // 创建状态机
             _stateMachine = new StateMachine();
-
+            
             // 预创建状态
             _moveState = new AnimalMoveState(this, _stateMachine, "Move");
             _hitState = new AnimalHitState(this, _stateMachine, "Hit");
@@ -222,14 +222,14 @@ namespace Hunting.Game.Animal
         /// <param name="data"></param>
         /// <param name="stayTime"></param>
         /// <param name="initialDirection"></param>
-        public void Init(Specie data, float stayTime)
+        public void Init(Specie data, float stayTime, Vector3 initialDirection)
         {
             // 初始化数据
             SpecieData = data;
             MaxHP = data.HP;
             CurrentHP = MaxHP;
             CurrentMoveSpeed = data.MoveSpeed;
-            CurrentDirection = transform.forward;
+            CurrentDirection = initialDirection;
             TimeInScene = 0f;
             StayTime = stayTime;
             IsHit = false;
@@ -239,9 +239,8 @@ namespace Hunting.Game.Animal
             // 启用碰撞体
             SetColliderEnabled(true);
 
-            // 设置RVO组件方向和速度（组件已在Awake时自动注册）
-            RVO.SetMoveDirection(CurrentDirection);
-            RVO.SetMaxSpeed(CurrentMoveSpeed);
+            // 初始化RVO组件
+            RVO.Init(CurrentDirection, CurrentMoveSpeed);
 
             // 初始化状态机
             _stateMachine.Init(_moveState);
@@ -251,7 +250,7 @@ namespace Hunting.Game.Animal
 
         private void Update()
         {
-            if (!IsInitialized)
+            if(!IsInitialized)
                 return;
 
             // 更新驻场时间
@@ -337,6 +336,30 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
+        /// 暂停移动
+        /// </summary>
+        public void PauseMovement()
+        {
+            RVO.PauseMovement();
+        }
+
+        /// <summary>
+        /// 恢复移动
+        /// </summary>
+        public void ResumeMovement()
+        {
+            RVO.ResumeMovement();
+        }
+
+        /// <summary>
+        /// 释放RVO
+        /// </summary>
+        public void ReleaseRVO()
+        {
+            RVO.Release();
+        }
+
+        /// <summary>
         /// 应用速度倍率
         /// </summary>
         public void ApplySpeedMultiplier(float multiplier)
@@ -350,18 +373,18 @@ namespace Hunting.Game.Animal
         /// </summary>
         public void PlayHitEffect()
         {
-            if (_materials == null || _materials.Length == 0)
+            if (_materials == null || _materials.Length == 0) 
                 return;
-
+            
             // 对所有材质应用变红效果（支持LOD模型）
             for (int i = 0; i < _materials.Length; i++)
             {
                 Material mat = _materials[i];
                 Color originalColor = _originalColors[i];
-
+                
                 // 停止之前的动画，避免重复播放冲突
                 mat.DOKill();
-
+                
                 // 变红再恢复（0.1秒变红，0.2秒恢复）
                 mat.DOColor(Color.red, 0.1f).OnComplete(() =>
                 {
@@ -377,7 +400,7 @@ namespace Hunting.Game.Animal
         {
             if (Animator == null || Animator.runtimeAnimatorController == null)
                 return 0.5f;
-
+            
             AnimationClip[] clips = Animator.runtimeAnimatorController.animationClips;
             foreach (var clip in clips)
             {

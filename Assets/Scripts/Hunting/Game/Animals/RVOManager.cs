@@ -35,13 +35,11 @@ public enum RVOUpdateMode
 {
     /// <summary>
     /// 动态步长
-    /// 步长 = Time.deltaTime
     /// </summary>
     DynamicStep,
 
     /// <summary>
     /// 固定步长
-    /// 步长 = 固定时间间隔
     /// </summary>
     FixedStep
 }
@@ -388,17 +386,6 @@ public class RVOManager : MonoBehaviour
         }
 
         return _simulator.getAgentMaxSpeed(agentId);
-    }
-
-    /// <summary>
-    /// 获取代理句柄信息
-    /// </summary>
-    public RVOAgentHandle GetAgentHandle(int agentId)
-    {
-        if (_agentHandles.ContainsKey(agentId))
-            return _agentHandles[agentId];
-
-        return null;
     }
 
     /// <summary>

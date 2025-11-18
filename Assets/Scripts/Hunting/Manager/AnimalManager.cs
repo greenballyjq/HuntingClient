@@ -59,7 +59,7 @@ namespace Hunting.Manager
             if (direction != Vector3.zero)
                 go.transform.rotation = Quaternion.LookRotation(direction);
 
-            animal.Init(specieData, stayTime, direction);
+            go.GetComponent<AnimalBehavior>().Init(specieData, stayTime);
 
             TriggerAnimalSpawned(new AnimalSpawnedEventArgs
             {
@@ -103,7 +103,6 @@ namespace Hunting.Manager
         /// </summary>
         private async void OnSpeciesSpawned(SpeciesSpawnEventArgs args)
         {
-            // 从对象池获取对应物种的预制体
             await SpawnAnimalAsync(args.SpecieData, args.Position, args.Direction, args.StayTime, args.Spawner);
         }
 
@@ -112,10 +111,6 @@ namespace Hunting.Manager
         /// </summary>
         private void OnAnimalDied(AnimalDiedEventArgs args)
         {
-            if (args.Animal == null)
-                return;
-
-            // 回收动物到对象池
             Pool.Despawn(args.Animal.gameObject);
         }
 
@@ -124,10 +119,6 @@ namespace Hunting.Manager
         /// </summary>
         private void OnAnimalFled(AnimalFledEventArgs args)
         {
-            if (args.Animal == null)
-                return;
-
-            // 回收动物到对象池
             Pool.Despawn(args.Animal.gameObject);
         }
 

@@ -35,41 +35,49 @@ namespace Hunting.Game.Bullets
         private Vector3 _moveDirection;
 
         /// <summary>
-        /// 子弹最大飞行时长 TODO: 之后配置化
+        /// 子弹最大飞行时长 TODO: 临时待调整
         /// </summary>
         private const float MaxLifetime = 10f;
 
         /// <summary>
-        /// 生命周期计时 TODO: 之后配置化
+        /// 生命周期计时 TODO: 临时待调整
         /// </summary>
         private float _lifeTimer;
-
-        /// <summary>
-        /// 预制体资源路径
-        /// </summary>
-        public string PrefabPath { get; set; }
 
         /// <summary>
         /// 事件管理器
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
+        #region 对象池接口
+        public string PrefabPath { get; set; }
+
+        public void OnSpawned()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void OnDespawned()
+        {
+            _lifeTimer = 0;
+            _moveDirection = Vector3.zero;
+
+            gameObject.SetActive(false);
+        }
+        #endregion
+
         /// <summary>
         /// 子弹初始化
         /// </summary>
         /// <param name="bulletData">子弹数据</param>
-        /// <param name="startPosition">起始位置</param>
-        /// <param name="direction">子弹方向</param>
         /// <param name="finalDamage">最终伤害</param>
-        public void Init(Bullet bulletData, Vector3 startPosition, Vector3 direction, float finalDamage)
+        public void Init(Bullet bulletData, float finalDamage)
         {
-            Debug.LogWarning("init");
-
             // 初始化数据
             _bulletData = bulletData;
-            _moveDirection = direction.normalized;
+            _moveDirection = transform.forward;
             _lifeTimer = MaxLifetime;
-            
+
             _bulletRuntimeContext = new BulletRuntimeContext
             {
                 FinalDamage = finalDamage
@@ -81,7 +89,6 @@ namespace Hunting.Game.Bullets
 
         private void Update()
         {
-            Debug.LogWarning("Update");
             UpdateMovement();
             UpdateLifetime();
             CheckCollision();
@@ -174,23 +181,5 @@ namespace Hunting.Game.Bullets
             Event.Trigger(BulletEvents.BulletHit, args);
         }
         #endregion
-
-        /// <summary>
-        /// 对象从池子取出后调用
-        /// </summary>
-        public void OnSpawned()
-        {
-            Debug.LogWarning("OnSpawned");
-        }
-
-        /// <summary>
-        /// 对象回收到池子之前调用
-        /// </summary>
-        public void OnDespawned()
-        {
-            _lifeTimer = 0;
-            _moveDirection = Vector3.zero;
-            _bulletRuntimeContext = null;
-        }
     }
 }

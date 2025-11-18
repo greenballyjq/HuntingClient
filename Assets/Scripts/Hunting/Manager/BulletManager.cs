@@ -83,8 +83,8 @@ namespace Hunting.Manager
                 return null;
             }
 
-            bullet.Init(bulletData, position, direction, finalDamage);
-
+            bullet.Init(bulletData, finalDamage);
+            
             // 对外通知子弹已生成
             TriggerBulletSpawned(new BulletSpawnedEventArgs
             {
@@ -121,7 +121,6 @@ namespace Hunting.Manager
         private void OnBulletDestroyed(BulletDestroyedEventArgs args)
         {
             Pool.Despawn(args.Bullet.gameObject);
-            Debug.Log("[BulletManager] 子弹已回收");
         }
 
         /// <summary>

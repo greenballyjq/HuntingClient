@@ -811,13 +811,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45dfdba63c4297040afc57109f832bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  neighborDist: 10
-  maxNeighbors: 6
-  timeHorizon: 8
-  timeHorizonObst: 1000
-  radius: 3
-  enableAutoRotation: 1
-  rotationSmoothSpeed: 3
+  _neighborDist: 10
+  _maxNeighbors: 6
+  _timeHorizon: 10
+  _timeHorizonObst: 10
+  _radius: 3
+  _maxSpeed: 8
+  _enableAutoRotation: 1
+  _rotationSmoothSpeed: 5
 --- !u!1 &7853299950699460719
 GameObject:
   m_ObjectHideFlags: 0
