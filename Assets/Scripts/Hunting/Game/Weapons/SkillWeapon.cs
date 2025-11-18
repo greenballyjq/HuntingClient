@@ -178,7 +178,7 @@ namespace Hunting.Game.Weapons
             Vector3 spawnPosition = muzzlePoint.position;
             Vector3 spawnDirection = muzzlePoint.forward;
 
-            await Bullet.SpawnBullet(bulletId, spawnPosition, spawnDirection, gameObject);
+            await Bullet.SpawnBullet(bulletId, spawnPosition, spawnDirection);
         }
         #endregion
 

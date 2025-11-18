@@ -12,17 +12,13 @@ using UnityEngine;
 /// </summary>
 public class GameServiceLocatorTest : MonoBehaviour
 {
-    public GameObject cube;
+
     private void Start()
     {
         
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            cube.SetActive(true);
-            cube.GetComponent<CubeTest>().Init();
-        }
+
     }
 }

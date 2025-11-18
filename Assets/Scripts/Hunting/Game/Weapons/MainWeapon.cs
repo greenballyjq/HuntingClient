@@ -203,7 +203,7 @@ namespace Hunting.Game.Weapons
             }
 
             Transform muzzlePoint = weaponVisual.MuzzlePoint;
-            await Bullet.SpawnBullet(_currentBulletId, muzzlePoint.position, muzzlePoint.forward, gameObject);
+            await Bullet.SpawnBullet(_currentBulletId, muzzlePoint.position, muzzlePoint.forward);
         }
 
         /// <summary>

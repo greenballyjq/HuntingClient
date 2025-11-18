@@ -54,41 +54,36 @@ namespace Hunting.Manager
         /// <summary>
         /// 生成子弹
         /// </summary>
-        public async UniTask<BulletBehavior> SpawnBullet(int bulletId, Vector3 position, Vector3 direction, GameObject owner)
+        public async UniTask<BulletBehavior> SpawnBullet(int bulletId, Vector3 position, Vector3 direction)
         {
             Bullet bulletData = Config.GetBullet(bulletId);
-            if (bulletData == null)
-            {
-                Debug.LogError($"[BulletManager] 子弹配置不存在: {bulletId}");
-                return null;
-            }
 
             // 从WeaponManager获取修正后的伤害
             float finalDamage = Weapon.GetCurrentDamage(bulletId);
 
             // 从对象池获取子弹预制体
-            var go = await Pool.SpawnAsync(bulletData.PrefabResourcePath);
-            if (go == null)
+            GameObject gameObject = await Pool.SpawnAsync(bulletData.PrefabResourcePath);
+            if (gameObject == null)
             {
                 Debug.LogError($"[BulletManager] 对象池取子弹失败: {bulletData.PrefabResourcePath}");
                 return null;
             }
 
             // 设置初始位置和朝向
-            go.transform.position = position;
+            gameObject.transform.position = position;
             if (direction != Vector3.zero)
-                go.transform.rotation = Quaternion.LookRotation(direction);
+                gameObject.transform.rotation = Quaternion.LookRotation(direction);
 
             // 获取并初始化子弹组件
-            var bullet = go.GetComponent<BulletBehavior>();
+            var bullet = gameObject.GetComponent<BulletBehavior>();
             if (bullet == null)
             {
                 Debug.LogError("[BulletManager] 子弹预制体缺少 BulletBehavior 组件");
-                Pool.Despawn(go);
+                Pool.Despawn(gameObject);
                 return null;
             }
 
-            bullet.Init(bulletData, position, direction, owner, finalDamage);
+            bullet.Init(bulletData, position, direction, finalDamage);
 
             // 对外通知子弹已生成
             TriggerBulletSpawned(new BulletSpawnedEventArgs
@@ -100,21 +95,6 @@ namespace Hunting.Manager
             });
 
             return bullet;
-        }
-        #endregion
-
-        #region 私有方法
-        /// <summary>
-        /// 回收指定子弹到对象池
-        /// </summary>
-        private void RecycleBullet(BulletDestroyedEventArgs args)
-        {
-            if (args.BulletData == null || args.Bullet == null)
-            {
-                Debug.LogError("[BulletManager] 回收子弹失败：BulletData或Bullet为空");
-                return;
-            }
-            Pool.Despawn(args.Bullet.gameObject);
         }
         #endregion
 
@@ -140,7 +120,7 @@ namespace Hunting.Manager
         /// </summary>
         private void OnBulletDestroyed(BulletDestroyedEventArgs args)
         {
-            RecycleBullet(args);
+            Pool.Despawn(args.Bullet.gameObject);
             Debug.Log("[BulletManager] 子弹已回收");
         }
 

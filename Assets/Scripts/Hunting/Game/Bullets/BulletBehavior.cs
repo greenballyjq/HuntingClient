@@ -60,10 +60,11 @@ namespace Hunting.Game.Bullets
         /// <param name="bulletData">子弹数据</param>
         /// <param name="startPosition">起始位置</param>
         /// <param name="direction">子弹方向</param>
-        /// <param name="owner">发射者</param>
         /// <param name="finalDamage">最终伤害</param>
-        public void Init(Bullet bulletData, Vector3 startPosition, Vector3 direction, GameObject owner, float finalDamage)
+        public void Init(Bullet bulletData, Vector3 startPosition, Vector3 direction, float finalDamage)
         {
+            Debug.LogWarning("init");
+
             // 初始化数据
             _bulletData = bulletData;
             _moveDirection = direction.normalized;
@@ -80,9 +81,10 @@ namespace Hunting.Game.Bullets
 
         private void Update()
         {
+            Debug.LogWarning("Update");
             UpdateMovement();
-            CheckCollision();
             UpdateLifetime();
+            CheckCollision();
         }
 
         #region 私有方法
@@ -101,8 +103,13 @@ namespace Hunting.Game.Bullets
         {
             _lifeTimer -= Time.deltaTime;
             if (_lifeTimer <= 0f)
-                DestroyBullet();
-                
+            {
+                TriggerBulletDestroyed(new BulletDestroyedEventArgs
+                {
+                    BulletData = _bulletData,
+                    Bullet = this
+                });
+            }
         }
 
         /// <summary>
@@ -126,14 +133,11 @@ namespace Hunting.Game.Bullets
         /// <param name="hitPoint">命中位置</param>
         private void HandleHit(AnimalBehavior animal, Vector3 hitPoint)
         {
-            var hitInfo = new BulletHitInfo
-            {
-                HitPoint = hitPoint,
-                PrimaryTarget = animal
-            };
-
             // 执行效果，获取所有命中的动物
-            List<AnimalBehavior> hitAnimals = _bulletEffect.OnHit(_bulletRuntimeContext, hitInfo);
+            List<AnimalBehavior> hitAnimals = _bulletEffect.OnHit(_bulletRuntimeContext, new BulletHitInfo { 
+                HitPoint = hitPoint,
+                PrimaryTarget = animal,
+            });
 
             // 触发命中事件
             TriggerBulletHit(new BulletHitEventArgs
@@ -144,15 +148,12 @@ namespace Hunting.Game.Bullets
                 Targets = hitAnimals
             });
 
-            DestroyBullet();
-        }
-
-        /// <summary>
-        /// 销毁子弹
-        /// </summary>
-        private void DestroyBullet()
-        {
-            TriggerBulletDestroyed();
+            // 触发销毁事件
+            TriggerBulletDestroyed(new BulletDestroyedEventArgs
+            {
+                BulletData = _bulletData,
+                Bullet = this
+            });
         }
         #endregion
 
@@ -160,13 +161,9 @@ namespace Hunting.Game.Bullets
         /// <summary>
         /// 触发子弹销毁事件
         /// </summary>
-        private void TriggerBulletDestroyed()
+        private void TriggerBulletDestroyed(BulletDestroyedEventArgs args)
         {
-            Event.Trigger(BulletEvents.BulletDestroyed, new BulletDestroyedEventArgs
-            {
-                BulletData = _bulletData,
-                Bullet = this
-            });
+            Event.Trigger(BulletEvents.BulletDestroyed,args );
         }
 
         /// <summary>
@@ -178,13 +175,12 @@ namespace Hunting.Game.Bullets
         }
         #endregion
 
-        #region IPoolItem 实现
         /// <summary>
         /// 对象从池子取出后调用
         /// </summary>
         public void OnSpawned()
         {
-
+            Debug.LogWarning("OnSpawned");
         }
 
         /// <summary>
@@ -192,8 +188,9 @@ namespace Hunting.Game.Bullets
         /// </summary>
         public void OnDespawned()
         {
-
+            _lifeTimer = 0;
+            _moveDirection = Vector3.zero;
+            _bulletRuntimeContext = null;
         }
-        #endregion
     }
 }
