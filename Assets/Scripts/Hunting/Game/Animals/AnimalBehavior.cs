@@ -146,12 +146,12 @@ namespace Hunting.Game.Animal
         public void OnSpawned()
         {
             gameObject.SetActive(true);
-            RVO.EnableRVO();
+            RVO.Enable();
         }
 
         public void OnDespawned()
         {
-            RVO.DisableRVO();
+            RVO.Disable();
 
             // 禁用碰撞体
             SetColliderEnabled(false);
@@ -240,6 +240,7 @@ namespace Hunting.Game.Animal
             SetColliderEnabled(true);
 
             // 设置RVO组件方向和速度（组件已在Awake时自动注册）
+            RVO.SyncPosition();
             RVO.SetMoveDirection(CurrentDirection);
             RVO.SetMaxSpeed(CurrentMoveSpeed);
 

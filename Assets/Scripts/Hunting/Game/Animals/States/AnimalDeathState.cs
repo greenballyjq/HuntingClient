@@ -25,9 +25,7 @@ namespace Hunting.Game.Animal.State
             // 设置死亡计时器
             stateTimer = _deathDuration;
 
-            // 停止移动（RVO组件会在OnDestroy时自动释放）
-            animal.RVO.SetMoveDirection(Vector3.zero);
-            animal.RVO.SetMaxSpeed(0);
+            animal.RVO.Disable();
 
             // 禁用碰撞体
             animal.SetColliderEnabled(false);

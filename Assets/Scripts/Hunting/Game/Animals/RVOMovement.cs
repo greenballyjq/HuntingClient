@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// RVO避障移动组件 - 提供基于RVO2的自动避障移动能力
+/// RVO避障移动组件
 /// </summary>
 public class RVOMovement : MonoBehaviour
 {
@@ -25,14 +25,14 @@ public class RVOMovement : MonoBehaviour
     /// <summary>
     /// 与代理碰撞预测时间
     /// </summary>
-    private float _timeHorizon = 8.0f;
+    private float _timeHorizon = 10.0f;
 
     [Tooltip("与障碍物碰撞预测时间")]
     [SerializeField]
     /// <summary>
     /// 与障碍物碰撞预测时间
     /// </summary>
-    private float _timeHorizonObst = 1000.0f;
+    private float _timeHorizonObst = 10.0f;
 
     [Tooltip("代理半径")]
     [SerializeField]
@@ -46,7 +46,7 @@ public class RVOMovement : MonoBehaviour
     /// <summary>
     /// 最大移动速度
     /// </summary>
-    private float _maxSpeed = 8.0f;
+    private float _defaultMaxSpeed = 8.0f;
 
     [Header("旋转参数")]
     [Tooltip("是否启用自动旋转")]
@@ -61,7 +61,7 @@ public class RVOMovement : MonoBehaviour
     /// <summary>
     /// 旋转平滑速度
     /// </summary>
-    private float _rotationSmoothSpeed = 5.0f;
+    private float _rotationSmoothSpeed = 3.0f;
 
     /// <summary>
     /// RVO代理ID
@@ -76,62 +76,37 @@ public class RVOMovement : MonoBehaviour
     /// <summary>
     /// 目标移动方向
     /// </summary>
-    private Vector3 _targetDirection = Vector3.zero;
+    private Vector3 _targetDirection;
 
     /// <summary>
     /// 实际移动速度
     /// </summary>
-    private Vector3 _actualVelocity = Vector3.zero;
+    private Vector3 _actualVelocity;
+
+    /// <summary>
+    /// 是否已注册到RVO系统
+    /// </summary>
+    private bool isRegistered => _agentId != -1;
 
     /// <summary>
     /// 当前是否已启用RVO
     /// </summary>
-    private bool _isRVOEnabled = false;
+    private bool _isEnabled = false;
 
     /// <summary>
     /// RVO管理器引用
     /// </summary>
     private RVOManager _rvoManager => RVOManager.Instance;
 
-    /// <summary>
-    /// 是否已注册到RVO系统
-    /// </summary>
-    public bool IsRegistered => _agentId != -1;
-
-    /// <summary>
-    /// Awake时注册RVO代理
-    /// </summary>
     private void Awake()
     {
         RegisterAgent();
+        Enable();
     }
 
-    /// <summary>
-    /// OnDestroy时释放RVO代理
-    /// </summary>
-    private void OnDestroy()
-    {
-        if (!IsRegistered)
-            return;
-
-        // 禁用RVO
-        DisableRVO();
-
-        // 移除代理
-        _rvoManager.RemoveAgent(_agentId);
-
-        // 重置状态
-        _agentId = -1;
-        _currentMaxSpeed = 0;
-        _actualVelocity = Vector3.zero;
-    }
-
-    /// <summary>
-    /// Update中更新期望速度和旋转
-    /// </summary>
     private void Update()
     {
-        if (!IsRegistered || !_isRVOEnabled)
+        if (!isRegistered || !_isEnabled)
             return;
 
         // 更新期望速度
@@ -142,76 +117,84 @@ public class RVOMovement : MonoBehaviour
             UpdateRotation();
     }
 
+    private void OnDestroy()
+    {
+        if (!isRegistered) 
+            return;
+
+        Disable();
+
+        _rvoManager.RemoveAgent(_agentId);
+        _agentId = -1; 
+
+        Debug.Log($"[RVOMovement] {gameObject.name} 已销毁并释放代理");
+    }
+
     #region 公共方法
     /// <summary>
     /// 设置移动方向
     /// </summary>
-    /// <param name="direction">移动方向（会自动归一化）</param>
+    /// <param name="direction">移动方向</param>
     public void SetMoveDirection(Vector3 direction)
     {
         if (direction.sqrMagnitude > 0.001f)
-        {
             _targetDirection = direction.normalized;
-        }
         else
-        {
             _targetDirection = Vector3.zero;
-        }
+    }
+    /// <summary>
+    /// 启用RVO代理
+    /// </summary>
+    public void Enable()
+    {
+        if (!isRegistered || _isEnabled)
+            return;
+
+        _rvoManager.OnRVOStepCompleted += OnRVOStepCompleted;
+        _isEnabled = true;
+    }
+
+    /// <summary>
+    /// 禁用RVO代理
+    /// </summary>
+    public void Disable()
+    {
+        if (!isRegistered || !_isEnabled)
+            return;
+
+        _rvoManager.OnRVOStepCompleted -= OnRVOStepCompleted;
+
+        _rvoManager.SetAgentPrefVelocity(_agentId, Vector3.zero);
+        _rvoManager.SetAgentPosition(_agentId, new Vector3(99999, 99999, 99999));
+
+        _currentMaxSpeed = 0f;
+        _targetDirection = Vector3.zero;
+        _actualVelocity = Vector3.zero;
+
+        _isEnabled = false;
     }
 
     /// <summary>
     /// 设置最大移动速度
     /// </summary>
-    /// <param name="speed">最大速度值（必须非负）</param>
+    /// <param name="speed">最大速度值</param>
     public void SetMaxSpeed(float speed)
     {
-        if (speed < 0)
-        {
-            Debug.LogWarning($"[RVOMovement] {gameObject.name} 设置的速度值不能为负: {speed}");
-            return;
-        }
-
         _currentMaxSpeed = speed;
 
-        if (IsRegistered)
-        {
+        if (isRegistered)
             _rvoManager.SetAgentMaxSpeed(_agentId, speed);
-        }
     }
 
     /// <summary>
-    /// 启用RVO（订阅步进事件，重置运行时状态）
+    /// 同步当前位置到RVO代理
     /// </summary>
-    public void EnableRVO()
+    public void SyncPosition()
     {
-        if (!IsRegistered || _isRVOEnabled)
-            return;
+        if (!isRegistered || !_isEnabled) return;
 
-        _rvoManager.OnRVOStepCompleted += OnRVOStepCompleted;
-
-        if (_currentMaxSpeed <= 0f)
-            _currentMaxSpeed = _maxSpeed;
-
-        _isRVOEnabled = true;
-        UpdatePrefVelocity();
-
-        Debug.Log($"[RVOMovement] {gameObject.name} 已启用，代理 ID: {_agentId}");
-    }
-
-    /// <summary>
-    /// 禁用RVO（取消订阅并停止移动）
-    /// </summary>
-    public void DisableRVO()
-    {
-        if (!IsRegistered || !_isRVOEnabled)
-            return;
-
-        _rvoManager.OnRVOStepCompleted -= OnRVOStepCompleted;
-        _rvoManager.SetAgentPrefVelocity(_agentId, Vector3.zero);
-        _actualVelocity = Vector3.zero;
-        _isRVOEnabled = false;
-
-        Debug.Log($"[RVOMovement] {gameObject.name} 已禁用，代理 ID: {_agentId}");
+        // 同步当前位置到RVO系统
+        _rvoManager.SetAgentPosition(_agentId, transform.position);
     }
     #endregion
 
@@ -228,8 +211,8 @@ public class RVOMovement : MonoBehaviour
             maxNeighbors = _maxNeighbors,
             timeHorizon = _timeHorizon,
             timeHorizonObst = _timeHorizonObst,
+            maxSpeed = _defaultMaxSpeed,
             radius = _radius,
-            maxSpeed = _maxSpeed,
         };
 
         // 注册代理到RVO系统
@@ -241,12 +224,10 @@ public class RVOMovement : MonoBehaviour
         }
 
         // 初始化运行时状态
-        _currentMaxSpeed = _maxSpeed;
-
-        Debug.Log($"[RVOMovement] {gameObject.name} 注册代理成功，代理 ID: {_agentId}");
-
-        // 默认启用RVO
-        EnableRVO();
+        _currentMaxSpeed = _defaultMaxSpeed;
+        _targetDirection = Vector3.zero;
+        _actualVelocity = Vector3.zero;
+        _rvoManager.SetAgentPosition(_agentId, new Vector3(99999, 99999, 99999));
     }
 
     /// <summary>
@@ -254,22 +235,19 @@ public class RVOMovement : MonoBehaviour
     /// </summary>
     private void UpdatePrefVelocity()
     {
-        if (!IsRegistered || !_isRVOEnabled)
-            return;
-
         // 计算期望速度
-        Vector3 prefVelocity = _targetDirection.normalized * _currentMaxSpeed;
+        Vector3 prefVelocity = _targetDirection * _currentMaxSpeed;
 
         // 设置到RVO系统
         _rvoManager.SetAgentPrefVelocity(_agentId, prefVelocity);
     }
 
     /// <summary>
-    /// 更新旋转（基于实际移动方向）
+    /// 更新旋转
     /// </summary>
     private void UpdateRotation()
     {
-        // 计算目标朝向（基于实际移动方向）
+        // 计算目标朝向
         Vector3 targetDirection = _actualVelocity.normalized;
 
         // 平滑旋转
@@ -285,14 +263,14 @@ public class RVOMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// RVO模拟步进完成回调（从RVOManager订阅）
+    /// RVO模拟步进完成回调
     /// </summary>
     private void OnRVOStepCompleted()
     {
-        if (!IsRegistered)
+        if (!isRegistered)
             return;
 
-        // 获取实际速度（RVO计算后的）
+        // 获取实际速度
         _actualVelocity = _rvoManager.GetAgentVelocity(_agentId);
 
         // 应用位置
@@ -304,11 +282,11 @@ public class RVOMovement : MonoBehaviour
 
     #region 调试可视化
     /// <summary>
-    /// 绘制调试信息（Gizmos）
+    /// 绘制调试信息
     /// </summary>
     private void OnDrawGizmos()
     {
-        if (!Application.isPlaying || !IsRegistered)
+        if (!Application.isPlaying || !isRegistered || !_isEnabled) 
             return;
 
         Vector3 pos = transform.position;

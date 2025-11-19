@@ -1,4 +1,4 @@
-using Hunting.Game.Animal;
+﻿using Hunting.Game.Animal;
 using System.Collections.Generic;
 
 namespace Hunting.Game.Bullets.Effects
