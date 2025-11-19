@@ -11,12 +11,12 @@ namespace Hunting.Manager
     public class SkillManager : BaseGameManager
     {
         /// <summary>
-        /// 当前技能处理器
+        /// 当局技能处理器
         /// </summary>
-        private ISkillHandler _handler;
+        private ISkillHandler _currentHandler;
 
         /// <summary>
-        /// 当前技能上下文
+        /// 当局技能上下文
         /// </summary>
         private SkillContext _currentSkillContext;
 
@@ -59,7 +59,7 @@ namespace Hunting.Manager
 
             // 逐帧递减持续时间并调用处理器更新
             _remainingTime -= Time.deltaTime;
-            _handler?.OnSkillUpdate(_currentSkillContext, Time.deltaTime);
+            _currentHandler?.OnSkillUpdate(_currentSkillContext, Time.deltaTime);
 
             if (_remainingTime <= 0f)
                 EndSkill();
@@ -79,7 +79,7 @@ namespace Hunting.Manager
         /// </summary>
         public bool CanStartSkill()
         {
-            if (_handler == null || _isRunning || !Energy.CanConsume())
+            if (_currentHandler == null || _isRunning || !Energy.CanConsume())
                 return false;
 
             return true;
@@ -106,22 +106,6 @@ namespace Hunting.Manager
             BeginSkill();
             return true;
         }
-
-        /// <summary>
-        /// 当前技能是否正在运行
-        /// </summary>
-        public bool IsRunning()
-        {
-            return _isRunning;
-        }
-
-        /// <summary>
-        /// 获取技能剩余时间
-        /// </summary>
-        public float GetRemainingTime()
-        {
-            return _remainingTime;
-        }
         #endregion
 
         #region 私有方法
@@ -134,14 +118,13 @@ namespace Hunting.Manager
             _isRunning = true;
 
             // 通知处理器执行开始逻辑
-            _handler.OnSkillStart(_currentSkillContext);
+            _currentHandler.OnSkillStart(_currentSkillContext);
 
             TriggerSkillStarted(new SkillStartedEventArgs
             {
                 Sender = this,
                 SkillData = _currentSkillContext.SkillData,
                 Context = _currentSkillContext.RoundContext,
-                Duration = _remainingTime
             });
 
             Debug.Log($"[SkillManager] 技能开始，持续 {_remainingTime:F2} 秒");
@@ -156,7 +139,7 @@ namespace Hunting.Manager
                 return;
 
             // 通知处理器执行结束逻辑
-            _handler?.OnSkillEnd(_currentSkillContext);
+            _currentHandler?.OnSkillEnd(_currentSkillContext);
 
             _isRunning = false;
             _remainingTime = 0f;
@@ -176,7 +159,7 @@ namespace Hunting.Manager
         /// </summary>
         private void ResetState()
         {
-            _handler = null;
+            _currentHandler = null;
             _currentSkillContext = null;
             _isRunning = false;
             _remainingTime = 0f;
@@ -217,8 +200,8 @@ namespace Hunting.Manager
                 return;
             }
 
-            _handler = SkillHandlerFactory.CreateSkillHandler(skill.SkillType);
-            if (_handler == null)
+            _currentHandler = SkillHandlerFactory.CreateSkillHandler(skill.SkillType);
+            if (_currentHandler == null)
             {
                 Debug.LogWarning($"[SkillManager] 未实现的技能类型: {skill.SkillType}");
                 return;

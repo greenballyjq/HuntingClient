@@ -61,6 +61,8 @@ namespace Hunting.Game.Bullets
         {
             _lifeTimer = 0;
             _moveDirection = Vector3.zero;
+            _bulletRuntimeContext = null;
+            _bulletEffect = null;
 
             gameObject.SetActive(false);
         }

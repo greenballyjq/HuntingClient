@@ -106,6 +106,16 @@ namespace Hunting.Game.Animal
         public float FleeTimeRemaining { get; set; }
 
         /// <summary>
+        /// 受击减速倍率
+        /// </summary>
+        public float HitSpeedMultiplier { get; private set; } = 0.5f;
+
+        /// <summary>
+        /// 逃跑加速倍率
+        /// </summary>
+        public float FleeSpeedMultiplier { get; private set; } = 2f;
+
+        /// <summary>
         /// 动画组件
         /// </summary>
         public Animator Animator { get; private set; }
@@ -146,43 +156,28 @@ namespace Hunting.Game.Animal
         public void OnSpawned()
         {
             gameObject.SetActive(true);
+            SetColliderEnabled(true);
             RVO.Enable();
         }
 
         public void OnDespawned()
         {
             RVO.Disable();
-
-            // 禁用碰撞体
             SetColliderEnabled(false);
 
-            // 清理所有数据
-            SpecieData = null;
-            MaxHP = 0;
             CurrentHP = 0;
             CurrentMoveSpeed = 0;
             CurrentDirection = Vector3.zero;
             TimeInScene = 0;
-            StayTime = 0;
             IsHit = false;
             IsFleeing = false;
             FleeTimeRemaining = 0;
-
-            IsInitialized = false;
 
             gameObject.SetActive(false);
         }
         #endregion
 
-        /// <summary>
-        /// 受击减速倍率
-        /// </summary>
-        public float HitSpeedMultiplier { get; private set; } = 0.5f;
-
-        /// <summary>
-        /// 逃跑加速倍率
-        /// </summary>
-        public float FleeSpeedMultiplier { get; private set; } = 2f;
+       
 
         private void Awake()
         {
@@ -209,7 +204,7 @@ namespace Hunting.Game.Animal
             // 创建状态机
             _stateMachine = new StateMachine();
 
-            // 预创建状态
+            // 创建状态
             _moveState = new AnimalMoveState(this, _stateMachine, "Move");
             _hitState = new AnimalHitState(this, _stateMachine, "Hit");
             _deathState = new AnimalDeathState(this, _stateMachine, "Death");
@@ -221,47 +216,27 @@ namespace Hunting.Game.Animal
         /// </summary>
         /// <param name="data"></param>
         /// <param name="stayTime"></param>
-        /// <param name="initialDirection"></param>
         public void Init(Specie data, float stayTime)
         {
-            // 初始化数据
             SpecieData = data;
             MaxHP = data.HP;
+            StayTime = stayTime;
             CurrentHP = MaxHP;
             CurrentMoveSpeed = data.MoveSpeed;
             CurrentDirection = transform.forward;
-            TimeInScene = 0f;
-            StayTime = stayTime;
-            IsHit = false;
-            IsFleeing = false;
-            FleeTimeRemaining = 0;
 
-            // 启用碰撞体
-            SetColliderEnabled(true);
-
-            // 设置RVO组件方向和速度（组件已在Awake时自动注册）
-            RVO.SyncPosition();
             RVO.SetMoveDirection(CurrentDirection);
             RVO.SetMaxSpeed(CurrentMoveSpeed);
-
-            // 初始化状态机
+            RVO.SyncPosition();
+            
             _stateMachine.Init(_moveState);
-
-            IsInitialized = true;
         }
 
         private void Update()
         {
-            if (!IsInitialized)
-                return;
-
-            // 更新驻场时间
             TimeInScene += Time.deltaTime;
 
-            // 更新状态机
             _stateMachine.Update();
-
-
         }
 
         #region 公共方法

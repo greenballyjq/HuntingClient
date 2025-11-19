@@ -1,0 +1,382 @@
+﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Prop;
+using GameFramework.Core;
+using Hunting.Game.Props;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Hunting.Manager
+{
+    /// <summary>
+    /// 道具管理器
+    /// </summary>
+    public class PropManager : BaseGameManager
+    {
+        /// <summary>
+        /// 活跃道具运行时上下文
+        /// </summary>
+        private class ActivePropRuntimeContext
+        {
+            /// <summary>
+            /// 道具处理器
+            /// </summary>
+            public IPropHandler Handler;
+
+            /// <summary>
+            /// 道具上下文
+            /// </summary>
+            public PropContext Context;
+
+            /// <summary>
+            /// 道具配置
+            /// </summary>
+            public Prop PropData;
+
+            /// <summary>
+            /// 剩余时间
+            /// </summary>
+            public float RemainingTime;
+        }
+
+        /// <summary>
+        /// 活跃道具列表
+        /// </summary>
+        private readonly List<ActivePropRuntimeContext> _activeProps = new List<ActivePropRuntimeContext>();
+
+        /// <summary>
+        /// 事件管理器
+        /// </summary>
+        private EventManager Event => GameServiceLocator.Event;
+
+        /// <summary>
+        /// 配置管理器
+        /// </summary>
+        private HuntingGameConfigManager Config => GameServiceLocator.Config;
+
+        /// <summary>
+        /// 玩家数据管理器
+        /// </summary>
+        private PlayerDataManager PlayerData => GameServiceLocator.GetGameManager<PlayerDataManager>();
+
+        /// <summary>
+        /// 单局管理器
+        /// </summary>
+        private RoundManager Round => GameServiceLocator.GetGameManager<RoundManager>();
+
+        public override void Init()
+        {
+            RegisterEvents();
+            ResetState();
+            Debug.Log("[PropManager] 初始化完成");
+        }
+
+        public override void Update()
+        {
+            UpdateActiveProps(Time.deltaTime);
+        }
+
+        public override void Release()
+        {
+            UnregisterEvents();
+            StopAllProps();
+            ResetState();
+            Debug.Log("[PropManager] 已释放");
+        }
+
+        #region 公共方法
+        /// <summary>
+        /// 尝试使用道具
+        /// </summary>
+        /// <param name="propType">道具类型</param>
+        /// <returns>是否使用成功</returns>
+        public bool TryUseProp(EPropType propType)
+        {
+            // 获取道具配置
+            Prop propData = Config.GetProp(propType);
+            if (propData == null)
+            {
+                Debug.LogWarning($"[PropManager] 未找到道具配置，PropType:{propType}");
+                TriggerPropUseRejected(new PropUseRejectedEventArgs
+                {
+                    Sender = this,
+                    PropData = null,
+                    PropType = propType,
+                    Reason = "配置不存在"
+                });
+                return false;
+            }
+
+            // 检查是否可以使用（有持续时间的道具，持续期间不能重复使用）
+            if (!CanUseProp(propType, propData))
+            {
+                Debug.LogWarning($"[PropManager] 道具正在使用中，无法重复使用，PropType:{propType}");
+                TriggerPropUseRejected(new PropUseRejectedEventArgs
+                {
+                    Sender = this,
+                    PropData = propData,
+                    PropType = propType,
+                    Reason = "正在使用中"
+                });
+                return false;
+            }
+
+            // 检查库存
+            if (!PlayerData.CanUseProp(propType))
+            {
+                Debug.LogWarning($"[PropManager] 道具库存不足，PropType:{propType}");
+                TriggerPropUseRejected(new PropUseRejectedEventArgs
+                {
+                    Sender = this,
+                    PropData = propData,
+                    PropType = propType,
+                    Reason = "库存不足"
+                });
+                return false;
+            }
+
+            // 消耗库存
+            if (!PlayerData.TryConsumeProp(propType))
+            {
+                Debug.LogWarning($"[PropManager] 道具消耗失败，PropType:{propType}");
+                TriggerPropUseRejected(new PropUseRejectedEventArgs
+                {
+                    Sender = this,
+                    PropData = propData,
+                    PropType = propType,
+                    Reason = "消耗失败"
+                });
+                return false;
+            }
+
+            // 创建处理器
+            IPropHandler handler = PropHandlerFactory.CreatePropHandler(propType);
+            if (handler == null)
+            {
+                Debug.LogWarning($"[PropManager] 未实现的道具类型: {propType}");
+                return false;
+            }
+
+            // 构造上下文
+            PropContext context = new PropContext
+            {
+                PropData = propData,
+                RoundContext = Round.CurrentContext
+            };
+
+            // 开始道具效果
+            BeginProp(propData, handler, context);
+            return true;
+        }
+        #endregion
+
+        #region 私有方法
+        /// <summary>
+        /// 检查道具是否可以使用
+        /// </summary>
+        /// <param name="propType">道具类型</param>
+        /// <param name="propData">道具配置</param>
+        /// <returns>是否可以使用</returns>
+        private bool CanUseProp(EPropType propType, Prop propData)
+        {
+            // 有持续时间的道具，持续期间不能重复使用
+            if (propData.Duration > 0f)
+            {
+                // 检查同类型道具是否正在使用
+                foreach (var activeProp in _activeProps)
+                {
+                    if (activeProp.PropData.PropType == propType)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 开始道具效果
+        /// </summary>
+        /// <param name="propData">道具配置</param>
+        /// <param name="handler">道具处理器</param>
+        /// <param name="context">道具上下文</param>
+        private void BeginProp(Prop propData, IPropHandler handler, PropContext context)
+        {
+            // 创建活跃道具实例
+            ActivePropRuntimeContext activeProp = new ActivePropRuntimeContext
+            {
+                Handler = handler,
+                Context = context,
+                PropData = propData,
+                RemainingTime = propData.Duration
+            };
+
+            // 加入活跃列表
+            _activeProps.Add(activeProp);
+
+            // 通知处理器执行开始逻辑
+            handler.OnPropStart(context);
+
+            // 触发道具开始事件
+            TriggerPropStarted(new PropStartedEventArgs
+            {
+                Sender = this,
+                PropData = propData,
+                PropType = propData.PropType
+            });
+
+            Debug.Log($"[PropManager] 道具开始，类型:{propData.PropType}，持续时间:{propData.Duration:F2}秒");
+
+            // 无持续时间的道具，立即结束
+            if (propData.Duration <= 0f)
+            {
+                EndProp(activeProp);
+            }
+        }
+
+        /// <summary>
+        /// 结束道具效果
+        /// </summary>
+        /// <param name="activeProp">活跃道具实例</param>
+        private void EndProp(ActivePropRuntimeContext activeProp)
+        {
+            // 通知处理器执行结束逻辑
+            activeProp.Handler?.OnPropEnd(activeProp.Context);
+
+            // 从活跃列表移除
+            _activeProps.Remove(activeProp);
+
+            // 触发道具结束事件
+            TriggerPropEnded(new PropEndedEventArgs
+            {
+                Sender = this,
+                PropData = activeProp.PropData,
+                PropType = activeProp.PropData.PropType
+            });
+
+            Debug.Log($"[PropManager] 道具结束，类型:{activeProp.PropData.PropType}");
+        }
+
+        /// <summary>
+        /// 更新所有活跃道具
+        /// </summary>
+        /// <param name="deltaTime">时间增量</param>
+        private void UpdateActiveProps(float deltaTime)
+        {
+            // 倒序遍历，避免移除时索引问题
+            for (int i = _activeProps.Count - 1; i >= 0; i--)
+            {
+                ActivePropRuntimeContext activeProp = _activeProps[i];
+
+                // 更新剩余时间
+                activeProp.RemainingTime -= deltaTime;
+
+                // 通知处理器执行更新逻辑
+                activeProp.Handler?.OnPropUpdate(activeProp.Context, deltaTime);
+
+                // 触发道具更新事件
+                TriggerPropUpdated(new PropUpdatedEventArgs
+                {
+                    Sender = this,
+                    PropData = activeProp.PropData,
+                    PropType = activeProp.PropData.PropType,
+                    RemainingTime = activeProp.RemainingTime
+                });
+
+                // 检查是否时间到
+                if (activeProp.RemainingTime <= 0f)
+                {
+                    EndProp(activeProp);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 停止所有道具
+        /// </summary>
+        private void StopAllProps()
+        {
+            // 倒序遍历，避免移除时索引问题
+            for (int i = _activeProps.Count - 1; i >= 0; i--)
+                EndProp(_activeProps[i]);
+        }
+
+        /// <summary>
+        /// 重置内部状态
+        /// </summary>
+        private void ResetState()
+        {
+            _activeProps.Clear();
+        }
+        #endregion
+
+        #region 事件相关
+        /// <summary>
+        /// 注册事件
+        /// </summary>
+        private void RegisterEvents()
+        {
+            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+        }
+
+        /// <summary>
+        /// 注销事件
+        /// </summary>
+        private void UnregisterEvents()
+        {
+            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+        }
+
+        /// <summary>
+        /// 单局开始回调
+        /// </summary>
+        private void OnRoundStarted(RoundStartedEventArgs args)
+        {
+            ResetState();
+        }
+
+        /// <summary>
+        /// 单局结束回调
+        /// </summary>
+        private void OnRoundEnded(RoundEndedEventArgs args)
+        {
+            StopAllProps();
+            ResetState();
+        }
+
+        /// <summary>
+        /// 触发道具开始事件
+        /// </summary>
+        private void TriggerPropStarted(PropStartedEventArgs args)
+        {
+            Event.Trigger(PropEvents.PropStarted, args);
+        }
+
+        /// <summary>
+        /// 触发道具更新事件
+        /// </summary>
+        private void TriggerPropUpdated(PropUpdatedEventArgs args)
+        {
+            Event.Trigger(PropEvents.PropUpdated, args);
+        }
+
+        /// <summary>
+        /// 触发道具结束事件
+        /// </summary>
+        private void TriggerPropEnded(PropEndedEventArgs args)
+        {
+            Event.Trigger(PropEvents.PropEnded, args);
+        }
+
+        /// <summary>
+        /// 触发道具使用被拒绝事件
+        /// </summary>
+        private void TriggerPropUseRejected(PropUseRejectedEventArgs args)
+        {
+            Event.Trigger(PropEvents.PropUseRejected, args);
+        }
+        #endregion
+    }
+}
+

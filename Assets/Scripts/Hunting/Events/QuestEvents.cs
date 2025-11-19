@@ -7,7 +7,7 @@ using GameFramework.Core;
 public static class QuestEvents
 {
     /// <summary>
-    /// 任务已派发事件
+    /// 任务派发事件
     /// </summary>
     public static readonly EventKey<QuestDispatchedEventArgs> QuestDispatched = new EventKey<QuestDispatchedEventArgs>();
 
@@ -17,18 +17,18 @@ public static class QuestEvents
     public static readonly EventKey<QuestProgressUpdatedEventArgs> QuestProgressUpdated = new EventKey<QuestProgressUpdatedEventArgs>();
 
     /// <summary>
-    /// 任务已完成事件
+    /// 任务完成事件
     /// </summary>
     public static readonly EventKey<QuestCompletedEventArgs> QuestCompleted = new EventKey<QuestCompletedEventArgs>();
 
     /// <summary>
-    /// 任务已超时事件
+    /// 任务超时事件
     /// </summary>
     public static readonly EventKey<QuestTimeoutEventArgs> QuestTimeout = new EventKey<QuestTimeoutEventArgs>();
 }
 
 /// <summary>
-/// 任务已派发事件参数
+/// 任务派发事件参数
 /// </summary>
 public sealed class QuestDispatchedEventArgs : EventArgs
 {
@@ -65,7 +65,7 @@ public sealed class QuestProgressUpdatedEventArgs : EventArgs
 }
 
 /// <summary>
-/// 任务已完成事件参数
+/// 任务完成事件参数
 /// </summary>
 public sealed class QuestCompletedEventArgs : EventArgs
 {
@@ -81,7 +81,7 @@ public sealed class QuestCompletedEventArgs : EventArgs
 }
 
 /// <summary>
-/// 任务已超时事件参数
+/// 任务超时事件参数
 /// </summary>
 public sealed class QuestTimeoutEventArgs : EventArgs
 {

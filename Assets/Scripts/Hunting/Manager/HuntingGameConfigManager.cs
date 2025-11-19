@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Bean;
 using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Prop;
 using cfg.HuntingConfig.Skill;
 using GameFramework.Manager;
 using System.Collections.Generic;
@@ -34,6 +35,10 @@ namespace Hunting.Manager
             "huntingconfig_skill_tbskilljinzhuangyuan",
             "huntingconfig_skill_tbskillyakedong",
             "huntingconfig_tblucky",
+            "huntingconfig_prop_tbprop",
+            "huntingconfig_prop_tbpropbombardment",
+            "huntingconfig_prop_tbpropaimassist",
+            "huntingconfig_prop_tbproptrap",
         };
 
         #region 数值表访问
@@ -111,6 +116,26 @@ namespace Hunting.Manager
         /// 幸运仪式数值表
         /// </summary>
         public TbLucky LuckyTable => _tables.TbLucky;
+
+        /// <summary>
+        /// 道具总表
+        /// </summary>
+        public TbProp PropTable => _tables.TbProp;
+
+        /// <summary>
+        /// 炮火轰炸道具参数数值表
+        /// </summary>
+        public TbPropBombardment PropBombardmentTable => _tables.TbPropBombardment;
+
+        /// <summary>
+        /// 指哪打哪道具参数数值表
+        /// </summary>
+        public TbPropAimAssist PropAimAssistTable => _tables.TbPropAimAssist;
+
+        /// <summary>
+        /// 智能诱捕陷阱道具参数数值表
+        /// </summary>
+        public TbPropTrap PropTrapTable => _tables.TbPropTrap;
         #endregion
 
         #region 数值表单个数据项访问
@@ -209,6 +234,21 @@ namespace Hunting.Manager
         public Lucky GetLucky(ELuckyType type)
             => LuckyTable.DataList.FirstOrDefault(p => p.LuckyType == type);
 
+        /// <summary>
+        /// 获取单个道具配置
+        /// </summary>
+        /// <param name="id">道具ID</param>
+        /// <returns></returns>
+        public Prop GetProp(int id) => PropTable.Get(id);
+
+        /// <summary>
+        /// 通过道具类型获取单个配置
+        /// </summary>
+        /// <param name="type">道具类型</param>
+        /// <returns></returns>
+        public Prop GetProp(EPropType type)
+            => PropTable.DataList.FirstOrDefault(p => p.PropType == type);
+
 		/// <summary>
         /// 获取单个技能配置
         /// </summary>
@@ -259,6 +299,27 @@ namespace Hunting.Manager
         /// <param name="id">参数ID</param>
         /// <returns></returns>
         public SkillYaKeDong GetSkillYaKeDong(int id) => SkillYaKeDongTable.Get(id);
+
+        /// <summary>
+        /// 获取炮火轰炸道具参数
+        /// </summary>
+        /// <param name="id">参数ID</param>
+        /// <returns></returns>
+        public PropBombardment GetPropBombardment(int id) => PropBombardmentTable.Get(id);
+
+        /// <summary>
+        /// 获取指哪打哪道具参数
+        /// </summary>
+        /// <param name="id">参数ID</param>
+        /// <returns></returns>
+        public PropAimAssist GetPropAimAssist(int id) => PropAimAssistTable.Get(id);
+
+        /// <summary>
+        /// 获取智能诱捕陷阱道具参数
+        /// </summary>
+        /// <param name="id">参数ID</param>
+        /// <returns></returns>
+        public PropTrap GetPropTrap(int id) => PropTrapTable.Get(id);
 
 		/// <summary>
 		/// 通过任务类型获取单个任务数据

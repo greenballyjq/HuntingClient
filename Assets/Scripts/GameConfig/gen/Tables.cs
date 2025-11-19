@@ -73,6 +73,19 @@ public partial class Tables
     /// 幸运仪式数值表
     /// </summary>
     public HuntingConfig.TbLucky TbLucky {get; }
+    /// <summary>
+    /// 道具数值表
+    /// </summary>
+    public HuntingConfig.Prop.TbProp TbProp {get; }
+    /// <summary>
+    /// 炮火轰炸道具数值表
+    /// </summary>
+    public HuntingConfig.Prop.TbPropBombardment TbPropBombardment {get; }
+    /// <summary>
+    /// 指哪打哪道具数值表
+    /// </summary>
+    public HuntingConfig.Prop.TbPropAimAssist TbPropAimAssist {get; }
+    public HuntingConfig.Prop.TbPropTrap TbPropTrap {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
@@ -91,6 +104,10 @@ public partial class Tables
         TbSkillJinZhuangYuan = new HuntingConfig.Skill.TbSkillJinZhuangYuan(loader("huntingconfig_skill_tbskilljinzhuangyuan"));
         TbSkillYaKeDong = new HuntingConfig.Skill.TbSkillYaKeDong(loader("huntingconfig_skill_tbskillyakedong"));
         TbLucky = new HuntingConfig.TbLucky(loader("huntingconfig_tblucky"));
+        TbProp = new HuntingConfig.Prop.TbProp(loader("huntingconfig_prop_tbprop"));
+        TbPropBombardment = new HuntingConfig.Prop.TbPropBombardment(loader("huntingconfig_prop_tbpropbombardment"));
+        TbPropAimAssist = new HuntingConfig.Prop.TbPropAimAssist(loader("huntingconfig_prop_tbpropaimassist"));
+        TbPropTrap = new HuntingConfig.Prop.TbPropTrap(loader("huntingconfig_prop_tbproptrap"));
         ResolveRef();
     }
     
@@ -111,6 +128,10 @@ public partial class Tables
         TbSkillJinZhuangYuan.ResolveRef(this);
         TbSkillYaKeDong.ResolveRef(this);
         TbLucky.ResolveRef(this);
+        TbProp.ResolveRef(this);
+        TbPropBombardment.ResolveRef(this);
+        TbPropAimAssist.ResolveRef(this);
+        TbPropTrap.ResolveRef(this);
     }
 }
 

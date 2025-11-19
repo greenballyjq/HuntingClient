@@ -52,14 +52,19 @@ namespace Hunting.UI
         [SerializeField, Range(1.0f, 2.0f)] private float brightnessMultiplier = 1.1f;
 
         /// <summary>
-        /// 丰收能量条管理器
-        /// </summary>
-        private EnergyProgressManager EnergyManager => GameServiceLocator.GetGameManager<EnergyProgressManager>();
-
-        /// <summary>
         /// 事件管理器
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
+
+        /// <summary>
+        /// 技能管理器
+        /// </summary>
+        private SkillManager Skill => GameServiceLocator.GetGameManager<SkillManager>();
+
+        /// <summary>
+        /// 丰收能量条管理器
+        /// </summary>
+        private EnergyProgressManager EnergyManager => GameServiceLocator.GetGameManager<EnergyProgressManager>();
 
         private void Awake()
         {
@@ -252,9 +257,7 @@ namespace Hunting.UI
         private void OnSkillButtonClicked()
         {
             // 请求技能管理器尝试启动技能
-            var skillManager = GameServiceLocator.GetGameManager<SkillManager>();
-            if (!skillManager.TryStartSkill())
-                Debug.LogWarning("[UIEnergyProgress] 技能启动失败");
+            Skill.TryStartSkill();
         }
         #endregion
     }

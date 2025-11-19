@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Skill;
+﻿using cfg.HuntingConfig.Skill;
 using GameFramework.Core;
 using Hunting.Manager;
 
@@ -32,11 +32,6 @@ public sealed class SkillStartedEventArgs : EventArgs
     /// 当前局上下文
     /// </summary>
     public RoundContext Context { get; set; }
-
-    /// <summary>
-    /// 技能持续时间
-    /// </summary>
-    public float Duration { get; set; }
 }
 
 /// <summary>

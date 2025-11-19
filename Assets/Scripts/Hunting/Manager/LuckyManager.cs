@@ -12,19 +12,14 @@ namespace Hunting.Manager
     public class LuckyManager : BaseGameManager
     {
         /// <summary>
-        /// 当前幸运仪式处理器
+        /// 当局幸运仪式处理器
         /// </summary>
         private ILuckyHandler _handler;
 
         /// <summary>
-        /// 当前幸运仪式上下文
+        /// 当局幸运仪式上下文
         /// </summary>
-        private LuckyContext _luckyContext;
-
-        /// <summary>
-        /// 当前幸运仪式类型
-        /// </summary>
-        private ELuckyType _currentLuckyType;
+        private LuckyContext _currentLuckyContext;
 
         /// <summary>
         /// 事件管理器
@@ -45,7 +40,7 @@ namespace Hunting.Manager
 
         public override void Update()
         {
-            // 幸运仪式开局生效，无需更新逻辑
+
         }
 
         public override void Release()
@@ -62,8 +57,7 @@ namespace Hunting.Manager
         private void ResetState()
         {
             _handler = null;
-            _luckyContext = null;
-            _currentLuckyType = ELuckyType.None;
+            _currentLuckyContext = null;
         }
         #endregion
 
@@ -116,17 +110,15 @@ namespace Hunting.Manager
                 return;
             }
 
-            _currentLuckyType = luckyType;
-
             // 构造幸运仪式上下文
-            _luckyContext = new LuckyContext
+            _currentLuckyContext = new LuckyContext
             {
                 LuckyData = luckyData,
                 RoundContext = args.Context
             };
 
             // 激活幸运仪式效果
-            _handler.OnActivate(_luckyContext);
+            _handler.OnActivate(_currentLuckyContext);
 
             // 触发幸运仪式激活事件
             TriggerLuckyActivated(new LuckyActivatedEventArgs
@@ -145,8 +137,8 @@ namespace Hunting.Manager
         private void OnRoundEnded(RoundEndedEventArgs args)
         {
             // 注销幸运仪式效果
-            if (_handler != null && _luckyContext != null)
-                _handler.OnDeactivate(_luckyContext);
+            if (_handler != null && _currentLuckyContext != null)
+                _handler.OnDeactivate(_currentLuckyContext);
 
             ResetState();
         }
