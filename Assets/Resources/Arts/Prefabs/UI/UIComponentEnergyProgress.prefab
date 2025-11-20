@@ -323,7 +323,7 @@ GameObject:
   - component: {fileID: 2562752457098835875}
   - component: {fileID: 7285830743392266838}
   m_Layer: 5
-  m_Name: UIEnergyProgress
+  m_Name: UIComponentEnergyProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -360,16 +360,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4554186025829346618}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c2e632854b46f247a9d06fc73fe515b, type: 3}
+  m_Script: {fileID: 11500000, guid: e1586976d1ca08646ba5b2add47dff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   imageEnergyFill: {fileID: 5098790004127911149}
   imageEnergyBackground: {fileID: 4583891581119472239}
   textEnergyBars: {fileID: 4635710575096440446}
   buttonSkill: {fileID: 3472539407607218480}
-  colorTierA: {r: 0.39215687, g: 0.78431374, b: 0.5882353, a: 1}
-  colorTierB: {r: 0.94509804, g: 0.6901961, b: 0.4392157, a: 1}
-  colorTierC: {r: 0.9411765, g: 0.627451, b: 0.78431374, a: 1}
+  colorTierA: {r: 0.6367924, g: 1, b: 0.65004313, a: 1}
+  colorTierB: {r: 1, g: 0.9477894, b: 0.3443396, a: 1}
+  colorTierC: {r: 1, g: 0.4657459, b: 0.41037738, a: 1}
   brightnessMultiplier: 1.5
 --- !u!1 &4780224528697385217
 GameObject:

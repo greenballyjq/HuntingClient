@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 390609171625110374}
   - component: {fileID: 3024330419573043102}
   m_Layer: 5
-  m_Name: UIMeatProgress
+  m_Name: UIComponentMeatProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

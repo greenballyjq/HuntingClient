@@ -9,7 +9,7 @@ namespace Hunting.UI
     /// <summary>
     /// 肉度条展示组件
     /// </summary>
-    public class UIMeatProgress : MonoBehaviour, IUIComponent
+    public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     {
         /// <summary>
         /// 肉度填充图像
@@ -61,9 +61,6 @@ namespace Hunting.UI
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
-        /// <summary>
-        /// 初始化组件
-        /// </summary>
         public void Init()
         {
             Event.AddListener(MeatEvents.MeatProgressChanged, OnMeatProgressChanged);
@@ -73,9 +70,6 @@ namespace Hunting.UI
             UpdateAll(MeatProgressManager.GetCurrentMeatValue(), MeatProgressManager.GetCurrentMeatBars());
         }
 
-        /// <summary>
-        /// 清理组件
-        /// </summary>
         public void CleanUp()
         {
             Event.RemoveListener(MeatEvents.MeatProgressChanged, OnMeatProgressChanged);

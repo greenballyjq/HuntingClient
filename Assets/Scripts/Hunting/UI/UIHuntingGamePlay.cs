@@ -20,12 +20,17 @@ namespace Hunting.UI
         /// <summary>
         /// 肉度条组件
         /// </summary>
-        [SerializeField] private UIMeatProgress uiComponentMeatProgress;
+        [SerializeField] private UIComponentMeatProgress uiComponentMeatProgress;
 
         /// <summary>
         /// 能量条组件
         /// </summary>
-        [SerializeField] private UIEnergyProgress uiComponentEnergyProgress;
+        [SerializeField] private UIComponentEnergyProgress uiComponentEnergyProgress;
+
+        /// <summary>
+        /// 子弹状态组件
+        /// </summary>
+        [SerializeField] private UIComponentBulletStatus uiComponentBulletStatus;
 
         /// <summary>
         /// UI管理器
@@ -47,10 +52,12 @@ namespace Hunting.UI
             base.OnInit(userData);
             uiComponentMeatProgress.Init();
             uiComponentEnergyProgress.Init();
+            uiComponentBulletStatus.Init();
         }
 
         public override void OnClose()
         {
+            uiComponentBulletStatus.CleanUp();
             uiComponentEnergyProgress.CleanUp();
             uiComponentMeatProgress.CleanUp();
             base.OnClose();

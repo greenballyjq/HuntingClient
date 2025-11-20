@@ -44,16 +44,6 @@ namespace Hunting.Game.Weapons
         private bool _isSpecialBullet;
 
         /// <summary>
-        /// 武器管理器
-        /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
-
-        /// <summary>
-        /// 子弹管理器
-        /// </summary>
-        private BulletManager Bullet => GameServiceLocator.GetGameManager<BulletManager>();
-
-        /// <summary>
         /// 事件管理器
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
@@ -62,6 +52,16 @@ namespace Hunting.Game.Weapons
         /// 配置管理器
         /// </summary>
         private HuntingGameConfigManager Config => GameServiceLocator.Config;
+
+        /// <summary>
+        /// 武器管理器
+        /// </summary>
+        private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
+
+        /// <summary>
+        /// 子弹管理器
+        /// </summary>
+        private BulletManager Bullet => GameServiceLocator.GetGameManager<BulletManager>();
 
         private void Start()
         {
@@ -148,15 +148,15 @@ namespace Hunting.Game.Weapons
             _specialBulletRemainingTime -= Time.deltaTime;
 
             // 获取子弹配置用于触发倒计时事件
-            var bulletConfig = Config.GetBullet(_currentBulletId);
-            if (bulletConfig != null)
+            var bulletData = Config.GetBullet(_currentBulletId);
+            if (bulletData != null)
             {
                 // 触发特殊子弹倒计时事件
                 TriggerSpecialBulletCountdown(new SpecialBulletCountdownEventArgs
                 {
-                    BulletId = _currentBulletId,
+                    BulletData = bulletData,
                     RemainingTime = _specialBulletRemainingTime,
-                    TotalTime = bulletConfig.Duration
+                    TotalTime = bulletData.Duration
                 });
             }
 
@@ -164,10 +164,10 @@ namespace Hunting.Game.Weapons
             if (_specialBulletRemainingTime <= 0f)
             {
                 // 触发特殊子弹效果结束事件
-                int endedBulletId = _currentBulletId;
+                var endedBulletData = Config.GetBullet(_currentBulletId);
                 TriggerSpecialBulletEffectEnded(new SpecialBulletEffectEndedEventArgs
                 {
-                    BulletId = endedBulletId
+                    BulletData = endedBulletData
                 });
 
                 // 恢复为普通子弹（ID为1）
@@ -218,18 +218,20 @@ namespace Hunting.Game.Weapons
             UpdateFireInterval();
 
             // 获取子弹配置
-            var bulletConfig = Config.GetBullet(newBulletId);
-            if (bulletConfig == null)
+            var newBulletData = Config.GetBullet(newBulletId);
+            if (newBulletData== null)
             {
                 Debug.LogWarning($"[Weapon] 子弹配置不存在: {newBulletId}");
                 return;
             }
 
+            var oldBulletData = Config.GetBullet(oldBulletId);
+
             // 判断是否为特殊子弹（持续时间 > 0）
-            bool isSpecialBullet = bulletConfig.Duration > 0f;
+            bool isSpecialBullet = newBulletData.Duration > 0f;
             if (isSpecialBullet)
             {
-                _specialBulletRemainingTime = bulletConfig.Duration;
+                _specialBulletRemainingTime = newBulletData.Duration;
                 _isSpecialBullet = true;
             }
             else
@@ -241,8 +243,8 @@ namespace Hunting.Game.Weapons
             // 触发子弹切换事件
             TriggerBulletChanged(new BulletChangedEventArgs
             {
-                OldBulletId = oldBulletId,
-                NewBulletId = newBulletId,
+                OldBulletData = oldBulletData,
+                NewBulletData = newBulletData,
                 IsSpecialBullet = isSpecialBullet,
                 RemainingTime = _specialBulletRemainingTime
             });

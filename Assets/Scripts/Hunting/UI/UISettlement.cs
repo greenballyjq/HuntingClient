@@ -67,7 +67,7 @@ namespace Hunting.UI
             base.OnClose();
         }
 
-        #region UI回调
+        #region 事件相关
         /// <summary>
         /// 普通结算按钮回调
         /// </summary>
@@ -86,9 +86,7 @@ namespace Hunting.UI
             SettlementManager.ApplyDouble();
             buttonDoubleSettlement.gameObject.SetActive(false);
         }
-        #endregion
 
-        #region 事件回调
         /// <summary>
         /// 结算数据更新
         /// </summary>

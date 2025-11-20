@@ -118,14 +118,14 @@ namespace Hunting.Events
     public sealed class BulletChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// 旧子弹ID
+        /// 旧子弹配置
         /// </summary>
-        public int OldBulletId { get; set; }
+        public Bullet OldBulletData { get; set; }
 
         /// <summary>
-        /// 新子弹ID
+        /// 新子弹配置
         /// </summary>
-        public int NewBulletId { get; set; }
+        public Bullet NewBulletData { get; set; }
 
         /// <summary>
         /// 是否是新特殊子弹
@@ -144,9 +144,9 @@ namespace Hunting.Events
     public sealed class SpecialBulletCountdownEventArgs : EventArgs
     {
         /// <summary>
-        /// 当前子弹ID
+        /// 当前子弹配置
         /// </summary>
-        public int BulletId { get; set; }
+        public Bullet BulletData { get; set; }
 
         /// <summary>
         /// 剩余时间
@@ -165,9 +165,9 @@ namespace Hunting.Events
     public sealed class SpecialBulletEffectEndedEventArgs : EventArgs
     {
         /// <summary>
-        /// 结束的特殊子弹ID
+        /// 结束的特殊子弹配置
         /// </summary>
-        public int BulletId { get; set; }
+        public Bullet BulletData { get; set; }
     }
 }
 

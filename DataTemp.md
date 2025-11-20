@@ -1,11 +1,12 @@
-##var	ID	BulletType	Name	Duration	BaseDamage	FireRate	MoveSpeed	EffectParamInt	EffectParamFloat	PrefabResourcePath	Comment
-##type	int	HuntingConfig.Enum.EBulletType	string	float	float	int	float	int	float	string	string
-##group	c	c	c	c	c	c	c	c	c	c	c
-##	子弹ID	子弹类型	子弹显示名称	持续时间	基础伤害	射速（发/秒）	飞行速度	整形效果参数	浮点型效果参数	预制体资源路径	备注
-	1	Normal	普通子弹	-1	10	3	60	-1	-1	Arts/Prefabs/Bullets/Bullet_Normal	示例
-	2	Explosive	爆炸子弹	10	25	1	40	-1	10	Arts/Prefabs/Bullets/Bullet_Explosive	EffectParamFloat:伤害范围
-	3	HighDamage	高伤子弹	10	50	1	60	-1	-1	Arts/Prefabs/Bullets/Bullet_HighDamage	示例
-	4	HighSpeed	高速子弹	10	8	8	100	-1	-1	Arts/Prefabs/Bullets/Bullet_HighSpeed	示例
+##var	ID	BulletType	Name	Duration	BaseDamage	FireRate	MoveSpeed	EffectParamInt	EffectParamFloat	PrefabResourcePath	IconResourcePath	Comment
+##type	int	HuntingConfig.Enum.EBulletType	string	float	float	int	float	int	float	string	string	string
+##group	c	c	c	c	c	c	c	c	c	c	c	c
+##	子弹ID	子弹类型	子弹显示名称	持续时间	基础伤害	射速（发/秒）	飞行速度	整形效果参数	浮点型效果参数	预制体资源路径	图标资源路径	备注
+	1	Normal	普通子弹	-1	10	3	60	-1	-1	Arts/Prefabs/Bullets/Bullet_Normal	Arts/UI/Gameplay/Bullets/Bullet_Normal	示例
+	2	Explosive	爆炸子弹	10	25	1	40	-1	10	Arts/Prefabs/Bullets/Bullet_Explosive	Arts/UI/Gameplay/Bullets/Bullet_Explosive	EffectParamFloat:伤害范围
+	3	HighDamage	高伤子弹	10	50	1	60	-1	-1	Arts/Prefabs/Bullets/Bullet_HighDamage	Arts/UI/Gameplay/Bullets/Bullet_HighDamage	示例
+	4	HighSpeed	高速子弹	10	8	8	100	-1	-1	Arts/Prefabs/Bullets/Bullet_HighSpeed	Arts/UI/Gameplay/Bullets/Bullet_HighSpeed	示例
+
 
 ##var	ID	RequiredPerBar	MaxBar	IncreasePerSecond	Comment
 ##type	int	float	int	float	string

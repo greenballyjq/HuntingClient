@@ -9,7 +9,7 @@ namespace Hunting.UI
     /// <summary>
     /// 丰收能量条展示组件
     /// </summary>
-    public class UIEnergyProgress : MonoBehaviour, IUIComponent
+    public class UIComponentEnergyProgress : MonoBehaviour, IUIComponent
     {
         /// <summary>
         /// 能量填充图像
