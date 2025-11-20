@@ -19,11 +19,9 @@ namespace Hunting.Game.Props
                 case EPropType.Bombardment:
                     return new PropBombardmentHandler();
                 case EPropType.AimAssist:
-                    //return new PropAimAssistHandler();
-                    break;
+                    return new PropAimAssistHandler();
                 case EPropType.Trap:
-                    //return new PropTrapHandler();
-                    break;
+                    return new PropTrapHandler();
             }
 
             return null;

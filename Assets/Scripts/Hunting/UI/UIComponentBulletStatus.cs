@@ -15,7 +15,7 @@ namespace Hunting.UI
     public class UIComponentBulletStatus : MonoBehaviour, IUIComponent
     {
         /// <summary>
-        /// 子弹图标图像
+        /// 子弹图像
         /// </summary>
         [SerializeField] private Image _imageBullet;
 

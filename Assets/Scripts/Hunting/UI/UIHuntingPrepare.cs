@@ -41,7 +41,7 @@ namespace Hunting.UI
         [SerializeField] private Text _textRoleProfile;
 
         /// <summary>
-        /// 角色展示图片
+        /// 角色图像
         /// </summary>
         [SerializeField] private Image _imageRole;
 
@@ -56,7 +56,7 @@ namespace Hunting.UI
         [SerializeField] private Text _textMapDescription;
 
         /// <summary>
-        /// 地图展示图片
+        /// 地图图像
         /// </summary>
         [SerializeField] private Image _imageMap;
 

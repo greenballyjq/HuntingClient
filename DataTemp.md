@@ -46,9 +46,9 @@ EffectParamInt：额外掉肉倍率"
 ##type	int	HuntingConfig.Enum.EPropType	string	string	float	string	int	string
 ##group	c	c	c	c	c	c	c	c
 ##	道具ID	道具类型	道具名称	道具描述	持续时间（秒）	图标资源路径	参数子表ID	备注
-	1	Bombardment	炮火轰炸	在范围内持续造成伤害	6	/	1	示例
-	2	AimAssist	指哪打哪	自动锁定并跟随目标	10	/	1	示例
-	3	Trap	智能诱捕陷阱	生成陷阱吸引并击杀动物	10	/	1	示例
+	1	Bombardment	炮火轰炸	在范围内持续造成伤害	6	Arts/UI/Gameplay/Props/Prop_Bombardment	1	示例
+	2	AimAssist	指哪打哪	自动锁定并跟随目标	10	Arts/UI/Gameplay/Props/Prop_AimAssist	1	示例
+	3	Trap	智能诱捕陷阱	生成陷阱吸引并击杀动物	0	Arts/UI/Gameplay/Props/Prop_Trap	1	示例
 
 ##var	ID	MaxLockDistance	Comment
 ##type	int	float	string

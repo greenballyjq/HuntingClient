@@ -3,6 +3,7 @@ using cfg.HuntingConfig.Prop;
 using Hunting.Game.Props;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.MaterialProperty;
 
 namespace Hunting.Manager
 {
@@ -187,6 +188,8 @@ namespace Hunting.Manager
 
             // 通知处理器执行开始逻辑
             handler.OnPropStart(context);
+
+
 
             // 触发道具开始事件
             TriggerPropStarted(new PropStartedEventArgs

@@ -127,14 +127,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368b6a3e5e4d3d8469133d17b2e222c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageMeatFill: {fileID: 1011119615956226967}
-  imageMeatBackground: {fileID: 7642110425630419154}
-  textMeatValue: {fileID: 2300987438535215049}
-  textMeatBars: {fileID: 5553984577594271961}
-  colorTierA: {r: 0.4764151, g: 1, b: 0.5549756, a: 1}
-  colorTierB: {r: 1, g: 0.7115653, b: 0.4009434, a: 1}
-  colorTierC: {r: 1, g: 0.50363827, b: 0.4198113, a: 1}
-  brightnessMultiplier: 1.1
+  _imageMeatFill: {fileID: 1011119615956226967}
+  _imageMeatBackground: {fileID: 7642110425630419154}
+  _textMeatValue: {fileID: 2300987438535215049}
+  _textMeatBars: {fileID: 5553984577594271961}
+  _colorTierA: {r: 0.45059457, g: 0.7924528, b: 0.31025273, a: 1}
+  _colorTierB: {r: 0.8773585, g: 0.61990136, b: 0.26900145, a: 1}
+  _colorTierC: {r: 0.9056604, g: 0.3033108, b: 0.3033108, a: 1}
+  _brightnessMultiplier: 1.1
 --- !u!1 &851195743867410991
 GameObject:
   m_ObjectHideFlags: 0

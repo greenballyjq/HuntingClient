@@ -38,11 +38,6 @@ public sealed class PropStartedEventArgs : EventArgs
     /// 道具配置
     /// </summary>
     public Prop PropData { get; set; }
-
-    /// <summary>
-    /// 道具类型
-    /// </summary>
-    public EPropType PropType { get; set; }
 }
 
 /// <summary>
@@ -54,11 +49,6 @@ public sealed class PropUpdatedEventArgs : EventArgs
     /// 道具配置
     /// </summary>
     public Prop PropData { get; set; }
-
-    /// <summary>
-    /// 道具类型
-    /// </summary>
-    public EPropType PropType { get; set; }
 
     /// <summary>
     /// 剩余时间（秒）
@@ -75,11 +65,6 @@ public sealed class PropEndedEventArgs : EventArgs
     /// 道具配置
     /// </summary>
     public Prop PropData { get; set; }
-
-    /// <summary>
-    /// 道具类型
-    /// </summary>
-    public EPropType PropType { get; set; }
 }
 
 /// <summary>
@@ -91,11 +76,6 @@ public sealed class PropUseRejectedEventArgs : EventArgs
     /// 道具配置
     /// </summary>
     public Prop PropData { get; set; }
-
-    /// <summary>
-    /// 道具类型
-    /// </summary>
-    public EPropType PropType { get; set; }
 
     /// <summary>
     /// 拒绝原因

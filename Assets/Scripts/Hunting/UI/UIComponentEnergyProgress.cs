@@ -14,42 +14,42 @@ namespace Hunting.UI
         /// <summary>
         /// 能量填充图像
         /// </summary>
-        [SerializeField] private Image imageEnergyFill;
+        [SerializeField] private Image _imageEnergyFill;
 
         /// <summary>
-        /// 能量底图
+        /// 能量底图图像
         /// </summary>
-        [SerializeField] private Image imageEnergyBackground;
+        [SerializeField] private Image _imageEnergyBackground;
 
         /// <summary>
         /// 能量条文本
         /// </summary>
-        [SerializeField] private Text textEnergyBars;
+        [SerializeField] private Text _textEnergyBars;
 
         /// <summary>
         /// 技能按钮
         /// </summary>
-        [SerializeField] private Button buttonSkill;
+        [SerializeField] private Button _buttonSkill;
 
         /// <summary>
         /// 前段颜色
         /// </summary>
-        [SerializeField] private Color colorTierA;
+        [SerializeField] private Color _colorTierA;
 
         /// <summary>
         /// 中段颜色
         /// </summary>
-        [SerializeField] private Color colorTierB;
+        [SerializeField] private Color _colorTierB;
 
         /// <summary>
         /// 后段颜色
         /// </summary>
-        [SerializeField] private Color colorTierC;
+        [SerializeField] private Color _colorTierC;
 
         /// <summary>
         /// 同段内亮度提升因子
         /// </summary>
-        [SerializeField, Range(1.0f, 2.0f)] private float brightnessMultiplier = 1.1f;
+        [SerializeField, Range(1.0f, 2.0f)] private float _brightnessMultiplier = 1.1f;
 
         /// <summary>
         /// 事件管理器
@@ -68,7 +68,7 @@ namespace Hunting.UI
 
         private void Awake()
         {
-            buttonSkill.onClick.AddListener(OnSkillButtonClicked);
+            _buttonSkill.onClick.AddListener(OnSkillButtonClicked);
         }
 
         public void Init()
@@ -89,7 +89,7 @@ namespace Hunting.UI
 
         private void OnDestroy()
         {
-            buttonSkill.onClick.RemoveListener(OnSkillButtonClicked);
+            _buttonSkill.onClick.RemoveListener(OnSkillButtonClicked);
             CleanUp();
         }
 
@@ -112,12 +112,12 @@ namespace Hunting.UI
             // 计算当前条的填充比例
             float requiredPerBar = EnergyManager.GetRequiredPerBar();
             float normalized = Mathf.Clamp01(currentEnergy / requiredPerBar);
-            imageEnergyFill.fillAmount = normalized;
+            _imageEnergyFill.fillAmount = normalized;
 
             // 根据当前条决定填充颜色
             int maxBars = EnergyManager.GetMaxBars();
             int nextBarIndex = currentBars >= maxBars ? maxBars : Mathf.Clamp(currentBars + 1, 1, maxBars);
-            imageEnergyFill.color = EvaluateBarColor(nextBarIndex);
+            _imageEnergyFill.color = EvaluateBarColor(nextBarIndex);
         }
 
         /// <summary>
@@ -128,15 +128,15 @@ namespace Hunting.UI
             if (maxBars > 0 && currentBars >= maxBars)
             {
                 // 满条时显示无穷并与最终颜色同步
-                textEnergyBars.text = "∞";
-                textEnergyBars.color = EvaluateBarColor(maxBars);
+                _textEnergyBars.text = "∞";
+                _textEnergyBars.color = EvaluateBarColor(maxBars);
                 return;
             }
 
             // 非满条时显示 当前/总条
-            textEnergyBars.text = $"{currentBars}/{maxBars}";
+            _textEnergyBars.text = $"{currentBars}/{maxBars}";
             int displayIndex = Mathf.Clamp(Mathf.Max(1, currentBars), 1, maxBars);
-            textEnergyBars.color = EvaluateBarColor(displayIndex);
+            _textEnergyBars.color = EvaluateBarColor(displayIndex);
         }
 
         /// <summary>
@@ -147,12 +147,12 @@ namespace Hunting.UI
             if (currentBars <= 0)
             {
                 // 没有任何条时保持透明
-                imageEnergyBackground.color = Color.clear;
+                _imageEnergyBackground.color = Color.clear;
                 return;
             }
 
             // 使用当前条的颜色渲染底图
-            imageEnergyBackground.color = EvaluateBarColor(currentBars);
+            _imageEnergyBackground.color = EvaluateBarColor(currentBars);
         }
 
         /// <summary>
@@ -200,9 +200,9 @@ namespace Hunting.UI
         {
             return groupIndex switch
             {
-                0 => colorTierA,
-                1 => colorTierB,
-                _ => colorTierC
+                0 => _colorTierA,
+                1 => _colorTierB,
+                _ => _colorTierC
             };
         }
 
@@ -213,7 +213,7 @@ namespace Hunting.UI
         {
             // 提升亮度使同组后续条更亮
             Color.RGBToHSV(baseColor, out float h, out float s, out float v);
-            float boostedV = Mathf.Clamp01(v * Mathf.Pow(brightnessMultiplier, step));
+            float boostedV = Mathf.Clamp01(v * Mathf.Pow(_brightnessMultiplier, step));
             Color result = Color.HSVToRGB(h, s, boostedV);
             result.a = baseColor.a;
             return result;
@@ -246,9 +246,9 @@ namespace Hunting.UI
         {
             int maxBars = EnergyManager.GetMaxBars();
             UpdateBarText(maxBars, maxBars);
-            imageEnergyBackground.color = EvaluateBarColor(maxBars);
-            imageEnergyFill.fillAmount = 1f;
-            imageEnergyFill.color = EvaluateBarColor(maxBars);
+            _imageEnergyBackground.color = EvaluateBarColor(maxBars);
+            _imageEnergyFill.fillAmount = 1f;
+            _imageEnergyFill.color = EvaluateBarColor(maxBars);
         }
 
         /// <summary>

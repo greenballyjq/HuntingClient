@@ -33,6 +33,11 @@ namespace Hunting.UI
         [SerializeField] private UIComponentBulletStatus uiComponentBulletStatus;
 
         /// <summary>
+        /// 道具组组件
+        /// </summary>
+        [SerializeField] private UIComponentPropGroup uiComponentPropGroup;
+
+        /// <summary>
         /// UI管理器
         /// </summary>
         private UIManager UI => GameServiceLocator.UI;
@@ -53,10 +58,12 @@ namespace Hunting.UI
             uiComponentMeatProgress.Init();
             uiComponentEnergyProgress.Init();
             uiComponentBulletStatus.Init();
+            uiComponentPropGroup.Init();
         }
 
         public override void OnClose()
         {
+            uiComponentPropGroup.CleanUp();
             uiComponentBulletStatus.CleanUp();
             uiComponentEnergyProgress.CleanUp();
             uiComponentMeatProgress.CleanUp();
