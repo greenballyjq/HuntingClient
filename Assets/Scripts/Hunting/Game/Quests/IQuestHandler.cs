@@ -1,4 +1,4 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using Hunting.Manager;
 
 namespace Hunting.Game.Quests
@@ -12,11 +12,6 @@ namespace Hunting.Game.Quests
         /// 任务配置
         /// </summary>
         public Quest QuestData { get; set; }
-
-        /// <summary>
-        /// 单局上下文
-        /// </summary>
-        public RoundContext RoundContext { get; set; }
     }
 
     /// <summary>

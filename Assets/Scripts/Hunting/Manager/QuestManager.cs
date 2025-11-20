@@ -77,11 +77,6 @@ namespace Hunting.Manager
         /// </summary>
         private HuntingGameConfigManager Config => GameServiceLocator.Config;
 
-        /// <summary>
-        /// 单局管理器
-        /// </summary>
-        private RoundManager Round => GameServiceLocator.GetGameManager<RoundManager>();
-
         public override void Init()
         {
             RegisterEvents();
@@ -188,8 +183,7 @@ namespace Hunting.Manager
             // 构造任务上下文
             _currentQuestContext = new QuestContext
             {
-                QuestData = questData,
-                RoundContext = Round.CurrentContext
+                QuestData = questData
             };
 
             // 设置任务剩余时间

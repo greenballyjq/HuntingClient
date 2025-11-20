@@ -17,14 +17,16 @@ namespace Hunting.Game.Props
             switch (propType)
             {
                 case EPropType.Bombardment:
-                    //return new PropBombardmentHandler();
+                    return new PropBombardmentHandler();
                 case EPropType.AimAssist:
                     //return new PropAimAssistHandler();
+                    break;
                 case EPropType.Trap:
                     //return new PropTrapHandler();
-                default:
-                    return null;
+                    break;
             }
+
+            return null;
         }
     }
 }

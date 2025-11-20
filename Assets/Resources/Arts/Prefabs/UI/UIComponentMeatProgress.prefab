@@ -84,7 +84,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 390609171625110374}
-  - component: {fileID: 3024330419573043102}
+  - component: {fileID: 2900121696585160902}
   m_Layer: 5
   m_Name: UIComponentMeatProgress
   m_TagString: Untagged
@@ -115,7 +115,7 @@ RectTransform:
   m_AnchoredPosition: {x: -20.91681, y: 0}
   m_SizeDelta: {x: 1316.1573, y: 193.15}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3024330419573043102
+--- !u!114 &2900121696585160902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,10 +131,10 @@ MonoBehaviour:
   imageMeatBackground: {fileID: 7642110425630419154}
   textMeatValue: {fileID: 2300987438535215049}
   textMeatBars: {fileID: 5553984577594271961}
-  colorTierA: {r: 0.39215687, g: 0.78431374, b: 0.5882353, a: 1}
-  colorTierB: {r: 0.94509804, g: 0.6901961, b: 0.4392157, a: 1}
-  colorTierC: {r: 0.90588236, g: 0.47058824, b: 0.39215687, a: 1}
-  brightnessMultiplier: 1.5
+  colorTierA: {r: 0.4764151, g: 1, b: 0.5549756, a: 1}
+  colorTierB: {r: 1, g: 0.7115653, b: 0.4009434, a: 1}
+  colorTierC: {r: 1, g: 0.50363827, b: 0.4198113, a: 1}
+  brightnessMultiplier: 1.1
 --- !u!1 &851195743867410991
 GameObject:
   m_ObjectHideFlags: 0

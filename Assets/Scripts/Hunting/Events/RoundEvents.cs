@@ -34,7 +34,7 @@ public static class RoundEvents
 public sealed class RoundStartedEventArgs : EventArgs
 {
     /// <summary>
-    /// 本局上下文
+    /// 单局上下文
     /// </summary>
     public RoundContext Context { get; set; }
 }
@@ -45,13 +45,8 @@ public sealed class RoundStartedEventArgs : EventArgs
 public sealed class RoundEndedEventArgs : EventArgs
 {
     /// <summary>
-    /// 本局上下文
+    /// 单局上下文
     /// </summary>
     public RoundContext Context { get; set; }
-
-    /// <summary>
-    /// 是否正常完成
-    /// </summary>
-    public bool IsCompleted { get; set; }
 }
 

@@ -99,16 +99,11 @@ namespace Hunting.Manager
         public int GetMaxBars() => _maxBars;
 
         /// <summary>
-        /// 判断是否可以消耗一条能量
-        /// </summary>
-        public bool CanConsume() => _currentBars > 0;
-
-        /// <summary>
         /// 尝试消耗一条能量
         /// </summary>
         public bool TryConsumeOneBar()
         {
-            if (!CanConsume())
+            if (_currentBars <= 0)
                 return false;
 
             // 直接扣除一条能量

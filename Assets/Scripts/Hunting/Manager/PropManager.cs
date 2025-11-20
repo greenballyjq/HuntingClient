@@ -1,7 +1,5 @@
-﻿using cfg.HuntingConfig;
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
-using GameFramework.Core;
 using Hunting.Game.Props;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,9 +12,9 @@ namespace Hunting.Manager
     public class PropManager : BaseGameManager
     {
         /// <summary>
-        /// 活跃道具运行时上下文
+        /// 活跃道具上下文
         /// </summary>
-        private class ActivePropRuntimeContext
+        private class ActiveProp
         {
             /// <summary>
             /// 道具处理器
@@ -42,7 +40,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 活跃道具列表
         /// </summary>
-        private readonly List<ActivePropRuntimeContext> _activeProps = new List<ActivePropRuntimeContext>();
+        private readonly List<ActiveProp> _activeProps = new List<ActiveProp>();
 
         /// <summary>
         /// 事件管理器
@@ -58,11 +56,6 @@ namespace Hunting.Manager
         /// 玩家数据管理器
         /// </summary>
         private PlayerDataManager PlayerData => GameServiceLocator.GetGameManager<PlayerDataManager>();
-
-        /// <summary>
-        /// 单局管理器
-        /// </summary>
-        private RoundManager Round => GameServiceLocator.GetGameManager<RoundManager>();
 
         public override void Init()
         {
@@ -94,20 +87,8 @@ namespace Hunting.Manager
         {
             // 获取道具配置
             Prop propData = Config.GetProp(propType);
-            if (propData == null)
-            {
-                Debug.LogWarning($"[PropManager] 未找到道具配置，PropType:{propType}");
-                TriggerPropUseRejected(new PropUseRejectedEventArgs
-                {
-                    Sender = this,
-                    PropData = null,
-                    PropType = propType,
-                    Reason = "配置不存在"
-                });
-                return false;
-            }
 
-            // 检查是否可以使用（有持续时间的道具，持续期间不能重复使用）
+            // 检查是否可以使用
             if (!CanUseProp(propType, propData))
             {
                 Debug.LogWarning($"[PropManager] 道具正在使用中，无法重复使用，PropType:{propType}");
@@ -115,7 +96,6 @@ namespace Hunting.Manager
                 {
                     Sender = this,
                     PropData = propData,
-                    PropType = propType,
                     Reason = "正在使用中"
                 });
                 return false;
@@ -129,7 +109,6 @@ namespace Hunting.Manager
                 {
                     Sender = this,
                     PropData = propData,
-                    PropType = propType,
                     Reason = "库存不足"
                 });
                 return false;
@@ -143,7 +122,6 @@ namespace Hunting.Manager
                 {
                     Sender = this,
                     PropData = propData,
-                    PropType = propType,
                     Reason = "消耗失败"
                 });
                 return false;
@@ -151,17 +129,11 @@ namespace Hunting.Manager
 
             // 创建处理器
             IPropHandler handler = PropHandlerFactory.CreatePropHandler(propType);
-            if (handler == null)
-            {
-                Debug.LogWarning($"[PropManager] 未实现的道具类型: {propType}");
-                return false;
-            }
 
             // 构造上下文
             PropContext context = new PropContext
             {
-                PropData = propData,
-                RoundContext = Round.CurrentContext
+                PropData = propData
             };
 
             // 开始道具效果
@@ -202,7 +174,7 @@ namespace Hunting.Manager
         private void BeginProp(Prop propData, IPropHandler handler, PropContext context)
         {
             // 创建活跃道具实例
-            ActivePropRuntimeContext activeProp = new ActivePropRuntimeContext
+            ActiveProp activeProp = new ActiveProp
             {
                 Handler = handler,
                 Context = context,
@@ -220,27 +192,24 @@ namespace Hunting.Manager
             TriggerPropStarted(new PropStartedEventArgs
             {
                 Sender = this,
-                PropData = propData,
-                PropType = propData.PropType
+                PropData = propData
             });
 
             Debug.Log($"[PropManager] 道具开始，类型:{propData.PropType}，持续时间:{propData.Duration:F2}秒");
 
             // 无持续时间的道具，立即结束
             if (propData.Duration <= 0f)
-            {
                 EndProp(activeProp);
-            }
         }
 
         /// <summary>
         /// 结束道具效果
         /// </summary>
         /// <param name="activeProp">活跃道具实例</param>
-        private void EndProp(ActivePropRuntimeContext activeProp)
+        private void EndProp(ActiveProp activeProp)
         {
             // 通知处理器执行结束逻辑
-            activeProp.Handler?.OnPropEnd(activeProp.Context);
+            activeProp.Handler.OnPropEnd(activeProp.Context);
 
             // 从活跃列表移除
             _activeProps.Remove(activeProp);
@@ -249,8 +218,7 @@ namespace Hunting.Manager
             TriggerPropEnded(new PropEndedEventArgs
             {
                 Sender = this,
-                PropData = activeProp.PropData,
-                PropType = activeProp.PropData.PropType
+                PropData = activeProp.PropData
             });
 
             Debug.Log($"[PropManager] 道具结束，类型:{activeProp.PropData.PropType}");
@@ -262,31 +230,27 @@ namespace Hunting.Manager
         /// <param name="deltaTime">时间增量</param>
         private void UpdateActiveProps(float deltaTime)
         {
-            // 倒序遍历，避免移除时索引问题
             for (int i = _activeProps.Count - 1; i >= 0; i--)
             {
-                ActivePropRuntimeContext activeProp = _activeProps[i];
+                ActiveProp activeProp = _activeProps[i];
 
                 // 更新剩余时间
                 activeProp.RemainingTime -= deltaTime;
 
                 // 通知处理器执行更新逻辑
-                activeProp.Handler?.OnPropUpdate(activeProp.Context, deltaTime);
+                activeProp.Handler.OnPropUpdate(activeProp.Context, deltaTime);
 
                 // 触发道具更新事件
                 TriggerPropUpdated(new PropUpdatedEventArgs
                 {
                     Sender = this,
                     PropData = activeProp.PropData,
-                    PropType = activeProp.PropData.PropType,
                     RemainingTime = activeProp.RemainingTime
                 });
 
                 // 检查是否时间到
                 if (activeProp.RemainingTime <= 0f)
-                {
                     EndProp(activeProp);
-                }
             }
         }
 
@@ -295,7 +259,6 @@ namespace Hunting.Manager
         /// </summary>
         private void StopAllProps()
         {
-            // 倒序遍历，避免移除时索引问题
             for (int i = _activeProps.Count - 1; i >= 0; i--)
                 EndProp(_activeProps[i]);
         }

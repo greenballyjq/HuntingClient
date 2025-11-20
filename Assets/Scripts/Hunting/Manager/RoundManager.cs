@@ -169,8 +169,7 @@ namespace Hunting.Manager
             TriggerRoundEnded(new RoundEndedEventArgs
             {
                 Sender = this,
-                Context = CurrentContext,
-                IsCompleted = isCompleted
+                Context = CurrentContext
             });
 
             CloseGameplayUI();

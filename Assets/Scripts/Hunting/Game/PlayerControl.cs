@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using cfg.HuntingConfig.Enum;
+using Cysharp.Threading.Tasks;
 using Hunting.Manager;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -93,6 +94,11 @@ namespace Hunting.Game
         {
             // 检查操作区域
             CheckValidArea();
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                GameServiceLocator.GetGameManager<PropManager>().TryUseProp(EPropType.Bombardment);
+            }
         }
 
         /// <summary>

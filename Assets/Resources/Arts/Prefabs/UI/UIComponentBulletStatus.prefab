@@ -206,6 +206,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _imageBullet: {fileID: 6656851012247277830}
   _textCountdown: {fileID: 2697633420922135843}
-  _colorNormal: {r: 0.38740388, g: 1, b: 0.3443396, a: 1}
-  _colorWarning: {r: 1, g: 0.25, b: 0.25, a: 1}
+  _colorNormal: {r: 0.53734034, g: 1, b: 0.504717, a: 1}
+  _colorWarning: {r: 1, g: 0.3915094, b: 0.3915094, a: 1}
   _blinkSpeedMultiplier: 2

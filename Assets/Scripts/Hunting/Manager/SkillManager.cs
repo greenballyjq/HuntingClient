@@ -1,5 +1,4 @@
 ﻿using cfg.HuntingConfig.Skill;
-using GameFramework.Core;
 using Hunting.Game.Skills;
 using UnityEngine;
 
@@ -21,14 +20,14 @@ namespace Hunting.Manager
         private SkillContext _currentSkillContext;
 
         /// <summary>
-        /// 技能是否正在运行
-        /// </summary>
-        private bool _isRunning;
-
-        /// <summary>
         /// 技能剩余时间
         /// </summary>
         private float _remainingTime;
+
+        /// <summary>
+        /// 技能是否正在运行
+        /// </summary>
+        private bool _isRunning;
 
         /// <summary>
         /// 事件管理器
@@ -59,7 +58,7 @@ namespace Hunting.Manager
 
             // 逐帧递减持续时间并调用处理器更新
             _remainingTime -= Time.deltaTime;
-            _currentHandler?.OnSkillUpdate(_currentSkillContext, Time.deltaTime);
+            _currentHandler.OnSkillUpdate(_currentSkillContext, Time.deltaTime);
 
             if (_remainingTime <= 0f)
                 EndSkill();
@@ -75,33 +74,12 @@ namespace Hunting.Manager
 
         #region 公共方法
         /// <summary>
-        /// 当前是否可以启动技能
-        /// </summary>
-        public bool CanStartSkill()
-        {
-            if (_currentHandler == null || _isRunning || !Energy.CanConsume())
-                return false;
-
-            return true;
-        }
-
-        /// <summary>
         /// 尝试启动技能
         /// </summary>
         public bool TryStartSkill()
         {
-            if (!CanStartSkill())
-            {
-                Debug.LogWarning("[SkillManager] 当前无法启动技能");
+            if (_currentHandler == null || _isRunning || !Energy.TryConsumeOneBar())
                 return false;
-            }
-
-            // 只有成功消耗能量条后才启动技能
-            if (!Energy.TryConsumeOneBar())
-            {
-                Debug.LogWarning("[SkillManager] 能量消耗失败，取消启动技能");
-                return false;
-            }
 
             BeginSkill();
             return true;
@@ -123,8 +101,7 @@ namespace Hunting.Manager
             TriggerSkillStarted(new SkillStartedEventArgs
             {
                 Sender = this,
-                SkillData = _currentSkillContext.SkillData,
-                Context = _currentSkillContext.RoundContext,
+                SkillData = _currentSkillContext.SkillData
             });
 
             Debug.Log($"[SkillManager] 技能开始，持续 {_remainingTime:F2} 秒");
@@ -139,7 +116,7 @@ namespace Hunting.Manager
                 return;
 
             // 通知处理器执行结束逻辑
-            _currentHandler?.OnSkillEnd(_currentSkillContext);
+            _currentHandler.OnSkillEnd(_currentSkillContext);
 
             _isRunning = false;
             _remainingTime = 0f;
@@ -147,8 +124,7 @@ namespace Hunting.Manager
             TriggerSkillEnded(new SkillEndedEventArgs
             {
                 Sender = this,
-                SkillData = _currentSkillContext.SkillData,
-                Context = _currentSkillContext.RoundContext
+                SkillData = _currentSkillContext.SkillData
             });
 
             Debug.Log("[SkillManager] 技能结束");
@@ -193,27 +169,17 @@ namespace Hunting.Manager
             ResetState();
 
             // 读取本局技能配置
-            Skill skill = Config.GetSkill(args.Context.SkillId);
-            if (skill == null)
-            {
-                Debug.LogWarning($"[SkillManager] 未找到技能配置，SkillId:{args.Context.SkillId}");
-                return;
-            }
+            Skill skillData = Config.GetSkill(args.Context.SkillId);
 
-            _currentHandler = SkillHandlerFactory.CreateSkillHandler(skill.SkillType);
-            if (_currentHandler == null)
-            {
-                Debug.LogWarning($"[SkillManager] 未实现的技能类型: {skill.SkillType}");
-                return;
-            }
+            // 创建处理器
+            _currentHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
 
+            // 构造上下文
             _currentSkillContext = new SkillContext
             {
-                SkillData = skill,
+                SkillData = skillData,
                 RoundContext = args.Context
             };
-
-            Debug.Log($"[SkillManager] 已准备技能处理器: {skill.SkillType}");
         }
 
         /// <summary>
@@ -221,7 +187,6 @@ namespace Hunting.Manager
         /// </summary>
         private void OnRoundEnded(RoundEndedEventArgs args)
         {
-            // 确保技能在单局结束时停止
             EndSkill();
             ResetState();
         }

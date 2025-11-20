@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Prop;
+﻿using cfg.HuntingConfig.Prop;
 using Hunting.Manager;
 
 namespace Hunting.Game.Props

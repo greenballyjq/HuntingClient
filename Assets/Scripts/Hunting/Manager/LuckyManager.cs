@@ -113,8 +113,7 @@ namespace Hunting.Manager
             // 构造幸运仪式上下文
             _currentLuckyContext = new LuckyContext
             {
-                LuckyData = luckyData,
-                RoundContext = args.Context
+                LuckyData = luckyData
             };
 
             // 激活幸运仪式效果
@@ -124,8 +123,7 @@ namespace Hunting.Manager
             TriggerLuckyActivated(new LuckyActivatedEventArgs
             {
                 Sender = this,
-                LuckyData = luckyData,
-                Context = args.Context
+                LuckyData = luckyData
             });
 
             Debug.Log($"[LuckyManager] 幸运仪式已激活: {luckyType}");

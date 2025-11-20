@@ -12,11 +12,6 @@ namespace Hunting.Game.Luckys
         /// 幸运仪式数据
         /// </summary>
         public Lucky LuckyData { get; set; }
-
-        /// <summary>
-        /// 单局上下文
-        /// </summary>
-        public RoundContext RoundContext { get; set; }
     }
 
     /// <summary>

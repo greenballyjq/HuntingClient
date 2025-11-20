@@ -152,11 +152,6 @@ namespace Hunting.Events
         /// 剩余时间
         /// </summary>
         public float RemainingTime { get; set; }
-
-        /// <summary>
-        /// 总持续时间
-        /// </summary>
-        public float TotalTime { get; set; }
     }
 
     /// <summary>

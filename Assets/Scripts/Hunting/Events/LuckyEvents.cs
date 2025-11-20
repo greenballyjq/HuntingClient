@@ -1,4 +1,4 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using GameFramework.Core;
 using Hunting.Manager;
 
@@ -22,10 +22,5 @@ public sealed class LuckyActivatedEventArgs : EventArgs
     /// 幸运仪式配置
     /// </summary>
     public Lucky LuckyData { get; set; }
-
-    /// <summary>
-    /// 当前局上下文
-    /// </summary>
-    public RoundContext Context { get; set; }
 }
 

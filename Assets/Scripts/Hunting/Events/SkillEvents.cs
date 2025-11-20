@@ -27,11 +27,6 @@ public sealed class SkillStartedEventArgs : EventArgs
     /// 技能配置
     /// </summary>
     public Skill SkillData { get; set; }
-
-    /// <summary>
-    /// 当前局上下文
-    /// </summary>
-    public RoundContext Context { get; set; }
 }
 
 /// <summary>
@@ -43,11 +38,6 @@ public sealed class SkillEndedEventArgs : EventArgs
     /// 技能配置
     /// </summary>
     public Skill SkillData { get; set; }
-
-    /// <summary>
-    /// 当前局上下文
-    /// </summary>
-    public RoundContext Context { get; set; }
 }
 
 

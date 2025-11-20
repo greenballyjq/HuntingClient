@@ -155,8 +155,7 @@ namespace Hunting.Game.Weapons
                 TriggerSpecialBulletCountdown(new SpecialBulletCountdownEventArgs
                 {
                     BulletData = bulletData,
-                    RemainingTime = _specialBulletRemainingTime,
-                    TotalTime = bulletData.Duration
+                    RemainingTime = _specialBulletRemainingTime
                 });
             }
 
@@ -196,12 +195,6 @@ namespace Hunting.Game.Weapons
         /// </summary>
         private async UniTask SpawnBulletAsync()
         {
-            if (weaponVisual == null || weaponVisual.MuzzlePoint == null)
-            {
-                Debug.LogError("[Weapon] 武器视觉引用或枪口位置为空");
-                return;
-            }
-
             Transform muzzlePoint = weaponVisual.MuzzlePoint;
             await Bullet.SpawnBullet(_currentBulletId, muzzlePoint.position, muzzlePoint.forward);
         }
