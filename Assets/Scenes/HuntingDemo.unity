@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44402316, g: 0.49316597, b: 0.57223195, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.4964137, b: 0.57481897, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2908,7 +2908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94da678f5885b04c97527f3f9bb714e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 1
+  spawnInterval: 0.5
   spawnLineRange: {x: -2.96, y: 3.8}
   minSpawnAngle: 62.6
   maxSpawnAngle: 88.3
@@ -2971,7 +2971,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94da678f5885b04c97527f3f9bb714e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 2
+  spawnInterval: 0.5
   spawnLineRange: {x: -3, y: 5.89}
   minSpawnAngle: -83.8
   maxSpawnAngle: -59.2
@@ -4034,10 +4034,6 @@ PrefabInstance:
     - target: {fileID: 6037383438632139027, guid: f01daca9cda326b4aa6b96bff280d0a8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6091380187284313810, guid: f01daca9cda326b4aa6b96bff280d0a8, type: 3}
-      propertyPath: m_Text
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
