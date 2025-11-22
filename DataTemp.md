@@ -50,11 +50,12 @@ EffectParamInt：额外掉肉倍率"
 	2	AimAssist	指哪打哪	自动锁定并跟随目标	10	Arts/UI/Gameplay/Props/Prop_AimAssist	1	示例
 	3	Trap	智能诱捕陷阱	生成陷阱吸引并击杀动物	0	Arts/UI/Gameplay/Props/Prop_Trap	1	示例
 
-##var	ID	MaxLockDistance	Comment
-##type	int	float	string
-##group	c	c	c
-##	参数ID	最大锁定距离	备注
-	1	20	示例
+##var	ID	MinLockDistance	MaxLockDistance	UIPropAimAssistPrefabResourcePath	Comment
+##type	int	float	float	string	string
+##group	c	c	c	c	c
+##	参数ID	最小锁定距离	最大锁定距离	指哪打哪道具UI预制体资源加载路径	备注
+	1	50	1	Arts/Prefabs/UI/HUD/UIPropAimAssist	示例
+
 
 ##var	ID	ZoneRadius	DamageAmount	DamageInterval	Comment
 ##type	int	float	float	float	string
@@ -62,11 +63,13 @@ EffectParamInt：额外掉肉倍率"
 ##	参数ID	圆形范围半径	每次伤害数值	伤害间隔（秒）	备注
 	1	8	80	1	示例
 
-##var	ID	TrapCount	AttractRadius	SpawnRadius	TrapPrefabResourcePath	Comment
-##type	int	int	float	float	string	string
-##group	c	c	c	c	c	c
-##	参数ID	陷阱数量	吸引半径	生成半径	陷阱预制体资源路径	备注
-	1	6	12	15	Arts/Prefabs/Props/Traps/Trap_Bomb	示例
+##var	ID	TrapCount	SpawnMinDistance	SpawnMaxDistance	SpawnSectorAngle	SpawnAnimalCheckRadius	SpawnTrapMinDistance	TriggerRadius	AttractRadius	AttractRadiusRangeByVolume	TrapPrefabResourcePath	Comment
+##type	int	int	float	float	float	float	float	float	float	(map#sep=:|),HuntingConfig.Enum.EVolumeType,(array#sep=,),float	string	string
+##group	c	c	c	c	c	c	c	c	c	c	c	c
+##	参数ID	陷阱数量	生成最小距离	生成最大距离	生成扇形角度	生成时检测动物半径	生成时陷阱最小间隔	陷阱触发半径	吸引半径	按体型划分的吸引半径范围比例	陷阱预制体资源路径	备注
+	1	12	10	300	90	10	30	5	30	Small:0.6,1.0|Medium:0.2,0.6|Large:0.0,0.2|Special:0,0	Arts/Prefabs/Props/Traps/Trap_Bomb	示例
+
+
 
 ##var	ID	QuestType	TargetRange	Duration	RewardRange	Comment
 ##type	int	HuntingConfig.Enum.EQuestType	(array#sep=,),int	float	(array#sep=,),int	string

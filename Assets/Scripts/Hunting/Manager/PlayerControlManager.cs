@@ -44,21 +44,25 @@ namespace Hunting.Manager
         /// </summary>
         public void SwitchToDefaultShooting()
         {
-            IPlayerControlHandler handler = PlayerControlHandlerFactory.Create(EControlType.DefaultShooting);
+            IPlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.DefaultShooting);
             SwitchHandler(handler);
         }
 
         /// <summary>
         /// 切换到指哪打哪模式
         /// </summary>
+        /// <param name="minLockDistance">最小锁定距离</param>
         /// <param name="maxLockDistance">最大锁定距离</param>
-        public void SwitchToAimAssist(float maxLockDistance)
+        public void SwitchToAimAssist(float minLockDistance, float maxLockDistance)
         {
-            IPlayerControlHandler handler = PlayerControlHandlerFactory.Create(EControlType.AimAssist);
+            IPlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.AimAssist);
             
             // 设置指哪打哪控制器的参数
             if (handler is AimAssistHandler aimAssistHandler)
+            {
+                aimAssistHandler.SetMinLockDistance(minLockDistance);
                 aimAssistHandler.SetMaxLockDistance(maxLockDistance);
+            }
             
             SwitchHandler(handler);
         }

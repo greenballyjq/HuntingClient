@@ -1,6 +1,5 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Core;
 using Hunting.Game.Luckys;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 当局幸运仪式处理器
         /// </summary>
-        private ILuckyHandler _handler;
+        private ILuckyHandler _currentHandler;
 
         /// <summary>
         /// 当局幸运仪式上下文
@@ -56,7 +55,7 @@ namespace Hunting.Manager
         /// </summary>
         private void ResetState()
         {
-            _handler = null;
+            _currentHandler = null;
             _currentLuckyContext = null;
         }
         #endregion
@@ -94,30 +93,24 @@ namespace Hunting.Manager
                 Debug.Log("[LuckyManager] 本局未选择幸运仪式");
                 return;
             }
-
             Lucky luckyData = Config.GetLucky(luckyType);
-            if (luckyData == null)
-            {
-                Debug.LogWarning($"[LuckyManager] 未找到幸运仪式配置，LuckyType:{luckyType}");
-                return;
-            }
 
-            // 创建对应的处理器
-            _handler = LuckyHandlerFactory.CreateLuckyHandler(luckyType);
-            if (_handler == null)
+            // 创建处理器
+            _currentHandler = LuckyHandlerFactory.CreateLuckyHandler(luckyType);
+            if (_currentHandler == null)
             {
                 Debug.LogWarning($"[LuckyManager] 未实现的幸运仪式类型: {luckyType}");
                 return;
             }
 
-            // 构造幸运仪式上下文
+            // 构造上下文
             _currentLuckyContext = new LuckyContext
             {
                 LuckyData = luckyData
             };
 
             // 激活幸运仪式效果
-            _handler?.OnActivate(_currentLuckyContext);
+            _currentHandler?.OnActivate(_currentLuckyContext);
 
             // 触发幸运仪式激活事件
             TriggerLuckyActivated(new LuckyActivatedEventArgs
@@ -135,8 +128,8 @@ namespace Hunting.Manager
         private void OnRoundEnded(RoundEndedEventArgs args)
         {
             // 注销幸运仪式效果
-            if (_handler != null && _currentLuckyContext != null)
-                _handler?.OnDeactivate(_currentLuckyContext);
+            if (_currentHandler != null && _currentLuckyContext != null)
+                _currentHandler?.OnDeactivate(_currentLuckyContext);
 
             ResetState();
         }

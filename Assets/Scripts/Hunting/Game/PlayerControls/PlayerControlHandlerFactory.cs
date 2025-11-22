@@ -1,4 +1,4 @@
-namespace Hunting.Game.PlayerControls
+﻿namespace Hunting.Game.PlayerControls
 {
     /// <summary>
     /// 控制类型枚举
@@ -26,7 +26,7 @@ namespace Hunting.Game.PlayerControls
         /// </summary>
         /// <param name="type">控制类型</param>
         /// <returns>控制处理器实例</returns>
-        public static IPlayerControlHandler Create(EControlType type)
+        public static IPlayerControlHandler CreatePlayerControlHandler(EControlType type)
         {
             switch (type)
             {

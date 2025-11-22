@@ -17,7 +17,9 @@ public sealed partial class PropAimAssist : Luban.BeanBase
     public PropAimAssist(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
+        MinLockDistance = _buf.ReadFloat();
         MaxLockDistance = _buf.ReadFloat();
+        UIPropAimAssistPrefabResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -31,9 +33,17 @@ public sealed partial class PropAimAssist : Luban.BeanBase
     /// </summary>
     public readonly int ID;
     /// <summary>
+    /// 最小锁定距离
+    /// </summary>
+    public readonly float MinLockDistance;
+    /// <summary>
     /// 最大锁定距离
     /// </summary>
     public readonly float MaxLockDistance;
+    /// <summary>
+    /// 指哪打哪道具UI预制体资源加载路径
+    /// </summary>
+    public readonly string UIPropAimAssistPrefabResourcePath;
     /// <summary>
     /// 备注
     /// </summary>
@@ -50,7 +60,9 @@ public sealed partial class PropAimAssist : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
+        + "MinLockDistance:" + MinLockDistance + ","
         + "MaxLockDistance:" + MaxLockDistance + ","
+        + "UIPropAimAssistPrefabResourcePath:" + UIPropAimAssistPrefabResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

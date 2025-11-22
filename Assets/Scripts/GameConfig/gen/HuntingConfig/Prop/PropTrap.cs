@@ -18,8 +18,14 @@ public sealed partial class PropTrap : Luban.BeanBase
     {
         ID = _buf.ReadInt();
         TrapCount = _buf.ReadInt();
+        SpawnMinDistance = _buf.ReadFloat();
+        SpawnMaxDistance = _buf.ReadFloat();
+        SpawnSectorAngle = _buf.ReadFloat();
+        SpawnAnimalCheckRadius = _buf.ReadFloat();
+        SpawnTrapMinDistance = _buf.ReadFloat();
+        TriggerRadius = _buf.ReadFloat();
         AttractRadius = _buf.ReadFloat();
-        SpawnRadius = _buf.ReadFloat();
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);AttractRadiusRangeByVolume = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.EVolumeType, float[]>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.EVolumeType _k0;  _k0 = (HuntingConfig.Enum.EVolumeType)_buf.ReadInt(); float[] _v0;  {int __n1 = System.Math.Min(_buf.ReadSize(), _buf.Size);_v0 = new float[__n1];for(var __index1 = 0 ; __index1 < __n1 ; __index1++) { float __e1;__e1 = _buf.ReadFloat(); _v0[__index1] = __e1;}}     AttractRadiusRangeByVolume.Add(_k0, _v0);}}
         TrapPrefabResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
@@ -38,13 +44,37 @@ public sealed partial class PropTrap : Luban.BeanBase
     /// </summary>
     public readonly int TrapCount;
     /// <summary>
+    /// 生成最小距离
+    /// </summary>
+    public readonly float SpawnMinDistance;
+    /// <summary>
+    /// 生成最大距离
+    /// </summary>
+    public readonly float SpawnMaxDistance;
+    /// <summary>
+    /// 生成扇形角度
+    /// </summary>
+    public readonly float SpawnSectorAngle;
+    /// <summary>
+    /// 生成时检测动物半径
+    /// </summary>
+    public readonly float SpawnAnimalCheckRadius;
+    /// <summary>
+    /// 生成时陷阱最小间隔
+    /// </summary>
+    public readonly float SpawnTrapMinDistance;
+    /// <summary>
+    /// 陷阱触发半径
+    /// </summary>
+    public readonly float TriggerRadius;
+    /// <summary>
     /// 吸引半径
     /// </summary>
     public readonly float AttractRadius;
     /// <summary>
-    /// 生成半径
+    /// 按体型划分的吸引半径范围比例
     /// </summary>
-    public readonly float SpawnRadius;
+    public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.EVolumeType, float[]> AttractRadiusRangeByVolume;
     /// <summary>
     /// 陷阱预制体资源路径
     /// </summary>
@@ -66,8 +96,14 @@ public sealed partial class PropTrap : Luban.BeanBase
         return "{ "
         + "ID:" + ID + ","
         + "TrapCount:" + TrapCount + ","
+        + "SpawnMinDistance:" + SpawnMinDistance + ","
+        + "SpawnMaxDistance:" + SpawnMaxDistance + ","
+        + "SpawnSectorAngle:" + SpawnSectorAngle + ","
+        + "SpawnAnimalCheckRadius:" + SpawnAnimalCheckRadius + ","
+        + "SpawnTrapMinDistance:" + SpawnTrapMinDistance + ","
+        + "TriggerRadius:" + TriggerRadius + ","
         + "AttractRadius:" + AttractRadius + ","
-        + "SpawnRadius:" + SpawnRadius + ","
+        + "AttractRadiusRangeByVolume:" + Luban.StringUtil.CollectionToString(AttractRadiusRangeByVolume) + ","
         + "TrapPrefabResourcePath:" + TrapPrefabResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";

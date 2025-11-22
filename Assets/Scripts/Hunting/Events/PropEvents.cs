@@ -2,6 +2,9 @@
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using GameFramework.Core;
+using Hunting.Game.Animal;
+using Hunting.Game.Props;
+using UnityEngine;
 
 /// <summary>
 /// 道具系统事件键
@@ -27,6 +30,11 @@ public static class PropEvents
     /// 道具使用被拒绝事件
     /// </summary>
     public static readonly EventKey<PropUseRejectedEventArgs> PropUseRejected = new EventKey<PropUseRejectedEventArgs>();
+
+    /// <summary>
+    /// 陷阱触发事件
+    /// </summary>
+    public static readonly EventKey<TrapTriggeredEventArgs> TrapTriggered = new EventKey<TrapTriggeredEventArgs>();
 }
 
 /// <summary>
@@ -81,5 +89,26 @@ public sealed class PropUseRejectedEventArgs : EventArgs
     /// 拒绝原因
     /// </summary>
     public string Reason { get; set; }
+}
+
+/// <summary>
+/// 陷阱触发事件参数
+/// </summary>
+public sealed class TrapTriggeredEventArgs : EventArgs
+{
+    /// <summary>
+    /// 触发的陷阱实例
+    /// </summary>
+    public TrapBehavior Trap { get; set; }
+
+    /// <summary>
+    /// 触发陷阱的动物实例
+    /// </summary>
+    public AnimalBehavior TriggeredAnimal { get; set; }
+
+    /// <summary>
+    /// 触发位置
+    /// </summary>
+    public Vector3 TriggerPosition { get; set; }
 }
 

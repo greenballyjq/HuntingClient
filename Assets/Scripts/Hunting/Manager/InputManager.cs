@@ -86,6 +86,16 @@ namespace Hunting.Manager
         {
             return _mainCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, depth));
         }
+
+        /// <summary>
+        /// 将世界坐标转换为屏幕坐标
+        /// </summary>
+        /// <param name="worldPosition">世界坐标</param>
+        /// <returns>屏幕坐标</returns>
+        public Vector3 WorldToScreen(Vector3 worldPosition)
+        {
+            return _mainCamera.WorldToScreenPoint(worldPosition);
+        }
         #endregion
 
         #region 事件相关

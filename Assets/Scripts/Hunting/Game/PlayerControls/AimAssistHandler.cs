@@ -1,5 +1,6 @@
 ﻿namespace Hunting.Game.PlayerControls
 {
+    using Hunting.Game.Animal;
     using Hunting.Game.Weapons;
     using Hunting.Manager;
     using UnityEngine;
@@ -18,6 +19,11 @@
         /// 当前锁定的目标
         /// </summary>
         private Transform _currentTarget;
+
+        /// <summary>
+        /// 最小锁定距离
+        /// </summary>
+        private float _minLockDistance;
 
         /// <summary>
         /// 最大锁定距离
@@ -59,16 +65,26 @@
             if (_currentTarget == null)
                 return;
 
+            // 获取目标的碰撞器中心点
+            Collider targetCollider = _currentTarget.GetComponent<Collider>();
+            Vector3 targetPosition = targetCollider.bounds.center;
+
             // 检查目标距离
-            float distance = Vector3.Distance(_weapon.transform.position, _currentTarget.position);
-            if (distance > _maxLockDistance)
+            float distance = Vector3.Distance(_weapon.transform.position, targetPosition);
+            if (distance < _minLockDistance || distance > _maxLockDistance)
             {
+                Transform lostTarget = _currentTarget;
                 _currentTarget = null;
+                TriggerTargetLost(new TargetLostEventArgs
+                {
+                    LostTarget = lostTarget,
+                    Reason = ETargetLostReason.DistanceExceeded
+                });
                 return;
             }
 
             // 控制武器朝向目标
-            _weapon.SetAimTarget(_currentTarget.position);
+            _weapon.SetAimTarget(targetPosition);
 
             // 持续射击
             _weapon.Fire();
@@ -77,10 +93,28 @@
         public void OnControlEnd()
         {
             UnregisterEvents();
-            _currentTarget = null;
+            if (_currentTarget != null)
+            {
+                Transform lostTarget = _currentTarget;
+                _currentTarget = null;
+                TriggerTargetLost(new TargetLostEventArgs
+                {
+                    LostTarget = lostTarget,
+                    Reason = ETargetLostReason.ControlEnded
+                });
+            }
         }
 
         #region 公共方法
+        /// <summary>
+        /// 设置最小锁定距离
+        /// </summary>
+        /// <param name="distance">最小锁定距离</param>
+        public void SetMinLockDistance(float distance)
+        {
+            _minLockDistance = distance;
+        }
+
         /// <summary>
         /// 设置最大锁定距离
         /// </summary>
@@ -103,7 +137,50 @@
 
             int layerMask = LayerMask.GetMask("Animal");
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
-                _currentTarget = hit.transform;
+            {
+                Transform newTarget = hit.transform;
+                
+                // 获取目标的碰撞器中心点
+                Collider targetCollider = newTarget.GetComponent<Collider>();
+                Vector3 targetPosition = targetCollider != null ? targetCollider.bounds.center : newTarget.position;
+                
+                // 检查距离是否在范围内
+                if (_weapon != null)
+                {
+                    float distance = Vector3.Distance(_weapon.transform.position, targetPosition);
+                    if (distance < _minLockDistance || distance > _maxLockDistance)
+                        return;
+                }
+
+                AnimalBehavior animal = hit.transform.GetComponent<AnimalBehavior>();
+
+                if (_currentTarget == null)
+                {
+                    // 首次选择目标
+                    _currentTarget = newTarget;
+                    TriggerTargetSelected(new TargetSelectedEventArgs
+                    {
+                        Target = newTarget,
+                        Animal = animal
+                    });
+                }
+                else if (_currentTarget != newTarget)
+                {
+                    // 切换目标
+                    Transform oldTarget = _currentTarget;
+                    _currentTarget = newTarget;
+                    TriggerTargetChanged(new TargetChangedEventArgs
+                    {
+                        OldTarget = oldTarget,
+                        NewTarget = newTarget
+                    });
+                    TriggerTargetSelected(new TargetSelectedEventArgs
+                    {
+                        Target = newTarget,
+                        Animal = animal
+                    });
+                }
+            }
         }
         #endregion
 
@@ -133,7 +210,39 @@
         {
             // 当死亡的动物是当前锁定目标时清除
             if (_currentTarget != null && args.Animal.transform == _currentTarget)
+            {
+                Transform lostTarget = _currentTarget;
                 _currentTarget = null;
+                TriggerTargetLost(new TargetLostEventArgs
+                {
+                    LostTarget = lostTarget,
+                    Reason = ETargetLostReason.TargetDied
+                });
+            }
+        }
+
+        /// <summary>
+        /// 触发目标已选中事件
+        /// </summary>
+        private void TriggerTargetSelected(TargetSelectedEventArgs args)
+        {
+            Event.Trigger(PlayerControlEvents.TargetSelected, args);
+        }
+
+        /// <summary>
+        /// 触发目标已丢失事件
+        /// </summary>
+        private void TriggerTargetLost(TargetLostEventArgs args)
+        {
+            Event.Trigger(PlayerControlEvents.TargetLost, args);
+        }
+
+        /// <summary>
+        /// 触发目标已切换事件
+        /// </summary>
+        private void TriggerTargetChanged(TargetChangedEventArgs args)
+        {
+            Event.Trigger(PlayerControlEvents.TargetChanged, args);
         }
         #endregion
     }

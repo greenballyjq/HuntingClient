@@ -711,9 +711,9 @@ MonoBehaviour:
   _timeHorizon: 10
   _timeHorizonObst: 10
   _radius: 3
-  _maxSpeed: 8
+  _defaultMaxSpeed: 8
   _enableAutoRotation: 1
-  _rotationSmoothSpeed: 5
+  _rotationSmoothSpeed: 2
 --- !u!1 &5512041106863543837
 GameObject:
   m_ObjectHideFlags: 0
