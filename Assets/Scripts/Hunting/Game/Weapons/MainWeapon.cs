@@ -12,11 +12,43 @@ namespace Hunting.Game.Weapons
     /// </summary>
     public class MainWeapon : MonoBehaviour
     {
+        #region TODO: 武器视觉类待处理
         /// <summary>
         /// 武器视觉引用
         /// </summary>
         [Header("武器视觉引用")]
         [SerializeField] private WeaponVisual weaponVisual;
+        #endregion
+
+        #region TODO: 待音效系统待实现
+        [Header("音效")]
+        [SerializeField] private AudioClip fireAudioClip;
+        private AudioSource _audioSource;
+
+        protected virtual void Awake()
+        {
+            _audioSource = GetComponent<AudioSource>();
+            if (_audioSource == null)
+            {
+                _audioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
+
+        private void PlayFireSound()
+        {
+            if (fireAudioClip != null && _audioSource != null)
+            {
+                _audioSource.clip = fireAudioClip;
+                _audioSource.Play();
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// 武器旋转速度
+        /// </summary>
+        [Header("旋转设置")]
+        [SerializeField] private float rotationSpeed = 20f;
 
         /// <summary>
         /// 当前子弹ID
@@ -24,14 +56,14 @@ namespace Hunting.Game.Weapons
         private int _currentBulletId = 1;
 
         /// <summary>
-        /// 上次射击的时间戳
-        /// </summary>
-        private float _lastFireTime;
-
-        /// <summary>
         /// 射击间隔（秒）
         /// </summary>
         private float _fireInterval;
+
+        /// <summary>
+        /// 上次射击的时间戳
+        /// </summary>
+        private float _lastFireTime;
 
         /// <summary>
         /// 特殊子弹剩余持续时间（秒）
@@ -71,7 +103,6 @@ namespace Hunting.Game.Weapons
 
         private void Update()
         {
-            UpdateShooting();
             UpdateSpecialBulletTimer();
         }
 
@@ -104,6 +135,39 @@ namespace Hunting.Game.Weapons
         {
             UpdateFireInterval();
         }
+
+        /// <summary>
+        /// 设置瞄准目标
+        /// </summary>
+        /// <param name="worldPosition">目标世界坐标</param>
+        public void SetAimTarget(Vector3 worldPosition)
+        {
+            // 计算方向（保持Y轴水平）
+            Vector3 direction = worldPosition - transform.position;
+            direction.y = 0f;
+
+            // 旋转武器
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            }
+        }
+
+        /// <summary>
+        /// 射击
+        /// </summary>
+        public void Fire()
+        {
+            // 检查射击间隔
+            if (Time.time - _lastFireTime < _fireInterval)
+                return;
+
+            // 执行射击
+            SpawnBulletAsync().Forget();
+            PlayFireSound();
+            _lastFireTime = Time.time;
+        }
         #endregion
 
         #region 私有方法
@@ -115,17 +179,6 @@ namespace Hunting.Game.Weapons
             // 设置默认子弹
             ChangeBullet(_currentBulletId);
             UpdateFireInterval();
-        }
-
-        /// <summary>
-        /// 更新射击逻辑
-        /// </summary>
-        private void UpdateShooting()
-        {
-            if (!PlayerControl.Instance.ShootingPerformed)
-                return;
-
-            TryShoot();
         }
 
         /// <summary>
@@ -173,21 +226,6 @@ namespace Hunting.Game.Weapons
                 ChangeBullet(1);
                 Debug.Log("[Weapon] 特殊子弹时间到，已切回普通子弹");
             }
-        }
-
-        /// <summary>
-        /// 尝试射击
-        /// </summary>
-        private void TryShoot()
-        {
-            // 检查射击间隔
-            if (Time.time - _lastFireTime < _fireInterval)
-                return;
-
-            // 执行射击
-            SpawnBulletAsync().Forget();
-            PlayFireSound();
-            _lastFireTime = Time.time;
         }
 
         /// <summary>
@@ -305,29 +343,6 @@ namespace Hunting.Game.Weapons
         }
         #endregion
 
-        #region TODO: 测试代码
-        // TODO: 音效系统待实现
-        [Header("音效")]
-        [SerializeField] private AudioClip fireAudioClip;
-        private AudioSource _audioSource;
-
-        protected virtual void Awake()
-        {
-            _audioSource = GetComponent<AudioSource>();
-            if (_audioSource == null)
-            {
-                _audioSource = gameObject.AddComponent<AudioSource>();
-            }
-        }
-
-        private void PlayFireSound()
-        {
-            if (fireAudioClip != null && _audioSource != null)
-            {
-                _audioSource.clip = fireAudioClip;
-                _audioSource.Play();
-            }
-        }
-        #endregion
+        
     }
 }

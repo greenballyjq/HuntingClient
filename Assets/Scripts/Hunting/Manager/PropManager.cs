@@ -187,7 +187,7 @@ namespace Hunting.Manager
             _activeProps.Add(activeProp);
 
             // 通知处理器执行开始逻辑
-            handler.OnPropStart(context);
+            handler?.OnPropStart(context);
 
 
 
@@ -212,7 +212,7 @@ namespace Hunting.Manager
         private void EndProp(ActiveProp activeProp)
         {
             // 通知处理器执行结束逻辑
-            activeProp.Handler.OnPropEnd(activeProp.Context);
+            activeProp.Handler?.OnPropEnd(activeProp.Context);
 
             // 从活跃列表移除
             _activeProps.Remove(activeProp);
@@ -241,7 +241,7 @@ namespace Hunting.Manager
                 activeProp.RemainingTime -= deltaTime;
 
                 // 通知处理器执行更新逻辑
-                activeProp.Handler.OnPropUpdate(activeProp.Context, deltaTime);
+                activeProp.Handler?.OnPropUpdate(activeProp.Context, deltaTime);
 
                 // 触发道具更新事件
                 TriggerPropUpdated(new PropUpdatedEventArgs

@@ -29,6 +29,9 @@ namespace Hunting.Game.Animal.State
 
             // 禁用碰撞体
             animal.SetColliderEnabled(false);
+
+            // 触发进入死亡事件
+            animal.TriggerAnimalDying();
         }
 
         public override void Update()

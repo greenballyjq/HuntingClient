@@ -15,10 +15,6 @@ namespace Hunting.Game.Weapons
         /// </summary>
         public Transform MuzzlePoint => muzzlePoint;
         
-        [Header("旋转设置")]
-        [SerializeField] private float rotationSpeed = 20f; // 枪械旋转平滑速度
-        [SerializeField] private float aimDistance = 10f; // 瞄准目标点的世界空间深度
-        
         [Header("瞄准线设置")]
         [SerializeField] private Color aimLineColor = Color.red; // 瞄准线颜色
         [SerializeField] private float aimLineWidth = 0.05f; // 瞄准线宽度
@@ -28,11 +24,6 @@ namespace Hunting.Game.Weapons
         /// 枪口瞄准辅助线
         /// </summary>
         private LineRenderer _aimLine;
-
-        /// <summary>
-        /// 主摄像机
-        /// </summary>
-        private Camera _mainCamera;
         
         private void Awake()
         {
@@ -41,7 +32,6 @@ namespace Hunting.Game.Weapons
 
         private void Start()
         {
-            _mainCamera = Camera.main;
             InitializeAimLine();
         }
         
@@ -67,7 +57,6 @@ namespace Hunting.Game.Weapons
 
         private void Update()
         {
-            UpdateWeaponRotation();
             UpdateAimLine();
         }
 
@@ -108,23 +97,6 @@ namespace Hunting.Game.Weapons
             // 更新LineRenderer的点位
             _aimLine.SetPosition(0, startPoint);
             _aimLine.SetPosition(1, endPoint);
-        }
-
-        private void UpdateWeaponRotation()
-        {
-            // 获取瞄准的世界位置
-            Vector3 aimWorldPosition = PlayerControl.Instance.AimWorldPosition;
-
-            aimWorldPosition.y = transform.position.y;
-            // 获取目标朝向
-            Vector3 direction = (aimWorldPosition - transform.position).normalized;
-            
-            // 获取枪械目标旋转
-            Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-            
-            // 平滑旋转到目标方向
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
         
         /// <summary>

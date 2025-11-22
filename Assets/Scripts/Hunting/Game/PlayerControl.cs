@@ -1,5 +1,4 @@
 ﻿using cfg.HuntingConfig.Enum;
-using Cysharp.Threading.Tasks;
 using Hunting.Manager;
 using UnityEngine;
 using UnityEngine.InputSystem;

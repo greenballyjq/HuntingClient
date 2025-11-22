@@ -17,6 +17,11 @@ public static class AnimalEvents
     public static readonly EventKey<AnimalSpawnedEventArgs> AnimalSpawned = new EventKey<AnimalSpawnedEventArgs>();
 
     /// <summary>
+    /// 动物进入死亡事件
+    /// </summary>
+    public static readonly EventKey<AnimalDyingEventArgs> AnimalDying = new EventKey<AnimalDyingEventArgs>();
+
+    /// <summary>
     /// 动物死亡事件
     /// </summary>
     public static readonly EventKey<AnimalDiedEventArgs> AnimalDied = new EventKey<AnimalDiedEventArgs>();
@@ -69,7 +74,23 @@ public sealed class AnimalSpawnedEventArgs : EventArgs
 }
 
 /// <summary>
-/// 动物死亡事件参数
+/// 动物进入死亡事件参数
+/// </summary>
+public sealed class AnimalDyingEventArgs : EventArgs
+{
+    /// <summary>
+    /// 进入死亡的动物实例
+    /// </summary>
+    public AnimalBehavior Animal { get; set; }
+
+    /// <summary>
+    /// 物种配置
+    /// </summary>
+    public Specie SpecieData { get; set; }
+}
+
+/// <summary>
+/// 动物死亡事件参数（死亡动画结束后）
 /// </summary>
 public sealed class AnimalDiedEventArgs : EventArgs
 {

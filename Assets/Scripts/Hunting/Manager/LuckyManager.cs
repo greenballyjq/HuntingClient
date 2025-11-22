@@ -117,7 +117,7 @@ namespace Hunting.Manager
             };
 
             // 激活幸运仪式效果
-            _handler.OnActivate(_currentLuckyContext);
+            _handler?.OnActivate(_currentLuckyContext);
 
             // 触发幸运仪式激活事件
             TriggerLuckyActivated(new LuckyActivatedEventArgs
@@ -136,7 +136,7 @@ namespace Hunting.Manager
         {
             // 注销幸运仪式效果
             if (_handler != null && _currentLuckyContext != null)
-                _handler.OnDeactivate(_currentLuckyContext);
+                _handler?.OnDeactivate(_currentLuckyContext);
 
             ResetState();
         }

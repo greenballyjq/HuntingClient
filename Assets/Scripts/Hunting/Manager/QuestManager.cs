@@ -190,7 +190,7 @@ namespace Hunting.Manager
             _currentQuestRemainingTime = QuestDuration;
 
             // 调用处理器开始
-            _currentHandler.OnQuestStart(_currentQuestContext);
+            _currentHandler?.OnQuestStart(_currentQuestContext);
 
             // 计算下次派发时间
             float currentTime = Time.time - _roundStartTime;

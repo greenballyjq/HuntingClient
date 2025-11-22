@@ -216,7 +216,7 @@ namespace Hunting.Manager
             _mainWeapon = weaponObj.GetComponent<MainWeapon>();
             if (_mainWeapon == null)
             {
-                Debug.LogError("[WeaponManager] 武器预制体缺少 Weapon 组件");
+                Debug.LogError("[WeaponManager] 武器预制体缺少 MainWeapon 组件");
                 GameObject.Destroy(weaponObj);
                 return;
             }

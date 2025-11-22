@@ -58,7 +58,7 @@ namespace Hunting.Manager
 
             // 逐帧递减持续时间并调用处理器更新
             _remainingTime -= Time.deltaTime;
-            _currentHandler.OnSkillUpdate(_currentSkillContext, Time.deltaTime);
+            _currentHandler?.OnSkillUpdate(_currentSkillContext, Time.deltaTime);
 
             if (_remainingTime <= 0f)
                 EndSkill();
@@ -96,7 +96,7 @@ namespace Hunting.Manager
             _isRunning = true;
 
             // 通知处理器执行开始逻辑
-            _currentHandler.OnSkillStart(_currentSkillContext);
+            _currentHandler?.OnSkillStart(_currentSkillContext);
 
             TriggerSkillStarted(new SkillStartedEventArgs
             {
@@ -116,7 +116,7 @@ namespace Hunting.Manager
                 return;
 
             // 通知处理器执行结束逻辑
-            _currentHandler.OnSkillEnd(_currentSkillContext);
+            _currentHandler?.OnSkillEnd(_currentSkillContext);
 
             _isRunning = false;
             _remainingTime = 0f;

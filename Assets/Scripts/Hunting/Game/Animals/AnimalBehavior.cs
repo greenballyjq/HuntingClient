@@ -385,6 +385,18 @@ namespace Hunting.Game.Animal
         public AnimalFleeState GetFleeState() { return _fleeState; }
 
         /// <summary>
+        /// 触发动物进入死亡事件
+        /// </summary>
+        public void TriggerAnimalDying()
+        {
+            Event.Trigger(AnimalEvents.AnimalDying, new AnimalDyingEventArgs
+            {
+                Animal = this,
+                SpecieData = SpecieData,
+            });
+        }
+
+        /// <summary>
         /// 触发动物死亡事件
         /// </summary>
         public void TriggerAnimalDied()

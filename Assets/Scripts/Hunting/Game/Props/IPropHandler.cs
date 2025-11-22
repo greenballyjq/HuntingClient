@@ -12,11 +12,6 @@ namespace Hunting.Game.Props
         /// 道具配置
         /// </summary>
         public Prop PropData { get; set; }
-
-        /// <summary>
-        /// 单局上下文
-        /// </summary>
-        public RoundContext RoundContext { get; set; }
     }
 
     /// <summary>
