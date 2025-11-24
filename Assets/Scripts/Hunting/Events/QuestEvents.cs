@@ -36,6 +36,16 @@ public sealed class QuestDispatchedEventArgs : EventArgs
     /// 任务配置
     /// </summary>
     public Quest QuestData { get; set; }
+    
+    /// <summary>
+    /// 任务目标值
+    /// </summary>
+    public int TargetValue { get; set; }
+    
+    /// <summary>
+    /// 任务奖励值
+    /// </summary>
+    public int RewardValue { get; set; }
 }
 
 /// <summary>

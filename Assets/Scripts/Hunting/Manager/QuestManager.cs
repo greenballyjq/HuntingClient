@@ -200,7 +200,9 @@ namespace Hunting.Manager
             TriggerQuestDispatched(new QuestDispatchedEventArgs
             {
                 Sender = this,
-                QuestData = questData
+                QuestData = questData,
+                TargetValue = _currentTargetValue,
+                RewardValue = _currentRewardValue,
             });
 
             Debug.Log($"[QuestManager] 任务已派发: {questData.QuestType}，目标值:{_currentTargetValue}，奖励值:{_currentRewardValue}");
