@@ -65,7 +65,6 @@ namespace Hunting.Manager
 
             // 初始化陷阱
             IPoolItem poolItem = trap.GetComponent<IPoolItem>();
-            poolItem.PrefabPath = prefabPath;
 
             trap.transform.position = position;
             trap.transform.rotation = Quaternion.identity;

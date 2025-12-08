@@ -50,8 +50,6 @@ namespace Hunting.Game.Bullets
         private EventManager Event => GameServiceLocator.Event;
 
         #region 对象池接口
-        public string PrefabPath { get; set; }
-
         public void OnSpawned()
         {
             gameObject.SetActive(true);

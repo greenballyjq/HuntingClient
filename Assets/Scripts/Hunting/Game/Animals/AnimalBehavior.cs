@@ -1,6 +1,5 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using DG.Tweening;
 using GameFramework.Core.Pool;
 using Hunting.Game.Animal.State;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace Hunting.Game.Animal
     /// </summary>
     public class AnimalBehavior : MonoBehaviour, IPoolItem
     {
-        #region 测试（TODO: 规范化音效系统后移除）
+        #region 测试（TODO: 规范化音效系统、动画系统后移除）
         public AudioClip hitClip;
         public AudioSource audioSource;
 
@@ -22,6 +21,79 @@ namespace Hunting.Game.Animal
         {
             audioSource.clip = hitClip;
             audioSource.Play();
+        }
+
+        /// <summary>
+        /// 受击效果协程
+        /// </summary>
+        private Coroutine _hitEffectCoroutine;
+
+        /// <summary>
+        /// 播放受击变红效果
+        /// </summary>
+        public void PlayHitEffect()
+        {
+            if (_materials == null || _materials.Length == 0)
+                return;
+
+            // 停止之前的协程，避免重复播放冲突
+            if (_hitEffectCoroutine != null)
+            {
+                StopCoroutine(_hitEffectCoroutine);
+            }
+
+            // 启动新的受击效果协程
+            _hitEffectCoroutine = StartCoroutine(HitEffectCoroutine());
+        }
+
+        /// <summary>
+        /// 受击效果协程实现
+        /// </summary>
+        private System.Collections.IEnumerator HitEffectCoroutine()
+        {
+            // 变红阶段（0.1秒）
+            float redDuration = 0.1f;
+            float elapsed = 0f;
+            
+            while (elapsed < redDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / redDuration;
+                
+                // 对所有材质应用变红效果
+                for (int i = 0; i < _materials.Length; i++)
+                {
+                    _materials[i].color = Color.Lerp(_originalColors[i], Color.red, t);
+                }
+                
+                yield return null;
+            }
+
+            // 恢复原色阶段（0.2秒）
+            float recoverDuration = 0.2f;
+            elapsed = 0f;
+            
+            while (elapsed < recoverDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / recoverDuration;
+                
+                // 对所有材质恢复原色
+                for (int i = 0; i < _materials.Length; i++)
+                {
+                    _materials[i].color = Color.Lerp(Color.red, _originalColors[i], t);
+                }
+                
+                yield return null;
+            }
+
+            // 确保最终颜色正确
+            for (int i = 0; i < _materials.Length; i++)
+            {
+                _materials[i].color = _originalColors[i];
+            }
+
+            _hitEffectCoroutine = null;
         }
         #endregion
 
@@ -151,8 +223,6 @@ namespace Hunting.Game.Animal
         private EventManager Event => GameServiceLocator.Event;
 
         #region 对象池接口
-        public string PrefabPath { get; set; }
-
         public void OnSpawned()
         {
             gameObject.SetActive(true);
@@ -320,31 +390,6 @@ namespace Hunting.Game.Animal
         {
             float finalSpeed = CurrentMoveSpeed * multiplier;
             RVO.SetMaxSpeed(finalSpeed);
-        }
-
-        /// <summary>
-        /// 播放受击变红效果
-        /// </summary>
-        public void PlayHitEffect()
-        {
-            if (_materials == null || _materials.Length == 0)
-                return;
-
-            // 对所有材质应用变红效果（支持LOD模型）
-            for (int i = 0; i < _materials.Length; i++)
-            {
-                Material mat = _materials[i];
-                Color originalColor = _originalColors[i];
-
-                // 停止之前的动画，避免重复播放冲突
-                mat.DOKill();
-
-                // 变红再恢复（0.1秒变红，0.2秒恢复）
-                mat.DOColor(Color.red, 0.1f).OnComplete(() =>
-                {
-                    mat.DOColor(originalColor, 0.2f);
-                });
-            }
         }
 
         /// <summary>

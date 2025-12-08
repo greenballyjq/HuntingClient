@@ -40,7 +40,7 @@ namespace Hunting.UI
         /// <summary>
         /// 动态任务组件
         /// </summary>
-        [SerializeField] private UIComponentQuest uiComponentQuest;
+        //[SerializeField] private UIComponentQuest uiComponentQuest;
 
         /// <summary>
         /// UI管理器
@@ -64,7 +64,7 @@ namespace Hunting.UI
             uiComponentEnergyProgress.Init();
             uiComponentBulletStatus.Init();
             uiComponentPropGroup.Init();
-            uiComponentQuest.Init();
+            //uiComponentQuest.Init();
         }
 
         public override void OnClose()
@@ -73,7 +73,7 @@ namespace Hunting.UI
             uiComponentBulletStatus.CleanUp();
             uiComponentEnergyProgress.CleanUp();
             uiComponentMeatProgress.CleanUp();
-            uiComponentQuest.CleanUp();
+            //uiComponentQuest.CleanUp();
             base.OnClose();
         }
 
