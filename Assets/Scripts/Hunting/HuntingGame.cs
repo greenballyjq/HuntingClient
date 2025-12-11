@@ -50,7 +50,7 @@ namespace Hunting
         protected override async UniTask OnGameInit()
         {
             await PreloadPrepareAssetsAsync();
-            UIHuntingPrepare uiHuntingPrepare = await UI.OpenUIAsync<UIHuntingPrepare>("UIHuntingPrepare");
+            UIPrepare uiHuntingPrepare = await UI.OpenUIAsync<UIPrepare>("UIPrepare");
             GameLauncher.Instance.OnCompleteLauncher();
         }
 

@@ -48,3 +48,13 @@ UI订阅和取消订阅事件，如果是UI事件适合在Awake()、OnDestory()�
 推荐使用方式：在类的私有属性中定义快捷访问方式，以提高代码可读性和编写效率。
 private EventManager Event => GameServiceLocator.Event;
 private ResourceManager Resource => GameServiceLocator.Resource;
+
+下面是UI的特有代码风格规范以及命名规范（字段、属性、方法名等标识符的取名风格）
+请先看@UIBase.cs和@UIManager.cs以及@IUIComponent.cs两个文件
+UIBase挂载在代表整个UI预制体的游戏对象上，由UIManager管理，界面级别的复杂的UI会使用。
+UIBase上的复杂组件，实现IUIComponent接口后被UIBase管理。
+
+UI事件一般在Awake() Destory()订阅和取消，如果是频繁关闭打开的UIBase，自定义事件在OnInit() 与OnClose()订阅，反之在OnShow() OnHide()订阅
+
+UIBase中定义各控件以及组件字段/属性的命名风格是：控件类型/_uiComponent+名字
+如果字段/属性是private修饰，举例:_buttonStartGame _uiComponentSkillShow
