@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6037383438632139027}
   - component: {fileID: 6451358937464353595}
   m_Layer: 5
-  m_Name: UIHuntingGameplay
+  m_Name: UIHuntingGamePlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,7 +58,6 @@ MonoBehaviour:
   uiComponentEnergyProgress: {fileID: 6832401078380431568}
   uiComponentBulletStatus: {fileID: 5601951887838309526}
   uiComponentPropGroup: {fileID: 343816043067253853}
-  uiComponentQuest: {fileID: 0}
 --- !u!1 &1638097053662358516
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,7 +75,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7946382308101941332
 RectTransform:
   m_ObjectHideFlags: 0
@@ -156,7 +155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7851347214645950587
 RectTransform:
   m_ObjectHideFlags: 0
@@ -351,6 +350,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIComponentEnergyProgress
       objectReference: {fileID: 0}
+    - target: {fileID: 4554186025829346618, guid: 24385a12f30975d489d4b0d7c26be185, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7285830743392266838, guid: 24385a12f30975d489d4b0d7c26be185, type: 3}
       propertyPath: colorTierA.b
       value: 0.35104808
@@ -532,6 +535,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIComponentPropGroup
       objectReference: {fileID: 0}
+    - target: {fileID: 5657528830437865171, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726174319150084150, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726174319150084150, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726174319150084150, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 5726174319150084150, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -75
+      objectReference: {fileID: 0}
     - target: {fileID: 7609430811037030368, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -547,6 +570,38 @@ PrefabInstance:
     - target: {fileID: 7609430811037030368, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7727801373313482610, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7727801373313482610, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7727801373313482610, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 375
+      objectReference: {fileID: 0}
+    - target: {fileID: 7727801373313482610, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522290263357141801, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522290263357141801, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522290263357141801, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 225
+      objectReference: {fileID: 0}
+    - target: {fileID: 8522290263357141801, guid: a38205b0e2a634144a2dd0e4830e8412, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -661,6 +716,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIComponentBulletStatus
       objectReference: {fileID: 0}
+    - target: {fileID: 7680671753915214258, guid: 13dffe3e27e9919498dcd9544d245faa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -693,6 +752,10 @@ PrefabInstance:
     - target: {fileID: 193414854309454283, guid: adea006abcd042442b6e96cc541851fa, type: 3}
       propertyPath: m_Name
       value: UIComponentMeatProgress
+      objectReference: {fileID: 0}
+    - target: {fileID: 193414854309454283, guid: adea006abcd042442b6e96cc541851fa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 390609171625110374, guid: adea006abcd042442b6e96cc541851fa, type: 3}
       propertyPath: m_Pivot.x
