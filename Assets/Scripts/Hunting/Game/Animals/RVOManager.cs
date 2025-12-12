@@ -226,7 +226,7 @@ public class RVOManager : MonoBehaviour
             agentId = _reuseQueue.Dequeue();
             ResetAgent(agentId, position, config);
 
-            Debug.Log($"[RVOManager] 复用代理 ID: {agentId}");
+            //Debug.Log($"[RVOManager] 复用代理 ID: {agentId}");
         }
         else
         {
@@ -287,7 +287,7 @@ public class RVOManager : MonoBehaviour
         // 加入复用队列
         _reuseQueue.Enqueue(agentId);
 
-        Debug.Log($"[RVOManager] 移除代理 ID: {agentId}");
+        //Debug.Log($"[RVOManager] 移除代理 ID: {agentId}");
     }
   
     /// <summary>

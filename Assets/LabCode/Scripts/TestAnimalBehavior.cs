@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using cfg.HuntingConfig;
 
 /// <summary>
@@ -44,7 +44,7 @@ public class TestAnimalBehavior : MonoBehaviour
     /// <summary>
     /// 逃跑持续时间
     /// </summary>
-    private float _fleeDuration = 2f;
+    private float _fleeDuration = 30f;
 
     /// <summary>
     /// 逃跑剩余时间

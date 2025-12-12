@@ -127,7 +127,7 @@ public class RVOMovement : MonoBehaviour
         _rvoManager.RemoveAgent(_agentId);
         _agentId = -1; 
 
-        Debug.Log($"[RVOMovement] {gameObject.name} 已销毁并释放代理");
+        //Debug.Log($"[RVOMovement] {gameObject.name} 已销毁并释放代理");
     }
 
     #region 公共方法
