@@ -1,4 +1,5 @@
 using cfg.HuntingConfig.Enum;
+using GameFramework.Game;
 using UnityEngine;
 
 namespace Hunting.Manager

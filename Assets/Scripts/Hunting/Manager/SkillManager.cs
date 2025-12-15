@@ -1,4 +1,5 @@
 ﻿using cfg.HuntingConfig.Skill;
+using GameFramework.Game;
 using Hunting.Game.Skills;
 using UnityEngine;
 

@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using GameFramework.Core;
+using GameFramework.Game;
 using Hunting.Manager;
 
 namespace Hunting
@@ -47,7 +48,7 @@ namespace Hunting
         /// <summary>
         /// 获取游戏业务管理器
         /// </summary>
-        public static T GetGameManager<T>() where T : class, IGameManager
+        public static T GetGameManager<T>() where T : BaseGameManager
         {
             return GameLogic.Instance.GetGameManager<T>();
         }
@@ -57,16 +58,16 @@ namespace Hunting
         /// </summary>
         public static async UniTask<T> GetFrameworkManagerAsync<T>() where T : class, IManager
         {
-            await GameLogic.Instance.WaitForInitialization();
+            await GameLogic.Instance.WaitForInitializationAsync();
             return GameLogic.Instance.GetFrameworkManager<T>();
         }
 
         /// <summary>
         /// 异步等待获取游戏业务管理器
         /// </summary>
-        public static async UniTask<T> GetGameManagerAsync<T>() where T : class, IGameManager
+        public static async UniTask<T> GetGameManagerAsync<T>() where T : BaseGameManager
         {
-            await GameLogic.Instance.WaitForInitialization();
+            await GameLogic.Instance.WaitForInitializationAsync();
             return GameLogic.Instance.GetGameManager<T>();
         }
 
@@ -75,7 +76,7 @@ namespace Hunting
         /// </summary>
         public static async UniTask WaitForInitialization()
         {
-            await GameLogic.Instance.WaitForInitialization();
+            await GameLogic.Instance.WaitForInitializationAsync();
         }
     }
 }

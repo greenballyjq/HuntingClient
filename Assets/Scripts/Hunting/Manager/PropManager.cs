@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
+using GameFramework.Game;
 using Hunting.Game.Props;
 using System.Collections.Generic;
 using UnityEngine;

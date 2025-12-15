@@ -454,7 +454,6 @@ GameObject:
   - component: {fileID: -9221332333728369963}
   - component: {fileID: 2179243204159730175}
   - component: {fileID: 1012161089364175123}
-  - component: {fileID: 8434395041949567867}
   m_Layer: 6
   m_Name: Animal_Small_102
   m_TagString: Animal
@@ -658,7 +657,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6788538757290762323}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ce4db9d80b050f4d95f84ef0e3ace90, type: 3}
   m_Name: 
@@ -685,18 +684,6 @@ MonoBehaviour:
   _defaultMaxSpeed: 8
   _enableAutoRotation: 1
   _rotationSmoothSpeed: 2
---- !u!114 &8434395041949567867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6788538757290762323}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670acb8936a4aa148bfd0c337c9fc69f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6788538757856321312
 GameObject:
   m_ObjectHideFlags: 0

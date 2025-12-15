@@ -2,6 +2,7 @@
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
+using GameFramework.Game;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -287,6 +288,7 @@ namespace Hunting.Manager
         {
             Event.Trigger(EnergyEvents.EnergyConsumed, args);
         }
+
         #endregion
     }
 }

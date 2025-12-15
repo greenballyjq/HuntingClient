@@ -41,9 +41,9 @@ namespace Hunting.UI
         [SerializeField] private Text _textSkill;
 
         /// <summary>
-        /// 待显示的角色ID
+        /// 当前角色ID
         /// </summary>
-        private int _pendingRoleId;
+        private int _currentRoleId;
 
         /// <summary>
         /// 配置管理器
@@ -62,26 +62,13 @@ namespace Hunting.UI
 
         public void Init()
         {
-            _imageRole.sprite = null;
-            _imageSkill.sprite = null;
-            _textRoleName.text = "";
-            _textRoleProfile.text = "";
-            _textSkill.text = "";
+            Event.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
+            Event.AddListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
+
             gameObject.SetActive(false);
         }
 
         public void CleanUp()
-        {
-
-        }
-
-        private void Awake()
-        {
-            Event.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
-            Event.AddListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
-        }
-
-        private void OnDestroy()
         {
             Event.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
             Event.RemoveListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
@@ -152,7 +139,7 @@ namespace Hunting.UI
         /// </summary>
         private void OnRoleSelected(RoleSelectedEventArgs args)
         {
-            _pendingRoleId = args.RoleId;
+            _currentRoleId = args.RoleId;
         }
 
         /// <summary>
@@ -161,7 +148,7 @@ namespace Hunting.UI
         private void OnRoleSelectionAnimationEnded()
         {
             gameObject.SetActive(true);
-            UpdateRoleInfo(_pendingRoleId);
+            UpdateRoleInfo(_currentRoleId);
         }
         #endregion
     }

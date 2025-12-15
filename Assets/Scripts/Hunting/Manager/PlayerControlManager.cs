@@ -1,4 +1,5 @@
-﻿using Hunting.Game.PlayerControls;
+﻿using GameFramework.Game;
+using Hunting.Game.PlayerControls;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -139,6 +140,7 @@ namespace Hunting.Manager
             EndCurrentControl();
             ResetState();
         }
+
         #endregion
     }
 }

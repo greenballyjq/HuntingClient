@@ -12,6 +12,16 @@ public static class PrepareEvents
     public static readonly EventKey<RoleSelectedEventArgs> RoleSelected = new EventKey<RoleSelectedEventArgs>();
 
     /// <summary>
+    /// 完整选角动画开始事件
+    /// </summary>
+    public static readonly EventKey RoleSelectionAnimationStarted = new EventKey();
+
+    /// <summary>
+    /// 完整选角动画结束事件
+    /// </summary>
+    public static readonly EventKey RoleSelectionAnimationEnded = new EventKey();
+
+    /// <summary>
     /// 骰子动画开始事件
     /// </summary>
     public static readonly EventKey DiceAnimationStarted = new EventKey();
@@ -30,16 +40,6 @@ public static class PrepareEvents
     /// 走格子动画结束事件
     /// </summary>
     public static readonly EventKey SlotAnimationEnded = new EventKey();
-
-    /// <summary>
-    /// 完整选角动画开始事件
-    /// </summary>
-    public static readonly EventKey RoleSelectionAnimationStarted = new EventKey();
-
-    /// <summary>
-    /// 完整选角动画结束事件
-    /// </summary>
-    public static readonly EventKey RoleSelectionAnimationEnded = new EventKey();
 
     /// <summary>
     /// 地图联动检查完成事件

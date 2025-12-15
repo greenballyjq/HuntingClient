@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using GameFramework.Core;
+using GameFramework.Game;
 using Hunting.Game.Weapons;
 using UnityEngine;
 

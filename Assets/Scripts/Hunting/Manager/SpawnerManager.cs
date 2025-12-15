@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameFramework.Core;
+using GameFramework.Game;
 using Hunting.Game.Animal;
 using UnityEngine;
 

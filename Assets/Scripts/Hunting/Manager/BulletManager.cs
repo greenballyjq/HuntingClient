@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core;
+using GameFramework.Game;
 using Hunting.Events;
 using Hunting.Game.Animal;
 using Hunting.Game.Bullets;
@@ -130,6 +131,7 @@ namespace Hunting.Manager
         {
             Event.Trigger(BulletEvents.BulletSpawned, args);
         }
+
         #endregion
     }
 }

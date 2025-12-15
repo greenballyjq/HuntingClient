@@ -363,6 +363,8 @@ MonoBehaviour:
   _uiComponentRoleChoice: {fileID: 831751228957560993}
   _uiComponentRoleInfo: {fileID: 6662218415670374801}
   _uiComponentMapInfo: {fileID: 304377437126000941}
+  _buttonStartRound: {fileID: 3441168053547427345}
+  _buttonLuckyRitual: {fileID: 1972441359714698502}
 --- !u!114 &5090534349253613400
 MonoBehaviour:
   m_ObjectHideFlags: 0

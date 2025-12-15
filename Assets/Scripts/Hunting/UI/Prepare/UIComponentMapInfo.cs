@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using GameFramework.Core;
 using GameFramework.Core.UI;

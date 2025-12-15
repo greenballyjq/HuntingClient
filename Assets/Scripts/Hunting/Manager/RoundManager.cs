@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
+using GameFramework.Game;
 using Hunting.UI;
 using UnityEngine;
 

@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
+using GameFramework.Game;
 using Hunting.Game.Luckys;
 using UnityEngine;
 

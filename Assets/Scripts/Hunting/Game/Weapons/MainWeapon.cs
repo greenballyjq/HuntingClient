@@ -12,43 +12,15 @@ namespace Hunting.Game.Weapons
     /// </summary>
     public class MainWeapon : MonoBehaviour
     {
-        #region TODO: 武器视觉类待处理
-        /// <summary>
-        /// 武器视觉引用
-        /// </summary>
-        [Header("武器视觉引用")]
-        [SerializeField] private WeaponVisual weaponVisual;
-        #endregion
-
-        #region TODO: 待音效系统待实现
-        [Header("音效")]
-        [SerializeField] private AudioClip fireAudioClip;
-        private AudioSource _audioSource;
-
-        protected virtual void Awake()
-        {
-            _audioSource = GetComponent<AudioSource>();
-            if (_audioSource == null)
-            {
-                _audioSource = gameObject.AddComponent<AudioSource>();
-            }
-        }
-
-        private void PlayFireSound()
-        {
-            if (fireAudioClip != null && _audioSource != null)
-            {
-                _audioSource.clip = fireAudioClip;
-                _audioSource.Play();
-            }
-        }
-        #endregion
-
         /// <summary>
         /// 武器旋转速度
         /// </summary>
-        [Header("旋转设置")]
-        [SerializeField] private float rotationSpeed = 20f;
+        [SerializeField] private float _rotationSpeed = 20f;
+
+        /// <summary>
+        /// 开火点
+        /// </summary>
+        [SerializeField] private Transform _muzzlePoint;
 
         /// <summary>
         /// 当前子弹ID
@@ -150,7 +122,7 @@ namespace Hunting.Game.Weapons
             if (direction != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
             }
         }
 
@@ -233,8 +205,7 @@ namespace Hunting.Game.Weapons
         /// </summary>
         private async UniTask SpawnBulletAsync()
         {
-            Transform muzzlePoint = weaponVisual.MuzzlePoint;
-            await Bullet.SpawnBullet(_currentBulletId, muzzlePoint.position, muzzlePoint.forward);
+            await Bullet.SpawnBullet(_currentBulletId, _muzzlePoint.position, _muzzlePoint.forward);
         }
 
         /// <summary>
@@ -343,6 +314,29 @@ namespace Hunting.Game.Weapons
         }
         #endregion
 
-        
+        #region TODO: 待音效系统待实现
+        [Header("音效")]
+        [SerializeField] private AudioClip fireAudioClip;
+        private AudioSource _audioSource;
+
+        protected virtual void Awake()
+        {
+            _audioSource = GetComponent<AudioSource>();
+            if (_audioSource == null)
+            {
+                _audioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
+
+        private void PlayFireSound()
+        {
+            if (fireAudioClip != null && _audioSource != null)
+            {
+                _audioSource.clip = fireAudioClip;
+                _audioSource.Play();
+            }
+        }
+        #endregion
+
     }
 }

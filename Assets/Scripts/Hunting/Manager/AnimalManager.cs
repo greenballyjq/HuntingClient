@@ -2,6 +2,7 @@
 using cfg.HuntingConfig;
 using Hunting.Game.Animal;
 using UnityEngine;
+using GameFramework.Game;
 
 namespace Hunting.Manager
 {
@@ -129,6 +130,7 @@ namespace Hunting.Manager
         {
             Event.Trigger(AnimalEvents.AnimalSpawned, args);
         }
-        #endregion     
+
+        #endregion
     }
 }

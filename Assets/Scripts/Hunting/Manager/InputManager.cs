@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameFramework.Game;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -153,6 +154,7 @@ namespace Hunting.Manager
                 OnTargetSelected?.Invoke();
             }
         }
+
         #endregion
     }
 }

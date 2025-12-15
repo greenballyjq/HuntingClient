@@ -46,20 +46,19 @@ namespace Hunting.UI
             _buttonDice.onClick.AddListener(OnDiceButtonClicked);
         }
 
+        private void OnDestroy()
+        {
+            _buttonDice.onClick.RemoveListener(OnDiceButtonClicked);
+        }
+
         public void Init()
         {
-            _currentSlotIndex = 0;
-            UpdateSelectedSlot(_currentSlotIndex);
+
         }
 
         public void CleanUp()
         {
 
-        }
-
-        private void OnDestroy()
-        {
-            _buttonDice.onClick.RemoveListener(OnDiceButtonClicked);
         }
 
         #region 私有方法
@@ -86,17 +85,9 @@ namespace Hunting.UI
              // 触发完整选角动画开始事件
             Event.Trigger(PrepareEvents.RoleSelectionAnimationStarted);
 
-            UpdateSelectedSlot(_targetSlotIndex);
-        }
-
-        /// <summary>
-        /// 更新选中格子
-        /// </summary>
-        /// <param name="slotIndex">格子索引</param>
-        private void UpdateSelectedSlot(int slotIndex)
-        {
-            _currentSlotIndex = slotIndex;
-        }      
+            // 更新当前格子索引
+            _currentSlotIndex = _targetSlotIndex;
+        }  
         #endregion
 
         #region 事件相关
