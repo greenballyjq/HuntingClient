@@ -114,10 +114,10 @@ namespace GameFramework.Core
         {
             Debug.Log("[GameLogic] 等待游戏启动器初始化...");
 
-            if (GameLauncher.Instance == null)
+            //if (GameLauncher.Instance == null)
                 Debug.LogError("[GameLogic] 未在场景中找到GameLauncher。请确保在初始场景中挂载并配置好GameLauncher组件");
 
-            await GameLauncher.Instance.WaitForInitializationAsync();
+            //await GameLauncher.Instance.WaitForInitializationAsync();
             Debug.Log("[GameLogic] 游戏启动器初始化完成");
         }
 

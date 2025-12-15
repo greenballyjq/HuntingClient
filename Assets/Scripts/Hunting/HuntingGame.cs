@@ -51,7 +51,7 @@ namespace Hunting
         {
             await PreloadPrepareAssetsAsync();
             UIHuntingPrepare uiHuntingPrepare = await UI.OpenUIAsync<UIHuntingPrepare>("UIHuntingPrepare");
-            GameLauncher.Instance.OnCompleteLauncher();
+            //GameLauncher.Instance.OnCompleteLauncher();
         }
 
         protected override void OnGameStart()
