@@ -51,7 +51,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingGameConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager Config => GameServiceLocator.Config;
 
         /// <summary>
         /// 事件中心

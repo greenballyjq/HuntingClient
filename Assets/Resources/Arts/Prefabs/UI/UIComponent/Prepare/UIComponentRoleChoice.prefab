@@ -199,12 +199,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: dba67d05c1be3e54a8236e24e54bdfea, type: 3}
   - {fileID: 21300000, guid: 39bcdb5d43fd2f644a1d1bf9c7ceccd8, type: 3}
   _resultSprites:
-  - {fileID: 21300000, guid: af12693185dce4c488aeb13526e197db, type: 3}
-  - {fileID: 21300000, guid: aec9d78a9ea595d42971a1ff7e643432, type: 3}
-  - {fileID: 21300000, guid: 52e0de16987637c47b200895feba87d9, type: 3}
-  - {fileID: 21300000, guid: e2d695afd0836c44b95c9659f8e2dbc8, type: 3}
-  - {fileID: 21300000, guid: 08a41452c69a32d408bf30fdd88ebceb, type: 3}
-  - {fileID: 21300000, guid: 9605d1225d1cd6745a70b9204156ea04, type: 3}
+  - {fileID: 21300000, guid: c980763686826c94f9bf06485b4c8ee0, type: 3}
+  - {fileID: 21300000, guid: 994f23bbd9ef42649b2267eca3d71cec, type: 3}
+  - {fileID: 21300000, guid: c6be8bed8fc1c3f4da5269c23960a391, type: 3}
+  - {fileID: 21300000, guid: 36b639dcc4d4ce444bc514585015e1ea, type: 3}
+  - {fileID: 21300000, guid: 66695b77d8ee8d140b8751056369b011, type: 3}
+  - {fileID: 21300000, guid: 16ddb32afaef64546b4ff27297c95a3e, type: 3}
   _spinDuration: 2
   _spinFPS: 12
 --- !u!114 &1776306865211640333

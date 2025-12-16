@@ -72,18 +72,19 @@ public partial class Tables
     /// <summary>
     /// 幸运仪式数值表
     /// </summary>
-    public HuntingConfig.TbLucky TbLucky {get; }
+    public HuntingConfig.TbLuckyBuff TbLuckyBuff {get; }
     /// <summary>
     /// 道具数值表
     /// </summary>
-    public HuntingConfig.Prop.TbProp TbProp {get; }
+    public HuntingConfig.TbLuckyGift TbLuckyGift {get; }
     /// <summary>
     /// 炮火轰炸道具数值表
     /// </summary>
-    public HuntingConfig.Prop.TbPropBombardment TbPropBombardment {get; }
+    public HuntingConfig.Prop.TbProp TbProp {get; }
     /// <summary>
     /// 指哪打哪道具数值表
     /// </summary>
+    public HuntingConfig.Prop.TbPropBombardment TbPropBombardment {get; }
     public HuntingConfig.Prop.TbPropAimAssist TbPropAimAssist {get; }
     public HuntingConfig.Prop.TbPropTrap TbPropTrap {get; }
 
@@ -103,7 +104,8 @@ public partial class Tables
         TbSkillDaMeiLi = new HuntingConfig.Skill.TbSkillDaMeiLi(loader("huntingconfig_skill_tbskilldameili"));
         TbSkillJinZhuangYuan = new HuntingConfig.Skill.TbSkillJinZhuangYuan(loader("huntingconfig_skill_tbskilljinzhuangyuan"));
         TbSkillYaKeDong = new HuntingConfig.Skill.TbSkillYaKeDong(loader("huntingconfig_skill_tbskillyakedong"));
-        TbLucky = new HuntingConfig.TbLucky(loader("huntingconfig_tblucky"));
+        TbLuckyBuff = new HuntingConfig.TbLuckyBuff(loader("huntingconfig_tbluckybuff"));
+        TbLuckyGift = new HuntingConfig.TbLuckyGift(loader("huntingconfig_tbluckygift"));
         TbProp = new HuntingConfig.Prop.TbProp(loader("huntingconfig_prop_tbprop"));
         TbPropBombardment = new HuntingConfig.Prop.TbPropBombardment(loader("huntingconfig_prop_tbpropbombardment"));
         TbPropAimAssist = new HuntingConfig.Prop.TbPropAimAssist(loader("huntingconfig_prop_tbpropaimassist"));
@@ -127,7 +129,8 @@ public partial class Tables
         TbSkillDaMeiLi.ResolveRef(this);
         TbSkillJinZhuangYuan.ResolveRef(this);
         TbSkillYaKeDong.ResolveRef(this);
-        TbLucky.ResolveRef(this);
+        TbLuckyBuff.ResolveRef(this);
+        TbLuckyGift.ResolveRef(this);
         TbProp.ResolveRef(this);
         TbPropBombardment.ResolveRef(this);
         TbPropAimAssist.ResolveRef(this);

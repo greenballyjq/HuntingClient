@@ -13,7 +13,7 @@ using Luban;
 namespace cfg.HuntingConfig.Prop
 {
 /// <summary>
-/// 道具数值表
+/// 炮火轰炸道具数值表
 /// </summary>
 public partial class TbProp
 {

@@ -28,9 +28,9 @@ namespace Hunting.Manager
         public int SkillId { get; set; }
 
         /// <summary>
-        /// 幸运仪式类型
+        /// 幸运仪式增益类型
         /// </summary>
-        public ELuckyType LuckyType { get; set; }
+        public ELuckyBuffType LuckyBuffType { get; set; }
 
         /// <summary>
         /// 是否存在地图联动
@@ -215,7 +215,7 @@ namespace Hunting.Manager
         /// </summary>
         private async UniTask OpenGameplayUIAsync()
         {
-            await UI.OpenUIAsync<UIHuntingGameplay>("UIHuntingGameplay", UIManager.UILayer.Game);
+            await UI.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Game);
         }
 
         /// <summary>

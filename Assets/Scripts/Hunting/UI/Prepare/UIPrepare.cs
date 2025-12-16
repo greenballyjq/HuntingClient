@@ -47,7 +47,7 @@ namespace Hunting.UI
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingGameConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager Config => GameServiceLocator.Config;
 
         /// <summary>
         /// 单局管理器
@@ -140,7 +140,7 @@ namespace Hunting.UI
                 RoleId = _currentRoleId,
                 MapId = _currentMapId,
                 SkillId = role.LinkedSkillId,
-                LuckyType = ELuckyType.None,
+                LuckyBuffType = ELuckyBuffType.DamageBoost,
                 HasMapAffinity = role.LinkedMapId == _currentMapId
             };
 

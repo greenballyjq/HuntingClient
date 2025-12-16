@@ -3,24 +3,24 @@ using GameFramework.Core;
 using Hunting.Manager;
 
 /// <summary>
-/// 幸运仪式系统事件键
+/// 幸运仪式增益系统事件键
 /// </summary>
-public static class LuckyEvents
+public static class LuckyBuffEvents
 {
     /// <summary>
-    /// 幸运仪式已激活事件
+    /// 幸运仪式增益已激活事件
     /// </summary>
-    public static readonly EventKey<LuckyActivatedEventArgs> LuckyActivated = new EventKey<LuckyActivatedEventArgs>();
+    public static readonly EventKey<LuckyBuffActivatedEventArgs> LuckyBuffActivated = new EventKey<LuckyBuffActivatedEventArgs>();
 }
 
 /// <summary>
-/// 幸运仪式已激活事件参数
+/// 幸运仪式增益已激活事件参数
 /// </summary>
-public sealed class LuckyActivatedEventArgs : EventArgs
+public sealed class LuckyBuffActivatedEventArgs : EventArgs
 {
     /// <summary>
-    /// 幸运仪式配置
+    /// 幸运仪式增益配置
     /// </summary>
-    public Lucky LuckyData { get; set; }
+    public LuckyBuff LuckyBuffData { get; set; }
 }
 

@@ -12,9 +12,6 @@ using Luban;
 
 namespace cfg.HuntingConfig.Prop
 {
-/// <summary>
-/// 指哪打哪道具数值表
-/// </summary>
 public partial class TbPropAimAssist
 {
     private readonly System.Collections.Generic.Dictionary<int, HuntingConfig.Prop.PropAimAssist> _dataMap;

@@ -7,19 +7,19 @@ using UnityEngine;
 namespace Hunting.Manager
 {
     /// <summary>
-    /// 幸运仪式管理器
+    /// 幸运仪式增益管理器
     /// </summary>
-    public class LuckyManager : BaseGameManager
+    public class LuckyBuffManager : BaseGameManager
     {
         /// <summary>
-        /// 当局幸运仪式处理器
+        /// 当局幸运仪式增益处理器
         /// </summary>
-        private ILuckyHandler _currentHandler;
+        private ILuckyBuffHandler _currentHandler;
 
         /// <summary>
-        /// 当局幸运仪式上下文
+        /// 当局幸运仪式增益上下文
         /// </summary>
-        private LuckyContext _currentLuckyContext;
+        private LuckyBuffContext _currentLuckyBuffContext;
 
         /// <summary>
         /// 事件管理器
@@ -29,13 +29,13 @@ namespace Hunting.Manager
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingGameConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager Config => GameServiceLocator.Config;
 
         public override void Init()
         {
             RegisterEvents();
             ResetState();
-            Debug.Log("[LuckyManager] 初始化完成");
+            Debug.Log("[LuckyBuffManager] 初始化完成");
         }
 
         public override void Update()
@@ -47,7 +47,7 @@ namespace Hunting.Manager
         {
             UnregisterEvents();
             ResetState();
-            Debug.Log("[LuckyManager] 已释放");
+            Debug.Log("[LuckyBuffManager] 已释放");
         }
 
         #region 私有方法
@@ -57,7 +57,7 @@ namespace Hunting.Manager
         private void ResetState()
         {
             _currentHandler = null;
-            _currentLuckyContext = null;
+            _currentLuckyBuffContext = null;
         }
         #endregion
 
@@ -87,40 +87,40 @@ namespace Hunting.Manager
         {
             ResetState();
 
-            // 读取本局幸运仪式配置
-            ELuckyType luckyType = args.Context.LuckyType;
-            if (luckyType == ELuckyType.None)
+            // 读取本局幸运仪式增益配置
+            ELuckyBuffType buffType = args.Context.LuckyBuffType;
+            if (buffType == ELuckyBuffType.None)
             {
-                Debug.Log("[LuckyManager] 本局未选择幸运仪式");
+                Debug.Log("[LuckyBuffManager] 本局未选择幸运仪式增益");
                 return;
             }
-            Lucky luckyData = Config.GetLucky(luckyType);
+            LuckyBuff buffData = Config.GetLuckyBuff(buffType);
 
             // 创建处理器
-            _currentHandler = LuckyHandlerFactory.CreateLuckyHandler(luckyType);
+            _currentHandler = LuckyBuffHandlerFactory.CreateLuckyBuffHandler(buffType);
             if (_currentHandler == null)
             {
-                Debug.LogWarning($"[LuckyManager] 未实现的幸运仪式类型: {luckyType}");
+                Debug.LogWarning($"[LuckyBuffManager] 未实现的幸运仪式增益类型: {buffType}");
                 return;
             }
 
             // 构造上下文
-            _currentLuckyContext = new LuckyContext
+            _currentLuckyBuffContext = new LuckyBuffContext
             {
-                LuckyData = luckyData
+                LuckyBuffData = buffData
             };
 
             // 激活幸运仪式效果
-            _currentHandler?.OnActivate(_currentLuckyContext);
+            _currentHandler?.OnActivate(_currentLuckyBuffContext);
 
-            // 触发幸运仪式激活事件
-            TriggerLuckyActivated(new LuckyActivatedEventArgs
+            // 触发幸运仪式增益激活事件
+            TriggerLuckyBuffActivated(new LuckyBuffActivatedEventArgs
             {
                 Sender = this,
-                LuckyData = luckyData
+                LuckyBuffData = buffData
             });
 
-            Debug.Log($"[LuckyManager] 幸运仪式已激活: {luckyType}");
+            Debug.Log($"[LuckyBuffManager] 幸运仪式增益已激活: {buffType}");
         }
 
         /// <summary>
@@ -128,19 +128,19 @@ namespace Hunting.Manager
         /// </summary>
         private void OnRoundEnded(RoundEndedEventArgs args)
         {
-            // 注销幸运仪式效果
-            if (_currentHandler != null && _currentLuckyContext != null)
-                _currentHandler?.OnDeactivate(_currentLuckyContext);
+            // 注销幸运仪式增益效果
+            if (_currentHandler != null && _currentLuckyBuffContext != null)
+                _currentHandler?.OnDeactivate(_currentLuckyBuffContext);
 
             ResetState();
         }
 
         /// <summary>
-        /// 触发幸运仪式激活事件
+        /// 触发幸运仪式增益激活事件
         /// </summary>
-        private void TriggerLuckyActivated(LuckyActivatedEventArgs args)
+        private void TriggerLuckyBuffActivated(LuckyBuffActivatedEventArgs args)
         {
-            Event.Trigger(LuckyEvents.LuckyActivated, args);
+            Event.Trigger(LuckyBuffEvents.LuckyBuffActivated, args);
         }
         #endregion
     }

@@ -1,12 +1,13 @@
 ﻿using Hunting.Manager;
 using UnityEngine;
+using cfg.HuntingConfig.Bean;
 
 namespace Hunting.Game.Luckys
 {
     /// <summary>
-    /// 伤害提升幸运仪式处理器
+    /// 伤害提升幸运仪式增益处理器
     /// </summary>
-    public class LuckyDamageBoostHandler : ILuckyHandler
+    public class LuckyBuffDamageBoostHandler : ILuckyBuffHandler
     {
         /// <summary>
         /// 修正来源ID
@@ -19,21 +20,22 @@ namespace Hunting.Game.Luckys
         private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
 
         /// <summary>
-        /// 激活幸运仪式效果
+        /// 激活幸运仪式增益效果
         /// </summary>
-        public void OnActivate(LuckyContext context)
+        public void OnActivate(LuckyBuffContext context)
         {
             // 读取配置中的伤害提升倍率
-            float damageMultiplier = context.LuckyData.EffectParamFloat;
+            var param = context.LuckyBuffData.EffectParam as LuckyBuffParamDamageBoost;
+            float damageMultiplier = param.DamageIncreaseMultiplier;
 
             // 注册伤害修正倍率
             Weapon.RegisterDamageModifier(ModifierSourceId, damageMultiplier);
         }
 
         /// <summary>
-        /// 注销幸运仪式效果
+        /// 注销幸运仪式增益效果
         /// </summary>
-        public void OnDeactivate(LuckyContext context)
+        public void OnDeactivate(LuckyBuffContext context)
         {
             // 注销伤害修正倍率
             Weapon.UnregisterDamageModifier(ModifierSourceId);

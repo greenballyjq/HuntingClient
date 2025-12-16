@@ -31,7 +31,7 @@ namespace Hunting.Game.Skills
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingGameConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager Config => GameServiceLocator.Config;
 
         /// <summary>
         /// 动物管理器

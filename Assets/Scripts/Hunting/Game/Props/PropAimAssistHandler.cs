@@ -44,7 +44,7 @@ namespace Hunting.Game.Props
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingGameConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager Config => GameServiceLocator.Config;
 
         /// <summary>
         /// 玩家控制管理器

@@ -34,7 +34,7 @@ namespace Hunting
         /// <summary>
         /// 配置管理器
         /// </summary>
-        public static HuntingGameConfigManager Config => HuntingGameConfigManager.Instance;
+        public static HuntingConfigManager Config => HuntingConfigManager.Instance;
         #endregion
 
         /// <summary>

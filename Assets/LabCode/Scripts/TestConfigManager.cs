@@ -218,7 +218,7 @@ public class TestConfigManager : MonoBehaviour
     /// <summary>
     /// 幸运仪式数值表
     /// </summary>
-    public TbLucky LuckyTable => _tables?.TbLucky;
+    public TbLuckyBuff LuckyTable => _tables?.TbLuckyBuff;
 
     /// <summary>
     /// 道具总表
@@ -303,13 +303,13 @@ public class TestConfigManager : MonoBehaviour
     /// <summary>
     /// 获取单个幸运仪式配置
     /// </summary>
-    public Lucky GetLucky(int id) => LuckyTable?.Get(id);
+    public LuckyBuff GetLucky(int id) => LuckyTable?.Get(id);
 
     /// <summary>
     /// 通过幸运仪式类型获取单个配置
     /// </summary>
-    public Lucky GetLucky(ELuckyType type)
-        => LuckyTable?.DataList.FirstOrDefault(p => p.LuckyType == type);
+    public LuckyBuff GetLucky(ELuckyBuffType type)
+        => LuckyTable?.DataList.FirstOrDefault(p => p.LuckyBuffType == type);
 
     /// <summary>
     /// 获取单个道具配置

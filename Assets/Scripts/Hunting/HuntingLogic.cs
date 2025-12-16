@@ -17,7 +17,7 @@ public class HuntingLogic : GameLogic
         RegisterGameManager<InputManager>();
         RegisterGameManager<PlayerControlManager>();
         RegisterGameManager<PlayerDataManager>();
-        RegisterGameManager<LuckyManager>();
+        RegisterGameManager<LuckyBuffManager>();
         RegisterGameManager<MeatProgressManager>();
         RegisterGameManager<EnergyProgressManager>();
         RegisterGameManager<SettlementRewardManager>();
@@ -34,7 +34,7 @@ public class HuntingLogic : GameLogic
 
     protected override BaseConfigManager GetConfigManager()
     {
-        return HuntingGameConfigManager.Instance;
+        return HuntingConfigManager.Instance;
     }
 
     protected override async UniTask OnGameInitAsync()
