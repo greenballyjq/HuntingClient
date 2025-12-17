@@ -94,40 +94,15 @@ namespace Hunting.Manager
             if (!CanUseProp(propType, propData))
             {
                 Debug.LogWarning($"[PropManager] 道具正在使用中，无法重复使用，PropType:{propType}");
-                TriggerPropUseRejected(new PropUseRejectedEventArgs
+                TriggerPropUseFailed(new PropUseFailedEventArgs
                 {
                     Sender = this,
                     PropData = propData,
-                    Reason = "正在使用中"
                 });
                 return false;
             }
 
-            // 检查库存
-            if (!PlayerData.CanUseProp(propType))
-            {
-                Debug.LogWarning($"[PropManager] 道具库存不足，PropType:{propType}");
-                TriggerPropUseRejected(new PropUseRejectedEventArgs
-                {
-                    Sender = this,
-                    PropData = propData,
-                    Reason = "库存不足"
-                });
-                return false;
-            }
-
-            // 消耗库存
-            if (!PlayerData.TryConsumeProp(propType))
-            {
-                Debug.LogWarning($"[PropManager] 道具消耗失败，PropType:{propType}");
-                TriggerPropUseRejected(new PropUseRejectedEventArgs
-                {
-                    Sender = this,
-                    PropData = propData,
-                    Reason = "消耗失败"
-                });
-                return false;
-            }
+            // TODO: 将来从PlayerDataManager检查道具是否可以使用
 
             // 创建处理器
             IPropHandler handler = PropHandlerFactory.CreatePropHandler(propType);
@@ -337,11 +312,11 @@ namespace Hunting.Manager
         }
 
         /// <summary>
-        /// 触发道具使用被拒绝事件
+        /// 触发道具使用失败事件
         /// </summary>
-        private void TriggerPropUseRejected(PropUseRejectedEventArgs args)
+        private void TriggerPropUseFailed(PropUseFailedEventArgs args)
         {
-            Event.Trigger(PropEvents.PropUseRejected, args);
+            Event.Trigger(PropEvents.PropUseFailed, args);
         }
         #endregion
     }

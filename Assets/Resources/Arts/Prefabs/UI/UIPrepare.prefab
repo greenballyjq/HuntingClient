@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u5F00\u59CB\u6253\u730E"
+  m_Text: "\u5E78\u8FD0\u4EEA\u5F0F"
 --- !u!1 &1798994242467459908
 GameObject:
   m_ObjectHideFlags: 0
@@ -837,10 +837,6 @@ PrefabInstance:
     - target: {fileID: 1478602188781397911, guid: a13e8189e8f1da046baabb16fdfb0525, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2897879982645253351, guid: a13e8189e8f1da046baabb16fdfb0525, type: 3}
-      propertyPath: _roleId
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3920629726826865880, guid: a13e8189e8f1da046baabb16fdfb0525, type: 3}
       propertyPath: m_Name

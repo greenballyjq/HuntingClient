@@ -26,11 +26,6 @@ namespace Hunting.Manager
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
-        /// <summary>
-        /// 配置管理器
-        /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
-
         public override void Init()
         {
             RegisterEvents();
@@ -85,22 +80,18 @@ namespace Hunting.Manager
         /// </summary>
         private void OnRoundStarted(RoundStartedEventArgs args)
         {
-            ResetState();
-
             // 读取本局幸运仪式增益配置
-            ELuckyBuffType buffType = args.Context.LuckyBuffType;
-            if (buffType == ELuckyBuffType.None)
-            {
-                Debug.Log("[LuckyBuffManager] 本局未选择幸运仪式增益");
+            LuckyBuff buffData = args.Context.LuckyBuffData;
+
+            // 未选择幸运仪式增益
+            if (buffData == null)
                 return;
-            }
-            LuckyBuff buffData = Config.GetLuckyBuff(buffType);
 
             // 创建处理器
-            _currentHandler = LuckyBuffHandlerFactory.CreateLuckyBuffHandler(buffType);
+            _currentHandler = LuckyBuffHandlerFactory.CreateLuckyBuffHandler(buffData.LuckyBuffType);
             if (_currentHandler == null)
             {
-                Debug.LogWarning($"[LuckyBuffManager] 未实现的幸运仪式增益类型: {buffType}");
+                Debug.LogWarning($"[LuckyBuffManager] 未实现的幸运仪式增益类型: {buffData.LuckyBuffType}");
                 return;
             }
 
@@ -119,8 +110,6 @@ namespace Hunting.Manager
                 Sender = this,
                 LuckyBuffData = buffData
             });
-
-            Debug.Log($"[LuckyBuffManager] 幸运仪式增益已激活: {buffType}");
         }
 
         /// <summary>
@@ -129,8 +118,7 @@ namespace Hunting.Manager
         private void OnRoundEnded(RoundEndedEventArgs args)
         {
             // 注销幸运仪式增益效果
-            if (_currentHandler != null && _currentLuckyBuffContext != null)
-                _currentHandler?.OnDeactivate(_currentLuckyBuffContext);
+            _currentHandler?.OnDeactivate(_currentLuckyBuffContext);
 
             ResetState();
         }

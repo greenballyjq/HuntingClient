@@ -18,7 +18,9 @@ public sealed partial class LuckyGift : Luban.BeanBase
     {
         ID = _buf.ReadInt();
         LuckyGiftType = (HuntingConfig.Enum.ELuckyGiftType)_buf.ReadInt();
-        PriceCoin = _buf.ReadInt();
+        Name = _buf.ReadString();
+        ThreeKPCoin = _buf.ReadInt();
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);BuffTypeWeights = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.ELuckyBuffType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.ELuckyBuffType _k0;  _k0 = (HuntingConfig.Enum.ELuckyBuffType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     BuffTypeWeights.Add(_k0, _v0);}}
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);BuffStrengthWeights = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.ELuckyBuffStrengthType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.ELuckyBuffStrengthType _k0;  _k0 = (HuntingConfig.Enum.ELuckyBuffStrengthType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     BuffStrengthWeights.Add(_k0, _v0);}}
         Comment = _buf.ReadString();
     }
@@ -37,9 +39,17 @@ public sealed partial class LuckyGift : Luban.BeanBase
     /// </summary>
     public readonly HuntingConfig.Enum.ELuckyGiftType LuckyGiftType;
     /// <summary>
-    /// 价值金币
+    /// 礼包名称
     /// </summary>
-    public readonly int PriceCoin;
+    public readonly string Name;
+    /// <summary>
+    /// 价值3币
+    /// </summary>
+    public readonly int ThreeKPCoin;
+    /// <summary>
+    /// Buff类型权重(5种效果类型)
+    /// </summary>
+    public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.ELuckyBuffType, int> BuffTypeWeights;
     /// <summary>
     /// Buff强度权重(弱/中/强) 
     /// </summary>
@@ -61,7 +71,9 @@ public sealed partial class LuckyGift : Luban.BeanBase
         return "{ "
         + "ID:" + ID + ","
         + "LuckyGiftType:" + LuckyGiftType + ","
-        + "PriceCoin:" + PriceCoin + ","
+        + "Name:" + Name + ","
+        + "ThreeKPCoin:" + ThreeKPCoin + ","
+        + "BuffTypeWeights:" + Luban.StringUtil.CollectionToString(BuffTypeWeights) + ","
         + "BuffStrengthWeights:" + Luban.StringUtil.CollectionToString(BuffStrengthWeights) + ","
         + "Comment:" + Comment + ","
         + "}";

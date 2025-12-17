@@ -1,17 +1,29 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
+using GameFramework.Core;
 using GameFramework.Game;
 using UnityEngine;
 
 namespace Hunting.Manager
 {
     /// <summary>
-    /// 玩家数据管理器（占位，模拟道具数据逻辑）
+    /// 玩家数据管理器（占位）
     /// </summary>
     public class PlayerDataManager : BaseGameManager
     {
+        /// <summary>
+        /// 3币数量
+        /// </summary>
+        private int _threeKPCoin = 500;
+
+        /// <summary>
+        /// 事件管理器
+        /// </summary>
+        private EventManager Event => GameServiceLocator.Event;
+
         public override void Init()
         {
-            Debug.Log("[PlayerDataManager] 初始化占位管理器");
+            // TODO: 从服务器获取玩家数据
+            Debug.Log("[PlayerDataManager] 初始化完成");
         }
 
         public override void Update()
@@ -23,28 +35,42 @@ namespace Hunting.Manager
             Debug.Log("[PlayerDataManager] 已释放");
         }
 
-        #region 道具接口
+        #region 公共方法
         /// <summary>
-        /// 判断是否可使用指定道具（当前始终返回可用）
+        /// 获取3币数量
         /// </summary>
-        public bool CanUseProp(EPropType propType)
+        /// <returns>3币数量</returns>
+        public int GetThreeKPCoin()
         {
-            return true;
+            return _threeKPCoin;
         }
 
         /// <summary>
-        /// 尝试消耗道具（当前始终视为成功）
+        /// 更新3币数量
         /// </summary>
-        public bool TryConsumeProp(EPropType propType)
+        /// <param name="amount">数量</param>
+        public void UpdateThreeKPCoin(int amount)
         {
-            return true;
-        }
+            int oldAmount = _threeKPCoin;
+            _threeKPCoin += amount;
 
+            int deltaAmount = _threeKPCoin - oldAmount;
+            TriggerThreeKPCoinChanged(new ThreeKPCoinChangedEventArgs
+            {
+                CurrentAmount = _threeKPCoin,
+                DeltaAmount = deltaAmount
+            });
+        }
+        #endregion
+
+        #region 事件相关
         /// <summary>
-        /// 增加道具数量（占位，暂不处理）
+        /// 触发3币数量改变事件
         /// </summary>
-        public void AddProp(EPropType propType, int count)
+        /// <param name="args">事件参数</param>
+        private void TriggerThreeKPCoinChanged(ThreeKPCoinChangedEventArgs args)
         {
+            Event.Trigger(PlayerDataEvents.ThreeKPCoinChanged, args);
         }
         #endregion
     }

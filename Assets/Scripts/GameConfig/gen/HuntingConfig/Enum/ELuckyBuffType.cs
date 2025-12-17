@@ -17,29 +17,25 @@ namespace cfg.HuntingConfig.Enum
     public enum ELuckyBuffType
     {
         /// <summary>
-        /// 无增益
-        /// </summary>
-        None = 0,
-        /// <summary>
         /// 更多大肉
         /// </summary>
-        MoreMeat = 1,
+        MoreMeat = 0,
         /// <summary>
         /// 开局特殊子弹
         /// </summary>
-        StartSpecialBullet = 2,
+        StartSpecialBullet = 1,
         /// <summary>
         /// 开局丰收能量
         /// </summary>
-        StartEnergy = 3,
+        StartEnergy = 2,
         /// <summary>
         /// 伤害提升
         /// </summary>
-        DamageBoost = 4,
+        DamageBoost = 3,
         /// <summary>
         /// 高阶派发
         /// </summary>
-        HighTierSpawn = 5,
+        HighTierSpawn = 4,
     }
 
 } 

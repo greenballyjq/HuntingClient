@@ -26,7 +26,6 @@ namespace Hunting.Game.Luckys
                     return new LuckyBuffDamageBoostHandler();
                 case ELuckyBuffType.HighTierSpawn:
                     //return new LuckyBuffHighTierSpawnHandler();
-                case ELuckyBuffType.None:
                 default:
                     return null;
             }

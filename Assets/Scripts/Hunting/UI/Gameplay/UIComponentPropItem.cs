@@ -93,7 +93,7 @@ namespace Hunting.UI
             Event.AddListener(PropEvents.PropStarted, OnPropStarted);
             Event.AddListener(PropEvents.PropUpdated, OnPropUpdated);
             Event.AddListener(PropEvents.PropEnded, OnPropEnded);
-            Event.AddListener(PropEvents.PropUseRejected, OnPropUseRejected);
+            Event.AddListener(PropEvents.PropUseFailed, OnPropUseRejected);
 
             // 初始化显示
             InitializeDisplay();
@@ -107,7 +107,7 @@ namespace Hunting.UI
             Event.RemoveListener(PropEvents.PropStarted, OnPropStarted);
             Event.RemoveListener(PropEvents.PropUpdated, OnPropUpdated);
             Event.RemoveListener(PropEvents.PropEnded, OnPropEnded);
-            Event.RemoveListener(PropEvents.PropUseRejected, OnPropUseRejected);
+            Event.RemoveListener(PropEvents.PropUseFailed, OnPropUseRejected);
         }
 
         private void OnDestroy()
@@ -253,7 +253,7 @@ namespace Hunting.UI
         /// <summary>
         /// 道具使用被拒绝事件回调
         /// </summary>
-        private void OnPropUseRejected(PropUseRejectedEventArgs args)
+        private void OnPropUseRejected(PropUseFailedEventArgs args)
         {
             if (args.PropData.PropType != _propType)
                 return;

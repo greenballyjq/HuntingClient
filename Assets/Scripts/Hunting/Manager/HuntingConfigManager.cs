@@ -61,7 +61,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 地图数值表
         /// </summary>
-        public TbMap MapTable => _tables.TbMap; 
+        public TbMap MapTable => _tables.TbMap;
 
         /// <summary>
         /// 角色数值表
@@ -84,7 +84,7 @@ namespace Hunting.Manager
         public TbQuest QuestTable => _tables.TbQuest;
 
         /// <summary>
-        /// 技能参数主表
+        /// 技能数值主表
         /// </summary>
         public TbSkill SkillTable => _tables.TbSkill;
 
@@ -119,7 +119,12 @@ namespace Hunting.Manager
         public TbLuckyBuff LuckyBuffTable => _tables.TbLuckyBuff;
 
         /// <summary>
-        /// 道具参数总表
+        /// 幸运仪式礼包数值表
+        /// </summary>
+        public TbLuckyGift LuckyGiftTable => _tables.TbLuckyGift;
+
+        /// <summary>
+        /// 道具数值总表
         /// </summary>
         public TbProp PropTable => _tables.TbProp;
 
@@ -147,14 +152,14 @@ namespace Hunting.Manager
         /// <returns></returns>
         public Bullet GetBullet(int id) => BulletTable.Get(id);
 
-		/// <summary>
-		/// 通过子弹类型获取单个子弹数据
-		/// </summary>
-		/// <param name="type">子弹类型</param>
-		/// <returns></returns>
-		public Bullet GetBullet(EBulletType type)
-			=> BulletTable.DataList.FirstOrDefault(b => b.BulletType == type);
-        
+        /// <summary>
+        /// 通过子弹类型获取单个子弹数据
+        /// </summary>
+        /// <param name="type">子弹类型</param>
+        /// <returns></returns>
+        public Bullet GetBullet(EBulletType type)
+            => BulletTable.DataList.FirstOrDefault(b => b.BulletType == type);
+
         /// <summary>
         /// 获取单个物种数据
         /// </summary>
@@ -182,7 +187,7 @@ namespace Hunting.Manager
         /// <param name="type">地图类型</param>
         /// <returns></returns>
         public Map GetMap(EMapType type)
-             => MapTable.DataList.FirstOrDefault(p => p.MapType == type);
+            => MapTable.DataList.FirstOrDefault(m => m.MapType == type);
 
         /// <summary>
         /// 获取单个角色数据
@@ -197,7 +202,7 @@ namespace Hunting.Manager
         /// <param name="type">角色类型</param>
         /// <returns></returns>
         public Role GetRole(ERoleType type)
-            => RoleTable.DataList.FirstOrDefault(p => p.RoleType == type);
+            => RoleTable.DataList.FirstOrDefault(r => r.RoleType == type);
 
         /// <summary>
         /// 获取单个肉度条数据
@@ -218,47 +223,17 @@ namespace Hunting.Manager
         /// </summary>
         /// <param name="id">任务ID</param>
         /// <returns></returns>
-        public Quest GetDynamicQuest(int id) => QuestTable.Get(id);
+        public Quest GetQuest(int id) => QuestTable.Get(id);
 
         /// <summary>
-        /// 获取单个幸运仪式增益数据
+        /// 通过任务类型获取单个任务数据
         /// </summary>
-        /// <param name="id">增益ID</param>
+        /// <param name="type">任务类型</param>
         /// <returns></returns>
-        public LuckyBuff GetLuckyBuff(int id) => LuckyBuffTable.Get(id);
+        public Quest GetQuest(EQuestType type)
+            => QuestTable.DataList.FirstOrDefault(q => q.QuestType == type);
 
         /// <summary>
-        /// 通过幸运仪式增益类型获取单个增益数据
-        /// </summary>
-        /// <param name="type">增益类型</param>
-        /// <returns></returns>
-        public LuckyBuff GetLuckyBuff(ELuckyBuffType type)
-            => LuckyBuffTable.DataList.FirstOrDefault(p => p.LuckyBuffType == type);
-
-        /// <summary>
-        /// 通过幸运仪式增益类型获取单个增益效果数据
-        /// </summary>
-        /// <param name="type">增益类型</param>
-        /// <returns></returns>
-        public LuckyBuffParam GetLuckyParam(ELuckyBuffType type)
-            => GetLuckyBuff(type).EffectParam;
-
-        /// <summary>
-        /// 获取单个道具数据
-        /// </summary>
-        /// <param name="id">道具ID</param>
-        /// <returns></returns>
-        public Prop GetProp(int id) => PropTable.Get(id);
-
-        /// <summary>
-        /// 通过道具类型获取单个道具数据
-        /// </summary>
-        /// <param name="type">道具类型</param>
-        /// <returns></returns>
-        public Prop GetProp(EPropType type)
-            => PropTable.DataList.FirstOrDefault(p => p.PropType == type);
-
-		/// <summary>
         /// 获取单个技能数据
         /// </summary>
         /// <param name="id">技能ID</param>
@@ -271,7 +246,7 @@ namespace Hunting.Manager
         /// <param name="type">技能类型</param>
         /// <returns></returns>
         public Skill GetSkill(ESkillType type)
-            => SkillTable.DataList.FirstOrDefault(p => p.SkillType == type);
+            => SkillTable.DataList.FirstOrDefault(s => s.SkillType == type);
 
         /// <summary>
         /// 获取色块人技能数据
@@ -310,6 +285,60 @@ namespace Hunting.Manager
         public SkillYaKeDong GetSkillYaKeDong(int id) => SkillYaKeDongTable.Get(id);
 
         /// <summary>
+        /// 获取单个幸运仪式增益数据
+        /// </summary>
+        /// <param name="id">增益ID</param>
+        /// <returns></returns>
+        public LuckyBuff GetLuckyBuff(int id) => LuckyBuffTable.Get(id);
+
+        /// <summary>
+        /// 通过幸运仪式增益类型获取单个增益数据
+        /// </summary>
+        /// <param name="type">增益类型</param>
+        /// <returns></returns>
+        public LuckyBuff GetLuckyBuff(ELuckyBuffType type)
+            => LuckyBuffTable.DataList.FirstOrDefault(b => b.LuckyBuffType == type);
+
+        /// <summary>
+        /// 通过幸运仪式增益类型和强度获取单个增益数据
+        /// </summary>
+        /// <param name="type">增益类型</param>
+        /// <param name="strength">增益强度</param>
+        /// <returns></returns>
+        public LuckyBuff GetLuckyBuff(ELuckyBuffType type, ELuckyBuffStrengthType strength)
+            => LuckyBuffTable.DataList.FirstOrDefault(b => b.LuckyBuffType == type && b.LuckyBuffStrengthType == strength);
+
+        /// <summary>
+        /// 获取单个幸运仪式礼包数据
+        /// </summary>
+        /// <param name="id">礼包ID</param>
+        /// <returns></returns>
+        public LuckyGift GetLuckyGift(int id) => LuckyGiftTable.Get(id);
+
+        /// <summary>
+        /// 通过礼包类型获取单个礼包数据
+        /// </summary>
+        /// <param name="type">礼包类型</param>
+        /// <returns></returns>
+        public LuckyGift GetLuckyGift(ELuckyGiftType type)
+            => LuckyGiftTable.DataList.FirstOrDefault(g => g.LuckyGiftType == type);
+
+        /// <summary>
+        /// 获取单个道具数据
+        /// </summary>
+        /// <param name="id">道具ID</param>
+        /// <returns></returns>
+        public Prop GetProp(int id) => PropTable.Get(id);
+
+        /// <summary>
+        /// 通过道具类型获取单个道具数据
+        /// </summary>
+        /// <param name="type">道具类型</param>
+        /// <returns></returns>
+        public Prop GetProp(EPropType type)
+            => PropTable.DataList.FirstOrDefault(p => p.PropType == type);
+
+        /// <summary>
         /// 获取炮火轰炸道具数据
         /// </summary>
         /// <param name="id">参数ID</param>
@@ -329,34 +358,6 @@ namespace Hunting.Manager
         /// <param name="id">参数ID</param>
         /// <returns></returns>
         public PropTrap GetPropTrap(int id) => PropTrapTable.Get(id);
-
-		/// <summary>
-		/// 通过任务类型获取单个任务数据
-		/// </summary>
-		/// <param name="type">任务类型</param>
-		/// <returns></returns>
-		public Quest GetDynamicQuest(EQuestType type)
-			=> QuestTable.DataList.FirstOrDefault(q => q.QuestType == type);
-        #endregion
-
-        #region 角色相关特殊方法
-        #endregion
-
-        #region 地图相关特殊方法
-        /// <summary>
-        /// 获取地图使用的体型策略（体型比例与驻场时间）
-        /// </summary>
-        /// <param name="mapId">地图ID</param>
-        /// <returns>体型策略</returns>
-        public Spawn GetMapSpawnStrategy(int mapId)
-        => GetSpawn(GetMap(mapId).SpawnStrategyId);
-
-        /// <summary>
-        /// 随机获取一个地图
-        /// </summary>
-        /// <returns>随机地图配置</returns>
-        public Map GetRandomMap()
-        => MapTable.DataList[Random.Range(0, MapTable.DataList.Count)];
         #endregion
 
         #region 子弹相关特殊方法
@@ -365,56 +366,56 @@ namespace Hunting.Manager
         /// </summary>
         /// <returns></returns>
         public List<Bullet> GetAllSpecialBullets()
-        => BulletTable.DataList.Where(b => b.BulletType != EBulletType.Normal).ToList();
+            => BulletTable.DataList.Where(b => b.BulletType != EBulletType.Normal).ToList();
 
         /// <summary>
-        /// 随机获取一个特殊子弹的数据
+        /// 随机获取一个特殊子弹的数据 TODO: 应移到 BulletManager 或 LuckyManager
         /// </summary>
         /// <returns></returns>
         public Bullet GetRandomSpecialBullet()
-        => GetAllSpecialBullets()[Random.Range(0, GetAllSpecialBullets().Count)];
+            => GetAllSpecialBullets()[Random.Range(0, GetAllSpecialBullets().Count)];
         #endregion
 
         #region 物种相关特殊方法
         /// <summary>
-        /// 根据地图与体型，在对应物种池内按权重随机选择一个物种
+        /// 根据地图与体型，在对应物种池内按权重随机选择一个物种 TODO: 应移到 SpawnerManager
         /// </summary>
         /// <param name="mapId">地图ID</param>
         /// <param name="volumeType">体型</param>
         /// <returns>选中的物种</returns>
         public Specie GetRandomSpecieByMapAndVolume(int mapId, EVolumeType volumeType)
         {
-			// 取得当前地图该体型对应的物种权重列表
-			var specieWeights = GetMap(mapId).SpeciesByVolume[volumeType];
-            
-			// 累加权重用于后续随机
-			float totalWeight = 0f;
-			for (int i = 0; i < specieWeights.Length; i++)
-			{
-				float w = specieWeights[i].Weight;
-				if (w > 0f) totalWeight += w;
-			}
-            
-			// 在总权重范围内取随机点
-			float randomPoint = Random.Range(0f, totalWeight);
-			float cumulative = 0f;
-			for (int i = 0; i < specieWeights.Length; i++)
-			{
-				float w = specieWeights[i].Weight;
-				if (w <= 0f) continue;
-                
-				// 累加权重，一旦超过随机点即命中
-				cumulative += w;
-				if (randomPoint <= cumulative)
-				{
-					return GetSpecie(specieWeights[i].SpecieId);
-				}
-			}
-			return null;
+            // 取得当前地图该体型对应的物种权重列表
+            var specieWeights = GetMap(mapId).SpeciesByVolume[volumeType];
+
+            // 累加权重用于后续随机
+            float totalWeight = 0f;
+            for (int i = 0; i < specieWeights.Length; i++)
+            {
+                float w = specieWeights[i].Weight;
+                if (w > 0f) totalWeight += w;
+            }
+
+            // 在总权重范围内取随机点
+            float randomPoint = Random.Range(0f, totalWeight);
+            float cumulative = 0f;
+            for (int i = 0; i < specieWeights.Length; i++)
+            {
+                float w = specieWeights[i].Weight;
+                if (w <= 0f) continue;
+
+                // 累加权重，一旦超过随机点即命中
+                cumulative += w;
+                if (randomPoint <= cumulative)
+                {
+                    return GetSpecie(specieWeights[i].SpecieId);
+                }
+            }
+            return null;
         }
 
         /// <summary>
-        /// 随机派发一只物种（基于地图、体型策略、体型内物种权重）
+        /// 随机派发一只物种（基于地图、体型策略、体型内物种权重）TODO: 应移到 SpawnerManager
         /// </summary>
         /// <param name="mapId">地图ID</param>
         /// <returns>物种数据与驻场时间</returns>
@@ -435,30 +436,30 @@ namespace Hunting.Manager
 
         #region 派发相关特殊方法
         /// <summary>
-        /// 根据地图的体型策略按比例随机选择一种体型
+        /// 根据地图的体型策略按比例随机选择一种体型 TODO: 应移到 SpawnerManager
         /// </summary>
         /// <param name="mapId">地图ID</param>
         /// <returns>选中的体型</returns>
         public EVolumeType GetRandomVolumeTypeByStrategy(int mapId)
         {
-			// 获取地图配置的体型策略
-			var strategy = GetMapSpawnStrategy(mapId);
-            
-			// 计算所有体型比例总和
-			float totalRatio = strategy.VolumeRatio.Values.Sum();
-            
-			// 取随机点并根据权重命中体型
-			float randomPoint = Random.Range(0f, totalRatio);
-			float cumulative = 0f;
-			foreach (var kv in strategy.VolumeRatio)
-			{
-				float ratio = kv.Value;
-				cumulative += ratio;
-				if (randomPoint <= cumulative)
-					return kv.Key;
-			}
-            
-			return default;
+            // 获取地图配置的体型策略
+            var strategy = GetMapSpawnStrategy(mapId);
+
+            // 计算所有体型比例总和
+            float totalRatio = strategy.VolumeRatio.Values.Sum();
+
+            // 取随机点并根据权重命中体型
+            float randomPoint = Random.Range(0f, totalRatio);
+            float cumulative = 0f;
+            foreach (var kv in strategy.VolumeRatio)
+            {
+                float ratio = kv.Value;
+                cumulative += ratio;
+                if (randomPoint <= cumulative)
+                    return kv.Key;
+            }
+
+            return default;
         }
 
         /// <summary>
@@ -468,7 +469,27 @@ namespace Hunting.Manager
         /// <param name="volumeType">体型</param>
         /// <returns>驻场时间（秒）</returns>
         public float GetStayTimeByVolumeType(int mapId, EVolumeType volumeType)
-        => GetMapSpawnStrategy(mapId).StayTime[volumeType];
+            => GetMapSpawnStrategy(mapId).StayTime[volumeType];
+        #endregion
+
+        #region 地图相关特殊方法
+        /// <summary>
+        /// 获取地图使用的体型策略（体型比例与驻场时间）
+        /// </summary>
+        /// <param name="mapId">地图ID</param>
+        /// <returns>体型策略</returns>
+        public Spawn GetMapSpawnStrategy(int mapId)
+            => GetSpawn(GetMap(mapId).SpawnStrategyId);
+
+        /// <summary>
+        /// 随机获取一个地图 TODO: 应移到 RoundManager
+        /// </summary>
+        /// <returns>随机地图配置</returns>
+        public Map GetRandomMap()
+            => MapTable.DataList[Random.Range(0, MapTable.DataList.Count)];
+        #endregion
+
+        #region 角色相关特殊方法
         #endregion
 
         #region 肉度条相关特殊方法
@@ -483,22 +504,18 @@ namespace Hunting.Manager
                 return null;
             return GetMeatProgress(1).RewardSteps[completedBars];
         }
-        
         #endregion
 
         #region 能量条相关特殊方法
         #endregion
 
-        #region 技能相关特殊方法
-        #endregion
-
         #region 任务相关特殊方法
         /// <summary>
-        /// 随机获取一个任务配置
+        /// 随机获取一个任务配置 TODO: 应移到 QuestManager
         /// </summary>
         /// <returns>随机任务配置</returns>
         public Quest GetRandomQuest()
-        => QuestTable.DataList[Random.Range(0, QuestTable.DataList.Count)];
+            => QuestTable.DataList[Random.Range(0, QuestTable.DataList.Count)];
 
         /// <summary>
         /// 从任务配置中随机获取目标值
@@ -523,6 +540,71 @@ namespace Hunting.Manager
                 return quest.RewardRange[0];
             return Random.Range(quest.RewardRange[0], quest.RewardRange[1] + 1);
         }
+        #endregion
+
+        #region 技能相关特殊方法
+        #endregion
+
+        #region 幸运仪式相关特殊方法
+        /// <summary>
+        /// 根据礼包类型和权重随机抽取一个幸运仪式增益数据
+        /// </summary>
+        /// <param name="giftType">礼包类型</param>
+        /// <returns>随机抽取的幸运 Buff 数据</returns>
+        public LuckyBuff GetLuckyBuffFromGift(ELuckyGiftType giftType)
+        {
+            var gift = GetLuckyGift(giftType);
+
+            ELuckyBuffType buffType = GetBuffTypeByWeight(gift.BuffTypeWeights);
+            ELuckyBuffStrengthType buffStrength = GetBuffStrengthByWeight(gift.BuffStrengthWeights);
+
+            return GetLuckyBuff(buffType, buffStrength);
+        }
+
+        /// <summary>
+        /// 根据权重随机抽取幸运仪式增益类型
+        /// </summary>
+        /// <param name="typeWeights">类型权重映射</param>
+        /// <returns>随机抽取的幸运仪式增益类型</returns>
+        private ELuckyBuffType GetBuffTypeByWeight(Dictionary<ELuckyBuffType, int> typeWeights)
+        {
+            int totalWeight = typeWeights.Values.Sum();
+            int randomPoint = Random.Range(0, totalWeight);
+            int cumulative = 0;
+
+            foreach (var kv in typeWeights)
+            {
+                cumulative += kv.Value;
+                if (randomPoint < cumulative)
+                    return kv.Key;
+            }
+
+            return default;
+        }
+
+        /// <summary>
+        /// 根据权重随机抽取幸运仪式增益强度
+        /// </summary>
+        /// <param name="strengthWeights">强度权重映射</param>
+        /// <returns>随机抽取的幸运仪式增益强度</returns>
+        private ELuckyBuffStrengthType GetBuffStrengthByWeight(Dictionary<ELuckyBuffStrengthType, int> strengthWeights)
+        {
+            int totalWeight = strengthWeights.Values.Sum();
+            int randomPoint = Random.Range(0, totalWeight);
+            int cumulative = 0;
+
+            foreach (var kv in strengthWeights)
+            {
+                cumulative += kv.Value;
+                if (randomPoint < cumulative)
+                    return kv.Key;
+            }
+
+            return default;
+        }
+        #endregion
+
+        #region 道具相关特殊方法
         #endregion
     }
 }

@@ -278,13 +278,16 @@
 	14	HighTierSpawn	Normal	高阶派发·2级	大型/特殊动物的派发比中幅提升 	HuntingConfig.Bean.LuckyBuffHighTierSpawn,1.50 	中档：高阶权重 ×1.5
 	15	HighTierSpawn	Strong	高阶派发·3级	大型/特殊动物的派发比大幅提升	HuntingConfig.Bean.LuckyBuffHighTierSpawn,2.00	强档：高阶权重 ×2.0
 
-##var	ID	LuckyGiftType	PriceCoin	BuffStrengthWeights	Comment
-##type	int	HuntingConfig.Enum.ELuckyGiftType	int	(map#sep=:|),HuntingConfig.Enum.ELuckyBuffStrengthType,int	string
-##group	c	c	c	c	c
-##	礼包ID	礼包类型	价值金币	Buff强度权重(弱/中/强) 	备注
-	1	Basic	10	Weak:100|Normal:0|Strong:0	示例
-	2	Standard	20	Weak:0|Normal:100|Strong:0	示例
-	3	Advanced	50	Weak:0|Normal:0|Strong:100	示例
+##var	ID	LuckyGiftType	Name	ThreeKPCoin	BuffTypeWeights	BuffStrengthWeights	Comment
+##type	int	HuntingConfig.Enum.ELuckyGiftType	string	int	(map#sep=:|),HuntingConfig.Enum.ELuckyBuffType,int	(map#sep=:|),HuntingConfig.Enum.ELuckyBuffStrengthType,int	string
+##group	c	c	c	c	c	c	c
+##	礼包ID	礼包类型	礼包名称	价值3币	Buff类型权重(5种效果类型)	Buff强度权重(弱/中/强) 	备注
+	1	Basic	初级礼包	10	MoreMeat:15|StartSpecialBullet:40|StartEnergy:30|DamageBoost:10|HighTierSpawn:5	Weak:100|Normal:0|Strong:0	示例
+	2	Standard	中级礼包	20	MoreMeat:30|StartSpecialBullet:20|StartEnergy:20|DamageBoost:20|HighTierSpawn:10	Weak:0|Normal:100|Strong:0	示例
+	3	Advanced	高级礼包	50	MoreMeat:30|StartSpecialBullet:10|StartEnergy:10|DamageBoost:30|HighTierSpawn:20	Weak:0|Normal:0|Strong:100	示例
+
+
+
 
 
 

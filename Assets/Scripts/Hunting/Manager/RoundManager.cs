@@ -1,4 +1,5 @@
-﻿using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using Hunting.UI;
@@ -28,9 +29,9 @@ namespace Hunting.Manager
         public int SkillId { get; set; }
 
         /// <summary>
-        /// 幸运仪式增益类型
+        /// 幸运仪式增益数据
         /// </summary>
-        public ELuckyBuffType LuckyBuffType { get; set; }
+        public LuckyBuff LuckyBuffData { get; set; }
 
         /// <summary>
         /// 是否存在地图联动

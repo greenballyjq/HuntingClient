@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core;
 using GameFramework.Core.UI;
 using Hunting.Events;
@@ -50,6 +51,11 @@ namespace Hunting.UI
         private HuntingConfigManager Config => GameServiceLocator.Config;
 
         /// <summary>
+        /// UI管理器
+        /// </summary>
+        private UIManager UI => GameServiceLocator.UI;
+
+        /// <summary>
         /// 单局管理器
         /// </summary>
         private RoundManager Round => GameServiceLocator.GetGameManager<RoundManager>();
@@ -65,10 +71,16 @@ namespace Hunting.UI
         private int _currentMapId;
 
         /// <summary>
+        /// 当前选中幸运仪式增益数据
+        /// </summary>
+        private LuckyBuff _currentLuckyBuffData;
+
+        /// <summary>
         /// 是否已经有合法的角色选择
         /// </summary>
         private bool _hasSelectedRole;
 
+    
         private void Awake()
         {
             _buttonStartRound.onClick.AddListener(OnClickStartRound);
@@ -94,6 +106,7 @@ namespace Hunting.UI
             Event.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
             Event.AddListener(PrepareEvents.RoleSelectionAnimationStarted, OnRoleSelectionAnimationStarted);
             Event.AddListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
+            Event.AddListener(LuckyBuffEvents.GiftOpened, OnGiftOpened);
         }
 
         public override void OnClose()
@@ -105,6 +118,7 @@ namespace Hunting.UI
             Event.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
             Event.RemoveListener(PrepareEvents.RoleSelectionAnimationStarted, OnRoleSelectionAnimationStarted);
             Event.RemoveListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
+            Event.RemoveListener(LuckyBuffEvents.GiftOpened, OnGiftOpened);
 
             base.OnClose();
         }
@@ -140,7 +154,7 @@ namespace Hunting.UI
                 RoleId = _currentRoleId,
                 MapId = _currentMapId,
                 SkillId = role.LinkedSkillId,
-                LuckyBuffType = ELuckyBuffType.DamageBoost,
+                LuckyBuffData = _currentLuckyBuffData,
                 HasMapAffinity = role.LinkedMapId == _currentMapId
             };
 
@@ -194,9 +208,17 @@ namespace Hunting.UI
         /// <summary>
         /// 幸运仪式按钮回调
         /// </summary>
-        private void OnClickLuckyRitual()
+        private async void OnClickLuckyRitual()
         {
-            // TODO: 实现幸运仪式选择逻辑
+            await UI.OpenUIAsync<UILucky>("UILucky");
+        }
+
+        /// <summary>
+        /// 礼包开启事件回调
+        /// </summary>
+        private void OnGiftOpened(GiftOpenedEventArgs args)
+        {
+            _currentLuckyBuffData = args.LuckyBuffData;
         }
 
         #endregion

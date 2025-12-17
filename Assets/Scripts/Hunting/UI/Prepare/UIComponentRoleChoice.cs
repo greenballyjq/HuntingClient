@@ -53,12 +53,12 @@ namespace Hunting.UI
 
         public void Init()
         {
-
+            Event.AddListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
         }
 
         public void CleanUp()
         {
-
+            Event.RemoveListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
         }
 
         #region 私有方法
@@ -67,6 +67,9 @@ namespace Hunting.UI
         /// </summary>
         private void RollDice()
         {
+            // 失活按钮
+            _buttonDice.interactable = false;
+
             // 随机骰子点数
             _diceValue = Random.Range(1, 7);
             int fromSlotIndex = _currentSlotIndex;
@@ -106,6 +109,15 @@ namespace Hunting.UI
         private void TriggerRoleSelected(RoleSelectedEventArgs args)
         {
             Event.Trigger(PrepareEvents.RoleSelected, args);
+        }
+
+        /// <summary>
+        /// 完整选角动画结束事件回调
+        /// </summary>
+        private void OnRoleSelectionAnimationEnded()
+        {
+            // 激活按钮
+            _buttonDice.interactable = true;
         }
         #endregion
     }

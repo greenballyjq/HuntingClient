@@ -1,4 +1,4 @@
-我们项目的代码风格规范，这套规范是通用规范，以后还会介绍特有代码风格规范
+我们项目的代码风格，这套风格是通用风格，以后还会介绍特有代码风格
 1.代码注释规范
 1)文档注释：对各种字段、属性、方法、类名、枚举名、接口名等使用///文档注释，无论访问修饰符是什么。
 2)方法内注释：在方法内部使用//进行适量、必要的注释，确保逻辑清晰，不能不写。
@@ -8,6 +8,7 @@
 举例：
 Debug.Log("[GameLogic] 开始初始化游戏");
 Debug.LogWarning($"[SpeciesSpawner] 物种 {specieId} 配置不存在");
+这里只是举例当你用日志的时候要用这种格式，没有说要去用日志。
 
 3.代码区域整理
 使用#region和#endregion对代码进行分块，使结构清晰。不需要过度使用，一般用个3~4个就可以。
@@ -49,7 +50,9 @@ UI订阅和取消订阅事件，如果是UI事件适合在Awake()、OnDestory()�
 private EventManager Event => GameServiceLocator.Event;
 private ResourceManager Resource => GameServiceLocator.Resource;
 
-下面是UI的特有代码风格规范以及命名规范（字段、属性、方法名等标识符的取名风格）
+
+
+下面是UI的特有代码风格以及命名风格（字段、属性、方法名等标识符的取名风格）
 请先看@UIBase.cs和@UIManager.cs以及@IUIComponent.cs两个文件
 UIBase挂载在代表整个UI预制体的游戏对象上，由UIManager管理，界面级别的复杂的UI会使用。
 UIBase上的复杂组件，实现IUIComponent接口后被UIBase管理。
@@ -58,3 +61,7 @@ UI事件一般在Awake() Destory()订阅和取消，如果是频繁关闭打开�
 
 UIBase中定义各控件以及组件字段/属性的命名风格是：控件类型/_uiComponent+名字
 如果字段/属性是private修饰，举例:_buttonStartGame _uiComponentSkillShow
+
+另外就是项目的命名风格，命名风格就是给字段、属性、方法名等标识符的取名风格，取名字时英文单词的使用，可以通过看我项目中其它文件的取名字风格模仿即可。
+
+另外不要把你跟我说话写到注释里头，不要这样，注释是给未来的我和团队成员看的，不是你跟我沟通用的写字板。

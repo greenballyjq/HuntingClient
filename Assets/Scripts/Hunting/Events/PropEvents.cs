@@ -27,9 +27,9 @@ public static class PropEvents
     public static readonly EventKey<PropEndedEventArgs> PropEnded = new EventKey<PropEndedEventArgs>();
 
     /// <summary>
-    /// 道具使用被拒绝事件
+    /// 道具使用失败事件
     /// </summary>
-    public static readonly EventKey<PropUseRejectedEventArgs> PropUseRejected = new EventKey<PropUseRejectedEventArgs>();
+    public static readonly EventKey<PropUseFailedEventArgs> PropUseFailed = new EventKey<PropUseFailedEventArgs>();
 
     /// <summary>
     /// 陷阱触发事件
@@ -76,19 +76,14 @@ public sealed class PropEndedEventArgs : EventArgs
 }
 
 /// <summary>
-/// 道具使用被拒绝事件参数
+/// 道具使用失败事件参数
 /// </summary>
-public sealed class PropUseRejectedEventArgs : EventArgs
+public sealed class PropUseFailedEventArgs : EventArgs
 {
     /// <summary>
     /// 道具配置
     /// </summary>
     public Prop PropData { get; set; }
-
-    /// <summary>
-    /// 拒绝原因
-    /// </summary>
-    public string Reason { get; set; }
 }
 
 /// <summary>
