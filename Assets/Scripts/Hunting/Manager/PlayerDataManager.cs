@@ -13,7 +13,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 3币数量
         /// </summary>
-        private int _threeKPCoin = 500;
+        private int _threeKPCoin = 50;
 
         /// <summary>
         /// 事件管理器

@@ -12,26 +12,18 @@
 namespace cfg.HuntingConfig.Enum
 { 
     /// <summary>
-    /// 幸运仪式礼包类型 
+    /// 礼包付费方式
     /// </summary>
-    public enum ELuckyGiftType
+    public enum ELuckyGiftCostType
     {
         /// <summary>
-        /// 初级礼包
+        /// 3KP金币
         /// </summary>
-        Basic = 0,
+        ThreeKPCoin = 0,
         /// <summary>
-        /// 中级礼包
+        /// 广告
         /// </summary>
-        Standard = 1,
-        /// <summary>
-        /// 高级礼包
-        /// </summary>
-        Advanced = 2,
-        /// <summary>
-        /// 特殊礼包
-        /// </summary>
-        Special = 3,
+        Ad = 1,
     }
 
 } 

@@ -56,12 +56,20 @@
 							DaMeiLiSkill	大美丽技能	2		
 							JinZhuangYuanSkill	金状元技能	3		
 							YaKeDongSkill	亚克东技能	4		
-	HuntingConfig.Enum.ELuckyBuffType	FALSE	TRUE	c	幸运仪式增益类型		None	无增益	0		
-							MoreMeat	更多大肉	1		
-							StartSpecialBullet	开局特殊子弹	2		
-							StartEnergy	开局丰收能量	3		
-							DamageBoost	伤害提升	4		
-							HighTierSpawn	高阶派发	5		
+	HuntingConfig.Enum.ELuckyBuffType	FALSE	TRUE	c	幸运仪式增益类型		MoreMeat	更多大肉	0		
+							StartSpecialBullet	开局特殊子弹	1		
+							StartEnergy	开局丰收能量	2		
+							DamageBoost	伤害提升	3		
+							HighTierSpawn	高阶派发	4		
+	HuntingConfig.Enum.ELuckyBuffStrengthType	FALSE	TRUE	c	幸运仪式增益强度类型		Weak	弱档	0		
+							Normal	中档	1		
+							Strong	强档	2		
+	HuntingConfig.Enum.ELuckyGiftType	FALSE	TRUE	c	幸运仪式礼包类型 		Basic	初级礼包	0		
+							Standard	中级礼包	1		
+							Advanced	高级礼包	2		
+							Special	特殊礼包	3		
+	HuntingConfig.Enum.ELuckyGiftCostType	FALSE	TRUE	c	礼包付费方式		ThreeKPCoin	3KP金币	0		
+							Ad	广告	1		
 	HuntingConfig.Enum.EQuestType	FALSE	TRUE	c	任务类型		KillLargeAnimal	击杀大型动物	0		
 							CollectMeat	收集回血肉	1		
 							UsePaidItem 	使用付费道具	2		
@@ -69,6 +77,7 @@
 	HuntingConfig.Enum.EPropType	FALSE	TRUE	c	道具类型		Bombardment	炮火轰炸	0		
 							AimAssist	指哪打哪	1		
 							Trap	智能诱捕陷阱	2		
+
 
 
 ##var	full_name	parent	valueType	sep	alias	comment	group	tags	*fields						
@@ -278,13 +287,15 @@
 	14	HighTierSpawn	Normal	高阶派发·2级	大型/特殊动物的派发比中幅提升 	HuntingConfig.Bean.LuckyBuffHighTierSpawn,1.50 	中档：高阶权重 ×1.5
 	15	HighTierSpawn	Strong	高阶派发·3级	大型/特殊动物的派发比大幅提升	HuntingConfig.Bean.LuckyBuffHighTierSpawn,2.00	强档：高阶权重 ×2.0
 
-##var	ID	LuckyGiftType	Name	ThreeKPCoin	BuffTypeWeights	BuffStrengthWeights	Comment
-##type	int	HuntingConfig.Enum.ELuckyGiftType	string	int	(map#sep=:|),HuntingConfig.Enum.ELuckyBuffType,int	(map#sep=:|),HuntingConfig.Enum.ELuckyBuffStrengthType,int	string
-##group	c	c	c	c	c	c	c
-##	礼包ID	礼包类型	礼包名称	价值3币	Buff类型权重(5种效果类型)	Buff强度权重(弱/中/强) 	备注
-	1	Basic	初级礼包	10	MoreMeat:15|StartSpecialBullet:40|StartEnergy:30|DamageBoost:10|HighTierSpawn:5	Weak:100|Normal:0|Strong:0	示例
-	2	Standard	中级礼包	20	MoreMeat:30|StartSpecialBullet:20|StartEnergy:20|DamageBoost:20|HighTierSpawn:10	Weak:0|Normal:100|Strong:0	示例
-	3	Advanced	高级礼包	50	MoreMeat:30|StartSpecialBullet:10|StartEnergy:10|DamageBoost:30|HighTierSpawn:20	Weak:0|Normal:0|Strong:100	示例
+##var	ID	LuckyGiftType	Name	ThreeKPCoin	CostType	BuffTypeWeights	BuffStrengthWeights	Comment
+##type	int	HuntingConfig.Enum.ELuckyGiftType	string	int	HuntingConfig.Enum.ELuckyGiftCostType	(map#sep=:|),HuntingConfig.Enum.ELuckyBuffType,int	(map#sep=:|),HuntingConfig.Enum.ELuckyBuffStrengthType,int	string
+##group	c	c	c	c	c	c	c	c
+##	礼包ID	礼包类型	礼包名称	价值3币	付费方式	Buff类型权重(5种效果类型)	Buff强度权重(弱/中/强) 	备注
+	1	Basic	初级礼包	10	ThreeKPCoin	MoreMeat:15|StartSpecialBullet:40|StartEnergy:30|DamageBoost:10|HighTierSpawn:5	Weak:100|Normal:0|Strong:0	示例
+	2	Standard	中级礼包	20	ThreeKPCoin	MoreMeat:30|StartSpecialBullet:20|StartEnergy:20|DamageBoost:20|HighTierSpawn:10	Weak:0|Normal:100|Strong:0	示例
+	3	Advanced	高级礼包	50	ThreeKPCoin	MoreMeat:30|StartSpecialBullet:10|StartEnergy:10|DamageBoost:30|HighTierSpawn:20	Weak:0|Normal:0|Strong:100	示例
+	4	Special	特殊礼包	0	Ad	MoreMeat:20|StartSpecialBullet:20|StartEnergy:20|DamageBoost:20|HighTierSpawn:20	Weak:33|Normal:33|Strong:34	示例
+
 
 
 

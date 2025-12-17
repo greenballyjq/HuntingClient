@@ -38,6 +38,11 @@ namespace Hunting.UI
         /// </summary>
         private PlayerDataManager PlayerData => GameServiceLocator.GetGameManager<PlayerDataManager>();
 
+        /// <summary>
+        /// UI管理器
+        /// </summary>
+        private UIManager UI => GameServiceLocator.UI;
+
         private void Awake()
         {
             _buttonClose.onClick.AddListener(OnClickClose);
@@ -58,6 +63,8 @@ namespace Hunting.UI
             UpdateThreeCoinDisplay(PlayerData.GetThreeKPCoin());
 
             Event.AddListener(PlayerDataEvents.ThreeKPCoinChanged, OnThreeKPCoinChanged);
+            Event.AddListener(LuckyBuffEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
+            Event.AddListener(LuckyBuffEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
         }
 
         public override void OnClose()
@@ -66,6 +73,8 @@ namespace Hunting.UI
                 gift.CleanUp();
 
             Event.RemoveListener(PlayerDataEvents.ThreeKPCoinChanged, OnThreeKPCoinChanged);
+            Event.RemoveListener(LuckyBuffEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
+            Event.RemoveListener(LuckyBuffEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
 
             base.OnClose();
         }
@@ -96,6 +105,24 @@ namespace Hunting.UI
         private void OnThreeKPCoinChanged(ThreeKPCoinChangedEventArgs args)
         {
             UpdateThreeCoinDisplay(args.CurrentAmount);
+        }
+
+        /// <summary>
+        /// 礼包开启动画开始事件回调
+        /// </summary>
+        private void OnGiftOpenAnimationStarted()
+        {
+            _buttonClose.interactable = false;
+        }
+
+        /// <summary>
+        /// 礼包开启动画结束事件回调
+        /// </summary>
+        private async void OnGiftOpenAnimationEnded(GiftOpenAnimationEndedEventArgs args)
+        {
+            _buttonClose.interactable = true;
+
+            await UI.OpenUIAsync<UILuckyBuffShow>("UILuckyBuffShow",UIManager.UILayer.Normal, args.LuckyBuffData);
         }
         #endregion
     }

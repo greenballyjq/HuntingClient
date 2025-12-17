@@ -17,12 +17,12 @@ namespace Hunting.UI
         [SerializeField] private Image _imageDice;
 
         /// <summary>
-        /// 旋转序列图片数组
+        /// 骰子旋转序列帧图片数组
         /// </summary>
         [SerializeField] private Sprite[] _spinSprites;
 
         /// <summary>
-        /// 结果图片数组
+        /// 骰子结果图片数组
         /// </summary>
         [SerializeField] private Sprite[] _resultSprites;
 
@@ -32,9 +32,9 @@ namespace Hunting.UI
         [SerializeField] private float _spinDuration = 2f;
 
         /// <summary>
-        /// 旋转动画帧率
+        /// 动画帧率
         /// </summary>
-        [SerializeField, Range(1, 60)] private int _spinFPS = 12;
+        [SerializeField, Range(1, 60)] private int _animationFPS = 12;
 
         /// <summary>
         /// 事件管理器
@@ -61,8 +61,10 @@ namespace Hunting.UI
             // 触发投骰子动画开始事件
             Event.Trigger(PrepareEvents.DiceAnimationStarted);
 
+            // 播放旋转动画
             await PlaySpinAnimationAsync();
 
+            // 显示骰子结果
             ShowDiceResult(diceValue);
 
             // 触发投骰子动画结束事件
@@ -75,7 +77,7 @@ namespace Hunting.UI
         private async UniTask PlaySpinAnimationAsync()
         {
             // 根据FPS计算帧间隔
-            float frameInterval = 1f / _spinFPS;
+            float frameInterval = 1f / _animationFPS;
             float elapsed = 0f;
             int currentFrameIndex = 0;
 
