@@ -29,6 +29,11 @@ namespace Hunting.UI
         [SerializeField] private UIComponentGift[] _uiComponentGifts;
 
         /// <summary>
+        /// 广告礼包组件列表
+        /// </summary>
+        [SerializeField] private UIComponentGiftAd[] _uiComponentGiftAds;
+
+        /// <summary>
         /// 事件管理器
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
@@ -60,6 +65,9 @@ namespace Hunting.UI
             foreach (var gift in _uiComponentGifts)
                 gift.Init();
 
+            foreach (var giftAd in _uiComponentGiftAds)
+                giftAd.Init();
+
             UpdateThreeCoinDisplay(PlayerData.GetThreeKPCoin());
 
             Event.AddListener(PlayerDataEvents.ThreeKPCoinChanged, OnThreeKPCoinChanged);
@@ -71,6 +79,9 @@ namespace Hunting.UI
         {
             foreach (var gift in _uiComponentGifts)
                 gift.CleanUp();
+
+            foreach (var giftAd in _uiComponentGiftAds)
+                giftAd.CleanUp();
 
             Event.RemoveListener(PlayerDataEvents.ThreeKPCoinChanged, OnThreeKPCoinChanged);
             Event.RemoveListener(LuckyBuffEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
@@ -122,7 +133,7 @@ namespace Hunting.UI
         {
             _buttonClose.interactable = true;
 
-            await UI.OpenUIAsync<UILuckyBuffShow>("UILuckyBuffShow",UIManager.UILayer.Normal, args.LuckyBuffData);
+            await UI.OpenUIAsync<UILuckyBuffShow>("UILuckyBuffShow", UIManager.UILayer.PopUp, args.LuckyBuffData);
         }
         #endregion
     }
