@@ -27,7 +27,10 @@ namespace Hunting.Manager
             Debug.Log("[AnimalManager] 初始化完成");
         }
 
-        public override void Update(){}
+        public override void DoUpdate()
+        {
+
+        }
 
         public override void Release()
         {
@@ -130,6 +133,8 @@ namespace Hunting.Manager
         {
             Event.Trigger(AnimalEvents.AnimalSpawned, args);
         }
+
+       
 
         #endregion
     }

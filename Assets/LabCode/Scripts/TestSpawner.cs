@@ -127,7 +127,7 @@ public class TestSpawner : MonoBehaviour
     private async void LoadAndSpawnAnimal(Specie specieData, Vector3 position, Vector3 direction, float stayTime)
     {
         // 从配置中获取预制体路径
-        string prefabPath = specieData.PrefabResourcePath;
+        string prefabPath = specieData.TestPrefabResourcePath;
 
         if (string.IsNullOrEmpty(prefabPath))
         {

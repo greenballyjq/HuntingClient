@@ -60,7 +60,7 @@ namespace Hunting.Manager
             Debug.Log("[EnergyProgressManager] 初始化完成");
         }
 
-        public override void Update()
+        public void Update()
         {
             if (!_isAutoAccumulating)
                 return;
@@ -69,6 +69,11 @@ namespace Hunting.Manager
             float deltaEnergy = Time.deltaTime * _increasePerSecond;
             if (deltaEnergy > 0f)
                 AddEnergy(deltaEnergy);
+        }
+
+        public override void DoUpdate()
+        {
+
         }
 
         public override void Release()
@@ -288,6 +293,8 @@ namespace Hunting.Manager
         {
             Event.Trigger(EnergyEvents.EnergyConsumed, args);
         }
+
+       
 
         #endregion
     }

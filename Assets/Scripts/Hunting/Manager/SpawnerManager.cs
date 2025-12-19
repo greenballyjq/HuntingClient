@@ -27,9 +27,7 @@ namespace Hunting.Manager
             Debug.Log("[SpecieSpawnManager] 初始化完成");
         }
 
-        public override void Update()
-        {
-        }
+        public override void DoUpdate(){}
 
         public override void Release()
         {
@@ -142,6 +140,8 @@ namespace Hunting.Manager
         {
             SetAllActive(false);
         }
+
+        
         #endregion
     }
 }

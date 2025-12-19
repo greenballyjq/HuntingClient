@@ -34,8 +34,6 @@ namespace Hunting.Manager
             Debug.Log("[TrapManager] 初始化完成");
         }
 
-        public override void Update() { }
-
         public override void Release()
         {
             UnregisterEvents();
@@ -138,6 +136,11 @@ namespace Hunting.Manager
         private void OnRoundEnded(RoundEndedEventArgs args)
         {
             ClearAllTraps();
+        }
+
+        public override void DoUpdate()
+        {
+
         }
         #endregion
     }

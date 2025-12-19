@@ -33,11 +33,6 @@ namespace Hunting.Manager
             Debug.Log("[LuckyBuffManager] 初始化完成");
         }
 
-        public override void Update()
-        {
-
-        }
-
         public override void Release()
         {
             UnregisterEvents();
@@ -129,6 +124,11 @@ namespace Hunting.Manager
         private void TriggerLuckyBuffActivated(LuckyBuffActivatedEventArgs args)
         {
             Event.Trigger(LuckyBuffEvents.LuckyBuffActivated, args);
+        }
+
+        public override void DoUpdate()
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
     }

@@ -74,11 +74,6 @@ namespace Hunting.Manager
             Debug.Log("[WeaponManager] 初始化完成");
         }
 
-        public override void Update()
-        {
-            // 当前无需逐帧逻辑
-        }
-
         public override void Release()
         {
             UnregisterEvents();
@@ -86,6 +81,11 @@ namespace Hunting.Manager
             ClearPrefabCache();
             ResetState();
             Debug.Log("[WeaponManager] 已释放");
+        }
+
+        public override void DoUpdate()
+        {
+
         }
 
         #region 公共方法
@@ -324,6 +324,8 @@ namespace Hunting.Manager
             DestroyMainWeapon();
             ResetState();
         }
+
+        
         #endregion
     }
 }

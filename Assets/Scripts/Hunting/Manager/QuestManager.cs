@@ -86,7 +86,7 @@ namespace Hunting.Manager
             Debug.Log("[QuestManager] 初始化完成");
         }
 
-        public override void Update()
+        public void Update()
         {
             if (_currentQuestContext == null)
             {
@@ -130,6 +130,11 @@ namespace Hunting.Manager
                 TargetValue = _currentTargetValue,
                 RemainingTime = _currentQuestRemainingTime
             });
+        }
+
+        public override void DoUpdate()
+        {
+
         }
 
         public override void Release()
@@ -335,6 +340,8 @@ namespace Hunting.Manager
         {
             Event.Trigger(QuestEvents.QuestTimeout, args);
         }
+
+        
         #endregion
     }
 }

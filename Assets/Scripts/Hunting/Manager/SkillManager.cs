@@ -52,7 +52,7 @@ namespace Hunting.Manager
             Debug.Log("[SkillManager] 初始化完成");
         }
 
-        public override void Update()
+        public void Update()
         {
             if (!_isRunning)
                 return;
@@ -63,6 +63,11 @@ namespace Hunting.Manager
 
             if (_remainingTime <= 0f)
                 EndSkill();
+        }
+
+        public override void DoUpdate()
+        {
+
         }
 
         public override void Release()

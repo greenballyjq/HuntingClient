@@ -79,15 +79,16 @@ namespace Hunting.Manager
             Debug.Log("[RoundManager] 初始化");
         }
 
-        public override void Update()
-        {
-        }
-
         public override void Release()
         {
             Debug.Log("[RoundManager] 释放");
             CloseGameplayUI();
             ResetState();
+        }
+
+        public override void DoUpdate()
+        {
+
         }
 
         #region 公共方法
@@ -227,6 +228,8 @@ namespace Hunting.Manager
             if (UI.IsUIOpened("UIHuntingGameplay"))
                 UI.CloseUI("UIHuntingGameplay");
         }
+
+        
         #endregion
     }
 }

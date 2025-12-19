@@ -46,16 +46,16 @@ namespace Hunting.Manager
             Debug.Log("[InputManager] 初始化完成");
         }
 
-        public override void Update()
-        {
-            // InputManager不需要每帧更新逻辑
-        }
-
         public override void Release()
         {
             _input.Disable();
             _input.Dispose();
             Debug.Log("[InputManager] 已释放");
+        }
+
+        public override void DoUpdate()
+        {
+
         }
 
         #region 公共方法
@@ -154,7 +154,6 @@ namespace Hunting.Manager
                 OnTargetSelected?.Invoke();
             }
         }
-
         #endregion
     }
 }

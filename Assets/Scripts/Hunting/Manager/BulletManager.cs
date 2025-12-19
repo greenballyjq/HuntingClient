@@ -40,10 +40,10 @@ namespace Hunting.Manager
             Debug.Log("[BulletManager] 初始化完成");
         }
 
-        public override void Update()
+        public override void DoUpdate()
         {
-            // 当前无需逐帧逻辑
         }
+
 
         public override void Release()
         {
@@ -132,6 +132,7 @@ namespace Hunting.Manager
             Event.Trigger(BulletEvents.BulletSpawned, args);
         }
 
+        
         #endregion
     }
 }

@@ -66,10 +66,12 @@ namespace Hunting.Manager
             Debug.Log("[PropManager] 初始化完成");
         }
 
-        public override void Update()
+        public void Update()
         {
             UpdateActiveProps(Time.deltaTime);
         }
+
+        public override void DoUpdate(){ }
 
         public override void Release()
         {
@@ -318,6 +320,8 @@ namespace Hunting.Manager
         {
             Event.Trigger(PropEvents.PropUseFailed, args);
         }
+
+       
         #endregion
     }
 }

@@ -51,15 +51,16 @@ namespace Hunting.Manager
             Debug.Log("[MeatProgressManager] 初始化完成");
         }
 
-        public override void Update()
-        {
-        }
-
         public override void Release()
         {
             UnregisterEvents();
             ResetProgress();
             Debug.Log("[MeatProgressManager] 已释放");
+        }
+
+        public override void DoUpdate()
+        {
+
         }
 
         #region 公共方法
@@ -225,6 +226,8 @@ namespace Hunting.Manager
             if (_currentMeatBars >= _maxMeatBars)
                 Event.Trigger(MeatEvents.MeatMaxBarsReached);
         }
+
+        
         #endregion
     }
 }

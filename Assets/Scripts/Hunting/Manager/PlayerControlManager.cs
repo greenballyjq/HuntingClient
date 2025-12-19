@@ -26,9 +26,14 @@ namespace Hunting.Manager
             Debug.Log("[PlayerControlManager] 初始化完成");
         }
 
-        public override void Update()
+        public void Update()
         {
             _currentHandler?.OnControlUpdate(Time.deltaTime);
+        }
+
+        public override void DoUpdate()
+        {
+
         }
 
         public override void Release()
@@ -140,6 +145,8 @@ namespace Hunting.Manager
             EndCurrentControl();
             ResetState();
         }
+
+        
 
         #endregion
     }

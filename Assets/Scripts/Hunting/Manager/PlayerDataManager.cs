@@ -26,13 +26,13 @@ namespace Hunting.Manager
             Debug.Log("[PlayerDataManager] 初始化完成");
         }
 
-        public override void Update()
-        {
-        }
-
         public override void Release()
         {
             Debug.Log("[PlayerDataManager] 已释放");
+        }
+        public override void DoUpdate()
+        {
+
         }
 
         #region 公共方法
