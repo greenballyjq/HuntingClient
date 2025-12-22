@@ -5,6 +5,7 @@ using GameFramework.Core;
 using GameFramework.Core.UI;
 using Hunting.Events;
 using Hunting.Manager;
+using Hunting.Round;
 using UnityEngine;
 using UnityEngine.UI;
 
