@@ -3,44 +3,13 @@ using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Game;
+using Hunting.Round;
 using Hunting.UI;
 using UnityEngine;
 
 
 namespace Hunting.Manager
 {
-    /// <summary>
-    /// 单局上下文
-    /// </summary>
-    public sealed class RoundContext
-    {
-        /// <summary>
-        /// 角色数据
-        /// </summary>
-        public Role RoleData { get; set; }
-
-        /// <summary>
-        /// 地图数据
-        /// </summary>
-        public Map MapData { get; set; }
-
-        /// <summary>
-        /// 技能数据
-        /// </summary>
-        public Skill SkillData { get; set; }
-
-        /// <summary>
-        /// 幸运仪式增益数据
-        /// </summary>
-        public LuckyBuff LuckyBuffData { get; set; }
-
-        /// <summary>
-        /// 是否存在地图联动
-        /// </summary>
-        public bool HasMapAffinity { get; set; }
-    }
-
-    /// <summary>
     /// 单局管理器
     /// </summary>
     public sealed class RoundManager : BaseGameManager

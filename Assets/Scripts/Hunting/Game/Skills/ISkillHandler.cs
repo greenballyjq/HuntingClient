@@ -1,5 +1,5 @@
 ﻿using cfg.HuntingConfig.Skill;
-using Hunting.Manager;
+using Hunting.Round;
 
 namespace Hunting.Game.Skills
 {
