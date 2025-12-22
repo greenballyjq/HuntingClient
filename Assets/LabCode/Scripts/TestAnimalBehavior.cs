@@ -86,7 +86,7 @@ public class TestAnimalBehavior : MonoBehaviour
         _specieData = data;
         _stayTime = stayTime;
         _currentHP = data.HP;
-        _currentMoveSpeed = data.MoveSpeed;
+        _currentMoveSpeed = 1;
         _currentDirection = transform.forward;
         _timeInScene = 0f;
         _currentState = AnimalState.Move;
