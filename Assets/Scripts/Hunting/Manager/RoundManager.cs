@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using Hunting.UI;
@@ -14,19 +15,19 @@ namespace Hunting.Manager
     public sealed class RoundContext
     {
         /// <summary>
-        /// 角色ID
+        /// 角色数据
         /// </summary>
-        public int RoleId { get; set; }
+        public Role RoleData { get; set; }
 
         /// <summary>
-        /// 地图ID
+        /// 地图数据
         /// </summary>
-        public int MapId { get; set; }
+        public Map MapData { get; set; }
 
         /// <summary>
-        /// 技能ID
+        /// 技能数据
         /// </summary>
-        public int SkillId { get; set; }
+        public Skill SkillData { get; set; }
 
         /// <summary>
         /// 幸运仪式增益数据
@@ -103,7 +104,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 开始单局
         /// </summary>
-        public void StartRound()
+        public async void StartRound()
         {
             if (_nextContext == null)
             {
@@ -117,10 +118,9 @@ namespace Hunting.Manager
             IsRoundRunning = true;
             IsPaused = false;
 
-            Debug.Log($"[RoundManager] 单局开始，角色:{CurrentContext.RoleId}，地图:{CurrentContext.MapId}");
-            OpenGameplayUIAsync().Forget();
+            await OpenGameplayUIAsync();
 
-            // 调用局内管理器执行开局初始化（刷怪、重置进度、应用增益等）
+            // 触发单局开始事件
             TriggerRoundStarted(new RoundStartedEventArgs
             {
                 Sender = this,
@@ -228,8 +228,6 @@ namespace Hunting.Manager
             if (UI.IsUIOpened("UIHuntingGameplay"))
                 UI.CloseUI("UIHuntingGameplay");
         }
-
-        
         #endregion
     }
 }

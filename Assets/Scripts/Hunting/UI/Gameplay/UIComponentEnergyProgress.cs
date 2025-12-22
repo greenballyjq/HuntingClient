@@ -2,6 +2,7 @@
 using GameFramework.Core.UI;
 using Hunting.Manager;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace Hunting.UI

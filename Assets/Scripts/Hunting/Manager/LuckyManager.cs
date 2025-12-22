@@ -39,6 +39,10 @@ namespace Hunting.Manager
             ResetState();
             Debug.Log("[LuckyBuffManager] 已释放");
         }
+        public override void DoUpdate()
+        {
+
+        }
 
         #region 私有方法
         /// <summary>
@@ -105,6 +109,8 @@ namespace Hunting.Manager
                 Sender = this,
                 LuckyBuffData = buffData
             });
+
+            Debug.LogWarning($"[LuckyBuffManager] 本局幸运仪式增益已激活，类型: {buffData.LuckyBuffType}");
         }
 
         /// <summary>
@@ -124,11 +130,6 @@ namespace Hunting.Manager
         private void TriggerLuckyBuffActivated(LuckyBuffActivatedEventArgs args)
         {
             Event.Trigger(LuckyBuffEvents.LuckyBuffActivated, args);
-        }
-
-        public override void DoUpdate()
-        {
-            throw new System.NotImplementedException();
         }
         #endregion
     }

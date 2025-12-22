@@ -73,7 +73,7 @@ namespace Hunting.Game.Skills
             var player = FindPlayerTransform();
 
             int spawnCount = GetSpawnCount(parameter);
-            float stayTime = Config.GetStayTimeByVolumeType(context.RoundContext.MapId, specie.VolumeType);
+            float stayTime = Config.GetStayTimeByVolumeType(context.RoundContext.MapData.ID, specie.VolumeType);
 
             Vector3 forward = player.forward;
             Vector3 right = player.right;

@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core;
 using GameFramework.Core.UI;
@@ -76,7 +77,7 @@ namespace Hunting.UI
         private LuckyBuff _currentLuckyBuffData;
 
         /// <summary>
-        /// 是否已经有合法的角色选择
+        /// 是否有选择的角色
         /// </summary>
         private bool _hasSelectedRole;
 
@@ -124,7 +125,6 @@ namespace Hunting.UI
         }
 
         #region 私有方法
-
         /// <summary>
         /// 检查地图联动
         /// </summary>
@@ -147,23 +147,22 @@ namespace Hunting.UI
         /// </summary>
         private void SetNextRoundContext()
         {
-            Role role = Config.GetRole(_currentRoleId);
+            Role roleData = Config.GetRole(_currentRoleId);
+            Map mapData = Config.GetMap(_currentMapId);
+            Skill skillData = Config.GetSkill(roleData.LinkedSkillId);
 
-            var context = new RoundContext
+            Round.SetRoundContext(new RoundContext
             {
-                RoleId = _currentRoleId,
-                MapId = _currentMapId,
-                SkillId = role.LinkedSkillId,
+                RoleData = roleData,
+                MapData = mapData,
+                SkillData = skillData,
                 LuckyBuffData = _currentLuckyBuffData,
-                HasMapAffinity = role.LinkedMapId == _currentMapId
-            };
-
-            Round.SetRoundContext(context);
+                HasMapAffinity = roleData.LinkedMapId == _currentMapId
+            });
         }
         #endregion
 
         #region 事件相关
-
         /// <summary>
         /// 角色选中事件回调
         /// </summary>

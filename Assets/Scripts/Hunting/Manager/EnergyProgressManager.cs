@@ -172,6 +172,8 @@ namespace Hunting.Manager
         /// </summary>
         public void AddEnergy(float amount)
         {
+            //Debug.LogWarning("[AddEnergy] " + amount);
+
             if (amount <= 0f || _currentBars >= _maxBars)
                 return;
 
@@ -192,6 +194,7 @@ namespace Hunting.Manager
                 _currentEnergyValue = 0f;
             }
 
+            //Debug.LogWarning("[AddEnergy] 触发 TriggerProgressChanged" + "_currentEnergyValue" + _currentEnergyValue + "_currentBars" + _currentBars);
             TriggerProgressChanged(new EnergyProgressChangedEventArgs
             {
                 Sender = this,
@@ -200,6 +203,7 @@ namespace Hunting.Manager
             });
             if (barIncreased)
             {
+                Debug.LogWarning("[AddEnergy] 触发 TriggerBarCountChanged" + "_currentBars" + _currentBars);
                 TriggerBarCountChanged(new EnergyBarCountChangedEventArgs
                 {
                     Sender = this,
@@ -238,7 +242,6 @@ namespace Hunting.Manager
         /// </summary>
         private void OnRoundStarted(RoundStartedEventArgs args)
         {
-            ResetProgress();
             _isAutoAccumulating = true;
         }
 

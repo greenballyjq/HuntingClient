@@ -19,7 +19,7 @@ namespace Hunting.Game.Luckys
                 case ELuckyBuffType.MoreMeat:
                     //return new LuckyBuffMoreMeatHandler();
                 case ELuckyBuffType.StartSpecialBullet:
-                    return new LuckyBuffStartSpecialBulletHandler();
+                    //return new LuckyBuffStartSpecialBulletHandler();
                 case ELuckyBuffType.StartEnergy:
                     return new LuckyBuffStartEnergyHandler();
                 case ELuckyBuffType.DamageBoost:

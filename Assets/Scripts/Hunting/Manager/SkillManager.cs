@@ -175,7 +175,7 @@ namespace Hunting.Manager
             ResetState();
 
             // 读取本局技能配置
-            Skill skillData = Config.GetSkill(args.Context.SkillId);
+            Skill skillData = args.Context.SkillData;
 
             // 创建处理器
             _currentHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
