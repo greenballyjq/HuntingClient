@@ -14,7 +14,7 @@ public class HuntingLogic : GameLogic
     /// <summary>
     /// 单局流程控制器
     /// </summary>
-    private RoundController _roundController;
+    private RoundFlowController _roundController;
    
     protected override void RegisterGameManagers()
     {
@@ -54,7 +54,7 @@ public class HuntingLogic : GameLogic
     /// <param name="context">单局上下文</param>
     public void EnterRound(RoundContext context)
     {
-        _roundController = new RoundController();
+        _roundController = new RoundFlowController();
         _roundController.StartRound(context);
         // TODO: 后续接入状态机/场景切换
     }
@@ -62,7 +62,7 @@ public class HuntingLogic : GameLogic
     protected override void Update()
     {
         base.Update();
-        _roundController?.Update(Time.deltaTime);
+        _roundController?.DoUpdate(Time.deltaTime);
         // TODO: 状态机落地后按状态驱动 RoundController
     }
 }

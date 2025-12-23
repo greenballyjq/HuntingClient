@@ -1,15 +1,14 @@
-namespace Hunting.Round
+namespace Hunting.App
 {
     /// <summary>
-    /// 单局管理器基础接口
+    /// 应用级管理器接口
     /// </summary>
-    public interface IRoundManager
+    public interface IAppManager
     {
         /// <summary>
         /// 初始化
         /// </summary>
-        /// <param name="context">单局上下文</param>
-        void Init(RoundContext context);
+        void Init();
 
         /// <summary>
         /// 释放
@@ -18,9 +17,9 @@ namespace Hunting.Round
     }
 
     /// <summary>
-    /// 可更新的单局管理器
+    /// 可更新的应用级管理器
     /// </summary>
-    public interface IRoundUpdatable
+    public interface IAppUpdatable
     {
         /// <summary>
         /// 每帧更新
@@ -30,9 +29,9 @@ namespace Hunting.Round
     }
 
     /// <summary>
-    /// 可暂停的单局管理器
+    /// 可暂停的应用级管理器
     /// </summary>
-    public interface IRoundPausable
+    public interface IAppPausable
     {
         /// <summary>
         /// 暂停

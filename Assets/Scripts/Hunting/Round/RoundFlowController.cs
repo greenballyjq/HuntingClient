@@ -5,7 +5,7 @@ namespace Hunting.Round
     /// <summary>
     /// 单局流程控制器（占位，后续补全）
     /// </summary>
-    public class RoundController
+    public class RoundFlowController
     {
         /// <summary>
         /// 当前单局上下文
@@ -27,7 +27,7 @@ namespace Hunting.Round
         /// 每帧更新
         /// </summary>
         /// <param name="deltaTime">时间增量</param>
-        public void Update(float deltaTime)
+        public void DoUpdate(float deltaTime)
         {
             // TODO: 调度单局系统更新
         }

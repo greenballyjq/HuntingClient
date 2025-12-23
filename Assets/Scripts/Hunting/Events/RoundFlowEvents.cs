@@ -3,33 +3,33 @@ using Hunting.Manager;
 using Hunting.Round;
 
 /// <summary>
-/// 单局流程广播事件
+/// 单局流程事件
 /// </summary>
 public static class RoundFlowEvents
 {
     /// <summary>
-    /// 单局开始事件
+    /// 单局流程开始事件
     /// </summary>
     public static readonly EventKey<RoundFlowStartedEventArgs> RoundFlowStarted = new EventKey<RoundFlowStartedEventArgs>();
 
     /// <summary>
-    /// 单局暂停事件
+    /// 单局流程暂停事件
     /// </summary>
     public static readonly EventKey RoundFlowPaused = new EventKey();
 
     /// <summary>
-    /// 单局恢复事件
+    /// 单局流程恢复事件
     /// </summary>
     public static readonly EventKey RoundFlowResumed = new EventKey();
 
     /// <summary>
-    /// 单局结束事件
+    /// 单局流程结束事件
     /// </summary>
     public static readonly EventKey<RoundFlowEndedEventArgs> RoundFlowEnded = new EventKey<RoundFlowEndedEventArgs>();
 }
 
 /// <summary>
-/// 单局开始事件参数
+/// 单局流程开始事件参数
 /// </summary>
 public sealed class RoundFlowStartedEventArgs : EventArgs
 {
@@ -40,7 +40,7 @@ public sealed class RoundFlowStartedEventArgs : EventArgs
 }
 
 /// <summary>
-/// 单局结束事件参数
+/// 单局流程结束事件参数
 /// </summary>
 public sealed class RoundFlowEndedEventArgs : EventArgs
 {
