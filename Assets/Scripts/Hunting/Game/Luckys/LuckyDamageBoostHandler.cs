@@ -17,7 +17,7 @@ namespace Hunting.Game.Luckys
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetAppManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
 
         /// <summary>
         /// 激活幸运仪式增益效果

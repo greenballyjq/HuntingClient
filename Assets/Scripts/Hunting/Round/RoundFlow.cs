@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
-using cfg.HuntingConfig.Enum;
 using Hunting.Manager;
+using Hunting.UI;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Hunting.Round
@@ -71,6 +72,8 @@ namespace Hunting.Round
         {
             if (_currentState != RoundFlowState.None)
                 return;
+
+            Debug.LogWarning("2");
 
             _currentRoundContext = context;
 
@@ -187,6 +190,7 @@ namespace Hunting.Round
         /// </summary>
         private void CreateRoundManagers()
         {
+            Debug.LogWarning("3");
             // TODO: 现阶段先接入可测的局级管理器，后续逐个迁移
             _roundManagers.Add(new AnimalManager(_services));
 
@@ -216,11 +220,13 @@ namespace Hunting.Round
         /// <summary>
         /// 单局开始
         /// </summary>
-        private void OnRoundStart()
+        private async void OnRoundStart()
         {
             CreateRoundManagers();
 
             InitRoundManagers();
+
+            await _services.UI.OpenUIAsync<UIGameplay>("UIHuntingGameplay");
         }
 
         /// <summary>

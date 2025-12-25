@@ -7,14 +7,34 @@ using Hunting.Manager;
 using Hunting.Round;
 using Hunting.UI;
 using UnityEngine;
+using GameFramework.Core;
 
 namespace Hunting.App
 {
     /// <summary>
     /// 打猎应用流程
     /// </summary>
-    public sealed class HuntingAppFlow : GameAppFlow
+    public class HuntingAppFlow : GameAppFlow
     {
+        private static HuntingAppFlow _instance;
+        public static HuntingAppFlow Instance => _instance;
+
+        private void Awake()
+        {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            _instance = this;
+        }
+
+        private void OnDestroy()
+        {
+            if (_instance == this)
+                _instance = null;
+        }
+
         /// <summary>
         /// 打猎应用流程状态枚举
         /// </summary>
@@ -47,6 +67,16 @@ namespace Hunting.App
         private RoundContext _currentRoundContext;
 
         /// <summary>
+        /// 当前局级流程实例
+        /// </summary>
+        private RoundFlow _roundFlow;
+
+        /// <summary>
+        /// 局级服务集合
+        /// </summary>
+        private RoundServices _roundServices;
+
+        /// <summary>
         /// 事件管理器
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
@@ -59,7 +89,7 @@ namespace Hunting.App
         /// <summary>
         /// 单局管理器
         /// </summary>
-        private RoundManager Round => GameServiceLocator.GetAppManager<RoundManager>();
+        private RoundManager Round => GameServiceLocator.GetHuntingAppManager<RoundManager>();
 
         #region 公共方法
         /// <summary>
@@ -69,6 +99,11 @@ namespace Hunting.App
         {
             _currentState = HuntingAppFlowState.Prepare;
 
+            // 结束当前单局流程
+            _roundFlow?.EndRound();
+            _roundFlow = null;
+            _roundServices = null;
+
             // TODO: 当前版本启动应用后即进入准备界面 未来根据需求调整
             await UI.OpenUIAsync<UIPrepare>("UIPrepare");
 
@@ -76,10 +111,10 @@ namespace Hunting.App
         }
 
         /// <summary>
-        /// 开始单局
+        /// 进入单局
         /// </summary>
         /// <param name="context">单局上下文</param>
-        public void StartRound(RoundContext context)
+        public void EnterRound(RoundContext context)
         {
             _currentState = HuntingAppFlowState.Round;
 
@@ -92,9 +127,34 @@ namespace Hunting.App
                 Context = _currentRoundContext
             });
 
-            // TODO: 现阶段复用 RoundManager，未来可切换到 RoundFlow 统一调度
-            Round.SetRoundContext(_currentRoundContext);
-            Round.StartRound();
+            // 创建单局服务集合
+            _roundServices = new RoundServices(
+                GameServiceLocator.Event,
+                GameServiceLocator.UI,
+                GameServiceLocator.Resource,
+                GameServiceLocator.Pool,
+                GameServiceLocator.Config,
+                GameServiceLocator.GetHuntingAppManager<PlayerDataManager>()
+            );
+
+            // 创建单局流程并开始
+            _roundFlow = new RoundFlow(_roundServices);
+            _roundFlow.StartRound(_currentRoundContext);
+            Debug.LogWarning("1");
+        }
+
+        /// <summary>
+        /// 获取单局流程
+        /// </summary>
+        /// <returns>单局流程实例</returns>
+        public RoundFlow GetRoundFlow()
+        {
+            if (_currentState != HuntingAppFlowState.Round)
+            {
+                Debug.LogWarning("[HuntingAppFlow] 当前未进入单局，不允许访问 RoundFlow");
+                return null;
+            }
+            return _roundFlow;
         }
         #endregion
 
@@ -149,22 +209,25 @@ namespace Hunting.App
             if (_currentState != HuntingAppFlowState.Round)
                 return;
 
-            // TODO: 未来接入 RoundFlow 的更新调度
+            _roundFlow.DoUpdate(dt);
         }
         #endregion
 
         #region 事件相关
+        /// <summary>
+        /// 触发进入准备阶段事件
+        /// </summary>
+        private void TriggerPrepareEntered()
+        {
+            Event.Trigger(HuntingAppFlowEvents.PrepareEntered);
+        }
+
         /// <summary>
         /// 触发离开准备阶段事件
         /// </summary>
         private void TriggerPrepareExited(PrepareExitedEventArgs args)
         {
             Event.Trigger(HuntingAppFlowEvents.PrepareExited, args);
-        }
-
-        private void TriggerPrepareEntered()
-        {
-            Event.Trigger(HuntingAppFlowEvents.PrepareEntered);
         }
         #endregion
     }

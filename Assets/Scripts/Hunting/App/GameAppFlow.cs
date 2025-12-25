@@ -11,7 +11,7 @@ namespace Hunting.App
     /// <summary>
     /// 游戏应用流程基类
     /// </summary>
-    public abstract class GameAppFlow : MonoSingleton<GameAppFlow>
+    public abstract class GameAppFlow : MonoBehaviour
     {
         /// <summary>
         /// 游戏应用流程状态枚举

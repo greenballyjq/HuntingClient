@@ -43,7 +43,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 能量条管理器
         /// </summary>
-        private EnergyProgressManager Energy => GameServiceLocator.GetAppManager<EnergyProgressManager>();
+        private EnergyProgressManager Energy => GameServiceLocator.GetHuntingAppManager<EnergyProgressManager>();
 
         public void Init()
         {

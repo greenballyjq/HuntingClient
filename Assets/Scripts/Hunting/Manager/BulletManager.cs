@@ -32,7 +32,7 @@ namespace Hunting.Manager
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetAppManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
 
         public void Init()
         {

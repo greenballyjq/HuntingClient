@@ -4,6 +4,7 @@ using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core;
 using GameFramework.Core.UI;
+using Hunting.App;
 using Hunting.Events;
 using Hunting.Manager;
 using Hunting.Round;
@@ -60,7 +61,7 @@ namespace Hunting.UI
         /// <summary>
         /// 单局管理器
         /// </summary>
-        private RoundManager Round => GameServiceLocator.GetAppManager<RoundManager>();
+        private RoundManager Round => GameServiceLocator.GetHuntingAppManager<RoundManager>();
 
         /// <summary>
         /// 当前选中的角色ID
@@ -142,25 +143,6 @@ namespace Hunting.UI
                 MapId = _currentMapId
             });
         }
-
-        /// <summary>
-        /// 设置下一局的单局上下文
-        /// </summary>
-        private void SetNextRoundContext()
-        {
-            Role roleData = Config.GetRole(_currentRoleId);
-            Map mapData = Config.GetMap(_currentMapId);
-            Skill skillData = Config.GetSkill(roleData.LinkedSkillId);
-
-            Round.SetRoundContext(new RoundContext
-            {
-                RoleData = roleData,
-                MapData = mapData,
-                SkillData = skillData,
-                LuckyBuffData = _currentLuckyBuffData,
-                HasMapAffinity = roleData.LinkedMapId == _currentMapId
-            });
-        }
         #endregion
 
         #region 事件相关
@@ -200,8 +182,22 @@ namespace Hunting.UI
         /// </summary>
         private void OnClickStartRound()
         {
-            SetNextRoundContext();
-            Round.StartRound();
+            Role roleData = Config.GetRole(_currentRoleId);
+            Map mapData = Config.GetMap(_currentMapId);
+            Skill skillData = Config.GetSkill(roleData.LinkedSkillId);
+
+            var roundContext = new RoundContext
+            {
+                RoleData = roleData,
+                MapData = mapData,
+                SkillData = skillData,
+                LuckyBuffData = _currentLuckyBuffData,
+                HasMapAffinity = roleData.LinkedMapId == _currentMapId
+            };
+
+            Round.StartRound(roundContext);
+
+            HuntingAppFlow.Instance.EnterRound(roundContext);
             Close();
         }
 

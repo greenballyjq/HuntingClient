@@ -46,11 +46,11 @@ namespace Hunting
         }
 
         /// <summary>
-        /// 获取应用级管理器
+        /// 获取打猎应用级管理器
         /// </summary>
-        public static T GetAppManager<T>() where T : class, IAppManager
+        public static T GetHuntingAppManager<T>() where T : class, IAppManager
         {
-            return GameAppFlow.Instance.GetAppManager<T>();
+            return HuntingAppFlow.Instance.GetAppManager<T>();
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Hunting
         /// </summary>
         public static async UniTask WaitForInitializationAsync()
         {
-            await GameAppFlow.Instance.WaitForAppStartedAsync();
+            await HuntingAppFlow.Instance.WaitForAppStartedAsync();
         }
     }
 }

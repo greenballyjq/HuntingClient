@@ -53,7 +53,7 @@ namespace Hunting.UI
         /// <summary>
         /// 玩家数据管理器
         /// </summary>
-        private PlayerDataManager PlayerData => GameServiceLocator.GetAppManager<PlayerDataManager>();
+        private PlayerDataManager PlayerData => GameServiceLocator.GetHuntingAppManager<PlayerDataManager>();
 
         private void Awake()
         {
