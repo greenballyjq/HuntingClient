@@ -1,4 +1,5 @@
 ﻿using cfg.HuntingConfig.Skill;
+using Hunting.App;
 using Hunting.Manager;
 using UnityEngine;
 
@@ -17,19 +18,19 @@ namespace Hunting.Game.Skills
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager _configManager = GameServiceLocator.Config;
 
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetRoundManager<WeaponManager>();
 
         /// <summary>
         /// 技能开始
         /// </summary>
         public void OnSkillStart(SkillContext context)
         {
-            var parameter = Config.GetSkill3KP(context.SkillData.ParamTableID);
+            var parameter = _configManager.GetSkill3KP(context.SkillData.ParamTableID);
 
             // 注册射速和伤害倍率修正
             Weapon.RegisterFireRateModifier(ModifierSourceId, parameter.FireRateMultiplier);

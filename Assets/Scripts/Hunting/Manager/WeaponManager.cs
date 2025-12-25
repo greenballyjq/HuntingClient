@@ -4,6 +4,7 @@ using cfg.HuntingConfig;
 using GameFramework.Core;
 using Hunting.App;
 using Hunting.Game.Weapons;
+using Hunting.Round;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -11,7 +12,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 武器管理器
     /// </summary>
-    public class WeaponManager : IAppManager
+    public class WeaponManager : IRoundManager
     {
         /// <summary>
         /// 主武器实例
@@ -55,28 +56,27 @@ namespace Hunting.Manager
         /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        private EventManager _eventManager = GameServiceLocator.Event;
 
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager _configManager = GameServiceLocator.Config;
 
         /// <summary>
         /// 资源管理器
         /// </summary>
-        private ResourceManager Resource => GameServiceLocator.Resource;
+        private ResourceManager _resourceManager = GameServiceLocator.Resource;
 
-        public void Init()
+        public void Init(RoundContext context)
         {
-            RegisterEvents();
             ResetState();
+            CreateMainWeaponAsync().Forget();
             Debug.Log("[WeaponManager] 初始化完成");
         }
 
         public void Dispose()
         {
-            UnregisterEvents();
             DestroyMainWeapon();
             ClearPrefabCache();
             ResetState();
@@ -147,7 +147,7 @@ namespace Hunting.Manager
         /// </summary>
         public float GetCurrentFireRate(int bulletId)
         {
-            var bulletData = Config.GetBullet(bulletId);
+            var bulletData = _configManager.GetBullet(bulletId);
             if (bulletData == null)
             {
                 Debug.LogWarning($"[WeaponManager] 子弹配置不存在: {bulletId}");
@@ -162,7 +162,7 @@ namespace Hunting.Manager
         /// </summary>
         public float GetCurrentDamage(int bulletId)
         {
-            var bulletData = Config.GetBullet(bulletId);
+            var bulletData = _configManager.GetBullet(bulletId);
             if (bulletData == null)
             {
                 Debug.LogWarning($"[WeaponManager] 子弹配置不存在: {bulletId}");
@@ -196,7 +196,7 @@ namespace Hunting.Manager
             // 加载或使用缓存的武器预制体
             if (_weaponPrefabCache == null)
             {
-                _weaponPrefabCache = await Resource.LoadAssetAsync<GameObject>(WeaponPrefabPath);
+                _weaponPrefabCache = await _resourceManager.LoadAssetAsync<GameObject>(WeaponPrefabPath);
                 if (_weaponPrefabCache == null)
                 {
                     Debug.LogError($"[WeaponManager] 加载武器预制体失败: {WeaponPrefabPath}");
@@ -281,46 +281,6 @@ namespace Hunting.Manager
             _fireRateMultiplier = 1f;
             _damageMultiplier = 1f;
         }
-        #endregion
-
-        #region 事件相关
-        /// <summary>
-        /// 注册事件
-        /// </summary>
-        private void RegisterEvents()
-        {
-            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 注销事件
-        /// </summary>
-        private void UnregisterEvents()
-        {
-            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 单局开始回调
-        /// </summary>
-        private async void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            ResetState();
-            await CreateMainWeaponAsync();
-        }
-
-        /// <summary>
-        /// 单局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            DestroyMainWeapon();
-            ResetState();
-        }
-
-        
         #endregion
     }
 }

@@ -2,6 +2,7 @@
 using GameFramework.Core;
 using Hunting.App;
 using Hunting.Game.Animal;
+using Hunting.Round;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -9,7 +10,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 派发器管理器
     /// </summary>
-    public class SpawnerManager : IAppManager
+    public class SpawnerManager : IRoundManager
     {
         /// <summary>
         /// 派发器列表
@@ -21,14 +22,17 @@ namespace Hunting.Manager
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
-        public void Init()
+        public void Init(RoundContext context)
         {
+            CollectSpawners();
+            SetAllActive(true);
             RegisterEvents();
             Debug.Log("[SpecieSpawnManager] 初始化完成");
         }
 
         public void Dispose()
         {
+            SetAllActive(false);
             UnregisterEvents();
             _spawners.Clear();
             Debug.Log("[SpecieSpawnManager] 已释放");
@@ -109,8 +113,6 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -118,28 +120,7 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
-
-        /// <summary>
-        /// 本局开始回调
-        /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            CollectSpawners();
-            SetAllActive(true);
-        }
-
-        /// <summary>
-        /// 本局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            SetAllActive(false);
-        }
-
-        
         #endregion
     }
 }

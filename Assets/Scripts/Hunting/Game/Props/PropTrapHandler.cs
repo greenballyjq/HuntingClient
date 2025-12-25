@@ -20,7 +20,7 @@ namespace Hunting.Game.Props
         /// <summary>
         /// 陷阱管理器
         /// </summary>
-        private TrapManager Trap => GameServiceLocator.GetHuntingAppManager<TrapManager>();
+        private TrapManager Trap => GameServiceLocator.GetRoundManager<TrapManager>();
 
         /// <summary>
         /// 道具效果开始

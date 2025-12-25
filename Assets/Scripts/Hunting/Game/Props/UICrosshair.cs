@@ -1,4 +1,5 @@
-﻿using Hunting.Game.Weapons;
+﻿using Hunting.App;
+using Hunting.Game.Weapons;
 using Hunting.Manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -73,12 +74,12 @@ namespace Hunting.Game.Props
         /// <summary>
         /// 输入管理器
         /// </summary>
-        private InputManager Input => GameServiceLocator.GetHuntingAppManager<InputManager>();
+        private InputManager Input => GameServiceLocator.GetAppManager<InputManager>();
 
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetRoundManager<WeaponManager>();
 
         private void Awake()
         {

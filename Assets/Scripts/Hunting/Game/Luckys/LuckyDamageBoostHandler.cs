@@ -1,4 +1,5 @@
-﻿using Hunting.Manager;
+﻿using Hunting.App;
+using Hunting.Manager;
 using UnityEngine;
 using cfg.HuntingConfig.Bean;
 
@@ -17,7 +18,7 @@ namespace Hunting.Game.Luckys
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetRoundManager<WeaponManager>();
 
         /// <summary>
         /// 激活幸运仪式增益效果

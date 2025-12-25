@@ -5,6 +5,7 @@ using Hunting.App;
 using Hunting.Events;
 using Hunting.Game.Animal;
 using Hunting.Game.Bullets;
+using Hunting.Round;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -12,29 +13,29 @@ namespace Hunting.Manager
     /// <summary>
     /// 子弹管理器
     /// </summary>
-    public class BulletManager : IAppManager
+    public class BulletManager : IRoundManager
     {
         /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        private EventManager _eventManager = GameServiceLocator.Event;
 
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager _configManager = GameServiceLocator.Config;
 
         /// <summary>
         /// 对象池管理器
         /// </summary>
-        private GameObjectPoolManager Pool => GameServiceLocator.Pool;
+        private GameObjectPoolManager _poolManager = GameServiceLocator.Pool;
 
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
+        private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
 
-        public void Init()
+        public void Init(RoundContext context)
         {
             RegisterEvents();
             Debug.Log("[BulletManager] 初始化完成");
@@ -52,13 +53,13 @@ namespace Hunting.Manager
         /// </summary>
         public async UniTask<BulletBehavior> SpawnBullet(int bulletId, Vector3 position, Vector3 direction)
         {
-            Bullet bulletData = Config.GetBullet(bulletId);
+            Bullet bulletData = _configManager.GetBullet(bulletId);
 
             // 从WeaponManager获取修正后的伤害
-            float finalDamage = Weapon.GetCurrentDamage(bulletId);
+            float finalDamage = _weaponManager.GetCurrentDamage(bulletId);
 
             // 从对象池获取子弹预制体
-            GameObject gameObject = await Pool.SpawnAsync(bulletData.PrefabResourcePath);
+            GameObject gameObject = await _poolManager.SpawnAsync(bulletData.PrefabResourcePath);
             if (gameObject == null)
             {
                 Debug.LogError($"[BulletManager] 对象池取子弹失败: {bulletData.PrefabResourcePath}");
@@ -75,7 +76,7 @@ namespace Hunting.Manager
             if (bullet == null)
             {
                 Debug.LogError("[BulletManager] 子弹预制体缺少 BulletBehavior 组件");
-                Pool.Despawn(gameObject);
+                _poolManager.Despawn(gameObject);
                 return null;
             }
 
@@ -100,7 +101,7 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(BulletEvents.BulletDestroyed, OnBulletDestroyed);
+            _eventManager.AddListener(BulletEvents.BulletDestroyed, OnBulletDestroyed);
         }
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(BulletEvents.BulletDestroyed, OnBulletDestroyed);
+            _eventManager.RemoveListener(BulletEvents.BulletDestroyed, OnBulletDestroyed);
         }
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace Hunting.Manager
         /// </summary>
         private void OnBulletDestroyed(BulletDestroyedEventArgs args)
         {
-            Pool.Despawn(args.Bullet.gameObject);
+            _poolManager.Despawn(args.Bullet.gameObject);
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerBulletSpawned(BulletSpawnedEventArgs args)
         {
-            Event.Trigger(BulletEvents.BulletSpawned, args);
+            _eventManager.Trigger(BulletEvents.BulletSpawned, args);
         }
 
         

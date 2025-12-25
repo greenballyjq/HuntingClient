@@ -1,4 +1,4 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
 using GameFramework.Core.UI;

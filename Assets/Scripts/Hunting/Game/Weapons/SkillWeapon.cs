@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using GameFramework.Core;
+using Hunting.App;
 using Hunting.Game.Animal;
 using Hunting.Manager;
 using UnityEngine;
@@ -51,7 +52,7 @@ namespace Hunting.Game.Weapons
         /// <summary>
         /// 子弹管理器
         /// </summary>
-        private BulletManager Bullet => GameServiceLocator.GetHuntingAppManager<BulletManager>();
+        private BulletManager Bullet => GameServiceLocator.GetRoundManager<BulletManager>();
 
         private void Update()
         {

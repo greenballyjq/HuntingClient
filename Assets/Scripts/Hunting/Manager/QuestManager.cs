@@ -3,6 +3,7 @@ using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
 using Hunting.App;
 using Hunting.Game.Quests;
+using Hunting.Round;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 任务管理器
     /// </summary>
-    public class QuestManager : IAppManager, IAppUpdatable
+    public class QuestManager : IRoundManager, IRoundUpdatable
     {
         /// <summary>
         /// 任务起始派发时间（秒）
@@ -71,18 +72,18 @@ namespace Hunting.Manager
         /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        private EventManager _eventManager => GameServiceLocator.Event;
 
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager _configManager => GameServiceLocator.Config;
 
-        public void Init()
+        public void Init(RoundContext context)
         {
-            RegisterEvents();
             _handlerCache = new Dictionary<EQuestType, IQuestHandler>();
-            ResetState();
+            _roundStartTime = Time.time;
+            _nextDispatchTime = QuestStartTime;
             Debug.Log("[QuestManager] 初始化完成");
         }
 
@@ -134,7 +135,6 @@ namespace Hunting.Manager
 
         public void Dispose()
         {
-            UnregisterEvents();
             EndCurrentQuest(isTimeout: false);
             ResetState();
             Debug.Log("[QuestManager] 已释放");
@@ -158,7 +158,7 @@ namespace Hunting.Manager
         private void DispatchQuest()
         {
             // 随机获取任务配置
-            Quest questData = Config.GetRandomQuest();
+            Quest questData = _configManager.GetRandomQuest();
             if (questData == null)
             {
                 Debug.LogWarning("[QuestManager] 未找到任务配置");
@@ -178,8 +178,8 @@ namespace Hunting.Manager
             }
 
             // 获取随机目标值和奖励值
-            _currentTargetValue = Config.GetRandomTargetValue(questData);
-            _currentRewardValue = Config.GetRandomRewardValue(questData);
+            _currentTargetValue = _configManager.GetRandomTargetValue(questData);
+            _currentRewardValue = _configManager.GetRandomRewardValue(questData);
 
             // 构造任务上下文
             _currentQuestContext = new QuestContext
@@ -268,48 +268,11 @@ namespace Hunting.Manager
 
         #region 事件相关
         /// <summary>
-        /// 注册事件
-        /// </summary>
-        private void RegisterEvents()
-        {
-            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 注销事件
-        /// </summary>
-        private void UnregisterEvents()
-        {
-            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 单局开始回调
-        /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            ResetState();
-            _roundStartTime = Time.time;
-            _nextDispatchTime = QuestStartTime;
-        }
-
-        /// <summary>
-        /// 单局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            EndCurrentQuest(isTimeout: false);
-            ResetState();
-        }
-
-        /// <summary>
         /// 触发任务派发事件
         /// </summary>
         private void TriggerQuestDispatched(QuestDispatchedEventArgs args)
         {
-            Event.Trigger(QuestEvents.QuestDispatched, args);
+            _eventManager.Trigger(QuestEvents.QuestDispatched, args);
         }
 
         /// <summary>
@@ -317,7 +280,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerProgressUpdated(QuestProgressUpdatedEventArgs args)
         {
-            Event.Trigger(QuestEvents.QuestProgressUpdated, args);
+            _eventManager.Trigger(QuestEvents.QuestProgressUpdated, args);
         }
 
         /// <summary>
@@ -325,7 +288,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerQuestCompleted(QuestCompletedEventArgs args)
         {
-            Event.Trigger(QuestEvents.QuestCompleted, args);
+            _eventManager.Trigger(QuestEvents.QuestCompleted, args);
         }
 
         /// <summary>
@@ -333,7 +296,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerQuestTimeout(QuestTimeoutEventArgs args)
         {
-            Event.Trigger(QuestEvents.QuestTimeout, args);
+            _eventManager.Trigger(QuestEvents.QuestTimeout, args);
         }
 
         

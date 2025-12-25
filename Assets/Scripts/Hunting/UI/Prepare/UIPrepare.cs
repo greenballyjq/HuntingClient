@@ -59,11 +59,6 @@ namespace Hunting.UI
         private UIManager UI => GameServiceLocator.UI;
 
         /// <summary>
-        /// 单局管理器
-        /// </summary>
-        private RoundManager Round => GameServiceLocator.GetHuntingAppManager<RoundManager>();
-
-        /// <summary>
         /// 当前选中的角色ID
         /// </summary>
         private int _currentRoleId;
@@ -186,18 +181,15 @@ namespace Hunting.UI
             Map mapData = Config.GetMap(_currentMapId);
             Skill skillData = Config.GetSkill(roleData.LinkedSkillId);
 
-            var roundContext = new RoundContext
+            HuntingAppFlow.Instance.EnterRound(new RoundContext
             {
                 RoleData = roleData,
                 MapData = mapData,
                 SkillData = skillData,
                 LuckyBuffData = _currentLuckyBuffData,
                 HasMapAffinity = roleData.LinkedMapId == _currentMapId
-            };
+            });
 
-            Round.StartRound(roundContext);
-
-            HuntingAppFlow.Instance.EnterRound(roundContext);
             Close();
         }
 

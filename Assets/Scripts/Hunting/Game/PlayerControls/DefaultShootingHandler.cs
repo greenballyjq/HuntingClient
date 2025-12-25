@@ -1,5 +1,6 @@
 ﻿namespace Hunting.Game.PlayerControls
 {
+    using Hunting.App;
     using Hunting.Game.Weapons;
     using Hunting.Manager;
     using UnityEngine;
@@ -17,12 +18,12 @@
         /// <summary>
         /// 输入管理器
         /// </summary>
-        private InputManager Input => GameServiceLocator.GetHuntingAppManager<InputManager>();
+        private InputManager Input => GameServiceLocator.GetAppManager<InputManager>();
 
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetRoundManager<WeaponManager>();
 
         /// <summary>
         /// 瞄准深度

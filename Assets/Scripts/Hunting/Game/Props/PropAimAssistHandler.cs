@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
+using Hunting.App;
 using Hunting.Game.Weapons;
 using Hunting.Manager;
 using UnityEngine;
@@ -49,7 +50,7 @@ namespace Hunting.Game.Props
         /// <summary>
         /// 玩家控制管理器
         /// </summary>
-        private PlayerControlManager PlayerControl => GameServiceLocator.GetHuntingAppManager<PlayerControlManager>();
+        private PlayerControlManager PlayerControl => GameServiceLocator.GetRoundManager<PlayerControlManager>();
 
         /// <summary>
         /// 道具效果开始

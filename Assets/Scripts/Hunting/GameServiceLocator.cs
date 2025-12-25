@@ -2,6 +2,7 @@
 using GameFramework.Core;
 using Hunting.App;
 using Hunting.Manager;
+using Hunting.Round;
 
 namespace Hunting
 {
@@ -46,11 +47,19 @@ namespace Hunting
         }
 
         /// <summary>
-        /// 获取打猎应用级管理器
+        /// 获取应用级管理器
         /// </summary>
-        public static T GetHuntingAppManager<T>() where T : class, IAppManager
+        public static T GetAppManager<T>() where T : class, IAppManager
         {
             return HuntingAppFlow.Instance.GetAppManager<T>();
+        }
+
+        /// <summary>
+        /// 获取单局管理器
+        /// </summary>
+        public static T GetRoundManager<T>() where T : class, IRoundManager
+        {
+            return HuntingAppFlow.Instance.GetRoundFlow().GetRoundManager<T>();
         }
 
         /// <summary>

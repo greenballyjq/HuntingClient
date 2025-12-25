@@ -49,7 +49,7 @@ namespace Hunting.UI
         /// <summary>
         /// 结算管理器
         /// </summary>
-        private SettlementRewardManager SettlementManager => GameServiceLocator.GetHuntingAppManager<SettlementRewardManager>();
+        private SettlementRewardManager SettlementManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
 
         private void Awake()
         {

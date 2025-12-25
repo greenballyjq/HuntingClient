@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core;
+using Hunting.App;
 using Hunting.Events;
 using Hunting.Manager;
 using UnityEngine;
@@ -50,22 +51,22 @@ namespace Hunting.Game.Weapons
         /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        private EventManager _eventManager = GameServiceLocator.Event;
 
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager _configManager = GameServiceLocator.Config;
 
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetRoundManager<WeaponManager>();
 
         /// <summary>
         /// 子弹管理器
         /// </summary>
-        private BulletManager Bullet => GameServiceLocator.GetHuntingAppManager<BulletManager>();
+        private BulletManager Bullet => GameServiceLocator.GetRoundManager<BulletManager>();
 
         private void Start()
         {
@@ -173,7 +174,7 @@ namespace Hunting.Game.Weapons
             _specialBulletRemainingTime -= Time.deltaTime;
 
             // 获取子弹配置用于触发倒计时事件
-            var bulletData = Config.GetBullet(_currentBulletId);
+            var bulletData = _configManager.GetBullet(_currentBulletId);
             if (bulletData != null)
             {
                 // 触发特殊子弹倒计时事件
@@ -188,7 +189,7 @@ namespace Hunting.Game.Weapons
             if (_specialBulletRemainingTime <= 0f)
             {
                 // 触发特殊子弹效果结束事件
-                var endedBulletData = Config.GetBullet(_currentBulletId);
+                var endedBulletData = _configManager.GetBullet(_currentBulletId);
                 TriggerSpecialBulletEffectEnded(new SpecialBulletEffectEndedEventArgs
                 {
                     BulletData = endedBulletData
@@ -220,14 +221,14 @@ namespace Hunting.Game.Weapons
             UpdateFireInterval();
 
             // 获取子弹配置
-            var newBulletData = Config.GetBullet(newBulletId);
+            var newBulletData = _configManager.GetBullet(newBulletId);
             if (newBulletData== null)
             {
                 Debug.LogWarning($"[Weapon] 子弹配置不存在: {newBulletId}");
                 return;
             }
 
-            var oldBulletData = Config.GetBullet(oldBulletId);
+            var oldBulletData = _configManager.GetBullet(oldBulletId);
 
             // 判断是否为特殊子弹（持续时间 > 0）
             bool isSpecialBullet = newBulletData.Duration > 0f;
@@ -261,7 +262,7 @@ namespace Hunting.Game.Weapons
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+            _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
         /// <summary>
@@ -269,7 +270,7 @@ namespace Hunting.Game.Weapons
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+            _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
         /// <summary>
@@ -282,7 +283,7 @@ namespace Hunting.Game.Weapons
                 return;
 
             // 获取随机特殊子弹
-            var specialBullet = Config.GetRandomSpecialBullet();
+            var specialBullet = _configManager.GetRandomSpecialBullet();
 
             // 切换到特殊子弹
             ChangeBullet(specialBullet.ID);
@@ -294,7 +295,7 @@ namespace Hunting.Game.Weapons
         /// </summary>
         private void TriggerBulletChanged(BulletChangedEventArgs args)
         {
-            Event.Trigger(BulletEvents.BulletChanged, args);
+            _eventManager.Trigger(BulletEvents.BulletChanged, args);
         }
 
         /// <summary>
@@ -302,7 +303,7 @@ namespace Hunting.Game.Weapons
         /// </summary>
         private void TriggerSpecialBulletCountdown(SpecialBulletCountdownEventArgs args)
         {
-            Event.Trigger(BulletEvents.SpecialBulletCountdown, args);
+            _eventManager.Trigger(BulletEvents.SpecialBulletCountdown, args);
         }
 
         /// <summary>
@@ -310,7 +311,7 @@ namespace Hunting.Game.Weapons
         /// </summary>
         private void TriggerSpecialBulletEffectEnded(SpecialBulletEffectEndedEventArgs args)
         {
-            Event.Trigger(BulletEvents.SpecialBulletEffectEnded, args);
+            _eventManager.Trigger(BulletEvents.SpecialBulletEffectEnded, args);
         }
         #endregion
 

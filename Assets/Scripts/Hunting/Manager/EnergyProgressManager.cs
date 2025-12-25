@@ -3,6 +3,7 @@ using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
 using Hunting.App;
+using Hunting.Round;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -10,7 +11,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 丰收能量条管理器
     /// </summary>
-    public class EnergyProgressManager : IAppManager, IAppUpdatable
+    public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     {
         /// <summary>
         /// 当前能量值
@@ -45,18 +46,22 @@ namespace Hunting.Manager
         /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        private EventManager _eventManager => GameServiceLocator.Event;
 
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager _configManager => GameServiceLocator.Config;
 
-        public void Init()
+        public void Init(RoundContext context)
         {
             LoadConfig();
             RegisterEvents();
             ResetProgress();
+
+            // 单局开始时开始自动积攒
+            _isAutoAccumulating = true;
+
             Debug.Log("[EnergyProgressManager] 初始化完成");
         }
 
@@ -74,7 +79,11 @@ namespace Hunting.Manager
         public void Dispose()
         {
             UnregisterEvents();
+
+            // 单局结束时停止自动积攒并重置进度
+            _isAutoAccumulating = false;
             ResetProgress();
+
             Debug.Log("[EnergyProgressManager] 已释放");
         }
 
@@ -135,7 +144,7 @@ namespace Hunting.Manager
         /// </summary>
         private void LoadConfig()
         {
-            EnergyProgress energyProgress = Config.GetEnergyProgress(1);
+            EnergyProgress energyProgress = _configManager.GetEnergyProgress(1);
             _requiredPerBar = energyProgress.RequiredPerBar;
             _maxBars = energyProgress.MaxBar;
             _increasePerSecond = energyProgress.IncreasePerSecond;
@@ -216,9 +225,7 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-            Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+            _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
         /// <summary>
@@ -226,26 +233,7 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-            Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        }
-
-        /// <summary>
-        /// 单局开始回调
-        /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            _isAutoAccumulating = true;
-        }
-
-        /// <summary>
-        /// 单局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            _isAutoAccumulating = false;
-            ResetProgress();
+            _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
         /// <summary>
@@ -264,7 +252,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerProgressChanged(EnergyProgressChangedEventArgs args)
         {
-            Event.Trigger(EnergyEvents.EnergyProgressChanged, args);
+            _eventManager.Trigger(EnergyEvents.EnergyProgressChanged, args);
         }
 
         /// <summary>
@@ -272,7 +260,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerBarCountChanged(EnergyBarCountChangedEventArgs args)
         {
-            Event.Trigger(EnergyEvents.EnergyBarCountChanged, args);
+            _eventManager.Trigger(EnergyEvents.EnergyBarCountChanged, args);
         }
 
         /// <summary>
@@ -280,7 +268,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerMaxBarsReached()
         {
-            Event.Trigger(EnergyEvents.EnergyMaxBarsReached);
+            _eventManager.Trigger(EnergyEvents.EnergyMaxBarsReached);
         }
 
         /// <summary>
@@ -288,7 +276,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerEnergyConsumed(EnergyConsumedEventArgs args)
         {
-            Event.Trigger(EnergyEvents.EnergyConsumed, args);
+            _eventManager.Trigger(EnergyEvents.EnergyConsumed, args);
         }
 
        

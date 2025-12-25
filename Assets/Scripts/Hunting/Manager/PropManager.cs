@@ -2,6 +2,7 @@
 using cfg.HuntingConfig.Prop;
 using Hunting.App;
 using Hunting.Game.Props;
+using Hunting.Round;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.MaterialProperty;
@@ -11,7 +12,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 道具管理器
     /// </summary>
-    public class PropManager : IAppManager, IAppUpdatable
+    public class PropManager : IRoundManager, IRoundUpdatable
     {
         /// <summary>
         /// 活跃道具上下文
@@ -57,11 +58,10 @@ namespace Hunting.Manager
         /// <summary>
         /// 玩家数据管理器
         /// </summary>
-        private PlayerDataManager PlayerData => GameServiceLocator.GetHuntingAppManager<PlayerDataManager>();
+        private PlayerDataManager PlayerData => GameServiceLocator.GetAppManager<PlayerDataManager>();
 
-        public void Init()
+        public void Init(RoundContext context)
         {
-            RegisterEvents();
             ResetState();
             Debug.Log("[PropManager] 初始化完成");
         }
@@ -73,7 +73,6 @@ namespace Hunting.Manager
 
         public void Dispose()
         {
-            UnregisterEvents();
             StopAllProps();
             ResetState();
             Debug.Log("[PropManager] 已释放");
@@ -253,41 +252,6 @@ namespace Hunting.Manager
 
         #region 事件相关
         /// <summary>
-        /// 注册事件
-        /// </summary>
-        private void RegisterEvents()
-        {
-            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 注销事件
-        /// </summary>
-        private void UnregisterEvents()
-        {
-            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 单局开始回调
-        /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            ResetState();
-        }
-
-        /// <summary>
-        /// 单局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            StopAllProps();
-            ResetState();
-        }
-
-        /// <summary>
         /// 触发道具开始事件
         /// </summary>
         private void TriggerPropStarted(PropStartedEventArgs args)
@@ -318,8 +282,6 @@ namespace Hunting.Manager
         {
             Event.Trigger(PropEvents.PropUseFailed, args);
         }
-
-       
         #endregion
     }
 }

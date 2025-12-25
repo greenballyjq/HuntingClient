@@ -1,5 +1,6 @@
 ﻿namespace Hunting.Game.PlayerControls
 {
+    using Hunting.App;
     using Hunting.Game.Animal;
     using Hunting.Game.Weapons;
     using Hunting.Manager;
@@ -33,17 +34,17 @@
         /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        private EventManager _eventManager = GameServiceLocator.Event;
 
         /// <summary>
         /// 输入管理器
         /// </summary>
-        private InputManager Input => GameServiceLocator.GetHuntingAppManager<InputManager>();
+        private InputManager Input => GameServiceLocator.GetAppManager<InputManager>();
 
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetRoundManager<WeaponManager>();
 
         public void OnControlStart()
         {
@@ -191,7 +192,7 @@
         private void RegisterEvents()
         {
             Input.OnTargetSelected += HandleTargetSelected;
-            Event.AddListener(AnimalEvents.AnimalDying, OnAnimalDying);
+            _eventManager.AddListener(AnimalEvents.AnimalDying, OnAnimalDying);
         }
 
         /// <summary>
@@ -200,7 +201,7 @@
         private void UnregisterEvents()
         {
             Input.OnTargetSelected -= HandleTargetSelected;
-            Event.RemoveListener(AnimalEvents.AnimalDying, OnAnimalDying);
+            _eventManager.RemoveListener(AnimalEvents.AnimalDying, OnAnimalDying);
         }
 
         /// <summary>
@@ -226,7 +227,7 @@
         /// </summary>
         private void TriggerTargetSelected(TargetSelectedEventArgs args)
         {
-            Event.Trigger(PlayerControlEvents.TargetSelected, args);
+            _eventManager.Trigger(PlayerControlEvents.TargetSelected, args);
         }
 
         /// <summary>
@@ -234,7 +235,7 @@
         /// </summary>
         private void TriggerTargetLost(TargetLostEventArgs args)
         {
-            Event.Trigger(PlayerControlEvents.TargetLost, args);
+            _eventManager.Trigger(PlayerControlEvents.TargetLost, args);
         }
 
         /// <summary>
@@ -242,7 +243,7 @@
         /// </summary>
         private void TriggerTargetChanged(TargetChangedEventArgs args)
         {
-            Event.Trigger(PlayerControlEvents.TargetChanged, args);
+            _eventManager.Trigger(PlayerControlEvents.TargetChanged, args);
         }
         #endregion
     }

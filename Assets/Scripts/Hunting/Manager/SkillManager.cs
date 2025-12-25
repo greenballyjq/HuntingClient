@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig.Skill;
 using Hunting.App;
 using Hunting.Game.Skills;
+using Hunting.Round;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -8,7 +9,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 技能管理器
     /// </summary>
-    public class SkillManager : IAppManager, IAppUpdatable
+    public class SkillManager : IRoundManager, IRoundUpdatable
     {
         /// <summary>
         /// 当局技能处理器
@@ -33,22 +34,30 @@ namespace Hunting.Manager
         /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
-
-        /// <summary>
-        /// 配置管理器
-        /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
+        private EventManager _eventManager = GameServiceLocator.Event;
 
         /// <summary>
         /// 能量条管理器
         /// </summary>
-        private EnergyProgressManager Energy => GameServiceLocator.GetHuntingAppManager<EnergyProgressManager>();
+        private EnergyProgressManager _energyProgressManager = GameServiceLocator.GetRoundManager<EnergyProgressManager>();
 
-        public void Init()
+        public void Init(RoundContext context)
         {
-            RegisterEvents();
             ResetState();
+
+            // 读取本局技能配置
+            Skill skillData = context.SkillData;
+
+            // 创建处理器
+            _currentHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
+
+            // 构造上下文
+            _currentSkillContext = new SkillContext
+            {
+                SkillData = skillData,
+                RoundContext = context
+            };
+            
             Debug.Log("[SkillManager] 初始化完成");
         }
 
@@ -66,7 +75,6 @@ namespace Hunting.Manager
 
         public void Dispose()
         {
-            UnregisterEvents();
             EndSkill();
             ResetState();
             Debug.Log("[SkillManager] 已释放");
@@ -78,7 +86,7 @@ namespace Hunting.Manager
         /// </summary>
         public bool TryStartSkill()
         {
-            if (_currentHandler == null || _isRunning || !Energy.TryConsumeOneBar())
+            if (_currentHandler == null || _isRunning || !_energyProgressManager.TryConsumeOneBar())
                 return false;
 
             BeginSkill();
@@ -143,60 +151,13 @@ namespace Hunting.Manager
         #endregion
 
         #region 事件相关
-        /// <summary>
-        /// 注册事件
-        /// </summary>
-        private void RegisterEvents()
-        {
-            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 注销事件
-        /// </summary>
-        private void UnregisterEvents()
-        {
-            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 单局开始回调
-        /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            ResetState();
-
-            // 读取本局技能配置
-            Skill skillData = args.Context.SkillData;
-
-            // 创建处理器
-            _currentHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
-
-            // 构造上下文
-            _currentSkillContext = new SkillContext
-            {
-                SkillData = skillData,
-                RoundContext = args.Context
-            };
-        }
-
-        /// <summary>
-        /// 单局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            EndSkill();
-            ResetState();
-        }
 
         /// <summary>
         /// 触发技能开始事件
         /// </summary>
         private void TriggerSkillStarted(SkillStartedEventArgs args)
         {
-            Event.Trigger(SkillEvents.SkillStarted, args);
+            _eventManager.Trigger(SkillEvents.SkillStarted, args);
         }
 
         /// <summary>
@@ -204,7 +165,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerSkillEnded(SkillEndedEventArgs args)
         {
-            Event.Trigger(SkillEvents.SkillEnded, args);
+            _eventManager.Trigger(SkillEvents.SkillEnded, args);
         }
         #endregion
     }

@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-﻿using System.Collections.Generic;
-using cfg;
+﻿using cfg;
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
 using Hunting.App;
+using Hunting.Round;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -12,7 +11,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 肉度条管理器
     /// </summary>
-    public class MeatProgressManager : IAppManager
+    public class MeatProgressManager : IRoundManager
     {
         /// <summary>
         /// 当前肉度值
@@ -37,14 +36,14 @@ namespace Hunting.Manager
         /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        private EventManager _eventManager => GameServiceLocator.Event;
 
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager _configManager => GameServiceLocator.Config;
 
-        public void Init()
+        public void Init(RoundContext context)
         {
             LoadConfig();
             RegisterEvents();
@@ -130,7 +129,7 @@ namespace Hunting.Manager
         /// </summary>
         private void LoadConfig()
         {
-            var meatProgress = Config.GetMeatProgress(1);
+            var meatProgress = _configManager.GetMeatProgress(1);
             _requiredPerBar = meatProgress.RequiredPerBar;
             _maxMeatBars = meatProgress.MaxBar;
         }
@@ -162,9 +161,7 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-            Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+            _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
         /// <summary>
@@ -172,30 +169,9 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-            Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        }
-        
-        /// <summary>
-        /// 本局开始回调
-        /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            ResetProgress();
+            _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
-        /// <summary>
-        /// 本局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            ResetProgress();
-        }
-
-        /// <summary>
-        /// 掉落奖励回调
-        /// </summary>
         private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
         {
             if (!args.DropRewards.TryGetValue(EDropType.Meat, out var meatAmount) || meatAmount <= 0)
@@ -209,7 +185,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerProgressChanged(MeatProgressChangedEventArgs args)
         {
-            Event.Trigger(MeatEvents.MeatProgressChanged, args);
+            _eventManager.Trigger(MeatEvents.MeatProgressChanged, args);
         }
 
         /// <summary>
@@ -217,10 +193,10 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerBarCountChanged(MeatBarCountChangedEventArgs args)
         {
-            Event.Trigger(MeatEvents.MeatBarCountChanged, args);
+            _eventManager.Trigger(MeatEvents.MeatBarCountChanged, args);
 
             if (_currentMeatBars >= _maxMeatBars)
-                Event.Trigger(MeatEvents.MeatMaxBarsReached);
+                _eventManager.Trigger(MeatEvents.MeatMaxBarsReached);
         }
 
         

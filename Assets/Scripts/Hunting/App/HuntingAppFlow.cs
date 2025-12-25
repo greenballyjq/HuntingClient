@@ -72,11 +72,6 @@ namespace Hunting.App
         private RoundFlow _roundFlow;
 
         /// <summary>
-        /// 局级服务集合
-        /// </summary>
-        private RoundServices _roundServices;
-
-        /// <summary>
         /// 事件管理器
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
@@ -85,12 +80,6 @@ namespace Hunting.App
         /// UI管理器
         /// </summary>
         private UIManager UI => GameServiceLocator.UI;
-
-        /// <summary>
-        /// 单局管理器
-        /// </summary>
-        private RoundManager Round => GameServiceLocator.GetHuntingAppManager<RoundManager>();
-
         #region 公共方法
         /// <summary>
         /// 进入准备阶段
@@ -102,7 +91,6 @@ namespace Hunting.App
             // 结束当前单局流程
             _roundFlow?.EndRound();
             _roundFlow = null;
-            _roundServices = null;
 
             // TODO: 当前版本启动应用后即进入准备界面 未来根据需求调整
             await UI.OpenUIAsync<UIPrepare>("UIPrepare");
@@ -127,20 +115,9 @@ namespace Hunting.App
                 Context = _currentRoundContext
             });
 
-            // 创建单局服务集合
-            _roundServices = new RoundServices(
-                GameServiceLocator.Event,
-                GameServiceLocator.UI,
-                GameServiceLocator.Resource,
-                GameServiceLocator.Pool,
-                GameServiceLocator.Config,
-                GameServiceLocator.GetHuntingAppManager<PlayerDataManager>()
-            );
-
             // 创建单局流程并开始
-            _roundFlow = new RoundFlow(_roundServices);
+            _roundFlow = new RoundFlow();
             _roundFlow.StartRound(_currentRoundContext);
-            Debug.LogWarning("1");
         }
 
         /// <summary>
@@ -172,22 +149,8 @@ namespace Hunting.App
         /// </summary>
         protected override void RegisterAppManagers()
         {
-            // TODO: 下面方法并非都是真的“应用级”管理器，未来需要整理分类
-            RegisterAppManager(new RoundManager());
             RegisterAppManager(new InputManager());
-            RegisterAppManager(new PlayerControlManager());
             RegisterAppManager(new PlayerDataManager());
-            RegisterAppManager(new LuckyBuffManager());
-            RegisterAppManager(new MeatProgressManager());
-            RegisterAppManager(new EnergyProgressManager());
-            RegisterAppManager(new SettlementRewardManager());
-            RegisterAppManager(new WeaponManager());
-            RegisterAppManager(new BulletManager());
-            RegisterAppManager(new SpawnerManager());
-            RegisterAppManager(new TrapManager());
-            RegisterAppManager(new PropManager());
-            RegisterAppManager(new SkillManager());
-            RegisterAppManager(new QuestManager());
         }
         #endregion
 

@@ -54,7 +54,7 @@ namespace Hunting.UI
         /// <summary>
         /// 肉度条管理器
         /// </summary>
-        private MeatProgressManager MeatProgressManager => GameServiceLocator.GetHuntingAppManager<MeatProgressManager>();
+        private MeatProgressManager MeatProgressManager => GameServiceLocator.GetRoundManager<MeatProgressManager>();
 
         /// <summary>
         /// 事件管理器

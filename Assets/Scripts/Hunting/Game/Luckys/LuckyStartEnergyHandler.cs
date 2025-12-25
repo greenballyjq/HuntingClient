@@ -12,7 +12,8 @@ namespace Hunting.Game.Luckys
         /// <summary>
         /// 能量条管理器
         /// </summary>
-        private EnergyProgressManager Energy => GameServiceLocator.GetHuntingAppManager<EnergyProgressManager>();
+        private EnergyProgressManager _energyProgressManager => GameServiceLocator.GetRoundManager<EnergyProgressManager>();
+
 
         /// <summary>
         /// 激活幸运仪式增益效果
@@ -24,11 +25,11 @@ namespace Hunting.Game.Luckys
             int barCount = param.EnergyBarCount;
 
             // 获取单条所需能量值
-            float requiredPerBar = Energy.GetRequiredPerBar();
+            float requiredPerBar = _energyProgressManager.GetRequiredPerBar();
 
             // 计算需要增加的能量总量 = 单条所需值 * 条数
             float totalEnergy = requiredPerBar * barCount;
-            Energy.AddEnergy(totalEnergy);
+            _energyProgressManager.AddEnergy(totalEnergy);
             Debug.Log($"[LuckyStartEnergyHandler] 开局获得 {barCount} 条丰收能量");
         }
 

@@ -12,14 +12,14 @@ namespace Hunting.Manager
     public class AnimalManager : IRoundManager
     {
         /// <summary>
-        /// 单局服务集合
+        /// 事件管理器
         /// </summary>
-        private readonly RoundServices _services;
+        private EventManager _eventManager => GameServiceLocator.Event;
 
-        public AnimalManager(RoundServices services)
-        {
-            _services = services;
-        }
+        /// <summary>
+        /// 对象池管理器
+        /// </summary>
+        private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.Pool;
 
         /// <summary>
         /// 初始化单局管理器
@@ -46,7 +46,7 @@ namespace Hunting.Manager
         /// </summary>
         public async UniTask<AnimalBehavior> SpawnAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, float stayTime, Spawner spawner = null)
         {
-            var go = await _services.Pool.SpawnAsync(specieData.PrefabResourcePath);
+            var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
             if (go == null)
             {
                 Debug.LogError($"[AnimalManager] 从对象池获取失败: {specieData.PrefabResourcePath}");
@@ -57,7 +57,7 @@ namespace Hunting.Manager
             if (animal == null)
             {
                 Debug.LogError("[AnimalManager] 预制体缺少 AnimalBehavior 组件");
-                _services.Pool.Despawn(go);
+                _gameObjectPoolManager.Despawn(go);
                 return null;
             }
 
@@ -88,9 +88,9 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            _services.Event.AddListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
-            _services.Event.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
-            _services.Event.AddListener(AnimalEvents.AnimalFled, OnAnimalFled);
+            _eventManager.AddListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
+            _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
+            _eventManager.AddListener(AnimalEvents.AnimalFled, OnAnimalFled);
         }
 
         /// <summary>
@@ -98,9 +98,9 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            _services.Event.RemoveListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
-            _services.Event.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
-            _services.Event.RemoveListener(AnimalEvents.AnimalFled, OnAnimalFled);
+            _eventManager.RemoveListener(SpawnEvents.SpeciesSpawned, OnSpeciesSpawned);
+            _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
+            _eventManager.RemoveListener(AnimalEvents.AnimalFled, OnAnimalFled);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Hunting.Manager
         /// </summary>
         private void OnAnimalDied(AnimalDiedEventArgs args)
         {
-            _services.Pool.Despawn(args.Animal.gameObject);
+            _gameObjectPoolManager.Despawn(args.Animal.gameObject);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Hunting.Manager
         /// </summary>
         private void OnAnimalFled(AnimalFledEventArgs args)
         {
-            _services.Pool.Despawn(args.Animal.gameObject);
+            _gameObjectPoolManager.Despawn(args.Animal.gameObject);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerAnimalSpawned(AnimalSpawnedEventArgs args)
         {
-            _services.Event.Trigger(AnimalEvents.AnimalSpawned, args);
+            _eventManager.Trigger(AnimalEvents.AnimalSpawned, args);
         }
         #endregion
     }

@@ -1,9 +1,8 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using Hunting.Manager;
 using Hunting.UI;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Hunting.Round
 {
@@ -44,11 +43,6 @@ namespace Hunting.Round
         private RoundFlowState _currentState = RoundFlowState.None;
 
         /// <summary>
-        /// 单局服务集合
-        /// </summary>
-        private readonly RoundServices _services;
-
-        /// <summary>
         /// 当前单局上下文
         /// </summary>
         private RoundContext _currentRoundContext;
@@ -58,12 +52,31 @@ namespace Hunting.Round
         /// </summary>
         private readonly List<IRoundManager> _roundManagers = new List<IRoundManager>();
 
-        public RoundFlow(RoundServices services)
-        {
-            _services = services;
-        }
+        /// <summary>
+        /// 事件管理器
+        /// </summary>
+        private EventManager _eventManager = GameServiceLocator.Event;
+
+        /// <summary>
+        /// UI管理器
+        /// </summary>
+
+        private UIManager _uiManager = GameServiceLocator.UI;
 
         #region 公共方法
+        /// <summary>
+        /// 获取单局管理器
+        /// </summary>
+        public T GetRoundManager<T>() where T : class, IRoundManager
+        {
+            foreach (var manager in _roundManagers)
+            {
+                if (manager is T result)
+                    return result;
+            }
+            return null;
+        }
+
         /// <summary>
         /// 开始单局
         /// </summary>
@@ -72,8 +85,6 @@ namespace Hunting.Round
         {
             if (_currentState != RoundFlowState.None)
                 return;
-
-            Debug.LogWarning("2");
 
             _currentRoundContext = context;
 
@@ -190,11 +201,22 @@ namespace Hunting.Round
         /// </summary>
         private void CreateRoundManagers()
         {
-            Debug.LogWarning("3");
             // TODO: 现阶段先接入可测的局级管理器，后续逐个迁移
-            _roundManagers.Add(new AnimalManager(_services));
+            _roundManagers.Add(new AnimalManager());
+            _roundManagers.Add(new EnergyProgressManager());
+            _roundManagers.Add(new MeatProgressManager());
+            _roundManagers.Add(new QuestManager());
+            _roundManagers.Add(new SettlementRewardManager());
+            _roundManagers.Add(new SpawnerManager());
+            _roundManagers.Add(new TrapManager());
+            _roundManagers.Add(new LuckyBuffManager());
+            _roundManagers.Add(new PropManager());
+            _roundManagers.Add(new PlayerControlManager());
+            _roundManagers.Add(new WeaponManager());
+            _roundManagers.Add(new BulletManager());
+            _roundManagers.Add(new SkillManager());
 
-            // TODO: 其它局级管理器在此添加（Spawner/Weapon/Bullet/...）
+            // TODO: 其它局级管理器在此添加
         }
 
         /// <summary>
@@ -226,7 +248,7 @@ namespace Hunting.Round
 
             InitRoundManagers();
 
-            await _services.UI.OpenUIAsync<UIGameplay>("UIHuntingGameplay");
+            await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay");
         }
 
         /// <summary>
@@ -311,7 +333,7 @@ namespace Hunting.Round
         /// </summary>
         private void TriggerRoundStarted(RoundStartedEventArgs args)
         {
-            _services.Event.Trigger(RoundFlowEvents.RoundStarted, args);
+            _eventManager.Trigger(RoundFlowEvents.RoundStarted, args);
         }
 
         /// <summary>
@@ -319,7 +341,7 @@ namespace Hunting.Round
         /// </summary>
         private void TriggerRoundPaused()
         {
-            _services.Event.Trigger(RoundFlowEvents.RoundPaused);
+            _eventManager.Trigger(RoundFlowEvents.RoundPaused);
         }
 
         /// <summary>
@@ -327,7 +349,7 @@ namespace Hunting.Round
         /// </summary>
         private void TriggerRoundResumed()
         {
-            _services.Event.Trigger(RoundFlowEvents.RoundResumed);
+            _eventManager.Trigger(RoundFlowEvents.RoundResumed);
         }
 
         /// <summary>
@@ -335,7 +357,7 @@ namespace Hunting.Round
         /// </summary>
         private void TriggerRoundEnded(RoundEndedEventArgs args)
         {
-            _services.Event.Trigger(RoundFlowEvents.RoundEnded, args);
+            _eventManager.Trigger(RoundFlowEvents.RoundEnded, args);
         }
 
         /// <summary>
@@ -343,7 +365,7 @@ namespace Hunting.Round
         /// </summary>
         private void TriggerRoundMapChangeStarted(RoundMapChangeEventArgs args)
         {
-            _services.Event.Trigger(RoundFlowEvents.RoundMapChangeStarted, args);
+            _eventManager.Trigger(RoundFlowEvents.RoundMapChangeStarted, args);
         }
 
         /// <summary>
@@ -351,7 +373,7 @@ namespace Hunting.Round
         /// </summary>
         private void TriggerRoundMapChangeFinished(RoundMapChangeEventArgs args)
         {
-            _services.Event.Trigger(RoundFlowEvents.RoundMapChangeFinished, args);
+            _eventManager.Trigger(RoundFlowEvents.RoundMapChangeFinished, args);
         }
         #endregion
     }

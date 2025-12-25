@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig.Enum;
 using Hunting.App;
+using Hunting.Round;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -7,7 +8,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 结算奖励管理器
     /// </summary>
-    public class SettlementRewardManager : IAppManager
+    public class SettlementRewardManager : IRoundManager
     {
         /// <summary>
         /// 本局完成的肉度条数量
@@ -59,10 +60,10 @@ namespace Hunting.Manager
         /// </summary>
         private HuntingConfigManager Config => GameServiceLocator.Config;
 
-        public void Init()
+        public void Init(RoundContext context)
         {
-            RegisterEvents();
             ClearRoundData();
+            RegisterEvents();
             Debug.Log("[SettlementRewardManager] 初始化完成");
         }
 
@@ -213,8 +214,6 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
             Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
             Event.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
             Event.AddListener(QuestEvents.QuestCompleted, OnQuestCompleted);
@@ -225,27 +224,9 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
             Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
             Event.RemoveListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
             Event.RemoveListener(QuestEvents.QuestCompleted, OnQuestCompleted);
-        }
-
-        /// <summary>
-        /// 本局开始回调
-        /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            ClearRoundData();
-        }
-
-        /// <summary>
-        /// 本局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            ClearRoundData();
         }
 
         /// <summary>

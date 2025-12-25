@@ -22,7 +22,7 @@ namespace Hunting.Game.Skills
         /// <summary>
         /// 肉度条管理器
         /// </summary>
-        private MeatProgressManager Meat => GameServiceLocator.GetHuntingAppManager<MeatProgressManager>();
+        private MeatProgressManager Meat => GameServiceLocator.GetRoundManager<MeatProgressManager>();
 
         /// <summary>
         /// 技能开始

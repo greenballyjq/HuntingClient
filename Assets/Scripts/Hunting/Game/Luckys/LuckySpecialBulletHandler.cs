@@ -1,4 +1,5 @@
 ﻿using cfg.HuntingConfig;
+using Hunting.App;
 using Hunting.Game.Weapons;
 using Hunting.Manager;
 using UnityEngine;
@@ -13,12 +14,12 @@ namespace Hunting.Game.Luckys
         /// <summary>
         /// 配置管理器
         /// </summary>
-        private HuntingConfigManager Config => GameServiceLocator.Config;
+        private HuntingConfigManager _configManager = GameServiceLocator.Config;
 
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetHuntingAppManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetRoundManager<WeaponManager>();
 
         /// <summary>
         /// 激活幸运仪式增益效果
@@ -26,7 +27,7 @@ namespace Hunting.Game.Luckys
         public void OnActivate(LuckyBuffContext context)
         {
             // 获取随机特殊子弹
-            var specialBullet = Config.GetRandomSpecialBullet();
+            var specialBullet = _configManager.GetRandomSpecialBullet();
             
             // 获取主武器并切换子弹
             var mainWeapon = Weapon.GetMainWeapon();

@@ -1,4 +1,4 @@
-﻿using GameFramework.Core;
+using GameFramework.Core;
 using GameFramework.Core.UI;
 using Hunting.Manager;
 using UnityEngine;
@@ -34,7 +34,7 @@ namespace Hunting.UI
         /// <summary>
         /// 结算管理器
         /// </summary>
-        private SettlementRewardManager SettlementManager => GameServiceLocator.GetHuntingAppManager<SettlementRewardManager>();
+        private SettlementRewardManager SettlementManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
 
         /// <summary>
         /// 事件中心

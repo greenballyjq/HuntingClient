@@ -3,6 +3,7 @@ using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using GameFramework.Core;
 using GameFramework.Core.UI;
+using Hunting.App;
 using Hunting.Events;
 using Hunting.Manager;
 using UnityEngine;
@@ -83,7 +84,7 @@ namespace Hunting.UI
         /// <summary>
         /// 道具管理器
         /// </summary>
-        private PropManager Prop => GameServiceLocator.GetHuntingAppManager<PropManager>();
+        private PropManager Prop => GameServiceLocator.GetRoundManager<PropManager>();
 
         public void Init()
         {

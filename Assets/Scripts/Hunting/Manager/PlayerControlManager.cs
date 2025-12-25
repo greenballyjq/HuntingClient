@@ -1,5 +1,6 @@
 ﻿using Hunting.App;
 using Hunting.Game.PlayerControls;
+using Hunting.Round;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -7,7 +8,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 玩家控制管理器
     /// </summary>
-    public class PlayerControlManager : IAppManager, IAppUpdatable
+    public class PlayerControlManager : IRoundManager, IRoundUpdatable
     {
         /// <summary>
         /// 当前控制处理器
@@ -17,12 +18,12 @@ namespace Hunting.Manager
         /// <summary>
         /// 事件管理器
         /// </summary>
-        private EventManager Event => GameServiceLocator.Event;
+        private EventManager _eventManager = GameServiceLocator.Event;
 
-        public void Init()
+        public void Init(RoundContext context)
         {
-            RegisterEvents();
             ResetState();
+            SwitchToDefaultShooting();
             Debug.Log("[PlayerControlManager] 初始化完成");
         }
 
@@ -33,7 +34,6 @@ namespace Hunting.Manager
 
         public void Dispose()
         {
-            UnregisterEvents();
             EndCurrentControl();
             ResetState();
             Debug.Log("[PlayerControlManager] 已释放");
@@ -102,47 +102,6 @@ namespace Hunting.Manager
         {
             _currentHandler = null;
         }
-        #endregion
-
-        #region 事件相关
-        /// <summary>
-        /// 注册事件
-        /// </summary>
-        private void RegisterEvents()
-        {
-            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 注销事件
-        /// </summary>
-        private void UnregisterEvents()
-        {
-            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
-        }
-
-        /// <summary>
-        /// 单局开始回调
-        /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-            ResetState();
-            SwitchToDefaultShooting();
-        }
-
-        /// <summary>
-        /// 单局结束回调
-        /// </summary>
-        private void OnRoundEnded(RoundEndedEventArgs args)
-        {
-            EndCurrentControl();
-            ResetState();
-        }
-
-        
-
         #endregion
     }
 }
