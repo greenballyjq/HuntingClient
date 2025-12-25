@@ -1,5 +1,5 @@
 ﻿using cfg.HuntingConfig.Enum;
-using GameFramework.Game;
+using Hunting.App;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -7,7 +7,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 结算奖励管理器
     /// </summary>
-    public class SettlementRewardManager : BaseGameManager
+    public class SettlementRewardManager : IAppManager
     {
         /// <summary>
         /// 本局完成的肉度条数量
@@ -59,17 +59,14 @@ namespace Hunting.Manager
         /// </summary>
         private HuntingConfigManager Config => GameServiceLocator.Config;
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             ClearRoundData();
             Debug.Log("[SettlementRewardManager] 初始化完成");
         }
 
-        public override void DoUpdate()
-        {}
-
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             ClearRoundData();
@@ -216,8 +213,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
             Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
             Event.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
             Event.AddListener(QuestEvents.QuestCompleted, OnQuestCompleted);
@@ -228,8 +225,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
             Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
             Event.RemoveListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
             Event.RemoveListener(QuestEvents.QuestCompleted, OnQuestCompleted);

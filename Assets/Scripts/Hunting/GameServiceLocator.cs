@@ -1,35 +1,35 @@
 ﻿using Cysharp.Threading.Tasks;
 using GameFramework.Core;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Manager;
 
 namespace Hunting
 {
     /// <summary>
-    /// 游戏服务定位器 - 统一的服务访问点
+    /// 游戏服务定位器
     /// </summary>
     public static class GameServiceLocator
     {
         #region 常用管理器
         /// <summary>
-        /// 事件中心管理器
+        /// 事件管理器
         /// </summary>
-        public static EventManager Event => GameLogic.Instance.GetFrameworkManager<EventManager>();
-
-        /// <summary>
-        /// 资源加载管理器
-        /// </summary>
-        public static ResourceManager Resource => GameLogic.Instance.GetFrameworkManager<ResourceManager>();
+        public static EventManager Event => GameFrameworkManager.Instance.GetManager<EventManager>();
 
         /// <summary>
         /// UI管理器
         /// </summary>
-        public static UIManager UI => GameLogic.Instance.GetFrameworkManager<UIManager>();
+        public static UIManager UI => GameFrameworkManager.Instance.GetManager<UIManager>();
+
+        /// <summary>
+        /// 资源加载管理器
+        /// </summary>
+        public static ResourceManager Resource => GameFrameworkManager.Instance.GetManager<ResourceManager>();
 
         /// <summary>
         /// 对象池管理器
         /// </summary>
-        public static GameObjectPoolManager Pool => GameLogic.Instance.GetFrameworkManager<GameObjectPoolManager>();
+        public static GameObjectPoolManager Pool => GameFrameworkManager.Instance.GetManager<GameObjectPoolManager>();
 
         /// <summary>
         /// 配置管理器
@@ -42,41 +42,23 @@ namespace Hunting
         /// </summary>
         public static T GetFrameworkManager<T>() where T : class, IManager
         {
-            return GameLogic.Instance.GetFrameworkManager<T>();
+            return GameFrameworkManager.Instance.GetManager<T>();
         }
 
         /// <summary>
-        /// 获取游戏业务管理器
+        /// 获取应用级管理器
         /// </summary>
-        public static T GetGameManager<T>() where T : BaseGameManager
+        public static T GetAppManager<T>() where T : class, IAppManager
         {
-            return GameLogic.Instance.GetGameManager<T>();
+            return GameAppFlow.Instance.GetAppManager<T>();
         }
 
         /// <summary>
-        /// 异步等待获取框架管理器
+        /// 等待初始化完成
         /// </summary>
-        public static async UniTask<T> GetFrameworkManagerAsync<T>() where T : class, IManager
+        public static async UniTask WaitForInitializationAsync()
         {
-            await GameLogic.Instance.WaitForInitializationAsync();
-            return GameLogic.Instance.GetFrameworkManager<T>();
-        }
-
-        /// <summary>
-        /// 异步等待获取游戏业务管理器
-        /// </summary>
-        public static async UniTask<T> GetGameManagerAsync<T>() where T : BaseGameManager
-        {
-            await GameLogic.Instance.WaitForInitializationAsync();
-            return GameLogic.Instance.GetGameManager<T>();
-        }
-
-        /// <summary>
-        /// 等待游戏初始化完成
-        /// </summary>
-        public static async UniTask WaitForInitialization()
-        {
-            await GameLogic.Instance.WaitForInitializationAsync();
+            await GameAppFlow.Instance.WaitForAppStartedAsync();
         }
     }
 }

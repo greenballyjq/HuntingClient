@@ -73,12 +73,12 @@ namespace Hunting.Game.Props
         /// <summary>
         /// 输入管理器
         /// </summary>
-        private InputManager Input => GameServiceLocator.GetGameManager<InputManager>();
+        private InputManager Input => GameServiceLocator.GetAppManager<InputManager>();
 
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetAppManager<WeaponManager>();
 
         private void Awake()
         {

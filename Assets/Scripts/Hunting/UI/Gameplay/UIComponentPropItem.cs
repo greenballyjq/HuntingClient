@@ -83,7 +83,7 @@ namespace Hunting.UI
         /// <summary>
         /// 道具管理器
         /// </summary>
-        private PropManager Prop => GameServiceLocator.GetGameManager<PropManager>();
+        private PropManager Prop => GameServiceLocator.GetAppManager<PropManager>();
 
         public void Init()
         {

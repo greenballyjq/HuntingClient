@@ -9,25 +9,40 @@ using UnityEngine;
 namespace Hunting.App
 {
     /// <summary>
-    /// 应用流程基类
+    /// 游戏应用流程基类
     /// </summary>
-    public abstract class GameAppFlow : MonoSingleton<GameLogic>
+    public abstract class GameAppFlow : MonoSingleton<GameAppFlow>
     {
         /// <summary>
-        /// 应用流程状态枚举
+        /// 游戏应用流程状态枚举
         /// </summary>
-        private enum AppFlowState
+        private enum GameAppFlowState
         {
+            /// <summary>
+            /// 无状态
+            /// </summary>
             None,
+
+            /// <summary>
+            /// 启动中
+            /// </summary>
             Starting,
+
+            /// <summary>
+            /// 运行中
+            /// </summary>
             Running,
+
+            /// <summary>
+            /// 退出中
+            /// </summary>
             Exiting
         }
 
         /// <summary>
-        /// 应用流程当前状态
+        /// 游戏应用流程当前状态
         /// </summary>
-        private AppFlowState _currentState = AppFlowState.None;
+        private GameAppFlowState _currentState = GameAppFlowState.None;
 
         /// <summary>
         /// 应用级管理器列表
@@ -41,7 +56,7 @@ namespace Hunting.App
 
         private void Update()
         {
-            if (_currentState != AppFlowState.Running)
+            if (_currentState != GameAppFlowState.Running)
                 return;
 
             float deltaTime = Time.deltaTime;
@@ -61,10 +76,10 @@ namespace Hunting.App
         /// </summary>
         public async UniTask StartAppAsync()
         {
-            if (_currentState != AppFlowState.None)
+            if (_currentState != GameAppFlowState.None)
                 return;
 
-            _currentState = AppFlowState.Starting;
+            _currentState = GameAppFlowState.Starting;
 
             // 等待游戏启动器初始化完成
             await WaitForGameLauncherAsync();
@@ -82,7 +97,7 @@ namespace Hunting.App
 
             TriggerAppStarted();
 
-            _currentState = AppFlowState.Running;            
+            _currentState = GameAppFlowState.Running;
         }
 
         /// <summary>
@@ -90,10 +105,10 @@ namespace Hunting.App
         /// </summary>
         public async UniTask ExitAppAsync()
         {
-            if (_currentState != AppFlowState.Running)
+            if (_currentState != GameAppFlowState.Running)
                 return;
 
-            _currentState = AppFlowState.Exiting;
+            _currentState = GameAppFlowState.Exiting;
 
             await OnAppExitAsync();
 
@@ -104,13 +119,13 @@ namespace Hunting.App
 
             TriggerAppExited();
 
-            _currentState = AppFlowState.None;
+            _currentState = GameAppFlowState.None;
         }
 
         /// <summary>
         /// 获取框架管理器
         /// </summary>
-        protected T GetFrameworkManager<T>() where T : class, IManager
+        public T GetFrameworkManager<T>() where T : class, IManager
         {
             return GameFrameworkManager.Instance.GetManager<T>();
         }
@@ -118,7 +133,7 @@ namespace Hunting.App
         /// <summary>
         /// 获取应用级管理器
         /// </summary>
-        protected T GetAppManager<T>() where T : class, IAppManager
+        public T GetAppManager<T>() where T : class, IAppManager
         {
             for (int i = 0; i < _appManagers.Count; i++)
             {
@@ -134,9 +149,52 @@ namespace Hunting.App
         /// </summary>
         public async UniTask WaitForAppStartedAsync()
         {
-            while (_currentState == AppFlowState.None || _currentState == AppFlowState.Starting)
+            while (_currentState == GameAppFlowState.None || _currentState == GameAppFlowState.Starting)
                 await UniTask.Yield();
         }
+        #endregion
+
+        #region 私有方法
+        /// <summary>
+        /// 等待游戏启动器初始化
+        /// </summary>
+        private async UniTask WaitForGameLauncherAsync()
+        {
+            await GameLauncher.Instance.WaitForInitializationAsync();
+        }
+
+        /// <summary>
+        /// 等待配置管理器初始化
+        /// </summary>
+        private async UniTask WaitForConfigManagerAsync()
+        {
+            var config = GetConfigManager();
+            config.Init();
+            await config.WaitForInitializationAsync();
+        }
+
+        /// <summary>
+        /// 获取配置管理器
+        /// </summary>
+        /// <returns>配置管理器</returns>
+        protected abstract BaseConfigManager GetConfigManager();
+
+        /// <summary>
+        /// 注册单个应用级管理器
+        /// </summary>
+        /// <param name="manager">应用级管理器</param>
+        protected void RegisterAppManager(IAppManager manager)
+        {
+            if (_appManagers.Contains(manager))
+                return;
+
+            _appManagers.Add(manager);
+        }
+
+        /// <summary>
+        /// 注册应用级管理器
+        /// </summary>
+        protected abstract void RegisterAppManagers();
         #endregion
 
         #region 钩子方法
@@ -151,64 +209,10 @@ namespace Hunting.App
         protected virtual UniTask OnAppExitAsync() => UniTask.CompletedTask;
 
         /// <summary>
-        /// 应用运行时每帧回调
+        /// 应用运行时钩子
         /// </summary>
         /// <param name="deltaTime">时间增量</param>
         protected virtual void OnAppRunning(float deltaTime) { }
-        #endregion
-
-        #region 私有方法
-        /// <summary>
-        /// 等待配置管理器初始化
-        /// </summary>
-        private async UniTask WaitForConfigManagerAsync()
-        {
-            var config = GetConfigManager();
-            config.Init();
-            await config.WaitForInitializationAsync();
-        }
-
-        /// <summary>
-        /// 等待启动器初始化
-        /// </summary>
-        private async UniTask WaitForGameLauncherAsync()
-        {
-            if (GameLauncher.Instance != null)
-                await GameLauncher.Instance.WaitForInitializationAsync();
-        }
-
-        /// <summary>
-        /// 获取配置管理器
-        /// </summary>
-        /// <returns>配置管理器</returns>
-        protected abstract BaseConfigManager GetConfigManager();
-
-        /// <summary>
-        /// 注册应用级管理器
-        /// </summary>
-        protected abstract void RegisterAppManagers();
-
-        /// <summary>
-        /// 注册单个应用级管理器
-        /// </summary>
-        /// <param name="manager">应用级管理器</param>
-        protected void RegisterAppManager(IAppManager manager)
-        {
-            if (manager == null)
-                return;
-
-            var managerType = manager.GetType();
-            for (int i = 0; i < _appManagers.Count; i++)
-            {
-                if (_appManagers[i].GetType() == managerType)
-                    return;
-            }
-
-            if (_appManagers.Contains(manager))
-                return;
-
-            _appManagers.Add(manager);
-        }
         #endregion
 
         #region 事件相关
@@ -217,7 +221,7 @@ namespace Hunting.App
         /// </summary>
         private void TriggerAppStarted()
         {
-            GetFrameworkManager<EventManager>().Trigger(AppFlowEvents.AppStarted);
+            GetFrameworkManager<EventManager>().Trigger(GameAppFlowEvents.AppStarted);
         }
 
         /// <summary>
@@ -225,7 +229,7 @@ namespace Hunting.App
         /// </summary>
         private void TriggerAppExited()
         {
-            GetFrameworkManager<EventManager>().Trigger(AppFlowEvents.AppExited);
+            GetFrameworkManager<EventManager>().Trigger(GameAppFlowEvents.AppExited);
         }
         #endregion
     }

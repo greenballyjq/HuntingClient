@@ -1,5 +1,5 @@
-﻿using GameFramework.Game;
-using System;
+﻿using System;
+using Hunting.App;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +8,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 输入管理器
     /// </summary>
-    public class InputManager : BaseGameManager, GameInputActions.IPlayerActions
+    public class InputManager : IAppManager, GameInputActions.IPlayerActions
     {
         /// <summary>
         /// 输入系统
@@ -31,7 +31,7 @@ namespace Hunting.Manager
         /// </summary>
         public bool IsFireHeld { get; private set; }
 
-        public override void Init()
+        public void Init()
         {
             // 初始化输入系统
             _input = new GameInputActions();
@@ -46,16 +46,11 @@ namespace Hunting.Manager
             Debug.Log("[InputManager] 初始化完成");
         }
 
-        public override void Release()
+        public void Dispose()
         {
             _input.Disable();
             _input.Dispose();
             Debug.Log("[InputManager] 已释放");
-        }
-
-        public override void DoUpdate()
-        {
-
         }
 
         #region 公共方法

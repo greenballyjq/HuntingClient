@@ -1,7 +1,7 @@
 ﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Pool;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Game.Props;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 陷阱管理器
     /// </summary>
-    public class TrapManager : BaseGameManager
+    public class TrapManager : IAppManager
     {
         /// <summary>
         /// 事件管理器
@@ -28,13 +28,13 @@ namespace Hunting.Manager
         /// </summary>
         private List<GameObject> _activeTraps = new List<GameObject>();
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             Debug.Log("[TrapManager] 初始化完成");
         }
 
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             ClearAllTraps();
@@ -109,7 +109,7 @@ namespace Hunting.Manager
         private void RegisterEvents()
         {
             Event.AddListener(PropEvents.TrapTriggered, OnTrapTriggered);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Hunting.Manager
         private void UnregisterEvents()
         {
             Event.RemoveListener(PropEvents.TrapTriggered, OnTrapTriggered);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -136,11 +136,6 @@ namespace Hunting.Manager
         private void OnRoundEnded(RoundEndedEventArgs args)
         {
             ClearAllTraps();
-        }
-
-        public override void DoUpdate()
-        {
-
         }
         #endregion
     }

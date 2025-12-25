@@ -1,7 +1,7 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Game.Quests;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 任务管理器
     /// </summary>
-    public class QuestManager : BaseGameManager
+    public class QuestManager : IAppManager, IAppUpdatable
     {
         /// <summary>
         /// 任务起始派发时间（秒）
@@ -78,7 +78,7 @@ namespace Hunting.Manager
         /// </summary>
         private HuntingConfigManager Config => GameServiceLocator.Config;
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             _handlerCache = new Dictionary<EQuestType, IQuestHandler>();
@@ -86,7 +86,7 @@ namespace Hunting.Manager
             Debug.Log("[QuestManager] 初始化完成");
         }
 
-        public void Update()
+        public void DoUpdate(float deltaTime)
         {
             if (_currentQuestContext == null)
             {
@@ -99,10 +99,10 @@ namespace Hunting.Manager
             }
 
             // 更新当前任务剩余时间
-            _currentQuestRemainingTime -= Time.deltaTime;
+            _currentQuestRemainingTime -= deltaTime;
 
             // 调用处理器更新
-            _currentHandler?.OnQuestUpdate(_currentQuestContext, Time.deltaTime);
+            _currentHandler?.OnQuestUpdate(_currentQuestContext, deltaTime);
 
             // 检查任务是否完成
             int currentProgress = _currentHandler.GetCurrentProgress(_currentQuestContext);
@@ -132,12 +132,7 @@ namespace Hunting.Manager
             });
         }
 
-        public override void DoUpdate()
-        {
-
-        }
-
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             EndCurrentQuest(isTimeout: false);
@@ -277,8 +272,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -286,8 +281,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>

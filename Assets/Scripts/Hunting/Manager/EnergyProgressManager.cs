@@ -2,7 +2,7 @@
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
-using GameFramework.Game;
+using Hunting.App;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -10,7 +10,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 丰收能量条管理器
     /// </summary>
-    public class EnergyProgressManager : BaseGameManager
+    public class EnergyProgressManager : IAppManager, IAppUpdatable
     {
         /// <summary>
         /// 当前能量值
@@ -52,7 +52,7 @@ namespace Hunting.Manager
         /// </summary>
         private HuntingConfigManager Config => GameServiceLocator.Config;
 
-        public override void Init()
+        public void Init()
         {
             LoadConfig();
             RegisterEvents();
@@ -60,23 +60,18 @@ namespace Hunting.Manager
             Debug.Log("[EnergyProgressManager] 初始化完成");
         }
 
-        public void Update()
+        public void DoUpdate(float deltaTime)
         {
             if (!_isAutoAccumulating)
                 return;
 
             // 累积本帧自动增加的能量
-            float deltaEnergy = Time.deltaTime * _increasePerSecond;
+            float deltaEnergy = deltaTime * _increasePerSecond;
             if (deltaEnergy > 0f)
                 AddEnergy(deltaEnergy);
         }
 
-        public override void DoUpdate()
-        {
-
-        }
-
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             ResetProgress();
@@ -203,7 +198,6 @@ namespace Hunting.Manager
             });
             if (barIncreased)
             {
-                Debug.LogWarning("[AddEnergy] 触发 TriggerBarCountChanged" + "_currentBars" + _currentBars);
                 TriggerBarCountChanged(new EnergyBarCountChangedEventArgs
                 {
                     Sender = this,
@@ -222,8 +216,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
             Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
@@ -232,8 +226,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
             Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 

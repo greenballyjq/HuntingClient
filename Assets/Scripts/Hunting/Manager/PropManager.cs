@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Game.Props;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 道具管理器
     /// </summary>
-    public class PropManager : BaseGameManager
+    public class PropManager : IAppManager, IAppUpdatable
     {
         /// <summary>
         /// 活跃道具上下文
@@ -57,23 +57,21 @@ namespace Hunting.Manager
         /// <summary>
         /// 玩家数据管理器
         /// </summary>
-        private PlayerDataManager PlayerData => GameServiceLocator.GetGameManager<PlayerDataManager>();
+        private PlayerDataManager PlayerData => GameServiceLocator.GetAppManager<PlayerDataManager>();
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             ResetState();
             Debug.Log("[PropManager] 初始化完成");
         }
 
-        public void Update()
+        public void DoUpdate(float deltaTime)
         {
-            UpdateActiveProps(Time.deltaTime);
+            UpdateActiveProps(deltaTime);
         }
 
-        public override void DoUpdate(){ }
-
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             StopAllProps();
@@ -259,8 +257,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -268,8 +266,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>

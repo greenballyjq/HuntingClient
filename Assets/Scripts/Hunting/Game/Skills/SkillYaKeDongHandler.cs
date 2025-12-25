@@ -36,7 +36,8 @@ namespace Hunting.Game.Skills
         /// <summary>
         /// 动物管理器
         /// </summary>
-        private AnimalManager Animal => GameServiceLocator.GetGameManager<AnimalManager>();
+        //private AnimalManager Animal => GameServiceLocator.GetAppManager<AnimalManager>();
+        private AnimalManager Animal => null;
 
         /// <summary>
         /// 技能开始

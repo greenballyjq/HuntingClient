@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using cfg;
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
-using GameFramework.Game;
+using Hunting.App;
 using UnityEngine;
 
 namespace Hunting.Manager
@@ -11,7 +12,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 肉度条管理器
     /// </summary>
-    public class MeatProgressManager : BaseGameManager
+    public class MeatProgressManager : IAppManager
     {
         /// <summary>
         /// 当前肉度值
@@ -43,7 +44,7 @@ namespace Hunting.Manager
         /// </summary>
         private HuntingConfigManager Config => GameServiceLocator.Config;
 
-        public override void Init()
+        public void Init()
         {
             LoadConfig();
             RegisterEvents();
@@ -51,16 +52,11 @@ namespace Hunting.Manager
             Debug.Log("[MeatProgressManager] 初始化完成");
         }
 
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             ResetProgress();
             Debug.Log("[MeatProgressManager] 已释放");
-        }
-
-        public override void DoUpdate()
-        {
-
         }
 
         #region 公共方法
@@ -166,8 +162,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
             Event.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
 
@@ -176,8 +172,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
             Event.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
         }
         

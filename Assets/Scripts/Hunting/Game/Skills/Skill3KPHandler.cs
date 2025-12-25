@@ -22,7 +22,7 @@ namespace Hunting.Game.Skills
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetAppManager<WeaponManager>();
 
         /// <summary>
         /// 技能开始

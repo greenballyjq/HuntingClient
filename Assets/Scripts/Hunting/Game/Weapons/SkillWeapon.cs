@@ -51,7 +51,7 @@ namespace Hunting.Game.Weapons
         /// <summary>
         /// 子弹管理器
         /// </summary>
-        private BulletManager Bullet => GameServiceLocator.GetGameManager<BulletManager>();
+        private BulletManager Bullet => GameServiceLocator.GetAppManager<BulletManager>();
 
         private void Update()
         {

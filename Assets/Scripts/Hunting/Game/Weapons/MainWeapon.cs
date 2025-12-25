@@ -60,12 +60,12 @@ namespace Hunting.Game.Weapons
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetAppManager<WeaponManager>();
 
         /// <summary>
         /// 子弹管理器
         /// </summary>
-        private BulletManager Bullet => GameServiceLocator.GetGameManager<BulletManager>();
+        private BulletManager Bullet => GameServiceLocator.GetAppManager<BulletManager>();
 
         private void Start()
         {

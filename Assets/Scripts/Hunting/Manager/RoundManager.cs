@@ -2,7 +2,7 @@
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Round;
 using Hunting.UI;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace Hunting.Manager
 {
     /// 单局管理器
     /// </summary>
-    public sealed class RoundManager : BaseGameManager
+    public sealed class RoundManager : IAppManager
     {
         /// <summary>
         /// 待启动的下一局的上下文
@@ -44,21 +44,16 @@ namespace Hunting.Manager
         /// </summary>
         private UIManager UI => GameServiceLocator.UI;
 
-        public override void Init()
+        public void Init()
         {
             Debug.Log("[RoundManager] 初始化");
         }
 
-        public override void Release()
+        public void Dispose()
         {
             Debug.Log("[RoundManager] 释放");
             CloseGameplayUI();
             ResetState();
-        }
-
-        public override void DoUpdate()
-        {
-
         }
 
         #region 公共方法
@@ -108,7 +103,7 @@ namespace Hunting.Manager
             IsPaused = true;
 
             // 通知局内管理器暂停运行（停止AI、暂停计时器等）
-            Event.Trigger(RoundEvents.RoundPaused);
+            Event.Trigger(RoundFlowEvents.RoundPaused);
 
             Debug.Log("[RoundManager] 单局已暂停");
         }
@@ -124,7 +119,7 @@ namespace Hunting.Manager
             IsPaused = false;
 
             // 通知局内管理器恢复运行（恢复AI、恢复计时器等）
-            Event.Trigger(RoundEvents.RoundResumed);
+            Event.Trigger(RoundFlowEvents.RoundResumed);
 
             Debug.Log("[RoundManager] 单局已恢复");
         }
@@ -157,7 +152,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerRoundStarted(RoundStartedEventArgs args)
         {
-            Event.Trigger(RoundEvents.RoundStarted, args);
+            Event.Trigger(RoundFlowEvents.RoundStarted, args);
         }
 
         /// <summary>
@@ -165,7 +160,7 @@ namespace Hunting.Manager
         /// </summary>
         private void TriggerRoundEnded(RoundEndedEventArgs args)
         {
-            Event.Trigger(RoundEvents.RoundEnded, args);
+            Event.Trigger(RoundFlowEvents.RoundEnded, args);
         }
 
         /// <summary>

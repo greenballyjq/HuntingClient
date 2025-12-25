@@ -1,5 +1,5 @@
 ﻿using cfg.HuntingConfig.Skill;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Game.Skills;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 技能管理器
     /// </summary>
-    public class SkillManager : BaseGameManager
+    public class SkillManager : IAppManager, IAppUpdatable
     {
         /// <summary>
         /// 当局技能处理器
@@ -43,34 +43,28 @@ namespace Hunting.Manager
         /// <summary>
         /// 能量条管理器
         /// </summary>
-        private EnergyProgressManager Energy => GameServiceLocator.GetGameManager<EnergyProgressManager>();
+        private EnergyProgressManager Energy => GameServiceLocator.GetAppManager<EnergyProgressManager>();
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             ResetState();
             Debug.Log("[SkillManager] 初始化完成");
         }
 
-        public void Update()
+        public void DoUpdate(float deltaTime)
         {
             if (!_isRunning)
                 return;
 
-            // 逐帧递减持续时间并调用处理器更新
-            _remainingTime -= Time.deltaTime;
-            _currentHandler?.OnSkillUpdate(_currentSkillContext, Time.deltaTime);
+            _remainingTime -= deltaTime;
+            _currentHandler?.OnSkillUpdate(_currentSkillContext, deltaTime);
 
             if (_remainingTime <= 0f)
                 EndSkill();
         }
 
-        public override void DoUpdate()
-        {
-
-        }
-
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             EndSkill();
@@ -98,7 +92,7 @@ namespace Hunting.Manager
         /// </summary>
         private void BeginSkill()
         {
-            _remainingTime =  _currentSkillContext.SkillData.Duration;
+            _remainingTime = _currentSkillContext.SkillData.Duration;
             _isRunning = true;
 
             // 通知处理器执行开始逻辑
@@ -154,8 +148,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -163,8 +157,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>

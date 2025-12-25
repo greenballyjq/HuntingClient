@@ -60,7 +60,7 @@ namespace Hunting.UI
         /// <summary>
         /// 单局管理器
         /// </summary>
-        private RoundManager Round => GameServiceLocator.GetGameManager<RoundManager>();
+        private RoundManager Round => GameServiceLocator.GetAppManager<RoundManager>();
 
         /// <summary>
         /// 当前选中的角色ID

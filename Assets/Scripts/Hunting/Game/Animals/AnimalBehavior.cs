@@ -370,7 +370,6 @@ namespace Hunting.Game.Animal
         /// </summary>
         public void SetDirection(Vector3 direction)
         {
-            Debug.LogWarning("被吸引");
             CurrentDirection = direction;
             RVO.SetMoveDirection(direction);
         }

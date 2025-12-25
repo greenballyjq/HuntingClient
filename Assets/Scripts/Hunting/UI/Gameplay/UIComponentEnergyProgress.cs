@@ -60,12 +60,12 @@ namespace Hunting.UI
         /// <summary>
         /// 技能管理器
         /// </summary>
-        private SkillManager Skill => GameServiceLocator.GetGameManager<SkillManager>();
+        private SkillManager Skill => GameServiceLocator.GetAppManager<SkillManager>();
 
         /// <summary>
         /// 丰收能量条管理器
         /// </summary>
-        private EnergyProgressManager EnergyManager => GameServiceLocator.GetGameManager<EnergyProgressManager>();
+        private EnergyProgressManager EnergyManager => GameServiceLocator.GetAppManager<EnergyProgressManager>();
 
         private void Awake()
         {

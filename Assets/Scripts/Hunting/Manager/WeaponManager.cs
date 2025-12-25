@@ -2,7 +2,7 @@
 using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using GameFramework.Core;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Game.Weapons;
 using UnityEngine;
 
@@ -11,7 +11,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 武器管理器
     /// </summary>
-    public class WeaponManager : BaseGameManager
+    public class WeaponManager : IAppManager
     {
         /// <summary>
         /// 主武器实例
@@ -67,25 +67,20 @@ namespace Hunting.Manager
         /// </summary>
         private ResourceManager Resource => GameServiceLocator.Resource;
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             ResetState();
             Debug.Log("[WeaponManager] 初始化完成");
         }
 
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             DestroyMainWeapon();
             ClearPrefabCache();
             ResetState();
             Debug.Log("[WeaponManager] 已释放");
-        }
-
-        public override void DoUpdate()
-        {
-
         }
 
         #region 公共方法
@@ -294,8 +289,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -303,8 +298,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>

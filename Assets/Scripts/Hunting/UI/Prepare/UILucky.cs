@@ -41,7 +41,7 @@ namespace Hunting.UI
         /// <summary>
         /// 玩家数据管理器
         /// </summary>
-        private PlayerDataManager PlayerData => GameServiceLocator.GetGameManager<PlayerDataManager>();
+        private PlayerDataManager PlayerData => GameServiceLocator.GetAppManager<PlayerDataManager>();
 
         /// <summary>
         /// UI管理器

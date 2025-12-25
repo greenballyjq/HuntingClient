@@ -34,7 +34,7 @@ namespace Hunting.UI
         /// <summary>
         /// 结算管理器
         /// </summary>
-        private SettlementRewardManager SettlementManager => GameServiceLocator.GetGameManager<SettlementRewardManager>();
+        private SettlementRewardManager SettlementManager => GameServiceLocator.GetAppManager<SettlementRewardManager>();
 
         /// <summary>
         /// 事件中心

@@ -1,7 +1,7 @@
 ﻿using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Events;
 using Hunting.Game.Animal;
 using Hunting.Game.Bullets;
@@ -12,7 +12,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 子弹管理器
     /// </summary>
-    public class BulletManager : BaseGameManager
+    public class BulletManager : IAppManager
     {
         /// <summary>
         /// 事件管理器
@@ -32,20 +32,15 @@ namespace Hunting.Manager
         /// <summary>
         /// 武器管理器
         /// </summary>
-        private WeaponManager Weapon => GameServiceLocator.GetGameManager<WeaponManager>();
+        private WeaponManager Weapon => GameServiceLocator.GetAppManager<WeaponManager>();
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             Debug.Log("[BulletManager] 初始化完成");
         }
 
-        public override void DoUpdate()
-        {
-        }
-
-
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             Debug.Log("[BulletManager] 已释放");

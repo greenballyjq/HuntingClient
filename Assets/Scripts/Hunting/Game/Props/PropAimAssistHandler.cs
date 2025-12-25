@@ -49,7 +49,7 @@ namespace Hunting.Game.Props
         /// <summary>
         /// 玩家控制管理器
         /// </summary>
-        private PlayerControlManager PlayerControl => GameServiceLocator.GetGameManager<PlayerControlManager>();
+        private PlayerControlManager PlayerControl => GameServiceLocator.GetAppManager<PlayerControlManager>();
 
         /// <summary>
         /// 道具效果开始

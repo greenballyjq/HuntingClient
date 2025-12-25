@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Game.Luckys;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 幸运仪式增益管理器
     /// </summary>
-    public class LuckyBuffManager : BaseGameManager
+    public class LuckyBuffManager : IAppManager
     {
         /// <summary>
         /// 当局幸运仪式增益处理器
@@ -26,22 +26,18 @@ namespace Hunting.Manager
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             ResetState();
             Debug.Log("[LuckyBuffManager] 初始化完成");
         }
 
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             ResetState();
             Debug.Log("[LuckyBuffManager] 已释放");
-        }
-        public override void DoUpdate()
-        {
-
         }
 
         #region 私有方法
@@ -61,8 +57,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -70,8 +66,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -109,8 +105,6 @@ namespace Hunting.Manager
                 Sender = this,
                 LuckyBuffData = buffData
             });
-
-            Debug.LogWarning($"[LuckyBuffManager] 本局幸运仪式增益已激活，类型: {buffData.LuckyBuffType}");
         }
 
         /// <summary>
@@ -134,4 +128,3 @@ namespace Hunting.Manager
         #endregion
     }
 }
-

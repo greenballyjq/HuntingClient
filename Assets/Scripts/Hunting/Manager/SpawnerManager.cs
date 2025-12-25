@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameFramework.Core;
-using GameFramework.Game;
+using Hunting.App;
 using Hunting.Game.Animal;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 派发器管理器
     /// </summary>
-    public class SpawnerManager : BaseGameManager
+    public class SpawnerManager : IAppManager
     {
         /// <summary>
         /// 派发器列表
@@ -21,15 +21,13 @@ namespace Hunting.Manager
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             Debug.Log("[SpecieSpawnManager] 初始化完成");
         }
 
-        public override void DoUpdate(){}
-
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             _spawners.Clear();
@@ -111,8 +109,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -120,8 +118,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>

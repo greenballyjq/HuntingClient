@@ -1,4 +1,4 @@
-﻿using GameFramework.Game;
+﻿using Hunting.App;
 using Hunting.Game.PlayerControls;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ namespace Hunting.Manager
     /// <summary>
     /// 玩家控制管理器
     /// </summary>
-    public class PlayerControlManager : BaseGameManager
+    public class PlayerControlManager : IAppManager, IAppUpdatable
     {
         /// <summary>
         /// 当前控制处理器
@@ -19,24 +19,19 @@ namespace Hunting.Manager
         /// </summary>
         private EventManager Event => GameServiceLocator.Event;
 
-        public override void Init()
+        public void Init()
         {
             RegisterEvents();
             ResetState();
             Debug.Log("[PlayerControlManager] 初始化完成");
         }
 
-        public void Update()
+        public void DoUpdate(float deltaTime)
         {
-            _currentHandler?.OnControlUpdate(Time.deltaTime);
+            _currentHandler?.OnControlUpdate(deltaTime);
         }
 
-        public override void DoUpdate()
-        {
-
-        }
-
-        public override void Release()
+        public void Dispose()
         {
             UnregisterEvents();
             EndCurrentControl();
@@ -115,8 +110,8 @@ namespace Hunting.Manager
         /// </summary>
         private void RegisterEvents()
         {
-            Event.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.AddListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.AddListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.AddListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>
@@ -124,8 +119,8 @@ namespace Hunting.Manager
         /// </summary>
         private void UnregisterEvents()
         {
-            Event.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
-            Event.RemoveListener(RoundEvents.RoundEnded, OnRoundEnded);
+            Event.RemoveListener(RoundFlowEvents.RoundStarted, OnRoundStarted);
+            Event.RemoveListener(RoundFlowEvents.RoundEnded, OnRoundEnded);
         }
 
         /// <summary>

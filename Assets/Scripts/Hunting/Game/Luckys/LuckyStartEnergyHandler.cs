@@ -12,7 +12,7 @@ namespace Hunting.Game.Luckys
         /// <summary>
         /// 能量条管理器
         /// </summary>
-        private EnergyProgressManager Energy => GameServiceLocator.GetGameManager<EnergyProgressManager>();
+        private EnergyProgressManager Energy => GameServiceLocator.GetAppManager<EnergyProgressManager>();
 
         /// <summary>
         /// 激活幸运仪式增益效果
