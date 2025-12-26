@@ -1,0 +1,59 @@
+﻿using cfg.HuntingConfig.Skill;
+using Hunting.App;
+using Hunting.Manager;
+using UnityEngine;
+
+namespace Hunting.Game.Skills
+{
+    /// <summary>
+    /// 色块人技能处理器
+    /// </summary>
+    public class Skill3KPHandler : ISkillHandler
+    {
+        /// <summary>
+        /// 技能修正来源ID
+        /// </summary>
+        private const string ModifierSourceId = "Skill_3KP";
+
+        /// <summary>
+        /// 配置管理器
+        /// </summary>
+        private HuntingConfigManager _configManager = GameServiceLocator.ConfigManager;
+
+        /// <summary>
+        /// 武器管理器
+        /// </summary>
+        private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
+
+        /// <summary>
+        /// 技能开始
+        /// </summary>
+        public void OnSkillStart(SkillContext context)
+        {
+            var parameter = _configManager.GetSkill3KP(context.SkillData.ParamTableID);
+
+            // 注册射速和伤害倍率修正
+            _weaponManager.RegisterFireRateModifier(ModifierSourceId, parameter.FireRateMultiplier);
+            _weaponManager.RegisterDamageModifier(ModifierSourceId, parameter.DamageMultiplier);
+        }
+
+        /// <summary>
+        /// 技能更新
+        /// </summary>
+        public void OnSkillUpdate(SkillContext context, float deltaTime)
+        {
+
+        }
+
+        /// <summary>
+        /// 技能结束
+        /// </summary>
+        public void OnSkillEnd(SkillContext context)
+        {
+            // 注销射速和伤害倍率修正
+            _weaponManager.UnregisterFireRateModifier(ModifierSourceId);
+            _weaponManager.UnregisterDamageModifier(ModifierSourceId);
+        }
+    }
+}
+
