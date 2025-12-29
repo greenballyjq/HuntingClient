@@ -66,9 +66,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 647515ac9ff1e7c49b69a494020b6fd6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5867419486160616610}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 647515ac9ff1e7c49b69a494020b6fd6, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -2149356354997813740}
   m_SourcePrefab: {fileID: 100100000, guid: 647515ac9ff1e7c49b69a494020b6fd6, type: 3}
 --- !u!1 &4888245026814176215 stripped
 GameObject:
@@ -107,25 +104,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670acb8936a4aa148bfd0c337c9fc69f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-2149356354997813740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4888245026814176215}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f41fb30b65f4d3e4ca8c0d5a77acab55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _showGUI: 1
-  _autoRefresh: 1
-  _refreshInterval: 0.5
-  _showSafeArea: 1
-  _showCutouts: 1
-  _safeAreaColor: {r: 0, g: 1, b: 0, a: 0.3}
-  _cutoutColor: {r: 1, g: 0, b: 0, a: 0.5}
-  _selectedResolutionIndex: -1
-  _showResolutionList: 1
-  _testFullScreenMode: 1
