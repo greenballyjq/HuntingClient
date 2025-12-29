@@ -6,6 +6,11 @@ using GameFramework.Core;
 public static class SettlementEvents
 {
     /// <summary>
+    /// 结算开始事件
+    /// </summary>
+    public static readonly EventKey SettlementStarted = new EventKey();
+
+    /// <summary>
     /// 结算数据已计算事件
     /// </summary>
     public static readonly EventKey<SettlementCalculatedEventArgs> SettlementCalculated = new EventKey<SettlementCalculatedEventArgs>();

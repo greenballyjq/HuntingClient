@@ -1,12 +1,8 @@
-﻿using cfg.HuntingConfig;
+﻿using System.Collections.Generic;
+using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using Hunting.Events;
-using Hunting.Game.Bullets;
-using Hunting.Round;
 using UnityEngine;
-
-namespace Hunting.Manager
-{
     /// <summary>
     /// 子弹管理器
     /// </summary>
@@ -21,6 +17,11 @@ namespace Hunting.Manager
         /// 对象池管理器
         /// </summary>
         private GameObjectPoolManager _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+
+        /// <summary>
+        /// 追踪所有活跃的子弹
+        /// </summary>
+        private readonly HashSet<BulletBehavior> _activeBullets = new HashSet<BulletBehavior>();
 
         /// <summary>
         /// 配置管理器
@@ -40,6 +41,13 @@ namespace Hunting.Manager
 
         public void Dispose()
         {
+            // 回收所有活跃的子弹
+            foreach (var bullet in _activeBullets)
+                if (bullet != null && bullet.gameObject != null)
+                    _gameObjectPoolManager.Despawn(bullet.gameObject);
+                    
+            _activeBullets.Clear();
+            
             UnregisterEvents();
             Debug.Log("[BulletManager] 已释放");
         }
@@ -79,6 +87,9 @@ namespace Hunting.Manager
 
             bullet.Init(bulletData, finalDamage);
             
+            // 添加到活跃子弹集合
+            _activeBullets.Add(bullet);
+            
             // 对外通知子弹已生成
             TriggerBulletSpawned(new BulletSpawnedEventArgs
             {
@@ -114,6 +125,8 @@ namespace Hunting.Manager
         /// </summary>
         private void OnBulletDestroyed(BulletDestroyedEventArgs args)
         {
+            // 从活跃集合中移除
+            _activeBullets.Remove(args.Bullet);
             _gameObjectPoolManager.Despawn(args.Bullet.gameObject);
         }
 
@@ -128,5 +141,4 @@ namespace Hunting.Manager
         
         #endregion
     }
-}
 

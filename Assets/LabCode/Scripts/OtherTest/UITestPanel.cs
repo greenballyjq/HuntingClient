@@ -1,7 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GameFramework.Core.UI;
-using Hunting.App;
 using UnityEngine;
 using UnityEngine.UI;
 

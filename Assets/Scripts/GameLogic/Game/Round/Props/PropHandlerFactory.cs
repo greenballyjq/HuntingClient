@@ -1,31 +1,27 @@
 ﻿using cfg.HuntingConfig.Enum;
 
-namespace Hunting.Game.Props
+/// <summary>
+/// 道具处理器工厂
+/// </summary>
+public static class PropHandlerFactory
 {
     /// <summary>
-    /// 道具处理器工厂
+    /// 创建道具处理器
     /// </summary>
-    public static class PropHandlerFactory
+    /// <param name="propType">道具类型</param>
+    /// <returns>道具处理器实例</returns>
+    public static IPropHandler CreatePropHandler(EPropType propType)
     {
-        /// <summary>
-        /// 创建道具处理器
-        /// </summary>
-        /// <param name="propType">道具类型</param>
-        /// <returns>道具处理器实例</returns>
-        public static IPropHandler CreatePropHandler(EPropType propType)
+        switch (propType)
         {
-            switch (propType)
-            {
-                case EPropType.Bombardment:
-                    return new PropBombardmentHandler();
-                case EPropType.AimAssist:
-                    return new PropAimAssistHandler();
-                case EPropType.Trap:
-                    return new PropTrapHandler();
-            }
-
-            return null;
+            case EPropType.Bombardment:
+                return new PropBombardmentHandler();
+            case EPropType.AimAssist:
+                return new PropAimAssistHandler();
+            case EPropType.Trap:
+                return new PropTrapHandler();
         }
+
+        return null;
     }
 }
-

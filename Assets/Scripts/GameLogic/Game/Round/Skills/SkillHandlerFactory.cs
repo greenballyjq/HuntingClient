@@ -1,36 +1,31 @@
 ﻿using cfg.HuntingConfig.Enum;
 
-namespace Hunting.Game.Skills
+/// <summary>
+/// 技能处理器工厂
+/// </summary>
+public static class SkillHandlerFactory
 {
     /// <summary>
-    /// 技能处理器工厂
+    /// 创建技能处理器
     /// </summary>
-    public static class SkillHandlerFactory
+    /// <param name="skillType">技能类型</param>
+    /// <returns>技能处理器实例</returns>
+    public static ISkillHandler CreateSkillHandler(ESkillType skillType)
     {
-        /// <summary>
-        /// 创建技能处理器
-        /// </summary>
-        /// <param name="skillType">技能类型</param>
-        /// <returns>技能处理器实例</returns>
-        public static ISkillHandler CreateSkillHandler(ESkillType skillType)
+        switch (skillType)
         {
-            switch (skillType)
-            {
-                case ESkillType._3KPSkill:
-                    return new Skill3KPHandler();
-                case ESkillType.ZiWeiSkill:
-                    return new SkillZiWeiHandler();
-                case ESkillType.DaMeiLiSkill:
-                    return null;
-                case ESkillType.JinZhuangYuanSkill:
-                    return new SkillJinZhuangYuanHandler();
-                case ESkillType.YaKeDongSkill:
-                    return new SkillYaKeDongHandler();
-                default:
-                    return null;
-            }
+            case ESkillType._3KPSkill:
+                return new Skill3KPHandler();
+            case ESkillType.ZiWeiSkill:
+                return new SkillZiWeiHandler();
+            case ESkillType.DaMeiLiSkill:
+                return null;
+            case ESkillType.JinZhuangYuanSkill:
+                return new SkillJinZhuangYuanHandler();
+            case ESkillType.YaKeDongSkill:
+                return new SkillYaKeDongHandler();
+            default:
+                return null;
         }
     }
 }
-
-

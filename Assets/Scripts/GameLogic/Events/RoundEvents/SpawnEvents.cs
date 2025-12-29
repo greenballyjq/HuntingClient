@@ -1,6 +1,5 @@
 ﻿using cfg.HuntingConfig;
 using GameFramework.Core;
-using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>

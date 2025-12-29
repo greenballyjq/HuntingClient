@@ -1,11 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using cfg.HuntingConfig;
-using Hunting;
-using Hunting.Game;
-using Hunting.Game.Animal;
-using Hunting.UI;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 服务定位器测试

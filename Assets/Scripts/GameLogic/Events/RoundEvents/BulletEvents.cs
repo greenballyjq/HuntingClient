@@ -1,8 +1,6 @@
 ﻿
 using cfg.HuntingConfig;
 using GameFramework.Core;
-using Hunting.Game.Animal;
-using Hunting.Game.Bullets;
 using System.Collections.Generic;
 using UnityEngine;
 

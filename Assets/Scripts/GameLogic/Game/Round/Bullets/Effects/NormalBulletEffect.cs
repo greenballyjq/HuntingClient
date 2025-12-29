@@ -1,24 +1,19 @@
-﻿using Hunting.Game.Animal;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Hunting.Game.Bullets.Effects
+/// <summary>
+/// 普通子弹效果
+/// </summary>
+public class NormalBulletEffect : IBulletEffect
 {
     /// <summary>
-    /// 普通子弹效果
+    /// 命中处理
     /// </summary>
-    public class NormalBulletEffect : IBulletEffect
+    public List<AnimalBehavior> OnHit(BulletRuntimeContext context, BulletHitInfo hitInfo)
     {
-        /// <summary>
-        /// 命中处理
-        /// </summary>
-        public List<AnimalBehavior> OnHit(BulletRuntimeContext context, BulletHitInfo hitInfo)
-        {
-            // 对命中目标造成伤害
-            hitInfo.PrimaryTarget.TakeDamage(context.FinalDamage, hitInfo.HitPoint);
+        // 对命中目标造成伤害
+        hitInfo.PrimaryTarget.TakeDamage(context.FinalDamage, hitInfo.HitPoint);
 
-            // 返回命中的动物列表
-            return new List<AnimalBehavior> { hitInfo.PrimaryTarget };
-        }
+        // 返回命中的动物列表
+        return new List<AnimalBehavior> { hitInfo.PrimaryTarget };
     }
 }
-

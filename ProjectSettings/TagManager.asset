@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - FxTemporaire
   - Obstcales
+  - Funky
   layers:
   - Default
   - TransparentFX

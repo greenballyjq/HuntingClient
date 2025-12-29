@@ -2,8 +2,6 @@
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using GameFramework.Core;
-using Hunting.Game.Animal;
-using Hunting.Game.Props;
 using UnityEngine;
 
 /// <summary>
@@ -30,6 +28,11 @@ public static class PropEvents
     /// 道具使用失败事件
     /// </summary>
     public static readonly EventKey<PropUseFailedEventArgs> PropUseFailed = new EventKey<PropUseFailedEventArgs>();
+
+    /// <summary>
+    /// 道具使用成功事件
+    /// </summary>
+    public static readonly EventKey<PropUseSucceededEventArgs> PropUseSucceeded = new EventKey<PropUseSucceededEventArgs>();
 
     /// <summary>
     /// 陷阱触发事件
@@ -79,6 +82,17 @@ public sealed class PropEndedEventArgs : EventArgs
 /// 道具使用失败事件参数
 /// </summary>
 public sealed class PropUseFailedEventArgs : EventArgs
+{
+    /// <summary>
+    /// 道具配置
+    /// </summary>
+    public Prop PropData { get; set; }
+}
+
+/// <summary>
+/// 道具使用成功事件参数
+/// </summary>
+public sealed class PropUseSucceededEventArgs : EventArgs
 {
     /// <summary>
     /// 道具配置

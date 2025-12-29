@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
-using Hunting.Game.Animal;
 
 /// <summary>
 /// 测试版派发器

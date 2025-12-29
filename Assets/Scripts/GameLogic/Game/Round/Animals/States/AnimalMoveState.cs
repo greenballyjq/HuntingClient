@@ -1,48 +1,45 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-namespace Hunting.Game.Animal.State
+/// <summary>
+/// 动物移动状态
+/// </summary>
+public class AnimalMoveState : AnimalState
 {
-    /// <summary>
-    /// 动物移动状态
-    /// </summary>
-    public class AnimalMoveState : AnimalState
+    public AnimalMoveState(AnimalBehavior animal, StateMachine stateMachine, string animationName) 
+        : base(animal, stateMachine, animationName) 
     {
-        public AnimalMoveState(AnimalBehavior animal, StateMachine stateMachine, string animationName) 
-            : base(animal, stateMachine, animationName) 
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        
+        // 确保正常速度
+        animal.ApplySpeedMultiplier(1f);
+    }
+
+    public override void Update()
+    {
+        base.Update();
+
+        // 受击判断
+        if (animal.IsHit)
         {
+            stateMachine.ChangeState(animal.GetHitState());
+            animal.ResetHitFlag();
+            return;
         }
 
-        public override void Enter()
+        // 驻场时间到，进入逃跑
+        if (animal.TimeInScene >= animal.StayTime)
         {
-            base.Enter();
-            
-            // 确保正常速度
-            animal.ApplySpeedMultiplier(1f);
+            stateMachine.ChangeState(animal.GetFleeState());
+            return;
         }
+    }
 
-        public override void Update()
-        {
-            base.Update();
-
-            // 受击判断
-            if (animal.IsHit)
-            {
-                stateMachine.ChangeState(animal.GetHitState());
-                animal.ResetHitFlag();
-                return;
-            }
-
-            // 驻场时间到，进入逃跑
-            if (animal.TimeInScene >= animal.StayTime)
-            {
-                stateMachine.ChangeState(animal.GetFleeState());
-                return;
-            }
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-        }
+    public override void Exit()
+    {
+        base.Exit();
     }
 }

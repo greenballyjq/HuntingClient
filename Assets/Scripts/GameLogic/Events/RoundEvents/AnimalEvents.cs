@@ -2,7 +2,6 @@
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
-using Hunting.Game.Animal;
 using System.Collections.Generic;
 using UnityEngine;
 

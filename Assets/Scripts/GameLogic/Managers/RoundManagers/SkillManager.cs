@@ -1,158 +1,153 @@
 ﻿using cfg.HuntingConfig.Skill;
-using Hunting.App;
-using Hunting.Game.Skills;
-using Hunting.Round;
 using UnityEngine;
 
-namespace Hunting.Manager
+
+/// <summary>
+/// 技能管理器
+/// </summary>
+public class SkillManager : IRoundManager, IRoundUpdatable
 {
     /// <summary>
-    /// 技能管理器
+    /// 当局技能处理器
     /// </summary>
-    public class SkillManager : IRoundManager, IRoundUpdatable
+    private ISkillHandler _currentHandler;
+
+    /// <summary>
+    /// 当局技能上下文
+    /// </summary>
+    private SkillContext _currentSkillContext;
+
+    /// <summary>
+    /// 技能剩余时间
+    /// </summary>
+    private float _remainingTime;
+
+    /// <summary>
+    /// 技能是否正在运行
+    /// </summary>
+    private bool _isRunning;
+
+    /// <summary>
+    /// 事件管理器
+    /// </summary>
+    private EventManager _eventManager = GameServiceLocator.EventManager;
+
+    /// <summary>
+    /// 能量条管理器
+    /// </summary>
+    private EnergyProgressManager _energyProgressManager = GameServiceLocator.GetRoundManager<EnergyProgressManager>();
+
+    public void Init(RoundContext context)
     {
-        /// <summary>
-        /// 当局技能处理器
-        /// </summary>
-        private ISkillHandler _currentHandler;
+        // 读取本局技能配置
+        Skill skillData = context.SkillData;
 
-        /// <summary>
-        /// 当局技能上下文
-        /// </summary>
-        private SkillContext _currentSkillContext;
+        // 创建处理器
+        _currentHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
 
-        /// <summary>
-        /// 技能剩余时间
-        /// </summary>
-        private float _remainingTime;
-
-        /// <summary>
-        /// 技能是否正在运行
-        /// </summary>
-        private bool _isRunning;
-
-        /// <summary>
-        /// 事件管理器
-        /// </summary>
-        private EventManager _eventManager = GameServiceLocator.EventManager;
-
-        /// <summary>
-        /// 能量条管理器
-        /// </summary>
-        private EnergyProgressManager _energyProgressManager = GameServiceLocator.GetRoundManager<EnergyProgressManager>();
-
-        public void Init(RoundContext context)
+        // 构造上下文
+        _currentSkillContext = new SkillContext
         {
-            // 读取本局技能配置
-            Skill skillData = context.SkillData;
-
-            // 创建处理器
-            _currentHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
-
-            // 构造上下文
-            _currentSkillContext = new SkillContext
-            {
-                SkillData = skillData,
-                RoundContext = context
-            };
+            SkillData = skillData,
+            RoundContext = context
+        };
             
-            Debug.Log("[SkillManager] 初始化完成");
-        }
-
-        public void DoUpdate(float deltaTime)
-        {
-            if (!_isRunning)
-                return;
-
-            _remainingTime -= deltaTime;
-            _currentHandler?.OnSkillUpdate(_currentSkillContext, deltaTime);
-
-            if (_remainingTime <= 0f)
-                EndSkill();
-        }
-
-        public void Dispose()
-        {
-            EndSkill();
-            Debug.Log("[SkillManager] 已释放");
-        }
-
-        #region 公共方法
-        /// <summary>
-        /// 尝试启动技能
-        /// </summary>
-        public bool TryStartSkill()
-        {
-            if (_currentHandler == null || _isRunning || !_energyProgressManager.TryConsumeOneBar())
-                return false;
-
-            BeginSkill();
-            return true;
-        }
-        #endregion
-
-        #region 私有方法
-        /// <summary>
-        /// 启动技能
-        /// </summary>
-        private void BeginSkill()
-        {
-            _remainingTime = _currentSkillContext.SkillData.Duration;
-            _isRunning = true;
-
-            // 通知处理器执行开始逻辑
-            _currentHandler?.OnSkillStart(_currentSkillContext);
-
-            TriggerSkillStarted(new SkillStartedEventArgs
-            {
-                Sender = this,
-                SkillData = _currentSkillContext.SkillData
-            });
-
-            Debug.Log($"[SkillManager] 技能开始，持续 {_remainingTime:F2} 秒");
-        }
-
-        /// <summary>
-        /// 结束技能
-        /// </summary>
-        private void EndSkill()
-        {
-            if (!_isRunning)
-                return;
-
-            // 通知处理器执行结束逻辑
-            _currentHandler?.OnSkillEnd(_currentSkillContext);
-
-            _isRunning = false;
-            _remainingTime = 0f;
-
-            TriggerSkillEnded(new SkillEndedEventArgs
-            {
-                Sender = this,
-                SkillData = _currentSkillContext.SkillData
-            });
-
-            Debug.Log("[SkillManager] 技能结束");
-        }
-        #endregion
-
-        #region 事件相关
-
-        /// <summary>
-        /// 触发技能开始事件
-        /// </summary>
-        private void TriggerSkillStarted(SkillStartedEventArgs args)
-        {
-            _eventManager.Trigger(SkillEvents.SkillStarted, args);
-        }
-
-        /// <summary>
-        /// 触发技能结束事件
-        /// </summary>
-        private void TriggerSkillEnded(SkillEndedEventArgs args)
-        {
-            _eventManager.Trigger(SkillEvents.SkillEnded, args);
-        }
-        #endregion
+        Debug.Log("[SkillManager] 初始化完成");
     }
+
+    public void DoUpdate(float deltaTime)
+    {
+        if (!_isRunning)
+            return;
+
+        _remainingTime -= deltaTime;
+        _currentHandler?.OnSkillUpdate(_currentSkillContext, deltaTime);
+
+        if (_remainingTime <= 0f)
+            EndSkill();
+    }
+
+    public void Dispose()
+    {
+        EndSkill();
+        Debug.Log("[SkillManager] 已释放");
+    }
+
+    #region 公共方法
+    /// <summary>
+    /// 尝试启动技能
+    /// </summary>
+    public bool TryStartSkill()
+    {
+        if (_currentHandler == null || _isRunning || !_energyProgressManager.TryConsumeOneBar())
+            return false;
+
+        BeginSkill();
+        return true;
+    }
+    #endregion
+
+    #region 私有方法
+    /// <summary>
+    /// 启动技能
+    /// </summary>
+    private void BeginSkill()
+    {
+        _remainingTime = _currentSkillContext.SkillData.Duration;
+        _isRunning = true;
+
+        // 通知处理器执行开始逻辑
+        _currentHandler?.OnSkillStart(_currentSkillContext);
+
+        TriggerSkillStarted(new SkillStartedEventArgs
+        {
+            Sender = this,
+            SkillData = _currentSkillContext.SkillData
+        });
+
+        Debug.Log($"[SkillManager] 技能开始，持续 {_remainingTime:F2} 秒");
+    }
+
+    /// <summary>
+    /// 结束技能
+    /// </summary>
+    private void EndSkill()
+    {
+        if (!_isRunning)
+            return;
+
+        // 通知处理器执行结束逻辑
+        _currentHandler?.OnSkillEnd(_currentSkillContext);
+
+        _isRunning = false;
+        _remainingTime = 0f;
+
+        TriggerSkillEnded(new SkillEndedEventArgs
+        {
+            Sender = this,
+            SkillData = _currentSkillContext.SkillData
+        });
+
+        Debug.Log("[SkillManager] 技能结束");
+    }
+    #endregion
+
+    #region 事件相关
+
+    /// <summary>
+    /// 触发技能开始事件
+    /// </summary>
+    private void TriggerSkillStarted(SkillStartedEventArgs args)
+    {
+        _eventManager.Trigger(SkillEvents.SkillStarted, args);
+    }
+
+    /// <summary>
+    /// 触发技能结束事件
+    /// </summary>
+    private void TriggerSkillEnded(SkillEndedEventArgs args)
+    {
+        _eventManager.Trigger(SkillEvents.SkillEnded, args);
+    }
+    #endregion
 }
