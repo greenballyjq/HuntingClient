@@ -226,22 +226,18 @@ public class TestUIManager : MonoBehaviour
     /// </summary>
     public void CloseUI(string uiName)
     {
-        if (!_openedUIs.TryGetValue(uiName, out var ui))
-        {
-            Debug.LogWarning($"[TestUIManager] UI界面 {uiName} 未打开");
-            return;
-        }
-
-        // 调用界面的关闭方法
+        _openedUIs.TryGetValue(uiName, out var ui);
         ui.OnClose();
+    }
 
-        // 销毁界面对象
+    /// <summary>
+    /// 强制关闭UI界面（不调用OnClose，直接销毁）
+    /// </summary>
+    public void ForceCloseUI(string uiName)
+    {
+        _openedUIs.TryGetValue(uiName, out var ui);
         Destroy(ui.gameObject);
-
-        // 从已打开界面中移除
         _openedUIs.Remove(uiName);
-
-        Debug.Log($"[TestUIManager] 关闭UI界面: {uiName}");
     }
 
     /// <summary>

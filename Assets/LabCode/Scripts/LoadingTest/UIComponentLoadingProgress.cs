@@ -17,19 +17,77 @@ public class UIComponentLoadingProgress : MonoBehaviour, ITestUIComponent
     [SerializeField] private RectTransform _rectTransformCharacter;
 
     /// <summary>
+    /// 小人图片组件（用于显示序列帧）
+    /// </summary>
+    [SerializeField] private Image _imageCharacter;
+
+    /// <summary>
     /// 进度条的RectTransform（用于计算宽度）
     /// </summary>
     [SerializeField] private RectTransform _rectTransformProgressBar;
+
+    /// <summary>
+    /// Loading文字组件
+    /// </summary>
+    [SerializeField] private Text _textLoading;
+
+    /// <summary>
+    /// 角色序列帧精灵数组
+    /// </summary>
+    [SerializeField] private Sprite[] _characterSprites;
+
+    /// <summary>
+    /// 动画帧率（每秒播放帧数）
+    /// </summary>
+    [SerializeField] private float _animationFrameRate = 10f;
+
+    /// <summary>
+    /// Loading文字更新间隔（秒）
+    /// </summary>
+    [SerializeField] private float _loadingTextInterval = 0.5f;
 
     /// <summary>
     /// 当前进度（0-1）
     /// </summary>
     private float _currentProgress = 0f;
 
+    /// <summary>
+    /// 目标进度（0-1）
+    /// </summary>
+    private float _targetProgress = 0f;
+
+    /// <summary>
+    /// 当前动画帧索引
+    /// </summary>
+    private int _currentFrameIndex = 0;
+
+    /// <summary>
+    /// 动画累计时间
+    /// </summary>
+    private float _animationTimer = 0f;
+
+    /// <summary>
+    /// Loading文字计时器
+    /// </summary>
+    private float _loadingTextTimer = 0f;
+
+    /// <summary>
+    /// Loading文字点数量（0-3）
+    /// </summary>
+    private int _loadingDotCount = 0;
+
     public void Init()
     {
         _currentProgress = 0f;
-        SetProgress(0f);
+        _targetProgress = 0f;
+        _imageProgressFill.fillAmount = 0f;
+        _currentFrameIndex = 0;
+        _animationTimer = 0f;
+        _loadingTextTimer = 0f;
+        _loadingDotCount = 0;
+        UpdateCharacterPosition();
+        UpdateCharacterSprite();
+        UpdateLoadingText();
     }
 
     public void CleanUp()
@@ -37,19 +95,89 @@ public class UIComponentLoadingProgress : MonoBehaviour, ITestUIComponent
         // 清理逻辑（如有需要）
     }
 
+    private void Update()
+    {
+        if (Mathf.Abs(_currentProgress - _targetProgress) > 0.001f)
+        {
+            _currentProgress = Mathf.Lerp(_currentProgress, _targetProgress, Time.deltaTime * 5f);
+            _imageProgressFill.fillAmount = _currentProgress;
+            UpdateCharacterPosition();
+        }
+
+        UpdateCharacterAnimation();
+        UpdateLoadingText();
+    }
+
     #region 私有方法
+    /// <summary>
+    /// 更新Loading文字
+    /// </summary>
+    private void UpdateLoadingText()
+    {
+        if (_textLoading == null)
+            return;
+
+        _loadingTextTimer += Time.deltaTime;
+
+        if (_loadingTextTimer >= _loadingTextInterval)
+        {
+            _loadingTextTimer = 0f;
+            _loadingDotCount = (_loadingDotCount + 1) % 4;
+            
+            string dots = "";
+            for (int i = 0; i < _loadingDotCount; i++)
+            {
+                dots += ".";
+            }
+            
+            _textLoading.text = "Loading" + dots;
+        }
+    }
+    /// <summary>
+    /// 更新角色序列帧动画
+    /// </summary>
+    private void UpdateCharacterAnimation()
+    {
+        if (_characterSprites == null || _characterSprites.Length == 0)
+            return;
+
+        _animationTimer += Time.deltaTime;
+        float frameInterval = 1f / _animationFrameRate;
+
+        if (_animationTimer >= frameInterval)
+        {
+            _animationTimer = 0f;
+            _currentFrameIndex = (_currentFrameIndex + 1) % _characterSprites.Length;
+            UpdateCharacterSprite();
+        }
+    }
+
+    /// <summary>
+    /// 更新角色精灵
+    /// </summary>
+    private void UpdateCharacterSprite()
+    {
+        if (_imageCharacter != null && _characterSprites != null && _characterSprites.Length > 0)
+        {
+            _imageCharacter.sprite = _characterSprites[_currentFrameIndex];
+        }
+    }
+
     /// <summary>
     /// 设置进度
     /// </summary>
     /// <param name="progress">进度值（0-1）</param>
     public void SetProgress(float progress)
     {
-        _currentProgress = Mathf.Clamp01(progress);
+        _targetProgress = Mathf.Clamp01(progress);
+    }
 
-        _imageProgressFill.fillAmount = _currentProgress;
-
-        // 更新小人位置
-        UpdateCharacterPosition();
+    /// <summary>
+    /// 获取当前进度
+    /// </summary>
+    public float GetCurrentProgress()
+    {
+        return _currentProgress;
     }
 
     /// <summary>

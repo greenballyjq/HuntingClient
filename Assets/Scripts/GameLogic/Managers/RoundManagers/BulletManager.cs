@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
+using GameFramework.Manager;
 using Hunting.Events;
 using UnityEngine;
     /// <summary>

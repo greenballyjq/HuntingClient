@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Pool;
+using GameFramework.Manager;
 using System.Collections.Generic;
 using UnityEngine;
 

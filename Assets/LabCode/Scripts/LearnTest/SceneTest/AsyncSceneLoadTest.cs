@@ -40,26 +40,10 @@ public class AsyncSceneLoadTest : MonoBehaviour
         
         _uiTestLoading = TestUIManager.Instance.OpenUI<UILoadingTest2>(loadingUIName, TestUIManager.UILayer.Loading);
         asyncOperation = SceneManager.LoadSceneAsync(targetSceneName);
+        asyncOperation.allowSceneActivation = false;
         
-        // 启动进度监控协程
-        _monitorCoroutine = StartCoroutine(MonitorProgress());
-        
-        asyncOperation.completed += (ao) =>
-        {
-            // 设置最终进度
-            _uiTestLoading.SetProgress(1f);
-            
-            // 停止协程
-            if (_monitorCoroutine != null)
-            {
-                StopCoroutine(_monitorCoroutine);
-                _monitorCoroutine = null;
-            }
-            
-            RecordLoadEndInfo();
-            
-            TestUIManager.Instance.CloseUI(loadingUIName);    
-        };
+        // 启动进度协程
+        _monitorCoroutine = StartCoroutine(ProgressCoroutine());
     }
     #endregion
 
@@ -109,24 +93,72 @@ public class AsyncSceneLoadTest : MonoBehaviour
     }
 
     /// <summary>
-    /// 监控加载进度
+    /// 进度协程
     /// </summary>
-    private IEnumerator MonitorProgress()
+    private IEnumerator ProgressCoroutine()
     {
-        float lastProgress = 0f;
-        while (!asyncOperation.isDone)
+        // 第一阶段：Unity场景加载 0-0.2
+        _uiTestLoading.SetStatusText("正在加载场景资源...");
+        while (asyncOperation.progress < 0.9f)
         {
-            float currentProgress = asyncOperation.progress;
-            
-            _uiTestLoading.SetProgress(currentProgress);
-            
-            if (currentProgress != lastProgress)
-            {
-                Debug.Log($"[AsyncSceneLoadTest] 进度: {currentProgress:P2}, 帧: {Time.frameCount}, 时间: {Time.time:F3}");
-                lastProgress = currentProgress;
-            }
+            float realProgress = asyncOperation.progress / 0.9f * 0.2f;
+            _uiTestLoading.SetProgress(realProgress);
             yield return null;
         }
+        
+        _uiTestLoading.SetProgress(0.2f);
+        
+        // 第二阶段：执行后续步骤
+        _uiTestLoading.SetStatusText("正在初始化场景...");
+        yield return new WaitForSeconds(Random.Range(1f, 2f));
+        float startProgress = 0.2f;
+        float targetProgress = 0.4f;
+        float duration = 0.3f;
+        float elapsed = 0f;
+        
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Lerp(startProgress, targetProgress, elapsed / duration);
+            _uiTestLoading.SetProgress(progress);
+            yield return null;
+        }
+        
+        _uiTestLoading.SetProgress(0.4f);
+        _uiTestLoading.SetStatusText("正在预加载动态资源...");
+        yield return new WaitForSeconds(Random.Range(1f, 2f));
+        
+        startProgress = 0.4f;
+        targetProgress = 0.6f;
+        elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Lerp(startProgress, targetProgress, elapsed / duration);
+            _uiTestLoading.SetProgress(progress);
+            yield return null;
+        }
+        
+        _uiTestLoading.SetProgress(0.6f);
+        asyncOperation.allowSceneActivation = true;
+        _uiTestLoading.SetStatusText("正在初始化本局管理器...");
+        yield return new WaitForSeconds(Random.Range(1f, 2f));
+        
+        startProgress = 0.6f;
+        targetProgress = 1.0f;
+        elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Lerp(startProgress, targetProgress, elapsed / duration);
+            _uiTestLoading.SetProgress(progress);
+            yield return null;
+        }
+        
+        _uiTestLoading.SetProgress(1.0f);
+        
+        RecordLoadEndInfo();
+        TestUIManager.Instance.CloseUI(loadingUIName);
     }
 
     /// <summary>

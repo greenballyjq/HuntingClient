@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using UnityEngine;
+using GameFramework.Manager;
 
 /// <summary>
 /// 动物管理器

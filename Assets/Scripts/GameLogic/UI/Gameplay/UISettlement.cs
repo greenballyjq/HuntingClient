@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using GameFramework.Core;
 using GameFramework.Core.UI;
+using GameFramework.Manager;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
