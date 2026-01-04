@@ -22,19 +22,19 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
     [SerializeField] private Image _imageSkill;
 
     /// <summary>
-    /// 角色名称文本
-    /// </summary>
-    [SerializeField] private Text _textRoleName;
-
-    /// <summary>
     /// 角色简介文本
     /// </summary>
     [SerializeField] private Text _textRoleProfile;
 
     /// <summary>
-    /// 技能文本
+    /// 技能名称文本
     /// </summary>
-    [SerializeField] private Text _textSkill;
+    [SerializeField] private Text _textSkillName;
+
+    /// <summary>
+    /// 技能描述文本
+    /// </summary>
+    [SerializeField] private Text _textSkillDescription;
 
     /// <summary>
     /// 当前角色ID
@@ -80,15 +80,13 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
         Role role = _configManager.GetRole(roleId);
 
         var profile = role.RoleProfile;
-        _textRoleName.text = profile.Name;
 
         _textRoleProfile.text =
+            $"姓名：{profile.Name}\n" +
             $"出生地：{profile.Birthplace}\n" +
             $"性别：{profile.Gender}\n" +
-            $"身高：{profile.Height}\n" +
             $"特征：{profile.Traits}\n" +
-            $"个性：{profile.Personality}\n" +
-            $"背景：{profile.BackgroundStory}";
+            $"个性：{profile.Personality}\n";
 
         LoadRoleSpriteAsync(role.RoleImageResourcePath).Forget();
 
@@ -103,7 +101,8 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
     {
         Skill skill = _configManager.GetSkill(skillId);
 
-        _textSkill.text = $"{skill.Name}\n{skill.Description}";
+        _textSkillName.text = skill.Name;
+        _textSkillDescription.text = skill.Description;
 
         LoadSkillSpriteAsync(skill.IconResourcePath).Forget();
     }

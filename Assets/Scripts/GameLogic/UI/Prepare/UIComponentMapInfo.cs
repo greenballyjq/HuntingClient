@@ -16,11 +16,6 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
     [SerializeField] private Image _imageMap;
 
     /// <summary>
-    /// 地图名称文本
-    /// </summary>
-    [SerializeField] private Text _textMapName;
-
-    /// <summary>
     /// 地图描述文本
     /// </summary>
     [SerializeField] private Text _textMapDescription;
@@ -70,7 +65,6 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
     /// <param name="map">地图配置</param>
     private void UpdateMapInfo(Map map)
     {
-        _textMapName.text = map.Name;
         _textMapDescription.text = map.Description;
 
         LoadMapSpriteAsync(map.MapImageResourcePath).Forget();

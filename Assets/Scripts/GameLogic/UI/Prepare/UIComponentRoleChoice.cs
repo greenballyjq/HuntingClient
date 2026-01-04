@@ -15,9 +15,9 @@ public class UIComponentRoleChoice : MonoBehaviour, IUIComponent
     [SerializeField] private UIComponentRoleSlot[] _roleSlots;
 
     /// <summary>
-    /// 骰子按钮
+    /// 开始按钮
     /// </summary>
-    [SerializeField] private Button _buttonDice;
+    [SerializeField] private Button _buttonStart;
 
     /// <summary>
     /// 当前格子索引
@@ -41,12 +41,12 @@ public class UIComponentRoleChoice : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        _buttonDice.onClick.AddListener(OnDiceButtonClicked);
+        _buttonStart.onClick.AddListener(OnDiceButtonClicked);
     }
 
     private void OnDestroy()
     {
-        _buttonDice.onClick.RemoveListener(OnDiceButtonClicked);
+        _buttonStart.onClick.RemoveListener(OnDiceButtonClicked);
     }
 
     public void Init()
@@ -66,7 +66,7 @@ public class UIComponentRoleChoice : MonoBehaviour, IUIComponent
     private void RollDice()
     {
         // 失活按钮
-        _buttonDice.interactable = false;
+        _buttonStart.interactable = false;
 
         // 随机骰子点数
         _diceValue = Random.Range(1, 7);
@@ -115,7 +115,7 @@ public class UIComponentRoleChoice : MonoBehaviour, IUIComponent
     private void OnRoleSelectionAnimationEnded()
     {
         // 激活按钮
-        _buttonDice.interactable = true;
+        _buttonStart.interactable = true;
     }
     #endregion
 }
