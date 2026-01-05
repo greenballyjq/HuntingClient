@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7284326030218896625}
   - component: {fileID: 3625918221936769491}
   m_Layer: 5
-  m_Name: ImageRoleSelected
+  m_Name: ImageCollabFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231,7 +231,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6fafbfb70b773254dafb19afb5d37c6b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 82eecee50bdba36428689b5760727a02, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -344,7 +344,7 @@ RectTransform:
   m_GameObject: {fileID: 3932792235998012884}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0000248, y: 1.0000248, z: 1.0000248}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 55891685897718938}
@@ -378,7 +378,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _imageRole: {fileID: 4270012225755898569}
-  _roleId: 1
 --- !u!114 &804347124132075170
 MonoBehaviour:
   m_ObjectHideFlags: 0

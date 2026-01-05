@@ -11,16 +11,6 @@ public static class PrepareEvents
     public static readonly EventKey<RoleSelectedEventArgs> RoleSelected = new EventKey<RoleSelectedEventArgs>();
 
     /// <summary>
-    /// 完整选角动画开始事件
-    /// </summary>
-    public static readonly EventKey RoleSelectionAnimationStarted = new EventKey();
-
-    /// <summary>
-    /// 完整选角动画结束事件
-    /// </summary>
-    public static readonly EventKey RoleSelectionAnimationEnded = new EventKey();
-
-    /// <summary>
     /// 骰子动画开始事件
     /// </summary>
     public static readonly EventKey DiceAnimationStarted = new EventKey();
@@ -39,11 +29,6 @@ public static class PrepareEvents
     /// 走格子动画结束事件
     /// </summary>
     public static readonly EventKey SlotAnimationEnded = new EventKey();
-
-    /// <summary>
-    /// 地图联动检查完成事件
-    /// </summary>
-    public static readonly EventKey<MapAffinityCheckedEventArgs> MapAffinityChecked = new EventKey<MapAffinityCheckedEventArgs>();
 }
 
 /// <summary>
@@ -75,25 +60,4 @@ public sealed class RoleSelectedEventArgs : EventArgs
     /// 角色格子列表
     /// </summary>
     public UIComponentRoleSlot[] RoleSlots { get; set; }
-}
-
-/// <summary>
-/// 地图联动检查完成事件参数
-/// </summary>
-public sealed class MapAffinityCheckedEventArgs : EventArgs
-{
-    /// <summary>
-    /// 是否有联动
-    /// </summary>
-    public bool HasAffinity { get; set; }
-
-    /// <summary>
-    /// 角色ID
-    /// </summary>
-    public int RoleId { get; set; }
-
-    /// <summary>
-    /// 地图ID
-    /// </summary>
-    public int MapId { get; set; }
 }

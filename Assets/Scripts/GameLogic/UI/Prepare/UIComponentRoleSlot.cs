@@ -12,18 +12,38 @@ public class UIComponentRoleSlot : MonoBehaviour
     [SerializeField] private Image _imageRole;
 
     /// <summary>
-    /// 角色ID
+    /// 当前角色ID
     /// </summary>
-    [SerializeField] private int _roleId;
+    private int _currentRoleId;
 
     #region 公共方法
+    /// <summary>
+    /// 设置角色
+    /// </summary>
+    /// <param name="roleId">角色ID</param>
+    /// <param name="roleSprite">角色图片</param>
+    public void SetRole(int roleId, Sprite roleSprite)
+    {
+        _currentRoleId = roleId;
+        _imageRole.sprite = roleSprite;
+    }
+
     /// <summary>
     /// 获取角色ID
     /// </summary>
     /// <returns>角色ID</returns>
     public int GetRoleId()
     {
-        return _roleId;
+        return _currentRoleId;
+    }
+
+    /// <summary>
+    /// 获取自身位置
+    /// </summary>
+    /// <returns>位置</returns>
+    public Vector3 GetPosition()
+    {
+        return (transform as RectTransform).anchoredPosition3D;
     }
     #endregion
 }

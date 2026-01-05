@@ -59,7 +59,7 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
     public void Init()
     {
         _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
-        _eventManager.AddListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
+        _eventManager.AddListener(PrepareEvents.SlotAnimationEnded , OnSlotAnimationEnded);
 
         gameObject.SetActive(false);
     }
@@ -67,7 +67,7 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
     public void CleanUp()
     {
         _eventManager.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
-        _eventManager.RemoveListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
+        _eventManager.RemoveListener(PrepareEvents.SlotAnimationEnded, OnSlotAnimationEnded);
     }
 
     #region 私有方法
@@ -140,7 +140,7 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
     /// <summary>
     /// 完整选角动画结束事件回调
     /// </summary>
-    private void OnRoleSelectionAnimationEnded()
+    private void OnSlotAnimationEnded()
     {
         gameObject.SetActive(true);
         UpdateRoleInfo(_currentRoleId);

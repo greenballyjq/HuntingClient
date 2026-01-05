@@ -11,9 +11,9 @@ using UnityEngine.UI;
 public class UIPrepare : UIBase
 {
     /// <summary>
-    /// 角色选择组件
+    /// 随机角色组件
     /// </summary>
-    [SerializeField] private UIComponentRoleChoice _uiComponentRoleChoice;
+    [SerializeField] private UIComponentRollRole _uiComponentRoleChoice;
 
     /// <summary>
     /// 角色信息组件
@@ -65,12 +65,6 @@ public class UIPrepare : UIBase
     /// </summary>
     private LuckyBuff _currentLuckyBuffData;
 
-    /// <summary>
-    /// 是否有选择的角色
-    /// </summary>
-    private bool _hasSelectedRole;
-
-
     private void Awake()
     {
         _buttonStartRound.onClick.AddListener(OnClickStartRound);
@@ -91,11 +85,12 @@ public class UIPrepare : UIBase
         _uiComponentRoleInfo.Init();
         _uiComponentMapInfo.Init();
 
+        // 默认开始单据单局按钮不可用
         _buttonStartRound.interactable = false;
 
         _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
-        _eventManager.AddListener(PrepareEvents.RoleSelectionAnimationStarted, OnRoleSelectionAnimationStarted);
-        _eventManager.AddListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
+        _eventManager.AddListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
+        _eventManager.AddListener(PrepareEvents.SlotAnimationEnded, OnSlotAnimationEnded);
         _eventManager.AddListener(LuckyEvents.GiftOpened, OnGiftOpened);
     }
 
@@ -106,31 +101,12 @@ public class UIPrepare : UIBase
         _uiComponentMapInfo.CleanUp();
 
         _eventManager.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
-        _eventManager.RemoveListener(PrepareEvents.RoleSelectionAnimationStarted, OnRoleSelectionAnimationStarted);
-        _eventManager.RemoveListener(PrepareEvents.RoleSelectionAnimationEnded, OnRoleSelectionAnimationEnded);
+        _eventManager.RemoveListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
+        _eventManager.RemoveListener(PrepareEvents.SlotAnimationEnded, OnSlotAnimationEnded);
         _eventManager.RemoveListener(LuckyEvents.GiftOpened, OnGiftOpened);
 
         base.OnClose();
     }
-
-    #region 私有方法
-    /// <summary>
-    /// 检查地图联动
-    /// </summary>
-    private void CheckMapAffinity()
-    {
-        _currentMapId = _uiComponentMapInfo.GetCurrentMapId();
-        Role role = _configManager.GetRole(_currentRoleId);
-        bool hasAffinity = role.LinkedMapId == _currentMapId;
-
-        _eventManager.Trigger(PrepareEvents.MapAffinityChecked, new MapAffinityCheckedEventArgs
-        {
-            HasAffinity = hasAffinity,
-            RoleId = _currentRoleId,
-            MapId = _currentMapId
-        });
-    }
-    #endregion
 
     #region 事件相关
     /// <summary>
@@ -139,29 +115,24 @@ public class UIPrepare : UIBase
     private void OnRoleSelected(RoleSelectedEventArgs args)
     {
         _currentRoleId = args.RoleId;
-        _hasSelectedRole = true;
     }
 
     /// <summary>
-    /// 完整选角动画开始事件回调
+    /// 骰子动画开始事件
     /// </summary>
-    private void OnRoleSelectionAnimationStarted()
+    private void OnDiceAnimationStarted()
     {
         _buttonStartRound.interactable = false;
         _buttonLuckyRitual.interactable = false;
     }
 
     /// <summary>
-    /// 完整选角动画结束事件回调
+    /// 走格子动画结束事件
     /// </summary>
-    private void OnRoleSelectionAnimationEnded()
+    private void OnSlotAnimationEnded()
     {
-        CheckMapAffinity();
-
         _buttonLuckyRitual.interactable = true;
-
-        if (_hasSelectedRole)
-            _buttonStartRound.interactable = true;
+        _buttonStartRound.interactable = true;
     }
 
     /// <summary>
@@ -177,7 +148,6 @@ public class UIPrepare : UIBase
         SceneManager.LoadSceneAsync("HuntingGameScene").completed += (ao) =>
         {
             Close();
-
             HuntingAppFlow.Instance.EnterRound(new RoundContext
             {
                 RoleData = roleData,
@@ -204,6 +174,5 @@ public class UIPrepare : UIBase
     {
         _currentLuckyBuffData = args.LuckyBuffData;
     }
-
     #endregion
 }
