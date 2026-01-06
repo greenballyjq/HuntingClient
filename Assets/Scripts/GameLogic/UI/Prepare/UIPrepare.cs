@@ -56,11 +56,6 @@ public class UIPrepare : UIBase
     private int _currentRoleId;
 
     /// <summary>
-    /// 当前选中的地图ID
-    /// </summary>
-    private int _currentMapId;
-
-    /// <summary>
     /// 当前选中幸运仪式增益数据
     /// </summary>
     private LuckyBuff _currentLuckyBuffData;
@@ -141,11 +136,12 @@ public class UIPrepare : UIBase
     private void OnClickStartRound()
     {
         Role roleData = _configManager.GetRole(_currentRoleId);
-        Map mapData = _configManager.GetMap(_currentMapId);
+        int mapId = _uiComponentMapInfo.GetCurrentMapId();
+        Map mapData = _configManager.GetMap(mapId);
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
 
         // TODO: 切换场景测试
-        SceneManager.LoadSceneAsync("HuntingGameScene").completed += (ao) =>
+        SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
         {
             Close();
             HuntingAppFlow.Instance.EnterRound(new RoundContext
@@ -154,8 +150,9 @@ public class UIPrepare : UIBase
                 MapData = mapData,
                 SkillData = skillData,
                 LuckyBuffData = _currentLuckyBuffData,
-                HasMapAffinity = roleData.LinkedMapId == _currentMapId
+                HasMapAffinity = roleData.LinkedMapId == mapId
             });
+            DynamicGI.UpdateEnvironment();
         };
     }
 

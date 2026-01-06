@@ -10,15 +10,6 @@ using UnityEngine;
 public class AnimalBehavior : MonoBehaviour, IPoolItem
 {
     #region 测试（TODO: 规范化音效系统、动画系统后移除）
-    public AudioClip hitClip;
-    public AudioSource audioSource;
-
-    public void PlayHitAudio()
-    {
-        audioSource.clip = hitClip;
-        audioSource.Play();
-    }
-
     /// <summary>
     /// 受击效果协程
     /// </summary>
@@ -29,14 +20,9 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     /// </summary>
     public void PlayHitEffect()
     {
-        if (_materials == null || _materials.Length == 0)
-            return;
-
         // 停止之前的协程，避免重复播放冲突
         if (_hitEffectCoroutine != null)
-        {
             StopCoroutine(_hitEffectCoroutine);
-        }
 
         // 启动新的受击效果协程
         _hitEffectCoroutine = StartCoroutine(HitEffectCoroutine());
@@ -50,44 +36,33 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
         // 变红阶段（0.1秒）
         float redDuration = 0.1f;
         float elapsed = 0f;
-        
+
         while (elapsed < redDuration)
         {
             elapsed += Time.deltaTime;
             float t = elapsed / redDuration;
-            
-            // 对所有材质应用变红效果
-            for (int i = 0; i < _materials.Length; i++)
-            {
-                _materials[i].color = Color.Lerp(_originalColors[i], Color.red, t);
-            }
-            
+
+            _material.color = Color.Lerp(_originalColor, Color.red, t);
+
             yield return null;
         }
 
         // 恢复原色阶段（0.2秒）
         float recoverDuration = 0.2f;
         elapsed = 0f;
-        
+
         while (elapsed < recoverDuration)
         {
             elapsed += Time.deltaTime;
             float t = elapsed / recoverDuration;
-            
-            // 对所有材质恢复原色
-            for (int i = 0; i < _materials.Length; i++)
-            {
-                _materials[i].color = Color.Lerp(Color.red, _originalColors[i], t);
-            }
-            
+
+            _material.color = Color.Lerp(Color.red, _originalColor, t);
+
             yield return null;
         }
 
         // 确保最终颜色正确
-        for (int i = 0; i < _materials.Length; i++)
-        {
-            _materials[i].color = _originalColors[i];
-        }
+        _material.color = _originalColor;
 
         _hitEffectCoroutine = null;
     }
@@ -199,19 +174,19 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     public Collider Collider { get; private set; }
 
     /// <summary>
-    /// 所有渲染器组件
+    /// 渲染器组件
     /// </summary>
-    private Renderer[] _renderers;
+    private Renderer _renderer;
 
     /// <summary>
-    /// 所有材质
+    /// 材质
     /// </summary>
-    private Material[] _materials;
+    private Material _material;
 
     /// <summary>
     /// 原始颜色
     /// </summary>
-    private Color[] _originalColors;
+    private Color _originalColor;
 
     /// <summary>
     /// 事件管理器
@@ -248,24 +223,14 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     private void Awake()
     {
         // 获取组件
-        audioSource = GetComponent<AudioSource>();
-        Animator = GetComponent<Animator>();
+        Animator = GetComponentInChildren<Animator>();
         RVO = GetComponent<RVOMovement>();
         Collider = GetComponent<Collider>();
 
-        // 获取所有渲染器和材质
-        _renderers = GetComponentsInChildren<Renderer>();
-        if (_renderers != null && _renderers.Length > 0)
-        {
-            _materials = new Material[_renderers.Length];
-            _originalColors = new Color[_renderers.Length];
-
-            for (int i = 0; i < _renderers.Length; i++)
-            {
-                _materials[i] = _renderers[i].material;
-                _originalColors[i] = _materials[i].color;
-            }
-        }
+        // 获取渲染器和材质
+        _renderer = GetComponentInChildren<Renderer>();
+        _material = _renderer.material;
+        _originalColor = _material.color;
 
         // 创建状态机
         _stateMachine = new StateMachine();

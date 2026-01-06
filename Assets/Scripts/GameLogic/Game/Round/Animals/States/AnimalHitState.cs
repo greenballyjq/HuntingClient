@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 动物被击中状态
@@ -26,8 +26,7 @@ public class AnimalHitState : AnimalState
         // 应用减速倍率
         animal.ApplySpeedMultiplier(animal.HitSpeedMultiplier);
         
-        // 播放受击音效和视觉效果
-        animal.PlayHitAudio();
+        // 播放视觉效果
         animal.PlayHitEffect();
     }
 
@@ -43,7 +42,6 @@ public class AnimalHitState : AnimalState
         {
             stateTimer = _hitDuration;
             animal.ResetHitFlag();
-            animal.PlayHitAudio();
             animal.PlayHitEffect();
             return;
         }

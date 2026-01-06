@@ -108,7 +108,7 @@ public class PropBombardmentHandler : IPropHandler
     /// <summary>
     /// 轰炸中心点距离玩家的前方距离
     /// </summary>
-    private const float BombardmentForwardDistance = 30f;
+    private const float BombardmentForwardDistance = 10f;
 
     /// <summary>
     /// 玩家Transform

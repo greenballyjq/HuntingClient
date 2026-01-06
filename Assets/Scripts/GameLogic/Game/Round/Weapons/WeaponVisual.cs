@@ -124,7 +124,7 @@ public class WeaponVisual : MonoBehaviour
             renderer.material.color = Color.green;
 
             // 设置小球大小（增大到0.3）
-            _hitMarker.transform.localScale = Vector3.one * 0.3f;
+            _hitMarker.transform.localScale = Vector3.one * 0.1f;
         }
 
         // 更新位置并显示

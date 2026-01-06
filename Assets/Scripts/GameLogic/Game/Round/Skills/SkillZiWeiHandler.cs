@@ -11,7 +11,7 @@ public class SkillZiWeiHandler : ISkillHandler
     /// <summary>
     /// 技能武器预制体资源路径
     /// </summary>
-    private const string SkillWeaponPrefabPath = "Arts/Prefabs/Weapons/SkillWeapon";
+    private const string SkillWeaponPrefabPath = "Arts/Skills/Prefabs/SkillWeapon";
 
     /// <summary>
     /// 技能武器预制体缓存
@@ -24,16 +24,15 @@ public class SkillZiWeiHandler : ISkillHandler
     private List<SkillWeapon> _skillWeapons = new List<SkillWeapon>();
 
     /// <summary>
+    /// 武器管理器
+    /// </summary>
+    private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
+
+    /// <summary>
     /// 玩家Transform
     /// </summary>
     /// <remarks>TODO: 将来可配置化</remarks>
     private Transform _playerTransform;
-
-    /// <summary>
-    /// 技能武器Y轴位置偏移
-    /// </summary>
-    /// <remarks>TODO: 将来可配置化</remarks>
-    private const float WeaponYOffset = 2f;
 
     /// <summary>
     /// 配置管理器
@@ -86,19 +85,20 @@ public class SkillZiWeiHandler : ISkillHandler
         // 计算生成位置并创建武器
         int gunCountPerSide = Mathf.RoundToInt(parameter.GunCountPerSide);
         Vector3 playerPosition = player.position;
-        Vector3 playerRight = player.right;
+
+        Vector3 worldRight = Vector3.right;
 
         // 创建左侧武器
         for (int i = 0; i < gunCountPerSide; i++)
         {
-            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, playerRight, parameter.GunOffsetX, i, true);
+            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, worldRight, parameter.GunOffsetX, i, true);
             CreateSkillWeapon(spawnPosition, parameter.FireInterval);
         }
 
         // 创建右侧武器
         for (int i = 0; i < gunCountPerSide; i++)
         {
-            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, playerRight, parameter.GunOffsetX, i, false);
+            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, worldRight, parameter.GunOffsetX, i, false);
             CreateSkillWeapon(spawnPosition, parameter.FireInterval);
         }
 
@@ -133,7 +133,6 @@ public class SkillZiWeiHandler : ISkillHandler
         if (isLeft)
             offset = -offset;
         Vector3 position = playerPosition + playerRight * offset;
-        position.y += WeaponYOffset;
         return position;
     }
 
@@ -157,7 +156,7 @@ public class SkillZiWeiHandler : ISkillHandler
     private Transform FindPlayerTransform()
     {
         if (_playerTransform == null)
-            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            _playerTransform = _weaponManager.GetMainWeapon().transform;
         return _playerTransform;
     }
     #endregion

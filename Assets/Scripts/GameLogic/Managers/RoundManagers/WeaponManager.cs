@@ -7,22 +7,12 @@ using UnityEngine;
 /// <summary>
 /// 武器管理器
 /// </summary>
-public class WeaponManager : IRoundManager
+public class WeaponManager : IRoundManager, IRoundUpdatable
 {
     /// <summary>
-    /// 主武器实例
+    /// 主武器
     /// </summary>
     private MainWeapon _mainWeapon;
-
-    /// <summary>
-    /// 武器预制体资源路径
-    /// </summary>
-    private const string WeaponPrefabPath = "Arts/Prefabs/Weapons/MainWeapon";
-
-    /// <summary>
-    /// 武器预制体缓存
-    /// </summary>
-    private GameObject _weaponPrefabCache;
 
     /// <summary>
     /// 射速修正倍率字典
@@ -48,26 +38,20 @@ public class WeaponManager : IRoundManager
     /// </summary>
     private float _damageMultiplier = 1f;
 
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager = GameServiceLocator.ConfigManager;
-
-    /// <summary>
-    /// 资源管理器
-    /// </summary>
-    private ResourceManager _resourceManager = GameServiceLocator.ResourceManager;
-
     public void Init(RoundContext context)
     {
-        CreateMainWeaponAsync().Forget();
+        CollectMainWeapon();
+        _mainWeapon.Init();
         Debug.Log("[WeaponManager] 初始化完成");
+    }
+
+    public void DoUpdate(float deltaTime)
+    {
+        _mainWeapon.UpdateSpecialBulletTimer();
     }
 
     public void Dispose()
     {
-        DestroyMainWeapon();
-        ClearPrefabCache();
         Debug.Log("[WeaponManager] 已释放");
     }
 
@@ -135,7 +119,8 @@ public class WeaponManager : IRoundManager
     /// </summary>
     public float GetCurrentFireRate(int bulletId)
     {
-        var bulletData = _configManager.GetBullet(bulletId);
+        var configManager = GameServiceLocator.ConfigManager;
+        var bulletData = configManager.GetBullet(bulletId);
         if (bulletData == null)
         {
             Debug.LogWarning($"[WeaponManager] 子弹配置不存在: {bulletId}");
@@ -150,7 +135,8 @@ public class WeaponManager : IRoundManager
     /// </summary>
     public float GetCurrentDamage(int bulletId)
     {
-        var bulletData = _configManager.GetBullet(bulletId);
+        var configManager = GameServiceLocator.ConfigManager;
+        var bulletData = configManager.GetBullet(bulletId);
         if (bulletData == null)
         {
             Debug.LogWarning($"[WeaponManager] 子弹配置不存在: {bulletId}");
@@ -163,63 +149,25 @@ public class WeaponManager : IRoundManager
 
     #region 私有方法
     /// <summary>
-    /// 创建主武器
+    /// 收集场景中的主武器
     /// </summary>
-    private async UniTask CreateMainWeaponAsync()
+    private void CollectMainWeapon()
     {
-        if (_mainWeapon != null)
+        GameObject weaponObj = GameObject.Find("MainWeapon");
+        if (weaponObj == null)
         {
-            Debug.LogWarning("[WeaponManager] 主武器已存在，跳过创建");
+            Debug.LogError("[WeaponManager] 未找到名为 MainWeapon 的武器对象");
             return;
         }
 
-        // 查找Player标签的GameObject
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (playerObj == null)
-        {
-            Debug.LogError("[WeaponManager] 未找到Player标签的GameObject");
-            return;
-        }
-
-        // 加载或使用缓存的武器预制体
-        if (_weaponPrefabCache == null)
-            _weaponPrefabCache = Resources.Load<GameObject>(WeaponPrefabPath);
-
-        // 实例化武器并挂载到Player对象上
-        var weaponObj = GameObject.Instantiate(_weaponPrefabCache, playerObj.transform);
-        weaponObj.name = "MainWeapon";
-
-        // 获取武器组件
         _mainWeapon = weaponObj.GetComponent<MainWeapon>();
         if (_mainWeapon == null)
         {
-            Debug.LogError("[WeaponManager] 武器预制体缺少 MainWeapon 组件");
-            GameObject.Destroy(weaponObj);
+            Debug.LogError("[WeaponManager] MainWeapon 对象上缺少 MainWeapon 组件");
             return;
         }
 
-        Debug.Log("[WeaponManager] 主武器创建完成");
-    }
-
-    /// <summary>
-    /// 销毁主武器
-    /// </summary>
-    private void DestroyMainWeapon()
-    {
-        if (_mainWeapon == null)
-            return;
-
-        GameObject.Destroy(_mainWeapon.gameObject);
-        _mainWeapon = null;
-        Debug.Log("[WeaponManager] 主武器已销毁");
-    }
-
-    /// <summary>
-    /// 清除预制体缓存
-    /// </summary>
-    private void ClearPrefabCache()
-    {
-        _weaponPrefabCache = null;
+        Debug.Log("[WeaponManager] 已绑定场景主武器 MainWeapon");
     }
 
     /// <summary>

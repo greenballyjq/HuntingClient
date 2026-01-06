@@ -63,23 +63,61 @@ public class MainWeapon : MonoBehaviour
     /// </summary>
     private BulletManager _bulletManager => GameServiceLocator.GetRoundManager<BulletManager>();
 
-    private void Start()
-    {
-        RegisterEvents();
-        InitializeWeapon();
-    }
-
-    private void Update()
-    {
-        UpdateSpecialBulletTimer();
-    }
-
     private void OnDestroy()
     {
         UnregisterEvents();
     }
 
     #region 公共方法
+    /// <summary>
+    /// 初始化武器
+    /// </summary>
+    public void Init()
+    {
+        RegisterEvents();
+        // 设置默认子弹
+        ChangeBullet(_currentBulletId);
+        UpdateFireInterval();
+    }
+
+    /// <summary>
+    /// 更新特殊子弹倒计时
+    /// </summary>
+    public void UpdateSpecialBulletTimer()
+    {
+        if (!_isSpecialBullet)
+            return;
+
+        _specialBulletRemainingTime -= Time.deltaTime;
+
+        // 获取子弹配置用于触发倒计时事件
+        var bulletData = _configManager.GetBullet(_currentBulletId);
+        if (bulletData != null)
+        {
+            // 触发特殊子弹倒计时事件
+            TriggerSpecialBulletCountdown(new SpecialBulletCountdownEventArgs
+            {
+                BulletData = bulletData,
+                RemainingTime = _specialBulletRemainingTime
+            });
+        }
+
+        // 检查是否时间到
+        if (_specialBulletRemainingTime <= 0f)
+        {
+            // 触发特殊子弹效果结束事件
+            var endedBulletData = _configManager.GetBullet(_currentBulletId);
+            TriggerSpecialBulletEffectEnded(new SpecialBulletEffectEndedEventArgs
+            {
+                BulletData = endedBulletData
+            });
+
+            // 恢复为普通子弹（ID为1）
+            ChangeBullet(1);
+            Debug.Log("[Weapon] 特殊子弹时间到，已切回普通子弹");
+        }
+    }
+
     /// <summary>
     /// 设置当前子弹类型
     /// </summary>
@@ -140,60 +178,12 @@ public class MainWeapon : MonoBehaviour
 
     #region 私有方法
     /// <summary>
-    /// 初始化武器状态
-    /// </summary>
-    private void InitializeWeapon()
-    {
-        // 设置默认子弹
-        ChangeBullet(_currentBulletId);
-        UpdateFireInterval();
-    }
-
-    /// <summary>
     /// 更新射击间隔
     /// </summary>
     private void UpdateFireInterval()
     {
         float fireRate = _weaponManager.GetCurrentFireRate(_currentBulletId);
         _fireInterval = 1f / fireRate;
-    }
-
-    /// <summary>
-    /// 更新特殊子弹倒计时
-    /// </summary>
-    private void UpdateSpecialBulletTimer()
-    {
-        if (!_isSpecialBullet)
-            return;
-
-        _specialBulletRemainingTime -= Time.deltaTime;
-
-        // 获取子弹配置用于触发倒计时事件
-        var bulletData = _configManager.GetBullet(_currentBulletId);
-        if (bulletData != null)
-        {
-            // 触发特殊子弹倒计时事件
-            TriggerSpecialBulletCountdown(new SpecialBulletCountdownEventArgs
-            {
-                BulletData = bulletData,
-                RemainingTime = _specialBulletRemainingTime
-            });
-        }
-
-        // 检查是否时间到
-        if (_specialBulletRemainingTime <= 0f)
-        {
-            // 触发特殊子弹效果结束事件
-            var endedBulletData = _configManager.GetBullet(_currentBulletId);
-            TriggerSpecialBulletEffectEnded(new SpecialBulletEffectEndedEventArgs
-            {
-                BulletData = endedBulletData
-            });
-
-            // 恢复为普通子弹（ID为1）
-            ChangeBullet(1);
-            Debug.Log("[Weapon] 特殊子弹时间到，已切回普通子弹");
-        }
     }
 
     /// <summary>
@@ -225,8 +215,8 @@ public class MainWeapon : MonoBehaviour
 
         var oldBulletData = _configManager.GetBullet(oldBulletId);
 
-        // 判断是否为特殊子弹（持续时间 > 0）
-        bool isSpecialBullet = newBulletData.Duration > 0f;
+        // 判断是否为特殊子弹
+        bool isSpecialBullet = newBulletData.BulletType != EBulletType.Normal;
         if (isSpecialBullet)
         {
             _specialBulletRemainingTime = newBulletData.Duration;
