@@ -169,6 +169,11 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     public RVOMovement RVO { get; private set; }
 
     /// <summary>
+    /// 移动组件
+    /// </summary>
+    //public AnimalMovement Movement { get; private set; }
+
+    /// <summary>
     /// 碰撞体组件
     /// </summary>
     public Collider Collider { get; private set; }
@@ -199,11 +204,13 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
         gameObject.SetActive(true);
         SetColliderEnabled(true);
         RVO.Enable();
+        //Movement.SetEnabled(true);
     }
 
     public void OnDespawned()
     {
         RVO.Disable();
+        //Movement.SetEnabled(false);
         SetColliderEnabled(false);
 
         CurrentHP = 0;
@@ -225,6 +232,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
         // 获取组件
         Animator = GetComponentInChildren<Animator>();
         RVO = GetComponent<RVOMovement>();
+        //Movement = GetComponent<AnimalMovement>();
         Collider = GetComponent<Collider>();
 
         // 获取渲染器和材质
@@ -259,6 +267,9 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
         RVO.SetMoveDirection(CurrentDirection);
         RVO.SetMaxSpeed(CurrentMoveSpeed);
         RVO.SyncPosition();
+        //Movement.SetBaseSpeed(CurrentMoveSpeed);
+        //Movement.SetDirection(CurrentDirection);
+        //Movement.SetSpeedMultiplier(1f);
         
         _stateMachine.Init(_moveState);
     }
@@ -266,7 +277,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     private void Update()
     {
         TimeInScene += Time.deltaTime;
-
+        //Movement.UpdateMovement(Time.deltaTime);
         _stateMachine.Update();
     }
 
@@ -324,6 +335,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     {
         CurrentMoveSpeed = speed;
         RVO.SetMaxSpeed(speed);
+        //Movement.SetBaseSpeed(speed);
     }
 
     /// <summary>
@@ -333,6 +345,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     {
         CurrentDirection = direction;
         RVO.SetMoveDirection(direction);
+        //Movement.SetDirection(direction);
     }
 
     /// <summary>
@@ -350,6 +363,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     {
         float finalSpeed = CurrentMoveSpeed * multiplier;
         RVO.SetMaxSpeed(finalSpeed);
+        //Movement.SetSpeedMultiplier(multiplier);
     }
 
     /// <summary>

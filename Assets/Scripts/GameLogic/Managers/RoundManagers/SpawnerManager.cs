@@ -95,5 +95,34 @@ public class SpawnerManager : IRoundManager
         Debug.Log($"[SpeciesSpawnManager] 收集到派发器数量：{_spawners.Count}");
     }
     #endregion
+
+    #region 测试
+    /// <summary>
+    /// 增加所有派发器的派发间隔
+    /// </summary>
+    public void IncreaseAllSpawnInterval(float step)
+    {
+        for (int i = 0; i < _spawners.Count; i++)
+        {
+            float newInterval = _spawners[i].GetSpawnInterval() + step;
+            _spawners[i].SetSpawnInterval(newInterval);
+        }
+        Debug.Log($"[SpawnerManager] 所有派发器间隔增加 {step} 秒");
+    }
+
+    /// <summary>
+    /// 减少所有派发器的派发间隔
+    /// </summary>
+    public void DecreaseAllSpawnInterval(float step)
+    {
+        for (int i = 0; i < _spawners.Count; i++)
+        {
+            float currentInterval = _spawners[i].GetSpawnInterval();
+            float newInterval = Mathf.Max(0.1f, currentInterval - step);
+            _spawners[i].SetSpawnInterval(newInterval);
+        }
+        Debug.Log($"[SpawnerManager] 所有派发器间隔减少 {step} 秒");
+    }
+    #endregion
 }
 

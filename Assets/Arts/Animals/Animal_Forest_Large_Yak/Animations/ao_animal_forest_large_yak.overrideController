@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ao_animal_forest_large_yak
+  m_Controller: {fileID: 9100000, guid: fbeddcfd50868ab4c86cbbf9a48ccd82, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 591d38b0919fbcf47bdd3c3f693ecb93, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3231747419336f944b8659f0861156f6, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: d883819ee0eae7343b7236517f49fb22, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 666170835a513a3469663193585a1b01, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: c4f6fe63dc55e46438ba174e18faf6b4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 15f208a4d5e8e524f9b92f3310baa783, type: 2}

@@ -32,6 +32,11 @@ public class UIGameplay : UIBase
     /// 道具组组件
     /// </summary>
     [SerializeField] private UIComponentPropGroup uiComponentPropGroup;
+
+    /// <summary>
+    /// Debug 控制组件
+    /// </summary>
+    [SerializeField] private UIComponentDebug uiComponentDebug;
     
     /// <summary>
     /// 动态任务组件
@@ -60,11 +65,13 @@ public class UIGameplay : UIBase
         uiComponentEnergyProgress.Init();
         uiComponentBulletStatus.Init();
         uiComponentPropGroup.Init();
+        uiComponentDebug.Init();
         //uiComponentQuest.Init();
     }
 
     public override void OnClose()
     {
+        uiComponentDebug.CleanUp();
         uiComponentPropGroup.CleanUp();
         uiComponentBulletStatus.CleanUp();
         uiComponentEnergyProgress.CleanUp();
