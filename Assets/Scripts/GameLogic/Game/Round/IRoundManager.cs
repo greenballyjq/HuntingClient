@@ -1,4 +1,4 @@
-/// <summary>
+﻿/// <summary>
 /// 单局管理器基础接口
 /// </summary>
 public interface IRoundManager
@@ -23,8 +23,8 @@ public interface IRoundUpdatable
     /// <summary>
     /// 每帧更新
     /// </summary>
-    /// <param name="deltaTime">时间增量</param>
-    void DoUpdate(float deltaTime);
+    /// <param name="dt">时间增量</param>
+    void DoUpdate(float dt);
 }
 
 /// <summary>

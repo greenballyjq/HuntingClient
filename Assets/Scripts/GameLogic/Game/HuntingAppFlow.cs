@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using GameFramework.Core;
 using GameFramework.Game;
 using GameFramework.Manager;
 using UnityEngine;
@@ -66,14 +67,16 @@ public class HuntingAppFlow : GameAppFlow
     private RoundFlow _roundFlow;
 
     /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
     /// UI管理器
     /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
+
+    private void Start()
+    {
+        // TODO: 可能由外部调用，暂时在这里启动应用
+        StartAppAsync().Forget();
+    }
+
     #region 公共方法
     /// <summary>
     /// 进入准备阶段
@@ -88,7 +91,6 @@ public class HuntingAppFlow : GameAppFlow
         //await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
 
         _currentState = HuntingAppFlowState.Prepare;
-        TriggerPrepareEntered();
     }
 
     /// <summary>
@@ -101,12 +103,6 @@ public class HuntingAppFlow : GameAppFlow
 
         // 记录下局上下文
         _currentRoundContext = context;
-
-        TriggerPrepareExited(new PrepareExitedEventArgs
-        {
-            Sender = this,
-            Context = _currentRoundContext
-        });
 
         // 创建单局流程并开始
         _roundFlow = new RoundFlow();
@@ -142,8 +138,8 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     protected override void RegisterAppManagers()
     {
-        RegisterAppManager(new InputManager());
         RegisterAppManager(new PlayerDataManager());
+        RegisterAppManager(new InputManager());
     }
     #endregion
 
@@ -153,7 +149,6 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     protected override async UniTask OnAppStartAsync()
     {
-        //await _uiManager.OpenUIAsync<UITestPanel>("UITestPanel");
         await EnterPrepareAsync();
 
         await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
@@ -169,24 +164,6 @@ public class HuntingAppFlow : GameAppFlow
             return;
 
         _roundFlow.DoUpdate(dt);
-    }
-    #endregion
-
-    #region 事件相关
-    /// <summary>
-    /// 触发进入准备阶段事件
-    /// </summary>
-    private void TriggerPrepareEntered()
-    {
-        _eventManager.Trigger(HuntingAppFlowEvents.PrepareEntered);
-    }
-
-    /// <summary>
-    /// 触发离开准备阶段事件
-    /// </summary>
-    private void TriggerPrepareExited(PrepareExitedEventArgs args)
-    {
-        _eventManager.Trigger(HuntingAppFlowEvents.PrepareExited, args);
     }
     #endregion
 }

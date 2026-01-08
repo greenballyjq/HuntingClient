@@ -2,7 +2,6 @@
 using GameFramework.Core;
 using GameFramework.Core.UI;
 using GameFramework.Manager;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

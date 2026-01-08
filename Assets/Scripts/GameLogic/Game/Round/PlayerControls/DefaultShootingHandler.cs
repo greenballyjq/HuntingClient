@@ -23,7 +23,7 @@ public class DefaultShootingHandler : IPlayerControlHandler
     /// <summary>
     /// 瞄准深度
     /// </summary>
-    private const float AimDepth = 10f;
+    private const float AimDepth = 20f;
 
     public void OnControlStart()
     {

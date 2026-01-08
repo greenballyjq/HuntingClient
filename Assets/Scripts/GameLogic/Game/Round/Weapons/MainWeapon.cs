@@ -46,12 +46,12 @@ public class MainWeapon : MonoBehaviour
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager = GameServiceLocator.EventManager;
+    private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager = GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
     /// 武器管理器

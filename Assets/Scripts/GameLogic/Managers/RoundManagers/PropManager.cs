@@ -2,7 +2,6 @@
 using cfg.HuntingConfig.Prop;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.MaterialProperty;
 
 
 /// <summary>

@@ -126,7 +126,7 @@ private void Initialize()
     if (_isInitialized)
         return;
 
-    //Debug.Log("[RVOManager] 初始化 RVO 管理器");
+    Debug.Log("[RVOManager] 初始化 RVO 管理器");
 
     // 获取模拟器实例
     _simulator = Simulator.Instance;
@@ -220,13 +220,11 @@ public int AddAgent(Vector3 position, RVOAgentConfig config, object owner = null
 
     int agentId;
 
-    // 尝试复用已删除的代理
+    // 复用已删除的代理
     if (_reuseQueue.Count > 0)
     {
         agentId = _reuseQueue.Dequeue();
         ResetAgent(agentId, position, config);
-
-        //Debug.Log($"[RVOManager] 复用代理 ID: {agentId}");
     }
     else
     {
@@ -245,8 +243,6 @@ public int AddAgent(Vector3 position, RVOAgentConfig config, object owner = null
 
         // 重建Workers
         _simulator.SetNumWorkers(0);
-
-        //Debug.Log($"[RVOManager] 创建新代理 ID: {agentId}");
     }
 
     // 创建句柄
@@ -287,7 +283,7 @@ public void RemoveAgent(int agentId)
     // 加入复用队列
     _reuseQueue.Enqueue(agentId);
 
-    //Debug.Log($"[RVOManager] 移除代理 ID: {agentId}");
+    Debug.Log($"[RVOManager] 移除代理 ID: {agentId}");
 }
 
 /// <summary>
@@ -409,7 +405,7 @@ public void SetGlobalDefaults(RVOAgentConfig config)
         new RVOVector2(0, 0)
     );
 
-    //Debug.Log("[RVOManager] 设置全局默认参数");
+    Debug.Log("[RVOManager] 设置全局默认参数");
 }
 
 /// <summary>

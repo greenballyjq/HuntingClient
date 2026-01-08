@@ -120,12 +120,6 @@ public class RoundFlow
         _currentRoundContext = context;
 
         OnRoundStart();
-
-        TriggerRoundStarted(new RoundStartedEventArgs
-        {
-            Sender = this,
-            Context = _currentRoundContext
-        });
     }
 
     /// <summary>
@@ -137,12 +131,6 @@ public class RoundFlow
             return;
 
         OnRoundEnd();
-
-        TriggerRoundEnded(new RoundEndedEventArgs
-        {
-            Sender = this,
-            Context = _currentRoundContext
-        });
 
         _currentState = RoundFlowState.None;
     }
@@ -157,8 +145,6 @@ public class RoundFlow
 
         OnRoundPause();
 
-        TriggerRoundPaused();
-
         _currentState = RoundFlowState.Paused;
     }
 
@@ -171,8 +157,6 @@ public class RoundFlow
             return;
 
         OnRoundResume();
-
-        TriggerRoundResumed();
 
         _currentState = RoundFlowState.Playing;
     }
@@ -189,26 +173,12 @@ public class RoundFlow
         _currentState = RoundFlowState.ChangingMap;
 
         OnRoundChangeMapStart(mapType);
-        TriggerRoundMapChangeStarted(new RoundMapChangeEventArgs
-        {
-            Sender = this,
-            Context = _currentRoundContext,
-            MapType = mapType
-        });
 
         // TODO: 根据 mapType 进行切图（可能涉及切场景/加载资源/等待完成）
         // TODO: 切图完成后，必要时重新收集场景对象（例如派发点等）
         await UniTask.CompletedTask;
 
-        OnRoundChangeMapFinish(mapType);
-        TriggerRoundMapChangeFinished(new RoundMapChangeEventArgs
-        {
-            Sender = this,
-            Context = _currentRoundContext,
-            MapType = mapType
-        });
-
-        
+        OnRoundChangeMapFinish(mapType);        
     }
 
     /// <summary>
@@ -356,56 +326,6 @@ public class RoundFlow
         _currentRoundContext = null;
 
         // TODO: 需要保证单局退出一定会调用 EndRound（例如回准备/退出游戏/异常中断）
-    }
-    #endregion
-
-    #region 事件相关
-    /// <summary>
-    /// 触发单局开始事件
-    /// </summary>
-    private void TriggerRoundStarted(RoundStartedEventArgs args)
-    {
-        _eventManager.Trigger(RoundFlowEvents.RoundStarted, args);
-    }
-
-    /// <summary>
-    /// 触发单局暂停事件
-    /// </summary>
-    private void TriggerRoundPaused()
-    {
-        _eventManager.Trigger(RoundFlowEvents.RoundPaused);
-    }
-
-    /// <summary>
-    /// 触发单局恢复事件
-    /// </summary>
-    private void TriggerRoundResumed()
-    {
-        _eventManager.Trigger(RoundFlowEvents.RoundResumed);
-    }
-
-    /// <summary>
-    /// 触发单局结束事件
-    /// </summary>
-    private void TriggerRoundEnded(RoundEndedEventArgs args)
-    {
-        _eventManager.Trigger(RoundFlowEvents.RoundEnded, args);
-    }
-
-    /// <summary>
-    /// 触发切图开始事件
-    /// </summary>
-    private void TriggerRoundMapChangeStarted(RoundMapChangeEventArgs args)
-    {
-        _eventManager.Trigger(RoundFlowEvents.RoundMapChangeStarted, args);
-    }
-
-    /// <summary>
-    /// 触发切图完成事件
-    /// </summary>
-    private void TriggerRoundMapChangeFinished(RoundMapChangeEventArgs args)
-    {
-        _eventManager.Trigger(RoundFlowEvents.RoundMapChangeFinished, args);
     }
     #endregion
 }
