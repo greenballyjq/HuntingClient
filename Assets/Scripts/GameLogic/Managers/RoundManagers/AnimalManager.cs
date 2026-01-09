@@ -152,14 +152,4 @@ public class AnimalManager : IRoundManager
         _eventManager.Trigger(AnimalEvents.AnimalSpawned, args);
     }
     #endregion
-
-    #region 测试
-    /// <summary>
-    /// 获取当前活跃动物数量
-    /// </summary>
-    public int GetActiveAnimalCount()
-    {
-        return _activeAnimals.Count;
-    }
-    #endregion
 }

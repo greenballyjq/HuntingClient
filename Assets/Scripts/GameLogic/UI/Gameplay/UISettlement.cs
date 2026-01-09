@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using GameFramework.Core;
-using GameFramework.Core.UI;
+﻿using GameFramework.Core.UI;
 using GameFramework.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -64,13 +62,11 @@ public class UISettlement : UIBase
     {
         base.OnInit(userData);
         _eventManager.AddListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
-        _eventManager.AddListener(SettlementEvents.SettlementCompleted, OnSettlementCompleted);
     }
 
     public override void OnClose()
     {
         _eventManager.RemoveListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
-        _eventManager.RemoveListener(SettlementEvents.SettlementCompleted, OnSettlementCompleted);
         base.OnClose();
     }
 
@@ -110,14 +106,6 @@ public class UISettlement : UIBase
         // 更新界面上的金币与熟练度
         textCoin.text = args.TotalCoin.ToString();
         textMastery.text = args.TotalMastery.ToString();
-    }
-
-    /// <summary>
-    /// 结算完成
-    /// </summary>
-    private void OnSettlementCompleted(SettlementCompletedEventArgs args)
-    {
-        Debug.Log($"[UISettlement] 结算完成 金币:{args.TotalCoin} 熟练度:{args.TotalMastery}");
     }
     #endregion
 }

@@ -1,8 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
-using GameFramework.Core;
 using GameFramework.Game;
 using GameFramework.Manager;
-using UnityEngine;
 
 /// <summary>
 /// 打猎应用流程
@@ -62,33 +60,31 @@ public class HuntingAppFlow : GameAppFlow
     private RoundContext _currentRoundContext;
 
     /// <summary>
-    /// 当前局级流程实例
+    /// 当前单局流程
     /// </summary>
-    private RoundFlow _roundFlow;
+    private RoundFlow _currentRoundFlow;
 
-    /// <summary>
-    /// UI管理器
-    /// </summary>
+    #region 测试
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
     private void Start()
     {
-        // TODO: 可能由外部调用，暂时在这里启动应用
+        // TODO: 可能由外部调用，暂时在这里启动应用，之后会按需调整
         StartAppAsync().Forget();
     }
+    #endregion
 
     #region 公共方法
     /// <summary>
-    /// 进入准备阶段
+    /// 进入准备
     /// </summary>
     public async UniTask EnterPrepareAsync()
     {
-        // 结束当前单局流程
-        _roundFlow?.EndRound();
-        _roundFlow = null;
-
-        // TODO: 当前版本启动应用后即进入准备界面 未来根据需求调整
-        //await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
+        #region 测试 将来这些逻辑可能在别处
+        _currentRoundFlow?.EndRound();
+        _currentRoundFlow = null;
+        await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
+        #endregion
 
         _currentState = HuntingAppFlowState.Prepare;
     }
@@ -97,30 +93,16 @@ public class HuntingAppFlow : GameAppFlow
     /// 进入单局
     /// </summary>
     /// <param name="context">单局上下文</param>
-    public void EnterRound(RoundContext context)
+    public async UniTask EnterRound(RoundContext context)
     {
-        _currentState = HuntingAppFlowState.Round;
-
         // 记录下局上下文
         _currentRoundContext = context;
 
         // 创建单局流程并开始
-        _roundFlow = new RoundFlow();
-        _roundFlow.StartRound(_currentRoundContext);
-    }
+        _currentRoundFlow = new RoundFlow();
+        await _currentRoundFlow.StartRound(_currentRoundContext);
 
-    /// <summary>
-    /// 获取单局流程
-    /// </summary>
-    /// <returns>单局流程实例</returns>
-    public RoundFlow GetRoundFlow()
-    {
-        if (_currentState != HuntingAppFlowState.Round)
-        {
-            Debug.LogWarning("[HuntingAppFlow] 当前未进入单局，不允许访问 RoundFlow");
-            return null;
-        }
-        return _roundFlow;
+        _currentState = HuntingAppFlowState.Round;
     }
     #endregion
 
@@ -140,6 +122,7 @@ public class HuntingAppFlow : GameAppFlow
     {
         RegisterAppManager(new PlayerDataManager());
         RegisterAppManager(new InputManager());
+        RegisterAppManager(new CameraManager());
     }
     #endregion
 
@@ -149,9 +132,9 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     protected override async UniTask OnAppStartAsync()
     {
+        #region 测试 将来不一定就是在这里进入准备
         await EnterPrepareAsync();
-
-        await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
+        #endregion
     }
 
     /// <summary>
@@ -160,10 +143,7 @@ public class HuntingAppFlow : GameAppFlow
     /// <param name="dt">时间增量</param>
     protected override void OnAppRunning(float dt)
     {
-        if (_currentState != HuntingAppFlowState.Round)
-            return;
-
-        _roundFlow.DoUpdate(dt);
+        _currentRoundFlow?.DoUpdate(dt);
     }
     #endregion
 }

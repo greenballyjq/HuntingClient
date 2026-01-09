@@ -32,11 +32,6 @@ public class UIGameplay : UIBase
     /// 道具组组件
     /// </summary>
     [SerializeField] private UIComponentPropGroup uiComponentPropGroup;
-
-    /// <summary>
-    /// Debug 控制组件
-    /// </summary>
-    [SerializeField] private UIComponentDebug uiComponentDebug;
     
     /// <summary>
     /// 动态任务组件
@@ -65,13 +60,11 @@ public class UIGameplay : UIBase
         uiComponentEnergyProgress.Init();
         uiComponentBulletStatus.Init();
         uiComponentPropGroup.Init();
-        uiComponentDebug.Init();
         //uiComponentQuest.Init();
     }
 
     public override void OnClose()
     {
-        uiComponentDebug.CleanUp();
         uiComponentPropGroup.CleanUp();
         uiComponentBulletStatus.CleanUp();
         uiComponentEnergyProgress.CleanUp();
@@ -85,30 +78,28 @@ public class UIGameplay : UIBase
         buttonSettlement.onClick.RemoveListener(OnSettlementButtonClicked);
     }
 
-    #region 私有方法
-    /// <summary>
-    /// 打开结算面板
-    /// </summary>
-    private async UniTask OpenSettlementWindowAsync()
-    {
-        await _uiManager.OpenUIAsync<UISettlement>("UISettlement",UIManager.UILayer.PopUp);
-
-        // TODO: 测试暂停  待换正式
-        Time.timeScale = 0;
-    }
-    #endregion
-
     #region 事件相关
     /// <summary>
     /// 结算按钮点击回调
     /// </summary>
     private async void OnSettlementButtonClicked()
     {
-        // 打开结算弹窗
-        await OpenSettlementWindowAsync();
+        var roundContext = RoundFlow.Instance.GetRoundContext();
+        
+        if (roundContext.HasHiddenMap)
+        {
+            // 打开假结算面板
+            await _uiManager.OpenUIAsync<UIFakeSettlement>("UIFakeSettlement", UIManager.UILayer.PopUp);
+        }
+        else
+        {
+            // 打开正常结算面板
+            await _uiManager.OpenUIAsync<UISettlement>("UISettlement", UIManager.UILayer.PopUp);
+            _settlementRewardManager.CalculateReward();
+        }
 
-        // 计算本局奖励
-        _settlementRewardManager.CalculateReward();
+        // TODO: 测试暂停  待换正式
+        Time.timeScale = 0;
     }
     #endregion
 }

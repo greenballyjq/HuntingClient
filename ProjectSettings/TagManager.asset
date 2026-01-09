@@ -7,8 +7,7 @@ TagManager:
   - Obstacle
   - Animal
   - Bullet
-  - FxTemporaire
-  - Obstcales
+  - Particle Camera
   layers:
   - Default
   - TransparentFX
@@ -19,7 +18,7 @@ TagManager:
   - Animal
   - Bullet
   - Background
-  - 
+  - Particle
   - 
   - 
   - 

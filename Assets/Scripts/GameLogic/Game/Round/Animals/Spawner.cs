@@ -148,24 +148,6 @@ public class Spawner : MonoBehaviour
     }
     #endregion
 
-    #region 测试
-    /// <summary>
-    /// 设置派发间隔
-    /// </summary>
-    public void SetSpawnInterval(float interval)
-    {
-        spawnInterval = interval;
-    }
-
-    /// <summary>
-    /// 获取派发间隔
-    /// </summary>
-    public float GetSpawnInterval()
-    {
-        return spawnInterval;
-    }
-    #endregion
-
     #region 编辑器可视化
     private void OnDrawGizmos()
     {

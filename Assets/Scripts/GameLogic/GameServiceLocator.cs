@@ -57,7 +57,7 @@ public static class GameServiceLocator
     /// </summary>
     public static T GetRoundManager<T>() where T : class, IRoundManager
     {
-        return HuntingAppFlow.Instance.GetRoundFlow().GetRoundManager<T>();
+        return RoundFlow.Instance.GetRoundManager<T>();
     }
 
     /// <summary>
