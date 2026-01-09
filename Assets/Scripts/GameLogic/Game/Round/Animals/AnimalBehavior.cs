@@ -1,13 +1,13 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Core.Pool;
+using GameFramework.Game.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// 动物基类
 /// </summary>
-public class AnimalBehavior : MonoBehaviour, IPoolItem
+public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
 {
     #region 测试（TODO: 规范化音效系统、动画系统后移除）
     /// <summary>
@@ -287,13 +287,16 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     /// </summary>
     /// <param name="damage">伤害值</param>
     /// <param name="hitPoint">击中点位置</param>
-    public void TakeDamage(float damage, Vector3 hitPoint)
+    /// <param name="hitNormal">命中法线</param>
+    public void TakeDamage(float damage, Vector3 hitPoint, Vector3 hitNormal = default)
     {
         // 扣除生命值
         CurrentHP -= damage;
 
         // 设置受击标志
         IsHit = true;
+        
+        // PlayAnimationTrigger("Hit");
     }
 
     /// <summary>
@@ -313,9 +316,17 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem
     }
 
     /// <summary>
-    /// 播放动画
+    /// 播放动画 bool参数
     /// </summary>
-    public void PlayAnimation(string animationName)
+    public void PlayAnimationBool(string animationName)
+    {
+        Animator.SetBool(animationName, true);
+    }
+
+    /// <summary>
+    /// 播放动画 trigger参数
+    /// </summary>
+    public void PlayAnimationTrigger(string animationName)
     {
         Animator.SetBool(animationName, true);
     }

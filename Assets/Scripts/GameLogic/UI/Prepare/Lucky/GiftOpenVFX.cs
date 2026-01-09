@@ -1,8 +1,8 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
-using GameFramework.Core;
-using GameFramework.Core.UI;
+using GameFramework.Game;
+using GameFramework.Game.UI;
 using Hunting.Events;
 using UnityEngine;
 using UnityEngine.UI;

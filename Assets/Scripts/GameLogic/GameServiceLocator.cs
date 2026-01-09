@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using GameFramework.Core;
 using GameFramework.Game;
 using GameFramework.Manager;
 using UnityEngine.SceneManagement;
@@ -14,6 +13,11 @@ public static class GameServiceLocator
     /// 事件管理器
     /// </summary>
     public static EventManager EventManager => GameFrameworkManager.Instance.GetManager<EventManager>();
+
+    /// <summary>
+    /// 游戏场景管理器
+    /// </summary>
+    public static GameSceneManager SceneManager => GameFrameworkManager.Instance.GetManager<GameSceneManager>();
 
     /// <summary>
     /// UI管理器

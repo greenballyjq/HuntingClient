@@ -1,5 +1,5 @@
 ﻿using cfg.HuntingConfig.Enum;
-using GameFramework.Core.Pool;
+using GameFramework.Game.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 

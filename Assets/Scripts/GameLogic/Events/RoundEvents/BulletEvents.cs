@@ -1,6 +1,6 @@
 ﻿
 using cfg.HuntingConfig;
-using GameFramework.Core;
+using GameFramework.Game;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -91,7 +91,7 @@ namespace Hunting.Events
         /// <summary>
         /// 命中的所有动物实例列表
         /// </summary>
-        public List<AnimalBehavior> Targets { get; set; }
+        public List<IDamageable> Targets { get; set; }
     }
 
     /// <summary>

@@ -1,5 +1,5 @@
 ﻿using cfg.HuntingConfig.Skill;
-using GameFramework.Core;
+using GameFramework.Game;
 
 /// <summary>
 /// 技能系统事件键

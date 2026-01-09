@@ -1,6 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
-using GameFramework.Core.UI;
+using GameFramework.Game.UI;
 using Hunting.Events;
 using UnityEngine;
 using UnityEngine.UI;
