@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using GameFramework.Core.UI;
+using GameFramework.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -39,6 +40,8 @@ public class UIPrepare : UIBase
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
+
+    private GameSceneManager _sceneManager => GameServiceLocator.SceneManager;
 
     /// <summary>
     /// 配置管理器
@@ -133,7 +136,7 @@ public class UIPrepare : UIBase
     /// <summary>
     /// 开始单局按钮回调
     /// </summary>
-    private void OnClickStartRound()
+    private async void OnClickStartRound()
     {
         Role roleData = _configManager.GetRole(_currentRoleId);
         int mapId = _uiComponentMapInfo.GetCurrentMapId();
@@ -154,6 +157,18 @@ public class UIPrepare : UIBase
             });
             DynamicGI.UpdateEnvironment();
         };
+
+        // await _sceneManager.LoadSceneAsync("GameplaySnowMountainScene");
+        // DynamicGI.UpdateEnvironment();
+        // Close();
+        // HuntingAppFlow.Instance.EnterRound(new RoundContext
+        // {
+        //     RoleData = roleData,
+        //     MapData = mapData,
+        //     SkillData = skillData,
+        //     LuckyBuffData = _currentLuckyBuffData,
+        //     HasMapAffinity = roleData.LinkedMapId == mapId
+        // });
     }
 
     /// <summary>

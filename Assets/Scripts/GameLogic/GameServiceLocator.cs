@@ -16,6 +16,11 @@ public static class GameServiceLocator
     public static EventManager EventManager => GameFrameworkManager.Instance.GetManager<EventManager>();
 
     /// <summary>
+    /// 游戏场景管理器
+    /// </summary>
+    public static GameSceneManager SceneManager => GameFrameworkManager.Instance.GetManager<GameSceneManager>();
+
+    /// <summary>
     /// UI管理器
     /// </summary>
     public static UIManager UIManager => GameFrameworkManager.Instance.GetManager<UIManager>();
