@@ -23,7 +23,6 @@ public sealed partial class Specie : Luban.BeanBase
         MoveSpeed = _buf.ReadFloat();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DropRewards = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.EDropType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.EDropType _k0;  _k0 = (HuntingConfig.Enum.EDropType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     DropRewards.Add(_k0, _v0);}}
         PrefabResourcePath = _buf.ReadString();
-        TestPrefabResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -61,10 +60,6 @@ public sealed partial class Specie : Luban.BeanBase
     /// </summary>
     public readonly string PrefabResourcePath;
     /// <summary>
-    /// 测试预制体资源路径
-    /// </summary>
-    public readonly string TestPrefabResourcePath;
-    /// <summary>
     /// 备注
     /// </summary>
     public readonly string Comment;
@@ -86,7 +81,6 @@ public sealed partial class Specie : Luban.BeanBase
         + "MoveSpeed:" + MoveSpeed + ","
         + "DropRewards:" + Luban.StringUtil.CollectionToString(DropRewards) + ","
         + "PrefabResourcePath:" + PrefabResourcePath + ","
-        + "TestPrefabResourcePath:" + TestPrefabResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";
     }
