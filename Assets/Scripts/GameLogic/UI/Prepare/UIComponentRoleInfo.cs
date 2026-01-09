@@ -1,10 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
-using GameFramework.Game.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using cfg.HuntingConfig.Skill;
 using GameFramework.Manager;
+using GameFramework.Core.UI;
 
 /// <summary>
 /// 角色信息组件

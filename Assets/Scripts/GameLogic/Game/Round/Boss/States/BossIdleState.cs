@@ -1,32 +1,29 @@
 ﻿using UnityEngine;
 
-namespace GameLogic.Game.Round.Boss.States
+/// <summary>
+/// Boss Idle状态
+/// </summary>
+public class BossIdleState : BossState
 {
-    /// <summary>
-    /// Boss Idle状态
-    /// </summary>
-    public class BossIdleState : BossState
+    public BossIdleState(BossBehaviour boss, StateMachine stateMachine, string animationName) : base(boss, stateMachine, animationName)
     {
-        public BossIdleState(BossBehaviour boss, StateMachine stateMachine, string animationName) : base(boss, stateMachine, animationName)
-        {
-            
-        }
+        
+    }
 
-        public override void Enter()
-        {
-            base.Enter();
-            stateTimer = 0f;
-        }
+    public override void Enter()
+    {
+        base.Enter();
+        stateTimer = 0f;
+    }
 
-        public override void Update()
+    public override void Update()
+    {
+        base.Update();
+        
+        stateTimer += Time.deltaTime;
+        if (stateTimer > boss.StayTime)
         {
-            base.Update();
-            
-            stateTimer += Time.deltaTime;
-            if (stateTimer > boss.StayTime)
-            {
-                stateMachine.ChangeState(boss.GetRandomMoveState());
-            }
+            stateMachine.ChangeState(boss.GetRandomMoveState());
         }
     }
 } 

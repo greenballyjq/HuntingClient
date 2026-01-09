@@ -202,7 +202,7 @@ PrefabInstance:
     - target: {fileID: 3643511216996983214, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: fbeddcfd50868ab4c86cbbf9a48ccd82, type: 2}
+      objectReference: {fileID: 9100000, guid: 301701992a11e5d45b00a3c375dfb04b, type: 2}
     - target: {fileID: 3866530701558865069, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
       propertyPath: m_Name
       value: Boss_SnowMountain_Rabbit
@@ -454,7 +454,7 @@ Transform:
   m_GameObject: {fileID: 1149857577}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.87672687, z: -0, w: -0.48098856}
-  m_LocalPosition: {x: -7.73, y: 0, z: 1.85}
+  m_LocalPosition: {x: -7.73, y: 0, z: 3.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -736,7 +736,7 @@ Transform:
   m_GameObject: {fileID: 2055510209}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.42103577, z: 0, w: 0.90704405}
-  m_LocalPosition: {x: 8.96, y: 0, z: 1.51}
+  m_LocalPosition: {x: 8.96, y: 0, z: 3.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -1,10 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
-using GameFramework.Game.UI;
 using Hunting.Events;
 using UnityEngine;
 using UnityEngine.UI;
 using GameFramework.Manager;
+using GameFramework.Core.UI;
 
 /// <summary>
 /// 子弹状态展示组件

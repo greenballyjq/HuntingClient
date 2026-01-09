@@ -1,10 +1,6 @@
-﻿using System;
+using System;
 using cfg.HuntingConfig;
-using GameLogic.Game.Round.Boss.States;
 using UnityEngine;
-
-namespace GameLogic.Game.Round.Boss
-{
     public class BossBehaviour : MonoBehaviour, IDamageable
     {
         /// <summary>
@@ -274,5 +270,4 @@ namespace GameLogic.Game.Round.Boss
         }
 
         #endregion
-    }
 }

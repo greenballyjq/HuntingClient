@@ -1,9 +1,9 @@
 ﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
-using GameFramework.Game.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using GameFramework.Manager;
+using GameFramework.Core.UI;
 
 /// <summary>
 /// 地图信息组件

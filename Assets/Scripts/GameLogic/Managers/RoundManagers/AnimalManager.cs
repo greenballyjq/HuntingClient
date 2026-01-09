@@ -7,7 +7,7 @@ using GameFramework.Manager;
 /// <summary>
 /// 动物管理器
 /// </summary>
-public class AnimalManager : IRoundManager
+public class AnimalManager : IRoundManager, IRoundResettable
 {
     /// <summary>
     /// 事件管理器
@@ -24,31 +24,25 @@ public class AnimalManager : IRoundManager
     /// </summary>
     private readonly HashSet<AnimalBehavior> _activeAnimals = new HashSet<AnimalBehavior>();
 
-    /// <summary>
-    /// 初始化单局管理器
-    /// </summary>
-    /// <param name="context">单局上下文</param>
     public void Init(RoundContext context)
     {
         RegisterEvents();
         Debug.Log("[AnimalManager] 初始化完成");
     }
 
-    /// <summary>
-    /// 释放单局管理器
-    /// </summary>
     public void Dispose()
     {
-        // 回收所有活跃的动物
-        foreach (var animal in _activeAnimals)
-            if (animal != null && animal.gameObject != null)
-                _gameObjectPoolManager.Despawn(animal.gameObject);
-                
-        _activeAnimals.Clear();
-        
+        RecycleAllAnimals();
         UnregisterEvents();
         Debug.Log("[AnimalManager] 已释放");
     }
+
+    public void Cleanup()
+    {
+        RecycleAllAnimals();
+    }
+
+    public void ReInit(RoundContext context){}
 
     #region 公共方法
     /// <summary>
@@ -92,6 +86,20 @@ public class AnimalManager : IRoundManager
         });
 
         return animal;
+    }
+    #endregion
+
+    #region 私有方法
+    /// <summary>
+    /// 回收所有动物
+    /// </summary>
+    private void RecycleAllAnimals()
+    {
+        foreach (var animal in _activeAnimals)
+            if (animal != null && animal.gameObject != null)
+                _gameObjectPoolManager.Despawn(animal.gameObject);
+                
+        _activeAnimals.Clear();
     }
     #endregion
 

@@ -35,7 +35,7 @@ namespace cfg.HuntingConfig.Enum
         /// <summary>
         /// 远古雪山
         /// </summary>
-        Mountain = 4,
+        Hidden = 4,
     }
 
 } 

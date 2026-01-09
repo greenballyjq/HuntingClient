@@ -8,7 +8,7 @@ using UnityEngine;
 /// <summary>
 /// 任务管理器
 /// </summary>
-public class QuestManager : IRoundManager, IRoundUpdatable
+public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
     /// 任务起始派发时间（秒）
@@ -133,6 +133,17 @@ public class QuestManager : IRoundManager, IRoundUpdatable
     {
         EndCurrentQuest(isTimeout: false);
         Debug.Log("[QuestManager] 已释放");
+    }
+
+    public void Cleanup()
+    {
+        EndCurrentQuest(isTimeout: false);
+    }
+
+    public void ReInit(RoundContext context)
+    {
+        _roundStartTime = Time.time;
+        _nextDispatchTime = QuestStartTime;
     }
 
     #region 公共方法

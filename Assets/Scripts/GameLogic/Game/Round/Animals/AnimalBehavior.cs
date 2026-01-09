@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Game.Pool;
+using GameFramework.Core.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 

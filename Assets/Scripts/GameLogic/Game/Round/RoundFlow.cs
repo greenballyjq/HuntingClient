@@ -2,6 +2,8 @@
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using GameFramework.Core;
 using GameFramework.Manager;
 
@@ -43,7 +45,7 @@ public class RoundContext
     /// <summary>
     /// 隐藏地图数据
     /// </summary>
-    public bool HiddenMapData { get; set; }
+    public Map HiddenMapData { get; set; }
 }
 
 /// <summary>
@@ -170,23 +172,30 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     public async UniTask EnterHiddenMapAsync()
     {
+        // 伪结算面板动画
         var uiFakeSettlement = _uiManager.GetUI<UIFakeSettlement>("UIFakeSettlement");
-
-        // 并行播放UI动画
         await UniTask.WhenAll(
             uiFakeSettlement.PlayWindowShakeAsync(),
             uiFakeSettlement.PlayButtonGlowAsync()
         );
-
-        // 关闭面板
         _uiManager.CloseUI("UIFakeSettlement");
 
-        // 播放爆炸和下雪粒子特效
+        // 伪结算面板爆米花动画  
         _particleEffectManager.SpawnParticleEffectAsync("Settlement_Explosion").Forget();
-        _particleEffectManager.SpawnParticleEffectAsync("Snow").Forget();
 
-        // TODO: 后续扩展
-        // await 翻页动画和场景切换
+        // 下雪动画
+        _particleEffectManager.SpawnParticleEffectAsync("Snow", autoDestroy: false).Forget();
+
+        // 地图过渡动画
+        var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
+        await uiLoading.PlayFadeInAsync();
+        CleanupManagers();
+        await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
+        ReInitManagers();
+        await uiLoading.PlayFadeOutAsync();
+        _uiManager.CloseUI("UILoading");
+
+        // TODO: 未来步骤待考虑
     }
     #endregion
 
@@ -240,6 +249,30 @@ public class RoundFlow : Singleton<RoundFlow>
         {
             if (_roundManagers[i] is IRoundUpdatable updatable)
                 updatable.DoUpdate(dt);
+        }
+    }
+
+    /// <summary>
+    /// 清理管理器
+    /// </summary>
+    private void CleanupManagers()
+    {
+        for (int i = 0; i < _roundManagers.Count; i++)
+        {
+            if (_roundManagers[i] is IRoundResettable resettable)
+                resettable.Cleanup();
+        }
+    }
+
+    /// <summary>
+    /// 重新初始化管理器
+    /// </summary>
+    private void ReInitManagers()
+    {
+        for (int i = 0; i < _roundManagers.Count; i++)
+        {
+            if (_roundManagers[i] is IRoundResettable resettable)
+                resettable.ReInit(_currentRoundContext);
         }
     }
     #endregion

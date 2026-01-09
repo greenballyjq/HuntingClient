@@ -1,4 +1,4 @@
-﻿    using GameFramework.Game;
+﻿using GameFramework.Core;
 
 /// <summary>
 /// 丰收能量条系统事件键

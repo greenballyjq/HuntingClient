@@ -42,3 +42,20 @@ public interface IRoundPausable
     /// </summary>
     void Resume();
 }
+
+/// <summary>
+/// 可重置状态的单局管理器
+/// </summary>
+public interface IRoundResettable
+{
+    /// <summary>
+    /// 清理当前状态
+    /// </summary>
+    void Cleanup();
+
+    /// <summary>
+    /// 重新初始化
+    /// </summary>
+    /// <param name="context">单局上下文</param>
+    void ReInit(RoundContext context);
+}

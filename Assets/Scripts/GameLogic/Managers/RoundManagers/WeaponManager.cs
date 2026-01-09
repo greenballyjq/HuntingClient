@@ -7,7 +7,7 @@ using UnityEngine;
 /// <summary>
 /// 武器管理器
 /// </summary>
-public class WeaponManager : IRoundManager, IRoundUpdatable
+public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
     /// 主武器
@@ -47,12 +47,25 @@ public class WeaponManager : IRoundManager, IRoundUpdatable
 
     public void DoUpdate(float deltaTime)
     {
-        _mainWeapon.UpdateSpecialBulletTimer();
+        if (_mainWeapon != null)
+            _mainWeapon.UpdateSpecialBulletTimer();
     }
 
     public void Dispose()
     {
         Debug.Log("[WeaponManager] 已释放");
+    }
+
+    public void Cleanup()
+    {
+        _mainWeapon.SetCurrentBullet(1);
+        _mainWeapon = null;
+    }
+
+    public void ReInit(RoundContext context)
+    {
+        CollectMainWeapon();
+        _mainWeapon.Init();
     }
 
     #region 公共方法

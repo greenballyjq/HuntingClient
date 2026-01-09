@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using GameFramework.Game;
 using UnityEngine;
 
 
 /// <summary>
 /// 派发器管理器
 /// </summary>
-public class SpawnerManager : IRoundManager
+public class SpawnerManager : IRoundManager, IRoundResettable
 {
     /// <summary>
     /// 派发器列表
@@ -16,68 +15,47 @@ public class SpawnerManager : IRoundManager
     public void Init(RoundContext context)
     {
         CollectSpawners();
-        SetAllActive(true);
+        SetMap(context.MapData.ID);
+        SetActive(true);
         Debug.Log("[SpecieSpawnManager] 初始化完成");
+    }
+
+    public void Cleanup()
+    {
+        _spawners.Clear();
+    }
+
+    public void ReInit(RoundContext context)
+    {
+        CollectSpawners();
+        SetMap(context.HiddenMapData.ID);
+        SetActive(true);
     }
 
     public void Dispose()
     {
-        SetAllActive(false);
+        SetActive(false);
         _spawners.Clear();
         Debug.Log("[SpecieSpawnManager] 已释放");
     }
 
     #region 公共方法
     /// <summary>
-    /// 根据索引获取派发器
+    /// 设置派发器的启用状态
     /// </summary>
-    public Spawner GetSpawner(int index)
-    {
-        if (index < 0 || index >= _spawners.Count)
-            return null;
-
-        return _spawners[index];
-    }
-    /// <summary>
-    /// 设置单个派发器的启用状态
-    /// </summary>
-    public void SetSpawnerActive(Spawner spawner, bool active)
-    {
-        if (spawner == null)
-            return;
-
-        if (spawner.IsActive == active)
-            return;
-
-        spawner.SetActive(active);
-    }
-
-    /// <summary>
-    /// 设置所有派发器的启用状态
-    /// </summary>
-    public void SetAllActive(bool active)
+    public void SetActive(bool active)
     {
         for (int i = 0; i < _spawners.Count; i++)
-            SetSpawnerActive(_spawners[i], active);
-
-        Debug.Log($"[SpeciesSpawnManager] 设置所有派发器的启用状态为 {active}");
+        {
+            if (_spawners[i].IsActive != active)
+                _spawners[i].SetActive(active);
+        }
     }
 
     /// <summary>
-    /// 设置单个派发器的地图 ID
+    /// 设置派发器的地图 ID
     /// </summary>
-    public void SetSpawnerMap(Spawner spawner, int mapId)
-    {
-        if (spawner == null)
-            return;
-
-        spawner.SetMap(mapId);
-    }
-
-    /// <summary>
-    /// 设置所有派发器的地图 ID
-    /// </summary>
-    public void SetAllMap(int mapId)
+    public void SetMap(int mapId)
     {
         for (int i = 0; i < _spawners.Count; i++)
             _spawners[i].SetMap(mapId);
@@ -90,9 +68,9 @@ public class SpawnerManager : IRoundManager
     /// </summary>
     private void CollectSpawners()
     {
+        _spawners.Clear();
         Spawner[] found = Object.FindObjectsOfType<Spawner>(true);
         _spawners.AddRange(found);
-        Debug.Log($"[SpeciesSpawnManager] 收集到派发器数量：{_spawners.Count}");
     }
     #endregion
 }

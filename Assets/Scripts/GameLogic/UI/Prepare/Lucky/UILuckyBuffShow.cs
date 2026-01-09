@@ -1,6 +1,5 @@
 ﻿using cfg.HuntingConfig;
-using GameFramework.Game;
-using GameFramework.Game.UI;
+using GameFramework.Core.UI;
 using Hunting.Events;
 using UnityEngine;
 using UnityEngine.UI;

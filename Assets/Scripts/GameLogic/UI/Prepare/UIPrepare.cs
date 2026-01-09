@@ -1,4 +1,5 @@
 ﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
@@ -152,7 +153,8 @@ public class UIPrepare : UIBase
                 SkillData = skillData,
                 LuckyBuffData = _currentLuckyBuffData,
                 HasLinkage = roleData.LinkedMapId == mapId,
-                HasHiddenMap = true
+                HasHiddenMap = true,
+                HiddenMapData = _configManager.GetMap(EMapType.Hidden)
             }).Forget();
             DynamicGI.UpdateEnvironment();
         };

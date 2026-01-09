@@ -1,5 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using GameFramework.Game.UI;
+﻿using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -97,9 +96,6 @@ public class UIGameplay : UIBase
             await _uiManager.OpenUIAsync<UISettlement>("UISettlement", UIManager.UILayer.PopUp);
             _settlementRewardManager.CalculateReward();
         }
-
-        // TODO: 测试暂停  待换正式
-        Time.timeScale = 0;
     }
     #endregion
 }

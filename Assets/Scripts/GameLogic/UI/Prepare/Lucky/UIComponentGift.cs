@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Game.UI;
+using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 

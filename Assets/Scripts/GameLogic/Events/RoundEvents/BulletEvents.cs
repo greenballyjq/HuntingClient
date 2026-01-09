@@ -1,5 +1,6 @@
 ﻿
 using cfg.HuntingConfig;
+using GameFramework.Core;
 using GameFramework.Game;
 using System.Collections.Generic;
 using UnityEngine;

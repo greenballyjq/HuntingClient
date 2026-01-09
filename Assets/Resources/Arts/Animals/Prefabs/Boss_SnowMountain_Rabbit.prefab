@@ -104,7 +104,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4661148520182368512}
+  - {fileID: 2792337702351851935}
   m_Father: {fileID: 5521390811681170418}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &3643511216996983214
@@ -128,7 +128,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!1001 &5126504435349171947
+--- !u!1001 &2398968508611409524
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -194,20 +194,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b527a0dc3c4eb9a4fa2497be7d820c1c, type: 3}
       propertyPath: m_Name
-      value: rabbit
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 3251187547055564028, guid: b527a0dc3c4eb9a4fa2497be7d820c1c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b5ff892b06527ce49a59a7ead44cbd7e, type: 2}
+      objectReference: {fileID: 2100000, guid: 49bfdbb5656da0c43b006a2a0174ab77, type: 2}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: b527a0dc3c4eb9a4fa2497be7d820c1c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b527a0dc3c4eb9a4fa2497be7d820c1c, type: 3}
---- !u!4 &4661148520182368512 stripped
+--- !u!4 &2792337702351851935 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b527a0dc3c4eb9a4fa2497be7d820c1c, type: 3}
-  m_PrefabInstance: {fileID: 5126504435349171947}
+  m_PrefabInstance: {fileID: 2398968508611409524}
   m_PrefabAsset: {fileID: 0}
