@@ -1,5 +1,5 @@
 ﻿using cfg.HuntingConfig.Enum;
-using GameFramework.Core;
+using GameFramework.Game;
 
 /// <summary>
 /// 击杀大型动物任务处理器

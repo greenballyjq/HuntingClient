@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig;
-using GameFramework.Core;
-using GameFramework.Core.Pool;
+using GameFramework.Game;
+using GameFramework.Game.Pool;
 using Hunting.Events;
 using System.Collections.Generic;
 using UnityEngine;
@@ -124,22 +124,27 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
         float moveDistance = _bulletData.MoveSpeed * Time.deltaTime;
         if (Physics.Raycast(transform.position, _moveDirection, out RaycastHit hit, moveDistance, LayerMask.GetMask("Animal")))
         {
-            if (hit.collider.TryGetComponent(out AnimalBehavior animal))
-                HandleHit(animal, hit.point);
+            // 尝试获取IDamageable组件（支持所有可攻击的目标）
+            if (hit.collider.TryGetComponent(out IDamageable damageable))
+                HandleHit(damageable, hit.point, hit.normal);
         }
     }
 
     /// <summary>
-    /// 处理命中
+    /// 处理命中可攻击目标
     /// </summary>
-    /// <param name="animal">命中的动物</param>
+    /// <param name="damageable">命中的可攻击目标</param>
     /// <param name="hitPoint">命中位置</param>
-    private void HandleHit(AnimalBehavior animal, Vector3 hitPoint)
+    /// <param name="hitNormal">命中法线</param>
+    private void HandleHit(IDamageable damageable, Vector3 hitPoint, Vector3 hitNormal)
     {
-        // 执行效果，获取所有命中的动物
-        List<AnimalBehavior> hitAnimals = _bulletEffect.OnHit(_bulletRuntimeContext, new BulletHitInfo { 
+        // 对目标造成伤害
+        damageable.TakeDamage(_bulletRuntimeContext.FinalDamage, hitPoint, hitNormal);
+        
+        // 执行效果，获取所有命中的目标
+        List<IDamageable> hitAnimals = _bulletEffect.OnHit(_bulletRuntimeContext, new BulletHitInfo { 
             HitPoint = hitPoint,
-            PrimaryTarget = animal,
+            PrimaryTarget = damageable,
         });
 
         // 触发命中事件

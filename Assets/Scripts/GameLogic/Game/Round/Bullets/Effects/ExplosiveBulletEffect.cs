@@ -20,19 +20,19 @@ public class ExplosiveBulletEffect : IBulletEffect
     /// <summary>
     /// 命中处理
     /// </summary>
-    public List<AnimalBehavior> OnHit(BulletRuntimeContext context, BulletHitInfo hitInfo)
+    public List<IDamageable> OnHit(BulletRuntimeContext context, BulletHitInfo hitInfo)
     {
         // 记录已处理的动物，避免重复伤害
-        HashSet<AnimalBehavior> processed = new HashSet<AnimalBehavior>
+        HashSet<IDamageable> processed = new HashSet<IDamageable>
         {
             hitInfo.PrimaryTarget
         };
 
         // 对主要目标造成伤害
-        hitInfo.PrimaryTarget.TakeDamage(context.FinalDamage, hitInfo.HitPoint);
+        hitInfo.PrimaryTarget.TakeDamage(context.FinalDamage, hitInfo.HitPoint, Vector3.zero);
 
         // 检测爆炸范围内的所有动物
-        List<AnimalBehavior> hitAnimals = new List<AnimalBehavior> { hitInfo.PrimaryTarget };
+        List<IDamageable> hitTargets = new List<IDamageable> { hitInfo.PrimaryTarget };
         Collider[] colliders = Physics.OverlapSphere(hitInfo.HitPoint, _radius, LayerMask.GetMask("Animal"));
         
         foreach (var collider in colliders)
@@ -45,9 +45,9 @@ public class ExplosiveBulletEffect : IBulletEffect
 
             // 对范围内的其他动物造成伤害
             animal.TakeDamage(context.FinalDamage, hitInfo.HitPoint);
-            hitAnimals.Add(animal);
+            hitTargets.Add(animal);
         }
 
-        return hitAnimals;
+        return hitTargets;
     }
 }

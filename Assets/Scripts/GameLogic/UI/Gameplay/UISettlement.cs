@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using GameFramework.Core;
-using GameFramework.Core.UI;
+using GameFramework.Game;
+using GameFramework.Game.UI;
 using GameFramework.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;

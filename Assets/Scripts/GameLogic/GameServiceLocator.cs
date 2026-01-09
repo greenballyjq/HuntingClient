@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using GameFramework.Core;
 using GameFramework.Game;
 using GameFramework.Manager;
 using UnityEngine.SceneManagement;

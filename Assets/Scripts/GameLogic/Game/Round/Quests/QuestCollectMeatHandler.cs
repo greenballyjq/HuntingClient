@@ -1,5 +1,5 @@
 ﻿using cfg.HuntingConfig.Enum;
-using GameFramework.Core;
+using GameFramework.Game;
 
 /// <summary>
 /// 收集肉类任务处理器

@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
-using GameFramework.Core.UI;
+using GameFramework.Game.UI;
 using GameFramework.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -144,31 +144,31 @@ public class UIPrepare : UIBase
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
 
         // TODO: 切换场景测试
-        SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
-        {
-            Close();
-            HuntingAppFlow.Instance.EnterRound(new RoundContext
-            {
-                RoleData = roleData,
-                MapData = mapData,
-                SkillData = skillData,
-                LuckyBuffData = _currentLuckyBuffData,
-                HasMapAffinity = roleData.LinkedMapId == mapId
-            });
-            DynamicGI.UpdateEnvironment();
-        };
-
-        // await _sceneManager.LoadSceneAsync("GameplaySnowMountainScene");
-        // DynamicGI.UpdateEnvironment();
-        // Close();
-        // HuntingAppFlow.Instance.EnterRound(new RoundContext
+        // SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
         // {
-        //     RoleData = roleData,
-        //     MapData = mapData,
-        //     SkillData = skillData,
-        //     LuckyBuffData = _currentLuckyBuffData,
-        //     HasMapAffinity = roleData.LinkedMapId == mapId
-        // });
+        //     Close();
+        //     HuntingAppFlow.Instance.EnterRound(new RoundContext
+        //     {
+        //         RoleData = roleData,
+        //         MapData = mapData,
+        //         SkillData = skillData,
+        //         LuckyBuffData = _currentLuckyBuffData,
+        //         HasMapAffinity = roleData.LinkedMapId == mapId
+        //     });
+        //     DynamicGI.UpdateEnvironment();
+        // };
+
+        await _sceneManager.LoadSceneAsync("GameplaySnowMountainScene");
+        DynamicGI.UpdateEnvironment();
+        Close();
+        HuntingAppFlow.Instance.EnterRound(new RoundContext
+        {
+            RoleData = roleData,
+            MapData = mapData,
+            SkillData = skillData,
+            LuckyBuffData = _currentLuckyBuffData,
+            HasMapAffinity = roleData.LinkedMapId == mapId
+        });
     }
 
     /// <summary>

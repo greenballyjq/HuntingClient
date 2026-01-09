@@ -38,6 +38,6 @@ public class StateMachine
     /// </summary>
     public void Update()
     {
-        currentState.Update();
+        currentState?.Update();
     }
 }

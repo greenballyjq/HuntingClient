@@ -42,7 +42,7 @@ public class AnimalState : IState
     /// </summary>
     public virtual void Enter()
     {
-        animal.PlayAnimation(animationName);
+        animal.PlayAnimationBool(animationName);
     }
 
     /// <summary>

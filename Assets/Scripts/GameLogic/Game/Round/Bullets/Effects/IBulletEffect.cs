@@ -12,7 +12,7 @@ public interface IBulletEffect
     /// <param name="context">子弹运行时上下文</param>
     /// <param name="hitInfo">命中信息</param>
     /// <returns>命中的所有动物列表</returns>
-    List<AnimalBehavior> OnHit(BulletRuntimeContext context, BulletHitInfo hitInfo);
+    List<IDamageable> OnHit(BulletRuntimeContext context, BulletHitInfo hitInfo);
 }
 
 /// <summary>
@@ -39,5 +39,6 @@ public class BulletHitInfo
     /// <summary>
     /// 主要命中目标
     /// </summary>
-    public AnimalBehavior PrimaryTarget { get; set; }
+    // public AnimalBehavior PrimaryTarget { get; set; }
+    public IDamageable PrimaryTarget { get; set; }
 }

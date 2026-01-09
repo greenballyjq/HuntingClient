@@ -1,5 +1,5 @@
 using cfg.HuntingConfig;
-using GameFramework.Core;
+using GameFramework.Game;
 
 /// <summary>
 /// 任务系统事件键
