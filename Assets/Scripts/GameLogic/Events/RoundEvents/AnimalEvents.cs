@@ -14,7 +14,7 @@ public static class AnimalEvents
     /// <summary>
     /// 动物生成事件
     /// </summary>
-    public static readonly EventKey<AnimalSpawnedEventArgs> AnimalSpawned = new EventKey<AnimalSpawnedEventArgs>();
+    public static readonly EventKey<AnimalGeneratedEventArgs> AnimalGenerated = new EventKey<AnimalGeneratedEventArgs>();
 
     /// <summary>
     /// 动物进入死亡事件
@@ -40,13 +40,8 @@ public static class AnimalEvents
 /// <summary>
 /// 动物生成事件参数
 /// </summary>
-public sealed class AnimalSpawnedEventArgs : EventArgs
+public sealed class AnimalGeneratedEventArgs : EventArgs
 {
-    /// <summary>
-    /// 触发派发的派发器
-    /// </summary>
-    public Spawner Spawner { get; set; }
-
     /// <summary>
     /// 生成的动物实例
     /// </summary>

@@ -9,11 +9,11 @@ public class TestSnow : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            bossBehaviour.Init(null, 2f);
+            //bossBehaviour.Init(null, 2f);
             foreach (var spawner in spawners)
             {
-                spawner.SetMap(1);
-                spawner.SetActive(true);
+                //spawner.SetMap(1);
+                //spawner.SetActive(true);
             }
         }
     }

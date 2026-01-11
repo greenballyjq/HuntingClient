@@ -74,7 +74,6 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private RoundFlowState _currentState = RoundFlowState.None;
 
-
     /// <summary>
     /// 当前单局上下文
     /// </summary>
@@ -85,7 +84,6 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private readonly List<IRoundManager> _roundManagers = new List<IRoundManager>();
 
-    #region 测试
     /// <summary>
     /// UI管理器
     /// </summary>
@@ -95,7 +93,11 @@ public class RoundFlow : Singleton<RoundFlow>
     /// 粒子特效管理器
     /// </summary>
     private ParticleEffectManager _particleEffectManager => GameServiceLocator.GetFrameworkManager<ParticleEffectManager>();
-    #endregion
+
+    /// <summary>
+    /// 音效管理器
+    /// </summary>
+    private SoundManager _soundManager => GameServiceLocator.GetFrameworkManager<SoundManager>();
 
     #region 公共方法
     /// <summary>
@@ -130,6 +132,10 @@ public class RoundFlow : Singleton<RoundFlow>
         CreateRoundManagers();
         await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
         InitRoundManagers();
+
+        // 等五秒
+        await UniTask.Delay(5000);
+
         _currentState = RoundFlowState.Playing;
         #endregion
     }
@@ -188,14 +194,33 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // 地图过渡动画
         var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
+
         await uiLoading.PlayFadeInAsync();
+
         CleanupManagers();
         await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
+
         ReInitManagers();
+        DynamicGI.UpdateEnvironment();
         await uiLoading.PlayFadeOutAsync();
+
         _uiManager.CloseUI("UILoading");
 
         // TODO: 未来步骤待考虑
+        var animalManager = GetRoundManager<AnimalManager>();
+        var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
+        
+        uiAlertRed.PlayFlashAsync().Forget();
+        _soundManager.PlaySound2DByPath("Arts/Audio/SFX/sfx_alert");
+        var boss = await animalManager.GenerateBossAsync();
+
+        await UniTask.Delay(2000);
+
+        _soundManager.PlaySound2DByPath("Arts/Audio/SFX/sfx_laugh");
+        _soundManager.PlaySound2DByPath("Arts/Audio/BGM/bgm_snow", AudioChannel.Bgm,volume:0.1f);
+        await UniTask.Delay(3000);
+
+        boss.EnterCombat();
     }
     #endregion
 

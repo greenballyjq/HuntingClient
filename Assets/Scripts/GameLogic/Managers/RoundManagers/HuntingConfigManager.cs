@@ -431,6 +431,13 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
 
         return (specie, stayTime);
     }
+
+    /// <summary>
+    /// 随机获取一个Boss物种
+    /// </summary>
+    /// <returns>随机Boss物种配置</returns>
+    public Specie GetRandomBoss()
+        => SpecieTable.DataList.Where(s => s.VolumeType == EVolumeType.Boss).ToList()[Random.Range(0, SpecieTable.DataList.Count(s => s.VolumeType == EVolumeType.Boss))];
     #endregion
 
     #region 派发相关特殊方法

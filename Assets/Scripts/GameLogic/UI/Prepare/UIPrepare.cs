@@ -142,7 +142,7 @@ public class UIPrepare : UIBase
         Map mapData = _configManager.GetMap(mapId);
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
 
-        // TODO: 切换场景测试
+        // TODO: 测试，未来根据不同地图加载不同场景，以及判断是否有隐藏地图
         SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
         {
             Close();

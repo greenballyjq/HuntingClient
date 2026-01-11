@@ -225,8 +225,6 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     }
     #endregion
 
-    
-
     private void Awake()
     {
         // 获取组件

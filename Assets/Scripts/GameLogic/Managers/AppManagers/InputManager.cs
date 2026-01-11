@@ -16,8 +16,22 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     /// <summary>
     /// 主摄像机
     /// </summary>
-    private Camera _mainCamera;
-    public Camera MainCamera => _mainCamera;
+    public Camera MainCamera
+    {
+        get
+        {
+            var camera = Camera.main;
+            if (camera == null)
+            {
+                var mainCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
+                if (mainCameraObj != null)
+                {
+                    camera = mainCameraObj.GetComponent<Camera>();
+                }
+            }
+            return camera;
+        }
+    }
 
     /// <summary>
     /// 指针屏幕坐标
@@ -34,7 +48,6 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
         // 初始化输入系统
         _input = new GameInputActions();
         _input.Player.SetCallbacks(this);
-        _mainCamera = Camera.main;
 
         // 默认启用Fire Action，禁用SelectTarget Action
         _input.Player.Fire.Enable();
@@ -71,14 +84,6 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     }
 
     /// <summary>
-    /// 更新主摄像机引用
-    /// </summary>
-    public void UpdateMainCamera()
-    {
-        _mainCamera = Camera.main;
-    }
-
-    /// <summary>
     /// 将屏幕坐标转换为世界坐标
     /// </summary>
     /// <param name="screenPosition">屏幕坐标</param>
@@ -86,10 +91,14 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     /// <returns>世界坐标</returns>
     public Vector3 ScreenToWorld(Vector2 screenPosition, float depth)
     {
-        if (_mainCamera == null)
-            UpdateMainCamera();
+        var camera = MainCamera;
+        if (camera == null)
+        {
+            Debug.LogError("[InputManager] MainCamera 为 null，无法转换屏幕坐标到世界坐标");
+            return Vector3.zero;
+        }
 
-        return _mainCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, depth));
+        return camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, depth));
     }
 
     /// <summary>
@@ -99,10 +108,7 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     /// <returns>屏幕坐标</returns>
     public Vector3 WorldToScreen(Vector3 worldPosition)
     {
-        if (_mainCamera == null)
-            UpdateMainCamera();
-            
-        return _mainCamera.WorldToScreenPoint(worldPosition);
+        return MainCamera.WorldToScreenPoint(worldPosition);
     }
     #endregion
 

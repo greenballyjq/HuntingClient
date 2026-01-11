@@ -32,6 +32,10 @@ namespace cfg.HuntingConfig.Enum
         /// 特殊体型
         /// </summary>
         Special = 3,
+        /// <summary>
+        /// Boss体型
+        /// </summary>
+        Boss = 4,
     }
 
 } 

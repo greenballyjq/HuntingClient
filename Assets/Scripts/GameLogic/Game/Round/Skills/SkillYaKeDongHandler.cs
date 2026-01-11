@@ -78,7 +78,7 @@ public class SkillYaKeDongHandler : ISkillHandler
         for (int i = 0; i < spawnCount; i++)
         {
             Vector3 spawnPosition = CalculateSpawnPosition(basePosition, right, i);
-            await _animalManager.SpawnAnimalAsync(specie, spawnPosition, forward, stayTime);
+            await _animalManager.GenerateAnimalAsync(specie, spawnPosition, forward, stayTime);
         }
     }
 

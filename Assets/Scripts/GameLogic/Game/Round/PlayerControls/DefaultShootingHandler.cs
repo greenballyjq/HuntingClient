@@ -23,36 +23,23 @@ public class DefaultShootingHandler : IPlayerControlHandler
     /// <summary>
     /// 瞄准深度
     /// </summary>
-    private const float AimDepth = 20f;
+    private const float AimDepth = 30f;
 
     public void OnControlStart()
     {
         Input.SwitchToFireMode();
+        _weapon = _weaponManager.GetMainWeapon();
     }
 
     public void OnControlUpdate(float deltaTime)
     {
-        // TODO: 待以后实现LoadingManager后移除
-        if (_weapon == null)
+        if (Input.IsFireHeld)
         {
-            _weapon = _weaponManager.GetMainWeapon();
-            if (_weapon == null)
-                return;  
-        }
-
-        // 获取输入
-        Vector2 screenPos = Input.PointerScreenPosition;
-        bool isFiring = Input.IsFireHeld;
-
-        // 转换为世界坐标
-        Vector3 worldPos = Input.ScreenToWorld(screenPos, AimDepth);
-
-        // 控制武器瞄准
-        _weapon.SetAimTarget(worldPos);
-
-        // 控制武器开火
-        if (isFiring)
+            Vector3 worldPos = Input.ScreenToWorld(Input.PointerScreenPosition, AimDepth);
+            _weapon.SetAimTarget(worldPos);
             _weapon.Fire();
+        }
+            
     }
 
     public void OnControlEnd()

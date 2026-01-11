@@ -4,7 +4,7 @@
 /// <summary>
 /// 玩家控制管理器
 /// </summary>
-public class PlayerControlManager : IRoundManager, IRoundUpdatable
+public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
     /// 当前玩家控制处理器
@@ -26,6 +26,16 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable
     {
         EndCurrentControl();
         Debug.Log("[PlayerControlManager] 已释放");
+    }
+
+    public void Cleanup()
+    {
+        EndCurrentControl();
+    }
+
+    public void ReInit(RoundContext context)
+    {
+        SwitchToDefaultShooting();
     }
 
     #region 公共方法

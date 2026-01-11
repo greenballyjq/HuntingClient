@@ -55,11 +55,6 @@ public class HuntingAppFlow : GameAppFlow
     private HuntingAppFlowState _currentState = HuntingAppFlowState.None;
 
     /// <summary>
-    /// 当前单局上下文
-    /// </summary>
-    private RoundContext _currentRoundContext;
-
-    /// <summary>
     /// 当前单局流程
     /// </summary>
     private RoundFlow _currentRoundFlow;
@@ -95,12 +90,9 @@ public class HuntingAppFlow : GameAppFlow
     /// <param name="context">单局上下文</param>
     public async UniTask EnterRound(RoundContext context)
     {
-        // 记录下局上下文
-        _currentRoundContext = context;
-
         // 创建单局流程并开始
         _currentRoundFlow = new RoundFlow();
-        await _currentRoundFlow.StartRound(_currentRoundContext);
+        await _currentRoundFlow.StartRound(context);
 
         _currentState = HuntingAppFlowState.Round;
     }

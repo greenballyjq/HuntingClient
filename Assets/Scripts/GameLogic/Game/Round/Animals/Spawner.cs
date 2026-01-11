@@ -1,15 +1,12 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using cfg.HuntingConfig;
+using UnityEngine;
 
 /// <summary>
 /// 物种派发器
 /// </summary>
 public class Spawner : MonoBehaviour
 {
-    /// <summary>
-    /// 初始地图 ID
-    /// </summary>
-    private int mapId = 1;
-
     /// <summary>
     /// 派发间隔（秒）
     /// </summary>
@@ -31,19 +28,14 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float maxSpawnAngle = 60f;
 
     /// <summary>
-    /// 上次派发的时间戳
+    /// 累积时间
     /// </summary>
-    private float _lastSpawnTime;
+    private float _accumulatedTime;
 
     /// <summary>
-    /// 派发器是否处于启用状态。
+    /// 当前地图数据
     /// </summary>
-    private bool _isActive = false;
-
-    /// <summary>
-    /// 当前派发是否启用
-    /// </summary>
-    public bool IsActive => _isActive;
+    private Map _mapData;
 
     /// <summary>
     /// 配置管理器
@@ -51,55 +43,50 @@ public class Spawner : MonoBehaviour
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
-    /// 事件中心
+    /// 动物管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
 
-    private void Start()
+    /// <summary>
+    /// 初始化派发器
+    /// </summary>
+    /// <param name="mapData">地图数据</param>
+    public void Init(Map mapData)
     {
-        _lastSpawnTime = Time.time;
+        _mapData = mapData;
+        _accumulatedTime = 0f;
     }
 
-    private void Update()
+    /// <summary>
+    /// 每帧更新
+    /// </summary>
+    /// <param name="dt">时间增量</param>
+    public void DoUpdate(float dt)
     {
-        if (!_isActive)
-            return;
+        _accumulatedTime += dt;
 
-        if (Time.time - _lastSpawnTime < spawnInterval)
-            return;
-
-        TrySpawn();
-        _lastSpawnTime = Time.time;
+        if (_accumulatedTime >= spawnInterval)
+        {
+            Spawn();
+            _accumulatedTime -= spawnInterval;
+        }
     }
 
     #region 私有方法
     /// <summary>
-    /// 尝试派发
+    /// 派发物种
     /// </summary>
-    private void TrySpawn()
+    private void Spawn()
     {
         // 从配置按地图与体型策略选出物种与驻场时间
-        var (specie, stayTime) = _configManager.GetRandomSpecieForMap(mapId);
-        if (specie == null)
-        {
-            Debug.LogError($"[SpeciesSpawner] 地图 {mapId} 未配置可用物种");
-            return;
-        }
+        var (specie, stayTime) = _configManager.GetRandomSpecieForMap(_mapData.ID);
 
         // 计算生成位置与移动方向
         Vector3 spawnPosition = CalculateSpawnPosition();
         Vector3 moveDirection = CalculateMoveDirection();
 
-        // 触发派发事件
-        TriggerSpecieSpawn(new SpeciesSpawnEventArgs
-        {
-            Sender = this,
-            Spawner = this,
-            SpecieData = specie,
-            StayTime = stayTime,
-            Position = spawnPosition,
-            Direction = moveDirection,
-        }); 
+        // 调用动物管理器生成动物
+        _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection, stayTime).Forget();
     }
 
     /// <summary>
@@ -119,32 +106,6 @@ public class Spawner : MonoBehaviour
     {
         float angle = Random.Range(minSpawnAngle, maxSpawnAngle);
         return Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
-    }
-
-    /// <summary>
-    /// 触发派发事件
-    /// </summary>
-    private void TriggerSpecieSpawn(SpeciesSpawnEventArgs args)
-    {
-        _eventManager.Trigger(SpawnEvents.SpeciesSpawned, args);
-    }
-    #endregion
-
-    #region 公共方法
-    /// <summary>
-    /// 设置地图 ID
-    /// </summary>
-    public void SetMap(int value)
-    {
-        mapId = value;
-    }
-
-    /// <summary>
-    /// 启用或禁用派发
-    /// </summary>
-    public void SetActive(bool value)
-    {
-        _isActive = value;
     }
     #endregion
 

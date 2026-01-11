@@ -1,12 +1,13 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using cfg.HuntingConfig;
 using UnityEngine;
     public class BossBehaviour : MonoBehaviour, IDamageable
     {
         /// <summary>
-        /// Boos移动目标点
+        /// Boss移动目标点
         /// </summary>
-        [SerializeField] private Transform[] randomMovePoints;
+        private Transform[] _randomMovePoints;
 
         /// <summary>
         /// 状态机
@@ -29,9 +30,19 @@ using UnityEngine;
         private BossIdleState _idleState;
 
         /// <summary>
-        /// Boss Idle状态
+        /// Boss Hit状态
         /// </summary>
         private BossHitState _hitState;
+
+        /// <summary>
+        /// Boss Enter状态
+        /// </summary>
+        private BossEnterState _enterState;
+        
+        /// <summary>
+        /// 配置数据
+        /// </summary>
+        public Specie SpecieData { get; private set; }
         
         /// <summary>
         /// 最大生命值
@@ -52,11 +63,6 @@ using UnityEngine;
         /// 当前移动方向
         /// </summary>
         public Vector3 CurrentDirection { get; private set; }
-
-        /// <summary>
-        /// 最大驻场时间
-        /// </summary>
-        public float StayTime { get; private set; }
         
         /// <summary>
         /// 是否被击中标志
@@ -93,32 +99,36 @@ using UnityEngine;
             _material = _renderer.material;
             _originalColor = _material.color;
 
+            // 查找所有Boss移动点
+            CollectBossMovePoints();
+
             // 创建状态机
             _stateMachine = new StateMachine();
+            _enterState = new BossEnterState(this, _stateMachine, "Enter");
             _idleState = new BossIdleState(this, _stateMachine, "Idle");
             _hitState = new BossHitState(this, _stateMachine, "Hit");
-            _randomMoveState = new BossRandomMoveState(this, _stateMachine, "Move", randomMovePoints);
+            _randomMoveState = new BossRandomMoveState(this, _stateMachine, "Move", _randomMovePoints);
             _deathState = new BossDeathState(this, _stateMachine, "Death");
         }
 
         private void Start()
         {
-            Init(null, 2f);
+            Init(null);
         }
 
         /// <summary>
-        /// TODO Boss初始化，后续根据数值表填入
+        /// Boss初始化
         /// </summary>
-        public void Init(Specie data, float stayTime)
+        /// <param name="data">物种数据</param>
+        public void Init(Specie data)
         {
-            // SpecieData = data;
-            MaxHP = 1000;
-            StayTime = stayTime;
-            CurrentHP = MaxHP;
-            CurrentMoveSpeed = 4f;
+            SpecieData = data;
+            MaxHP = 2000;
+            CurrentHP = 2000;
+            CurrentMoveSpeed = 6;
             CurrentDirection = transform.forward;
             
-            _stateMachine.Init(_idleState);
+            _stateMachine.Init(_enterState);
         }
 
         private void Update()
@@ -261,12 +271,41 @@ using UnityEngine;
         }
         
         /// <summary>
-        /// 获取 idle状态
+        /// 获取 Hit状态
         /// </summary>
         /// <returns></returns>
         public BossHitState GetHitState()
         {
             return _hitState;
+        }
+
+        /// <summary>
+        /// 获取 Enter状态
+        /// </summary>
+        /// <returns></returns>
+        public BossEnterState GetEnterState()
+        {
+            return _enterState;
+        }
+
+        /// <summary>
+        /// 进入战斗
+        /// </summary>
+        public void EnterCombat()
+        {
+            _stateMachine.ChangeState(_randomMoveState);
+        }
+
+        /// <summary>
+        /// 收集Boss移动点
+        /// </summary>
+        private void CollectBossMovePoints()
+        {
+            var bossMovePointsParent = GameObject.Find("BossMovePoints");
+            var movePointList = new List<Transform>();
+            for (int i = 0; i < bossMovePointsParent.transform.childCount; i++)
+                movePointList.Add(bossMovePointsParent.transform.GetChild(i));
+            _randomMovePoints = movePointList.ToArray();
         }
 
         #endregion

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5521390811681170418}
   - component: {fileID: 8459504412770068652}
-  - component: {fileID: 7843935110911132913}
+  - component: {fileID: 283936586924955467}
   m_Layer: 6
-  m_Name: Boss_SnowMountain_Rabbit
+  m_Name: pf_animal_snow_boss_rabbit_test
   m_TagString: Animal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.9276338, y: 2.7506495, z: 3.6202908}
   m_Center: {x: 0.015198469, y: 1.3853247, z: -0.3914063}
---- !u!114 &7843935110911132913
+--- !u!114 &283936586924955467
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,7 +117,7 @@ Animator:
   m_GameObject: {fileID: 8966005518921594391}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b527a0dc3c4eb9a4fa2497be7d820c1c, type: 3}
-  m_Controller: {fileID: 9100000, guid: 301701992a11e5d45b00a3c375dfb04b, type: 2}
+  m_Controller: {fileID: 9100000, guid: 40a93317caa698640af8bb2c94460038, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

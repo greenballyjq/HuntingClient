@@ -39,7 +39,6 @@ public class MeatProgressManager : IRoundManager
 
     public void Init(RoundContext context)
     {
-
         var meatProgress = _configManager.GetMeatProgress(1);
         _requiredPerBar = meatProgress.RequiredPerBar;
         _maxMeatBars = meatProgress.MaxBar;

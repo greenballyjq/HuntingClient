@@ -167,20 +167,7 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private void CollectMainWeapon()
     {
         GameObject weaponObj = GameObject.Find("MainWeapon");
-        if (weaponObj == null)
-        {
-            Debug.LogError("[WeaponManager] 未找到名为 MainWeapon 的武器对象");
-            return;
-        }
-
         _mainWeapon = weaponObj.GetComponent<MainWeapon>();
-        if (_mainWeapon == null)
-        {
-            Debug.LogError("[WeaponManager] MainWeapon 对象上缺少 MainWeapon 组件");
-            return;
-        }
-
-        Debug.Log("[WeaponManager] 已绑定场景主武器 MainWeapon");
     }
 
     /// <summary>

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-
 /// <summary>
 /// 派发器管理器
 /// </summary>
-public class SpawnerManager : IRoundManager, IRoundResettable
+public class SpawnerManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
     /// 派发器列表
@@ -15,9 +14,10 @@ public class SpawnerManager : IRoundManager, IRoundResettable
     public void Init(RoundContext context)
     {
         CollectSpawners();
-        SetMap(context.MapData.ID);
-        SetActive(true);
-        Debug.Log("[SpecieSpawnManager] 初始化完成");
+        for (int i = 0; i < _spawners.Count; i++)
+            _spawners[i].Init(context.HiddenMapData);
+
+        Debug.Log("[SpawnerManager] 初始化完成");
     }
 
     public void Cleanup()
@@ -28,39 +28,25 @@ public class SpawnerManager : IRoundManager, IRoundResettable
     public void ReInit(RoundContext context)
     {
         CollectSpawners();
-        SetMap(context.HiddenMapData.ID);
-        SetActive(true);
+        for (int i = 0; i < _spawners.Count; i++)
+            _spawners[i].Init(context.HiddenMapData);
     }
 
     public void Dispose()
     {
-        SetActive(false);
         _spawners.Clear();
-        Debug.Log("[SpecieSpawnManager] 已释放");
-    }
-
-    #region 公共方法
-    /// <summary>
-    /// 设置派发器的启用状态
-    /// </summary>
-    public void SetActive(bool active)
-    {
-        for (int i = 0; i < _spawners.Count; i++)
-        {
-            if (_spawners[i].IsActive != active)
-                _spawners[i].SetActive(active);
-        }
+        Debug.Log("[SpawnerManager] 已释放");
     }
 
     /// <summary>
-    /// 设置派发器的地图 ID
+    /// 每帧更新
     /// </summary>
-    public void SetMap(int mapId)
+    /// <param name="dt">时间增量</param>
+    public void DoUpdate(float dt)
     {
         for (int i = 0; i < _spawners.Count; i++)
-            _spawners[i].SetMap(mapId);
+            _spawners[i].DoUpdate(dt);
     }
-    #endregion
 
     #region 私有方法
     /// <summary>
@@ -74,4 +60,5 @@ public class SpawnerManager : IRoundManager, IRoundResettable
     }
     #endregion
 }
+
 

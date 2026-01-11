@@ -21,7 +21,7 @@ public class BossIdleState : BossState
         base.Update();
         
         stateTimer += Time.deltaTime;
-        if (stateTimer > boss.StayTime)
+        if (stateTimer > 2f)
         {
             stateMachine.ChangeState(boss.GetRandomMoveState());
         }
