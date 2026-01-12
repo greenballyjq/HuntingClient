@@ -1,24 +1,19 @@
-﻿using System;
-using cfg.HuntingConfig;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace GameLogic.Game.Round.Boss
+public class TestSnow : MonoBehaviour
 {
-    public class TestSnow : MonoBehaviour
-    {
-        [SerializeField] private BossBehaviour bossBehaviour;
-        [SerializeField] private Spawner[] spawners;
+    [SerializeField] private BossBehaviour bossBehaviour;
+    [SerializeField] private Spawner[] spawners;
 
-        private void Update()
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            //bossBehaviour.Init(null, 2f);
+            foreach (var spawner in spawners)
             {
-                bossBehaviour.Init(null, 2f);
-                foreach (var spawner in spawners)
-                {
-                    spawner.SetMap(1);
-                    spawner.SetActive(true);
-                }
+                //spawner.SetMap(1);
+                //spawner.SetActive(true);
             }
         }
     }

@@ -1,12 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-namespace GameLogic.Game.Round.Boss.States
-{
-    /// <summary>
-    /// Boss随机移动状态
-    /// </summary>
-    public class BossRandomMoveState : BossState
+/// <summary>
+/// Boss随机移动状态
+/// </summary>
+public class BossRandomMoveState : BossState
     {
         /// <summary>
         /// 随机移动点
@@ -78,5 +76,4 @@ namespace GameLogic.Game.Round.Boss.States
             
             return randomPoint1.position + normalized * (randomPoint2.position - randomPoint1.position);
         }
-    }
 }

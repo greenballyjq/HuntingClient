@@ -1,7 +1,8 @@
 ﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
-using GameFramework.Game.UI;
-using GameFramework.Manager;
+using Cysharp.Threading.Tasks;
+using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -40,8 +41,6 @@ public class UIPrepare : UIBase
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    private GameSceneManager _sceneManager => GameServiceLocator.SceneManager;
 
     /// <summary>
     /// 配置管理器
@@ -136,39 +135,29 @@ public class UIPrepare : UIBase
     /// <summary>
     /// 开始单局按钮回调
     /// </summary>
-    private async void OnClickStartRound()
+    private void OnClickStartRound()
     {
         Role roleData = _configManager.GetRole(_currentRoleId);
         int mapId = _uiComponentMapInfo.GetCurrentMapId();
         Map mapData = _configManager.GetMap(mapId);
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
 
-        // TODO: 切换场景测试
-        // SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
-        // {
-        //     Close();
-        //     HuntingAppFlow.Instance.EnterRound(new RoundContext
-        //     {
-        //         RoleData = roleData,
-        //         MapData = mapData,
-        //         SkillData = skillData,
-        //         LuckyBuffData = _currentLuckyBuffData,
-        //         HasMapAffinity = roleData.LinkedMapId == mapId
-        //     });
-        //     DynamicGI.UpdateEnvironment();
-        // };
-
-        await _sceneManager.LoadSceneAsync("GameplaySnowMountainScene");
-        DynamicGI.UpdateEnvironment();
-        Close();
-        HuntingAppFlow.Instance.EnterRound(new RoundContext
+        // TODO: 测试，未来根据不同地图加载不同场景，以及判断是否有隐藏地图
+        SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
         {
-            RoleData = roleData,
-            MapData = mapData,
-            SkillData = skillData,
-            LuckyBuffData = _currentLuckyBuffData,
-            HasMapAffinity = roleData.LinkedMapId == mapId
-        });
+            Close();
+            HuntingAppFlow.Instance.EnterRound(new RoundContext
+            {
+                RoleData = roleData,
+                MapData = mapData,
+                SkillData = skillData,
+                LuckyBuffData = _currentLuckyBuffData,
+                HasLinkage = roleData.LinkedMapId == mapId,
+                HasHiddenMap = true,
+                HiddenMapData = _configManager.GetMap(EMapType.Hidden)
+            }).Forget();
+            DynamicGI.UpdateEnvironment();
+        };
     }
 
     /// <summary>

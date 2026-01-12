@@ -7,7 +7,7 @@ using UnityEngine;
 /// <summary>
 /// 道具管理器
 /// </summary>
-public class PropManager : IRoundManager, IRoundUpdatable
+public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
     /// 活跃道具上下文
@@ -65,6 +65,13 @@ public class PropManager : IRoundManager, IRoundUpdatable
         StopAllProps();
         Debug.Log("[PropManager] 已释放");
     }
+
+    public void Cleanup()
+    {
+        StopAllProps();
+    }
+
+    public void ReInit(RoundContext context){}
 
     #region 公共方法
     /// <summary>

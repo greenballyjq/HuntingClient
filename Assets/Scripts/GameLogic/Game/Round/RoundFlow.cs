@@ -1,9 +1,11 @@
 ﻿using cfg.HuntingConfig;
-using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using GameFramework.Core;
+using GameFramework.Manager;
 
 /// <summary>
 /// 单局上下文
@@ -31,15 +33,25 @@ public class RoundContext
     public LuckyBuff LuckyBuffData { get; set; }
 
     /// <summary>
-    /// 是否存在地图联动
+    /// 是否有地图联动
     /// </summary>
-    public bool HasMapAffinity { get; set; }
+    public bool HasLinkage { get; set; }
+
+    /// <summary>
+    /// 是否有隐藏地图
+    /// </summary>
+    public bool HasHiddenMap { get; set; }
+
+    /// <summary>
+    /// 隐藏地图数据
+    /// </summary>
+    public Map HiddenMapData { get; set; }
 }
 
 /// <summary>
 /// 单局流程类
 /// </summary>
-public class RoundFlow
+public class RoundFlow : Singleton<RoundFlow>
 {
     /// <summary>
     /// 单局流程状态枚举
@@ -55,23 +67,12 @@ public class RoundFlow
         /// 正在游玩
         /// </summary>
         Playing,
-
-        /// <summary>
-        /// 暂停
-        /// </summary>
-        Paused,
-
-        /// <summary>
-        /// 正在切图
-        /// </summary>
-        ChangingMap
     }
 
     /// <summary>
     /// 单局流程当前状态
     /// </summary>
     private RoundFlowState _currentState = RoundFlowState.None;
-
 
     /// <summary>
     /// 当前单局上下文
@@ -84,15 +85,19 @@ public class RoundFlow
     private readonly List<IRoundManager> _roundManagers = new List<IRoundManager>();
 
     /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager = GameServiceLocator.EventManager;
-
-    /// <summary>
     /// UI管理器
     /// </summary>
+    private UIManager _uiManager => GameServiceLocator.UIManager;
 
-    private UIManager _uiManager = GameServiceLocator.UIManager;
+    /// <summary>
+    /// 粒子特效管理器
+    /// </summary>
+    private ParticleEffectManager _particleEffectManager => GameServiceLocator.GetFrameworkManager<ParticleEffectManager>();
+
+    /// <summary>
+    /// 音效管理器
+    /// </summary>
+    private SoundManager _soundManager => GameServiceLocator.GetFrameworkManager<SoundManager>();
 
     #region 公共方法
     /// <summary>
@@ -109,76 +114,45 @@ public class RoundFlow
     }
 
     /// <summary>
+    /// 获取当前单局上下文
+    /// </summary>
+    public RoundContext GetRoundContext()
+    {
+        return _currentRoundContext;
+    }
+
+    /// <summary>
     /// 开始单局
     /// </summary>
     /// <param name="context">单局上下文</param>
-    public void StartRound(RoundContext context)
+    public async UniTask StartRound(RoundContext context)
     {
-        if (_currentState != RoundFlowState.None)
-            return;
-
+        #region 测试代码 将来会正式化
         _currentRoundContext = context;
+        CreateRoundManagers();
+        await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
+        InitRoundManagers();
 
-        OnRoundStart();
+        // 等五秒
+        await UniTask.Delay(5000);
+
+        _currentState = RoundFlowState.Playing;
+        #endregion
     }
 
     /// <summary>
     /// 结束单局
     /// </summary>
-    public void EndRound()
+    public async UniTask EndRound()
     {
-        if (_currentState != RoundFlowState.Playing)
-            return;
-
-        OnRoundEnd();
-
+        #region 测试代码 将来会正式化
+        DisposeRoundManagers();
+        _roundManagers.Clear();
+        _currentRoundContext = null;
         _currentState = RoundFlowState.None;
-    }
+        #endregion
 
-    /// <summary>
-    /// 暂停单局
-    /// </summary>
-    public void PauseRound()
-    {
-        if (_currentState != RoundFlowState.Playing)
-            return;
-
-        OnRoundPause();
-
-        _currentState = RoundFlowState.Paused;
-    }
-
-    /// <summary>
-    /// 恢复单局
-    /// </summary>
-    public void ResumeRound()
-    {
-        if (_currentState != RoundFlowState.Paused)
-            return;
-
-        OnRoundResume();
-
-        _currentState = RoundFlowState.Playing;
-    }
-
-    /// <summary>
-    /// 切换地图
-    /// </summary>
-    /// <param name="mapType">目标地图类型</param>
-    public async UniTask ChangeMapAsync(EMapType mapType)
-    {
-        if (_currentState != RoundFlowState.Playing)
-            return;
-
-        _currentState = RoundFlowState.ChangingMap;
-
-        OnRoundChangeMapStart(mapType);
-
-        // TODO: 根据 mapType 进行切图（可能涉及切场景/加载资源/等待完成）
-        // TODO: 切图完成后，必要时重新收集场景对象（例如派发点等）
         await UniTask.CompletedTask;
-
-        OnRoundChangeMapFinish(mapType);        
     }
 
     /// <summary>
@@ -187,10 +161,66 @@ public class RoundFlow
     /// <param name="dt">时间增量</param>
     public void DoUpdate(float dt)
     {
-        if (_currentState != RoundFlowState.Playing)
-            return;
+        switch (_currentState)
+        {
+            case RoundFlowState.Playing:
+                OnRoundPlaying(dt);
+                break;
+            
+            case RoundFlowState.None:
+            default:
+                break;
+        }
+    }
 
-        OnRoundPlaying(dt);
+    /// <summary>
+    /// 进入隐藏地图
+    /// </summary>
+    public async UniTask EnterHiddenMapAsync()
+    {
+        // 伪结算面板动画
+        var uiFakeSettlement = _uiManager.GetUI<UIFakeSettlement>("UIFakeSettlement");
+        await UniTask.WhenAll(
+            uiFakeSettlement.PlayWindowShakeAsync(),
+            uiFakeSettlement.PlayButtonGlowAsync()
+        );
+        _uiManager.CloseUI("UIFakeSettlement");
+
+        // 伪结算面板爆米花动画  
+        _particleEffectManager.SpawnParticleEffectAsync("Settlement_Explosion").Forget();
+
+        // 下雪动画
+        _particleEffectManager.SpawnParticleEffectAsync("Snow", autoDestroy: false).Forget();
+
+        // 地图过渡动画
+        var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
+
+        await uiLoading.PlayFadeInAsync();
+
+        CleanupManagers();
+        await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
+
+        ReInitManagers();
+        DynamicGI.UpdateEnvironment();
+        await uiLoading.PlayFadeOutAsync();
+
+        _uiManager.CloseUI("UILoading");
+
+        // TODO: 未来步骤待考虑
+        var animalManager = GetRoundManager<AnimalManager>();
+        var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
+        
+        uiAlertRed.PlayFlashAsync().Forget();
+        _soundManager.PlaySound2DByPath("Arts/Audio/SFX/sfx_alert");
+        var boss = await animalManager.GenerateBossAsync();
+
+        await UniTask.Delay(2000);
+
+        _soundManager.PlaySound2DByPath("Arts/Audio/SFX/sfx_laugh");
+        _soundManager.PlaySound2DByPath("Arts/Audio/BGM/bgm_snow", AudioChannel.Bgm,volume:0.1f);
+        await UniTask.Delay(3000);
+
+        boss.EnterCombat();
     }
     #endregion
 
@@ -200,7 +230,7 @@ public class RoundFlow
     /// </summary>
     private void CreateRoundManagers()
     {
-        // TODO: 现阶段先接入可测的局级管理器，后续逐个迁移
+        // TODO: 未来会根据情况调整顺序
         _roundManagers.Add(new WeaponManager());
         _roundManagers.Add(new AnimalManager());
         _roundManagers.Add(new EnergyProgressManager());
@@ -214,9 +244,6 @@ public class RoundFlow
         _roundManagers.Add(new PropManager());
         _roundManagers.Add(new BulletManager());
         _roundManagers.Add(new SkillManager());
-        // TODO: 其它局级管理器在此添加
-
-        
     }
 
     /// <summary>
@@ -236,22 +263,6 @@ public class RoundFlow
         for (int i = _roundManagers.Count - 1; i >= 0; i--)
             _roundManagers[i].Dispose();
     }
-    #endregion
-
-    #region 钩子方法
-    /// <summary>
-    /// 单局开始
-    /// </summary>
-    private async void OnRoundStart()
-    {
-        CreateRoundManagers();
-
-        await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
-
-        InitRoundManagers();
-
-        _currentState = RoundFlowState.Playing;
-    }
 
     /// <summary>
     /// 游玩中更新
@@ -261,71 +272,33 @@ public class RoundFlow
     {
         for (int i = 0; i < _roundManagers.Count; i++)
         {
-            // 仅调度实现了可更新接口的单局管理器
             if (_roundManagers[i] is IRoundUpdatable updatable)
                 updatable.DoUpdate(dt);
         }
     }
 
     /// <summary>
-    /// 进入暂停
+    /// 清理管理器
     /// </summary>
-    private void OnRoundPause()
+    private void CleanupManagers()
     {
         for (int i = 0; i < _roundManagers.Count; i++)
         {
-            // 仅调度实现了可暂停接口的单局管理器
-            if (_roundManagers[i] is IRoundPausable pausable)
-                pausable.Pause();
+            if (_roundManagers[i] is IRoundResettable resettable)
+                resettable.Cleanup();
         }
-
-        // TODO: 是否需要 Time.timeScale/音效/输入等全局处理，后续按策略补充
     }
 
     /// <summary>
-    /// 退出暂停
+    /// 重新初始化管理器
     /// </summary>
-    private void OnRoundResume()
+    private void ReInitManagers()
     {
         for (int i = 0; i < _roundManagers.Count; i++)
         {
-            if (_roundManagers[i] is IRoundPausable pausable)
-                pausable.Resume();
+            if (_roundManagers[i] is IRoundResettable resettable)
+                resettable.ReInit(_currentRoundContext);
         }
-
-        // TODO: 是否需要恢复 Time.timeScale/音效/输入等全局处理，后续按策略补充
-    }
-
-    /// <summary>
-    /// 切图开始
-    /// </summary>
-    /// <param name="mapType">目标地图类型</param>
-    private void OnRoundChangeMapStart(EMapType mapType)
-    {
-        // TODO: 切图开始时需要做的准备（例如停输入/停生成/停AI等）
-    }
-
-    /// <summary>
-    /// 切图完成
-    /// </summary>
-    /// <param name="mapType">目标地图类型</param>
-    private void OnRoundChangeMapFinish(EMapType mapType)
-    {
-        // TODO: 切图完成后需要做的恢复/重绑（例如重新收集场景对象等）
-    }
-
-    /// <summary>
-    /// 单局结束
-    /// </summary>
-    private void OnRoundEnd()
-    {
-        DisposeRoundManagers();
-
-        _roundManagers.Clear();
-
-        _currentRoundContext = null;
-
-        // TODO: 需要保证单局退出一定会调用 EndRound（例如回准备/退出游戏/异常中断）
     }
     #endregion
 }

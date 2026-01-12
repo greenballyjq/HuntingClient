@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
-using GameFramework.Game.Pool;
+using GameFramework.Core.Pool;
 using GameFramework.Manager;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +9,7 @@ using UnityEngine;
 /// <summary>
 /// 陷阱管理器
 /// </summary>
-public class TrapManager : IRoundManager
+public class TrapManager : IRoundManager, IRoundResettable
 {
     /// <summary>
     /// 事件管理器
@@ -38,6 +38,13 @@ public class TrapManager : IRoundManager
         ClearAllTraps();
         Debug.Log("[TrapManager] 已释放");
     }
+
+    public void Cleanup()
+    {
+        ClearAllTraps();
+    }
+
+    public void ReInit(RoundContext context){}
 
     #region 公共方法
     /// <summary>
@@ -87,7 +94,9 @@ public class TrapManager : IRoundManager
 
         return positions;
     }
+    #endregion
 
+    #region 私有方法
     /// <summary>
     /// 清理所有陷阱
     /// </summary>

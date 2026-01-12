@@ -1,6 +1,5 @@
 ﻿using cfg.HuntingConfig;
-using GameFramework.Game;
-using GameFramework.Game.Pool;
+using GameFramework.Core.Pool;
 using Hunting.Events;
 using System.Collections.Generic;
 using UnityEngine;

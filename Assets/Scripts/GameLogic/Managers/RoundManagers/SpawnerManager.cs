@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using GameFramework.Game;
 using UnityEngine;
-
 
 /// <summary>
 /// 派发器管理器
 /// </summary>
-public class SpawnerManager : IRoundManager
+public class SpawnerManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
     /// 派发器列表
@@ -16,73 +14,39 @@ public class SpawnerManager : IRoundManager
     public void Init(RoundContext context)
     {
         CollectSpawners();
-        SetAllActive(true);
-        Debug.Log("[SpecieSpawnManager] 初始化完成");
+        for (int i = 0; i < _spawners.Count; i++)
+            _spawners[i].Init(context.HiddenMapData);
+
+        Debug.Log("[SpawnerManager] 初始化完成");
+    }
+
+    public void Cleanup()
+    {
+        _spawners.Clear();
+    }
+
+    public void ReInit(RoundContext context)
+    {
+        CollectSpawners();
+        for (int i = 0; i < _spawners.Count; i++)
+            _spawners[i].Init(context.HiddenMapData);
     }
 
     public void Dispose()
     {
-        SetAllActive(false);
         _spawners.Clear();
-        Debug.Log("[SpecieSpawnManager] 已释放");
-    }
-
-    #region 公共方法
-    /// <summary>
-    /// 根据索引获取派发器
-    /// </summary>
-    public Spawner GetSpawner(int index)
-    {
-        if (index < 0 || index >= _spawners.Count)
-            return null;
-
-        return _spawners[index];
-    }
-    /// <summary>
-    /// 设置单个派发器的启用状态
-    /// </summary>
-    public void SetSpawnerActive(Spawner spawner, bool active)
-    {
-        if (spawner == null)
-            return;
-
-        if (spawner.IsActive == active)
-            return;
-
-        spawner.SetActive(active);
+        Debug.Log("[SpawnerManager] 已释放");
     }
 
     /// <summary>
-    /// 设置所有派发器的启用状态
+    /// 每帧更新
     /// </summary>
-    public void SetAllActive(bool active)
+    /// <param name="dt">时间增量</param>
+    public void DoUpdate(float dt)
     {
         for (int i = 0; i < _spawners.Count; i++)
-            SetSpawnerActive(_spawners[i], active);
-
-        Debug.Log($"[SpeciesSpawnManager] 设置所有派发器的启用状态为 {active}");
+            _spawners[i].DoUpdate(dt);
     }
-
-    /// <summary>
-    /// 设置单个派发器的地图 ID
-    /// </summary>
-    public void SetSpawnerMap(Spawner spawner, int mapId)
-    {
-        if (spawner == null)
-            return;
-
-        spawner.SetMap(mapId);
-    }
-
-    /// <summary>
-    /// 设置所有派发器的地图 ID
-    /// </summary>
-    public void SetAllMap(int mapId)
-    {
-        for (int i = 0; i < _spawners.Count; i++)
-            _spawners[i].SetMap(mapId);
-    }
-    #endregion
 
     #region 私有方法
     /// <summary>
@@ -90,39 +54,11 @@ public class SpawnerManager : IRoundManager
     /// </summary>
     private void CollectSpawners()
     {
+        _spawners.Clear();
         Spawner[] found = Object.FindObjectsOfType<Spawner>(true);
         _spawners.AddRange(found);
-        Debug.Log($"[SpeciesSpawnManager] 收集到派发器数量：{_spawners.Count}");
-    }
-    #endregion
-
-    #region 测试
-    /// <summary>
-    /// 增加所有派发器的派发间隔
-    /// </summary>
-    public void IncreaseAllSpawnInterval(float step)
-    {
-        for (int i = 0; i < _spawners.Count; i++)
-        {
-            float newInterval = _spawners[i].GetSpawnInterval() + step;
-            _spawners[i].SetSpawnInterval(newInterval);
-        }
-        Debug.Log($"[SpawnerManager] 所有派发器间隔增加 {step} 秒");
-    }
-
-    /// <summary>
-    /// 减少所有派发器的派发间隔
-    /// </summary>
-    public void DecreaseAllSpawnInterval(float step)
-    {
-        for (int i = 0; i < _spawners.Count; i++)
-        {
-            float currentInterval = _spawners[i].GetSpawnInterval();
-            float newInterval = Mathf.Max(0.1f, currentInterval - step);
-            _spawners[i].SetSpawnInterval(newInterval);
-        }
-        Debug.Log($"[SpawnerManager] 所有派发器间隔减少 {step} 秒");
     }
     #endregion
 }
+
 

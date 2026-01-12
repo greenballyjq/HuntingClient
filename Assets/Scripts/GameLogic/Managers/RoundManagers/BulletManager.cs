@@ -7,7 +7,7 @@ using UnityEngine;
     /// <summary>
     /// 子弹管理器
     /// </summary>
-    public class BulletManager : IRoundManager
+    public class BulletManager : IRoundManager, IRoundResettable
     {
         /// <summary>
         /// 事件管理器
@@ -42,16 +42,17 @@ using UnityEngine;
 
         public void Dispose()
         {
-            // 回收所有活跃的子弹
-            foreach (var bullet in _activeBullets)
-                if (bullet != null && bullet.gameObject != null)
-                    _gameObjectPoolManager.Despawn(bullet.gameObject);
-                    
-            _activeBullets.Clear();
-            
+            RecycleAllBullets();
             UnregisterEvents();
             Debug.Log("[BulletManager] 已释放");
         }
+
+        public void Cleanup()
+        {
+            RecycleAllBullets();
+        }
+
+        public void ReInit(RoundContext context){}
 
         #region 公共方法
         /// <summary>
@@ -138,8 +139,20 @@ using UnityEngine;
         {
             _eventManager.Trigger(BulletEvents.BulletSpawned, args);
         }
+        #endregion
 
-        
+        #region 私有方法
+        /// <summary>
+        /// 回收所有子弹
+        /// </summary>
+        private void RecycleAllBullets()
+        {
+            foreach (var bullet in _activeBullets)
+                if (bullet != null && bullet.gameObject != null)
+                    _gameObjectPoolManager.Despawn(bullet.gameObject);
+                    
+            _activeBullets.Clear();
+        }
         #endregion
     }
 

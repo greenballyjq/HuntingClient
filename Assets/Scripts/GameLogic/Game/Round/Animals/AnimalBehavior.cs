@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Game.Pool;
+using GameFramework.Core.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -224,8 +224,6 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         gameObject.SetActive(false);
     }
     #endregion
-
-    
 
     private void Awake()
     {

@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using GameFramework.Core;
 using GameFramework.Game;
 using GameFramework.Manager;
 using UnityEngine.SceneManagement;
@@ -61,7 +62,7 @@ public static class GameServiceLocator
     /// </summary>
     public static T GetRoundManager<T>() where T : class, IRoundManager
     {
-        return HuntingAppFlow.Instance.GetRoundFlow().GetRoundManager<T>();
+        return RoundFlow.Instance.GetRoundManager<T>();
     }
 
     /// <summary>

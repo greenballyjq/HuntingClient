@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -191,102 +191,6 @@ Transform:
   - {fileID: 1076143387}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &677959219
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3643511216996983214, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: fbeddcfd50868ab4c86cbbf9a48ccd82, type: 2}
-    - target: {fileID: 3866530701558865069, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_Name
-      value: Boss_SnowMountain_Rabbit
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 8.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.70710784
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.70710576
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 5521390811681170418, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7843935110911132913, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: randomMovePoints.Array.data[0]
-      value: 
-      objectReference: {fileID: 1709098177}
-    - target: {fileID: 7843935110911132913, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: randomMovePoints.Array.data[1]
-      value: 
-      objectReference: {fileID: 4630138}
-    - target: {fileID: 7843935110911132913, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: randomMovePoints.Array.data[2]
-      value: 
-      objectReference: {fileID: 952567383}
-    - target: {fileID: 7843935110911132913, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: randomMovePoints.Array.data[3]
-      value: 
-      objectReference: {fileID: 2032436465}
-    - target: {fileID: 7843935110911132913, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: randomMovePoints.Array.data[4]
-      value: 
-      objectReference: {fileID: 747978287}
-    - target: {fileID: 7843935110911132913, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-      propertyPath: randomMovePoints.Array.data[5]
-      value: 
-      objectReference: {fileID: 1076143387}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
---- !u!114 &677959221 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7843935110911132913, guid: 6ca51a104559e9f49b1ec505bcbb902d, type: 3}
-  m_PrefabInstance: {fileID: 677959219}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e54bae88ec2042999459f1a0662e956f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &747978286
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,54 +253,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 183037778}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &956355700
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 956355702}
-  - component: {fileID: 956355701}
-  m_Layer: 0
-  m_Name: TestSnowMountain
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &956355701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 956355700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810e7dc2507f47a68df742cf6c224f90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bossBehaviour: {fileID: 677959221}
-  spawners:
-  - {fileID: 1149857579}
-  - {fileID: 2055510211}
---- !u!4 &956355702
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 956355700}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1076143386
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,7 +310,7 @@ Transform:
   m_GameObject: {fileID: 1149857577}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.87672687, z: -0, w: -0.48098856}
-  m_LocalPosition: {x: -7.73, y: 0, z: 1.85}
+  m_LocalPosition: {x: -7.73, y: 0, z: 3.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -710,6 +566,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 183037778}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2035422787
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2035422788}
+  m_Layer: 0
+  m_Name: BossSpawnerPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2035422788
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035422787}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &2055510209
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,7 +623,7 @@ Transform:
   m_GameObject: {fileID: 2055510209}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.42103577, z: 0, w: 0.90704405}
-  m_LocalPosition: {x: 8.96, y: 0, z: 1.51}
+  m_LocalPosition: {x: 8.96, y: 0, z: 3.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1099,6 +986,5 @@ SceneRoots:
   - {fileID: 1149857578}
   - {fileID: 2055510210}
   - {fileID: 7705923147363665841}
-  - {fileID: 677959219}
+  - {fileID: 2035422788}
   - {fileID: 183037778}
-  - {fileID: 956355702}

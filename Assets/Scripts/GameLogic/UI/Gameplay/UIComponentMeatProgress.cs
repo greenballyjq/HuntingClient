@@ -1,4 +1,4 @@
-﻿using GameFramework.Game.UI;
+﻿using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 

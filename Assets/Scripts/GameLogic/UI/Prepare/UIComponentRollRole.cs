@@ -1,5 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
-using GameFramework.Game.UI;
+using GameFramework.Core.UI;
 using GameFramework.Manager;
 using System.Collections.Generic;
 using UnityEngine;

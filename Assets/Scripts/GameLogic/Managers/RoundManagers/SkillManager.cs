@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 技能管理器
 /// </summary>
-public class SkillManager : IRoundManager, IRoundUpdatable
+public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
     /// 当局技能处理器
@@ -72,6 +72,13 @@ public class SkillManager : IRoundManager, IRoundUpdatable
         EndSkill();
         Debug.Log("[SkillManager] 已释放");
     }
+
+    public void Cleanup()
+    {
+        EndSkill();
+    }
+
+    public void ReInit(RoundContext context){}
 
     #region 公共方法
     /// <summary>
