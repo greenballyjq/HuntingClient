@@ -46,52 +46,6 @@ public class RoundContext
     /// 隐藏地图数据
     /// </summary>
     public Map HiddenMapData { get; set; }
-    
-    /// <summary>
-    /// 隐藏地图结束触发器
-    /// </summary>
-    public HiddenRoundEndTrigger HiddenRoundEndTrigger { get; set; }
-}
-
-public class HiddenRoundEndTrigger
-{
-    private readonly EventManager _eventManager = GameServiceLocator.EventManager;
-    private readonly AnimalManager _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
-    
-    private bool _bossDied;
-    
-    public void Init()
-    {
-        _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
-        _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
-        _bossDied = false;
-    }
-
-    public void Release()
-    {
-        _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
-        _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
-    }
-
-    private void OnAnimalDied(AnimalDiedEventArgs obj)
-    {
-        CheckIsHiddenRoundEnd();
-    }
-
-    private void OnBossDied(BossDiedEventArgs obj)
-    {
-        _bossDied = true;
-        CheckIsHiddenRoundEnd();
-    }
-    
-    private void CheckIsHiddenRoundEnd()
-    {
-        if (_bossDied && !_animalManager.HasActiveAnimal())
-        {
-            // 隐藏地图结束
-            RoundFlow.Instance.EndHiddenMapProcessAsync().Forget();
-        }
-    }
 }
 
 /// <summary>
@@ -110,7 +64,12 @@ public class RoundFlow : Singleton<RoundFlow>
         None,
 
         /// <summary>
-        /// 正在游玩
+        /// 过渡状态
+        /// </summary>
+        Transitioning,
+
+        /// <summary>
+        /// 游玩状态
         /// </summary>
         Playing,
     }
@@ -174,13 +133,14 @@ public class RoundFlow : Singleton<RoundFlow>
     public async UniTask StartRound(RoundContext context)
     {
         #region 测试代码 将来会正式化
+        _currentState = RoundFlowState.Transitioning;
         _currentRoundContext = context;
         CreateRoundManagers();
         await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
         InitRoundManagers();
 
-        // 等五秒
-        await UniTask.Delay(5000);
+        var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown",UIManager.UILayer.Fixed);
+        await uiCountDown.PlayCountdownAsync();
 
         _currentState = RoundFlowState.Playing;
         
@@ -195,6 +155,7 @@ public class RoundFlow : Singleton<RoundFlow>
     public async UniTask EndRound()
     {
         #region 测试代码 将来会正式化
+        _currentState = RoundFlowState.Transitioning;
         DisposeRoundManagers();
         _roundManagers.Clear();
         _currentRoundContext = null;
@@ -202,6 +163,54 @@ public class RoundFlow : Singleton<RoundFlow>
         #endregion
 
         await UniTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// 进入隐藏地图
+    /// </summary>
+    public async UniTask EnterHiddenMapAsync()
+    {
+        _currentState = RoundFlowState.Transitioning;
+
+        // 伪结算面板动画
+        var uiFakeSettlement = _uiManager.GetUI<UIFakeSettlement>("UIFakeSettlement");
+        await UniTask.WhenAll(
+            uiFakeSettlement.PlayWindowShakeAsync(),
+            uiFakeSettlement.PlayButtonGlowAsync()
+        );
+        _uiManager.CloseUI("UIFakeSettlement");
+
+        // 伪结算面板爆米花动画  
+        _particleEffectManager.SpawnParticleEffectAsync("Settlement_Explosion").Forget();
+
+        // 下雪动画
+        _particleEffectManager.SpawnParticleEffectAsync("Snow", autoDestroy: false).Forget();
+
+        // 地图过渡动画
+        var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
+        await uiLoading.PlayFadeInAsync(); // 播放淡入动画
+        CleanupManagers(); // 清理本局管理器
+        await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask(); // 加载场景
+        ReInitManagers(); // 重新初始化管理器
+        DynamicGI.UpdateEnvironment(); // 更新环境光
+        await uiLoading.PlayFadeOutAsync(); // 播放淡出动画
+        _uiManager.CloseUI("UILoading");
+
+        var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
+        var boss = await GetRoundManager<AnimalManager>().GenerateBossAsync(); // Boss登场动画
+        uiAlertRed.PlayFlashAsync().Forget(); // 播放红屏闪动动画
+        _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_alert").Forget(); // 播放警报声
+        await UniTask.Delay(2000);
+        _soundManager.PlaySound2DByPathAsync("Audio/BGM/bgm_snow", AudioChannel.Bgm, volume: 0.1f).Forget(); // 播放远古雪山BGM
+        _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_laugh").Forget(); // 播放Boss台词
+        await UniTask.Delay(3000);
+
+        // 准备倒计时
+        var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
+        await uiCountDown.PlayCountdownAsync();
+
+        boss.EnterCombat();
+        _currentState = RoundFlowState.Playing;
     }
 
     /// <summary>
@@ -220,56 +229,6 @@ public class RoundFlow : Singleton<RoundFlow>
             default:
                 break;
         }
-    }
-
-    /// <summary>
-    /// 进入隐藏地图
-    /// </summary>
-    public async UniTask EnterHiddenMapAsync()
-    {
-        // 伪结算面板动画
-        var uiFakeSettlement = _uiManager.GetUI<UIFakeSettlement>("UIFakeSettlement");
-        await UniTask.WhenAll(
-            uiFakeSettlement.PlayWindowShakeAsync(),
-            uiFakeSettlement.PlayButtonGlowAsync()
-        );
-        _uiManager.CloseUI("UIFakeSettlement");
-
-        // 伪结算面板爆米花动画  
-        _particleEffectManager.SpawnParticleEffectAsync("Settlement_Explosion").Forget();
-
-        // 下雪动画
-        _particleEffectManager.SpawnParticleEffectAsync("Snow", autoDestroy: false).Forget();
-
-        // 地图过渡动画
-        var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
-
-        await uiLoading.PlayFadeInAsync();
-
-        CleanupManagers();
-        await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
-
-        ReInitManagers();
-        DynamicGI.UpdateEnvironment();
-        await uiLoading.PlayFadeOutAsync();
-
-        _uiManager.CloseUI("UILoading");
-
-        // TODO: 未来步骤待考虑
-        var animalManager = GetRoundManager<AnimalManager>();
-        var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
-        
-        uiAlertRed.PlayFlashAsync().Forget();
-        _soundManager.PlaySound2DByPath("Arts/Audio/SFX/sfx_alert");
-        var boss = await animalManager.GenerateBossAsync();
-
-        await UniTask.Delay(2000);
-
-        _soundManager.PlaySound2DByPath("Arts/Audio/SFX/sfx_laugh");
-        _soundManager.PlaySound2DByPath("Arts/Audio/BGM/bgm_snow", AudioChannel.Bgm,volume:0.1f);
-        await UniTask.Delay(3000);
-
-        boss.EnterCombat();
         
         _currentRoundContext.HiddenRoundEndTrigger.Init();
     }
@@ -328,6 +287,30 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
+    /// 清理本局管理器
+    /// </summary>
+    private void CleanupManagers()
+    {
+        for (int i = 0; i < _roundManagers.Count; i++)
+        {
+            if (_roundManagers[i] is IRoundResettable resettable)
+                resettable.Cleanup();
+        }
+    }
+
+    /// <summary>
+    /// 重新初始化本局管理器
+    /// </summary>
+    private void ReInitManagers()
+    {
+        for (int i = 0; i < _roundManagers.Count; i++)
+        {
+            if (_roundManagers[i] is IRoundResettable resettable)
+                resettable.ReInit(_currentRoundContext);
+        }
+    }
+
+    /// <summary>
     /// 游玩中更新
     /// </summary>
     /// <param name="dt">时间增量</param>
@@ -340,28 +323,6 @@ public class RoundFlow : Singleton<RoundFlow>
         }
     }
 
-    /// <summary>
-    /// 清理管理器
-    /// </summary>
-    private void CleanupManagers()
-    {
-        for (int i = 0; i < _roundManagers.Count; i++)
-        {
-            if (_roundManagers[i] is IRoundResettable resettable)
-                resettable.Cleanup();
-        }
-    }
-
-    /// <summary>
-    /// 重新初始化管理器
-    /// </summary>
-    private void ReInitManagers()
-    {
-        for (int i = 0; i < _roundManagers.Count; i++)
-        {
-            if (_roundManagers[i] is IRoundResettable resettable)
-                resettable.ReInit(_currentRoundContext);
-        }
-    }
+    
     #endregion
 }

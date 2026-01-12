@@ -25,8 +25,8 @@ public class AnimalMoveState : AnimalState
         // 受击判断
         if (animal.IsHit)
         {
-            stateMachine.ChangeState(animal.GetHitState());
             animal.ResetHitFlag();
+            stateMachine.ChangeState(animal.GetHitState());
             return;
         }
 

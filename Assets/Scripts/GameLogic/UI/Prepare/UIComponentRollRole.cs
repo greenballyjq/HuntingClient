@@ -158,6 +158,9 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
         // 播放骰子滚动动画
         await diceAnimation.PlayRoll(_diceValue);
 
+        // 等待投骰子动画结束
+        await _threeKPCoinManAnimation.WaitForThrowAnimationEndAsync();
+
         // 触发骰子动画结束事件
         _eventManager.Trigger(PrepareEvents.DiceAnimationEnded);
 

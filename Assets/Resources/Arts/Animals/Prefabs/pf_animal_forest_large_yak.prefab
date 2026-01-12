@@ -80,12 +80,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45dfdba63c4297040afc57109f832bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _neighborDist: 6
-  _maxNeighbors: 6
+  _neighborDist: 4
+  _maxNeighbors: 4
   _timeHorizon: 10
   _timeHorizonObst: 10
-  _radius: 2.3
-  _defaultMaxSpeed: 8
+  _radius: 1.2
+  _defaultMaxSpeed: 3
   _enableAutoRotation: 1
   _rotationSmoothSpeed: 3
 --- !u!1 &8036483548376823842
@@ -190,6 +190,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8241891696937854980, guid: 6c2e980c9dfe94243a454f152e74fb15, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 78f0717b25e2e5c4894677de41698358, type: 2}
     - target: {fileID: 919132149155446097, guid: 6c2e980c9dfe94243a454f152e74fb15, type: 3}
       propertyPath: m_Name
       value: Model

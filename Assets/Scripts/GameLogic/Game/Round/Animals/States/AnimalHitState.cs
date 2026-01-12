@@ -6,7 +6,7 @@
 public class AnimalHitState : AnimalState
 {
     /// <summary>
-    /// 受击状态持续时间（从动画获取）
+    /// 受击持续时间
     /// </summary>
     private float _hitDuration;
 
@@ -18,48 +18,38 @@ public class AnimalHitState : AnimalState
     public override void Enter()
     {
         base.Enter();
-        
-        // 从动画片段获取持续时间
-        _hitDuration = animal.GetAnimationLength("Clicked");
+
+        _hitDuration = animal.GetAnimationLength("Hit");
         stateTimer = _hitDuration;
-        
-        // 应用减速倍率
+
+        // 进入受击时清一次命中标记
+        animal.ResetHitFlag();
+
+        // 应用受击减速倍率
         animal.ApplySpeedMultiplier(animal.HitSpeedMultiplier);
-        
-        // 播放视觉效果
-        animal.PlayHitEffect();
     }
 
     public override void Update()
     {
         base.Update();
-        
-        // 状态计时器倒计时
-        stateTimer -= Time.deltaTime;
 
-        // 重复命中：不切换状态，重置计时器并播放效果
         if (animal.IsHit)
         {
-            stateTimer = _hitDuration;
             animal.ResetHitFlag();
-            animal.PlayHitEffect();
+            stateMachine.ChangeState(animal.GetHitState());
             return;
         }
 
-        // 受击状态结束
+        // 状态计时器倒计时
+        stateTimer -= Time.deltaTime;
+
+        // 本次受击结束后，根据逻辑回到移动或逃跑
         if (stateTimer <= 0f)
         {
-            // 如果是从逃跑状态进入的，返回逃跑（保持逃跑倒计时）
-            if (animal.IsFleeing)
+            if (animal.IsFleeing || animal.TimeInScene >= animal.StayTime)
             {
                 stateMachine.ChangeState(animal.GetFleeState());
             }
-            // 驻场时间到，进入逃跑（第一次进入逃跑）
-            else if (animal.TimeInScene >= animal.StayTime)
-            {
-                stateMachine.ChangeState(animal.GetFleeState());
-            }
-            // 否则回到移动状态
             else
             {
                 stateMachine.ChangeState(animal.GetMoveState());
@@ -70,8 +60,6 @@ public class AnimalHitState : AnimalState
     public override void Exit()
     {
         base.Exit();
-        
-        // 恢复正常速度
         animal.ApplySpeedMultiplier(1f);
     }
 }

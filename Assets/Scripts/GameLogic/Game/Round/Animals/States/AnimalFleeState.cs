@@ -51,8 +51,8 @@ public class AnimalFleeState : AnimalState
         // 受击判断（逃跑中可以被击中）
         if (animal.IsHit)
         {
-            stateMachine.ChangeState(animal.GetHitState());
             animal.ResetHitFlag();
+            stateMachine.ChangeState(animal.GetHitState());
             return;
         }
 

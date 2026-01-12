@@ -134,12 +134,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45dfdba63c4297040afc57109f832bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _neighborDist: 6
-  _maxNeighbors: 6
+  _neighborDist: 3
+  _maxNeighbors: 4
   _timeHorizon: 10
   _timeHorizonObst: 10
-  _radius: 0.8
-  _defaultMaxSpeed: 8
+  _radius: 0.6
+  _defaultMaxSpeed: 3
   _enableAutoRotation: 1
   _rotationSmoothSpeed: 3
 --- !u!1001 &967871390404513696
@@ -198,6 +198,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 22100000, guid: 9f24e49ba09523349b51dbb42f24135e, type: 2}
+    - target: {fileID: 6721797306595290687, guid: 88686650198d8ab43bcba2e74941dd66, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fc4f31b1a1b23af4ba08f529711f13c2, type: 2}
     m_RemovedComponents:
     - {fileID: 5866666021909216657, guid: 88686650198d8ab43bcba2e74941dd66, type: 3}
     m_RemovedGameObjects: []
