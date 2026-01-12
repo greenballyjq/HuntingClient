@@ -1,7 +1,8 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Core.Pool;
 using System.Collections.Generic;
+using GameFramework.Core.Pool;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -203,13 +204,13 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     {
         gameObject.SetActive(true);
         SetColliderEnabled(true);
-        RVO.Enable();
+        RVO?.Enable();
         //Movement.SetEnabled(true);
     }
 
     public void OnDespawned()
     {
-        RVO.Disable();
+        RVO?.Disable();
         //Movement.SetEnabled(false);
         SetColliderEnabled(false);
 
@@ -229,7 +230,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     {
         // 获取组件
         Animator = GetComponentInChildren<Animator>();
-        RVO = GetComponent<RVOMovement>();
+        // RVO = GetComponent<RVOMovement>();
         //Movement = GetComponent<AnimalMovement>();
         Collider = GetComponent<Collider>();
 
@@ -253,7 +254,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     /// <param name="data"></param>
     /// <param name="stayTime"></param>
-    public void Init(Specie data, float stayTime)
+    /// <param name="inHiddenMap"></param>
+    public void Init(Specie data, float stayTime, bool inHiddenMap = false)
     {
         SpecieData = data;
         MaxHP = data.HP;
@@ -262,14 +264,27 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         CurrentMoveSpeed = data.MoveSpeed;
         CurrentDirection = transform.forward;
 
-        RVO.SetMoveDirection(CurrentDirection);
-        RVO.SetMaxSpeed(CurrentMoveSpeed);
-        RVO.SyncPosition();
+        // RVO.SetMoveDirection(CurrentDirection);
+        // RVO.SetMaxSpeed(CurrentMoveSpeed);
+        // RVO.SyncPosition();
         //Movement.SetBaseSpeed(CurrentMoveSpeed);
         //Movement.SetDirection(CurrentDirection);
         //Movement.SetSpeedMultiplier(1f);
-        
-        _stateMachine.Init(_moveState);
+
+        // _stateMachine.Init(_moveState);
+        if (!inHiddenMap)
+        {
+            _stateMachine.Init(_moveState);
+            var rvo = transform.AddComponent<RVOMovement>();
+            rvo.SetMoveDirection(CurrentDirection);
+            rvo.SetMaxSpeed(CurrentMoveSpeed);
+            rvo.SyncPosition();
+        }
+        else
+        {
+            var guardState = new AnimalGuardState(this, _stateMachine, "Move");
+            _stateMachine.Init(guardState);
+        }
     }
 
     private void Update()
@@ -343,7 +358,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public void SetMoveSpeed(float speed)
     {
         CurrentMoveSpeed = speed;
-        RVO.SetMaxSpeed(speed);
+        RVO?.SetMaxSpeed(speed);
         //Movement.SetBaseSpeed(speed);
     }
 
@@ -353,7 +368,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public void SetDirection(Vector3 direction)
     {
         CurrentDirection = direction;
-        RVO.SetMoveDirection(direction);
+        RVO?.SetMoveDirection(direction);
         //Movement.SetDirection(direction);
     }
 
@@ -371,7 +386,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public void ApplySpeedMultiplier(float multiplier)
     {
         float finalSpeed = CurrentMoveSpeed * multiplier;
-        RVO.SetMaxSpeed(finalSpeed);
+        RVO?.SetMaxSpeed(finalSpeed);
         //Movement.SetSpeedMultiplier(multiplier);
     }
 

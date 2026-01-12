@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -148,7 +148,7 @@ Transform:
   m_GameObject: {fileID: 4630137}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.17, y: 0, z: 17.82}
+  m_LocalPosition: {x: -0.17, y: 0, z: 21.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -216,7 +216,7 @@ Transform:
   m_GameObject: {fileID: 747978286}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.64, y: 0, z: 9.35}
+  m_LocalPosition: {x: 6.64, y: 0, z: 12.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -247,7 +247,7 @@ Transform:
   m_GameObject: {fileID: 952567382}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.46, y: 0, z: 15.3}
+  m_LocalPosition: {x: 10.46, y: 0, z: 18.939999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -278,7 +278,7 @@ Transform:
   m_GameObject: {fileID: 1076143386}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.09, y: 0, z: 8.35}
+  m_LocalPosition: {x: -5.09, y: 0, z: 11.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -293,7 +293,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1149857578}
-  - component: {fileID: 1149857579}
+  - component: {fileID: 1149857580}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -310,13 +310,13 @@ Transform:
   m_GameObject: {fileID: 1149857577}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.87672687, z: -0, w: -0.48098856}
-  m_LocalPosition: {x: -7.73, y: 0, z: 3.62}
+  m_LocalPosition: {x: -7.73, y: 0, z: 5.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 237.5, z: 0}
---- !u!114 &1149857579
+--- !u!114 &1149857580
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -325,13 +325,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1149857577}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c94da678f5885b04c97527f3f9bb714e, type: 3}
+  m_Script: {fileID: 11500000, guid: a5eb96cd4afc4d37b40d1a7c2e756785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spawnInterval: 10
   spawnLineRange: {x: 0, y: 0}
   minSpawnAngle: 199.1
   maxSpawnAngle: 212.3
+  perSpawnCount: 1
+  perSpawnInterval: 0.8
 --- !u!1001 &1512712008
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -435,7 +437,7 @@ Transform:
   m_GameObject: {fileID: 1709098176}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.16, y: 0, z: 14.77}
+  m_LocalPosition: {x: -11.16, y: 0, z: 18.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -560,7 +562,7 @@ Transform:
   m_GameObject: {fileID: 2032436464}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 11.67}
+  m_LocalPosition: {x: 1, y: 0, z: 15.309999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -606,7 +608,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2055510210}
-  - component: {fileID: 2055510211}
+  - component: {fileID: 2055510212}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Untagged
@@ -623,13 +625,13 @@ Transform:
   m_GameObject: {fileID: 2055510209}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.42103577, z: 0, w: 0.90704405}
-  m_LocalPosition: {x: 8.96, y: 0, z: 3.48}
+  m_LocalPosition: {x: 8.96, y: 0, z: 5.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 49.8, z: 0}
---- !u!114 &2055510211
+--- !u!114 &2055510212
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -638,13 +640,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2055510209}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c94da678f5885b04c97527f3f9bb714e, type: 3}
+  m_Script: {fileID: 11500000, guid: a5eb96cd4afc4d37b40d1a7c2e756785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnInterval: 2
+  spawnInterval: 10
   spawnLineRange: {x: 1, y: 0}
-  minSpawnAngle: -123.1
+  minSpawnAngle: -123
   maxSpawnAngle: -141.5
+  perSpawnCount: 1
+  perSpawnInterval: 0.8
 --- !u!4 &162493009785143956
 Transform:
   m_ObjectHideFlags: 0

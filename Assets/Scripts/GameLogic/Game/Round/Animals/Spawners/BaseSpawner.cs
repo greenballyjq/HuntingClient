@@ -1,17 +1,14 @@
-﻿using Cysharp.Threading.Tasks;
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
+using Cysharp.Threading.Tasks;
+using GameLogic.Game.Round.Animals.Spawners;
 using UnityEngine;
 
-/// <summary>
-/// 物种派发器
-/// </summary>
-public class Spawner : MonoBehaviour
+public abstract class BaseSpawner : MonoBehaviour, IAnimalSpawner
 {
     /// <summary>
     /// 派发间隔（秒）
     /// </summary>
-    [SerializeField] private float spawnInterval = 2f;
-
+    [SerializeField] protected float spawnInterval;
     /// <summary>
     /// 物种生成线范围
     /// </summary>
@@ -30,22 +27,22 @@ public class Spawner : MonoBehaviour
     /// <summary>
     /// 累积时间
     /// </summary>
-    private float _accumulatedTime;
+    protected float _accumulatedTime;
 
     /// <summary>
     /// 当前地图数据
     /// </summary>
-    private Map _mapData;
+    protected Map _mapData;
 
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    protected HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
     /// 动物管理器
     /// </summary>
-    private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
+    protected AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
 
     /// <summary>
     /// 初始化派发器
@@ -55,8 +52,9 @@ public class Spawner : MonoBehaviour
     {
         _mapData = mapData;
         _accumulatedTime = 0f;
+        // _configManager.GetSpe
     }
-
+    
     /// <summary>
     /// 每帧更新
     /// </summary>
@@ -64,35 +62,22 @@ public class Spawner : MonoBehaviour
     public void DoUpdate(float dt)
     {
         _accumulatedTime += dt;
-
+    
         if (_accumulatedTime >= spawnInterval)
         {
-            Spawn();
+            SpawnAsync().Forget();
             _accumulatedTime -= spawnInterval;
         }
     }
 
     #region 私有方法
-    /// <summary>
-    /// 派发物种
-    /// </summary>
-    private void Spawn()
-    {
-        // 从配置按地图与体型策略选出物种与驻场时间
-        var (specie, stayTime) = _configManager.GetRandomSpecieForMap(_mapData.ID);
 
-        // 计算生成位置与移动方向
-        Vector3 spawnPosition = CalculateSpawnPosition();
-        Vector3 moveDirection = CalculateMoveDirection();
-
-        // 调用动物管理器生成动物
-        _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection, stayTime).Forget();
-    }
+    public abstract UniTask<AnimalBehavior> SpawnAsync();
 
     /// <summary>
     /// 计算派发的位置
     /// </summary>
-    private Vector3 CalculateSpawnPosition()
+    protected Vector3 CalculateSpawnPosition()
     {
         float offset = Random.Range(spawnLineRange.x, spawnLineRange.y);
         Vector3 localOffset = new Vector3(0f, 0f, offset);
@@ -102,11 +87,12 @@ public class Spawner : MonoBehaviour
     /// <summary>
     /// 计算派发方向
     /// </summary>
-    private Vector3 CalculateMoveDirection()
+    protected Vector3 CalculateMoveDirection()
     {
         float angle = Random.Range(minSpawnAngle, maxSpawnAngle);
         return Quaternion.AngleAxis(angle, Vector3.up) * transform.forward;
     }
+
     #endregion
 
     #region 编辑器可视化

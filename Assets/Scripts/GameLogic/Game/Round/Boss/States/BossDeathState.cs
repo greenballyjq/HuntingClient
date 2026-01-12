@@ -7,6 +7,10 @@ public class BossDeathState : BossState
     {
         
     }
-    
-    
+
+    public override void Enter()
+    {
+        base.Enter();
+        boss.TriggerBossDiedEvent();
+    }
 }

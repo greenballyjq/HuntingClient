@@ -53,7 +53,7 @@ public class AnimalManager : IRoundManager, IRoundResettable
     /// <summary>
     /// 生成动物
     /// </summary>
-    public async UniTask<AnimalBehavior> GenerateAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, float stayTime)
+    public async UniTask<AnimalBehavior> GenerateAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, float stayTime, bool inHiddenMap = false)
     {
         var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
         var animal = go.GetComponent<AnimalBehavior>();
@@ -61,7 +61,7 @@ public class AnimalManager : IRoundManager, IRoundResettable
         if (direction != Vector3.zero)
             go.transform.rotation = Quaternion.LookRotation(direction);
 
-        animal.Init(specieData, stayTime);
+        animal.Init(specieData, stayTime, inHiddenMap);
 
         // 添加到活跃动物集合
         _activeAnimals.Add(animal);
@@ -94,6 +94,13 @@ public class AnimalManager : IRoundManager, IRoundResettable
         boss.Init(bossSpecie);
         return boss;
     }
+    
+    /// <summary>
+    /// 是否还有活跃的动物
+    /// </summary>
+    /// <returns></returns>
+    public bool HasActiveAnimal() => _activeAnimals.Count > 0;
+    
     #endregion
 
     #region 私有方法

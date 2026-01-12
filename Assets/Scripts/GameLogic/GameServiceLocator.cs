@@ -14,6 +14,11 @@ public static class GameServiceLocator
     /// 事件管理器
     /// </summary>
     public static EventManager EventManager => GameFrameworkManager.Instance.GetManager<EventManager>();
+    
+    /// <summary>
+    /// 定时器管理器
+    /// </summary>
+    public static TimerManager TimerManager => GameFrameworkManager.Instance.GetManager<TimerManager>();
 
     /// <summary>
     /// 游戏场景管理器
