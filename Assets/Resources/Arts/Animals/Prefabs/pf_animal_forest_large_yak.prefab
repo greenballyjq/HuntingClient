@@ -80,12 +80,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45dfdba63c4297040afc57109f832bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _neighborDist: 6
-  _maxNeighbors: 6
+  _neighborDist: 4
+  _maxNeighbors: 4
   _timeHorizon: 10
   _timeHorizonObst: 10
-  _radius: 2.3
-  _defaultMaxSpeed: 8
+  _radius: 1.2
+  _defaultMaxSpeed: 3
   _enableAutoRotation: 1
   _rotationSmoothSpeed: 3
 --- !u!1 &8036483548376823842

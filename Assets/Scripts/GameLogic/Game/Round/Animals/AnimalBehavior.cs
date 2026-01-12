@@ -1,6 +1,8 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core.Pool;
+using GameFramework.Manager;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,65 +11,6 @@ using UnityEngine;
 /// </summary>
 public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
 {
-    #region 测试（TODO: 规范化音效系统、动画系统后移除）
-    /// <summary>
-    /// 受击效果协程
-    /// </summary>
-    private Coroutine _hitEffectCoroutine;
-
-    /// <summary>
-    /// 播放受击变红效果
-    /// </summary>
-    public void PlayHitEffect()
-    {
-        // 停止之前的协程，避免重复播放冲突
-        if (_hitEffectCoroutine != null)
-            StopCoroutine(_hitEffectCoroutine);
-
-        // 启动新的受击效果协程
-        _hitEffectCoroutine = StartCoroutine(HitEffectCoroutine());
-    }
-
-    /// <summary>
-    /// 受击效果协程实现
-    /// </summary>
-    private System.Collections.IEnumerator HitEffectCoroutine()
-    {
-        // 变红阶段（0.1秒）
-        float redDuration = 0.1f;
-        float elapsed = 0f;
-
-        while (elapsed < redDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / redDuration;
-
-            _material.color = Color.Lerp(_originalColor, Color.red, t);
-
-            yield return null;
-        }
-
-        // 恢复原色阶段（0.2秒）
-        float recoverDuration = 0.2f;
-        elapsed = 0f;
-
-        while (elapsed < recoverDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / recoverDuration;
-
-            _material.color = Color.Lerp(Color.red, _originalColor, t);
-
-            yield return null;
-        }
-
-        // 确保最终颜色正确
-        _material.color = _originalColor;
-
-        _hitEffectCoroutine = null;
-    }
-    #endregion
-
     /// <summary>
     /// 状态机
     /// </summary>
@@ -151,7 +94,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// <summary>
     /// 受击减速倍率
     /// </summary>
-    public float HitSpeedMultiplier { get; private set; } = 0.5f;
+    public float HitSpeedMultiplier { get; private set; } = 0f;
 
     /// <summary>
     /// 逃跑加速倍率
@@ -179,24 +122,14 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public Collider Collider { get; private set; }
 
     /// <summary>
-    /// 渲染器组件
-    /// </summary>
-    private Renderer _renderer;
-
-    /// <summary>
-    /// 材质
-    /// </summary>
-    private Material _material;
-
-    /// <summary>
-    /// 原始颜色
-    /// </summary>
-    private Color _originalColor;
-
-    /// <summary>
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
+
+    /// <summary>
+    /// 粒子特效管理器
+    /// </summary>
+    private ParticleEffectManager _particleEffectManager => GameServiceLocator.GetFrameworkManager<ParticleEffectManager>();
 
     #region 对象池接口
     public void OnSpawned()
@@ -232,11 +165,6 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         RVO = GetComponent<RVOMovement>();
         //Movement = GetComponent<AnimalMovement>();
         Collider = GetComponent<Collider>();
-
-        // 获取渲染器和材质
-        _renderer = GetComponentInChildren<Renderer>();
-        _material = _renderer.material;
-        _originalColor = _material.color;
 
         // 创建状态机
         _stateMachine = new StateMachine();
@@ -390,6 +318,14 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
                 return clip.length;
         }
         return 0.5f;
+    }
+
+    /// <summary>
+    /// 播放死亡特效
+    /// </summary>
+    public void PlayDeathEffect()
+    {
+        _particleEffectManager.SpawnParticleEffectAsync("Animal_Smoke", transform.position).Forget();
     }
     #endregion
 

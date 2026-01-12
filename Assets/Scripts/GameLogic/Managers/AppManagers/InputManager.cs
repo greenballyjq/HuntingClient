@@ -14,28 +14,8 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     private GameInputActions _input;
 
     /// <summary>
-    /// 主摄像机
-    /// </summary>
-    public Camera MainCamera
-    {
-        get
-        {
-            var camera = Camera.main;
-            if (camera == null)
-            {
-                var mainCameraObj = GameObject.FindGameObjectWithTag("MainCamera");
-                if (mainCameraObj != null)
-                {
-                    camera = mainCameraObj.GetComponent<Camera>();
-                }
-            }
-            return camera;
-        }
-    }
-
-    /// <summary>
     /// 指针屏幕坐标
-    /// </summary>P
+    /// </summary>
     public Vector2 PointerScreenPosition { get; private set; }
 
     /// <summary>
@@ -81,34 +61,6 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     {
         _input.Player.Fire.Disable();
         _input.Player.SelectTarget.Enable();
-    }
-
-    /// <summary>
-    /// 将屏幕坐标转换为世界坐标
-    /// </summary>
-    /// <param name="screenPosition">屏幕坐标</param>
-    /// <param name="depth">世界空间深度</param>
-    /// <returns>世界坐标</returns>
-    public Vector3 ScreenToWorld(Vector2 screenPosition, float depth)
-    {
-        var camera = MainCamera;
-        if (camera == null)
-        {
-            Debug.LogError("[InputManager] MainCamera 为 null，无法转换屏幕坐标到世界坐标");
-            return Vector3.zero;
-        }
-
-        return camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, depth));
-    }
-
-    /// <summary>
-    /// 将世界坐标转换为屏幕坐标
-    /// </summary>
-    /// <param name="worldPosition">世界坐标</param>
-    /// <returns>屏幕坐标</returns>
-    public Vector3 WorldToScreen(Vector3 worldPosition)
-    {
-        return MainCamera.WorldToScreenPoint(worldPosition);
     }
     #endregion
 

@@ -152,27 +152,6 @@ public class UIFakeSettlement : UIBase
         base.OnClose();
     }
 
-    #region 事件相关
-    /// <summary>
-    /// 进入隐藏地图按钮点击回调
-    /// </summary>
-    private async void OnEnterHiddenMapButtonClick()
-    {
-        _buttonEnterHiddenMap.onClick.RemoveListener(OnEnterHiddenMapButtonClick);
-
-        await RoundFlow.Instance.EnterHiddenMapAsync();
-    }
-
-    /// <summary>
-    /// 结算数据更新
-    /// </summary>
-    private void OnSettlementCalculated(SettlementCalculatedEventArgs args)
-    {
-        _textCoin.text = args.TotalCoin.ToString();
-        _textMastery.text = args.TotalMastery.ToString();
-    }
-    #endregion
-
     #region 公共方法
     /// <summary>
     /// 播放抖动动画
@@ -240,4 +219,25 @@ public class UIFakeSettlement : UIBase
             await UniTask.Yield();
     }
     #endregion
+
+    #region 事件相关
+    /// <summary>
+    /// 进入隐藏地图按钮点击回调
+    /// </summary>
+    private async void OnEnterHiddenMapButtonClick()
+    {
+        _buttonEnterHiddenMap.onClick.RemoveListener(OnEnterHiddenMapButtonClick);
+
+        await RoundFlow.Instance.EnterHiddenMapAsync();
+    }
+
+    /// <summary>
+    /// 结算数据更新
+    /// </summary>
+    private void OnSettlementCalculated(SettlementCalculatedEventArgs args)
+    {
+        _textCoin.text = args.TotalCoin.ToString();
+        _textMastery.text = args.TotalMastery.ToString();
+    }
+    #endregion 
 }

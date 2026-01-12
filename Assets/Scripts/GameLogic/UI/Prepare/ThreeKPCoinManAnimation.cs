@@ -43,6 +43,11 @@ public class ThreeKPCoinManAnimation : MonoBehaviour
     /// </summary>
     private UniTaskCompletionSource<DiceAnimation> _diceThrowedCompletionSource;
 
+    /// <summary>
+    /// 投骰子动画结束等待源
+    /// </summary>
+    private UniTaskCompletionSource<bool> _throwAnimationEndedCompletionSource;
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -67,12 +72,21 @@ public class ThreeKPCoinManAnimation : MonoBehaviour
     public async UniTask<DiceAnimation> PlayThrowDiceAsync()
     {
         _diceThrowedCompletionSource = new UniTaskCompletionSource<DiceAnimation>();
+        _throwAnimationEndedCompletionSource = new UniTaskCompletionSource<bool>();
 
         _animator.SetBool("Roll", true);
         _animator.SetBool("Idle", false);
         _animator.SetBool("Walk", false);
 
         return await _diceThrowedCompletionSource.Task;
+    }
+
+    /// <summary>
+    /// 等待投骰子动画结束
+    /// </summary>
+    public async UniTask WaitForThrowAnimationEndAsync()
+    {
+        await _throwAnimationEndedCompletionSource.Task;
     }
 
     /// <summary>
@@ -114,9 +128,9 @@ public class ThreeKPCoinManAnimation : MonoBehaviour
     }
 
     /// <summary>
-    /// 投骰子动画事件
+    /// 骰子投出回调
     /// </summary>
-    public void OnRollDiceThrowEvent()
+    public void OnDiceThrowed()
     {
         // 创建骰子
         GameObject diceObj = Instantiate(_dicePrefab, _diceThrowStartPosition.position, Quaternion.identity, transform.parent);
@@ -124,6 +138,14 @@ public class ThreeKPCoinManAnimation : MonoBehaviour
 
         // 完成等待
         _diceThrowedCompletionSource.TrySetResult(diceAnimation);
+    }
+
+    /// <summary>
+    /// 投骰子动画结束回调
+    /// </summary>
+    public void OnThrowAnimationEnded()
+    {
+        _throwAnimationEndedCompletionSource.TrySetResult(true);
     }
     #endregion
 }

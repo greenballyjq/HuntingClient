@@ -39,12 +39,12 @@ public class HuntingAppFlow : GameAppFlow
         None,
 
         /// <summary>
-        /// 准备
+        /// 准备状态
         /// </summary>
         Prepare,
 
         /// <summary>
-        /// 单局
+        /// 单局状态
         /// </summary>
         Round
     }

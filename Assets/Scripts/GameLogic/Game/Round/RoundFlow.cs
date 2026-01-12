@@ -64,7 +64,12 @@ public class RoundFlow : Singleton<RoundFlow>
         None,
 
         /// <summary>
-        /// 正在游玩
+        /// 过渡状态
+        /// </summary>
+        Transitioning,
+
+        /// <summary>
+        /// 游玩状态
         /// </summary>
         Playing,
     }
@@ -128,13 +133,14 @@ public class RoundFlow : Singleton<RoundFlow>
     public async UniTask StartRound(RoundContext context)
     {
         #region 测试代码 将来会正式化
+        _currentState = RoundFlowState.Transitioning;
         _currentRoundContext = context;
         CreateRoundManagers();
         await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
         InitRoundManagers();
 
-        // 等五秒
-        await UniTask.Delay(5000);
+        var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown",UIManager.UILayer.Fixed);
+        await uiCountDown.PlayCountdownAsync();
 
         _currentState = RoundFlowState.Playing;
         #endregion
@@ -146,6 +152,7 @@ public class RoundFlow : Singleton<RoundFlow>
     public async UniTask EndRound()
     {
         #region 测试代码 将来会正式化
+        _currentState = RoundFlowState.Transitioning;
         DisposeRoundManagers();
         _roundManagers.Clear();
         _currentRoundContext = null;
@@ -156,28 +163,12 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
-    /// 每帧更新
-    /// </summary>
-    /// <param name="dt">时间增量</param>
-    public void DoUpdate(float dt)
-    {
-        switch (_currentState)
-        {
-            case RoundFlowState.Playing:
-                OnRoundPlaying(dt);
-                break;
-            
-            case RoundFlowState.None:
-            default:
-                break;
-        }
-    }
-
-    /// <summary>
     /// 进入隐藏地图
     /// </summary>
     public async UniTask EnterHiddenMapAsync()
     {
+        _currentState = RoundFlowState.Transitioning;
+
         // 伪结算面板动画
         var uiFakeSettlement = _uiManager.GetUI<UIFakeSettlement>("UIFakeSettlement");
         await UniTask.WhenAll(
@@ -202,21 +193,39 @@ public class RoundFlow : Singleton<RoundFlow>
         await uiLoading.PlayFadeOutAsync(); // 播放淡出动画
         _uiManager.CloseUI("UILoading");
 
-        // TODO: 未来步骤待考虑
-        var animalManager = GetRoundManager<AnimalManager>();
         var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
-        
-        uiAlertRed.PlayFlashAsync().Forget();
-        _soundManager.PlaySound2DByPath("Audio/SFX/sfx_alert");
-        var boss = await animalManager.GenerateBossAsync();
-
+        var boss = await GetRoundManager<AnimalManager>().GenerateBossAsync(); // Boss登场动画
+        uiAlertRed.PlayFlashAsync().Forget(); // 播放红屏闪动动画
+        _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_alert").Forget(); // 播放警报声
         await UniTask.Delay(2000);
-
-        _soundManager.PlaySound2DByPath("Audio/SFX/sfx_laugh");
-        _soundManager.PlaySound2DByPath("Audio/BGM/bgm_snow", AudioChannel.Bgm,volume:0.1f);
+        _soundManager.PlaySound2DByPathAsync("Audio/BGM/bgm_snow", AudioChannel.Bgm, volume: 0.1f).Forget(); // 播放远古雪山BGM
+        _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_laugh").Forget(); // 播放Boss台词
         await UniTask.Delay(3000);
 
+        // 准备倒计时
+        var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
+        await uiCountDown.PlayCountdownAsync();
+
         boss.EnterCombat();
+        _currentState = RoundFlowState.Playing;
+    }
+
+    /// <summary>
+    /// 每帧更新
+    /// </summary>
+    /// <param name="dt">时间增量</param>
+    public void DoUpdate(float dt)
+    {
+        switch (_currentState)
+        {
+            case RoundFlowState.Playing:
+                OnRoundPlaying(dt);
+                break;
+            
+            case RoundFlowState.None:
+            default:
+                break;
+        }
     }
     #endregion
 

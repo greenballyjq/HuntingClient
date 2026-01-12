@@ -76,6 +76,11 @@ public class UICrosshair : MonoBehaviour
     /// </summary>
     private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
 
+    /// <summary>
+    /// 相机管理器
+    /// </summary>
+    private CameraManager _cameraManager => GameServiceLocator.GetAppManager<CameraManager>();
+
     private void Awake()
     {
         _crosshairImage = GetComponentInChildren<Image>();
@@ -146,7 +151,7 @@ public class UICrosshair : MonoBehaviour
             worldPosition = target.position;
             
         // 计算目标屏幕位置
-        Vector3 screenPosition = Input.WorldToScreen(worldPosition);
+        Vector3 screenPosition = _cameraManager.WorldToScreenPoint(worldPosition);
         _targetPosition = new Vector2(screenPosition.x, screenPosition.y);
 
         // 计算距离

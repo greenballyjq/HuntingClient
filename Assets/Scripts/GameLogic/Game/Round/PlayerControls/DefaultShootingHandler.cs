@@ -21,6 +21,11 @@ public class DefaultShootingHandler : IPlayerControlHandler
     private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
 
     /// <summary>
+    /// 相机管理器
+    /// </summary>
+    private CameraManager _cameraManager => GameServiceLocator.GetAppManager<CameraManager>();
+
+    /// <summary>
     /// 瞄准深度
     /// </summary>
     private const float AimDepth = 30f;
@@ -35,7 +40,7 @@ public class DefaultShootingHandler : IPlayerControlHandler
     {
         if (Input.IsFireHeld)
         {
-            Vector3 worldPos = Input.ScreenToWorld(Input.PointerScreenPosition, AimDepth);
+            Vector3 worldPos = _cameraManager.ScreenToWorldPoint(Input.PointerScreenPosition, AimDepth);
             _weapon.SetAimTarget(worldPos);
             _weapon.Fire();
         }

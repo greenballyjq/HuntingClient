@@ -31,9 +31,14 @@ public class AimAssistHandler : IPlayerControlHandler
     private EventManager _eventManager = GameServiceLocator.EventManager;
 
     /// <summary>
+    /// 相机管理器
+    /// </summary>
+    private CameraManager _cameraManager => GameServiceLocator.GetAppManager<CameraManager>();
+
+    /// <summary>
     /// 输入管理器
     /// </summary>
-    private InputManager Input => GameServiceLocator.GetAppManager<InputManager>();
+    private InputManager _inputManager => GameServiceLocator.GetAppManager<InputManager>();
 
     /// <summary>
     /// 武器管理器
@@ -42,7 +47,7 @@ public class AimAssistHandler : IPlayerControlHandler
 
     public void OnControlStart()
     {
-        Input.SwitchToSelectTargetMode();
+        _inputManager.SwitchToSelectTargetMode();
         RegisterEvents();
     }
 
@@ -127,8 +132,8 @@ public class AimAssistHandler : IPlayerControlHandler
     private void HandleTargetSelected()
     {
         // 从屏幕坐标发射射线进行射线检测
-        Vector2 screenPos = Input.PointerScreenPosition;
-        Ray ray = Input.MainCamera.ScreenPointToRay(screenPos);
+        Vector2 screenPos = _inputManager.PointerScreenPosition;
+        Ray ray = _cameraManager.MainCamera.ScreenPointToRay(screenPos);
 
         int layerMask = LayerMask.GetMask("Animal");
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
@@ -185,7 +190,7 @@ public class AimAssistHandler : IPlayerControlHandler
     /// </summary>
     private void RegisterEvents()
     {
-        Input.OnTargetSelected += HandleTargetSelected;
+        _inputManager.OnTargetSelected += HandleTargetSelected;
         _eventManager.AddListener(AnimalEvents.AnimalDying, OnAnimalDying);
     }
 
@@ -194,7 +199,7 @@ public class AimAssistHandler : IPlayerControlHandler
     /// </summary>
     private void UnregisterEvents()
     {
-        Input.OnTargetSelected -= HandleTargetSelected;
+        _inputManager.OnTargetSelected -= HandleTargetSelected;
         _eventManager.RemoveListener(AnimalEvents.AnimalDying, OnAnimalDying);
     }
 
