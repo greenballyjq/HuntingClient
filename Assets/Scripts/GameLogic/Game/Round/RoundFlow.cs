@@ -194,16 +194,12 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // 地图过渡动画
         var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
-
-        await uiLoading.PlayFadeInAsync();
-
-        CleanupManagers();
-        await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
-
-        ReInitManagers();
-        DynamicGI.UpdateEnvironment();
-        await uiLoading.PlayFadeOutAsync();
-
+        await uiLoading.PlayFadeInAsync(); // 播放淡入动画
+        CleanupManagers(); // 清理本局管理器
+        await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask(); // 加载场景
+        ReInitManagers(); // 重新初始化管理器
+        DynamicGI.UpdateEnvironment(); // 更新环境光
+        await uiLoading.PlayFadeOutAsync(); // 播放淡出动画
         _uiManager.CloseUI("UILoading");
 
         // TODO: 未来步骤待考虑
@@ -211,13 +207,13 @@ public class RoundFlow : Singleton<RoundFlow>
         var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
         
         uiAlertRed.PlayFlashAsync().Forget();
-        _soundManager.PlaySound2DByPath("Arts/Audio/SFX/sfx_alert");
+        _soundManager.PlaySound2DByPath("Audio/SFX/sfx_alert");
         var boss = await animalManager.GenerateBossAsync();
 
         await UniTask.Delay(2000);
 
-        _soundManager.PlaySound2DByPath("Arts/Audio/SFX/sfx_laugh");
-        _soundManager.PlaySound2DByPath("Arts/Audio/BGM/bgm_snow", AudioChannel.Bgm,volume:0.1f);
+        _soundManager.PlaySound2DByPath("Audio/SFX/sfx_laugh");
+        _soundManager.PlaySound2DByPath("Audio/BGM/bgm_snow", AudioChannel.Bgm,volume:0.1f);
         await UniTask.Delay(3000);
 
         boss.EnterCombat();
@@ -265,6 +261,30 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
+    /// 清理本局管理器
+    /// </summary>
+    private void CleanupManagers()
+    {
+        for (int i = 0; i < _roundManagers.Count; i++)
+        {
+            if (_roundManagers[i] is IRoundResettable resettable)
+                resettable.Cleanup();
+        }
+    }
+
+    /// <summary>
+    /// 重新初始化本局管理器
+    /// </summary>
+    private void ReInitManagers()
+    {
+        for (int i = 0; i < _roundManagers.Count; i++)
+        {
+            if (_roundManagers[i] is IRoundResettable resettable)
+                resettable.ReInit(_currentRoundContext);
+        }
+    }
+
+    /// <summary>
     /// 游玩中更新
     /// </summary>
     /// <param name="dt">时间增量</param>
@@ -277,28 +297,6 @@ public class RoundFlow : Singleton<RoundFlow>
         }
     }
 
-    /// <summary>
-    /// 清理管理器
-    /// </summary>
-    private void CleanupManagers()
-    {
-        for (int i = 0; i < _roundManagers.Count; i++)
-        {
-            if (_roundManagers[i] is IRoundResettable resettable)
-                resettable.Cleanup();
-        }
-    }
-
-    /// <summary>
-    /// 重新初始化管理器
-    /// </summary>
-    private void ReInitManagers()
-    {
-        for (int i = 0; i < _roundManagers.Count; i++)
-        {
-            if (_roundManagers[i] is IRoundResettable resettable)
-                resettable.ReInit(_currentRoundContext);
-        }
-    }
+    
     #endregion
 }
