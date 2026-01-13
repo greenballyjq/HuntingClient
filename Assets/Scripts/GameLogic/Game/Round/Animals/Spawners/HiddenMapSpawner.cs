@@ -38,7 +38,8 @@ public class HiddenMapSpawner : BaseSpawner
         Vector3 moveDirection = CalculateMoveDirection();
 
         // 调用动物管理器生成动物
-        _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection, 10f, true).Forget();
+        await _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection, 10f, true);
+        // animalBehavior.
         // await UniTask.Delay((int)(perSpawnInterval * 1000));
         
         return null;

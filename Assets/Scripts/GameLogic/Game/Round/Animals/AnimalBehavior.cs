@@ -2,6 +2,8 @@
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core.Pool;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using GameFramework.Manager;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -198,14 +200,18 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         //Movement.SetSpeedMultiplier(1f);
         
         // _stateMachine.Init(_moveState);
-        // _stateMachine.Init(_moveState);
+
+        Debug.Log($"[{GetType().Name}] inHiddenMap: {inHiddenMap}");
+        // var rvo = transform.GetComponent<RVOMovement>();
         if (!inHiddenMap)
         {
-            _stateMachine.Init(_moveState);
             var rvo = transform.AddComponent<RVOMovement>();
+            RVO = rvo;
+            rvo.enabled = true;
             rvo.SetMoveDirection(CurrentDirection);
             rvo.SetMaxSpeed(CurrentMoveSpeed);
             rvo.SyncPosition();
+            _stateMachine.Init(_moveState);
         }
         else
         {

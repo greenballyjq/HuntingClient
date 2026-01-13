@@ -37,6 +37,7 @@ public class GuardMovement : MonoBehaviour
 
     private void MoveToGuardPosition()
     {
+        Debug.Log($"[{GetType().Name}] MoveToGuardPosition");
         var direction = (_guardPosition - transform.position).normalized;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 5f);
         transform.Translate(direction * (Time.deltaTime * 5f), Space.World);

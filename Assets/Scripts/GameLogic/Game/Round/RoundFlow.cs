@@ -46,6 +46,52 @@ public class RoundContext
     /// 隐藏地图数据
     /// </summary>
     public Map HiddenMapData { get; set; }
+    
+    /// <summary>
+    /// 隐藏地图结束触发器
+    /// </summary>
+    public HiddenRoundEndTrigger HiddenRoundEndTrigger { get; set; }
+}
+
+public class HiddenRoundEndTrigger
+{
+    private readonly EventManager _eventManager = GameServiceLocator.EventManager;
+    private readonly AnimalManager _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
+    
+    private bool _bossDied;
+    
+    public void Init()
+    {
+        _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
+        _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
+        _bossDied = false;
+    }
+
+    public void Release()
+    {
+        _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
+        _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
+    }
+
+    private void OnAnimalDied(AnimalDiedEventArgs obj)
+    {
+        CheckIsHiddenRoundEnd();
+    }
+
+    private void OnBossDied(BossDiedEventArgs obj)
+    {
+        _bossDied = true;
+        CheckIsHiddenRoundEnd();
+    }
+    
+    private void CheckIsHiddenRoundEnd()
+    {
+        if (_bossDied && !_animalManager.HasActiveAnimal())
+        {
+            // 隐藏地图结束
+            RoundFlow.Instance.EndHiddenMapProcessAsync().Forget();
+        }
+    }
 }
 
 /// <summary>
@@ -144,7 +190,7 @@ public class RoundFlow : Singleton<RoundFlow>
 
         _currentState = RoundFlowState.Playing;
         
-        _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
+        // _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
 
         #endregion
     }
@@ -230,7 +276,7 @@ public class RoundFlow : Singleton<RoundFlow>
                 break;
         }
         
-        _currentRoundContext.HiddenRoundEndTrigger.Init();
+        // _currentRoundContext.HiddenRoundEndTrigger.Init();
     }
 
     /// <summary>
@@ -238,7 +284,7 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     public async UniTask EndHiddenMapProcessAsync()
     {
-        _currentRoundContext.HiddenRoundEndTrigger.Release();
+        // _currentRoundContext.HiddenRoundEndTrigger.Release();
         // TODO: 打开结算面板三
         
         // TODO: 
