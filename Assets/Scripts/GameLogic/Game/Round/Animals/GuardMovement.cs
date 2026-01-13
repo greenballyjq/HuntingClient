@@ -1,5 +1,4 @@
-﻿using GameLogic.Game.Round.Animals;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 保护模式移动组件

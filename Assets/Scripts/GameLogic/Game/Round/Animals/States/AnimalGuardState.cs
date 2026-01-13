@@ -1,5 +1,4 @@
-﻿using GameLogic.Game.Round.Animals;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AnimalGuardState : AnimalState
 {

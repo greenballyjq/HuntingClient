@@ -111178,6 +111178,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 480611131116593838}
+  - component: {fileID: 6476256830425439046}
   m_Layer: 0
   m_Name: FX_DG_A
   m_TagString: Untagged
@@ -111202,6 +111203,18 @@ Transform:
   - {fileID: 446332386044554292}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6476256830425439046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7210412159562472171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0de766a321ce740942ac7e80b9f90d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7331299476751254766
 GameObject:
   m_ObjectHideFlags: 0
