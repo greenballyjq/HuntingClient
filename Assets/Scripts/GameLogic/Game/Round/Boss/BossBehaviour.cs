@@ -398,8 +398,8 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private void OnAnimalGenerated(AnimalGeneratedEventArgs obj)
     {
-        Debug.Log($"[{GetType().Name}] OnAnimalGenerated before");
         if (_followAnimals.Count >= MAX_FOLLOW_ANIMALS) return;
+        Debug.Log($"[{GetType().Name}] OnAnimalGenerated before");
         _followAnimals.Add(obj.Animal);
         var index = _followAnimals.Count - 1;
         _followAnimalActive[index] = true;
