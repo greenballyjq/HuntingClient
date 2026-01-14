@@ -16,7 +16,7 @@ public class SpawnerManager : IRoundManager, IRoundUpdatable, IRoundResettable
         CollectSpawners();
         for (int i = 0; i < _spawners.Count; i++)
             _spawners[i].Init(context.HiddenMapData);
-
+          
         Debug.Log("[SpawnerManager] 初始化完成");
     }
 

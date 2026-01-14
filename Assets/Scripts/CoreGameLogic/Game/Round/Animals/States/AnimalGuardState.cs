@@ -62,6 +62,7 @@ public class AnimalGuardState : AnimalState
             var z = UnityEngine.Random.Range(0, 0.3f);
             var randomDirection = new Vector3(x, 0, z);
             animal.RVO.SetMoveDirection(randomDirection);
+            animal.StopAnimation("Idle");
             stateMachine.ChangeState(animal.GetMoveState());
         }
     }
