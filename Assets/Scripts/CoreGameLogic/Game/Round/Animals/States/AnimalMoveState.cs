@@ -16,6 +16,9 @@ public class AnimalMoveState : AnimalState
         
         // 确保正常速度
         animal.ApplySpeedMultiplier(1f);
+        
+        // 设置移动方向
+        animal.SetDirection(animal.CurrentDirection);
     }
 
     public override void Update()

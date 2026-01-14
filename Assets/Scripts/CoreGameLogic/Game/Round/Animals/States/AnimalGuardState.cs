@@ -28,7 +28,9 @@ public class AnimalGuardState : AnimalState
         var guardIndex = _getGuardIndex.Invoke();
         _guardPolicy = new FanFormationGuardPolicy(BossBehaviour.MAX_FOLLOW_ANIMALS, guardIndex, 6f, 120f);
         // _eventManager.AddListener(BossEvents.BossCall, OnBossCall);
-        animal.RVO.SetMaxSpeed(animal.CurrentMoveSpeed);
+        //animal.RVO.SetMaxSpeed(animal.CurrentMoveSpeed);
+        animal.Movement?.SetBaseSpeed(animal.CurrentMoveSpeed);
+        animal.Movement?.SetSpeedMultiplier(1f);
     }
 
     public override void Update()
@@ -45,15 +47,18 @@ public class AnimalGuardState : AnimalState
                 // 停止
                 animal.PlayAnimationBool("Idle");
                 animal.StopAnimation("Move");
-                animal.RVO.SetMaxSpeed(0f);
+                //animal.RVO.SetMaxSpeed(0f);
+                animal.Movement?.SetSpeedMultiplier(0f);
             }
             else
             {
                 animal.PlayAnimationBool("Move");
                 animal.StopAnimation("Idle");
-                animal.RVO.SetMaxSpeed(animal.CurrentMoveSpeed);
+                //animal.RVO.SetMaxSpeed(animal.CurrentMoveSpeed);
+                animal.Movement?.SetSpeedMultiplier(1f);
                 var guardDirection = (guardPosition - animal.transform.position).normalized;
-                animal.RVO.SetMoveDirection(guardDirection);
+                //animal.RVO.SetMoveDirection(guardDirection);
+                animal.SetDirection(guardDirection);
             }
         }
         else
@@ -61,7 +66,8 @@ public class AnimalGuardState : AnimalState
             var x = UnityEngine.Random.Range(0.7f, 1f);
             var z = UnityEngine.Random.Range(0, 0.3f);
             var randomDirection = new Vector3(x, 0, z);
-            animal.RVO.SetMoveDirection(randomDirection);
+            //animal.RVO.SetMoveDirection(randomDirection);
+            animal.SetDirection(randomDirection);
             stateMachine.ChangeState(animal.GetMoveState());
         }
     }

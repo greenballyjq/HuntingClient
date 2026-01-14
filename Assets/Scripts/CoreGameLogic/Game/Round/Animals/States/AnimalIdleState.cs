@@ -10,7 +10,9 @@ public class AnimalIdleState : AnimalState
     public override void Enter()
     {
         base.Enter();
-        animal.RVO.SetMaxSpeed(0f);
+        //animal.RVO.SetMaxSpeed(0f);
+        // 设置速度为0（待机不动）
+        animal.ApplySpeedMultiplier(0f);
         stateTimer = 0f;
     }
 

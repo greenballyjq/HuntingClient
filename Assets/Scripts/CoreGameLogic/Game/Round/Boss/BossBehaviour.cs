@@ -146,8 +146,8 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private TimerManager _timerManager => GameServiceLocator.TimerManager;
 
-    private ParticleEffectManager _particleEffectManager =>
-        GameServiceLocator.GetFrameworkManager<ParticleEffectManager>();
+    private EffectManager _effectManager =>
+        GameServiceLocator.GetFrameworkManager<EffectManager>();
 
     private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
 
@@ -426,7 +426,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     public void PlayBossDeathEffect()
     {
-        _particleEffectManager.SpawnParticleEffectAsync("Animal_Smoke", transform.position).Forget();
+        _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Animal_Smoke", transform.position, Quaternion.identity).Forget();
     }
 
     /// <summary>

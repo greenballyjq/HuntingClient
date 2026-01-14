@@ -4897,7 +4897,7 @@ GameObject:
   - component: {fileID: 5393210987572526186}
   - component: {fileID: 423981261821042027}
   - component: {fileID: 1752816641938645822}
-  - component: {fileID: 2994358262014474619}
+  - component: {fileID: 950620975038137560}
   m_Layer: 9
   m_Name: Settlement_Explosion
   m_TagString: Untagged
@@ -9720,7 +9720,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &2994358262014474619
+--- !u!114 &950620975038137560
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9729,7 +9729,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3275822159746566102}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0fad3416b880804a9aea853727c4aa7, type: 3}
+  m_Script: {fileID: 11500000, guid: db0de766a321ce740942ac7e80b9f90d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4289600555579467910
