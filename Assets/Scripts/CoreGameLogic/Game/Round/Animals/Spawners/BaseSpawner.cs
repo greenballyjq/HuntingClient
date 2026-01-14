@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
-using GameLogic.Game.Round.Animals.Spawners;
+using CoreGameLogic.Game.Round.Animals.Spawners;
 using UnityEngine;
 
 public abstract class BaseSpawner : MonoBehaviour, IAnimalSpawner
@@ -55,20 +55,20 @@ public abstract class BaseSpawner : MonoBehaviour, IAnimalSpawner
         // _configManager.GetSpe
     }
     
-    /// <summary>
-    /// 每帧更新
-    /// </summary>
-    /// <param name="dt">时间增量</param>
-    public void DoUpdate(float dt)
-    {
-        _accumulatedTime += dt;
-    
-        if (_accumulatedTime >= spawnInterval)
-        {
-            SpawnAsync().Forget();
-            _accumulatedTime -= spawnInterval;
-        }
-    }
+    // /// <summary>
+    // /// 每帧更新
+    // /// </summary>
+    // /// <param name="dt">时间增量</param>
+    // public void DoUpdate(float dt)
+    // {
+    //     _accumulatedTime += dt;
+    //
+    //     if (_accumulatedTime >= spawnInterval)
+    //     {
+    //         SpawnAsync().Forget();
+    //         _accumulatedTime -= spawnInterval;
+    //     }
+    // }
 
     #region 私有方法
 

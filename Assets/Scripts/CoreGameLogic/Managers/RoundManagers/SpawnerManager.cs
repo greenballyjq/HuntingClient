@@ -9,7 +9,7 @@ public class SpawnerManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 派发器列表
     /// </summary>
-    private readonly List<BaseSpawner> _spawners = new List<BaseSpawner>();
+    private readonly List<Spawner> _spawners = new List<Spawner>();
 
     public void Init(RoundContext context)
     {
@@ -55,7 +55,7 @@ public class SpawnerManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private void CollectSpawners()
     {
         _spawners.Clear();
-        BaseSpawner[] found = Object.FindObjectsOfType<BaseSpawner>(true);
+        Spawner[] found = Object.FindObjectsOfType<Spawner>(true);
         _spawners.AddRange(found);
     }
     #endregion

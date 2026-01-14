@@ -8,6 +8,7 @@ TagManager:
   - Animal
   - Bullet
   - Particle Camera
+  - Border
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Bullet
   - Background
   - Particle
-  - 
+  - Border
   - 
   - 
   - 

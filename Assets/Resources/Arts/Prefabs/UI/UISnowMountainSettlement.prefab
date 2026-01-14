@@ -715,6 +715,41 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &2827013172154609767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5256977784261008371}
+  m_Layer: 5
+  m_Name: DiceParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5256977784261008371
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2827013172154609767}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5049895206067916627}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 280, y: 131}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3743244761639159396
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,9 +759,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5049895206067916627}
-  - component: {fileID: 6976701093616315992}
+  - component: {fileID: 8868862978697379124}
   m_Layer: 5
-  m_Name: UISnowMoutainSettlement
+  m_Name: UISnowMountainSettlement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -745,6 +780,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 347490581217056201}
+  - {fileID: 5256977784261008371}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -752,7 +788,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 792, y: 446}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6976701093616315992
+--- !u!114 &8868862978697379124
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -761,71 +797,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3743244761639159396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 085cc42cf9fcf284ea972f3b64f5ca22, type: 3}
+  m_Script: {fileID: 11500000, guid: 9fec75df01534ad69ff927308a6d0cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _textCoin: {fileID: 8563656566971671611}
   _textMastery: {fileID: 5830537599080612208}
-  _imageEnterHiddenMapButton: {fileID: 5326277116070069426}
-  _buttonEnterHiddenMap: {fileID: 5000584318785428161}
-  _shakeConfig:
-    Duration: 3
-    Strength: 30
-    Frequency: 10
-    StrengthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    FrequencyCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.3
-        inSlope: 0
-        outSlope: 0.7
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0.7
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    UseUnscaledTime: 1
-  _buttonGlowConfig:
-    Duration: 3
-    Frequency: 6
-    GlowColor: {r: 1, g: 0.9379985, b: 0.5990566, a: 1}
-    UseUnscaledTime: 1
+  _settleAndReturnButton: {fileID: 5000584318785428161}
+  _shareButton: {fileID: 641218406371667665}
+  _diceButton: {fileID: 4533478567049725579}
+  _dicePrefab: {fileID: 8633554459481619185, guid: 658a676b153a7b64c9612bc32299418b, type: 3}
 --- !u!1 &3805483058502954760
 GameObject:
   m_ObjectHideFlags: 0

@@ -57,21 +57,20 @@ public class Spawner : BaseSpawner
     //     _accumulatedTime = 0f;
     // }
     //
-    // /// <summary>
-    // /// 每帧更新
-    // /// </summary>
-    // /// <param name="dt">时间增量</param>
-    // public void DoUpdate(float dt)
-    // {
-    //     _accumulatedTime += dt;
-    //
-    //     if (_accumulatedTime >= spawnInterval)
-    //     {
-    //         var (specie, stayTime) = _configManager.GetRandomSpecieForMap(_mapData.ID);
-    //         SpawnAsync(specie, stayTime).Forget();
-    //         _accumulatedTime -= spawnInterval;
-    //     }
-    // }
+    /// <summary>
+    /// 每帧更新
+    /// </summary>
+    /// <param name="dt">时间增量</param>
+    public void DoUpdate(float dt)
+    {
+        _accumulatedTime += dt;
+    
+        if (_accumulatedTime >= spawnInterval)
+        {
+            SpawnAsync().Forget();
+            _accumulatedTime -= spawnInterval;
+        }
+    }
 
     #region 重写方法
     /// <summary>

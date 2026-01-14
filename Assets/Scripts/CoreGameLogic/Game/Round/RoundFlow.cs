@@ -63,6 +63,7 @@ public class HiddenRoundEndTrigger
     public void Init()
     {
         _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
+        _eventManager.AddListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
         _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
         _bossDied = false;
     }
@@ -70,10 +71,16 @@ public class HiddenRoundEndTrigger
     public void Release()
     {
         _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
+        _eventManager.RemoveListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
         _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
     }
 
     private void OnAnimalDied(AnimalDiedEventArgs obj)
+    {
+        CheckIsHiddenRoundEnd();
+    }
+    
+    private void OnAnimalReachedWall(AnimalReachedWallEventArgs obj)
     {
         CheckIsHiddenRoundEnd();
     }
@@ -86,6 +93,7 @@ public class HiddenRoundEndTrigger
     
     private void CheckIsHiddenRoundEnd()
     {
+        Debug.Log($"[{GetType().Name}] 检测雪山地图是否结束, bossDied: {_bossDied}, count: {_animalManager.GetActiveAnimalCount()}");
         if (_bossDied && !_animalManager.HasActiveAnimal())
         {
             // 隐藏地图结束
@@ -190,7 +198,7 @@ public class RoundFlow : Singleton<RoundFlow>
 
         _currentState = RoundFlowState.Playing;
         
-        // _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
+        _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
 
         #endregion
     }
@@ -207,6 +215,9 @@ public class RoundFlow : Singleton<RoundFlow>
         _currentRoundContext = null;
         _currentState = RoundFlowState.None;
         #endregion
+        
+        _uiManager.CloseUI("UISnowMountainSettlement");
+        _uiManager.CloseUI("UIHuntingGameplay");
 
         await UniTask.CompletedTask;
     }
@@ -257,6 +268,8 @@ public class RoundFlow : Singleton<RoundFlow>
 
         boss.EnterCombat();
         _currentState = RoundFlowState.Playing;
+        
+        _currentRoundContext.HiddenRoundEndTrigger.Init();
     }
 
     /// <summary>
@@ -275,8 +288,6 @@ public class RoundFlow : Singleton<RoundFlow>
             default:
                 break;
         }
-        
-        // _currentRoundContext.HiddenRoundEndTrigger.Init();
     }
 
     /// <summary>
@@ -284,10 +295,15 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     public async UniTask EndHiddenMapProcessAsync()
     {
-        // _currentRoundContext.HiddenRoundEndTrigger.Release();
-        // TODO: 打开结算面板三
+        _currentRoundContext.HiddenRoundEndTrigger.Release();
+        // TODO: 特效动画
+        var particleManager = GameServiceLocator.GetFrameworkManager<ParticleEffectManager>();
+        await particleManager.SpawnParticleEffectAsync("FX_DGB_PTFH", new Vector3(0, 0, 5));
+        await UniTask.Delay(3000);
         
-        // TODO: 
+        // TODO: 打开结算面板三
+        var uiSnowMountainSettlement = await _uiManager.OpenUIAsync<UISnowMountainSettlement>("UISnowMountainSettlement", UIManager.UILayer.PopUp);
+        
     }
 
     #endregion

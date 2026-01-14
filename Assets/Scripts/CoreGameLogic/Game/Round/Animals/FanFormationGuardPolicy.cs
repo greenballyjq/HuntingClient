@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GameLogic.Game.Round.Animals
+namespace CoreGameLogic.Game.Round.Animals
 {
     public class FanFormationGuardPolicy : IGuardPolicy
     {
