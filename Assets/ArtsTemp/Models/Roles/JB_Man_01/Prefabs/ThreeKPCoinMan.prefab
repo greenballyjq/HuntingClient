@@ -227,5 +227,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dicePrefab: {fileID: 4741585598212227209, guid: 658a676b153a7b64c9612bc32299418b, type: 3}
   _diceThrowStartPosition: {fileID: 8351003866705426749}
-  _moveSpeed: 10000
+  _moveSpeed: 200
   _yMoveOffset: -70

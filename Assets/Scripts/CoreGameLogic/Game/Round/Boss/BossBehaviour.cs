@@ -470,14 +470,32 @@ public class BossBehaviour : MonoBehaviour, IDamageable
     {
         if (_animalManager.GetActiveAnimalCount() >= MAX_ANIMAL_COUNT) return;
 
+        // 如果spawner数组为空，直接返回
+        if (_hiddenMapSpawners == null || _hiddenMapSpawners.Length == 0)
+        {
+            Debug.LogWarning("[BossBehaviour] 没有找到HiddenMapSpawner，无法生成跟随动物");
+            return;
+        }
+
         int spawnCount = 0;
+        int lastSpawnCount = 0;
         while (spawnCount < PER_SPAWN_ANIMAL_COUNT)
         {
+            lastSpawnCount = spawnCount;
             foreach (var spawner in _hiddenMapSpawners)
             {
+                if (spawner == null) continue;
+                
                 await spawner.SpawnAsync();
                 spawnCount++;
                 if (_animalManager.GetActiveAnimalCount() >= MAX_ANIMAL_COUNT) return;
+            }
+            
+            // 防止无限循环：如果遍历完所有spawner后spawnCount没有增加，说明无法继续生成，退出循环
+            if (spawnCount == lastSpawnCount)
+            {
+                Debug.LogWarning("[BossBehaviour] 无法生成任何动物，退出生成循环");
+                break;
             }
         }
     }

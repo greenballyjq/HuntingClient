@@ -240,8 +240,8 @@ public class RoundFlow : Singleton<RoundFlow>
         // 伪结算面板爆米花动画  
         _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity).Forget();
 
-        // 下雪动画（循环特效）
-        _effectManager.PlayLoopAsync("Arts/Prefabs/Particles/FX_Snow", Vector3.zero, Quaternion.identity).Forget();
+        // 下雪动画（循环特效，过场景不移除）
+        _effectManager.PlayLoopAsync("Arts/Prefabs/Particles/FX_Snow", Vector3.zero, Quaternion.identity, persistAcrossScenes: true).Forget();
 
         // 地图过渡动画
         var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
