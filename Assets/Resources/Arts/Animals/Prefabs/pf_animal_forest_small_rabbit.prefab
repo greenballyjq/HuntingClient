@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 53092448204478639}
   - component: {fileID: 2099314039572350811}
   - component: {fileID: 2172441857189665290}
-  - component: {fileID: 9153595358186017862}
   m_Layer: 6
   m_Name: pf_animal_forest_small_rabbit
   m_TagString: Animal
@@ -89,18 +88,6 @@ MonoBehaviour:
   _defaultMaxSpeed: 3
   _enableAutoRotation: 1
   _rotationSmoothSpeed: 3
---- !u!114 &9153595358186017862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3866530701558865069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a666664d38a84caa99ebe9132ec4c5bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8966005518921594391
 GameObject:
   m_ObjectHideFlags: 0

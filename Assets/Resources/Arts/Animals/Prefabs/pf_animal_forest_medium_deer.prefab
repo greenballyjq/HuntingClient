@@ -66,7 +66,6 @@ GameObject:
   - component: {fileID: 8318653326655390207}
   - component: {fileID: 2802442907295725165}
   - component: {fileID: 1845615783771499569}
-  - component: {fileID: 623700207367631476}
   m_Layer: 6
   m_Name: pf_animal_forest_medium_deer
   m_TagString: Animal
@@ -143,18 +142,6 @@ MonoBehaviour:
   _defaultMaxSpeed: 3
   _enableAutoRotation: 1
   _rotationSmoothSpeed: 3
---- !u!114 &623700207367631476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5668283609839772797}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a666664d38a84caa99ebe9132ec4c5bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &967871390404513696
 PrefabInstance:
   m_ObjectHideFlags: 0

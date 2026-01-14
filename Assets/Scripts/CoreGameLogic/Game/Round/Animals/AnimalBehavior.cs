@@ -3,10 +3,8 @@ using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core.Pool;
 using System.Collections.Generic;
-using CoreGameLogic.Game.Round.Animals.States;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -19,8 +17,11 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     private StateMachine _stateMachine;
 
+    /// <summary>
+    /// 待机状态
+    /// </summary>
     private AnimalIdleState _idleState;
-    
+
     /// <summary>
     /// 移动状态
     /// </summary>
@@ -40,6 +41,21 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// 逃跑状态
     /// </summary>
     private AnimalFleeState _fleeState;
+
+    /// <summary>
+    /// 保卫状态
+    /// </summary>
+    private AnimalGuardState _guardState;
+
+    /// <summary>
+    /// 守卫对象
+    /// </summary>
+    private Transform _guardTarget;
+
+    /// <summary>
+    /// 守卫序列索引
+    /// </summary>
+    private int _guardIndex;
 
     /// <summary>
     /// 是否已初始化
@@ -115,11 +131,11 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// RVO避障移动组件
     /// </summary>
     public RVOMovement RVO { get; private set; }
-
-    /// <summary>
-    /// 守卫移动组件
-    /// </summary>
-    public GuardMovement Guard { get; private set; }
+    //
+    // /// <summary>
+    // /// 守卫移动组件
+    // /// </summary>
+    // public GuardMovement Guard { get; private set; }
 
     /// <summary>
     /// 碰撞体组件
@@ -136,6 +152,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     private ParticleEffectManager _particleEffectManager =>
         GameServiceLocator.GetFrameworkManager<ParticleEffectManager>();
+
+    private Color _debugColor;
 
     #region 对象池接口
 
@@ -171,7 +189,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         // 获取组件
         Animator = GetComponentInChildren<Animator>();
         RVO = GetComponent<RVOMovement>();
-        Guard = GetComponent<GuardMovement>();
+        // Guard = GetComponent<GuardMovement>();
         // Debug.Log($"[{GetType().Name}] RVO：{RVO != null}");
         //Movement = GetComponent<AnimalMovement>();
         Collider = GetComponent<Collider>();
@@ -185,6 +203,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         _hitState = new AnimalHitState(this, _stateMachine, "Hit");
         _deathState = new AnimalDeathState(this, _stateMachine, "Death");
         _fleeState = new AnimalFleeState(this, _stateMachine, "Flee");
+        _guardState = new AnimalGuardState(this, _stateMachine, "Move", () => _guardTarget, () => _guardIndex);
     }
 
     /// <summary>
@@ -203,19 +222,22 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         CurrentDirection = transform.forward;
 
         EnableRVO();
-        DisableGuard();
+        // DisableGuard();
 
-        if (!inHiddenMap)
-        {
-            _stateMachine.Init(_moveState);
-        }
-        else
-        {
-            var guardState = new AnimalGuardState(this, _stateMachine, "Move");
-            _stateMachine.Init(guardState);
-        }
+        _debugColor = Color.green;
+        
+        _stateMachine.Init(_moveState);
+
+        // if (!inHiddenMap)
+        // {
+        //     _stateMachine.Init(_moveState);
+        // }
+        // else
+        // {
+        //     _stateMachine.Init(_guardState);
+        // }
     }
-    
+
     private void Update()
     {
         TimeInScene += Time.deltaTime;
@@ -266,7 +288,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     public void EnableGuard()
     {
-        Guard.SetGuard(true);
+        // Guard.SetGuard(true);
     }
 
     /// <summary>
@@ -274,14 +296,14 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     public void DisableGuard()
     {
-        Guard.SetGuard(false);
+        // Guard.SetGuard(false);
     }
-    
-    /// <summary>
-    /// 是否有Guard目标
-    /// </summary>
-    /// <returns></returns>
-    public bool HasGuardTarget() => Guard.HasTarget();
+
+    // /// <summary>
+    // /// 是否有Guard目标
+    // /// </summary>
+    // /// <returns></returns>
+    // public bool HasGuardTarget() => Guard.HasTarget();
 
     /// <summary>
     /// 重置受击标志
@@ -399,6 +421,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     public AnimalMoveState GetMoveState()
     {
+        _debugColor = Color.green;
         return _moveState;
     }
 
@@ -427,6 +450,27 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     }
 
     /// <summary>
+    /// 获取保护状态
+    /// </summary>
+    public AnimalGuardState GetGuardState()
+    {
+        return _guardState;
+    }
+
+    /// <summary>
+    /// 设置守卫对象
+    /// </summary>
+    /// <param name="guardTarget"></param>
+    /// <param name="guardIndex"></param>
+    public void SetGuardTarget(Transform guardTarget, int guardIndex)
+    {
+        _debugColor = Color.red;
+        _guardTarget = guardTarget;
+        _guardIndex = guardIndex;
+        _stateMachine.ChangeState(_guardState);
+    }
+
+    /// <summary>
     /// 触发动物进入死亡事件
     /// </summary>
     public void TriggerAnimalDying()
@@ -436,7 +480,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
             Animal = this,
             SpecieData = SpecieData,
         });
-        Guard.SetGuard(false);
+        // Guard.SetGuard(false);
         RVO.Disable();
     }
 
@@ -479,7 +523,14 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     {
         if (other.gameObject.CompareTag("Border"))
         {
-            _eventManager.Trigger(AnimalEvents.AnimalReachedWall, new AnimalReachedWallEventArgs { Sender = this, Animal = this });
+            _eventManager.Trigger(AnimalEvents.AnimalReachedWall,
+                new AnimalReachedWallEventArgs { Sender = this, Animal = this });
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = _debugColor;
+        Gizmos.DrawWireSphere(transform.position, 0.5f);
     }
 }

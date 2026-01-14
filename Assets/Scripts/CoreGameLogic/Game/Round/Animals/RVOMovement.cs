@@ -205,6 +205,15 @@ public void SyncPosition()
     // 同步当前位置到RVO系统
     _rvoManager.SetAgentPosition(_agentId, transform.position);
 }
+
+/// <summary>
+/// 获取当前移动方向
+/// </summary>
+/// <returns></returns>
+public Vector3 GetCurrentDirection()
+{
+    return _actualVelocity.normalized;
+}
 #endregion
 
 #region 私有方法

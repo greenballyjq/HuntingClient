@@ -3,6 +3,9 @@ using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using UnityEngine;
 using GameFramework.Manager;
+using System;
+using System.Linq;
+using Object = UnityEngine.Object;
 
 /// <summary>
 /// 动物管理器
@@ -106,6 +109,18 @@ public class AnimalManager : IRoundManager, IRoundResettable
     /// </summary>
     /// <returns></returns>
     public int GetActiveAnimalCount() => _activeAnimals.Count;
+
+    public List<AnimalBehavior> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
+    {
+        if (animalCount <= 0) return null;
+        if (_activeAnimals.Count <= 0) return null;
+
+        animalCount = Math.Min(_activeAnimals.Count, animalCount);
+        return _activeAnimals
+            .OrderBy(animal => Vector3.SqrMagnitude(animal.transform.position - position))
+            .Take(animalCount)
+            .ToList();
+    }
     
     #endregion
 

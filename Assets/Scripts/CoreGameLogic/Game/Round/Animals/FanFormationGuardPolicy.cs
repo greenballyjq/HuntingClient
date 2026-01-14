@@ -15,7 +15,7 @@ public class FanFormationGuardPolicy : IGuardPolicy
         _fanAngle = fanAngle;
     }
 
-    public Vector3 CalculateGuardPosition(AnimalBehavior animalBehavior, BossBehaviour bossBehaviour)
+    public Vector3 CalculateGuardPosition(AnimalBehavior animalBehavior, Transform guardTarget)
     {
         float startAngle = -_fanAngle / 2f;
         float angleStep = _fanAngle / (_totalGuards - 1);
@@ -23,5 +23,6 @@ public class FanFormationGuardPolicy : IGuardPolicy
 
         // 将角度转换为位置
         Vector3 offset = Quaternion.Euler(0, currentAngle, 0) * Vector3.back * _defenseRadius;
-        return bossBehaviour.transform.position + offset;
+        return guardTarget.position + offset;
     }
+}

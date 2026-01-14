@@ -2,5 +2,5 @@
 
 public interface IGuardPolicy
 {
-    public Vector3 CalculateGuardPosition(AnimalBehavior animalBehavior, BossBehaviour bossBehaviour);
+    public Vector3 CalculateGuardPosition(AnimalBehavior animalBehavior, Transform guardTarget);
 }

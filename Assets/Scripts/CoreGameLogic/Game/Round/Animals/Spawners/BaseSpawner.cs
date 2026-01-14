@@ -1,6 +1,5 @@
 ﻿using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
-using CoreGameLogic.Game.Round.Animals.Spawners;
 using UnityEngine;
 
 public abstract class BaseSpawner : MonoBehaviour, IAnimalSpawner

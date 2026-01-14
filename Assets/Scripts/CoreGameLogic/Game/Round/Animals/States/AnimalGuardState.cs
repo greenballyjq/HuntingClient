@@ -1,22 +1,22 @@
-﻿using CoreGameLogic.Game.Round.Animals;
+﻿using System;
 using UnityEngine;
 
 public class AnimalGuardState : AnimalState
 {
-    private BossBehaviour _boss;
-
     private IGuardPolicy _guardPolicy;
 
     private Vector3 _guardPosition;
+    
+    private Transform _guardTarget;
+    private readonly Func<Transform> _getGuardTarget;
+    private readonly Func<int> _getGuardIndex;
 
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    private bool _startGuard;
-    private float _guardDuration;
-
-    public AnimalGuardState(AnimalBehavior animal, StateMachine stateMachine, string animationName) :
+    public AnimalGuardState(AnimalBehavior animal, StateMachine stateMachine, string animationName
+        , Func<Transform> getGuardTarget, Func<int> getGuardIndex) :
         base(animal, stateMachine, animationName)
     {
+        _getGuardTarget = getGuardTarget;
+        _getGuardIndex = getGuardIndex;
     }
 
     public override void Enter()
@@ -24,64 +24,51 @@ public class AnimalGuardState : AnimalState
         base.Enter();
         Debug.Log($"[{GetType().Name}] 进入Guard状态");
         stateTimer = 0f;
-        _eventManager.AddListener(BossEvents.BossCall, OnBossCall);
+        _guardTarget = _getGuardTarget.Invoke();
+        var guardIndex = _getGuardIndex.Invoke();
+        _guardPolicy = new FanFormationGuardPolicy(BossBehaviour.MAX_FOLLOW_ANIMALS, guardIndex, 6f, 120f);
+        // _eventManager.AddListener(BossEvents.BossCall, OnBossCall);
         animal.RVO.SetMaxSpeed(animal.CurrentMoveSpeed);
     }
 
     public override void Update()
     {
         base.Update();
-        if (_startGuard)
+        // 守卫逻辑
+        stateTimer += Time.deltaTime;
+        if (stateTimer < BossBehaviour.FOLLOW_DURATION)
         {
-            stateTimer += Time.deltaTime;
-            if (stateTimer > _guardDuration)
+            var guardPosition = _guardPolicy.CalculateGuardPosition(animal, _guardTarget);
+            float minDistance = 2f;
+            if (Vector3.Distance(guardPosition, animal.transform.position) <= minDistance)
             {
-                // animal.DisableGuard();
-                // animal.EnableRVO();
-                _startGuard = false;
-                stateTimer = 0f;
-                _boss.RemoveFollowAnimal(animal);
+                // 停止
+                animal.PlayAnimationBool("Idle");
+                animal.StopAnimation("Move");
+                animal.RVO.SetMaxSpeed(0f);
             }
             else
             {
-                var guardPosition = _guardPolicy.CalculateGuardPosition(animal, _boss);
-
-                if (Vector3.Distance(guardPosition, animal.transform.position) < 1f)
-                {
-                    // 切换至idle状态
-                    stateMachine.ChangeState(animal.GetIdleState());
-                }
-                else
-                {
-                    var guardDirection = (guardPosition - animal.transform.position).normalized;
-                    animal.RVO.SetMoveDirection(guardDirection);
-                }
+                animal.PlayAnimationBool("Move");
+                animal.StopAnimation("Idle");
+                animal.RVO.SetMaxSpeed(animal.CurrentMoveSpeed);
+                var guardDirection = (guardPosition - animal.transform.position).normalized;
+                animal.RVO.SetMoveDirection(guardDirection);
             }
         }
-    }
-
-    private void OnBossCall(BossCallEventArgs obj)
-    {
-        // if (!animal.HasGuardTarget()) return;
-        _boss = obj.Boss;
-        Debug.Log($"[{GetType().Name}] 监听到Boss召唤");
-        // 响应Boss召唤，实现保护逻辑
-        _guardDuration = obj.GuardDuration;
-
-        var availableFollowIndex = obj.Boss.GetAvailableFollowIndex();
-
-        if (availableFollowIndex == -1) return;
-
-        _guardPolicy = new FanFormationGuardPolicy(BossBehaviour.MAX_FOLLOW_ANIMALS, availableFollowIndex, 7f, 100f);
-
-        obj.Boss.AddFollowAnimal(animal);
-
-        _startGuard = true;
+        else
+        {
+            var x = UnityEngine.Random.Range(0.7f, 1f);
+            var z = UnityEngine.Random.Range(0, 0.3f);
+            var randomDirection = new Vector3(x, 0, z);
+            animal.RVO.SetMoveDirection(randomDirection);
+            stateMachine.ChangeState(animal.GetMoveState());
+        }
     }
 
     public override void Exit()
     {
         base.Exit();
-        _eventManager.RemoveListener(BossEvents.BossCall, OnBossCall);
+        // _eventManager.RemoveListener(BossEvents.BossCall, OnBossCall);
     }
 }

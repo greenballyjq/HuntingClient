@@ -88,11 +88,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
     private Material _material;
 
     /// <summary>
-    /// 原始颜色
-    /// </summary>
-    private Color _originalColor;
-
-    /// <summary>
     /// 隐藏地图小怪生成器
     /// </summary>
     private HiddenMapSpawner[] _hiddenMapSpawners;
@@ -111,7 +106,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
     /// 跟随动物生成定时器ID
     /// </summary>
     private int _spawnAnimalsTimerId;
-    
+
     /// <summary>
     /// 召唤动物定时器ID
     /// </summary>
@@ -131,6 +126,11 @@ public class BossBehaviour : MonoBehaviour, IDamageable
     /// 每轮生成跟随动物数量
     /// </summary>
     public const int PER_SPAWN_ANIMAL_COUNT = 10;
+
+    /// <summary>
+    /// 跟随时长
+    /// </summary>
+    public const float FOLLOW_DURATION = 10f;
 
     /// <summary>
     /// 跟随动物数组
@@ -159,7 +159,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         // 获取渲染器和材质
         _renderer = GetComponentInChildren<Renderer>();
         _material = _renderer.material;
-        _originalColor = _material.color;
 
         // 查找所有Boss移动点
         CollectBossMovePoints();
@@ -173,11 +172,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _hitState = new BossHitState(this, _stateMachine, "Hit");
         _randomMoveState = new BossRandomMoveState(this, _stateMachine, "Move", _randomMovePoints);
         _deathState = new BossDeathState(this, _stateMachine, "Death");
-    }
-
-    private void OnDestroy()
-    {
-        // _eventManager.RemoveListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
     }
 
     /// <summary>
@@ -226,9 +220,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _followAnimals.Add(animalBehavior);
         int index = _followAnimals.IndexOf(animalBehavior);
         _followAnimalActive[index] = true;
-        // animalBehavior.Guard.InitGuard(this);
-        // animalBehavior.DisableRVO();
-        // animalBehavior.EnableGuard();
     }
 
     public void RemoveFollowAnimal(AnimalBehavior animalBehavior)
@@ -237,8 +228,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         if (index == -1) return;
         _followAnimals.Remove(animalBehavior);
         _followAnimalActive[index] = false;
-        // animalBehavior.DisableGuard();
-        // animalBehavior.EnableRVO();
     }
 
     #region 公共方法
@@ -414,7 +403,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
         return -1;
     }
-    
+
     public void TriggerBossDyingEvent()
     {
         _eventManager.Trigger(BossEvents.BossDying, new BossDyingEventArgs
@@ -461,21 +450,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     #region 事件相关
 
-    private void OnAnimalGenerated(AnimalGeneratedEventArgs obj)
-    {
-        if (_followAnimals.Count >= MAX_FOLLOW_ANIMALS) return;
-        Debug.Log($"[{GetType().Name}] OnAnimalGenerated before");
-        _followAnimals.Add(obj.Animal);
-        var index = _followAnimals.Count - 1;
-        _followAnimalActive[index] = true;
-
-        var guardMovement = obj.Animal.transform.GetComponent<GuardMovement>();
-        if (!guardMovement) 
-            guardMovement = obj.Animal.transform.AddComponent<GuardMovement>();
-        guardMovement.InitGuard(this);
-        Debug.Log($"[{GetType().Name}] OnAnimalGenerated after");
-    }
-    
     private void OnAnimalReachedWall(AnimalReachedWallEventArgs obj)
     {
         var index = _followAnimals.IndexOf(obj.Animal);
@@ -497,31 +471,25 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         if (_animalManager.GetActiveAnimalCount() >= MAX_ANIMAL_COUNT) return;
 
         int spawnCount = 0;
-        // while (_animalManager.GetActiveAnimalCount() < MAX_ANIMAL_COUNT)
         while (spawnCount < PER_SPAWN_ANIMAL_COUNT)
         {
             foreach (var spawner in _hiddenMapSpawners)
             {
-                var animalBehavior = await spawner.SpawnAsync();
+                await spawner.SpawnAsync();
                 spawnCount++;
-                
-                // if (_followAnimals.Count >= MAX_FOLLOW_ANIMALS) continue;
-                // _followAnimals.Add(animalBehavior);
-                // var index = _followAnimals.Count - 1;
-                // _followAnimalActive[index] = true;
-                // var guardMovement = animalBehavior.transform.GetComponent<GuardMovement>();
-                // if (!guardMovement) 
-                //     guardMovement = animalBehavior.transform.AddComponent<GuardMovement>();
-                // guardMovement.InitGuard(this);
-                
                 if (_animalManager.GetActiveAnimalCount() >= MAX_ANIMAL_COUNT) return;
             }
         }
     }
-    
+
     private void CallAnimals()
     {
-        _eventManager.Trigger(BossEvents.BossCall, new BossCallEventArgs { Boss = this, GuardDuration = 5f });
+        // _eventManager.Trigger(BossEvents.BossCall, new BossCallEventArgs { Boss = this, GuardDuration = FOLLOW_DURATION });
+        var followAnimals = _animalManager.GetCloseAnimalsFromTargetPosition(transform.position, MAX_FOLLOW_ANIMALS);
+        for (var i = 0; i < followAnimals.Count; i++)
+        {
+            followAnimals[i].SetGuardTarget(transform, i);
+        }
     }
 
     #endregion
