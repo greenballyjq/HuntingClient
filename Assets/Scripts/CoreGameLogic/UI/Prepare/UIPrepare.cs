@@ -150,7 +150,7 @@ public class UIPrepare : UIBase
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
 
         // TODO: 测试，未来根据不同地图加载不同场景，以及判断是否有隐藏地图
-        SceneManager.LoadSceneAsync("GameplayForestSceneTest").completed += (ao) =>
+        SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
         {
             Close();
             HuntingAppFlow.Instance.EnterRound(new RoundContext
