@@ -1,4 +1,6 @@
 ﻿using cfg.HuntingConfig.Prop;
+using Cysharp.Threading.Tasks;
+using GameFramework.Manager;
 using UnityEngine;
 
 /// <summary>
@@ -6,16 +8,6 @@ using UnityEngine;
 /// </summary>
 public class PropAimAssistHandler : IPropHandler
 {
-    /// <summary>
-    /// 瞄准镜游戏对象
-    /// </summary>
-    private GameObject _uiCrosshairGameObject;
-
-    /// <summary>
-    /// 瞄准镜UI
-    /// </summary>
-    private UICrosshair _uiCrosshair;
-
     /// <summary>
     /// 最小锁定距离
     /// </summary>
@@ -32,6 +24,16 @@ public class PropAimAssistHandler : IPropHandler
     private Transform _currentTarget;
 
     /// <summary>
+    /// 特效实例
+    /// </summary>
+    private GameObject _effectInstance;
+
+    /// <summary>
+    /// 特效控制器
+    /// </summary>
+    private AimAssistEffectController _effectController;
+
+    /// <summary>
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
@@ -42,6 +44,11 @@ public class PropAimAssistHandler : IPropHandler
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
+    /// 特效管理器
+    /// </summary>
+    private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
+
+    /// <summary>
     /// 玩家控制管理器
     /// </summary>
     private PlayerControlManager _playerControlManager => GameServiceLocator.GetRoundManager<PlayerControlManager>();
@@ -49,32 +56,46 @@ public class PropAimAssistHandler : IPropHandler
     /// <summary>
     /// 道具效果开始
     /// </summary>
-    public void OnPropStart(PropContext context)
+    public async void OnPropStart(PropContext context)
     {
+        RegisterEvents();
+
         // 读取配置参数
         PropAimAssist parameter = _configManager.GetPropAimAssist(context.PropData.ParamTableID);
         _minLockDistance = parameter.MinLockDistance;
         _maxLockDistance = parameter.MaxLockDistance;
-        string prefabPath = parameter.UIPropAimAssistPrefabResourcePath;
 
-        // 创建瞄准镜
-        CreateCrosshair(prefabPath);
+        // 获取特效路径
+        string effectPath = parameter.EffectPrefabPath;
+
+        // 播放循环特效
+        _effectInstance = await _effectManager.PlayLoopAsync(effectPath, Vector3.zero, Quaternion.identity);
+
+        // 获取特效控制器组件
+        _effectController = _effectInstance.GetComponent<AimAssistEffectController>();
+        _effectController.SetTarget(null);
 
         // 切换到指哪打哪模式
         _playerControlManager.SwitchToAimAssist(_minLockDistance, _maxLockDistance);
-
-        RegisterEvents();
     }
 
     /// <summary>
     /// 道具效果更新
     /// </summary>
-    public void OnPropUpdate(PropContext context, float deltaTime)
+    public void OnPropUpdate(PropContext context, float dt)
     {
-        if (_uiCrosshair == null)
+        if (_effectController == null)
             return;
 
-        _uiCrosshair.UpdateByTarget(_currentTarget);
+        // 检查目标是否仍然有效
+        if (_currentTarget != null && _currentTarget.gameObject == null)
+        {
+            _currentTarget = null;
+            _effectController.SetTarget(null);
+        }
+
+        // 由道具管理器驱动更新
+        _effectController.UpdatePosition(dt);
     }
 
     /// <summary>
@@ -82,47 +103,17 @@ public class PropAimAssistHandler : IPropHandler
     /// </summary>
     public void OnPropEnd(PropContext context)
     {
-        UnregisterEvents();
-
         // 切换回默认射击模式
         _playerControlManager.SwitchToDefaultShooting();
 
-        // 销毁瞄准镜
-        DestroyCrosshair();
-    }
+        // 停止并回收特效
+        _effectManager.Stop(_effectInstance, EffectStopMode.Graceful);
+        _effectInstance = null;
 
-    #region 私有方法
-    /// <summary>
-    /// 创建瞄准镜
-    /// </summary>
-    /// <param name="prefabPath">预制体资源路径</param>
-    private void CreateCrosshair(string prefabPath)
-    {
-        // TODO: 待以后统一资源管理器，当前使用Resource方式
-        GameObject prefab = Resources.Load<GameObject>(prefabPath); ;
-
-        // 实例化并初始化瞄准镜
-        _uiCrosshairGameObject = Object.Instantiate(prefab);
-        _uiCrosshair = _uiCrosshairGameObject.GetComponent<UICrosshair>();
-        _uiCrosshair.SetDistanceRange(_minLockDistance, _maxLockDistance);
-        _uiCrosshair.UpdateByTarget(null);
-    }
-
-    /// <summary>
-    /// 销毁瞄准镜
-    /// </summary>
-    private void DestroyCrosshair()
-    {
-        if (_uiCrosshairGameObject != null)
-        {
-            Object.Destroy(_uiCrosshairGameObject);
-            _uiCrosshairGameObject = null;
-        }
-
-        _uiCrosshair = null;
         _currentTarget = null;
+
+        UnregisterEvents();
     }
-    #endregion
 
     #region 事件相关
     /// <summary>
@@ -151,6 +142,7 @@ public class PropAimAssistHandler : IPropHandler
     private void OnTargetSelected(TargetSelectedEventArgs args)
     {
         _currentTarget = args.Target;
+        _effectController.SetTarget(_currentTarget);
     }
 
     /// <summary>
@@ -159,7 +151,10 @@ public class PropAimAssistHandler : IPropHandler
     private void OnTargetLost(TargetLostEventArgs args)
     {
         if (_currentTarget == args.LostTarget)
+        {
             _currentTarget = null;
+            _effectController.SetTarget(null);
+        }
     }
 
     /// <summary>
@@ -168,6 +163,7 @@ public class PropAimAssistHandler : IPropHandler
     private void OnTargetChanged(TargetChangedEventArgs args)
     {
         _currentTarget = args.NewTarget;
+        _effectController.SetTarget(_currentTarget);
     }
     #endregion
 }

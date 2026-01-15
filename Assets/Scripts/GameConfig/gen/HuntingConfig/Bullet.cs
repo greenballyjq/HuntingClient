@@ -27,6 +27,7 @@ public sealed partial class Bullet : Luban.BeanBase
         EffectParamFloat = _buf.ReadFloat();
         PrefabResourcePath = _buf.ReadString();
         IconResourcePath = _buf.ReadString();
+        EffectPrefabPath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -80,6 +81,10 @@ public sealed partial class Bullet : Luban.BeanBase
     /// </summary>
     public readonly string IconResourcePath;
     /// <summary>
+    /// 特效资源路径
+    /// </summary>
+    public readonly string EffectPrefabPath;
+    /// <summary>
     /// 备注
     /// </summary>
     public readonly string Comment;
@@ -105,6 +110,7 @@ public sealed partial class Bullet : Luban.BeanBase
         + "EffectParamFloat:" + EffectParamFloat + ","
         + "PrefabResourcePath:" + PrefabResourcePath + ","
         + "IconResourcePath:" + IconResourcePath + ","
+        + "EffectPrefabPath:" + EffectPrefabPath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

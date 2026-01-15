@@ -1,5 +1,8 @@
 ﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig.Enum;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core.Pool;
+using GameFramework.Manager;
 using Hunting.Events;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,6 +46,11 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
+
+    /// <summary>
+    /// 特效管理器
+    /// </summary>
+    private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
 
     #region 对象池接口
     public void OnSpawned()
@@ -140,6 +148,9 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
         // 对目标造成伤害
         damageable.TakeDamage(_bulletRuntimeContext.FinalDamage, hitPoint, hitNormal);
         
+        // 播放击中特效
+        PlayHitEffect(hitPoint);
+        
         // 执行效果，获取所有命中的目标
         List<IDamageable> hitAnimals = _bulletEffect.OnHit(_bulletRuntimeContext, new BulletHitInfo { 
             HitPoint = hitPoint,
@@ -161,6 +172,15 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
             BulletData = _bulletData,
             Bullet = this
         });
+    }
+
+    /// <summary>
+    /// 播放击中特效
+    /// </summary>
+    /// <param name="hitPoint">命中位置</param>
+    private void PlayHitEffect(Vector3 hitPoint)
+    {
+        _effectManager.PlayOneShotAsync(_bulletData.EffectPrefabPath, hitPoint, Quaternion.identity).Forget();
     }
     #endregion
 

@@ -624,4 +624,47 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
 
     #region 道具相关特殊方法
     #endregion
+
+    #region 测试
+    /// <summary>
+    /// 获取模拟排行榜数据
+    /// </summary>
+    /// <returns>排行榜面板数据</returns>
+    public RankingPanelData GetMockRankingData()
+    {
+        var panelData = new RankingPanelData
+        {
+            DailyRankingList = new List<RankingItemData>(),
+            WeeklyRankingList = new List<RankingItemData>()
+        };
+
+        string[] dailyPlayerNames = { "日榜冠军", "日榜亚军", "日榜季军", "日榜第四", "日榜第五", "日榜第六", "日榜第七", "日榜第八", "日榜第九", "日榜第十", "日榜十一", "日榜十二", "日榜十三", "日榜十四", "日榜十五", "日榜十六", "日榜十七", "日榜十八", "日榜十九", "日榜二十" };
+        string[] dailyTimeFormats = { "00:58:23", "01:02:15", "01:05:47", "01:08:32", "01:12:09", "01:15:44", "01:18:26", "01:21:53", "01:24:17", "01:27:38", "01:30:52", "01:33:14", "01:36:28", "01:39:41", "01:42:55", "01:46:08", "01:49:22", "01:52:35", "01:55:49", "01:59:02" };
+
+        string[] weeklyPlayerNames = { "周榜冠军", "周榜亚军", "周榜季军", "周榜第四", "周榜第五", "周榜第六", "周榜第七", "周榜第八", "周榜第九", "周榜第十", "周榜十一", "周榜十二", "周榜十三", "周榜十四", "周榜十五", "周榜十六", "周榜十七", "周榜十八", "周榜十九", "周榜二十", "周榜二一", "周榜二二", "周榜二三", "周榜二四", "周榜二五" };
+        string[] weeklyTimeFormats = { "00:45:12", "00:48:33", "00:51:56", "00:55:19", "00:58:42", "01:02:05", "01:05:28", "01:08:51", "01:12:14", "01:15:37", "01:19:00", "01:22:23", "01:25:46", "01:29:09", "01:32:32", "01:35:55", "01:39:18", "01:42:41", "01:46:04", "01:49:27", "01:52:50", "01:56:13", "01:59:36", "02:02:59", "02:06:22" };
+
+        for (int i = 0; i < dailyPlayerNames.Length; i++)
+        {
+            panelData.DailyRankingList.Add(new RankingItemData
+            {
+                Avatar = null,
+                PlayerName = dailyPlayerNames[i],
+                ClearTime = dailyTimeFormats[i]
+            });
+        }
+
+        for (int i = 0; i < weeklyPlayerNames.Length; i++)
+        {
+            panelData.WeeklyRankingList.Add(new RankingItemData
+            {
+                Avatar = null,
+                PlayerName = weeklyPlayerNames[i],
+                ClearTime = weeklyTimeFormats[i]
+            });
+        }
+
+        return panelData;
+    }
+    #endregion
 }

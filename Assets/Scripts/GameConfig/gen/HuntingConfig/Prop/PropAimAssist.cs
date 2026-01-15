@@ -19,7 +19,7 @@ public sealed partial class PropAimAssist : Luban.BeanBase
         ID = _buf.ReadInt();
         MinLockDistance = _buf.ReadFloat();
         MaxLockDistance = _buf.ReadFloat();
-        UIPropAimAssistPrefabResourcePath = _buf.ReadString();
+        EffectPrefabPath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -41,9 +41,9 @@ public sealed partial class PropAimAssist : Luban.BeanBase
     /// </summary>
     public readonly float MaxLockDistance;
     /// <summary>
-    /// 指哪打哪道具UI预制体资源加载路径
+    /// 特效预制体路径
     /// </summary>
-    public readonly string UIPropAimAssistPrefabResourcePath;
+    public readonly string EffectPrefabPath;
     /// <summary>
     /// 备注
     /// </summary>
@@ -62,7 +62,7 @@ public sealed partial class PropAimAssist : Luban.BeanBase
         + "ID:" + ID + ","
         + "MinLockDistance:" + MinLockDistance + ","
         + "MaxLockDistance:" + MaxLockDistance + ","
-        + "UIPropAimAssistPrefabResourcePath:" + UIPropAimAssistPrefabResourcePath + ","
+        + "EffectPrefabPath:" + EffectPrefabPath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

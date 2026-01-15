@@ -385,7 +385,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     public void PlayDeathEffect()
     {
-        _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Animal_Smoke", transform.position, Quaternion.identity).Forget();
+        _effectManager.PlayOneShotAsync(SpecieData.EffectPrefabPath, transform.position, Quaternion.identity).Forget();
     }
 
     #endregion
