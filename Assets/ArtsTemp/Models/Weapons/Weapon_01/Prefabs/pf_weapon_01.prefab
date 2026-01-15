@@ -260,7 +260,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6979756235606638100}
   - {fileID: 8006662144979314831}
@@ -390,6 +390,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   muzzlePoint: {fileID: 8006662144979314831}
-  aimLineColor: {r: 1, g: 0, b: 0, a: 1}
-  aimLineWidth: 0.05
-  aimLineLength: 20
+  aimLineColor: {r: 1, g: 0.30346894, b: 0.24056602, a: 1}
+  aimLineWidth: 0.02
+  aimLineLength: 60

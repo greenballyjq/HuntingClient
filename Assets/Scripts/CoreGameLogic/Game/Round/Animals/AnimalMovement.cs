@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 动物移动组件
 /// </summary>
-public class AnimalMovement : MonoBehaviour
+public class AnimalMovement : MonoBehaviour, IAnimalMovement
 {
     /// <summary>
     /// 基础移动速度
@@ -103,5 +103,39 @@ public class AnimalMovement : MonoBehaviour
         Vector3 movement = _direction * finalSpeed * deltaTime;
         transform.position += movement;
     }
+
+    #region IAnimalMovement 实现
+
+    void IAnimalMovement.SetDirection(Vector3 direction)
+    {
+        SetDirection(direction);
+    }
+
+    public void SetSpeed(float speed)
+    {
+        // AnimalMovement 需要同时设置基础速度和倍率
+        // 这里假设直接设置最终速度，将倍率设为1
+        _speedMultiplier = 1f;
+        _baseSpeed = speed;
+    }
+
+    void IAnimalMovement.Enable()
+    {
+        SetEnabled(true);
+    }
+
+    void IAnimalMovement.Disable()
+    {
+        SetEnabled(false);
+    }
+
+    public void Initialize(float speed, Vector3 direction)
+    {
+        SetBaseSpeed(speed);
+        SetDirection(direction);
+        SetEnabled(true);
+    }
+
+    #endregion
 }
 

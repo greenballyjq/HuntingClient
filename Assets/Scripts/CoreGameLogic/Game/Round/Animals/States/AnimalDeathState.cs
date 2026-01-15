@@ -27,11 +27,8 @@ public class AnimalDeathState : AnimalState
         // 设置死亡计时器
         stateTimer = _deathDuration;
 
-        // TODO: 测试禁用是否影响
-        // animal.RVO.Disable();
-        
-        // 禁用移动（死亡不动）
-        animal.Movement?.SetEnabled(false);
+        // 禁用移动
+        animal.Movement.Disable();
 
         // 禁用碰撞体
         animal.SetColliderEnabled(false);

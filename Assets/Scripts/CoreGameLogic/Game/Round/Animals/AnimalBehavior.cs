@@ -128,14 +128,9 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public Animator Animator { get; private set; }
 
     /// <summary>
-    /// RVO避障移动组件
+    /// 移动组件接口
     /// </summary>
-    //public RVOMovement RVO { get; private set; }
-
-    /// <summary>
-    /// 移动组件
-    /// </summary>
-    public AnimalMovement Movement { get; private set; }
+    public IAnimalMovement Movement { get; private set; }
 
     /// <summary>
     /// 碰撞体组件
@@ -161,14 +156,12 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     {
         gameObject.SetActive(true);
         SetColliderEnabled(true);
-        //RVO?.Enable();
-        Movement?.SetEnabled(true);
+        Movement.Enable();
     }
 
     public void OnDespawned()
     {
-        //RVO?.Disable();
-        Movement?.SetEnabled(false);
+        Movement?.Disable();
         SetColliderEnabled(false);
 
         CurrentHP = 0;
@@ -186,10 +179,9 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
 
     private void Awake()
     {
-        // 获取组件
+        // 获取组件（优先使用RVO，如果没有则使用AnimalMovement）
         Animator = GetComponentInChildren<Animator>();
-        //RVO = GetComponent<RVOMovement>();
-        Movement = GetComponent<AnimalMovement>();
+        Movement = GetComponent<RVOMovement>() ?? GetComponent<AnimalMovement>() as IAnimalMovement;
         Collider = GetComponent<Collider>();
 
         // 创建状态机
@@ -219,15 +211,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         CurrentMoveSpeed = data.MoveSpeed;
         CurrentDirection = transform.forward;
 
-        //EnableRVO();
-
-        // 初始化移动组件
-        if (Movement != null)
-        {
-            Movement.SetBaseSpeed(CurrentMoveSpeed);
-            Movement.SetDirection(CurrentDirection);
-            Movement.SetEnabled(true);
-        }
+        // 统一使用接口初始化
+        Movement?.Initialize(CurrentMoveSpeed, CurrentDirection);
 
         _debugColor = Color.green;
         
@@ -239,10 +224,10 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         TimeInScene += Time.deltaTime;
         _stateMachine.Update();
         
-        // 更新移动（每帧调用）
-        if (Movement != null)
+        // AnimalMovement 需要每帧更新，RVO不需要
+        if (Movement is AnimalMovement animalMovement)
         {
-            Movement.UpdateMovement(Time.deltaTime);
+            animalMovement.UpdateMovement(Time.deltaTime);
         }
     }
 
@@ -265,24 +250,6 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         // PlayAnimationTrigger("Hit");
     }
 
-    /// <summary>
-    /// 启用RVO移动策略
-    /// </summary>
-    public void EnableRVO()
-    {
-        //RVO.Enable();
-        //RVO.SyncPosition();
-        //RVO.SetMoveDirection(CurrentDirection);
-        //RVO.SetMaxSpeed(CurrentMoveSpeed);
-    }
-
-    /// <summary>
-    /// 禁用RVO移动策略
-    /// </summary>
-    public void DisableRVO()
-    {
-        //RVO.Disable(false);
-    }
 
     /// <summary>
     /// 重置受击标志
@@ -330,8 +297,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public void SetMoveSpeed(float speed)
     {
         CurrentMoveSpeed = speed;
-        //RVO?.SetMaxSpeed(speed);
-        Movement?.SetBaseSpeed(speed);
+        Movement.SetSpeed(speed);
     }
 
     /// <summary>
@@ -340,7 +306,6 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public void SetDirection(Vector3 direction)
     {
         CurrentDirection = direction;
-        //RVO?.SetMoveDirection(direction);
         Movement?.SetDirection(direction);
     }
 
@@ -358,8 +323,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public void ApplySpeedMultiplier(float multiplier)
     {
         float finalSpeed = CurrentMoveSpeed * multiplier;
-        //RVO?.SetMaxSpeed(finalSpeed);
-        Movement?.SetSpeedMultiplier(multiplier);
+        Movement.SetSpeed(finalSpeed);
     }
 
     /// <summary>
@@ -459,8 +423,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
             Animal = this,
             SpecieData = SpecieData,
         });
-        //RVO.Disable();
-        Movement?.SetEnabled(false);
+        Movement.Disable();
     }
 
     /// <summary>

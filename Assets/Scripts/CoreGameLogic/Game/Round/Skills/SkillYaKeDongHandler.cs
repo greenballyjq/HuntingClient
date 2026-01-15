@@ -11,7 +11,7 @@ public class SkillYaKeDongHandler : ISkillHandler
     /// <summary>
     /// 生成前方距离
     /// </summary>
-    private const float SpawnForwardDistance = 20f;
+    private const float SpawnForwardDistance = 5f;
 
     /// <summary>
     /// 左右偏移距离

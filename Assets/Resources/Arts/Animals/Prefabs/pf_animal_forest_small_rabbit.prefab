@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5521390811681170418}
   - component: {fileID: 53092448204478639}
   - component: {fileID: 2099314039572350811}
-  - component: {fileID: 6085005702854016481}
+  - component: {fileID: 2172441857189665290}
   m_Layer: 6
   m_Name: pf_animal_forest_small_rabbit
   m_TagString: Animal
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ce4db9d80b050f4d95f84ef0e3ace90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6085005702854016481
+--- !u!114 &2172441857189665290
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,9 +77,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3866530701558865069}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8731d45cde7eb0046887b09bae1a69f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 45dfdba63c4297040afc57109f832bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _neighborDist: 3
+  _maxNeighbors: 4
+  _timeHorizon: 10
+  _timeHorizonObst: 10
+  _radius: 0.4
+  _defaultMaxSpeed: 3
+  _enableAutoRotation: 1
+  _rotationSmoothSpeed: 3
 --- !u!1 &8966005518921594391
 GameObject:
   m_ObjectHideFlags: 0

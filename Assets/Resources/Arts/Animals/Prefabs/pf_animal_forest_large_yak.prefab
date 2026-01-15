@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4609264843672590039}
   - component: {fileID: 359703961456159607}
   - component: {fileID: 6537306475180127156}
-  - component: {fileID: 2374364778896988051}
+  - component: {fileID: 7344059794930829309}
   m_Layer: 6
   m_Name: pf_animal_forest_large_yak
   m_TagString: Animal
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ce4db9d80b050f4d95f84ef0e3ace90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2374364778896988051
+--- !u!114 &7344059794930829309
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,9 +77,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 5967435259919969589}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8731d45cde7eb0046887b09bae1a69f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 45dfdba63c4297040afc57109f832bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _neighborDist: 3
+  _maxNeighbors: 4
+  _timeHorizon: 10
+  _timeHorizonObst: 10
+  _radius: 0.6
+  _defaultMaxSpeed: 3
+  _enableAutoRotation: 1
+  _rotationSmoothSpeed: 3
 --- !u!1 &8036483548376823842
 GameObject:
   m_ObjectHideFlags: 0

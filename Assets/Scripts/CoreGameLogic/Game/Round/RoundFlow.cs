@@ -222,6 +222,7 @@ public class RoundFlow : Singleton<RoundFlow>
         await UniTask.CompletedTask;
     }
 
+    GameObject fxSnow;
     /// <summary>
     /// 进入隐藏地图
     /// </summary>
@@ -238,10 +239,10 @@ public class RoundFlow : Singleton<RoundFlow>
         _uiManager.CloseUI("UIFakeSettlement");
 
         // 伪结算面板爆米花动画  
-        _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity).Forget();
+        _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity,persistAcrossScenes: true).Forget();
 
         // 下雪动画（循环特效，过场景不移除）
-        _effectManager.PlayLoopAsync("Arts/Prefabs/Particles/FX_Snow", Vector3.zero, Quaternion.identity, persistAcrossScenes: true).Forget();
+        fxSnow = await _effectManager.PlayLoopAsync("Arts/Prefabs/Particles/FX_Snow", new Vector3(0,5,0), Quaternion.identity, persistAcrossScenes: true);
 
         // 地图过渡动画
         var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
@@ -296,9 +297,10 @@ public class RoundFlow : Singleton<RoundFlow>
     public async UniTask EndHiddenMapProcessAsync()
     {
         _currentRoundContext.HiddenRoundEndTrigger.Release();
+
         // TODO: 特效动画
-        var effectManager = GameServiceLocator.GetFrameworkManager<EffectManager>();
-        await effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/FX_DGB_PTFH", new Vector3(0, 0, 5), Quaternion.identity);
+        await _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/FX_DGB_PTFH", new Vector3(0, 0, 5), Quaternion.identity);
+        _effectManager.Stop(fxSnow,EffectStopMode.Graceful);
         await UniTask.Delay(3000);
         
         // TODO: 打开结算面板三
