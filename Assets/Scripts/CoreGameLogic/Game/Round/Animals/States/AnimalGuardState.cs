@@ -28,12 +28,25 @@ public class AnimalGuardState : AnimalState
         var guardIndex = _getGuardIndex.Invoke();
         _guardPolicy = new FanFormationGuardPolicy(BossBehaviour.MAX_FOLLOW_ANIMALS, guardIndex, 6f, 120f);
         // _eventManager.AddListener(BossEvents.BossCall, OnBossCall);
-        animal.RVO.SetMaxSpeed(animal.CurrentMoveSpeed);
+        animal.Movement?.SetSpeed(animal.CurrentMoveSpeed);
     }
 
     public override void Update()
     {
         base.Update();
+        
+        // 检查守卫目标是否已被销毁
+        if (_guardTarget == null)
+        {
+            // 守卫目标已销毁，退出守卫状态
+            var x = UnityEngine.Random.Range(0.7f, 1f);
+            var z = UnityEngine.Random.Range(0, 0.3f);
+            var randomDirection = new Vector3(x, 0, z);
+            animal.SetDirection(randomDirection);
+            stateMachine.ChangeState(animal.GetMoveState());
+            return;
+        }
+        
         // 守卫逻辑
         stateTimer += Time.deltaTime;
         if (stateTimer < BossBehaviour.FOLLOW_DURATION)
@@ -45,15 +58,15 @@ public class AnimalGuardState : AnimalState
                 // 停止
                 animal.PlayAnimationBool("Idle");
                 animal.StopAnimation("Move");
-                animal.RVO.SetMaxSpeed(0f);
+                animal.Movement?.SetSpeed(0f);
             }
             else
             {
                 animal.PlayAnimationBool("Move");
                 animal.StopAnimation("Idle");
-                animal.RVO.SetMaxSpeed(animal.CurrentMoveSpeed);
+                animal.Movement?.SetSpeed(animal.CurrentMoveSpeed);
                 var guardDirection = (guardPosition - animal.transform.position).normalized;
-                animal.RVO.SetMoveDirection(guardDirection);
+                animal.SetDirection(guardDirection);
             }
         }
         else
@@ -61,7 +74,7 @@ public class AnimalGuardState : AnimalState
             var x = UnityEngine.Random.Range(0.7f, 1f);
             var z = UnityEngine.Random.Range(0, 0.3f);
             var randomDirection = new Vector3(x, 0, z);
-            animal.RVO.SetMoveDirection(randomDirection);
+            animal.SetDirection(randomDirection);
             animal.StopAnimation("Idle");
             stateMachine.ChangeState(animal.GetMoveState());
         }

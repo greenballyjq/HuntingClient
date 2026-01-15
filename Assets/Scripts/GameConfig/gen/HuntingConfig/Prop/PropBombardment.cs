@@ -20,6 +20,8 @@ public sealed partial class PropBombardment : Luban.BeanBase
         ZoneRadius = _buf.ReadFloat();
         DamageAmount = _buf.ReadFloat();
         DamageInterval = _buf.ReadFloat();
+        FireDistance = _buf.ReadFloat();
+        EffectPrefabPath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -33,17 +35,25 @@ public sealed partial class PropBombardment : Luban.BeanBase
     /// </summary>
     public readonly int ID;
     /// <summary>
-    /// 圆形范围半径
+    /// 范围半径
     /// </summary>
     public readonly float ZoneRadius;
     /// <summary>
-    /// 每次伤害数值
+    /// 伤害值
     /// </summary>
     public readonly float DamageAmount;
     /// <summary>
     /// 伤害间隔（秒）
     /// </summary>
     public readonly float DamageInterval;
+    /// <summary>
+    /// 开火距离
+    /// </summary>
+    public readonly float FireDistance;
+    /// <summary>
+    /// 特效预制体路径
+    /// </summary>
+    public readonly string EffectPrefabPath;
     /// <summary>
     /// 备注
     /// </summary>
@@ -63,6 +73,8 @@ public sealed partial class PropBombardment : Luban.BeanBase
         + "ZoneRadius:" + ZoneRadius + ","
         + "DamageAmount:" + DamageAmount + ","
         + "DamageInterval:" + DamageInterval + ","
+        + "FireDistance:" + FireDistance + ","
+        + "EffectPrefabPath:" + EffectPrefabPath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

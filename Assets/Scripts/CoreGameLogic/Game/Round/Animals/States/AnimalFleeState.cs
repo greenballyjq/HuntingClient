@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 动物逃跑状态
@@ -8,8 +8,7 @@ public class AnimalFleeState : AnimalState
     /// <summary>
     /// 逃跑持续时间
     /// </summary>
-    // private float _fleeDuration = 20f;
-    private float _fleeDuration = 10f;
+    private float _fleeDuration = 8f;
 
     public AnimalFleeState(AnimalBehavior animal, StateMachine stateMachine, string animationName) 
         : base(animal, stateMachine, animationName)

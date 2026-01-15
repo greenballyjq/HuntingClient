@@ -600,7 +600,7 @@ GameObject:
   - component: {fileID: 6280487854150273540}
   - component: {fileID: 4890260342526247425}
   m_Layer: 5
-  m_Name: ButtonRank
+  m_Name: ButtonRanking
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1071,6 +1071,7 @@ MonoBehaviour:
   _uiComponentMapInfo: {fileID: 304377437126000941}
   _buttonStartRound: {fileID: 3441168053547427345}
   _buttonLuckyRitual: {fileID: 1972441359714698502}
+  _buttonRanking: {fileID: 4890260342526247425}
 --- !u!1 &7246982032935304172
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@
 /// <summary>
 /// RVO避障移动组件
 /// </summary>
-public class RVOMovement : MonoBehaviour
+public class RVOMovement : MonoBehaviour, IAnimalMovement
 {
 [Header("RVO代理参数")]
 [Tooltip("邻居检测距离")]
@@ -176,7 +176,7 @@ public void Disable(bool resetPosition = true)
         _rvoManager.SetAgentPosition(_agentId, new Vector3(99999, 99999, 99999));
 
     _currentMaxSpeed = 0f;
-    // _targetDirection = Vector3.zero;
+    _targetDirection = Vector3.zero;
     _lastActualVelocity = _actualVelocity;
     _actualVelocity = Vector3.zero;
 
@@ -214,6 +214,38 @@ public Vector3 GetCurrentDirection()
 {
     return _actualVelocity.normalized;
 }
+#endregion
+
+#region IAnimalMovement 实现
+
+public void SetDirection(Vector3 direction)
+{
+    SetMoveDirection(direction);
+}
+
+public void SetSpeed(float speed)
+{
+    SetMaxSpeed(speed);
+}
+
+void IAnimalMovement.Enable()
+{
+    Enable();
+}
+
+void IAnimalMovement.Disable()
+{
+    Disable(false);
+}
+
+public void Initialize(float speed, Vector3 direction)
+{
+    Enable();
+    SyncPosition();
+    SetMoveDirection(direction);
+    SetMaxSpeed(speed);
+}
+
 #endregion
 
 #region 私有方法

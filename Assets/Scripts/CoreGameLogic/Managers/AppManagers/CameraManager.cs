@@ -1,4 +1,4 @@
-using GameFramework.Game;
+﻿using GameFramework.Game;
 using UnityEngine;
 
 /// <summary>
@@ -48,7 +48,7 @@ public class CameraManager : IAppManager
     /// <param name="screenPosition">屏幕坐标</param>
     /// <param name="depth">世界空间深度</param>
     /// <returns>世界坐标</returns>
-    public Vector3 ScreenToWorldPoint(Vector2 screenPosition, float depth)
+    public Vector3 ScreenToWorldPoint(Vector2 screenPosition, float depth = 1f)
     {
         return MainCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, depth));
     }

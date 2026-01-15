@@ -38,6 +38,11 @@ public class UIPrepare : UIBase
     [SerializeField] private Button _buttonLuckyRitual;
 
     /// <summary>
+    /// 排行榜按钮
+    /// </summary>
+    [SerializeField] private Button _buttonRanking;
+
+    /// <summary>
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
@@ -66,12 +71,14 @@ public class UIPrepare : UIBase
     {
         _buttonStartRound.onClick.AddListener(OnClickStartRound);
         _buttonLuckyRitual.onClick.AddListener(OnClickLuckyRitual);
+        _buttonRanking.onClick.AddListener(OnClickRanking);
     }
 
     private void OnDestroy()
     {
         _buttonStartRound.onClick.RemoveListener(OnClickStartRound);
         _buttonLuckyRitual.onClick.RemoveListener(OnClickLuckyRitual);
+        _buttonRanking.onClick.RemoveListener(OnClickRanking);
     }
 
     public override void OnInit(object userData)
@@ -174,6 +181,15 @@ public class UIPrepare : UIBase
     private void OnGiftOpened(GiftOpenedEventArgs args)
     {
         _currentLuckyBuffData = args.LuckyBuffData;
+    }
+
+    /// <summary>
+    /// 排行榜按钮回调
+    /// </summary>
+    private async void OnClickRanking()
+    {
+        var rankingData = _configManager.GetMockRankingData();
+        await _uiManager.OpenUIAsync<UIRanking>("UIRanking", UIManager.UILayer.PopUp, rankingData);
     }
     #endregion
 }

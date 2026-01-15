@@ -1,4 +1,6 @@
 ﻿using cfg.HuntingConfig.Prop;
+using Cysharp.Threading.Tasks;
+using GameFramework.Manager;
 using UnityEngine;
 
 /// <summary>
@@ -7,19 +9,9 @@ using UnityEngine;
 public class PropBombardmentHandler : IPropHandler
 {
     /// <summary>
-    /// 轰炸中心点
-    /// </summary>
-    private Vector3 _bombardmentCenter;
-
-    /// <summary>
     /// 轰炸范围半径
     /// </summary>
     private float _zoneRadius;
-
-    /// <summary>
-    /// 伤害间隔
-    /// </summary>
-    private float _damageInterval;
 
     /// <summary>
     /// 伤害值
@@ -27,14 +19,34 @@ public class PropBombardmentHandler : IPropHandler
     private float _damageAmount;
 
     /// <summary>
+    /// 伤害间隔
+    /// </summary>
+    private float _damageInterval;
+
+    /// <summary>
+    /// 开火距离
+    /// </summary>
+    private float _fireDistance;
+
+    /// <summary>
     /// 伤害计时器
     /// </summary>
     private float _damageTimer;
 
     /// <summary>
+    /// 轰炸中心点
+    /// </summary>
+    private Vector3 _bombardmentCenter;
+
+    /// <summary>
     /// 配置管理器
     /// </summary>
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+
+    /// <summary>
+    /// 特效管理器
+    /// </summary>
+    private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
 
     /// <summary>
     /// 道具效果开始
@@ -46,13 +58,17 @@ public class PropBombardmentHandler : IPropHandler
         // 读取配置参数
         PropBombardment parameter = _configManager.GetPropBombardment(context.PropData.ParamTableID);
         _zoneRadius = parameter.ZoneRadius;
+        _fireDistance = parameter.FireDistance;
         _damageAmount = parameter.DamageAmount;
         _damageInterval = parameter.DamageInterval;
 
         // 计算轰炸中心点
         _bombardmentCenter = CalculateBombardmentCenter();
 
-        // 创建视觉表现
+        // 播放特效
+        _effectManager.PlayOneShotAsync(parameter.EffectPrefabPath, _bombardmentCenter, Quaternion.identity).Forget();
+
+        // 创建范围指示器（测试用）
         CreateRangeIndicator();
 
         _damageTimer = 0f;
@@ -77,7 +93,7 @@ public class PropBombardmentHandler : IPropHandler
     /// </summary>
     public void OnPropEnd(PropContext context)
     {
-        // 清理视觉表现
+        // 销毁范围指示器（测试用）
         DestroyRangeIndicator();
     }
 
@@ -87,7 +103,7 @@ public class PropBombardmentHandler : IPropHandler
     /// </summary>
     private Vector3 CalculateBombardmentCenter()
     {
-        return _playerTransform.position + _playerTransform.forward * BombardmentForwardDistance;
+        return _playerTransform.position + _playerTransform.forward * _fireDistance;
     }
 
     /// <summary>
@@ -104,12 +120,6 @@ public class PropBombardmentHandler : IPropHandler
     }
     #endregion
 
-    #region TODO：未来可配置化
-    /// <summary>
-    /// 轰炸中心点距离玩家的前方距离
-    /// </summary>
-    private const float BombardmentForwardDistance = 10f;
-
     /// <summary>
     /// 玩家Transform
     /// </summary>
@@ -125,16 +135,15 @@ public class PropBombardmentHandler : IPropHandler
 
         return _playerTransform;
     }
-    #endregion
 
-    #region 临时视觉表现 TODO：待未来替换
+    #region 测试
     /// <summary>
-    /// 范围指示器
+    /// 范围指示器（测试用）
     /// </summary>
     private GameObject _rangeIndicator;
 
     /// <summary>
-    /// 创建范围指示器
+    /// 创建范围指示器（测试用）
     /// </summary>
     private void CreateRangeIndicator()
     {
@@ -162,7 +171,7 @@ public class PropBombardmentHandler : IPropHandler
     }
 
     /// <summary>
-    /// 销毁范围指示器
+    /// 销毁范围指示器（测试用）
     /// </summary>
     private void DestroyRangeIndicator()
     {
@@ -173,4 +182,5 @@ public class PropBombardmentHandler : IPropHandler
         _rangeIndicator = null;
     }
     #endregion
+
 }
