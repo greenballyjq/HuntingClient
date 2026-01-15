@@ -149,9 +149,9 @@ public class RoundFlow : Singleton<RoundFlow>
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
     /// <summary>
-    /// 粒子特效管理器
+    /// 特效管理器
     /// </summary>
-    private ParticleEffectManager _particleEffectManager => GameServiceLocator.GetFrameworkManager<ParticleEffectManager>();
+    private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
 
     /// <summary>
     /// 音效管理器
@@ -238,10 +238,10 @@ public class RoundFlow : Singleton<RoundFlow>
         _uiManager.CloseUI("UIFakeSettlement");
 
         // 伪结算面板爆米花动画  
-        _particleEffectManager.SpawnParticleEffectAsync("Settlement_Explosion").Forget();
+        _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity).Forget();
 
-        // 下雪动画
-        _particleEffectManager.SpawnParticleEffectAsync("Snow", autoDestroy: false).Forget();
+        // 下雪动画（循环特效）
+        _effectManager.PlayLoopAsync("Arts/Prefabs/Particles/FX_Snow", Vector3.zero, Quaternion.identity).Forget();
 
         // 地图过渡动画
         var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
@@ -297,8 +297,8 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _currentRoundContext.HiddenRoundEndTrigger.Release();
         // TODO: 特效动画
-        var particleManager = GameServiceLocator.GetFrameworkManager<ParticleEffectManager>();
-        await particleManager.SpawnParticleEffectAsync("FX_DGB_PTFH", new Vector3(0, 0, 5));
+        var effectManager = GameServiceLocator.GetFrameworkManager<EffectManager>();
+        await effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/FX_DGB_PTFH", new Vector3(0, 0, 5), Quaternion.identity);
         await UniTask.Delay(3000);
         
         // TODO: 打开结算面板三

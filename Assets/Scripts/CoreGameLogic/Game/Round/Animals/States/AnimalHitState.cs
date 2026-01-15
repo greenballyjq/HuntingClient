@@ -25,7 +25,7 @@ public class AnimalHitState : AnimalState
         // 进入受击时清一次命中标记
         animal.ResetHitFlag();
 
-        // 应用受击减速倍率
+        // 应用受击减速倍率（0倍速，即停止）
         animal.ApplySpeedMultiplier(animal.HitSpeedMultiplier);
     }
 

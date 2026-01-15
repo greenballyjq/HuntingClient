@@ -20,7 +20,7 @@ public class AnimalFleeState : AnimalState
     {
         base.Enter();
 
-        // 应用逃跑加速倍率
+        // 应用逃跑加速倍率（2倍速）
         animal.ApplySpeedMultiplier(animal.FleeSpeedMultiplier);
 
         // 第一次进入逃跑，设置完整时间；从受击状态返回，使用剩余时间

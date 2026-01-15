@@ -130,12 +130,12 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// <summary>
     /// RVO避障移动组件
     /// </summary>
-    public RVOMovement RVO { get; private set; }
-    //
-    // /// <summary>
-    // /// 守卫移动组件
-    // /// </summary>
-    // public GuardMovement Guard { get; private set; }
+    //public RVOMovement RVO { get; private set; }
+
+    /// <summary>
+    /// 移动组件
+    /// </summary>
+    public AnimalMovement Movement { get; private set; }
 
     /// <summary>
     /// 碰撞体组件
@@ -148,10 +148,10 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
-    /// 粒子特效管理器
+    /// 特效管理器
     /// </summary>
-    private ParticleEffectManager _particleEffectManager =>
-        GameServiceLocator.GetFrameworkManager<ParticleEffectManager>();
+    private EffectManager _effectManager =>
+        GameServiceLocator.GetFrameworkManager<EffectManager>();
 
     private Color _debugColor;
 
@@ -161,14 +161,14 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     {
         gameObject.SetActive(true);
         SetColliderEnabled(true);
-        RVO?.Enable();
-        //Movement.SetEnabled(true);
+        //RVO?.Enable();
+        Movement?.SetEnabled(true);
     }
 
     public void OnDespawned()
     {
-        RVO?.Disable();
-        //Movement.SetEnabled(false);
+        //RVO?.Disable();
+        Movement?.SetEnabled(false);
         SetColliderEnabled(false);
 
         CurrentHP = 0;
@@ -188,10 +188,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     {
         // 获取组件
         Animator = GetComponentInChildren<Animator>();
-        RVO = GetComponent<RVOMovement>();
-        // Guard = GetComponent<GuardMovement>();
-        // Debug.Log($"[{GetType().Name}] RVO：{RVO != null}");
-        //Movement = GetComponent<AnimalMovement>();
+        //RVO = GetComponent<RVOMovement>();
+        Movement = GetComponent<AnimalMovement>();
         Collider = GetComponent<Collider>();
 
         // 创建状态机
@@ -221,28 +219,31 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         CurrentMoveSpeed = data.MoveSpeed;
         CurrentDirection = transform.forward;
 
-        EnableRVO();
-        // DisableGuard();
+        //EnableRVO();
+
+        // 初始化移动组件
+        if (Movement != null)
+        {
+            Movement.SetBaseSpeed(CurrentMoveSpeed);
+            Movement.SetDirection(CurrentDirection);
+            Movement.SetEnabled(true);
+        }
 
         _debugColor = Color.green;
         
         _stateMachine.Init(_moveState);
-
-        // if (!inHiddenMap)
-        // {
-        //     _stateMachine.Init(_moveState);
-        // }
-        // else
-        // {
-        //     _stateMachine.Init(_guardState);
-        // }
     }
 
     private void Update()
     {
         TimeInScene += Time.deltaTime;
-        //Movement.UpdateMovement(Time.deltaTime);
         _stateMachine.Update();
+        
+        // 更新移动（每帧调用）
+        if (Movement != null)
+        {
+            Movement.UpdateMovement(Time.deltaTime);
+        }
     }
 
     #region 公共方法
@@ -269,10 +270,10 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     public void EnableRVO()
     {
-        RVO.Enable();
-        RVO.SyncPosition();
-        RVO.SetMoveDirection(CurrentDirection);
-        RVO.SetMaxSpeed(CurrentMoveSpeed);
+        //RVO.Enable();
+        //RVO.SyncPosition();
+        //RVO.SetMoveDirection(CurrentDirection);
+        //RVO.SetMaxSpeed(CurrentMoveSpeed);
     }
 
     /// <summary>
@@ -280,30 +281,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     public void DisableRVO()
     {
-        RVO.Disable(false);
+        //RVO.Disable(false);
     }
-
-    /// <summary>
-    /// 启用Guard移动策略
-    /// </summary>
-    public void EnableGuard()
-    {
-        // Guard.SetGuard(true);
-    }
-
-    /// <summary>
-    /// 禁用Guard移动策略
-    /// </summary>
-    public void DisableGuard()
-    {
-        // Guard.SetGuard(false);
-    }
-
-    // /// <summary>
-    // /// 是否有Guard目标
-    // /// </summary>
-    // /// <returns></returns>
-    // public bool HasGuardTarget() => Guard.HasTarget();
 
     /// <summary>
     /// 重置受击标志
@@ -351,8 +330,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public void SetMoveSpeed(float speed)
     {
         CurrentMoveSpeed = speed;
-        RVO?.SetMaxSpeed(speed);
-        //Movement.SetBaseSpeed(speed);
+        //RVO?.SetMaxSpeed(speed);
+        Movement?.SetBaseSpeed(speed);
     }
 
     /// <summary>
@@ -361,8 +340,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public void SetDirection(Vector3 direction)
     {
         CurrentDirection = direction;
-        RVO?.SetMoveDirection(direction);
-        //Movement.SetDirection(direction);
+        //RVO?.SetMoveDirection(direction);
+        Movement?.SetDirection(direction);
     }
 
     /// <summary>
@@ -379,8 +358,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     public void ApplySpeedMultiplier(float multiplier)
     {
         float finalSpeed = CurrentMoveSpeed * multiplier;
-        RVO?.SetMaxSpeed(finalSpeed);
-        //Movement.SetSpeedMultiplier(multiplier);
+        //RVO?.SetMaxSpeed(finalSpeed);
+        Movement?.SetSpeedMultiplier(multiplier);
     }
 
     /// <summary>
@@ -406,7 +385,7 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
     /// </summary>
     public void PlayDeathEffect()
     {
-        _particleEffectManager.SpawnParticleEffectAsync("Animal_Smoke", transform.position).Forget();
+        _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Animal_Smoke", transform.position, Quaternion.identity).Forget();
     }
 
     #endregion
@@ -480,8 +459,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
             Animal = this,
             SpecieData = SpecieData,
         });
-        // Guard.SetGuard(false);
-        RVO.Disable();
+        //RVO.Disable();
+        Movement?.SetEnabled(false);
     }
 
     /// <summary>

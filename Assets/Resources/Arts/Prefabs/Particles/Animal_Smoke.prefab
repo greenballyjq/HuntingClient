@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4098114471964282260}
   - component: {fileID: 3023709059420977212}
   - component: {fileID: 4980138799023131072}
-  - component: {fileID: 1991095487673042755}
+  - component: {fileID: 8186493738707752492}
   m_Layer: 0
   m_Name: Animal_Smoke
   m_TagString: Untagged
@@ -4611,7 +4611,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &1991095487673042755
+--- !u!114 &8186493738707752492
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4620,6 +4620,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3159418154107107661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0fad3416b880804a9aea853727c4aa7, type: 3}
+  m_Script: {fileID: 11500000, guid: db0de766a321ce740942ac7e80b9f90d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

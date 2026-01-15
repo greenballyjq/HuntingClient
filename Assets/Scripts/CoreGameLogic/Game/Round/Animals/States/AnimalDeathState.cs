@@ -30,7 +30,8 @@ public class AnimalDeathState : AnimalState
         // TODO: 测试禁用是否影响
         // animal.RVO.Disable();
         
-        //animal.Movement.SetEnabled(false);
+        // 禁用移动（死亡不动）
+        animal.Movement?.SetEnabled(false);
 
         // 禁用碰撞体
         animal.SetColliderEnabled(false);
