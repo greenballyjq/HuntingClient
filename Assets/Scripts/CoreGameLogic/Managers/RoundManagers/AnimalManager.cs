@@ -61,10 +61,10 @@ public class AnimalManager : IRoundManager, IRoundResettable
         var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
         var animal = go.GetComponent<AnimalBehavior>();
         go.transform.position = position;
-        if (direction != Vector3.zero)
-            go.transform.rotation = Quaternion.LookRotation(direction);
 
         animal.Init(specieData, stayTime, inHiddenMap);
+        animal.SetDirection(direction);
+    
 
         // 添加到活跃动物集合
         _activeAnimals.Add(animal);

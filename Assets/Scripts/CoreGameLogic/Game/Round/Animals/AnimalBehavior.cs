@@ -179,9 +179,8 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
 
     private void Awake()
     {
-        // 获取组件（优先使用RVO，如果没有则使用AnimalMovement）
         Animator = GetComponentInChildren<Animator>();
-        Movement = GetComponent<RVOMovement>() ?? GetComponent<AnimalMovement>() as IAnimalMovement;
+        Movement = GetComponent<AnimalMovement>() as IAnimalMovement;
         Collider = GetComponent<Collider>();
 
         // 创建状态机
@@ -209,10 +208,13 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         StayTime = stayTime;
         CurrentHP = MaxHP;
         CurrentMoveSpeed = data.MoveSpeed;
-        CurrentDirection = transform.forward;
+        CurrentDirection = Vector3.zero;
 
-        // 统一使用接口初始化
-        Movement?.Initialize(CurrentMoveSpeed, CurrentDirection);
+        // 只初始化速度，方向等派发器通过 SetDirection 设置
+        if (Movement != null)
+        {
+            Movement.SetSpeed(CurrentMoveSpeed);
+        }
 
         _debugColor = Color.green;
         
@@ -224,7 +226,6 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
         TimeInScene += Time.deltaTime;
         _stateMachine.Update();
         
-        // AnimalMovement 需要每帧更新，RVO不需要
         if (Movement is AnimalMovement animalMovement)
         {
             animalMovement.UpdateMovement(Time.deltaTime);
@@ -246,8 +247,6 @@ public class AnimalBehavior : MonoBehaviour, IPoolItem, IDamageable
 
         // 设置受击标志
         IsHit = true;
-
-        // PlayAnimationTrigger("Hit");
     }
 
 
