@@ -58,7 +58,7 @@ public class AnimalFleeState : AnimalState
         // 逃跑时间到，触发离场事件
         if (stateTimer <= 0f)
         {
-            animal.TriggerAnimalFled();
+            //animal.TriggerAnimalFled();
         }
     }
 

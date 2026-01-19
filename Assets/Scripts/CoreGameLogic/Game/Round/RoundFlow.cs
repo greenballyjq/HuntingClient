@@ -259,7 +259,7 @@ public class RoundFlow : Singleton<RoundFlow>
         uiAlertRed.PlayFlashAsync().Forget(); // 播放红屏闪动动画
         _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_alert").Forget(); // 播放警报声
         await UniTask.Delay(2000);
-        _soundManager.PlaySound2DByPathAsync("Audio/BGM/bgm_snow", AudioChannel.Bgm, volume: 0.1f).Forget(); // 播放远古雪山BGM
+        //_soundManager.PlaySound2DByPathAsync("Audio/BGM/bgm_snow", AudioChannel.Bgm, volume: 0.1f).Forget(); // 播放远古雪山BGM
         _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_laugh").Forget(); // 播放Boss台词
         await UniTask.Delay(3000);
 
