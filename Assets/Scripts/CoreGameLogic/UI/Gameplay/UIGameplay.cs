@@ -20,12 +20,12 @@ public class UIGameplay : UIBase
     /// <summary>
     /// 能量条组件
     /// </summary>
-    [SerializeField] private UIComponentEnergyProgress uiComponentEnergyProgress;
+    [SerializeField] private UIComponentSkill uiComponentEnergyProgress;
 
     /// <summary>
     /// 子弹状态组件
     /// </summary>
-    [SerializeField] private UIComponentBulletStatus uiComponentBulletStatus;
+    [SerializeField] private UIComponentBullet uiComponentBulletStatus;
 
     /// <summary>
     /// 道具组组件

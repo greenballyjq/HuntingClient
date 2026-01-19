@@ -158,6 +158,11 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private SoundManager _soundManager => GameServiceLocator.GetFrameworkManager<SoundManager>();
 
+    /// <summary>
+    /// 事件管理器
+    /// </summary>
+    private EventManager _eventManager => GameServiceLocator.EventManager;
+
     #region 公共方法
     /// <summary>
     /// 获取单局管理器
@@ -190,8 +195,14 @@ public class RoundFlow : Singleton<RoundFlow>
         _currentState = RoundFlowState.Transitioning;
         _currentRoundContext = context;
         CreateRoundManagers();
-        await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
         InitRoundManagers();
+        await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
+
+        // 触发单局开始事件
+        TriggerRoundStarted(new RoundStartedEventArgs
+        {
+            RoundContext = _currentRoundContext
+        });
 
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown",UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync();
@@ -387,6 +398,13 @@ public class RoundFlow : Singleton<RoundFlow>
         }
     }
 
+    /// <summary>
+    /// 触发单局开始事件
+    /// </summary>
+    private void TriggerRoundStarted(RoundStartedEventArgs args)
+    {
+        _eventManager.Trigger(RoundEvents.RoundStarted, args);
+    }
     
     #endregion
 }

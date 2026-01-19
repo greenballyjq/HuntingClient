@@ -86,7 +86,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     public bool TryStartSkill()
     {
-        if (_currentHandler == null || _isRunning || !_energyProgressManager.TryConsumeOneBar())
+        if (_currentHandler == null || _isRunning || !_energyProgressManager.UseEnergyOneBar())
             return false;
 
         BeginSkill();

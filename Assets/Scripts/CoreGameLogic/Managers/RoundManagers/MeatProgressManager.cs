@@ -1,31 +1,25 @@
 ﻿using cfg.HuntingConfig.Enum;
 using UnityEngine;
 
-
 /// <summary>
 /// 肉度条管理器
 /// </summary>
 public class MeatProgressManager : IRoundManager
 {
     /// <summary>
+    /// 单刻度所需值
+    /// </summary>
+    private float _valuePerScale;
+
+    /// <summary>
+    /// 总刻度数
+    /// </summary>
+    private int _totalScale;
+
+    /// <summary>
     /// 当前肉度值
     /// </summary>
     private float _currentMeatValue;
-
-    /// <summary>
-    /// 当前肉度条条数
-    /// </summary>
-    private int _currentMeatBars;
-
-    /// <summary>
-    /// 单条所需肉度值
-    /// </summary>
-    private float _requiredPerBar;
-
-    /// <summary>
-    /// 肉度条上限
-    /// </summary>
-    private int _maxMeatBars;
 
     /// <summary>
     /// 事件管理器
@@ -40,95 +34,92 @@ public class MeatProgressManager : IRoundManager
     public void Init(RoundContext context)
     {
         var meatProgress = _configManager.GetMeatProgress(1);
-        _requiredPerBar = meatProgress.RequiredPerBar;
-        _maxMeatBars = meatProgress.MaxBar;
+        _valuePerScale = meatProgress.ValuePerScale;
+        _totalScale = meatProgress.TotalScale;
 
         RegisterEvents();
-        
-        TriggerProgressChanged(new MeatProgressChangedEventArgs
-        {
-            Sender = this,
-            CurrentMeat = _currentMeatValue,
-            CurrentBars = _currentMeatBars
-        });
-        
-        TriggerBarCountChanged(new MeatBarCountChangedEventArgs
-        {
-            Sender = this,
-            CurrentBars = _currentMeatBars
-        });
-        
+
         Debug.Log("[MeatProgressManager] 初始化完成");
     }
 
     public void Dispose()
     {
         UnregisterEvents();
+
         Debug.Log("[MeatProgressManager] 已释放");
     }
 
     #region 公共方法
     /// <summary>
-    /// 获取当前肉度值
+    /// 增加肉度值
     /// </summary>
-    public float GetCurrentMeatValue() => _currentMeatValue;
-
-    /// <summary>
-    /// 获取当前肉度条条数
-    /// </summary>
-    public int GetCurrentMeatBars() => _currentMeatBars;
-
-    /// <summary>
-    /// 获取单条所需肉度值
-    /// </summary>
-    public float GetRequiredPerBar() => _requiredPerBar;
-
-    /// <summary>
-    /// 获取肉度条上限
-    /// </summary>
-    public int GetMaxMeatBars() => _maxMeatBars;
-
-    /// <summary>
-    /// 增加肉度
-    /// </summary>
-    public void AddMeat(float amount)
+    /// <param name="amount">增加的肉度值</param>
+    public void AddMeatValue(float amount)
     {
-        if (amount <= 0f || _currentMeatBars >= _maxMeatBars)
-            return;
-
         // 累加肉度值
         _currentMeatValue += amount;
-        bool barIncreased = false;
 
-        // 检查是否跨越条数阈值
-        while (_currentMeatValue >= _requiredPerBar && _currentMeatBars < _maxMeatBars)
-        {
-            _currentMeatValue -= _requiredPerBar;
-            _currentMeatBars++;
-            barIncreased = true;
-        }
+        // 超过则封顶
+        float totalMeatValue = GetTotalMeatValue();
+        if (_currentMeatValue > totalMeatValue)
+            _currentMeatValue = totalMeatValue;
 
-        if (_currentMeatBars >= _maxMeatBars)
+        // 触发肉度值变化事件
+        TriggerMeatValueChanged(new MeatValueChangedEventArgs
         {
-            // 达到条数上限时，清空肉度值并封顶条数
-            _currentMeatBars = _maxMeatBars;
-            _currentMeatValue = 0f;
-        }
-
-        TriggerProgressChanged(new MeatProgressChangedEventArgs
-        {
-            Sender = this,
-            CurrentMeat = _currentMeatValue,
-            CurrentBars = _currentMeatBars
+            CurrentMeatValue = _currentMeatValue,
+            TotalProgressRatio = GetTotalProgressRatio(),
+            CompletedScaleCount = GetCompletedScaleCount()
         });
-        if (barIncreased)
-        {
-            TriggerBarCountChanged(new MeatBarCountChangedEventArgs
-            {
-                Sender = this,
-                CurrentBars = _currentMeatBars
-            });
-        }
+    }
+
+    /// <summary>
+    /// 获取单刻度所需值
+    /// </summary>
+    /// <returns>单刻度所需值</returns>
+    public float GetValuePerScale()
+    {
+        return _valuePerScale;
+    }
+
+    /// <summary>
+    /// 获取当前肉度值
+    /// </summary>
+    /// <returns>当前肉度值</returns>
+    public float GetCurrentMeatValue()
+    {
+        return _currentMeatValue;
+    }
+
+    /// <summary>
+    /// 获取总肉度值
+    /// </summary>
+    /// <returns>总肉度值</returns>
+    public float GetTotalMeatValue()
+    {
+        return _valuePerScale * _totalScale;
+    }
+
+    /// <summary>
+    /// 获取已完成的刻度数
+    /// </summary>
+    /// <returns>已完成的刻度数</returns>
+    public int GetCompletedScaleCount()
+    {
+        return Mathf.FloorToInt(_currentMeatValue / _valuePerScale);
+    }
+
+    /// <summary>
+    /// 获取总进度比例
+    /// </summary>
+    /// <returns>总进度比例（0-1之间）</returns>
+    public float GetTotalProgressRatio()
+    {
+        float totalMeatValue = GetTotalMeatValue();
+        if (totalMeatValue <= 0f)
+            return 0f;
+
+        return Mathf.Clamp01(_currentMeatValue / totalMeatValue);
     }
     #endregion
 
@@ -149,33 +140,21 @@ public class MeatProgressManager : IRoundManager
         _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
     }
 
+    /// <summary>
+    /// 动物掉落奖励事件回调
+    /// </summary>
     private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
     {
-        if (!args.DropRewards.TryGetValue(EDropType.Meat, out var meatAmount) || meatAmount <= 0)
-            return;
-
-        AddMeat(meatAmount);
+        AddMeatValue(args.DropRewards[EDropType.Meat]);
     }
 
     /// <summary>
     /// 触发肉度值变化事件
     /// </summary>
-    private void TriggerProgressChanged(MeatProgressChangedEventArgs args)
+    private void TriggerMeatValueChanged(MeatValueChangedEventArgs args)
     {
-        _eventManager.Trigger(MeatEvents.MeatProgressChanged, args);
-    }
-
-    /// <summary>
-    /// 触发肉度条变化事件
-    /// </summary>
-    private void TriggerBarCountChanged(MeatBarCountChangedEventArgs args)
-    {
-        _eventManager.Trigger(MeatEvents.MeatBarCountChanged, args);
-
-        if (_currentMeatBars >= _maxMeatBars)
-            _eventManager.Trigger(MeatEvents.MeatMaxBarsReached);
+        _eventManager.Trigger(MeatEvents.MeatValueChanged, args);
     }
     #endregion
 }
-
 

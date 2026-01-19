@@ -123,6 +123,7 @@ public class MainWeapon : MonoBehaviour
     /// </summary>
     public void SetCurrentBullet(int bulletId)
     {
+        Debug.Log($"[Weapon] 设置当前子弹类型{_currentBulletId}=>{bulletId}");
         ChangeBullet(bulletId);
     }
 

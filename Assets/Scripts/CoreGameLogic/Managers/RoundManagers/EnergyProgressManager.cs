@@ -9,34 +9,29 @@ using UnityEngine;
 public class EnergyProgressManager : IRoundManager, IRoundUpdatable
 {
     /// <summary>
+    /// 单条所需值
+    /// </summary>
+    private float _valuePerBar;
+
+    /// <summary>
+    /// 总条数
+    /// </summary>
+    private int _totalBar;
+
+    /// <summary>
+    /// 每秒增加量
+    /// </summary>
+    private float _increasePerSecond;
+
+    /// <summary>
     /// 当前能量值
     /// </summary>
     private float _currentEnergyValue;
 
     /// <summary>
-    /// 当前能量条条数
+    /// 已完成的能量条数
     /// </summary>
-    private int _currentBars;
-
-    /// <summary>
-    /// 单条所需能量值
-    /// </summary>
-    private float _requiredPerBar;
-
-    /// <summary>
-    /// 能量条上限
-    /// </summary>
-    private int _maxBars;
-
-    /// <summary>
-    /// 自动积攒速率（每秒）
-    /// </summary>
-    private float _increasePerSecond;
-
-    /// <summary>
-    /// 是否正在自动积攒
-    /// </summary>
-    private bool _isAutoAccumulating;
+    private int _completedBars;
 
     /// <summary>
     /// 事件管理器
@@ -50,158 +45,130 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
 
     public void Init(RoundContext context)
     {
-        LoadConfig();
-        RegisterEvents();
+        EnergyProgress energyProgress = _configManager.GetEnergyProgress(1);
+        _valuePerBar = energyProgress.ValuePerBar;
+        _totalBar = energyProgress.TotalBar;
+        _increasePerSecond = energyProgress.IncreasePerSecond;
 
-        // 单局开始时开始自动积攒
-        _isAutoAccumulating = true;
-        
-        // 触发初始状态事件，通知UI更新
-        TriggerProgressChanged(new EnergyProgressChangedEventArgs
-        {
-            Sender = this,
-            CurrentEnergy = _currentEnergyValue,
-            CurrentBars = _currentBars
-        });
-        
-        TriggerBarCountChanged(new EnergyBarCountChangedEventArgs
-        {
-            Sender = this,
-            CurrentBars = _currentBars
-        });
+        RegisterEvents();
 
         Debug.Log("[EnergyProgressManager] 初始化完成");
     }
 
     public void DoUpdate(float deltaTime)
     {
-        if (!_isAutoAccumulating)
-            return;
-
-        // 累积本帧自动增加的能量
-        float deltaEnergy = deltaTime * _increasePerSecond;
-        if (deltaEnergy > 0f)
-            AddEnergy(deltaEnergy);
+        AddEnergyValue(deltaTime * _increasePerSecond);
     }
 
     public void Dispose()
     {
         UnregisterEvents();
 
-        // 单局结束时停止自动积攒并重置进度
-        _isAutoAccumulating = false;
-
         Debug.Log("[EnergyProgressManager] 已释放");
     }
 
     #region 公共方法
     /// <summary>
-    /// 获取当前能量值
-    /// </summary>
-    public float GetCurrentEnergyValue() => _currentEnergyValue;
-
-    /// <summary>
-    /// 获取当前能量条条数
-    /// </summary>
-    public int GetCurrentBars() => _currentBars;
-
-    /// <summary>
-    /// 获取单条所需能量值
-    /// </summary>
-    public float GetRequiredPerBar() => _requiredPerBar;
-
-    /// <summary>
-    /// 获取能量条上限
-    /// </summary>
-    public int GetMaxBars() => _maxBars;
-
-    /// <summary>
-    /// 尝试消耗一条能量
-    /// </summary>
-    public bool TryConsumeOneBar()
-    {
-        if (_currentBars <= 0)
-            return false;
-
-        // 直接扣除一条能量
-        _currentBars = _currentBars - 1;
-        TriggerBarCountChanged(new EnergyBarCountChangedEventArgs
-        {
-            Sender = this,
-            CurrentBars = _currentBars
-        });
-        TriggerEnergyConsumed(new EnergyConsumedEventArgs
-        {
-            Sender = this,
-            RemainingBars = _currentBars
-        });
-        TriggerProgressChanged(new EnergyProgressChangedEventArgs
-        {
-            Sender = this,
-            CurrentEnergy = _currentEnergyValue,
-            CurrentBars = _currentBars
-        });
-        return true;
-    }
-    #endregion
-
-    #region 私有方法
-    /// <summary>
-    /// 读取配置
-    /// </summary>
-    private void LoadConfig()
-    {
-        EnergyProgress energyProgress = _configManager.GetEnergyProgress(1);
-        _requiredPerBar = energyProgress.RequiredPerBar;
-        _maxBars = energyProgress.MaxBar;
-        _increasePerSecond = energyProgress.IncreasePerSecond;
-    }
-
-    /// <summary>
     /// 增加能量
     /// </summary>
-    public void AddEnergy(float amount)
+    public void AddEnergyValue(float amount)
     {
-        //Debug.LogWarning("[AddEnergy] " + amount);
-
-        if (amount <= 0f || _currentBars >= _maxBars)
+        if (_completedBars >= _totalBar)
             return;
 
-        // 累加能量值，并在超过单条阈值时转换成完整能量条
         _currentEnergyValue += amount;
 
         bool barIncreased = false;
-        while (_currentEnergyValue >= _requiredPerBar && _currentBars < _maxBars)
+        while (_currentEnergyValue >= _valuePerBar && _completedBars < _totalBar)
         {
-            _currentEnergyValue -= _requiredPerBar;
-            _currentBars++;
+            _currentEnergyValue -= _valuePerBar;
+            _completedBars++;
             barIncreased = true;
         }
 
-        if (_currentBars >= _maxBars)
+        if (_completedBars >= _totalBar)
         {
-            _currentBars = _maxBars;
+            _completedBars = _totalBar;
             _currentEnergyValue = 0f;
         }
 
-        //Debug.LogWarning("[AddEnergy] 触发 TriggerProgressChanged" + "_currentEnergyValue" + _currentEnergyValue + "_currentBars" + _currentBars);
         TriggerProgressChanged(new EnergyProgressChangedEventArgs
         {
             Sender = this,
             CurrentEnergy = _currentEnergyValue,
-            CurrentBars = _currentBars,
+            CurrentBars = _completedBars,
         });
         if (barIncreased)
         {
             TriggerBarCountChanged(new EnergyBarCountChangedEventArgs
             {
                 Sender = this,
-                CurrentBars = _currentBars
+                CurrentBars = _completedBars
             });
         }
 
-        if (_currentBars >= _maxBars)
+        if (_completedBars >= _totalBar)
             TriggerMaxBarsReached();
+    }
+
+    /// <summary>
+    /// 获取单条所需值
+    /// </summary>
+    public float GetValuePerBar()
+    {
+        return _valuePerBar;
+    }
+
+    /// <summary>
+    /// 获取当前能量值
+    /// </summary>
+    public float GetCurrentEnergyValue()
+    {
+        return _currentEnergyValue;
+    }
+
+    /// <summary>
+    /// 获取总条数
+    /// </summary>
+    public int GetTotalBar()
+    {
+        return _totalBar;
+    }
+
+    /// <summary>
+    /// 获取已完成的能量条数
+    /// </summary>
+    public int GetCompletedBars()
+    {
+        return _completedBars;
+    }
+
+    /// <summary>
+    /// 使用一条能量条
+    /// </summary>
+    public bool UseEnergyOneBar()
+    {
+        if (_completedBars <= 0)
+            return false;
+
+        _completedBars = _completedBars - 1;
+        TriggerBarCountChanged(new EnergyBarCountChangedEventArgs
+        {
+            Sender = this,
+            CurrentBars = _completedBars
+        });
+        TriggerEnergyConsumed(new EnergyConsumedEventArgs
+        {
+            Sender = this,
+            RemainingBars = _completedBars
+        });
+        TriggerProgressChanged(new EnergyProgressChangedEventArgs
+        {
+            Sender = this,
+            CurrentEnergy = _currentEnergyValue,
+            CurrentBars = _completedBars
+        });
+        return true;
     }
     #endregion
 
@@ -227,10 +194,7 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     /// </summary>
     private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
     {
-        if (!args.DropRewards.TryGetValue(EDropType.Energy, out int energyAmount) || energyAmount <= 0)
-            return;
-
-        AddEnergy(energyAmount);
+        AddEnergyValue(args.DropRewards[EDropType.Energy]);
     }
 
     /// <summary>
@@ -264,9 +228,6 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     {
         _eventManager.Trigger(EnergyEvents.EnergyConsumed, args);
     }
-
-       
-
     #endregion
 }
 
