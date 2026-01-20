@@ -242,12 +242,12 @@ public class RoundFlow : Singleton<RoundFlow>
         _currentState = RoundFlowState.Transitioning;
 
         // 伪结算面板动画
-        var uiFakeSettlement = _uiManager.GetUI<UIFakeSettlement>("UIFakeSettlement");
+        var uiFakeSettlement = _uiManager.GetUI<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake");
         await UniTask.WhenAll(
             uiFakeSettlement.PlayWindowShakeAsync(),
             uiFakeSettlement.PlayButtonGlowAsync()
         );
-        _uiManager.CloseUI("UIFakeSettlement");
+        _uiManager.CloseUI("UIPopupSettlementSnowFake");
 
         // 伪结算面板爆米花动画  
         _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity,persistAcrossScenes: true).Forget();
