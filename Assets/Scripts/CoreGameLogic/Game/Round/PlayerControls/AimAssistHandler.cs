@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hunting.Game.Animal;
+using UnityEngine;
 
 /// <summary>
 /// 指哪打哪控制处理器

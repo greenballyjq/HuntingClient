@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 public abstract class BaseSpawner : MonoBehaviour, IAnimalSpawner
@@ -70,7 +71,6 @@ public abstract class BaseSpawner : MonoBehaviour, IAnimalSpawner
     // }
 
     #region 私有方法
-
     public abstract UniTask<AnimalBehavior> SpawnAsync();
 
     /// <summary>

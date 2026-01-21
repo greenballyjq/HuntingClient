@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>

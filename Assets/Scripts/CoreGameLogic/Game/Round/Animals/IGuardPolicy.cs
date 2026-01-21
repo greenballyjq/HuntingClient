@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hunting.Game.Animal;
+using UnityEngine;
 
 public interface IGuardPolicy
 {

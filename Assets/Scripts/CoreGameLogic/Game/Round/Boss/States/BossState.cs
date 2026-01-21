@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using Hunting.Game.Animal;
+
+/// <summary>
 /// Boss状态基类
 /// </summary>
 public class BossState : IState
@@ -36,7 +38,13 @@ public class BossState : IState
         boss.PlayAnimationBool(animationName);
     }
 
-    public virtual void Update()
+
+    public virtual void Exit()
+    {
+        boss.StopAnimation(animationName);
+    }
+
+    public virtual void DoUpdate(float dt)
     {
         if (boss.CurrentHP <= 0 && !(this is BossDeathState))
         {
@@ -44,8 +52,13 @@ public class BossState : IState
         }
     }
 
-    public virtual void Exit()
+    public virtual void Pause()
     {
-        boss.StopAnimation(animationName);
+
+    }
+
+    public virtual void Resume()
+    {
+
     }
 }

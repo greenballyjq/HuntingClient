@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hunting.Game.Animal;
+using UnityEngine;
 
 /// <summary>
 /// Boss 死亡状态
@@ -20,9 +21,9 @@ public class BossDeathState : BossState
         _hasPlayedDeathEffect = false;
     }
 
-    public override void Update()
+    public override void DoUpdate(float dt)
     {
-        base.Update();
+        base.DoUpdate(dt);
         stateTimer -= Time.deltaTime;
         if (!_hasPlayedDeathEffect && stateTimer < 2f)
         {

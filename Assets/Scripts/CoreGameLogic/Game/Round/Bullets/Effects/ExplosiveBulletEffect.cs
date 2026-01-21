@@ -1,4 +1,5 @@
 ﻿using cfg.HuntingConfig;
+using Hunting.Game.Animal;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +23,6 @@ public class ExplosiveBulletEffect : IBulletEffect
     /// </summary>
     public List<IDamageable> OnHit(BulletRuntimeContext context, BulletHitInfo hitInfo)
     {
-        // 记录已处理的动物，避免重复伤害
         HashSet<IDamageable> processed = new HashSet<IDamageable>
         {
             hitInfo.PrimaryTarget
@@ -31,21 +31,21 @@ public class ExplosiveBulletEffect : IBulletEffect
         // 对主要目标造成伤害
         hitInfo.PrimaryTarget.TakeDamage(context.FinalDamage, hitInfo.HitPoint, Vector3.zero);
 
-        // 检测爆炸范围内的所有动物
+        // 检测爆炸范围内的所有可伤害物体
         List<IDamageable> hitTargets = new List<IDamageable> { hitInfo.PrimaryTarget };
         Collider[] colliders = Physics.OverlapSphere(hitInfo.HitPoint, _radius, LayerMask.GetMask("Animal"));
         
         foreach (var collider in colliders)
         {
-            if (!collider.TryGetComponent(out AnimalBehavior animal))
+            if (!collider.TryGetComponent(out IDamageable damageable))
                 continue;
 
-            if (!processed.Add(animal))
+            if (!processed.Add(damageable))
                 continue;
 
-            // 对范围内的其他动物造成伤害
-            animal.TakeDamage(context.FinalDamage, hitInfo.HitPoint);
-            hitTargets.Add(animal);
+            // 对范围内的其他可伤害物体造成伤害
+            damageable.TakeDamage(context.FinalDamage, hitInfo.HitPoint);
+            hitTargets.Add(damageable);
         }
 
         return hitTargets;

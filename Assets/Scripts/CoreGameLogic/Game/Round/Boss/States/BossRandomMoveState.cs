@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
@@ -25,9 +25,9 @@ public class BossRandomMoveState : BossState
             _currentRandomPoint = SelectRandomPoint();
         }
 
-        public override void Update()
+        public override void DoUpdate(float dt)
         {
-            base.Update();
+            base.DoUpdate(dt);
             stateTimer += Time.deltaTime;
             if (boss.IsHit)
             {

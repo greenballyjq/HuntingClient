@@ -2,7 +2,7 @@
 using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
-using Unity.VisualScripting;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 public class BossBehaviour : MonoBehaviour, IDamageable
@@ -211,7 +211,8 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        _stateMachine?.Update();
+        float dt = Time.deltaTime;
+        _stateMachine?.DoUpdate(dt);
     }
 
     public void AddFollowAnimal(AnimalBehavior animalBehavior)
@@ -485,12 +486,12 @@ public class BossBehaviour : MonoBehaviour, IDamageable
             foreach (var spawner in _hiddenMapSpawners)
             {
                 if (spawner == null) continue;
-                
+
                 await spawner.SpawnAsync();
                 spawnCount++;
                 if (_animalManager.GetActiveAnimalCount() >= MAX_ANIMAL_COUNT) return;
             }
-            
+
             // 防止无限循环：如果遍历完所有spawner后spawnCount没有增加，说明无法继续生成，退出循环
             if (spawnCount == lastSpawnCount)
             {
@@ -506,7 +507,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         var followAnimals = _animalManager.GetCloseAnimalsFromTargetPosition(transform.position, MAX_FOLLOW_ANIMALS);
         for (var i = 0; i < followAnimals.Count; i++)
         {
-            followAnimals[i].SetGuardTarget(transform, i);
+            //followAnimals[i].SetGuardTarget(transform, i);
         }
     }
 

@@ -639,6 +639,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIHuntingGamePlay
       objectReference: {fileID: 0}
+    - target: {fileID: 680476121910715723, guid: f01daca9cda326b4aa6b96bff280d0a8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6037383438632139027, guid: f01daca9cda326b4aa6b96bff280d0a8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1025,6 +1029,14 @@ PrefabInstance:
     - target: {fileID: 1669855178041881157, guid: 02aba83ea5218204e97c8b2a4c2fc1ea, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479530662063734958, guid: 02aba83ea5218204e97c8b2a4c2fc1ea, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -18.440063
+      objectReference: {fileID: 0}
+    - target: {fileID: 2479530662063734958, guid: 02aba83ea5218204e97c8b2a4c2fc1ea, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -12.097565
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

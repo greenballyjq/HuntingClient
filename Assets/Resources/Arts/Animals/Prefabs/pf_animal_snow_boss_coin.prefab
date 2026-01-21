@@ -67,13 +67,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e54bae88ec2042999459f1a0662e956f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  randomMovePoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &8966005518921594391
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using UnityEngine;
+using Hunting.Game.Animal;
 
 /// <summary>
 /// 物种派发器

@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 public class HiddenMapSpawner : BaseSpawner

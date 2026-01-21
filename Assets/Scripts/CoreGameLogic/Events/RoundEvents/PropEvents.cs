@@ -3,6 +3,7 @@ using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using GameFramework.Core;
 using GameFramework.Game;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>

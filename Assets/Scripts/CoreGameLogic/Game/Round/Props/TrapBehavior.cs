@@ -1,5 +1,6 @@
 ﻿using cfg.HuntingConfig.Enum;
 using GameFramework.Core.Pool;
+using Hunting.Game.Animal;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -144,7 +145,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
             // 进行吸引
             Vector3 targetPoint = GetTargetPointForAnimal(animal);
             Vector3 direction = (targetPoint - animal.transform.position).normalized;
-            animal.SetDirection(direction);
+            animal.GetComponent<IMoveable>().SetDirection(direction);
 
             // 记录已吸引
             _attractedAnimals.Add(animal);
@@ -169,7 +170,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
             AnimalBehavior animal = collider.GetComponent<AnimalBehavior>();
 
             // 检查动物是否已死亡
-            if (animal.CurrentHP <= 0)
+            if (animal.Health.CurrentHealth <= 0)
                 continue;
 
             // 触发陷阱
@@ -235,7 +236,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
         });
 
         // 造成伤害
-        animal.TakeDamage(animal.MaxHP, transform.position);
+        animal.GetComponent<IDamageable>().TakeDamage(animal.GetComponent<IHealth>().MaxHealth);
     }
     #endregion
 

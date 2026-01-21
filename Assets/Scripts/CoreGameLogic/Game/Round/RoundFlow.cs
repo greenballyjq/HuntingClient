@@ -266,7 +266,7 @@ public class RoundFlow : Singleton<RoundFlow>
         _uiManager.CloseUI("UILoading");
 
         var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
-        var boss = await GetRoundManager<AnimalManager>().GenerateBossAsync(); // Boss登场动画
+        //var boss = await GetRoundManager<AnimalManager>().GenerateBossAsync(); // Boss登场动画
         uiAlertRed.PlayFlashAsync().Forget(); // 播放红屏闪动动画
         _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_alert").Forget(); // 播放警报声
         await UniTask.Delay(2000);
@@ -278,7 +278,7 @@ public class RoundFlow : Singleton<RoundFlow>
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync();
 
-        boss.EnterCombat();
+        //boss.EnterCombat();
         _currentState = RoundFlowState.Playing;
         
         _currentRoundContext.HiddenRoundEndTrigger.Init();
