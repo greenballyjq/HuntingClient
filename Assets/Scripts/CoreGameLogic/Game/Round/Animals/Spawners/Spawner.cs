@@ -77,17 +77,19 @@ public class Spawner : BaseSpawner
     /// <summary>
     /// 派发物种
     /// </summary>
-    public override async UniTask<AnimalBehaviour> SpawnAsync()
+    public override async UniTask<BaseAnimalBehaviour> SpawnAsync()
     {
-        // 从配置按地图与体型策略选出物种与驻场时间
-        var (specie, stayTime) = _configManager.GetRandomSpecieForMap(_mapData.ID);
+        
+
+        // 从配置按地图与体型策略选出物种
+        var specie = _configManager.GetRandomSpecieForMap(_mapData.ID);
 
         // 计算生成位置与移动方向
         Vector3 spawnPosition = CalculateSpawnPosition();
         Vector3 moveDirection = CalculateMoveDirection();
 
         // 调用动物管理器生成动物
-        return await _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection, stayTime);
+        return await _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection);
     }
     #endregion
 

@@ -30,12 +30,12 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <summary>
     /// 追踪所有活跃的动物
     /// </summary>
-    private readonly HashSet<AnimalBehaviour> _activeAnimals = new HashSet<AnimalBehaviour>();
+    private readonly HashSet<BaseAnimalBehaviour> _activeAnimals = new HashSet<BaseAnimalBehaviour>();
     
     /// <summary>
     /// 待移除的动物列表
     /// </summary>
-    private readonly List<AnimalBehaviour> _animalsToRemove = new List<AnimalBehaviour>();
+    private readonly List<BaseAnimalBehaviour> _animalsToRemove = new List<BaseAnimalBehaviour>();
 
     public void Init(RoundContext context)
     {
@@ -78,13 +78,13 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <summary>
     /// 生成动物
     /// </summary>
-    public async UniTask<AnimalBehaviour> GenerateAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, float stayTime, bool inHiddenMap = false)
+    public async UniTask<BaseAnimalBehaviour> GenerateAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, bool inHiddenMap = false)
     {
         var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
-        var animal = go.GetComponent<AnimalBehaviour>();
+        var animal = go.GetComponent<BaseAnimalBehaviour>();
         go.transform.position = position;
 
-        animal.Init(specieData, stayTime);
+        animal.Init(specieData);
         animal.GetComponent<IMoveable>().SetDirection(direction);
 
         // 添加到活跃动物集合
@@ -96,7 +96,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
             SpecieData = specieData,
             Position = position,
             Direction = direction,
-            StayTime = stayTime
         });
 
         return animal;
@@ -131,7 +130,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <returns></returns>
     public int GetActiveAnimalCount() => _activeAnimals.Count;
 
-    public List<AnimalBehaviour> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
+    public List<BaseAnimalBehaviour> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
     {
         if (animalCount <= 0) return null;
         if (_activeAnimals.Count <= 0) return null;

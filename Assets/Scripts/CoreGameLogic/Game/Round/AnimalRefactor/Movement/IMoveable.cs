@@ -13,9 +13,9 @@ namespace Hunting.Game.Animal
         float CurrentSpeed { get; }
         
         /// <summary>
-        /// 当前目标位置
+        /// 当前目标变换组件
         /// </summary>
-        Vector3 CurrentTargetPosition { get; }
+        Transform CurrentTargetTransform { get; }
         
         /// <summary>
         /// 当前目标方向

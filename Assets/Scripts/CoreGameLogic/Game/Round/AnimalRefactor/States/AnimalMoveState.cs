@@ -3,14 +3,14 @@
     /// <summary>
     /// 动物移动状态
     /// </summary>
-    public class AnimalMoveState : AnimalState, IStayState
+    public class AnimalMoveState : AnimalState
     {
         /// <summary>
         /// 移动速度倍率
         /// </summary>
-        protected float _moveSpeedRate;
+        protected float _moveSpeedRate = 1f;
 
-        public AnimalMoveState(StateMachine stateMachine, AnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
+        public AnimalMoveState(StateMachine stateMachine, BaseAnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
         {
         }
 
@@ -18,11 +18,9 @@
         {
             base.Enter();
 
-            _moveSpeedRate = 1f;
-
             animalBehavior.Moveable.SetMoveRate(_moveSpeedRate);
             
-            animalBehavior.AnimalAnimator.PlayMove();
+            animalBehavior.AnimalVisual.PlayMove();
         }
 
         public override void DoUpdate(float dt)
@@ -42,7 +40,7 @@
 
             animalBehavior.Moveable.SetMoveRate(_moveSpeedRate);
 
-            animalBehavior.AnimalAnimator.PlayMove();
+            animalBehavior.AnimalVisual.PlayMove();
         }
     }
 }

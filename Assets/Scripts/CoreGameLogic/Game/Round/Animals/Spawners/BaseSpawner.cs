@@ -71,7 +71,7 @@ public abstract class BaseSpawner : MonoBehaviour, IAnimalSpawner
     // }
 
     #region 私有方法
-    public abstract UniTask<AnimalBehaviour> SpawnAsync();
+    public abstract UniTask<BaseAnimalBehaviour> SpawnAsync();
 
     /// <summary>
     /// 计算派发的位置

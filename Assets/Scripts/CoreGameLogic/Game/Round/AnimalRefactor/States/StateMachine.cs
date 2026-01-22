@@ -43,9 +43,10 @@
         /// 进入临时状态
         /// </summary>
         /// <param name="tempState">临时状态</param>
-        public void EnterTempState(IState tempState)
+        /// <param name="ignore">是否忽略相同临时状态</param>
+        public void EnterTempState(IState tempState,bool ignore = false)
         {
-            if (_currentState == tempState)
+            if (!ignore && _currentState == tempState)
                 return;
 
             if (_stateBeforeTemp == null)
