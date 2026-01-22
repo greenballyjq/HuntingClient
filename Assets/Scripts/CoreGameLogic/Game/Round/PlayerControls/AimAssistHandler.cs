@@ -153,7 +153,7 @@ public class AimAssistHandler : IPlayerControlHandler
                     return;
             }
 
-            AnimalBehaviour animal = hit.transform.GetComponent<AnimalBehaviour>();
+            BaseAnimalBehaviour animal = hit.transform.GetComponent<BaseAnimalBehaviour>();
 
             if (_currentTarget == null)
             {
@@ -192,7 +192,7 @@ public class AimAssistHandler : IPlayerControlHandler
     private void RegisterEvents()
     {
         _inputManager.OnTargetSelected += HandleTargetSelected;
-        _eventManager.AddListener(AnimalEvents.AnimalDying, OnAnimalDying);
+        _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalDying);
     }
 
     /// <summary>
@@ -201,13 +201,13 @@ public class AimAssistHandler : IPlayerControlHandler
     private void UnregisterEvents()
     {
         _inputManager.OnTargetSelected -= HandleTargetSelected;
-        _eventManager.RemoveListener(AnimalEvents.AnimalDying, OnAnimalDying);
+        _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalDying);
     }
 
     /// <summary>
     /// 动物进入死亡事件回调
     /// </summary>
-    private void OnAnimalDying(AnimalDyingEventArgs args)
+    private void OnAnimalDying(AnimalEnteredDeathEventArgs args)
     {
         // 当死亡的动物是当前锁定目标时清除
         if (_currentTarget != null && args.Animal.transform == _currentTarget)

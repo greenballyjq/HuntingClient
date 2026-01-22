@@ -208,11 +208,6 @@ public class MainWeapon : MonoBehaviour
 
         // 获取子弹配置
         var newBulletData = _configManager.GetBullet(newBulletId);
-        if (newBulletData== null)
-        {
-            Debug.LogWarning($"[Weapon] 子弹配置不存在: {newBulletId}");
-            return;
-        }
 
         var oldBulletData = _configManager.GetBullet(oldBulletId);
 
@@ -237,8 +232,6 @@ public class MainWeapon : MonoBehaviour
             IsSpecialBullet = isSpecialBullet,
             RemainingTime = _specialBulletRemainingTime
         });
-
-        Debug.Log($"[Weapon] 切换子弹: {oldBulletId} -> {newBulletId}");
     }
     #endregion
 
@@ -273,7 +266,6 @@ public class MainWeapon : MonoBehaviour
 
         // 切换到特殊子弹
         ChangeBullet(specialBullet.ID);
-        Debug.Log($"[Weapon] 获得特殊子弹: {specialBullet.Name}，持续时间: {specialBullet.Duration}秒");
     }
 
     /// <summary>

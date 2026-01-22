@@ -50,7 +50,7 @@ namespace Hunting.Game.Animal
 
         #region 公共方法
         /// <summary>
-        /// 初始化生命值
+        /// 初始化生命值组件
         /// </summary>
         /// <param name="maxHealth">最大血量</param>
         public void Init(float maxHealth)

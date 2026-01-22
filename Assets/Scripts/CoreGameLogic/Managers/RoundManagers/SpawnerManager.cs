@@ -11,6 +11,8 @@ public class SpawnerManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private readonly List<Spawner> _spawners = new List<Spawner>();
 
+
+
     public void Init(RoundContext context)
     {
         CollectSpawners();

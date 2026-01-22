@@ -8,28 +8,23 @@
         /// <summary>
         /// 逃跑速度倍率
         /// </summary>
-        protected float _fleeSpeedRate;
+        protected float _fleeSpeedRate = 2f;
         
         /// <summary>
         /// 逃跑持续时间
         /// </summary>
-        protected float _fleeDuration;
+        protected float _fleeDuration = 8f;
 
-        public AnimalFleeState(StateMachine stateMachine, AnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
+        public AnimalFleeState(StateMachine stateMachine, BaseAnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
         {
         }
 
         public override void Enter()
         {
             base.Enter();
-
-            _fleeSpeedRate = 2f;
-
-            _fleeDuration = 8f;
-
             animalBehavior.Moveable.SetMoveRate(_fleeSpeedRate);
             
-            animalBehavior.AnimalAnimator.PlayFlee();
+            animalBehavior.AnimalVisual.PlayFlee();
         }
 
         public override void DoUpdate(float dt)
@@ -54,7 +49,7 @@
         {
             base.Resume();
             
-            animalBehavior.AnimalAnimator.PlayFlee();
+            animalBehavior.AnimalVisual.PlayFlee();
         }
     }
 }

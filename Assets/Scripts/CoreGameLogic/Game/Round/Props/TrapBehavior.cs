@@ -51,7 +51,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
     /// <summary>
     /// 已吸引的动物集合
     /// </summary>
-    private HashSet<AnimalBehaviour> _attractedAnimals = new HashSet<AnimalBehaviour>();
+    private HashSet<BaseAnimalBehaviour> _attractedAnimals = new HashSet<BaseAnimalBehaviour>();
 
     /// <summary>
     /// 是否已初始化
@@ -136,7 +136,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
         // 为每个动物选择目标点并设置移动方向
         foreach (Collider collider in animalColliders)
         {
-            AnimalBehaviour animal = collider.GetComponent<AnimalBehaviour>();
+            BaseAnimalBehaviour animal = collider.GetComponent<BaseAnimalBehaviour>();
 
             // 检查是否已经被吸引过
             if (_attractedAnimals.Contains(animal))
@@ -167,7 +167,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
         // 检查是否有动物进入触发范围
         foreach (Collider collider in animalColliders)
         {
-            AnimalBehaviour animal = collider.GetComponent<AnimalBehaviour>();
+            BaseAnimalBehaviour animal = collider.GetComponent<BaseAnimalBehaviour>();
 
             // 检查动物是否已死亡
             if (animal.Health.CurrentHealth <= 0)
@@ -182,7 +182,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
     /// <summary>
     /// 根据动物类型获取目标点
     /// </summary>
-    private Vector3 GetTargetPointForAnimal(AnimalBehaviour animal)
+    private Vector3 GetTargetPointForAnimal(BaseAnimalBehaviour animal)
     {
         // 根据体型从配置中获取范围比例
         EVolumeType volumeType = animal.SpecieData.VolumeType;
@@ -225,7 +225,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
     /// <summary>
     /// 触发陷阱
     /// </summary>
-    private void TriggerTrap(AnimalBehaviour animal)
+    private void TriggerTrap(BaseAnimalBehaviour animal)
     {
         // 触发陷阱触发事件
         _eventManager.Trigger(PropEvents.TrapTriggered, new TrapTriggeredEventArgs

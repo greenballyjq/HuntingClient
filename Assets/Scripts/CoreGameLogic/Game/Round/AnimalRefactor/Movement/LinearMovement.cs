@@ -38,9 +38,9 @@ namespace Hunting.Game.Animal
         public float CurrentSpeed => _isMoving ? _baseSpeed * _moveRate : 0f;
         
         /// <summary>
-        /// 当前目标位置
+        /// 当前目标变换组件
         /// </summary>
-        public Vector3 CurrentTargetPosition => Vector3.zero;
+        public Transform CurrentTargetTransform => null;
         
         /// <summary>
         /// 当前目标方向

@@ -10,7 +10,7 @@
         /// <summary>
         /// 动物基类
         /// </summary>
-        protected AnimalBehaviour animalBehavior;
+        protected BaseAnimalBehaviour animalBehavior;
 
         /// <summary>
         /// 状态计时器
@@ -22,7 +22,7 @@
         /// </summary>
         protected bool _isPaused;
 
-        public AnimalState(StateMachine stateMachine,AnimalBehaviour animalBehavior)
+        public AnimalState(StateMachine stateMachine,BaseAnimalBehaviour animalBehavior)
         {
             this.animalBehavior = animalBehavior;
             this.stateMachine = stateMachine;

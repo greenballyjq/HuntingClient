@@ -135,7 +135,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
     /// <summary>
     /// 跟随动物数组
     /// </summary>
-    private List<AnimalBehaviour> _followAnimals;
+    private List<BaseAnimalBehaviour> _followAnimals;
 
     /// <summary>
     /// 跟随动物活跃数组
@@ -186,7 +186,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         CurrentMoveSpeed = 6;
         CurrentDirection = transform.forward;
 
-        _followAnimals = new List<AnimalBehaviour>(MAX_FOLLOW_ANIMALS);
+        _followAnimals = new List<BaseAnimalBehaviour>(MAX_FOLLOW_ANIMALS);
         _followAnimalActive = new bool[MAX_FOLLOW_ANIMALS];
 
         _spawnAnimalsTimerId =
@@ -196,14 +196,14 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
         // _eventManager.AddListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
         _eventManager.AddListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
-        _eventManager.AddListener(AnimalEvents.AnimalDying, OnAnimalDying);
+        _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalDying);
 
         _stateMachine.Init(_enterState);
     }
 
     private void Release()
     {
-        _eventManager.RemoveListener(AnimalEvents.AnimalDying, OnAnimalDying);
+        _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalDying);
         _eventManager.AddListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
         _timerManager.StopTimer(_spawnAnimalsTimerId);
         _timerManager.StopTimer(_callAnimalsTimerId);
@@ -215,7 +215,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _stateMachine?.DoUpdate(dt);
     }
 
-    public void AddFollowAnimal(AnimalBehaviour animalBehavior)
+    public void AddFollowAnimal(BaseAnimalBehaviour animalBehavior)
     {
         if (_followAnimals.Count >= MAX_FOLLOW_ANIMALS) return;
         _followAnimals.Add(animalBehavior);
@@ -223,7 +223,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _followAnimalActive[index] = true;
     }
 
-    public void RemoveFollowAnimal(AnimalBehaviour animalBehavior)
+    public void RemoveFollowAnimal(BaseAnimalBehaviour animalBehavior)
     {
         int index = _followAnimals.IndexOf(animalBehavior);
         if (index == -1) return;
@@ -459,7 +459,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _followAnimals.Remove(obj.Animal);
     }
 
-    private void OnAnimalDying(AnimalDyingEventArgs obj)
+    private void OnAnimalDying(AnimalEnteredDeathEventArgs obj)
     {
         var index = _followAnimals.IndexOf(obj.Animal);
         if (index == -1) return;

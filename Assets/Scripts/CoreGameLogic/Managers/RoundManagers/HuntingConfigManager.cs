@@ -418,7 +418,7 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// </summary>
     /// <param name="mapId">地图ID</param>
     /// <returns>物种数据与驻场时间</returns>
-    public (Specie specie, float stayTime) GetRandomSpecieForMap(int mapId)
+    public Specie GetRandomSpecieForMap(int mapId)
     {
         // 1) 体型：按地图体型策略的比例加权随机
         EVolumeType volumeType = GetRandomVolumeTypeByStrategy(mapId);
@@ -426,10 +426,7 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
         // 2) 物种：在该体型下按权重随机选一个
         var specie = GetRandomSpecieByMapAndVolume(mapId, volumeType);
 
-        // 3) 驻场：从地图的体型策略获取
-        float stayTime = GetStayTimeByVolumeType(mapId, volumeType);
-
-        return (specie, stayTime);
+        return specie;
     }
 
     /// <summary>
@@ -438,7 +435,6 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <returns>随机Boss物种配置</returns>
     public Specie GetRandomBoss()
         => SpecieTable.DataList.Where(s => s.VolumeType == EVolumeType.Boss).ToList()[Random.Range(0, SpecieTable.DataList.Count(s => s.VolumeType == EVolumeType.Boss))];
-
 
     /// <summary>
     /// 随机获取一个跟随Boss的物种

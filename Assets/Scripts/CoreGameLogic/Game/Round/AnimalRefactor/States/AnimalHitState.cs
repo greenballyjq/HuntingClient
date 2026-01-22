@@ -3,14 +3,14 @@
     /// <summary>
     /// 动物受击状态
     /// </summary>
-    public class AnimalHitState : AnimalState, IStayState
+    public class AnimalHitState : AnimalState
     {
         /// <summary>
         /// 受伤持续时间
         /// </summary>
-        protected float _hitDuration;
+        protected float _hitDuration = 3f;
 
-        public AnimalHitState(StateMachine stateMachine, AnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
+        public AnimalHitState(StateMachine stateMachine, BaseAnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
         {
         }
 
@@ -18,9 +18,7 @@
         {
             base.Enter();
 
-            _hitDuration = 3f;
-
-            animalBehavior.AnimalAnimator.PlayHit();
+            animalBehavior.AnimalVisual.PlayHit();
         }
 
         public override void DoUpdate(float dt)

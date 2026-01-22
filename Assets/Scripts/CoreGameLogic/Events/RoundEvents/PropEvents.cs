@@ -115,7 +115,7 @@ public sealed class TrapTriggeredEventArgs : EventArgs
     /// <summary>
     /// 触发陷阱的动物实例
     /// </summary>
-    public AnimalBehaviour TriggeredAnimal { get; set; }
+    public BaseAnimalBehaviour TriggeredAnimal { get; set; }
 
     /// <summary>
     /// 触发位置

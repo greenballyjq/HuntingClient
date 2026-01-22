@@ -58,7 +58,7 @@ public sealed class TargetSelectedEventArgs : EventArgs
     /// <summary>
     /// 目标动物
     /// </summary>
-    public AnimalBehaviour Animal { get; set; }
+    public BaseAnimalBehaviour Animal { get; set; }
 }
 
 /// <summary>
