@@ -93,7 +93,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 动画组件
         /// </summary>
-        private Animator _animator;
+        protected Animator _animator;
 
         /// <summary>
         /// 播放移动动画

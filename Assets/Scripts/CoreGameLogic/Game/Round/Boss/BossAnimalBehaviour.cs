@@ -1,9 +1,22 @@
-﻿using Hunting.Game.Animal;
+﻿using Hunting.Events;
+using Hunting.Game.Animal;
 
-namespace CoreGameLogic.Game.Round.Boss
+public class BossAnimalBehaviour : BaseAnimalBehaviour
 {
-    public class BossAnimalBehaviour : AnimalBehaviour
+    private EventManager _eventManager => GameServiceLocator.EventManager;
+
+    private void Start()
     {
-        
+        _eventManager.AddListener(HiddenMapEvents.HiddenMapPlayStart, OnHiddenMapStart);
+    }
+
+    private void OnDestroy()
+    {
+        _eventManager.RemoveListener(HiddenMapEvents.HiddenMapPlayStart, OnHiddenMapStart);
+    }
+
+    private void OnHiddenMapStart()
+    {
+        Moveable.StartMove();
     }
 }

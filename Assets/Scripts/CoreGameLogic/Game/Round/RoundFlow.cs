@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GameFramework.Core;
 using GameFramework.Manager;
+using Hunting.Events;
 
 /// <summary>
 /// 单局上下文
@@ -280,6 +281,8 @@ public class RoundFlow : Singleton<RoundFlow>
 
         //boss.EnterCombat();
         _currentState = RoundFlowState.Playing;
+        
+        _eventManager.Trigger(HiddenMapEvents.HiddenMapPlayStart);
         
         _currentRoundContext.HiddenRoundEndTrigger.Init();
     }

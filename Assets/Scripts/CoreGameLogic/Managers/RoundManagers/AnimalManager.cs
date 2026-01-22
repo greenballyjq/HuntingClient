@@ -101,10 +101,10 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
         return animal;
     }
 
-    /// <summary>
-    /// 生成Boss
-    /// </summary>
-    /// <returns>Boss实例</returns>
+    // /// <summary>
+    // /// 生成Boss
+    // /// </summary>
+    // /// <returns>Boss实例</returns>
     //public async UniTask<BossBehaviour> GenerateBossAsync()
     //{
     //    var configManager = GameServiceLocator.ConfigManager;

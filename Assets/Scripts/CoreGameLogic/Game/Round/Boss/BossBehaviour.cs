@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using Hunting.Game.Animal;
 using UnityEngine;
 
+[Obsolete]
 public class BossBehaviour : MonoBehaviour, IDamageable
 {
     /// <summary>
@@ -420,7 +422,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _eventManager.Trigger(BossEvents.BossDied, new BossDiedEventArgs
         {
             Sender = this,
-            Boss = this
         });
         Destroy(gameObject);
     }

@@ -27,10 +27,6 @@ public static class BossEvents
 /// </summary>
 public sealed class BossDiedEventArgs : EventArgs
 {
-    /// <summary>
-    /// 死亡的Boss实例
-    /// </summary>
-    public BossBehaviour Boss { get; set; }
 }
 
 /// <summary>

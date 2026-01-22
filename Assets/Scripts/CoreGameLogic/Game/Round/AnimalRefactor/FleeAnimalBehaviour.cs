@@ -33,6 +33,8 @@ namespace Hunting.Game.Animal
             FleeState = new AnimalFleeState(_stateMachine, this);
 
             AnimalEventTrigger = AnimalEventTrigger as FleeAnimalEventTrigger;
+            
+            var eventTrigger = AnimalEventTrigger as FleeAnimalEventTrigger;
         }
 
         #region 公共方法
