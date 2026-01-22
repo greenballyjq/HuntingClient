@@ -172,7 +172,7 @@ public class UIPrepare : UIBase
     /// </summary>
     private async void OnClickLuckyRitual()
     {
-        await _uiManager.OpenUIAsync<UILucky>("UILucky",UIManager.UILayer.PopUp);
+        await _uiManager.OpenUIAsync<UIPopupLucky>("UIPopupLucky",UIManager.UILayer.PopUp);
     }
 
     /// <summary>

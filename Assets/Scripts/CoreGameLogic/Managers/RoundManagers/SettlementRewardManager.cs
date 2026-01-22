@@ -136,8 +136,8 @@ public class SettlementRewardManager : IRoundManager
             return;
         }
         
-        _coinFromMeat = reward.Coin;
-        _proficiencyFromMeat = reward.Mastery;
+        _coinFromMeat = reward.ThreeKPCoin;
+        _proficiencyFromMeat = reward.Point;
     }
 
     /// <summary>
@@ -174,7 +174,7 @@ public class SettlementRewardManager : IRoundManager
     private void RegisterEvents()
     {
         _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
+        //_eventManager.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
         _eventManager.AddListener(QuestEvents.QuestCompleted, OnQuestCompleted);
     }
 
@@ -184,7 +184,7 @@ public class SettlementRewardManager : IRoundManager
     private void UnregisterEvents()
     {
         _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.RemoveListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
+        //_eventManager.RemoveListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
         _eventManager.RemoveListener(QuestEvents.QuestCompleted, OnQuestCompleted);
     }
 
@@ -202,10 +202,10 @@ public class SettlementRewardManager : IRoundManager
     /// <summary>
     /// 肉度条数量变化回调
     /// </summary>
-    private void OnMeatBarCountChanged(MeatBarCountChangedEventArgs args)
-    {
-        _completedMeatBars = Mathf.Max(0, args.CurrentBars);
-    }
+    //private void OnMeatBarCountChanged(MeatBarCountChangedEventArgs args)
+    //{
+    //    _completedMeatBars = Mathf.Max(0, args.CurrentBars);
+    //}
 
     /// <summary>
     /// 任务完成回调

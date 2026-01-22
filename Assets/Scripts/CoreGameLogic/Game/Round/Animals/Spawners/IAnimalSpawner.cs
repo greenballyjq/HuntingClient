@@ -1,8 +1,8 @@
-﻿using cfg.HuntingConfig;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
+using Hunting.Game.Animal;
 
 
 public interface IAnimalSpawner
 {
-    public UniTask<AnimalBehavior> SpawnAsync();
+    public UniTask<AnimalBehaviour> SpawnAsync();
 }

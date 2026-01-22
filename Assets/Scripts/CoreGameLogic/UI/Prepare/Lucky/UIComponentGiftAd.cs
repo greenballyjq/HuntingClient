@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core.UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,7 @@ public class UIComponentGiftAd : MonoBehaviour, IUIComponent
     /// <summary>
     /// 礼包名称文本
     /// </summary>
-    [SerializeField] private Text _textGiftName;
+    [SerializeField] private TextMeshProUGUI _textGiftName;
 
     /// <summary>
     /// 购买按钮

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hunting.Game.Animal;
+using UnityEngine;
 
 /// <summary>
 /// 指哪打哪控制处理器
@@ -152,7 +153,7 @@ public class AimAssistHandler : IPlayerControlHandler
                     return;
             }
 
-            AnimalBehavior animal = hit.transform.GetComponent<AnimalBehavior>();
+            AnimalBehaviour animal = hit.transform.GetComponent<AnimalBehaviour>();
 
             if (_currentTarget == null)
             {

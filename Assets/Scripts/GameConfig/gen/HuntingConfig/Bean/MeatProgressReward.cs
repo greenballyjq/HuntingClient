@@ -16,8 +16,8 @@ public sealed partial class MeatProgressReward : Luban.BeanBase
 {
     public MeatProgressReward(ByteBuf _buf) 
     {
-        Coin = _buf.ReadInt();
-        Mastery = _buf.ReadInt();
+        ThreeKPCoin = _buf.ReadInt();
+        Point = _buf.ReadInt();
     }
 
     public static MeatProgressReward DeserializeMeatProgressReward(ByteBuf _buf)
@@ -26,13 +26,13 @@ public sealed partial class MeatProgressReward : Luban.BeanBase
     }
 
     /// <summary>
-    /// 3币奖励
+    /// 3币
     /// </summary>
-    public readonly int Coin;
+    public readonly int ThreeKPCoin;
     /// <summary>
-    /// 熟练度奖励
+    /// 积分
     /// </summary>
-    public readonly int Mastery;
+    public readonly int Point;
    
     public const int __ID__ = -1589996568;
     public override int GetTypeId() => __ID__;
@@ -44,8 +44,8 @@ public sealed partial class MeatProgressReward : Luban.BeanBase
     public override string ToString()
     {
         return "{ "
-        + "Coin:" + Coin + ","
-        + "Mastery:" + Mastery + ","
+        + "ThreeKPCoin:" + ThreeKPCoin + ","
+        + "Point:" + Point + ","
         + "}";
     }
 }

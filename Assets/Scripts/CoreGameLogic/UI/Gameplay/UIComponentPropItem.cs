@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GameFramework.Manager;
 using GameFramework.Core.UI;
+using TMPro;
 
 /// <summary>
 /// 道具UI组件
@@ -38,7 +39,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// <summary>
     /// 道具数量文本
     /// </summary>
-    [SerializeField] private Text _textCount;
+    [SerializeField] private TextMeshProUGUI _textCount;
 
     /// <summary>
     /// 道具类型
@@ -59,16 +60,6 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 资源管理器
-    /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
     /// 道具管理器
@@ -111,24 +102,11 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private void InitializeDisplay()
     {
-        // 加载道具图标
-        LoadPropIconAsync().Forget();
-
         // 更新数量显示
         UpdateCount();
 
         // 初始化冷却遮罩
         _imageCooldownMask.fillAmount = 0f;
-    }
-
-    /// <summary>
-    /// 异步加载道具图标
-    /// </summary>
-    private async UniTask LoadPropIconAsync()
-    {
-        var propData = _configManager.GetProp(_propType);
-        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(propData.IconResourcePath);
-        _imageProp.sprite = sprite;
     }
 
     /// <summary>

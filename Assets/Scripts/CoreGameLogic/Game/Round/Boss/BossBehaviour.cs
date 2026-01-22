@@ -2,7 +2,7 @@
 using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
-using Unity.VisualScripting;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 public class BossBehaviour : MonoBehaviour, IDamageable
@@ -135,7 +135,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
     /// <summary>
     /// 跟随动物数组
     /// </summary>
-    private List<AnimalBehavior> _followAnimals;
+    private List<AnimalBehaviour> _followAnimals;
 
     /// <summary>
     /// 跟随动物活跃数组
@@ -186,7 +186,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         CurrentMoveSpeed = 6;
         CurrentDirection = transform.forward;
 
-        _followAnimals = new List<AnimalBehavior>(MAX_FOLLOW_ANIMALS);
+        _followAnimals = new List<AnimalBehaviour>(MAX_FOLLOW_ANIMALS);
         _followAnimalActive = new bool[MAX_FOLLOW_ANIMALS];
 
         _spawnAnimalsTimerId =
@@ -211,10 +211,11 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        _stateMachine?.Update();
+        float dt = Time.deltaTime;
+        _stateMachine?.DoUpdate(dt);
     }
 
-    public void AddFollowAnimal(AnimalBehavior animalBehavior)
+    public void AddFollowAnimal(AnimalBehaviour animalBehavior)
     {
         if (_followAnimals.Count >= MAX_FOLLOW_ANIMALS) return;
         _followAnimals.Add(animalBehavior);
@@ -222,7 +223,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _followAnimalActive[index] = true;
     }
 
-    public void RemoveFollowAnimal(AnimalBehavior animalBehavior)
+    public void RemoveFollowAnimal(AnimalBehaviour animalBehavior)
     {
         int index = _followAnimals.IndexOf(animalBehavior);
         if (index == -1) return;
@@ -485,12 +486,12 @@ public class BossBehaviour : MonoBehaviour, IDamageable
             foreach (var spawner in _hiddenMapSpawners)
             {
                 if (spawner == null) continue;
-                
+
                 await spawner.SpawnAsync();
                 spawnCount++;
                 if (_animalManager.GetActiveAnimalCount() >= MAX_ANIMAL_COUNT) return;
             }
-            
+
             // 防止无限循环：如果遍历完所有spawner后spawnCount没有增加，说明无法继续生成，退出循环
             if (spawnCount == lastSpawnCount)
             {
@@ -506,7 +507,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         var followAnimals = _animalManager.GetCloseAnimalsFromTargetPosition(transform.position, MAX_FOLLOW_ANIMALS);
         for (var i = 0; i < followAnimals.Count; i++)
         {
-            followAnimals[i].SetGuardTarget(transform, i);
+            //followAnimals[i].SetGuardTarget(transform, i);
         }
     }
 

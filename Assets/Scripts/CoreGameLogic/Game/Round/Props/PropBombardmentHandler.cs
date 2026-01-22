@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
@@ -116,7 +117,7 @@ public class PropBombardmentHandler : IPropHandler
 
         // 对范围内的动物造成伤害
         foreach (Collider collider in colliders)
-            collider.GetComponent<AnimalBehavior>().TakeDamage(_damageAmount, _bombardmentCenter);
+            collider.GetComponent<IDamageable>().TakeDamage(_damageAmount);
     }
     #endregion
 

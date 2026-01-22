@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Hunting.Game.Animal;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -39,6 +40,5 @@ public class BulletHitInfo
     /// <summary>
     /// 主要命中目标
     /// </summary>
-    // public AnimalBehavior PrimaryTarget { get; set; }
     public IDamageable PrimaryTarget { get; set; }
 }

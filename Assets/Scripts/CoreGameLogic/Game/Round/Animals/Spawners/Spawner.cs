@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using UnityEngine;
+using Hunting.Game.Animal;
 
 /// <summary>
 /// 物种派发器
@@ -76,7 +77,7 @@ public class Spawner : BaseSpawner
     /// <summary>
     /// 派发物种
     /// </summary>
-    public override async UniTask<AnimalBehavior> SpawnAsync()
+    public override async UniTask<AnimalBehaviour> SpawnAsync()
     {
         // 从配置按地图与体型策略选出物种与驻场时间
         var (specie, stayTime) = _configManager.GetRandomSpecieForMap(_mapData.ID);

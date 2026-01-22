@@ -67,7 +67,7 @@ public class WeaponVisual : MonoBehaviour
         Vector3 direction = muzzlePoint.forward;
 
         // 进行射线检测，排除子弹层
-        int layerMask = ~(1 << LayerMask.NameToLayer("Bullet")); // 排除子弹层
+        int layerMask = LayerMask.NameToLayer("Animal");
         RaycastHit hit;
         bool hasHit = Physics.Raycast(startPoint, direction, out hit, aimLineLength, layerMask);
 

@@ -1,5 +1,6 @@
 ﻿using GameFramework.Core;
 using GameFramework.Game;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
@@ -57,7 +58,7 @@ public sealed class TargetSelectedEventArgs : EventArgs
     /// <summary>
     /// 目标动物
     /// </summary>
-    public AnimalBehavior Animal { get; set; }
+    public AnimalBehaviour Animal { get; set; }
 }
 
 /// <summary>

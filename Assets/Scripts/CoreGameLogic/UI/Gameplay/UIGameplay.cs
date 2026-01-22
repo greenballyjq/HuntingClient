@@ -20,12 +20,12 @@ public class UIGameplay : UIBase
     /// <summary>
     /// 能量条组件
     /// </summary>
-    [SerializeField] private UIComponentEnergyProgress uiComponentEnergyProgress;
+    [SerializeField] private UIComponentSkill uiComponentEnergyProgress;
 
     /// <summary>
     /// 子弹状态组件
     /// </summary>
-    [SerializeField] private UIComponentBulletStatus uiComponentBulletStatus;
+    [SerializeField] private UIComponentBullet uiComponentBulletStatus;
 
     /// <summary>
     /// 道具组组件
@@ -88,12 +88,12 @@ public class UIGameplay : UIBase
         if (roundContext.HasHiddenMap)
         {
             // 打开假结算面板
-            await _uiManager.OpenUIAsync<UIFakeSettlement>("UIFakeSettlement", UIManager.UILayer.PopUp);
+            await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
         }
         else
         {
             // 打开正常结算面板
-            await _uiManager.OpenUIAsync<UISettlement>("UISettlement", UIManager.UILayer.PopUp);
+            await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
             _settlementRewardManager.CalculateReward();
         }
     }

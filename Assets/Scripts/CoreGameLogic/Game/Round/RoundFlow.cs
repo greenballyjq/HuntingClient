@@ -158,6 +158,11 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private SoundManager _soundManager => GameServiceLocator.GetFrameworkManager<SoundManager>();
 
+    /// <summary>
+    /// 事件管理器
+    /// </summary>
+    private EventManager _eventManager => GameServiceLocator.EventManager;
+
     #region 公共方法
     /// <summary>
     /// 获取单局管理器
@@ -190,8 +195,14 @@ public class RoundFlow : Singleton<RoundFlow>
         _currentState = RoundFlowState.Transitioning;
         _currentRoundContext = context;
         CreateRoundManagers();
-        await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
         InitRoundManagers();
+        await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
+
+        // 触发单局开始事件
+        TriggerRoundStarted(new RoundStartedEventArgs
+        {
+            RoundContext = _currentRoundContext
+        });
 
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown",UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync();
@@ -231,12 +242,12 @@ public class RoundFlow : Singleton<RoundFlow>
         _currentState = RoundFlowState.Transitioning;
 
         // 伪结算面板动画
-        var uiFakeSettlement = _uiManager.GetUI<UIFakeSettlement>("UIFakeSettlement");
+        var uiFakeSettlement = _uiManager.GetUI<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake");
         await UniTask.WhenAll(
             uiFakeSettlement.PlayWindowShakeAsync(),
             uiFakeSettlement.PlayButtonGlowAsync()
         );
-        _uiManager.CloseUI("UIFakeSettlement");
+        _uiManager.CloseUI("UIPopupSettlementSnowFake");
 
         // 伪结算面板爆米花动画  
         _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity,persistAcrossScenes: true).Forget();
@@ -255,11 +266,11 @@ public class RoundFlow : Singleton<RoundFlow>
         _uiManager.CloseUI("UILoading");
 
         var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
-        var boss = await GetRoundManager<AnimalManager>().GenerateBossAsync(); // Boss登场动画
+        //var boss = await GetRoundManager<AnimalManager>().GenerateBossAsync(); // Boss登场动画
         uiAlertRed.PlayFlashAsync().Forget(); // 播放红屏闪动动画
         _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_alert").Forget(); // 播放警报声
         await UniTask.Delay(2000);
-        _soundManager.PlaySound2DByPathAsync("Audio/BGM/bgm_snow", AudioChannel.Bgm, volume: 0.1f).Forget(); // 播放远古雪山BGM
+        //_soundManager.PlaySound2DByPathAsync("Audio/BGM/bgm_snow", AudioChannel.Bgm, volume: 0.1f).Forget(); // 播放远古雪山BGM
         _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_laugh").Forget(); // 播放Boss台词
         await UniTask.Delay(3000);
 
@@ -267,7 +278,7 @@ public class RoundFlow : Singleton<RoundFlow>
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync();
 
-        boss.EnterCombat();
+        //boss.EnterCombat();
         _currentState = RoundFlowState.Playing;
         
         _currentRoundContext.HiddenRoundEndTrigger.Init();
@@ -387,6 +398,13 @@ public class RoundFlow : Singleton<RoundFlow>
         }
     }
 
+    /// <summary>
+    /// 触发单局开始事件
+    /// </summary>
+    private void TriggerRoundStarted(RoundStartedEventArgs args)
+    {
+        _eventManager.Trigger(RoundEvents.RoundStarted, args);
+    }
     
     #endregion
 }

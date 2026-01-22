@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Hunting.Game.Animal;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>

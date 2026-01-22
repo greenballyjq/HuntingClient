@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hunting.Game.Animal;
+using UnityEngine;
 
 /// <summary>
 /// Boss 受击状态
@@ -20,9 +21,9 @@ public class BossHitState : BossState
         stateTimer = 0f;
     }
 
-    public override void Update()
+    public override void DoUpdate(float dt)
     {
-        base.Update();
+        base.DoUpdate(dt);
         
         stateTimer += Time.deltaTime;
         if (stateTimer >= _hitDuration)

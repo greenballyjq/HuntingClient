@@ -17,8 +17,8 @@ public sealed partial class EnergyProgress : Luban.BeanBase
     public EnergyProgress(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        RequiredPerBar = _buf.ReadFloat();
-        MaxBar = _buf.ReadInt();
+        ValuePerBar = _buf.ReadFloat();
+        TotalBar = _buf.ReadInt();
         IncreasePerSecond = _buf.ReadFloat();
         Comment = _buf.ReadString();
     }
@@ -29,17 +29,17 @@ public sealed partial class EnergyProgress : Luban.BeanBase
     }
 
     /// <summary>
-    /// 丰收能量条ID
+    /// 能量条ID
     /// </summary>
     public readonly int ID;
     /// <summary>
     /// 单条所需值
     /// </summary>
-    public readonly float RequiredPerBar;
+    public readonly float ValuePerBar;
     /// <summary>
-    /// 最大条数
+    /// 总条数
     /// </summary>
-    public readonly int MaxBar;
+    public readonly int TotalBar;
     /// <summary>
     /// 每秒增加量
     /// </summary>
@@ -60,8 +60,8 @@ public sealed partial class EnergyProgress : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
-        + "RequiredPerBar:" + RequiredPerBar + ","
-        + "MaxBar:" + MaxBar + ","
+        + "ValuePerBar:" + ValuePerBar + ","
+        + "TotalBar:" + TotalBar + ","
         + "IncreasePerSecond:" + IncreasePerSecond + ","
         + "Comment:" + Comment + ","
         + "}";

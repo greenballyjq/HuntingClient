@@ -26,7 +26,7 @@ public class SkillJinZhuangYuanHandler : ISkillHandler
         var parameter = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
 
         // 计算总增加量 = 单条所需值 * 肉量百分比
-        float requiredPerBar = _meatManager.GetRequiredPerBar();
+        float requiredPerBar = _meatManager.GetTotalMeatValue();
         float totalMeatAmount = requiredPerBar * parameter.MeatPercent;
 
         // 计算每秒增加量 = 总增加量 / 技能持续时间
@@ -45,7 +45,7 @@ public class SkillJinZhuangYuanHandler : ISkillHandler
         // 累积本帧增加的肉量
         float deltaMeat = deltaTime * _meatIncreasePerSecond;
         if (deltaMeat > 0f)
-            _meatManager.AddMeat(deltaMeat);
+            _meatManager.AddMeatValue(deltaMeat);
     }
 
     /// <summary>

@@ -17,8 +17,8 @@ public sealed partial class MeatProgress : Luban.BeanBase
     public MeatProgress(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        RequiredPerBar = _buf.ReadFloat();
-        MaxBar = _buf.ReadInt();
+        ValuePerScale = _buf.ReadFloat();
+        TotalScale = _buf.ReadInt();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);RewardSteps = new System.Collections.Generic.Dictionary<int, HuntingConfig.Bean.MeatProgressReward>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { int _k0;  _k0 = _buf.ReadInt(); HuntingConfig.Bean.MeatProgressReward _v0;  _v0 = global::cfg.HuntingConfig.Bean.MeatProgressReward.DeserializeMeatProgressReward(_buf);     RewardSteps.Add(_k0, _v0);}}
         Comment = _buf.ReadString();
     }
@@ -29,19 +29,19 @@ public sealed partial class MeatProgress : Luban.BeanBase
     }
 
     /// <summary>
-    /// 血条包ID
+    /// 肉条ID
     /// </summary>
     public readonly int ID;
     /// <summary>
-    /// 单条所需值
+    /// 单刻度所需值
     /// </summary>
-    public readonly float RequiredPerBar;
+    public readonly float ValuePerScale;
     /// <summary>
-    /// 最大条数
+    /// 总刻度数
     /// </summary>
-    public readonly int MaxBar;
+    public readonly int TotalScale;
     /// <summary>
-    /// 奖励阶梯
+    /// 肉条奖励阶梯
     /// </summary>
     public readonly System.Collections.Generic.Dictionary<int, HuntingConfig.Bean.MeatProgressReward> RewardSteps;
     /// <summary>
@@ -61,8 +61,8 @@ public sealed partial class MeatProgress : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
-        + "RequiredPerBar:" + RequiredPerBar + ","
-        + "MaxBar:" + MaxBar + ","
+        + "ValuePerScale:" + ValuePerScale + ","
+        + "TotalScale:" + TotalScale + ","
         + "RewardSteps:" + Luban.StringUtil.CollectionToString(RewardSteps) + ","
         + "Comment:" + Comment + ","
         + "}";

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Hunting.Game.Animal;
+using UnityEngine;
 
 /// <summary>
 /// Boss Idle状态
@@ -16,9 +17,9 @@ public class BossIdleState : BossState
         stateTimer = 0f;
     }
 
-    public override void Update()
+    public override void DoUpdate(float dt)
     {
-        base.Update();
+        base.DoUpdate(dt);
         
         stateTimer += Time.deltaTime;
         if (stateTimer > 2f)
