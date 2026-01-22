@@ -36,7 +36,7 @@
             // 检查是否到达逃跑持续时间
             if (stateTimer >= _fleeDuration)
             {
-                // 暂时什么都不做
+                //(animalBehavior.AnimalEventTrigger as FleeAnimalEventTrigger).TriggerAnimalFled();
             }
         }
 

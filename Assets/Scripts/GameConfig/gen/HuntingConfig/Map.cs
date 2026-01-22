@@ -20,8 +20,8 @@ public sealed partial class Map : Luban.BeanBase
         MapType = (HuntingConfig.Enum.EMapType)_buf.ReadInt();
         Name = _buf.ReadString();
         Description = _buf.ReadString();
-        SpawnStrategyId = _buf.ReadInt();
-        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SpeciesByVolume = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.EVolumeType, HuntingConfig.Bean.SpecieWeight[]>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.EVolumeType _k0;  _k0 = (HuntingConfig.Enum.EVolumeType)_buf.ReadInt(); HuntingConfig.Bean.SpecieWeight[] _v0;  {int __n1 = System.Math.Min(_buf.ReadSize(), _buf.Size);_v0 = new HuntingConfig.Bean.SpecieWeight[__n1];for(var __index1 = 0 ; __index1 < __n1 ; __index1++) { HuntingConfig.Bean.SpecieWeight __e1;__e1 = global::cfg.HuntingConfig.Bean.SpecieWeight.DeserializeSpecieWeight(_buf); _v0[__index1] = __e1;}}     SpeciesByVolume.Add(_k0, _v0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SpecieTypeWeights = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.ESpecieType, float>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.ESpecieType _k0;  _k0 = (HuntingConfig.Enum.ESpecieType)_buf.ReadInt(); float _v0;  _v0 = _buf.ReadFloat();     SpecieTypeWeights.Add(_k0, _v0);}}
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);MapSpecies = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.ESpecieType, int[]>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.ESpecieType _k0;  _k0 = (HuntingConfig.Enum.ESpecieType)_buf.ReadInt(); int[] _v0;  {int __n1 = System.Math.Min(_buf.ReadSize(), _buf.Size);_v0 = new int[__n1];for(var __index1 = 0 ; __index1 < __n1 ; __index1++) { int __e1;__e1 = _buf.ReadInt(); _v0[__index1] = __e1;}}     MapSpecies.Add(_k0, _v0);}}
         MapImageResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
@@ -48,13 +48,13 @@ public sealed partial class Map : Luban.BeanBase
     /// </summary>
     public readonly string Description;
     /// <summary>
-    /// 体型策略ID
+    /// 物种类型权重
     /// </summary>
-    public readonly int SpawnStrategyId;
+    public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.ESpecieType, float> SpecieTypeWeights;
     /// <summary>
-    /// 体型-物种权重映射
+    /// 地图物种
     /// </summary>
-    public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.EVolumeType, HuntingConfig.Bean.SpecieWeight[]> SpeciesByVolume;
+    public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.ESpecieType, int[]> MapSpecies;
     /// <summary>
     /// 地图图片资源路径
     /// </summary>
@@ -78,8 +78,8 @@ public sealed partial class Map : Luban.BeanBase
         + "MapType:" + MapType + ","
         + "Name:" + Name + ","
         + "Description:" + Description + ","
-        + "SpawnStrategyId:" + SpawnStrategyId + ","
-        + "SpeciesByVolume:" + Luban.StringUtil.CollectionToString(SpeciesByVolume) + ","
+        + "SpecieTypeWeights:" + Luban.StringUtil.CollectionToString(SpecieTypeWeights) + ","
+        + "MapSpecies:" + Luban.StringUtil.CollectionToString(MapSpecies) + ","
         + "MapImageResourcePath:" + MapImageResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";

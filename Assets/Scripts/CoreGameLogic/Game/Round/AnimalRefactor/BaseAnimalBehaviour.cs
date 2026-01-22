@@ -73,11 +73,6 @@ namespace Hunting.Game.Animal
             AnimalVisual = GetComponent<BaseAnimalVisual>();
             AnimalEventTrigger = GetComponent<BaseAnimalEventTrigger>();
             Collider = GetComponent<Collider>();
-            
-            // 创建状态实例
-            MoveState = new AnimalMoveState(_stateMachine, this);
-            HitState = new AnimalHitState(_stateMachine, this);
-            DeathState = new AnimalDeathState(_stateMachine, this);
         }
 
         #region 公共方法
@@ -102,6 +97,11 @@ namespace Hunting.Game.Animal
 
             // 初始化事件触发器组件
             AnimalEventTrigger.Init(this);
+
+            // 创建状态实例
+            MoveState = new AnimalMoveState(_stateMachine, this);
+            HitState = new AnimalHitState(_stateMachine, this);
+            DeathState = new AnimalDeathState(_stateMachine, this);
 
             // 初始化状态机
             _stateMachine.Init(MoveState);

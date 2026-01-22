@@ -18,7 +18,7 @@ public sealed partial class Specie : Luban.BeanBase
     {
         ID = _buf.ReadInt();
         Name = _buf.ReadString();
-        VolumeType = (HuntingConfig.Enum.EVolumeType)_buf.ReadInt();
+        SpecieType = (HuntingConfig.Enum.ESpecieType)_buf.ReadInt();
         HP = _buf.ReadFloat();
         MoveSpeed = _buf.ReadFloat();
         StayTime = _buf.ReadFloat();
@@ -42,9 +42,9 @@ public sealed partial class Specie : Luban.BeanBase
     /// </summary>
     public readonly string Name;
     /// <summary>
-    /// 体型
+    /// 物种类型
     /// </summary>
-    public readonly HuntingConfig.Enum.EVolumeType VolumeType;
+    public readonly HuntingConfig.Enum.ESpecieType SpecieType;
     /// <summary>
     /// 血量
     /// </summary>
@@ -86,7 +86,7 @@ public sealed partial class Specie : Luban.BeanBase
         return "{ "
         + "ID:" + ID + ","
         + "Name:" + Name + ","
-        + "VolumeType:" + VolumeType + ","
+        + "SpecieType:" + SpecieType + ","
         + "HP:" + HP + ","
         + "MoveSpeed:" + MoveSpeed + ","
         + "StayTime:" + StayTime + ","

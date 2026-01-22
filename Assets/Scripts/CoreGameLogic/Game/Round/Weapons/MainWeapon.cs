@@ -114,7 +114,6 @@ public class MainWeapon : MonoBehaviour
 
             // 恢复为普通子弹（ID为1）
             ChangeBullet(1);
-            Debug.Log("[Weapon] 特殊子弹时间到，已切回普通子弹");
         }
     }
 
@@ -123,7 +122,6 @@ public class MainWeapon : MonoBehaviour
     /// </summary>
     public void SetCurrentBullet(int bulletId)
     {
-        Debug.Log($"[Weapon] 设置当前子弹类型{_currentBulletId}=>{bulletId}");
         ChangeBullet(bulletId);
     }
 

@@ -193,7 +193,7 @@ public class SettlementRewardManager : IRoundManager
     /// </summary>
     private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
     {
-        if (!args.DropRewards.TryGetValue(EDropType.Coin, out var coinAmount) || coinAmount < 0)
+        if (!args.DropRewards.TryGetValue(EDropType.ThreeKPCoin, out var coinAmount) || coinAmount < 0)
             return;
 
         _coinFromSpecie += coinAmount;
