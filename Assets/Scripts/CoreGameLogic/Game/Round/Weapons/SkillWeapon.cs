@@ -42,7 +42,7 @@ public class SkillWeapon : MonoBehaviour
     /// <summary>
     /// 当前瞄准目标
     /// </summary>
-    private AnimalBehavior _currentTarget;
+    private AnimalBehaviour _currentTarget;
 
     /// <summary>
     /// 子弹管理器
@@ -95,13 +95,13 @@ public class SkillWeapon : MonoBehaviour
     /// <summary>
     /// 查找最近的动物
     /// </summary>
-    private AnimalBehavior FindNearestAnimal()
+    private AnimalBehaviour FindNearestAnimal()
     {
-        AnimalBehavior[] animals = Object.FindObjectsOfType<AnimalBehavior>();
+        AnimalBehaviour[] animals = Object.FindObjectsOfType<AnimalBehaviour>();
         if (animals == null || animals.Length == 0)
             return null;
 
-        AnimalBehavior nearestAnimal = null;
+        AnimalBehaviour nearestAnimal = null;
         float nearestDistance = float.MaxValue;
         Vector3 weaponPosition = transform.position;
 

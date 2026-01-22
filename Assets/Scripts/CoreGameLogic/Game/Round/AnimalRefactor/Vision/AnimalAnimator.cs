@@ -12,7 +12,7 @@ namespace Hunting.Game.Animal
         /// </summary>
         protected Animator _animator;
 
-        protected virtual void Awake()
+        private void Awake()
         {
             _animator = GetComponentInChildren<Animator>();
         }

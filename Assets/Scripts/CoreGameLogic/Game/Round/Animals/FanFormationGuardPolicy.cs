@@ -16,7 +16,7 @@ public class FanFormationGuardPolicy : IGuardPolicy
         _fanAngle = fanAngle;
     }
 
-    public Vector3 CalculateGuardPosition(AnimalBehavior animalBehavior, Transform guardTarget)
+    public Vector3 CalculateGuardPosition(AnimalBehaviour animalBehavior, Transform guardTarget)
     {
         float startAngle = -_fanAngle / 2f;
         float angleStep = _fanAngle / (_totalGuards - 1);

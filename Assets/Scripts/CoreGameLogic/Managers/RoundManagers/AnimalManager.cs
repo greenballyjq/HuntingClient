@@ -30,12 +30,12 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <summary>
     /// 追踪所有活跃的动物
     /// </summary>
-    private readonly HashSet<AnimalBehavior> _activeAnimals = new HashSet<AnimalBehavior>();
+    private readonly HashSet<AnimalBehaviour> _activeAnimals = new HashSet<AnimalBehaviour>();
     
     /// <summary>
     /// 待移除的动物列表
     /// </summary>
-    private readonly List<AnimalBehavior> _animalsToRemove = new List<AnimalBehavior>();
+    private readonly List<AnimalBehaviour> _animalsToRemove = new List<AnimalBehaviour>();
 
     public void Init(RoundContext context)
     {
@@ -78,10 +78,10 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <summary>
     /// 生成动物
     /// </summary>
-    public async UniTask<AnimalBehavior> GenerateAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, float stayTime, bool inHiddenMap = false)
+    public async UniTask<AnimalBehaviour> GenerateAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, float stayTime, bool inHiddenMap = false)
     {
         var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
-        var animal = go.GetComponent<AnimalBehavior>();
+        var animal = go.GetComponent<AnimalBehaviour>();
         go.transform.position = position;
 
         animal.Init(specieData, stayTime);
@@ -131,7 +131,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <returns></returns>
     public int GetActiveAnimalCount() => _activeAnimals.Count;
 
-    public List<AnimalBehavior> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
+    public List<AnimalBehaviour> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
     {
         if (animalCount <= 0) return null;
         if (_activeAnimals.Count <= 0) return null;

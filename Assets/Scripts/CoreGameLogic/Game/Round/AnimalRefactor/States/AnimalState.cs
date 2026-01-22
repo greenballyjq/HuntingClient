@@ -1,18 +1,16 @@
-﻿using UnityEngine;
-
-namespace Hunting.Game.Animal
+﻿namespace Hunting.Game.Animal
 {
     public class AnimalState : IState
     {
         /// <summary>
-        /// 状态机引用
+        /// 状态机
         /// </summary>
         protected StateMachine stateMachine;
 
         /// <summary>
-        /// 动物引用
+        /// 动物基类
         /// </summary>
-        protected AnimalBehavior animal;
+        protected AnimalBehaviour animalBehavior;
 
         /// <summary>
         /// 状态计时器
@@ -24,9 +22,9 @@ namespace Hunting.Game.Animal
         /// </summary>
         protected bool _isPaused;
 
-        public AnimalState(StateMachine stateMachine,AnimalBehavior animal)
+        public AnimalState(StateMachine stateMachine,AnimalBehaviour animalBehavior)
         {
-            this.animal = animal;
+            this.animalBehavior = animalBehavior;
             this.stateMachine = stateMachine;
         }
 
@@ -40,14 +38,11 @@ namespace Hunting.Game.Animal
         {
             if (!_isPaused)
                 stateTimer += dt;
+
+            animalBehavior.AnimalVisual.DoUpdate(dt);
         }
 
         public virtual void Exit(){}
-
-        protected void ChangeState(IState next)
-        {
-            stateMachine.ChangeState(next);
-        }
 
         public virtual void Pause()
         {
@@ -57,6 +52,11 @@ namespace Hunting.Game.Animal
         public virtual void Resume()
         {
             _isPaused = false;
+        }
+
+        protected void ChangeState(IState next)
+        {
+            stateMachine.ChangeState(next);
         }
     }
 }

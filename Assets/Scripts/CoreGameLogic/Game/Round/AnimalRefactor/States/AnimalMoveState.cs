@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Hunting.Game.Animal
+﻿namespace Hunting.Game.Animal
 {
     /// <summary>
     /// 动物移动状态
@@ -10,9 +8,9 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 移动速度倍率
         /// </summary>
-        private const float MoveSpeedRate = 1f;
+        protected float _moveSpeedRate;
 
-        public AnimalMoveState(StateMachine stateMachine, AnimalBehavior animal) : base(stateMachine, animal)
+        public AnimalMoveState(StateMachine stateMachine, AnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
         {
         }
 
@@ -20,16 +18,17 @@ namespace Hunting.Game.Animal
         {
             base.Enter();
 
-            // 设置移动速度倍率
-            animal.Moveable.SetMoveRate(MoveSpeedRate);
+            _moveSpeedRate = 1f;
+
+            animalBehavior.Moveable.SetMoveRate(_moveSpeedRate);
             
-            // 播放移动动画
-            animal.AnimalAnimator.PlayMove();
+            animalBehavior.AnimalAnimator.PlayMove();
         }
 
         public override void DoUpdate(float dt)
         {
             base.DoUpdate(dt);
+            animalBehavior.Moveable.DoUpdate(dt);
         }
 
         public override void Exit()
@@ -41,9 +40,9 @@ namespace Hunting.Game.Animal
         {
             base.Resume();
 
-            animal.Moveable.SetMoveRate(MoveSpeedRate);
+            animalBehavior.Moveable.SetMoveRate(_moveSpeedRate);
 
-            animal.AnimalAnimator.PlayMove();
+            animalBehavior.AnimalAnimator.PlayMove();
         }
     }
 }

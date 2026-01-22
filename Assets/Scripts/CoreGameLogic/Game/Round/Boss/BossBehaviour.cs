@@ -135,7 +135,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
     /// <summary>
     /// 跟随动物数组
     /// </summary>
-    private List<AnimalBehavior> _followAnimals;
+    private List<AnimalBehaviour> _followAnimals;
 
     /// <summary>
     /// 跟随动物活跃数组
@@ -186,7 +186,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         CurrentMoveSpeed = 6;
         CurrentDirection = transform.forward;
 
-        _followAnimals = new List<AnimalBehavior>(MAX_FOLLOW_ANIMALS);
+        _followAnimals = new List<AnimalBehaviour>(MAX_FOLLOW_ANIMALS);
         _followAnimalActive = new bool[MAX_FOLLOW_ANIMALS];
 
         _spawnAnimalsTimerId =
@@ -215,7 +215,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _stateMachine?.DoUpdate(dt);
     }
 
-    public void AddFollowAnimal(AnimalBehavior animalBehavior)
+    public void AddFollowAnimal(AnimalBehaviour animalBehavior)
     {
         if (_followAnimals.Count >= MAX_FOLLOW_ANIMALS) return;
         _followAnimals.Add(animalBehavior);
@@ -223,7 +223,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _followAnimalActive[index] = true;
     }
 
-    public void RemoveFollowAnimal(AnimalBehavior animalBehavior)
+    public void RemoveFollowAnimal(AnimalBehaviour animalBehavior)
     {
         int index = _followAnimals.IndexOf(animalBehavior);
         if (index == -1) return;

@@ -8,26 +8,19 @@
         /// <summary>
         /// 受伤持续时间
         /// </summary>
-        private float _hitDuration = 3f;
-        
-        /// <summary>
-        /// 受伤速度倍率
-        /// </summary>
-        private const float HitSpeedRate = 0f;
+        protected float _hitDuration;
 
-        public AnimalHitState(StateMachine stateMachine, AnimalBehavior animal) : base(stateMachine, animal)
+        public AnimalHitState(StateMachine stateMachine, AnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
         {
         }
 
         public override void Enter()
         {
-            base.Enter();       
-            
-            // 设置受伤速度倍率
-            animal.Moveable.SetMoveRate(HitSpeedRate);
-            
-            // 播放受伤动画
-            animal.AnimalAnimator.PlayHit();
+            base.Enter();
+
+            _hitDuration = 3f;
+
+            animalBehavior.AnimalAnimator.PlayHit();
         }
 
         public override void DoUpdate(float dt)

@@ -153,7 +153,7 @@ public class AimAssistHandler : IPlayerControlHandler
                     return;
             }
 
-            AnimalBehavior animal = hit.transform.GetComponent<AnimalBehavior>();
+            AnimalBehaviour animal = hit.transform.GetComponent<AnimalBehaviour>();
 
             if (_currentTarget == null)
             {

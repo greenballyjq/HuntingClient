@@ -8,34 +8,38 @@
         /// <summary>
         /// 逃跑速度倍率
         /// </summary>
-        private const float FleeSpeedRate = 2f;
+        protected float _fleeSpeedRate;
         
         /// <summary>
         /// 逃跑持续时间
         /// </summary>
-        private const float FleeDuration = 8f;
+        protected float _fleeDuration;
 
-        public AnimalFleeState(StateMachine stateMachine, AnimalBehavior animal) : base(stateMachine, animal)
+        public AnimalFleeState(StateMachine stateMachine, AnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
         {
         }
 
         public override void Enter()
         {
             base.Enter();
-           
-            // 设置逃跑速度倍率
-            animal.Moveable.SetMoveRate(FleeSpeedRate);
+
+            _fleeSpeedRate = 2f;
+
+            _fleeDuration = 8f;
+
+            animalBehavior.Moveable.SetMoveRate(_fleeSpeedRate);
             
-            // 播放逃跑动画
-            animal.AnimalAnimator.PlayFlee();
+            animalBehavior.AnimalAnimator.PlayFlee();
         }
 
         public override void DoUpdate(float dt)
         {
             base.DoUpdate(dt);
-            
+
+            animalBehavior.Moveable.DoUpdate(dt);
+
             // 检查是否到达逃跑持续时间
-            if (stateTimer >= FleeDuration)
+            if (stateTimer >= _fleeDuration)
             {
                 // 暂时什么都不做
             }
@@ -50,7 +54,7 @@
         {
             base.Resume();
             
-            animal.AnimalAnimator.PlayFlee();
+            animalBehavior.AnimalAnimator.PlayFlee();
         }
     }
 }

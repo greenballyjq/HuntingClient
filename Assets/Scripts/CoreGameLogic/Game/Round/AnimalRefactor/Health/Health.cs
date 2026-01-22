@@ -4,9 +4,9 @@ using System;
 namespace Hunting.Game.Animal
 {
     /// <summary>
-    /// 动物生命值组件
+    /// 生命值组件
     /// </summary>
-    public class AnimalHealth : MonoBehaviour, IDamageable, IHealth
+    public class Health : MonoBehaviour, IDamageable, IHealth
     {
         /// <summary>
         /// 最大血量

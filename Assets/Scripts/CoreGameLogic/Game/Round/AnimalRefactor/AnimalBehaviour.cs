@@ -12,7 +12,7 @@ namespace Hunting.Game.Animal
     /// <summary>
     /// 动物基类
     /// </summary>
-    public class AnimalBehavior : MonoBehaviour, IPoolItem
+    public class AnimalBehaviour : MonoBehaviour, IPoolItem
     {
         /// <summary>
         /// 状态机
@@ -72,17 +72,17 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 驻场时间
         /// </summary>
-        protected float _stayTime;
+        private float _stayTime;
 
         /// <summary>
         /// 驻场计时器
         /// </summary>
-        protected float _stayTimer;
+        private float _stayTimer;
 
         /// <summary>
         /// 是否完成驻场
         /// </summary>
-        protected bool _stayFinished;
+        private bool _stayFinished;
 
         protected virtual void Awake()
         {
@@ -143,10 +143,6 @@ namespace Hunting.Game.Animal
         {
             _stateMachine.DoUpdate(dt);
 
-            Moveable.DoUpdate(dt);
-
-            AnimalVisual.DoUpdate(dt);
-
             UpdateStayTime(dt);
         }
         #endregion
@@ -156,7 +152,7 @@ namespace Hunting.Game.Animal
         /// 驻场时间更新
         /// </summary>
         /// <param name="dt"></param>
-        protected virtual void UpdateStayTime(float dt)
+        private void UpdateStayTime(float dt)
         {
             if (_stayTime == -1)
                 return;
@@ -165,13 +161,13 @@ namespace Hunting.Game.Animal
                 return;
 
             if (_stateMachine.CurrentState is IStayState)
-                return;
-
-            _stayTimer += dt;
-            if(_stayTimer >= _stayTime)
             {
-                _stayFinished = true;
-                _stateMachine.ChangeState(FleeState);
+                _stayTimer += dt;
+                if (_stayTimer >= _stayTime)
+                {
+                    _stayFinished = true;
+                    _stateMachine.ChangeState(FleeState);
+                }
             }
         }
         #endregion
@@ -180,7 +176,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 动物受伤事件回调
         /// </summary>
-        private void OnHealthDamaged()
+        protected virtual void OnDamaged()
         {
             _stateMachine.EnterTempState(HitState);
         }
@@ -188,7 +184,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 动物死亡事件回调
         /// </summary>
-        private void OnHealthDeath()
+        protected virtual void OnDeath()
         {
             _stateMachine.ChangeState(DeathState);
         }
@@ -199,14 +195,14 @@ namespace Hunting.Game.Animal
         {
             Collider.enabled = true;
 
-            Health.OnDamaged += OnHealthDamaged;
-            Health.OnDeath += OnHealthDeath;
+            Health.OnDamaged += OnDamaged;
+            Health.OnDeath += OnDeath;
         }
 
         public virtual void OnDespawned()
         {
-            Health.OnDamaged -= OnHealthDamaged;
-            Health.OnDeath -= OnHealthDeath;
+            Health.OnDamaged -= OnDamaged;
+            Health.OnDeath -= OnDeath;
 
             Collider.enabled = false;
         }

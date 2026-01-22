@@ -4,5 +4,5 @@ using Hunting.Game.Animal;
 
 public interface IAnimalSpawner
 {
-    public UniTask<AnimalBehavior> SpawnAsync();
+    public UniTask<AnimalBehaviour> SpawnAsync();
 }

@@ -16,7 +16,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 动物基类
         /// </summary>
-        private AnimalBehavior _animalBehavior;
+        private AnimalBehaviour _animalBehavior;
         
         /// <summary>
         /// 移动组件
@@ -38,7 +38,7 @@ namespace Hunting.Game.Animal
         /// 初始化视觉组件
         /// </summary>
         /// <param name="animalBehavior">动物基类</param>
-        public void Init(AnimalBehavior animalBehavior)
+        public void Init(AnimalBehaviour animalBehavior)
         {
             _animalBehavior = animalBehavior;
             _moveable = animalBehavior.Moveable;

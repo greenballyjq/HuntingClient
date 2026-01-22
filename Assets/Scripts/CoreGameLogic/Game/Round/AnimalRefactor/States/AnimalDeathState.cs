@@ -8,15 +8,15 @@
         /// <summary>
         /// 死亡持续时间
         /// </summary>
-        private float _deathDuration = 7f;
+        protected float _deathDuration ;
 
         /// <summary>
         /// 动物掉落奖励是否触发
         /// </summary>
-        private bool _isAnimalDropRewardTriggered;
+        protected bool _isAnimalDropRewardTriggered;
 
 
-        public AnimalDeathState(StateMachine stateMachine, AnimalBehavior animal) : base(stateMachine, animal)
+        public AnimalDeathState(StateMachine stateMachine, AnimalBehaviour animal) : base(stateMachine, animal)
         {
         }
 
@@ -24,13 +24,17 @@
         {
             base.Enter();
 
-            animal.AnimalAnimator.PlayDeath();
+            _deathDuration = 7f;
 
-            animal.Moveable.StopMove();
+            _isAnimalDropRewardTriggered = false;
 
-            animal.Collider.enabled = false;
+            animalBehavior.AnimalAnimator.PlayDeath();
 
-            animal.TriggerAnimalDying();
+            animalBehavior.Moveable.StopMove();
+
+            animalBehavior.Collider.enabled = false;
+
+            animalBehavior.TriggerAnimalDying();
         }
 
         public override void DoUpdate(float dt)
@@ -38,13 +42,13 @@
             base.DoUpdate(dt);
 
             if(stateTimer >= 4f && !_isAnimalDropRewardTriggered){
-                animal.TriggerAnimalDropReward();
-                animal.PlayDeathEffect();
+                animalBehavior.TriggerAnimalDropReward();
+                animalBehavior.PlayDeathEffect();
                 _isAnimalDropRewardTriggered = true;
             }
 
             if (stateTimer >= _deathDuration)
-                animal.TriggerAnimalDied();
+                animalBehavior.TriggerAnimalDied();
         }
 
         public override void Exit()

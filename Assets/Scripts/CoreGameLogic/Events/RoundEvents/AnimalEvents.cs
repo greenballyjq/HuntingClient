@@ -51,7 +51,7 @@ public sealed class AnimalGeneratedEventArgs : EventArgs
     /// <summary>
     /// 生成的动物实例
     /// </summary>
-    public AnimalBehavior Animal { get; set; }
+    public AnimalBehaviour Animal { get; set; }
 
     /// <summary>
     /// 物种配置
@@ -82,7 +82,7 @@ public sealed class AnimalDyingEventArgs : EventArgs
     /// <summary>
     /// 进入死亡的动物实例
     /// </summary>
-    public AnimalBehavior Animal { get; set; }
+    public AnimalBehaviour Animal { get; set; }
 
     /// <summary>
     /// 物种配置
@@ -98,7 +98,7 @@ public sealed class AnimalDiedEventArgs : EventArgs
     /// <summary>
     /// 死亡的动物实例
     /// </summary>
-    public AnimalBehavior Animal { get; set; }
+    public AnimalBehaviour Animal { get; set; }
 
     /// <summary>
     /// 物种配置
@@ -114,7 +114,7 @@ public sealed class AnimalFledEventArgs : EventArgs
     /// <summary>
     /// 逃跑的动物实例
     /// </summary>
-    public AnimalBehavior Animal { get; set; }
+    public AnimalBehaviour Animal { get; set; }
 
     /// <summary>
     /// 物种配置
@@ -130,7 +130,7 @@ public sealed class AnimalDropRewardEventArgs : EventArgs
     /// <summary>
     /// 掉落奖励的动物实例
     /// </summary>
-    public AnimalBehavior Animal { get; set; }
+    public AnimalBehaviour Animal { get; set; }
 
     /// <summary>
     /// 掉落奖励
@@ -146,5 +146,5 @@ public sealed class AnimalReachedWallEventArgs : EventArgs
     /// <summary>
     /// 到达边界的动物实例
     /// </summary>
-    public AnimalBehavior Animal { get; set; }
+    public AnimalBehaviour Animal { get; set; }
 }
