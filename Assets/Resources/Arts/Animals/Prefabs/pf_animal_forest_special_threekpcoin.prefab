@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -2945959396234817143}
   - component: {fileID: -6816324075201017398}
   - component: {fileID: -2478951839271067754}
+  - component: {fileID: -6606010155510144222}
   m_Layer: 6
   m_Name: pf_animal_forest_special_threekpcoin
   m_TagString: Animal
@@ -104,6 +105,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97c6162bb7e62594db7bdd409ca38826, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-6606010155510144222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399629174674016163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e242d194236f1db438e37c8f24556898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6602948970012789010

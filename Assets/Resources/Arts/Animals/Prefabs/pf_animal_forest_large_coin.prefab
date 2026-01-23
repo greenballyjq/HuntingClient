@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 515542528723282829}
   - component: {fileID: -7272458898548450525}
   - component: {fileID: 2691508840340745023}
+  - component: {fileID: 3834053797953882691}
   m_Layer: 6
   m_Name: pf_animal_forest_large_coin
   m_TagString: Animal
@@ -104,6 +105,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97c6162bb7e62594db7bdd409ca38826, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3834053797953882691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440515987627628908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e242d194236f1db438e37c8f24556898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7311420538273296454
