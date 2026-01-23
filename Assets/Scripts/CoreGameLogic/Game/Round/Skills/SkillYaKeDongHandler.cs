@@ -1,5 +1,9 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig.Skill;
+using GameFramework.Core;
+using GameFramework.Manager;
+using Hunting.Events;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
@@ -30,9 +34,14 @@ public class SkillYaKeDongHandler : ISkillHandler
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
-    /// 动物管理器
+    /// 对象池管理器
     /// </summary>
-    private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
+    private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
+
+    /// <summary>
+    /// 事件管理器
+    /// </summary>
+    private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
     /// 技能开始
@@ -77,8 +86,29 @@ public class SkillYaKeDongHandler : ISkillHandler
         for (int i = 0; i < spawnCount; i++)
         {
             Vector3 spawnPosition = CalculateSpawnPosition(basePosition, right, i);
-            await _animalManager.GenerateAnimalAsync(specie, spawnPosition, forward);
+            await SpawnAnimalAsync(specie, spawnPosition, forward);
         }
+    }
+
+    /// <summary>
+    /// 异步生成动物
+    /// </summary>
+    /// <param name="specie">物种数据</param>
+    /// <param name="position">生成位置</param>
+    /// <param name="direction">移动方向</param>
+    private async UniTask SpawnAnimalAsync(cfg.HuntingConfig.Specie specie, Vector3 position, Vector3 direction)
+    {
+        var go = await _gameObjectPoolManager.SpawnAsync(specie.PrefabResourcePath);
+        var animal = go.GetComponent<BaseAnimalBehaviour>();
+        go.transform.position = position;
+
+        animal.Init(specie);
+        animal.Moveable.SetDirection(direction);
+
+        _eventManager.Trigger(AnimalEvents.AnimalGenerated, new AnimalGeneratedEventArgs
+        {
+            Animal = animal
+        });
     }
 
     /// <summary>

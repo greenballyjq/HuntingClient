@@ -114,21 +114,6 @@ public sealed class AnimalGeneratedEventArgs : EventArgs
     /// 生成的动物实例
     /// </summary>
     public BaseAnimalBehaviour Animal { get; set; }
-
-    /// <summary>
-    /// 物种配置
-    /// </summary>
-    public Specie SpecieData { get; set; }
-
-    /// <summary>
-    /// 生成位置
-    /// </summary>
-    public Vector3 Position { get; set; }
-
-    /// <summary>
-    /// 初始方向
-    /// </summary>
-    public Vector3 Direction { get; set; }
 }
 
 /// <summary>

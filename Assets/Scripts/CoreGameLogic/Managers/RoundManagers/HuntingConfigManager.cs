@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Bean;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
@@ -367,6 +367,14 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <returns></returns>
     public Dictionary<ESpecieType, int[]> GetMapSpecies(int mapId)
         => GetMap(mapId).MapSpecies;
+
+    /// <summary>
+    /// 获取地图物种类型权重
+    /// </summary>
+    /// <param name="mapId">地图ID</param>
+    /// <returns></returns>
+    public Dictionary<ESpecieType, float> GetMapSpecieTypeWeights(int mapId)
+        => GetMap(mapId).SpecieTypeWeights;
     #endregion
 
     #region 地图相关特殊方法

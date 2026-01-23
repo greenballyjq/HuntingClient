@@ -30,19 +30,20 @@ public class HiddenMapSpawner : BaseSpawner
     public override async UniTask<BaseAnimalBehaviour> SpawnAsync()
     {
         // 从配置按地图与体型策略选出物种与驻场时间
-        // var (specie, stayTime) = _configManager.GetRandomSpecieForMap(_mapData.ID);
+        //  var (specie, stayTime) = _configManager.GetRandomSpecieForMap(_mapData.ID);
 
-        var specie = _configManager.GetRandomBossFollow();
+        // var specie = _configManager.GetRandomBossFollow();
 
         // 计算生成位置与移动方向
-        Vector3 spawnPosition = CalculateSpawnPosition();
-        Vector3 moveDirection = CalculateMoveDirection();
+        //Vector3 spawnPosition = CalculateSpawnPosition();
+        // Vector3 moveDirection = CalculateMoveDirection();
 
         // 调用动物管理器生成动物
-        var animalBehavior = await _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection, true);
+        //var animalBehavior = await _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection, true);
         // animalBehavior.
-        // await UniTask.Delay((int)(perSpawnInterval * 1000));
-        
-        return animalBehavior;
+        //  await UniTask.Delay((int)(perSpawnInterval * 1000));
+
+        // return animalBehavior;
+        return null;
     }
 }

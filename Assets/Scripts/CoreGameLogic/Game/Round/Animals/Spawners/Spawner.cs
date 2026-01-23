@@ -87,7 +87,8 @@ public class Spawner : BaseSpawner
         Vector3 moveDirection = CalculateMoveDirection();
 
         // 调用动物管理器生成动物
-        return await _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection);
+        //return await _animalManager.GenerateAnimalAsync(specie, spawnPosition, moveDirection);
+        return null;
     }
     #endregion
 

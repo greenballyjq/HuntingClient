@@ -92,7 +92,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
     /// <summary>
     /// 隐藏地图小怪生成器
     /// </summary>
-    private HiddenMapSpawner[] _hiddenMapSpawners;
+    //private HiddenMapSpawner[] _hiddenMapSpawners;
 
     /// <summary>
     /// 跟随动物生成时间
@@ -196,7 +196,6 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         _callAnimalsTimerId =
             _timerManager.StartTimer(FOLLOW_ANIMALS_CALL_DURATION, CallAnimals, repeat: TimerManager.LOOP);
 
-        // _eventManager.AddListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
         _eventManager.AddListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
         _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalDying);
 
@@ -445,7 +444,7 @@ public class BossBehaviour : MonoBehaviour, IDamageable
 
     private void CollectHiddenMapSpawners()
     {
-        _hiddenMapSpawners = FindObjectsOfType<HiddenMapSpawner>();
+        //_hiddenMapSpawners = FindObjectsOfType<HiddenMapSpawner>();
     }
 
     #endregion
@@ -473,25 +472,25 @@ public class BossBehaviour : MonoBehaviour, IDamageable
         if (_animalManager.GetActiveAnimalCount() >= MAX_ANIMAL_COUNT) return;
 
         // 如果spawner数组为空，直接返回
-        if (_hiddenMapSpawners == null || _hiddenMapSpawners.Length == 0)
-        {
-            Debug.LogWarning("[BossBehaviour] 没有找到HiddenMapSpawner，无法生成跟随动物");
-            return;
-        }
+        //if (_hiddenMapSpawners == null || _hiddenMapSpawners.Length == 0)
+        //{
+        //    Debug.LogWarning("[BossBehaviour] 没有找到HiddenMapSpawner，无法生成跟随动物");
+        //    return;
+        //}
 
         int spawnCount = 0;
         int lastSpawnCount = 0;
         while (spawnCount < PER_SPAWN_ANIMAL_COUNT)
         {
             lastSpawnCount = spawnCount;
-            foreach (var spawner in _hiddenMapSpawners)
-            {
-                if (spawner == null) continue;
+            //foreach (var spawner in _hiddenMapSpawners)
+            //{
+            //    if (spawner == null) continue;
 
-                await spawner.SpawnAsync();
-                spawnCount++;
-                if (_animalManager.GetActiveAnimalCount() >= MAX_ANIMAL_COUNT) return;
-            }
+            //    await spawner.SpawnAsync();
+            //    spawnCount++;
+            //    if (_animalManager.GetActiveAnimalCount() >= MAX_ANIMAL_COUNT) return;
+            //}
 
             // 防止无限循环：如果遍历完所有spawner后spawnCount没有增加，说明无法继续生成，退出循环
             if (spawnCount == lastSpawnCount)

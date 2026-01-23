@@ -16,16 +16,6 @@ public static class GameServiceLocator
     public static EventManager EventManager => GameFrameworkManager.Instance.GetManager<EventManager>();
     
     /// <summary>
-    /// 定时器管理器
-    /// </summary>
-    public static TimerManager TimerManager => GameFrameworkManager.Instance.GetManager<TimerManager>();
-
-    /// <summary>
-    /// 游戏场景管理器
-    /// </summary>
-    public static GameSceneManager SceneManager => GameFrameworkManager.Instance.GetManager<GameSceneManager>();
-
-    /// <summary>
     /// UI管理器
     /// </summary>
     public static UIManager UIManager => GameFrameworkManager.Instance.GetManager<UIManager>();
@@ -39,6 +29,16 @@ public static class GameServiceLocator
     /// 对象池管理器
     /// </summary>
     public static GameObjectPoolManager GameObjectPoolManager => GameFrameworkManager.Instance.GetManager<GameObjectPoolManager>();
+
+    /// <summary>
+    /// 定时器管理器
+    /// </summary>
+    public static TimerManager TimerManager => GameFrameworkManager.Instance.GetManager<TimerManager>();
+
+    /// <summary>
+    /// 游戏场景管理器
+    /// </summary>
+    public static GameSceneManager SceneManager => GameFrameworkManager.Instance.GetManager<GameSceneManager>();
 
     /// <summary>
     /// 配置管理器

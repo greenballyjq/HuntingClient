@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using GameFramework.Core;
 using GameFramework.Manager;
 using Hunting.Events;
+using Hunting.Game.Animal;
 
 /// <summary>
 /// 单局上下文

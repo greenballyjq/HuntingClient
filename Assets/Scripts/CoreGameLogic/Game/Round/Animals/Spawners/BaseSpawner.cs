@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Hunting.Game.Animal;
 using UnityEngine;
 
+
 public abstract class BaseSpawner : MonoBehaviour, IAnimalSpawner
 {
     /// <summary>
