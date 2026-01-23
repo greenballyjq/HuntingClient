@@ -73,9 +73,10 @@ public class BossMovement : MonoBehaviour, IMoveable
 
     public void DoUpdate(float dt)
     {
+        _currentMoveDirection = _currentTargetDirection;
         if (!_isMoving || _currentTargetDirection == Vector3.zero)
             return;
-
+        
         if (IsNearbyTargetPosition())
         {
             SetRandomTargetPosition();
@@ -149,7 +150,8 @@ public class BossMovement : MonoBehaviour, IMoveable
         var randomPoint = randomPoint1.Target.position +
                           normalized * (randomPoint2.Target.position - randomPoint1.Target.position);
 
-        _currentTargetPosition = (randomPoint - transform.position).normalized;
+        _currentTargetPosition = randomPoint;
+        _currentTargetDirection = (_currentTargetPosition - transform.position).normalized;
         // return randomPoint1.position + normalized * (randomPoint2.position - randomPoint1.position);
     }
 

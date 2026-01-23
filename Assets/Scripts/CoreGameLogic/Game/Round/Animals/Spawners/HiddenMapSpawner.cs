@@ -5,16 +5,6 @@ using UnityEngine;
 
 public class HiddenMapSpawner : BaseSpawner
 {
-    /// <summary>
-    /// 每批派发数量
-    /// </summary>
-    [SerializeField] private int perSpawnCount;
-
-    /// <summary>
-    /// 单批派发间隔
-    /// </summary>
-    [SerializeField] private float perSpawnInterval;
-
     // public void DoUpdate(float dt)
     // {
     //     _accumulatedTime += dt;

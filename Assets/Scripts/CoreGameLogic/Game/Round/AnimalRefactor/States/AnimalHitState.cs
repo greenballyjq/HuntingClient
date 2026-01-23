@@ -1,4 +1,6 @@
-﻿namespace Hunting.Game.Animal
+﻿using UnityEngine;
+
+namespace Hunting.Game.Animal
 {
     /// <summary>
     /// 动物受击状态
@@ -17,7 +19,7 @@
         public override void Enter()
         {
             base.Enter();
-
+            
             animalBehavior.AnimalVisual.PlayHit();
         }
 

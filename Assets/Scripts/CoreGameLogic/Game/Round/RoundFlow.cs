@@ -56,37 +56,30 @@ public class RoundContext
 
 public class HiddenRoundEndTrigger
 {
-    private readonly EventManager _eventManager = GameServiceLocator.EventManager;
-    private readonly AnimalManager _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
+    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
     
     private bool _bossDied;
     
     public void Init()
     {
-        _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
-        _eventManager.AddListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
+        _eventManager.AddListener(AnimalEvents.AnimalRemoved, OnAnimalRemoved);
         _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
         _bossDied = false;
     }
 
     public void Release()
     {
-        _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
-        _eventManager.RemoveListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
+        _eventManager.RemoveListener(AnimalEvents.AnimalRemoved, OnAnimalRemoved);
         _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
     }
 
-    private void OnAnimalDied(AnimalDiedEventArgs obj)
-    {
-        CheckIsHiddenRoundEnd();
-    }
-    
-    private void OnAnimalReachedWall(AnimalReachedWallEventArgs obj)
+    private void OnAnimalRemoved(AnimalRemovedEventArgs _)
     {
         CheckIsHiddenRoundEnd();
     }
 
-    private void OnBossDied(BossDiedEventArgs obj)
+    private void OnBossDied(BossDiedEventArgs _)
     {
         _bossDied = true;
         CheckIsHiddenRoundEnd();
@@ -398,6 +391,7 @@ public class RoundFlow : Singleton<RoundFlow>
         {
             if (_roundManagers[i] is IRoundUpdatable updatable)
                 updatable.DoUpdate(dt);
+            // _currentRoundContext.
         }
     }
 

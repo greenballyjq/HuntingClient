@@ -71,6 +71,7 @@ namespace Hunting.Game.Animal
         {
             if (other.gameObject.CompareTag("Border"))
             {
+                Debug.Log($"[{GetType().Name}] 触发边界事件");
                 _eventManager.Trigger(AnimalEvents.AnimalReachedWall,new AnimalReachedWallEventArgs 
                 { 
                     Sender = this, 

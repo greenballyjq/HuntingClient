@@ -37,6 +37,11 @@
         {
             base.DoUpdate(dt);
 
+            HandleDeathExecution();
+        }
+
+        protected virtual void HandleDeathExecution()
+        {
             if(stateTimer >= 4f && !_isAnimalDropRewardTriggered){
                 animalBehavior.AnimalEventTrigger.TriggerAnimalDropReward();
                 animalBehavior.AnimalVisual.PlayDeathEffect();

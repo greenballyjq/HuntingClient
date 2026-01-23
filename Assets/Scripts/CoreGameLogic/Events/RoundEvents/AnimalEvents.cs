@@ -19,6 +19,11 @@ public static class AnimalEvents
     /// 动物死亡事件
     /// </summary>
     public static readonly EventKey<AnimalDiedEventArgs> AnimalDied = new EventKey<AnimalDiedEventArgs>();
+    
+    /// <summary>
+    /// 动物移除事件（这是所有动物失活的最后一步，此时动物已被AnimalManager移除引用，但还未被销毁或归池）
+    /// </summary>
+    public static readonly EventKey<AnimalRemovedEventArgs> AnimalRemoved = new EventKey<AnimalRemovedEventArgs>();
 
     /// <summary>
     /// 动物逃跑事件
@@ -71,6 +76,17 @@ public sealed class AnimalDiedEventArgs : EventArgs
     /// 物种配置
     /// </summary>
     public Specie SpecieData { get; set; }
+}
+
+/// <summary>
+/// 动物死亡事件参数
+/// </summary>
+public sealed class AnimalRemovedEventArgs : EventArgs
+{
+    /// <summary>
+    /// 移除的动物实例
+    /// </summary>
+    public BaseAnimalBehaviour Animal { get; set; }
 }
 
 /// <summary>

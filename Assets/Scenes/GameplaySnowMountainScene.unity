@@ -822,6 +822,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 763099308595494945}
     m_Modifications:
+    - target: {fileID: 2849915929528973776, guid: 3cb529fb57fe3064eb1564a5ad877185, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3326200856193815591, guid: 3cb529fb57fe3064eb1564a5ad877185, type: 3}
       propertyPath: aimLineWidth
       value: 0.01
@@ -829,6 +833,14 @@ PrefabInstance:
     - target: {fileID: 3326200856193815591, guid: 3cb529fb57fe3064eb1564a5ad877185, type: 3}
       propertyPath: aimLineLength
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 3532686788468297409, guid: 3cb529fb57fe3064eb1564a5ad877185, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5889300244848519618, guid: 3cb529fb57fe3064eb1564a5ad877185, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6784287297071727772, guid: 3cb529fb57fe3064eb1564a5ad877185, type: 3}
       propertyPath: m_LocalPosition.x
@@ -870,9 +882,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7483456964765804041, guid: 3cb529fb57fe3064eb1564a5ad877185, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8087877615401792911, guid: 3cb529fb57fe3064eb1564a5ad877185, type: 3}
       propertyPath: m_Name
       value: MainWeapon
+      objectReference: {fileID: 0}
+    - target: {fileID: 8087877615401792911, guid: 3cb529fb57fe3064eb1564a5ad877185, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1227,7 +1247,7 @@ Transform:
   m_GameObject: {fileID: 2035422787}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 6}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1368,7 +1388,7 @@ Transform:
   m_GameObject: {fileID: 5643763707802821888}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.25884587, z: -0, w: 0.96591866}
-  m_LocalPosition: {x: -4.08, y: 0, z: -0.97}
+  m_LocalPosition: {x: -5.32, y: 0, z: 6.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1390,7 +1410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &5643763707802821889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1405,10 +1425,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnInterval: 0
   spawnLineRange: {x: 0.21, y: 4.81}
-  minSpawnAngle: 42.84
-  maxSpawnAngle: 63.4
-  perSpawnCount: 0
-  perSpawnInterval: 0
+  minSpawnAngle: 99.3
+  maxSpawnAngle: 117.1
 --- !u!1 &6064248335193114885
 GameObject:
   m_ObjectHideFlags: 0
@@ -1483,7 +1501,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6300625863727234842
 Transform:
   m_ObjectHideFlags: 0
@@ -1594,13 +1612,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6259223768617547517}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.27766278, y: 0.07836947, z: -0.3079961, w: 0.906587}
-  m_LocalPosition: {x: 8.9, y: 0, z: -0.23}
+  m_LocalRotation: {x: 0, y: 0.36650118, z: 0, w: 0.9304176}
+  m_LocalPosition: {x: 11.18, y: 0, z: 7.3900003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -27.076, y: 20.59, z: -42.537}
+  m_LocalEulerAnglesHint: {x: 0, y: 43, z: 0}
 --- !u!114 &8746362543823397697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1615,10 +1633,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnInterval: 0
   spawnLineRange: {x: -3, y: 2.85}
-  minSpawnAngle: -98.7
-  maxSpawnAngle: -76.7
-  perSpawnCount: 13
-  perSpawnInterval: -2.18
+  minSpawnAngle: -138.7
+  maxSpawnAngle: -114.3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1626,8 +1642,8 @@ SceneRoots:
   - {fileID: 162493009785143956}
   - {fileID: 2016849102}
   - {fileID: 1608150160}
-  - {fileID: 8746362543823397696}
   - {fileID: 3307460588587496380}
+  - {fileID: 8746362543823397696}
   - {fileID: 8363528723505645780}
   - {fileID: 2035422788}
   - {fileID: 183037778}

@@ -27,6 +27,10 @@ public static class BossEvents
 /// </summary>
 public sealed class BossDiedEventArgs : EventArgs
 {
+    /// <summary>
+    /// 死亡的Boss实例
+    /// </summary>
+    public BossAnimalBehaviour Boss { get; set; }
 }
 
 /// <summary>
@@ -37,7 +41,7 @@ public sealed class BossDyingEventArgs : EventArgs
     /// <summary>
     /// 死亡的Boss实例
     /// </summary>
-    public BossBehaviour Boss { get; set; }
+    public BossAnimalBehaviour Boss { get; set; }
 }
 
 /// <summary>
@@ -48,7 +52,7 @@ public sealed class BossCallEventArgs : EventArgs
     /// <summary>
     /// Boss实例
     /// </summary>
-    public BossBehaviour Boss { get; set; }
+    public BossAnimalBehaviour Boss { get; set; }
     
     /// <summary>
     /// 召唤小怪的保护时长

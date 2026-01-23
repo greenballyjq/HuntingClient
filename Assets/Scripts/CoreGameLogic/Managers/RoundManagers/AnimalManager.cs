@@ -6,6 +6,7 @@ using GameFramework.Manager;
 using System;
 using System.Linq;
 using Hunting.Game.Animal;
+using Object = UnityEngine.Object;
 
 /// <summary>
 /// 动物管理器
@@ -63,13 +64,13 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <param name="dt">时间增量</param>
     public void DoUpdate(float dt)
     {
-        _animalsToRemove.Clear();
+        // _animalsToRemove.Clear();
         
         foreach (var animal in _activeAnimals)
             animal.DoUpdate(dt);
         
         foreach (var animal in _animalsToRemove)
-            _activeAnimals.Remove(animal);
+            RemoveAndRecycleAnimal(animal);
 
         _animalsToRemove.Clear();
     }
@@ -83,6 +84,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
         var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
         var animal = go.GetComponent<BaseAnimalBehaviour>();
         go.transform.position = position;
+        go.AddComponent<LinearMovement>();
 
         animal.Init(specieData);
         animal.GetComponent<IMoveable>().SetDirection(direction);
@@ -92,22 +94,38 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
         return animal;
     }
 
-    // /// <summary>
-    // /// 生成Boss
-    // /// </summary>
-    // /// <returns>Boss实例</returns>
-    //public async UniTask<BossBehaviour> GenerateBossAsync()
-    //{
-    //    var configManager = GameServiceLocator.ConfigManager;
-    //    var bossSpecie = configManager.GetRandomBoss();
-    //    var spawnPoint = GameObject.Find("BossSpawnerPoint");
-    //    var prefab = await _resourceManager.LoadAssetAsync<GameObject>(bossSpecie.PrefabResourcePath);
-    //    var go = Object.Instantiate(prefab, spawnPoint.transform);
-    //    var boss = go.GetComponent<BossBehaviour>();
-    //    go.transform.position = spawnPoint.transform.position;
-    //    boss.Init(bossSpecie);
-    //    return boss;
-    //}
+    public async UniTask<BaseAnimalBehaviour> GenerateGuardAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, bool inHiddenMap = false)
+    {
+        var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
+        var animal = go.GetComponent<BaseAnimalBehaviour>();
+        go.transform.position = position;
+        go.AddComponent<GuardMovement>();
+
+        animal.Init(specieData);
+        animal.GetComponent<IMoveable>().SetDirection(direction);
+
+        // 添加到活跃动物集合
+        _activeAnimals.Add(animal);
+        return animal;
+    }
+
+     /// <summary>
+     /// 生成Boss
+     /// </summary>
+     /// <returns>Boss实例</returns>
+    public async UniTask<BossAnimalBehaviour> GenerateBossAsync(Specie bossSpecie, Transform spawnPoint)
+    {
+        // var configManager = GameServiceLocator.ConfigManager;
+        // var bossSpecie = configManager.GetRandomBoss();
+        // var spawnPoint = GameObject.Find("BossSpawnerPoint");
+        var prefab = await _resourceManager.LoadAssetAsync<GameObject>(bossSpecie.PrefabResourcePath);
+        var go = Object.Instantiate(prefab, spawnPoint);
+        var boss = go.GetComponent<BossAnimalBehaviour>();
+        _activeAnimals.Add(boss);
+        go.transform.position = spawnPoint.position;
+        boss.Init(bossSpecie);
+        return boss;
+    }
     
     /// <summary>
     /// 是否还有活跃的动物
@@ -120,6 +138,12 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     /// <returns></returns>
     public int GetActiveAnimalCount() => _activeAnimals.Count;
+    
+    /// <summary>
+    /// 获取真实活跃动物数量
+    /// </summary>
+    /// <returns></returns>
+    public int GetRealActiveAnimalCount() => _activeAnimals.Count - _animalsToRemove.Count;
 
     public List<BaseAnimalBehaviour> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
     {
@@ -147,6 +171,15 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
                 
         _activeAnimals.Clear();
     }
+
+    private void RemoveAndRecycleAnimal(BaseAnimalBehaviour animal)
+    {
+        var remove = _activeAnimals.Remove(animal);
+        if (!remove) return;
+        _eventManager.Trigger(AnimalEvents.AnimalRemoved, new AnimalRemovedEventArgs { Animal = animal});
+        _gameObjectPoolManager.Despawn(animal.gameObject);
+    }
+    
     #endregion
 
     #region 事件相关
@@ -156,6 +189,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void RegisterEvents()
     {
         _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
+        _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
         _eventManager.AddListener(AnimalEvents.AnimalFled, OnAnimalFled);
         _eventManager.AddListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
     }
@@ -166,6 +200,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void UnregisterEvents()
     {
         _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
+        _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
         _eventManager.RemoveListener(AnimalEvents.AnimalFled, OnAnimalFled);
         _eventManager.RemoveListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
     }
@@ -176,7 +211,17 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void OnAnimalDied(AnimalDiedEventArgs args)
     {
         _animalsToRemove.Add(args.Animal);
-        _gameObjectPoolManager.Despawn(args.Animal.gameObject);
+        // _gameObjectPoolManager.Despawn(args.Animal.gameObject);
+    }
+    
+    /// <summary>
+    /// Boss死亡事件回调
+    /// </summary>
+    /// <param name="args"></param>
+    private void OnBossDied(BossDiedEventArgs args)
+    {
+        _animalsToRemove.Add(args.Boss);
+        Object.Destroy(args.Boss.gameObject);
     }
 
     /// <summary>
@@ -185,7 +230,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void OnAnimalFled(AnimalFledEventArgs args)
     {
         _animalsToRemove.Add(args.Animal);
-        _gameObjectPoolManager.Despawn(args.Animal.gameObject);
+        // _gameObjectPoolManager.Despawn(args.Animal.gameObject);
     }
     
     /// <summary>
@@ -194,7 +239,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void OnAnimalReachedWall(AnimalReachedWallEventArgs args)
     {
         _animalsToRemove.Add(args.Animal);
-        _gameObjectPoolManager.Despawn(args.Animal.gameObject);
+        // _gameObjectPoolManager.Despawn(args.Animal.gameObject);
     }
     #endregion
 }
