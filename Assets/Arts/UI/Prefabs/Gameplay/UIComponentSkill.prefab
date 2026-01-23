@@ -33,10 +33,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7299601718235459130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.75, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 3, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &185774844366517656
 CanvasRenderer:
@@ -227,10 +227,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7299601718235459130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10, y: -10}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3179822372386751986
 CanvasRenderer:
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 82551015749bbe94ba7c645fd4d95fde, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e31935306b0dc0643ad0d16a1f15d4a1, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -305,10 +305,10 @@ RectTransform:
   - {fileID: 1343262320297388382}
   m_Father: {fileID: 2947265877959496745}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -5, y: -12}
+  m_SizeDelta: {x: 199, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3215618388057205336
 CanvasRenderer:
@@ -338,7 +338,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 952d39c3a9adb7c44bab6451dff27d59, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 95d6f0efab9be4d4ca8baf4a4b1f0851, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -403,10 +403,12 @@ MonoBehaviour:
   _textEnergyBars: {fileID: 7235352332590847597}
   _buttonSkill: {fileID: 8130695343347986975}
   _imageSkill: {fileID: 663398539946507464}
-  _colorTierA: {r: 0.40796396, g: 0.8867924, b: 0.30535775, a: 1}
-  _colorTierB: {r: 0.41585082, g: 0.57291305, b: 0.8396226, a: 1}
-  _colorTierC: {r: 1, g: 0.6972527, b: 0.24056602, a: 1}
-  _brightnessMultiplier: 1.2
+  _colors:
+  - {r: 0.7877358, g: 1, b: 0.7917034, a: 1}
+  - {r: 0.6650944, g: 1, b: 0.9625106, a: 1}
+  - {r: 1, g: 0.9093638, b: 0.6462264, a: 1}
+  - {r: 1, g: 0.8306117, b: 0.5707547, a: 1}
+  - {r: 1, g: 0.49905658, b: 0.3915094, a: 1}
 --- !u!1 &8259953977014075712
 GameObject:
   m_ObjectHideFlags: 0
