@@ -276,8 +276,11 @@ public class RoundFlow : Singleton<RoundFlow>
         //boss.EnterCombat();
         _currentState = RoundFlowState.Playing;
         
-        _eventManager.Trigger(HiddenMapEvents.HiddenMapPlayStart);
-        
+        // _eventManager.Trigger(HiddenMapEvents.HiddenMapPlayStart);
+        var spawnManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
+        var bossSpawner = spawnManager.GetSpawner<ManualSpawner>("Boss");
+        bossSpawner.Spawn();
+
         _currentRoundContext.HiddenRoundEndTrigger.Init();
     }
 
