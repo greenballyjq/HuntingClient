@@ -82,6 +82,11 @@ public class GuardMovement : MonoBehaviour, IMoveable
         _currentTargetTransform = FindObjectOfType<BossAnimalBehaviour>().transform;
     }
 
+    public void Init(IMovePolicy movePolicy)
+    {
+        
+    }
+
     /// <summary>
     /// 每帧更新
     /// </summary>

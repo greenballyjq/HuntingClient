@@ -36,6 +36,12 @@ namespace Hunting.Game.Animal
         /// 初始化移动组件
         /// </summary>
         void Init();
+
+        /// <summary>
+        /// 初始化移动组件
+        /// </summary>
+        /// <param name="movePolicy">移动策略</param>
+        void Init(IMovePolicy movePolicy);
         
         /// <summary>
         /// 每帧更新移动

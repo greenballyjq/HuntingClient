@@ -71,6 +71,20 @@ public class BossMovement : MonoBehaviour, IMoveable
         }
     }
 
+    public void Init(IMovePolicy movePolicy)
+    {
+        _currentTargetDirection = Vector3.zero;
+        _currentMoveDirection = Vector3.zero;
+        _isMoving = false;
+
+        // 收集场景上的所有点位
+        _movePoints = FindObjectsOfType<BossMovePoint>();
+        if (_movePoints.Length == 0)
+        {
+            Debug.LogError($"[{GetType().Name}] 没有找到任何移动点");
+        }
+    }
+
     public void DoUpdate(float dt)
     {
         _currentMoveDirection = _currentTargetDirection;

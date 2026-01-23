@@ -31,6 +31,11 @@ namespace Hunting.Game.Animal
         /// 是否正在移动
         /// </summary>
         private bool _isMoving;
+        
+        /// <summary>
+        /// 移动策略
+        /// </summary>
+        private IMovePolicy _movePolicy;
 
         /// <summary>
         /// 当前速度
@@ -68,6 +73,21 @@ namespace Hunting.Game.Animal
             _currentTargetDirection = Vector3.zero;
             _currentMoveDirection = Vector3.zero;
             _isMoving = false;
+
+            _movePolicy = new LinearMovePolicy(_baseSpeed, _moveRate);
+        }
+
+        public void Init(IMovePolicy movePolicy)
+        {
+            _baseSpeed = 0f;
+            _moveRate = 1f;
+            _currentTargetDirection = Vector3.zero;
+            _currentMoveDirection = Vector3.zero;
+            _isMoving = false;
+            
+            _movePolicy = movePolicy;
+            _movePolicy.BaseSpeed = _baseSpeed;
+            _movePolicy.MoveRate = _moveRate;
         }
         
         /// <summary>
@@ -86,6 +106,8 @@ namespace Hunting.Game.Animal
             float actualSpeed = _baseSpeed * _moveRate;
             Vector3 movement = _currentTargetDirection * actualSpeed * dt;
             transform.position += movement;
+            // Debug.Log($"[{GetType().Name}] DoUpdate");
+            // _movePolicy.DoMove(transform, dt);
         }
         
         /// <summary>
@@ -95,6 +117,7 @@ namespace Hunting.Game.Animal
         public void SetSpeed(float speed)
         {
             _baseSpeed = speed;
+            _movePolicy.BaseSpeed = speed;
         }
         
         /// <summary>
@@ -104,6 +127,7 @@ namespace Hunting.Game.Animal
         public void SetMoveRate(float rate)
         {
             _moveRate = rate;
+            _movePolicy.MoveRate = rate;
         }
         
         /// <summary>
@@ -119,6 +143,7 @@ namespace Hunting.Game.Animal
             }
             
             _currentTargetDirection = direction.normalized;
+            _movePolicy.TargetDirection = _currentTargetDirection;
         }
         
         /// <summary>

@@ -1,4 +1,6 @@
-﻿namespace Hunting.Game.Animal
+﻿using UnityEngine;
+
+namespace Hunting.Game.Animal
 {
     /// <summary>
     /// 动物移动状态
@@ -26,6 +28,7 @@
         public override void DoUpdate(float dt)
         {
             base.DoUpdate(dt);
+            Debug.Log($"[{GetType().Name}] DoUpdate");
             animalBehavior.Moveable.DoUpdate(dt);
         }
 
