@@ -8,6 +8,7 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
     private void Start()
     {
         _eventManager.AddListener(HiddenMapEvents.HiddenMapPlayStart, OnHiddenMapStart);
+        Moveable.StartMove();
     }
 
     private void OnDestroy()
@@ -17,6 +18,6 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
 
     private void OnHiddenMapStart()
     {
-        Moveable.StartMove();
+        // Moveable.StartMove();
     }
 }

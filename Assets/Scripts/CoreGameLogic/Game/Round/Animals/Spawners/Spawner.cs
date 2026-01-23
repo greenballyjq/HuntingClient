@@ -79,8 +79,6 @@ public class Spawner : BaseSpawner
     /// </summary>
     public override async UniTask<BaseAnimalBehaviour> SpawnAsync()
     {
-        
-
         // 从配置按地图与体型策略选出物种
         var specie = _configManager.GetRandomSpecieForMap(_mapData.ID);
 

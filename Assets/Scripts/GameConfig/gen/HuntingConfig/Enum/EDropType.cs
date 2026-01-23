@@ -17,7 +17,7 @@ namespace cfg.HuntingConfig.Enum
     public enum EDropType
     {
         /// <summary>
-        /// 回血肉
+        /// 肉
         /// </summary>
         Meat = 0,
         /// <summary>
@@ -27,7 +27,7 @@ namespace cfg.HuntingConfig.Enum
         /// <summary>
         /// 3KP金币
         /// </summary>
-        Coin = 2,
+        ThreeKPCoin = 2,
         /// <summary>
         /// 丰收能量
         /// </summary>

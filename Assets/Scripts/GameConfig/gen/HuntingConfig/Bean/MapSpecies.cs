@@ -12,17 +12,17 @@ using Luban;
 
 namespace cfg.HuntingConfig.Bean
 {
-public sealed partial class SpecieWeight : Luban.BeanBase
+public sealed partial class MapSpecies : Luban.BeanBase
 {
-    public SpecieWeight(ByteBuf _buf) 
+    public MapSpecies(ByteBuf _buf) 
     {
         SpecieId = _buf.ReadInt();
         Weight = _buf.ReadFloat();
     }
 
-    public static SpecieWeight DeserializeSpecieWeight(ByteBuf _buf)
+    public static MapSpecies DeserializeMapSpecies(ByteBuf _buf)
     {
-        return new HuntingConfig.Bean.SpecieWeight(_buf);
+        return new HuntingConfig.Bean.MapSpecies(_buf);
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ public sealed partial class SpecieWeight : Luban.BeanBase
     /// </summary>
     public readonly float Weight;
    
-    public const int __ID__ = -1077492816;
+    public const int __ID__ = -49180479;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)

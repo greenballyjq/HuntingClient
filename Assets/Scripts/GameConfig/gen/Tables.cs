@@ -22,10 +22,6 @@ public partial class Tables
     /// </summary>
     public HuntingConfig.TbSpecie TbSpecie {get; }
     /// <summary>
-    /// 派发数值表
-    /// </summary>
-    public HuntingConfig.TbSpawn TbSpawn {get; }
-    /// <summary>
     /// 地图数值表
     /// </summary>
     public HuntingConfig.TbMap TbMap {get; }
@@ -92,7 +88,6 @@ public partial class Tables
     {
         TbBullet = new HuntingConfig.TbBullet(loader("huntingconfig_tbbullet"));
         TbSpecie = new HuntingConfig.TbSpecie(loader("huntingconfig_tbspecie"));
-        TbSpawn = new HuntingConfig.TbSpawn(loader("huntingconfig_tbspawn"));
         TbMap = new HuntingConfig.TbMap(loader("huntingconfig_tbmap"));
         TbRole = new HuntingConfig.TbRole(loader("huntingconfig_tbrole"));
         TbMeatProgress = new HuntingConfig.TbMeatProgress(loader("huntingconfig_tbmeatprogress"));
@@ -117,7 +112,6 @@ public partial class Tables
     {
         TbBullet.ResolveRef(this);
         TbSpecie.ResolveRef(this);
-        TbSpawn.ResolveRef(this);
         TbMap.ResolveRef(this);
         TbRole.ResolveRef(this);
         TbMeatProgress.ResolveRef(this);

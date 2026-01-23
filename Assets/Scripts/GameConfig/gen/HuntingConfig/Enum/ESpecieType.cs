@@ -14,28 +14,32 @@ namespace cfg.HuntingConfig.Enum
     /// <summary>
     /// 物种体型类型
     /// </summary>
-    public enum EVolumeType
+    public enum ESpecieType
     {
         /// <summary>
-        /// 小体型
+        /// 小型动物
         /// </summary>
         Small = 0,
         /// <summary>
-        /// 中体型
+        /// 中型动物
         /// </summary>
         Medium = 1,
         /// <summary>
-        /// 大体型
+        /// 大型动物
         /// </summary>
         Large = 2,
         /// <summary>
-        /// 特殊体型
+        /// 弹药动物
         /// </summary>
-        Special = 3,
+        Bullet = 3,
         /// <summary>
-        /// Boss体型
+        /// 3KP金币动物
         /// </summary>
-        Boss = 4,
+        ThreeKPCoin = 4,
+        /// <summary>
+        /// Boss动物
+        /// </summary>
+        Boss = 5,
     }
 
 } 
