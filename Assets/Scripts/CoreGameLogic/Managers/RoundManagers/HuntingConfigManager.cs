@@ -8,9 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
 /// <summary>
-/// 打猎游戏专用配置管理器
+/// 打猎配置管理器
 /// </summary>
 public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
 {
@@ -21,7 +20,6 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     {
         "huntingconfig_tbbullet",
         "huntingconfig_tbspecie",
-        "huntingconfig_tbspawn",
         "huntingconfig_tbmap",
         "huntingconfig_tbrole",
         "huntingconfig_tbmeatprogress",
@@ -51,11 +49,6 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// 物种数值表
     /// </summary>
     public TbSpecie SpecieTable => _tables.TbSpecie;
-
-    /// <summary>
-    /// 派发数值表
-    /// </summary>
-    public TbSpawn SpawnTable => _tables.TbSpawn;
 
     /// <summary>
     /// 地图数值表
@@ -167,13 +160,6 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     public Specie GetSpecie(int id) => SpecieTable.Get(id);
 
     /// <summary>
-    /// 获取单个派发数据
-    /// </summary>
-    /// <param name="id">派发ID</param>
-    /// <returns></returns>
-    public Spawn GetSpawn(int id) => SpawnTable.Get(id);
-
-    /// <summary>
     /// 获取单个地图数据
     /// </summary>
     /// <param name="id">地图ID</param>
@@ -204,16 +190,16 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
         => RoleTable.DataList.FirstOrDefault(r => r.RoleType == type);
 
     /// <summary>
-    /// 获取单个肉度条数据
+    /// 获取单个肉条数据
     /// </summary>
-    /// <param name="id">肉度条ID</param>
+    /// <param name="id">肉条ID</param>
     /// <returns></returns>
     public MeatProgress GetMeatProgress(int id) => MeatProgressTable.Get(id);
 
     /// <summary>
-    /// 获取单个丰收能量条数据
+    /// 获取单个能量条数据
     /// </summary>
-    /// <param name="id">丰收能量条ID</param>
+    /// <param name="id">能量条ID</param>
     /// <returns></returns>
     public EnergyProgress GetEnergyProgress(int id) => EnergyProgressTable.Get(id);
 
@@ -363,144 +349,35 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <summary>
     /// 获取所有特殊子弹的数据
     /// </summary>
-    /// <returns></returns>
     public List<Bullet> GetAllSpecialBullets()
         => BulletTable.DataList.Where(b => b.BulletType != EBulletType.Normal).ToList();
 
     /// <summary>
-    /// 随机获取一个特殊子弹的数据 TODO: 应移到 BulletManager 或 LuckyManager
+    /// 随机获取一个特殊子弹的数据
     /// </summary>
-    /// <returns></returns>
     public Bullet GetRandomSpecialBullet()
         => GetAllSpecialBullets()[Random.Range(0, GetAllSpecialBullets().Count)];
     #endregion
 
     #region 物种相关特殊方法
     /// <summary>
-    /// 根据地图与体型，在对应物种池内按权重随机选择一个物种 TODO: 应移到 SpawnerManager
+    /// 获取地图所有物种的数据
     /// </summary>
     /// <param name="mapId">地图ID</param>
-    /// <param name="volumeType">体型</param>
-    /// <returns>选中的物种</returns>
-    public Specie GetRandomSpecieByMapAndVolume(int mapId, EVolumeType volumeType)
-    {
-        // 取得当前地图该体型对应的物种权重列表
-        var specieWeights = GetMap(mapId).SpeciesByVolume[volumeType];
-
-        // 累加权重用于后续随机
-        float totalWeight = 0f;
-        for (int i = 0; i < specieWeights.Length; i++)
-        {
-            float w = specieWeights[i].Weight;
-            if (w > 0f) totalWeight += w;
-        }
-
-        // 在总权重范围内取随机点
-        float randomPoint = Random.Range(0f, totalWeight);
-        float cumulative = 0f;
-        for (int i = 0; i < specieWeights.Length; i++)
-        {
-            float w = specieWeights[i].Weight;
-            if (w <= 0f) continue;
-
-            // 累加权重，一旦超过随机点即命中
-            cumulative += w;
-            if (randomPoint <= cumulative)
-            {
-                return GetSpecie(specieWeights[i].SpecieId);
-            }
-        }
-        return null;
-    }
-
-    /// <summary>
-    /// 随机派发一只物种（基于地图、体型策略、体型内物种权重）TODO: 应移到 SpawnerManager
-    /// </summary>
-    /// <param name="mapId">地图ID</param>
-    /// <returns>物种数据与驻场时间</returns>
-    public Specie GetRandomSpecieForMap(int mapId)
-    {
-        // 1) 体型：按地图体型策略的比例加权随机
-        EVolumeType volumeType = GetRandomVolumeTypeByStrategy(mapId);
-
-        // 2) 物种：在该体型下按权重随机选一个
-        var specie = GetRandomSpecieByMapAndVolume(mapId, volumeType);
-
-        return specie;
-    }
-
-    /// <summary>
-    /// 随机获取一个Boss物种
-    /// </summary>
-    /// <returns>随机Boss物种配置</returns>
-    public Specie GetRandomBoss()
-        => SpecieTable.DataList.Where(s => s.VolumeType == EVolumeType.Boss).ToList()[Random.Range(0, SpecieTable.DataList.Count(s => s.VolumeType == EVolumeType.Boss))];
-
-    /// <summary>
-    /// 随机获取一个跟随Boss的物种
-    /// </summary>
     /// <returns></returns>
-    public Specie GetRandomBossFollow()
-    {
-        var species = SpecieTable.DataList.Where(s => s.VolumeType == EVolumeType.Small).ToList();
-        return species[Random.Range(0, species.Count)];
-    }
-    
-    #endregion
-
-    #region 派发相关特殊方法
-    /// <summary>
-    /// 根据地图的体型策略按比例随机选择一种体型 TODO: 应移到 SpawnerManager
-    /// </summary>
-    /// <param name="mapId">地图ID</param>
-    /// <returns>选中的体型</returns>
-    public EVolumeType GetRandomVolumeTypeByStrategy(int mapId)
-    {
-        // 获取地图配置的体型策略
-        var strategy = GetMapSpawnStrategy(mapId);
-
-        // 计算所有体型比例总和
-        float totalRatio = strategy.VolumeRatio.Values.Sum();
-
-        // 取随机点并根据权重命中体型
-        float randomPoint = Random.Range(0f, totalRatio);
-        float cumulative = 0f;
-        foreach (var kv in strategy.VolumeRatio)
-        {
-            float ratio = kv.Value;
-            cumulative += ratio;
-            if (randomPoint <= cumulative)
-                return kv.Key;
-        }
-
-        return default;
-    }
-
-    /// <summary>
-    /// 获取地图下某体型的驻场时间
-    /// </summary>
-    /// <param name="mapId">地图ID</param>
-    /// <param name="volumeType">体型</param>
-    /// <returns>驻场时间（秒）</returns>
-    public float GetStayTimeByVolumeType(int mapId, EVolumeType volumeType)
-        => GetMapSpawnStrategy(mapId).StayTime[volumeType];
+    public Dictionary<ESpecieType, int[]> GetMapSpecies(int mapId)
+        => GetMap(mapId).MapSpecies;
     #endregion
 
     #region 地图相关特殊方法
     /// <summary>
-    /// 获取地图使用的体型策略（体型比例与驻场时间）
+    /// 随机获取一个地图的数据
     /// </summary>
-    /// <param name="mapId">地图ID</param>
-    /// <returns>体型策略</returns>
-    public Spawn GetMapSpawnStrategy(int mapId)
-        => GetSpawn(GetMap(mapId).SpawnStrategyId);
-
-    /// <summary>
-    /// 随机获取一个地图 TODO: 应移到 RoundManager
-    /// </summary>
-    /// <returns>随机地图配置</returns>
     public Map GetRandomMap()
-        => MapTable.DataList[Random.Range(0, MapTable.DataList.Count)];
+    {
+        var maps = MapTable.DataList.Where(m => m.MapType != EMapType.Hidden).ToList();
+        return maps[Random.Range(0, maps.Count)];
+    }
     #endregion
 
     #region 角色相关特殊方法
@@ -525,7 +402,7 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
 
     #region 任务相关特殊方法
     /// <summary>
-    /// 随机获取一个任务配置 TODO: 应移到 QuestManager
+    /// 随机获取一个任务配置
     /// </summary>
     /// <returns>随机任务配置</returns>
     public Quest GetRandomQuest()
@@ -662,5 +539,50 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
 
         return panelData;
     }
+    #endregion
+
+    #region 测试
+    /// <summary>
+    /// 随机获取一个跟随Boss的物种 不是我写的代码，我不在乎
+    /// </summary>
+    /// <returns></returns>
+    public Specie GetRandomBossFollow()
+    {
+        var species = SpecieTable.DataList.Where(s => s.SpecieType == ESpecieType.Small).ToList();
+        return species[Random.Range(0, species.Count)];
+    }
+
+    /// <summary>
+    /// 随机获取一个物种 测试方法，是否适合放这里未知，我偏向于不适合
+    /// </summary>
+    /// <param name="mapId">地图ID</param>
+    /// <returns></returns>
+    public Specie GetRandomSpecie(int mapId)
+    {
+        var map = GetMap(mapId);
+
+        float totalWeight = map.SpecieTypeWeights.Values.Sum();
+        float randomPoint = Random.Range(0f, totalWeight);
+        float cumulative = 0f;
+
+        foreach (var kv in map.SpecieTypeWeights)
+        {
+            cumulative += kv.Value;
+            if (randomPoint <= cumulative)
+            {
+                var specieIds = map.MapSpecies[kv.Key];
+                int specieId = specieIds[Random.Range(0, specieIds.Length)];
+                return GetSpecie(specieId);
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 随机获取一个Boss物种的数据 测试代码，是否适合放这里未知，我偏向于这个简单的还算适合
+    /// </summary>
+    public Specie GetRandomBoss()
+        => SpecieTable.DataList.Where(s => s.SpecieType == ESpecieType.Boss).ToList()[Random.Range(0, SpecieTable.DataList.Count(s => s.SpecieType == ESpecieType.Boss))];
     #endregion
 }

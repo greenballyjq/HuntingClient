@@ -38,7 +38,7 @@ public class Spawner : BaseSpawner
     // /// </summary>
     // private Map _mapData;
     //
-    // /// <summary>
+    // /// <summary>    
     // /// 配置管理器
     // /// </summary>
     // private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
@@ -80,7 +80,7 @@ public class Spawner : BaseSpawner
     public override async UniTask<BaseAnimalBehaviour> SpawnAsync()
     {
         // 从配置按地图与体型策略选出物种
-        var specie = _configManager.GetRandomSpecieForMap(_mapData.ID);
+        var specie = _configManager.GetRandomSpecie(_mapData.ID);
 
         // 计算生成位置与移动方向
         Vector3 spawnPosition = CalculateSpawnPosition();

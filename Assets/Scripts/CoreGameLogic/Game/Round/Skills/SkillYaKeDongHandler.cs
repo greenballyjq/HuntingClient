@@ -69,7 +69,6 @@ public class SkillYaKeDongHandler : ISkillHandler
         var player = FindPlayerTransform();
 
         int spawnCount = GetSpawnCount(parameter);
-        float stayTime = _configManager.GetStayTimeByVolumeType(context.RoundContext.MapData.ID, specie.VolumeType);
 
         Vector3 forward = player.forward;
         Vector3 right = player.right;

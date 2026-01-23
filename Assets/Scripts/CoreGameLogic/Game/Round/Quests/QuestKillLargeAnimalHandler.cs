@@ -1,5 +1,4 @@
 ﻿using cfg.HuntingConfig.Enum;
-using GameFramework.Game;
 
 /// <summary>
 /// 击杀大型动物任务处理器
@@ -60,7 +59,7 @@ public class QuestKillLargeAnimalHandler : IQuestHandler
     private void OnAnimalDied(AnimalDiedEventArgs args)
     {
         // 检查是否为大型动物
-        if (args.SpecieData.VolumeType == EVolumeType.Large)
+        if (args.SpecieData.SpecieType == ESpecieType.Large)
             _currentProgress++;
     }
     #endregion

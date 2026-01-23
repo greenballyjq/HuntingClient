@@ -30,21 +30,19 @@ namespace Hunting.Game.Animal
         protected override void Awake()
         {
             base.Awake();
-            FleeState = new AnimalFleeState(_stateMachine, this);
-
-            AnimalEventTrigger = AnimalEventTrigger as FleeAnimalEventTrigger;
             
-            var eventTrigger = AnimalEventTrigger as FleeAnimalEventTrigger;
         }
 
         #region 公共方法
         public override void Init(Specie data)
         {
-            base.Init(data);
-
             // 设置驻场时间
             _stayTime = data.StayTime;
             _stayTimer = 0f;
+
+            FleeState = new AnimalFleeState(_stateMachine, this);
+
+            base.Init(data);
         }
 
         public override void DoUpdate(float dt)

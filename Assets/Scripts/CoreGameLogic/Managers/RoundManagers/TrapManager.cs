@@ -60,7 +60,7 @@ public class TrapManager : IRoundManager, IRoundResettable
         Vector3 position,
         float attractRadius,
         float triggerRadius,
-        Dictionary<EVolumeType, float[]> attractRadiusRangeByVolume,
+        Dictionary<ESpecieType, float[]> attractRadiusRangeByVolume,
         string prefabPath
     )
     {

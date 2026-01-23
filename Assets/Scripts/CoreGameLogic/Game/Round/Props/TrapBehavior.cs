@@ -46,7 +46,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
     /// <summary>
     /// 按体型划分的吸引半径范围比例
     /// </summary>
-    private Dictionary<EVolumeType, float[]> _attractRadiusRangeByVolume;
+    private Dictionary<ESpecieType, float[]> _attractRadiusRangeByVolume;
 
     /// <summary>
     /// 已吸引的动物集合
@@ -89,7 +89,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
     /// <param name="attractRadius">吸引半径</param>
     /// <param name="triggerRadius">触发半径</param>
     /// <param name="attractRadiusRangeByVolume">按体型划分的吸引半径范围比例</param>
-    public void Init(float attractRadius, float triggerRadius, Dictionary<EVolumeType, float[]> attractRadiusRangeByVolume)
+    public void Init(float attractRadius, float triggerRadius, Dictionary<ESpecieType, float[]> attractRadiusRangeByVolume)
     {
         _attractRadius = attractRadius;
         _triggerRadius = triggerRadius;
@@ -185,7 +185,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
     private Vector3 GetTargetPointForAnimal(BaseAnimalBehaviour animal)
     {
         // 根据体型从配置中获取范围比例
-        EVolumeType volumeType = animal.SpecieData.VolumeType;
+        ESpecieType volumeType = animal.SpecieData.SpecieType;
         float[] range = _attractRadiusRangeByVolume[volumeType];
 
         // 计算动物相对于陷阱的方向角度

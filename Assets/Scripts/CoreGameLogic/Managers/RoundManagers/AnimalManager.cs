@@ -89,15 +89,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
 
         // 添加到活跃动物集合
         _activeAnimals.Add(animal);
-
-        TriggerAnimalGenerated(new AnimalGeneratedEventArgs
-        {
-            Animal = animal,
-            SpecieData = specieData,
-            Position = position,
-            Direction = direction,
-        });
-
         return animal;
     }
 
@@ -204,14 +195,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     {
         _animalsToRemove.Add(args.Animal);
         _gameObjectPoolManager.Despawn(args.Animal.gameObject);
-    }
-
-    /// <summary>
-    /// 触发动物生成完成事件
-    /// </summary>
-    private void TriggerAnimalGenerated(AnimalGeneratedEventArgs args)
-    {
-        _eventManager.Trigger(AnimalEvents.AnimalGenerated, args);
     }
     #endregion
 }
