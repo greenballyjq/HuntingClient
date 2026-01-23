@@ -27,12 +27,12 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// 资源加载管理器
     /// </summary>
     private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-
+    
     /// <summary>
     /// 追踪所有活跃的动物
     /// </summary>
     private readonly HashSet<BaseAnimalBehaviour> _activeAnimals = new HashSet<BaseAnimalBehaviour>();
-    
+
     /// <summary>
     /// 待移除的动物列表
     /// </summary>
@@ -131,7 +131,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// 是否还有活跃的动物
     /// </summary>
     /// <returns></returns>
-    public bool HasActiveAnimal() => _activeAnimals.Count > 0;
+    public bool HasActiveAnimal() => GetActiveAnimalCount() > 0;
     
     /// <summary>
     /// 获取活跃动物数量
@@ -148,10 +148,12 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     public List<BaseAnimalBehaviour> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
     {
         if (animalCount <= 0) return null;
-        if (_activeAnimals.Count <= 0) return null;
+        
+        var validAnimals = _activeAnimals.Except(_animalsToRemove).ToList();
+        if (validAnimals.Count <= 0) return null;
 
-        animalCount = Math.Min(_activeAnimals.Count, animalCount);
-        return _activeAnimals
+        animalCount = Math.Min(validAnimals.Count, animalCount);
+        return validAnimals
             .OrderBy(animal => Vector3.SqrMagnitude(animal.transform.position - position))
             .Take(animalCount)
             .ToList();
@@ -166,10 +168,10 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void RecycleAllAnimals()
     {
         foreach (var animal in _activeAnimals)
-            if (animal != null && animal.gameObject != null)
-                _gameObjectPoolManager.Despawn(animal.gameObject);
+            _gameObjectPoolManager.Despawn(animal.gameObject);
                 
         _activeAnimals.Clear();
+        _animalsToRemove.Clear();
     }
 
     private void RemoveAndRecycleAnimal(BaseAnimalBehaviour animal)
@@ -188,6 +190,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void RegisterEvents()
     {
+        _eventManager.AddListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
         _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
         _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
         _eventManager.AddListener(AnimalEvents.AnimalFled, OnAnimalFled);
@@ -199,6 +202,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void UnregisterEvents()
     {
+        _eventManager.RemoveListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
         _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
         _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
         _eventManager.RemoveListener(AnimalEvents.AnimalFled, OnAnimalFled);
@@ -206,12 +210,20 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     }
 
     /// <summary>
+    /// 动物生成事件回调
+    /// </summary>
+    private void OnAnimalGenerated(AnimalGeneratedEventArgs args)
+    {
+        _activeAnimals.Add(args.Animal);
+    }
+
+    /// <summary>
     /// 动物死亡事件回调
     /// </summary>
     private void OnAnimalDied(AnimalDiedEventArgs args)
     {
+        _gameObjectPoolManager.Despawn(args.Animal.gameObject);
         _animalsToRemove.Add(args.Animal);
-        // _gameObjectPoolManager.Despawn(args.Animal.gameObject);
     }
     
     /// <summary>
@@ -229,8 +241,8 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnAnimalFled(AnimalFledEventArgs args)
     {
+        _gameObjectPoolManager.Despawn(args.Animal.gameObject);
         _animalsToRemove.Add(args.Animal);
-        // _gameObjectPoolManager.Despawn(args.Animal.gameObject);
     }
     
     /// <summary>
@@ -238,8 +250,8 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnAnimalReachedWall(AnimalReachedWallEventArgs args)
     {
+        _gameObjectPoolManager.Despawn(args.Animal.gameObject);
         _animalsToRemove.Add(args.Animal);
-        // _gameObjectPoolManager.Despawn(args.Animal.gameObject);
     }
     #endregion
 }
