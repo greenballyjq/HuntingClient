@@ -29,7 +29,7 @@ namespace CoreGameLogic.Game.Round.Boss.States
 
             _calledAnimals?.ForEach(animal =>
             {
-                if (animal.Moveable.MovePolicy is GuardMovePolicy) return;
+                // if (animal.Moveable.MovePolicy is GuardMovePolicy) return;
                 animal.Moveable.ChangeMovePolicy(MovePolicyType.Guard);
                 // bossAnimalBehaviour.CalledGuardCount++;
             });

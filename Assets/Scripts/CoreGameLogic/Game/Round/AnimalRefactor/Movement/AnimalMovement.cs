@@ -5,7 +5,7 @@ namespace Hunting.Game.Animal
     /// <summary>
     /// 线性移动组件
     /// </summary>
-    public class LinearMovement : MonoBehaviour, IMoveable
+    public class AnimalMovement : MonoBehaviour, IMoveable
     {
         [SerializeField] private MovePolicyType currentMovePolicyType;
         
@@ -34,11 +34,6 @@ namespace Hunting.Game.Animal
         /// </summary>
         private bool _isMoving;
         
-        // /// <summary>
-        // /// 移动策略
-        // /// </summary>
-        // private IMovePolicy _movePolicy;
-        
         private Transform _guardTargetTransform;
 
         /// <summary>
@@ -61,7 +56,7 @@ namespace Hunting.Game.Animal
         /// </summary>
         public Vector3 CurrentMoveDirection => _currentMoveDirection;
 
-        public IMovePolicy MovePolicy { get; private set; } = new LinearMovePolicy();
+        // public IMovePolicy MovePolicy { get; private set; } = new LinearMovePolicy();
 
         /// <summary>
         /// 是否正在移动
@@ -120,16 +115,14 @@ namespace Hunting.Game.Animal
                     var angle = Vector3.SignedAngle(_guardTargetTransform.right, transform.position - _guardTargetTransform.position, Vector3.up);
                     if (angle > 0f)
                     {
-                        _currentMoveDirection = Vector3.right;
+                        _currentMoveDirection = Vector3.left;
                     }
                     else
                     {
-                        _currentMoveDirection = Vector3.left;
+                        _currentMoveDirection = Vector3.right;
                     }
                 }
             }
-            
-            // MovePolicy.DoMove(transform, dt);
         }
         
         /// <summary>
@@ -139,7 +132,7 @@ namespace Hunting.Game.Animal
         public void SetSpeed(float speed)
         {
             _baseSpeed = speed;
-            MovePolicy.BaseSpeed = speed;
+            // MovePolicy.BaseSpeed = speed;
         }
         
         /// <summary>
@@ -149,7 +142,7 @@ namespace Hunting.Game.Animal
         public void SetMoveRate(float rate)
         {
             _moveRate = rate;
-            MovePolicy.MoveRate = rate;
+            // MovePolicy.MoveRate = rate;
         }
         
         /// <summary>
@@ -165,7 +158,7 @@ namespace Hunting.Game.Animal
             }
             
             _currentTargetDirection = direction.normalized;
-            MovePolicy.TargetDirection = _currentTargetDirection;
+            // MovePolicy.TargetDirection = _currentTargetDirection;
         }
         
         /// <summary>
@@ -196,7 +189,7 @@ namespace Hunting.Game.Animal
             switch (policyType)
             {
                 case MovePolicyType.Linear:
-                    MovePolicy = new LinearMovePolicy(_baseSpeed, _moveRate);
+                    // MovePolicy = new LinearMovePolicy(_baseSpeed, _moveRate);
                     Debug.Log("[LinearMovement] 切换到线性策略");
                     break;
                 case MovePolicyType.Guard:
@@ -205,7 +198,7 @@ namespace Hunting.Game.Animal
                     {
                         Debug.LogError("[GuardMovePolicy] Could not find BossAnimalBehaviour");
                     }
-                    MovePolicy = new GuardMovePolicy(_baseSpeed, _moveRate);
+                    // MovePolicy = new GuardMovePolicy(_baseSpeed, _moveRate);
                     Debug.Log("[LinearMovement] 切换到守卫策略");
                     break;
             }

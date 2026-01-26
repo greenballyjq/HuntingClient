@@ -84,7 +84,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
         var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
         var animal = go.GetComponent<BaseAnimalBehaviour>();
         go.transform.position = position;
-        go.AddComponent<LinearMovement>();
+        // go.AddComponent<AnimalMovement>();
 
         animal.Init(specieData);
         animal.GetComponent<IMoveable>().SetDirection(direction);
