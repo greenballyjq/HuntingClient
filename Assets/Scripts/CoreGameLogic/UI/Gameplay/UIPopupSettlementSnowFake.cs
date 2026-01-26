@@ -45,7 +45,7 @@ public class UIPopupSettlementSnowFake : UIBase
         /// <summary>
         /// 是否不受TimeScale影响
         /// </summary>
-        public bool UseUnscaledTime = true;
+        public bool UseUnscaledTime;
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public class UIPopupSettlementSnowFake : UIBase
         /// <summary>
         /// 是否不受TimeScale影响
         /// </summary>
-        public bool UseUnscaledTime = true;
+        public bool UseUnscaledTime;
     }
 
     /// <summary>
@@ -142,8 +142,6 @@ public class UIPopupSettlementSnowFake : UIBase
         _eventManager.AddListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
 
         _originAnchoredPos = _windowRectTransform.anchoredPosition;
-
-        _settlementRewardManager.CalculateReward();
     }
 
     public override void OnClose()

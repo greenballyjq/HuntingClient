@@ -33,6 +33,13 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
         _stateMachine.EnterTempState(_bossCallGuardState);
     }
 
+    protected override void OnDamaged()
+    {
+        base.OnDamaged();
+
+        (AnimalEventTrigger as  BossAnimalEventTrigger).TriggerBossDamaged(Health.MaxHealth, Health.CurrentHealth);
+    }
+
     protected override void OnDeath()
     {
         _stateMachine.ChangeState(_bossDeathState);

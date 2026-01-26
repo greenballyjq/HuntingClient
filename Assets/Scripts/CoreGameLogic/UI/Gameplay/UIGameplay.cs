@@ -1,4 +1,5 @@
-﻿using GameFramework.Core.UI;
+﻿using Cysharp.Threading.Tasks;
+using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,49 +14,124 @@ public class UIGameplay : UIBase
     [SerializeField] private UIComponentButtonReturnOrSettlement _uiComponentReturnOrSettlement;
 
     /// <summary>
+    /// 动物计数器组件
+    /// </summary>
+    [SerializeField] private UIComponentAnimalCounter _uiComponentAnimalCounter;
+
+    /// <summary>
+    /// Boss血量组件
+    /// </summary>
+    [SerializeField] private UIComponentBossHealth _uiComponentBossHealth;
+
+    /// <summary>
+    /// 时间显示组件
+    /// </summary>
+    [SerializeField] private UIComponentTime _uiComponentTime;
+
+    /// <summary>
     /// 肉度条组件
     /// </summary>
     [SerializeField] private UIComponentMeatProgress _uiComponentMeatProgress;
 
     /// <summary>
-    /// 能量条组件
+    /// 技能组件
     /// </summary>
     [SerializeField] private UIComponentSkill _uiComponentSkill;
 
     /// <summary>
-    /// 子弹状态组件
+    /// 子弹组件
     /// </summary>
-    [SerializeField] private UIComponentBullet _uiComponentBulletStatus;
+    [SerializeField] private UIComponentBullet _uiComponentBullet;
 
     /// <summary>
     /// 道具组组件
     /// </summary>
     [SerializeField] private UIComponentPropGroup _uiComponentPropGroup;
-    
+
     /// <summary>
-    /// 动态任务组件
+    /// 背景图像
     /// </summary>
-    //[SerializeField] private UIComponentQuest uiComponentQuest;
+    [SerializeField] private Image _imageBackground;
+
+    /// <summary>
+    /// 雪山背景精灵图
+    /// </summary>
+    [SerializeField] private Sprite _snowBackgroundSprite;
+
+    /// <summary>
+    /// 画布组
+    /// </summary>
+    private CanvasGroup _canvasGroup;
+
+    private void Awake()
+    {
+        _canvasGroup = GetComponent<CanvasGroup>();
+    }
 
     public override void OnInit(object userData)
     {
         base.OnInit(userData);
+        _uiComponentReturnOrSettlement.Init();
+
+        _uiComponentAnimalCounter.Init();
+        _uiComponentAnimalCounter.gameObject.SetActive(true);
+
+        _uiComponentTime.Init();
         _uiComponentMeatProgress.Init();
         _uiComponentSkill.Init();
-        _uiComponentBulletStatus.Init();
+        _uiComponentBullet.Init();
         _uiComponentPropGroup.Init();
-        _uiComponentReturnOrSettlement.Init();
+        
         //uiComponentQuest.Init();
     }
 
     public override void OnClose()
     {
-        _uiComponentPropGroup.CleanUp();
-        _uiComponentBulletStatus.CleanUp();
-        _uiComponentSkill.CleanUp();
-        _uiComponentMeatProgress.CleanUp();
         _uiComponentReturnOrSettlement.CleanUp();
+        _uiComponentAnimalCounter.CleanUp();
+        _uiComponentBossHealth.CleanUp();
+        _uiComponentTime.CleanUp();
+        _uiComponentMeatProgress.CleanUp();
+        _uiComponentSkill.CleanUp();
+        _uiComponentBullet.CleanUp();
+        _uiComponentPropGroup.CleanUp();
+
         //uiComponentQuest.CleanUp();
+
         base.OnClose();
     }
+
+    #region 公共方法
+    /// <summary>
+    /// 切换到雪山背景
+    /// </summary>
+    public void SwitchSnow()
+    {
+        _imageBackground.sprite = _snowBackgroundSprite;
+
+        _uiComponentAnimalCounter.CleanUp();
+        _uiComponentAnimalCounter.gameObject.SetActive(false);
+
+        _uiComponentReturnOrSettlement.gameObject.SetActive(false);
+
+        _uiComponentBossHealth.Init();
+        _uiComponentBossHealth.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// 播放Boss血量增长动画
+    /// </summary>
+    public async UniTask PlayBossHealthIncreaseAnimationAsync()
+    {
+        await _uiComponentBossHealth.PlayBossHealthIncreaseAnimationAsync();
+    }
+
+    /// <summary>
+    /// 设置射线检测
+    /// </summary>
+    public void SetRaycast(bool enable)
+    {
+        _canvasGroup.blocksRaycasts = enable;
+    }
+    #endregion
 }

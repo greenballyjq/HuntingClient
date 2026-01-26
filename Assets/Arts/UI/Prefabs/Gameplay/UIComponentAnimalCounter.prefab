@@ -160,7 +160,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -68.696846}
+  m_AnchoredPosition: {x: 0, y: -69}
   m_SizeDelta: {x: 935, y: 52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2237004724257476702
@@ -213,6 +213,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIComponentAnimalCounterItem
       objectReference: {fileID: 0}
+    - target: {fileID: 5755274464707725210, guid: a6a7a7f80ca685548b5571e1172758fa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8942241362068721165, guid: a6a7a7f80ca685548b5571e1172758fa, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -243,7 +247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8942241362068721165, guid: a6a7a7f80ca685548b5571e1172758fa, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 127.2
+      value: 127
       objectReference: {fileID: 0}
     - target: {fileID: 8942241362068721165, guid: a6a7a7f80ca685548b5571e1172758fa, type: 3}
       propertyPath: m_LocalPosition.x
@@ -275,11 +279,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8942241362068721165, guid: a6a7a7f80ca685548b5571e1172758fa, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -387.982
+      value: -388
       objectReference: {fileID: 0}
     - target: {fileID: 8942241362068721165, guid: a6a7a7f80ca685548b5571e1172758fa, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8942241362068721165, guid: a6a7a7f80ca685548b5571e1172758fa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

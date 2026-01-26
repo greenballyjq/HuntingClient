@@ -3,6 +3,7 @@ using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -117,6 +118,20 @@ public class UIPrepare : UIBase
         _eventManager.RemoveListener(LuckyEvents.GiftOpened, OnGiftOpened);
 
         base.OnClose();
+    }
+
+    /// <summary>
+    /// 预加载所有资源
+    /// </summary>
+    public async UniTask PreloadResourcesAsync()
+    {
+        var preloaders = GetComponentsInChildren<IResourcePreloader>(true);
+        
+        var tasks = new List<UniTask>();
+        foreach (var preloader in preloaders)
+            tasks.Add(preloader.PreloadAsync());
+        
+        await UniTask.WhenAll(tasks);
     }
 
     #region 事件相关

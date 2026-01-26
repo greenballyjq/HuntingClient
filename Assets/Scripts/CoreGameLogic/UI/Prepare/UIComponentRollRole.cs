@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 随机角色组件
 /// </summary>
-public class UIComponentRollRole : MonoBehaviour, IUIComponent
+public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreloader
 {
     /// <summary>
     /// 角色格子列表
@@ -70,24 +70,14 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
         _buttonStartRoll.onClick.RemoveListener(OnDiceButtonClicked);
     }
 
-    public async void Init()
-    {
-        // TODO: 之后换到特定的位置预加载
-        await LoadAllRoleImagesAsync();
+    public void Init(){}
 
-        InitializeRoleSlots();
-    }
+    public void CleanUp(){}
 
-    public void CleanUp()
-    {
-
-    }
-
-    #region 私有方法
     /// <summary>
-    /// 异步加载所有角色图片
+    /// 预加载资源
     /// </summary>
-    private async UniTask LoadAllRoleImagesAsync()
+    public async UniTask PreloadAsync()
     {
         var allRoles = _configManager.RoleTable.DataList;
         foreach (var role in allRoles)
@@ -95,8 +85,11 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
             var sprite = await _resourceManager.LoadAssetAsync<Sprite>(role.RoleImageResourcePath);
             _roleSprites[role.ID] = sprite;
         }
+
+        InitializeRoleSlots();
     }
 
+    #region 私有方法
     /// <summary>
     /// 初始化角色格子
     /// </summary>
@@ -136,7 +129,6 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
         _diceValue = Random.Range(1, 7);
         int fromSlotIndex = _currentSlotIndex;
 
-        // 统一规则：场外(-1) 只是比 0 小 1，向前走 diceValue 步
         _targetSlotIndex = (_currentSlotIndex + _diceValue) % _roleSlots.Length;
         if (_targetSlotIndex < 0)
         {

@@ -4,6 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 雪山胜利结算弹窗
+/// </summary>
+
 public class UIPopupSettlementSnowVictory : UIBase
 {
     /// <summary>
@@ -17,9 +21,9 @@ public class UIPopupSettlementSnowVictory : UIBase
     [SerializeField] private TextMeshProUGUI _textPoint;
 
     /// <summary>
-    /// 确认按钮
+    /// 结算按钮
     /// </summary>
-    [SerializeField] private Button _buttonConfirm;
+    [SerializeField] private Button _buttonSettlement;
     
     /// <summary>
     /// 分享按钮
@@ -27,7 +31,7 @@ public class UIPopupSettlementSnowVictory : UIBase
     [SerializeField] private Button _buttonShare;
     
     /// <summary>
-    /// 掷骰子按钮
+    /// 骰子按钮
     /// </summary>
     [SerializeField] private Button _buttonDice;
 
@@ -40,64 +44,68 @@ public class UIPopupSettlementSnowVictory : UIBase
     /// 骰子动画父物体
     /// </summary>
     [SerializeField] private Transform _diceParent;
-    
+
+    /// <summary>
+    /// 事件管理器
+    /// </summary>
+    private EventManager _eventManager => GameServiceLocator.EventManager;
+
     private int _totalCoin;
     private int _totalMastery;
-
     private Transform _diceTransform;
 
     private void Awake()
     {
-        _buttonConfirm.onClick.AddListener(OnSettleAndReturnButtonClick);
-        _buttonShare.onClick.AddListener(OnShareButtonClick);
-        _buttonDice.onClick.AddListener(OnDiceButtonClick);
+        _buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
+        _buttonShare.onClick.AddListener(OnShareButtonClicked);
+        _buttonDice.onClick.AddListener(OnDiceButtonClicked);
     }
 
     private void OnDestroy()
     {
-        _buttonConfirm.onClick.RemoveListener(OnSettleAndReturnButtonClick);
-        _buttonShare.onClick.RemoveListener(OnShareButtonClick);
-        _buttonDice.onClick.RemoveListener(OnDiceButtonClick);
+        _buttonSettlement.onClick.RemoveListener(OnSettlementButtonClicked);
+        _buttonShare.onClick.RemoveListener(OnShareButtonClicked);
+        _buttonDice.onClick.RemoveListener(OnDiceButtonClicked);
     }
 
     public override void OnInit(object userData)
     {
         base.OnInit(userData);
-        var settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementRewardManager>();
-        settlementRewardManager.CalculateReward();
-        var eventManager = GameServiceLocator.EventManager;
-        eventManager.AddListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
+        _eventManager.AddListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
     }
 
     public override void OnClose()
     {
         base.OnClose();
-        var eventManager = GameServiceLocator.EventManager;
-        eventManager.RemoveListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
+        _eventManager.RemoveListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
     }
 
-    private void OnSettlementCalculated(SettlementCalculatedEventArgs obj)
+    #region 事件相关
+    /// <summary>
+    /// 结算按钮点击事件回调
+    /// </summary>
+    private void OnSettlementButtonClicked()
     {
-        _totalCoin = obj.TotalCoin;
-        _totalMastery = obj.TotalMastery;
-        _textThreeKPCoin.text = obj.TotalCoin.ToString();
-        _textPoint.text = obj.TotalMastery.ToString();
-    }
+        Close();
 
-    private void OnSettleAndReturnButtonClick()
-    {
         HuntingAppFlow.Instance.EnterPrepareAsync().Forget();
     }
 
-    private void OnShareButtonClick()
+    /// <summary>
+    /// 分享按钮点击事件回调
+    /// </summary>
+    private void OnShareButtonClicked()
     {
         // TODO: 分享
     }
-    
-    private async void OnDiceButtonClick()
+
+    /// <summary>
+    /// 骰子按钮点击事件回调
+    /// </summary>
+    private async void OnDiceButtonClicked()
     {
         // 掷骰子动画
-        int point = UnityEngine.Random.Range(0, 7);
+        int point = Random.Range(1, 7);
         if (!_diceTransform)
         {
             _diceTransform = Instantiate(_dicePrefab, _diceParent);
@@ -107,4 +115,17 @@ public class UIPopupSettlementSnowVictory : UIBase
         _textThreeKPCoin.text = (point * _totalCoin).ToString();
         _textPoint.text = (point * _totalMastery).ToString();
     }
+
+    /// <summary>
+    /// 结算计算完成事件回调
+    /// </summary>
+    private void OnSettlementCalculated(SettlementCalculatedEventArgs obj)
+    {
+        _totalCoin = obj.TotalCoin;
+        _totalMastery = obj.TotalMastery;
+        _textThreeKPCoin.text = obj.TotalCoin.ToString();
+        _textPoint.text = obj.TotalMastery.ToString();
+    }
+
+    #endregion
 }

@@ -47,6 +47,11 @@ namespace Hunting.Game.Animal
         /// </summary>
         private float _spawnIntervalTimer;
 
+        private void Awake()
+        {
+            _remainingSpawnCount = spawnCount;
+        }
+
         /// <summary>
         /// 设置启用状态
         /// </summary>

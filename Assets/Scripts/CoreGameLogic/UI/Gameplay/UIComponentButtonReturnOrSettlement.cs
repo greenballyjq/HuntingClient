@@ -32,7 +32,12 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     /// <summary>
     /// 结算管理器
     /// </summary>
-    private SettlementRewardManager _settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementRewardManager>();
+    private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
+
+    /// <summary>
+    /// 单局流程
+    /// </summary>
+    private RoundFlow _roundFlow => RoundFlow.Instance;
 
     /// <summary>
     /// 是否为结算模式
@@ -77,7 +82,7 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     {
         _eventManager.RemoveListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
         _eventManager.RemoveListener(MeatEvents.MeatScaleFull, OnMeatScaleFull);
-        _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
+        _eventManager.RemoveListener(RoundEvents.RoundEntered, OnRoundEntered);
 
         Debug.Log("[UIComponentReturnOrSettlement] 已清理");
     }
@@ -101,7 +106,7 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 单局开始事件回调
+    /// 进入单局事件回调
     /// </summary>
     private void OnRoundEntered(RoundEnteredEventArgs args)
     {
@@ -113,9 +118,9 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     /// </summary>
     private async void OnReturnOrSettlementButtonClicked()
     {
-        RoundFlow.Instance.StartSettlement();
         if (_isSettlementMode)
         {
+            _roundFlow.StartSettlement();
             if (_isMeatScaleFull && _hasHiddenMap)
                 await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
             else
@@ -125,16 +130,15 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
         }
         else
         {
+            // 临时测试代码
+            _roundFlow.StartSettlement();
             await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-            // TODO: 将来可能正式化
-            //    _uiManager.CloseUI("UIGameplay");
-            //    await HuntingAppFlow.Instance.EnterPrepareAsync();
-            //    SceneManager.LoadSceneAsync("PrepareScene").completed += async (ao) =>
-            //    {
-            //        await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
-            //    };
-            //}
+            _settlementRewardManager.CalculateReward();
+            
+
+            // 正式代码
+            // await HuntingAppFlow.Instance.EnterPrepareAsync();
         }
-        #endregion
     }
+    #endregion
 }

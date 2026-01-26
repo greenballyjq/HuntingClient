@@ -44,6 +44,11 @@ public static class AnimalEvents
     /// 动物到达边界事件
     /// </summary>
     public static readonly EventKey<AnimalReachedWallEventArgs> AnimalReachedWall = new EventKey<AnimalReachedWallEventArgs>();
+
+    /// <summary>
+    /// Boss受伤事件
+    /// </summary>
+    public static readonly EventKey<BossDamagedEventArgs> BossDamaged = new EventKey<BossDamagedEventArgs>();
 }
 
 /// <summary>
@@ -141,4 +146,20 @@ public sealed class AnimalReachedWallEventArgs : EventArgs
     /// 到达边界的动物实例
     /// </summary>
     public BaseAnimalBehaviour Animal { get; set; }
+}
+
+/// <summary>
+/// Boss受伤事件参数
+/// </summary>
+public sealed class BossDamagedEventArgs : EventArgs
+{
+    /// <summary>
+    /// 最大血量
+    /// </summary>
+    public float MaxHealth { get; set; }
+
+    /// <summary>
+    /// 当前血量
+    /// </summary>
+    public float CurrentHealth { get; set; }
 }

@@ -185,7 +185,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -63, y: 453}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 935, y: 53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &499845582386351924
@@ -200,3 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8789a49694b1d6745a565d0a5479ff4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _imageBossHealthBar: {fileID: 1656225045413158186}
+  _animationConfig:
+    Duration: 2
+    UseUnscaledTime: 0

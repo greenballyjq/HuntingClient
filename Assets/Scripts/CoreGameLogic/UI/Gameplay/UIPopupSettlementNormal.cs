@@ -1,4 +1,5 @@
-﻿using GameFramework.Core.UI;
+﻿using Cysharp.Threading.Tasks;
+using GameFramework.Core.UI;
 using GameFramework.Manager;
 using TMPro;
 using UnityEngine;
@@ -11,17 +12,17 @@ using UnityEngine.UI;
 public class UIPopupSettlementNormal : UIBase
 {
     /// <summary>
-    /// 金币文本
+    /// 三千盘金币文本
     /// </summary>
-    [SerializeField] private TextMeshProUGUI textCoin;
+    [SerializeField] private TextMeshProUGUI textThreeKPCoin;
 
     /// <summary>
-    /// 熟练度文本
+    /// 积分文本
     /// </summary>
-    [SerializeField] private TextMeshProUGUI textMastery;
+    [SerializeField] private TextMeshProUGUI textPoint;
 
     /// <summary>
-    /// 普通结算按钮
+    /// 结算按钮
     /// </summary>
     [SerializeField] private Button buttonSettlement;
 
@@ -31,32 +32,25 @@ public class UIPopupSettlementNormal : UIBase
     [SerializeField] private Button buttonDoubleSettlement;
 
     /// <summary>
-    /// 结算管理器
-    /// </summary>
-    private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
-
-    /// <summary>
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
-    /// UI管理器
+    /// 结算管理器
     /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
-
-    private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
+    private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
 
     private void Awake()
     {
-        buttonSettlement.onClick.AddListener(OnClickSettlement);
-        buttonDoubleSettlement.onClick.AddListener(OnClickDoubleSettlement);
+        buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
+        buttonDoubleSettlement.onClick.AddListener(OnDoubleSettlementClicked);
     }
 
     private void OnDestroy()
     {
-        buttonSettlement.onClick.RemoveListener(OnClickSettlement);
-        buttonDoubleSettlement.onClick.RemoveListener(OnClickDoubleSettlement);
+        buttonSettlement.onClick.RemoveListener(OnSettlementButtonClicked);
+        buttonDoubleSettlement.onClick.RemoveListener(OnDoubleSettlementClicked);
     }
 
     public override void OnInit(object userData)
@@ -73,26 +67,19 @@ public class UIPopupSettlementNormal : UIBase
 
     #region 事件相关
     /// <summary>
-    /// 普通结算按钮回调
+    /// 结算按钮点击事件回调
     /// </summary>
-    private async void OnClickSettlement()
+    private void OnSettlementButtonClicked()
     {
         Close();
 
-        //TODO : 测试代码，正式版本需要移除
-        _uiManager.CloseUI("UIGameplay");
-        await HuntingAppFlow.Instance.EnterPrepareAsync();
-        _gameObjectPoolManager.ClearAllPools();
-        SceneManager.LoadSceneAsync("PrepareScene").completed += async (ao) =>
-        {
-            await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
-        };
+        HuntingAppFlow.Instance.EnterPrepareAsync().Forget();        
     }
 
     /// <summary>
-    /// 翻倍结算按钮回调
+    /// 翻倍结算按钮点击事件回调
     /// </summary>
-    private void OnClickDoubleSettlement()
+    private void OnDoubleSettlementClicked()
     {
         _settlementRewardManager.SetRewardDouble();
         buttonDoubleSettlement.gameObject.SetActive(false);
@@ -103,9 +90,8 @@ public class UIPopupSettlementNormal : UIBase
     /// </summary>
     private void OnSettlementCalculated(SettlementCalculatedEventArgs args)
     {
-        // 更新界面上的金币与熟练度
-        textCoin.text = args.TotalCoin.ToString();
-        textMastery.text = args.TotalMastery.ToString();
+        textThreeKPCoin.text = args.TotalCoin.ToString();
+        textPoint.text = args.TotalMastery.ToString();
     }
     #endregion
 }

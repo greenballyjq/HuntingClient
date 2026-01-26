@@ -211,7 +211,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 115
+  m_SortingOrder: 111
   m_SortAtRoot: 0
 --- !u!114 &1736593415956284350
 MonoBehaviour:

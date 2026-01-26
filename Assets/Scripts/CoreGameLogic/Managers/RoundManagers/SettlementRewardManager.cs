@@ -8,27 +8,27 @@ using UnityEngine;
 public class SettlementRewardManager : IRoundManager
 {
     /// <summary>
-    /// 本局完成的肉度条数量
+    /// 完成的肉条刻度
     /// </summary>
-    private int _completedMeatBars;
+    private int _completedMeatScale;
 
     /// <summary>
-    /// 肉度条奖励熟练度
+    /// 肉条积分奖励
     /// </summary>
-    private int _proficiencyFromMeat;
+    private int _pointReward;
 
     /// <summary>
-    /// 肉度条奖励金币
+    /// 肉条奖励金币
     /// </summary>
     private int _coinFromMeat;
 
     /// <summary>
-    /// 金币物种掉落累计金币
+    /// 物种掉落金币
     /// </summary>
     private int _coinFromSpecie;
 
     /// <summary>
-    /// 动态任务累计金币
+    /// 任务奖励金币
     /// </summary>
     private int _coinFromQuest;
 
@@ -70,7 +70,7 @@ public class SettlementRewardManager : IRoundManager
     /// </summary>
     public void SetRewardMultiplier(float multiplier)
     {
-        _extraMultiplier = Mathf.Max(1f, multiplier);
+        _extraMultiplier = multiplier;
     }
 
     /// <summary>
@@ -82,9 +82,9 @@ public class SettlementRewardManager : IRoundManager
         TriggerSettlementCalculated(new SettlementCalculatedEventArgs
         {
             Sender = this,
-            CompletedMeatBars = _completedMeatBars,
+            CompletedMeatBars = _completedMeatScale,
             BaseCoin = _coinFromMeat,
-            BaseMastery = _proficiencyFromMeat,
+            BaseMastery = _pointReward,
             CoinFromSpecie = _coinFromSpecie,
             CoinFromQuest = _coinFromQuest,
             ExtraMultiplier = _extraMultiplier,
@@ -109,9 +109,9 @@ public class SettlementRewardManager : IRoundManager
         TriggerSettlementCalculated(new SettlementCalculatedEventArgs
         {
             Sender = this,
-            CompletedMeatBars = _completedMeatBars,
+            CompletedMeatBars = _completedMeatScale,
             BaseCoin = _coinFromMeat,
-            BaseMastery = _proficiencyFromMeat,
+            BaseMastery = _pointReward,
             CoinFromSpecie = _coinFromSpecie,
             CoinFromQuest = _coinFromQuest,
             ExtraMultiplier = _extraMultiplier,
@@ -128,16 +128,16 @@ public class SettlementRewardManager : IRoundManager
     /// </summary>
     private void CalculateBaseReward()
     {
-        var reward = _configManager.GetMeatProgressReward(_completedMeatBars);
+        var reward = _configManager.GetMeatProgressReward(_completedMeatScale);
         if (reward == null)
         {
             _coinFromMeat = 0;
-            _proficiencyFromMeat = 0;
+            _pointReward = 0;
             return;
         }
         
         _coinFromMeat = reward.ThreeKPCoin;
-        _proficiencyFromMeat = reward.Point;
+        _pointReward = reward.Point;
     }
 
     /// <summary>
@@ -158,7 +158,7 @@ public class SettlementRewardManager : IRoundManager
     /// </summary>
     private int GetTotalMastery()
     {
-        int total = _proficiencyFromMeat;
+        int total = _pointReward;
         total = Mathf.RoundToInt(total * _extraMultiplier);
         if (_isDoubleApplied)
             total *= 2;
@@ -174,7 +174,7 @@ public class SettlementRewardManager : IRoundManager
     private void RegisterEvents()
     {
         _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        //_eventManager.AddListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
+        _eventManager.AddListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
         _eventManager.AddListener(QuestEvents.QuestCompleted, OnQuestCompleted);
     }
 
@@ -184,7 +184,7 @@ public class SettlementRewardManager : IRoundManager
     private void UnregisterEvents()
     {
         _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        //_eventManager.RemoveListener(MeatEvents.MeatBarCountChanged, OnMeatBarCountChanged);
+        _eventManager.RemoveListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
         _eventManager.RemoveListener(QuestEvents.QuestCompleted, OnQuestCompleted);
     }
 
@@ -193,28 +193,22 @@ public class SettlementRewardManager : IRoundManager
     /// </summary>
     private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
     {
-        if (!args.DropRewards.TryGetValue(EDropType.ThreeKPCoin, out var coinAmount) || coinAmount < 0)
-            return;
-
-        _coinFromSpecie += coinAmount;
+        _coinFromSpecie += args.DropRewards[EDropType.ThreeKPCoin];
     }
 
     /// <summary>
     /// 肉度条数量变化回调
     /// </summary>
-    //private void OnMeatBarCountChanged(MeatBarCountChangedEventArgs args)
-    //{
-    //    _completedMeatBars = Mathf.Max(0, args.CurrentBars);
-    //}
+    private void OnMeatScaleCompleted(MeatScaleCompletedEventArgs args)
+    {
+        _completedMeatScale = Mathf.Max(0, args.CompletedScaleCount);
+    }
 
     /// <summary>
     /// 任务完成回调
     /// </summary>
     private void OnQuestCompleted(QuestCompletedEventArgs args)
     {
-        if (args.RewardCoin <= 0)
-            return;
-
         _coinFromQuest += args.RewardCoin;
     }
 

@@ -25,7 +25,7 @@ namespace CoreGameLogic.Game.Round.Boss.States
             //     return;
             // }
             
-            _calledAnimals = _animalManager.GetCloseAnimalsFromTargetPosition(animalBehavior.transform.position, 5);
+            _calledAnimals = _animalManager.GetCloseAnimalsFromTargetPosition(animalBehavior.transform.position, 20);
 
             _calledAnimals?.ForEach(animal =>
             {

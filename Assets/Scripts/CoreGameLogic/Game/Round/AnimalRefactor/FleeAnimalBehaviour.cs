@@ -32,6 +32,7 @@ namespace Hunting.Game.Animal
         {
             _stayTime = data.StayTime;
             _stayTimer = 0f;
+            _stayFinished = false;
 
             FleeState = new AnimalFleeState(_stateMachine, this);
 

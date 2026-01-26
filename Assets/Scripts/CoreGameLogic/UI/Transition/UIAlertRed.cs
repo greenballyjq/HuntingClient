@@ -33,7 +33,7 @@ public class UIAlertRed : UIBase
         /// <summary>
         /// 是否不受TimeScale影响
         /// </summary>
-        public bool UseUnscaledTime = true;
+        public bool UseUnscaledTime;
     }
 
     /// <summary>

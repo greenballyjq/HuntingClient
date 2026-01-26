@@ -17,5 +17,19 @@
                 Boss = _bossAnimalBehaviour
             });
         }
+
+        /// <summary>
+        /// 触发Boss受伤事件
+        /// </summary>
+        /// <param name="maxHealth">最大血量</param>
+        /// <param name="currentHealth">当前血量</param>
+        public void TriggerBossDamaged(float maxHealth, float currentHealth)
+        {
+            _eventManager.Trigger(AnimalEvents.BossDamaged, new BossDamagedEventArgs
+            {
+                MaxHealth = maxHealth,
+                CurrentHealth = currentHealth
+            });
+        }
     }
 }
