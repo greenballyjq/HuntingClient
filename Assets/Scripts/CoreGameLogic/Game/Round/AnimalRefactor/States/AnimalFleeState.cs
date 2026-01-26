@@ -24,7 +24,7 @@
             base.Enter();
             animalBehavior.Moveable.SetMoveRate(_fleeSpeedRate);
             
-            animalBehavior.AnimalVisual.PlayFlee();
+            (animalBehavior.AnimalVisual as FleeAnimalVisual).PlayFlee();
         }
 
         public override void DoUpdate(float dt)
@@ -49,7 +49,7 @@
         {
             base.Resume();
             
-            animalBehavior.AnimalVisual.PlayFlee();
+            (animalBehavior.AnimalVisual as FleeAnimalVisual).PlayFlee();
         }
     }
 }

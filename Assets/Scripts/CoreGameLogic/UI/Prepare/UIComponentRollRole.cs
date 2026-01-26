@@ -135,9 +135,13 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
         // 随机骰子点数
         _diceValue = Random.Range(1, 7);
         int fromSlotIndex = _currentSlotIndex;
-        
-        // 计算目标格子索引
-        _targetSlotIndex = _currentSlotIndex == -1 ? _diceValue - 1 : (_currentSlotIndex + _diceValue) % _roleSlots.Length;
+
+        // 统一规则：场外(-1) 只是比 0 小 1，向前走 diceValue 步
+        _targetSlotIndex = (_currentSlotIndex + _diceValue) % _roleSlots.Length;
+        if (_targetSlotIndex < 0)
+        {
+            _targetSlotIndex += _roleSlots.Length;
+        }
 
         // 触发角色选择事件
         TriggerRoleSelected(new RoleSelectedEventArgs
@@ -191,10 +195,6 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     /// <summary>
     /// 计算走格子路径
     /// </summary>
-    /// <param name="fromIndex">起始格子索引（-1表示在场外）</param>
-    /// <param name="stepCount">步数</param>
-    /// <param name="positions">位置序列</param>
-    /// <param name="directions">朝向序列</param>
     private void CalculateWalkPath(int fromIndex, int stepCount, out Vector3[] positions, out bool[] directions)
     {
         List<Vector3> positionList = new List<Vector3>();
@@ -206,7 +206,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
         for (int i = 0; i < stepCount; i++)
         {
             currentIndex = currentIndex == -1 ? 0 : (currentIndex + 1) % totalSlots;
-            
+
             positionList.Add(_roleSlots[currentIndex].GetPosition());
 
             // 5 0 1 朝右,2 3 4 朝左
@@ -219,18 +219,11 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     #endregion
 
     #region 事件相关
-    /// <summary>
-    /// 投骰子按钮点击回调
-    /// </summary>
     private void OnDiceButtonClicked()
     {
         RollDiceAsync().Forget();
     }
 
-    /// <summary>
-    /// 触发角色选中事件
-    /// </summary>
-    /// <param name="args">事件参数</param>
     private void TriggerRoleSelected(RoleSelectedEventArgs args)
     {
         _eventManager.Trigger(PrepareEvents.RoleSelected, args);

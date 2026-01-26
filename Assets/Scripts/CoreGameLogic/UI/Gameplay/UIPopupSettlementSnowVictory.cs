@@ -38,6 +38,8 @@ public class UIPopupSettlementSnowVictory : UIBase
     /// 骰子动画预制体
     /// </summary>
     [SerializeField] private Transform _dicePrefab;
+
+    private UIManager _uiManager => GameServiceLocator.UIManager;
     
     private int _totalCoin;
     private int _totalMastery;
@@ -84,6 +86,8 @@ public class UIPopupSettlementSnowVictory : UIBase
     {
         // TODO: 返回主菜单
         await SceneManager.LoadSceneAsync("PrepareScene").ToUniTask();
+        _uiManager.CloseUI("UIPopupSettlementSnowVictory");
+        _uiManager.CloseUI("UIGameplay");
         HuntingAppFlow.Instance.EnterPrepareAsync().Forget();
     }
 

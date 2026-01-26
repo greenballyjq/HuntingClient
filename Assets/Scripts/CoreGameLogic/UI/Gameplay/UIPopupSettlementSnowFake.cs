@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using System;
 
 /// <summary>
 /// 假结算弹窗
@@ -13,7 +14,7 @@ public class UIPopupSettlementSnowFake : UIBase
     /// <summary>
     /// 窗口抖动配置
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     private class WindowShakeConfig
     {
         /// <summary>
@@ -50,7 +51,7 @@ public class UIPopupSettlementSnowFake : UIBase
     /// <summary>
     /// 按钮发光频闪配置
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     private class ButtonGlowConfig
     {
         /// <summary>
@@ -75,24 +76,29 @@ public class UIPopupSettlementSnowFake : UIBase
     }
 
     /// <summary>
-    /// 金币文本
+    /// 三千盘金币文本
     /// </summary>
-    [SerializeField] private TextMeshProUGUI _textCoin;
+    [SerializeField] private TextMeshProUGUI _textThreeKPCoin;
 
     /// <summary>
-    /// 熟练度文本
+    /// 积分文本
     /// </summary>
-    [SerializeField] private TextMeshProUGUI _textMastery;
+    [SerializeField] private TextMeshProUGUI _textPoint;
 
     /// <summary>
-    /// 按钮图片
+    /// 确认按钮图片
     /// </summary>
-    [SerializeField] private Image _imageEnterHiddenMapButton;
+    [SerializeField] private Image _imageButtonConfirm;
 
     /// <summary>
-    /// 进入隐藏地图按钮
+    /// 确认按钮
     /// </summary>
-    [SerializeField] private Button _buttonEnterHiddenMap;
+    [SerializeField] private Button _buttonConfirm;
+
+    /// <summary>
+    /// 窗口矩形变换
+    /// </summary>
+    [SerializeField] RectTransform _windowRectTransform;
 
     /// <summary>
     /// 抖动配置
@@ -115,34 +121,28 @@ public class UIPopupSettlementSnowFake : UIBase
     private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
 
     /// <summary>
-    /// 窗口矩形变换
-    /// </summary>
-    private RectTransform _rectTransform;
-
-    /// <summary>
     /// 原始锚点位置
     /// </summary>
     private Vector2 _originAnchoredPos;
 
     private void Awake()
     {
-        _rectTransform = GetComponent<RectTransform>();
-        _originAnchoredPos = _rectTransform.anchoredPosition;
-
-        _buttonEnterHiddenMap.onClick.AddListener(OnEnterHiddenMapButtonClick);
+        _buttonConfirm.onClick.AddListener(OnButtonConfirmClicked);
     }
 
     private void OnDestroy()
     {
-        _buttonEnterHiddenMap.onClick.RemoveListener(OnEnterHiddenMapButtonClick);
+        _buttonConfirm.onClick.RemoveListener(OnButtonConfirmClicked);
     }
 
     public override void OnInit(object userData)
     {
         base.OnInit(userData);
+
         _eventManager.AddListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
 
-        // 计算奖励
+        _originAnchoredPos = _windowRectTransform.anchoredPosition;
+
         _settlementRewardManager.CalculateReward();
     }
 
@@ -187,11 +187,11 @@ public class UIPopupSettlementSnowFake : UIBase
 
                 // 计算偏移并设置位置
                 Vector2 offset = new Vector2(nx, ny) * currentStrength;
-                _rectTransform.anchoredPosition = _originAnchoredPos + offset;
+                _windowRectTransform.anchoredPosition = _originAnchoredPos + offset;
             })
             .OnComplete(() =>
             {
-                _rectTransform.anchoredPosition = _originAnchoredPos;
+                _windowRectTransform.anchoredPosition = _originAnchoredPos;
             });
 
         while (shakeTween.IsActive())
@@ -203,17 +203,17 @@ public class UIPopupSettlementSnowFake : UIBase
     /// </summary>
     public async UniTask PlayButtonGlowAsync()
     {
-        Color originColor = _imageEnterHiddenMapButton.color;
+        Color originColor = _imageButtonConfirm.color;
 
         float halfPeriod = 0.5f / _buttonGlowConfig.Frequency;
 
-        Tween glowTween = _imageEnterHiddenMapButton
+        Tween glowTween = _imageButtonConfirm
             .DOColor(_buttonGlowConfig.GlowColor, halfPeriod)
             .SetLoops(Mathf.CeilToInt(_buttonGlowConfig.Duration / halfPeriod), LoopType.Yoyo)
             .SetUpdate(_buttonGlowConfig.UseUnscaledTime)
             .OnComplete(() =>
             {
-                _imageEnterHiddenMapButton.color = originColor;
+                _imageButtonConfirm.color = originColor;
             });
 
         while (glowTween.IsActive())
@@ -223,11 +223,11 @@ public class UIPopupSettlementSnowFake : UIBase
 
     #region 事件相关
     /// <summary>
-    /// 进入隐藏地图按钮点击回调
+    /// 确认按钮点击事件回调
     /// </summary>
-    private async void OnEnterHiddenMapButtonClick()
+    private async void OnButtonConfirmClicked()
     {
-        _buttonEnterHiddenMap.onClick.RemoveListener(OnEnterHiddenMapButtonClick);
+        _buttonConfirm.onClick.RemoveListener(OnButtonConfirmClicked);
 
         await RoundFlow.Instance.EnterHiddenMapAsync();
     }
@@ -237,8 +237,8 @@ public class UIPopupSettlementSnowFake : UIBase
     /// </summary>
     private void OnSettlementCalculated(SettlementCalculatedEventArgs args)
     {
-        _textCoin.text = args.TotalCoin.ToString();
-        _textMastery.text = args.TotalMastery.ToString();
+        _textThreeKPCoin.text = args.TotalCoin.ToString();
+        _textPoint.text = args.TotalMastery.ToString();
     }
     #endregion 
 }

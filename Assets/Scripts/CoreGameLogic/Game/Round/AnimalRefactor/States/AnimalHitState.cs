@@ -10,7 +10,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 受伤持续时间
         /// </summary>
-        protected float _hitDuration = 3f;
+        protected float _hitDuration = 0.2f;
 
         public AnimalHitState(StateMachine stateMachine, BaseAnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
         {
