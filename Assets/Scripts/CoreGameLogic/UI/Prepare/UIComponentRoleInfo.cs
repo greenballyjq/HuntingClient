@@ -1,10 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
+using GameFramework.Core.UI;
+using GameFramework.Manager;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using cfg.HuntingConfig.Skill;
-using GameFramework.Manager;
-using GameFramework.Core.UI;
 
 /// <summary>
 /// 角色信息组件
@@ -17,24 +17,14 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
     [SerializeField] private Image _imageRole;
 
     /// <summary>
-    /// 技能图像
+    /// 角色阴影图像
     /// </summary>
-    [SerializeField] private Image _imageSkill;
+    [SerializeField] private Image _imageRoleShadow;
 
     /// <summary>
-    /// 角色简介文本
+    /// 角色描述文本
     /// </summary>
-    [SerializeField] private Text _textRoleProfile;
-
-    /// <summary>
-    /// 技能名称文本
-    /// </summary>
-    [SerializeField] private Text _textSkillName;
-
-    /// <summary>
-    /// 技能描述文本
-    /// </summary>
-    [SerializeField] private Text _textSkillDescription;
+    [SerializeField] private TextMeshProUGUI _textRoleDescription;
 
     /// <summary>
     /// 当前角色ID
@@ -59,7 +49,7 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
     public void Init()
     {
         _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
-        _eventManager.AddListener(PrepareEvents.SlotAnimationEnded , OnSlotAnimationEnded);
+        _eventManager.AddListener(PrepareEvents.SlotAnimationEnded, OnSlotAnimationEnded);
 
         gameObject.SetActive(false);
     }
@@ -72,59 +62,20 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
 
     #region 私有方法
     /// <summary>
-    /// 更新角色信息显示
+    /// 更新角色信息
     /// </summary>
     /// <param name="roleId">角色ID</param>
-    private void UpdateRoleInfo(int roleId)
+    private async UniTask UpdateRoleInfo(int roleId)
     {
-        Role role = _configManager.GetRole(roleId);
+        Role roleData = _configManager.GetRole(roleId);
 
-        var profile = role.RoleProfile;
+        var description = roleData.RoleProfile;
 
-        _textRoleProfile.text =
-            $"姓名：{profile.Name}\n" +
-            $"出生地：{profile.Birthplace}\n" +
-            $"性别：{profile.Gender}\n" +
-            $"特征：{profile.Traits}\n" +
-            $"个性：{profile.Personality}\n";
+        _textRoleDescription.text = description.BackgroundStory;
 
-        LoadRoleSpriteAsync(role.RoleImageResourcePath).Forget();
-
-        UpdateSkillInfo(role.LinkedSkillId);
-    }
-
-    /// <summary>
-    /// 更新技能信息显示
-    /// </summary>
-    /// <param name="skillId">技能ID</param>
-    private void UpdateSkillInfo(int skillId)
-    {
-        Skill skill = _configManager.GetSkill(skillId);
-
-        _textSkillName.text = skill.Name;
-        _textSkillDescription.text = skill.Description;
-
-        LoadSkillSpriteAsync(skill.IconResourcePath).Forget();
-    }
-
-    /// <summary>
-    /// 异步加载角色图片
-    /// </summary>
-    /// <param name="assetPath">资源路径</param>
-    private async UniTask LoadRoleSpriteAsync(string assetPath)
-    {
-        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(assetPath);    
+        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(roleData.RoleImageResourcePath);
         _imageRole.sprite = sprite;
-    }
-
-    /// <summary>
-    /// 异步加载技能图标
-    /// </summary>
-    /// <param name="assetPath">资源路径</param>
-    private async UniTask LoadSkillSpriteAsync(string assetPath)
-    {
-        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(assetPath);
-        _imageSkill.sprite = sprite;
+        _imageRoleShadow.sprite = sprite;
     }
     #endregion
 
@@ -138,12 +89,12 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 完整选角动画结束事件回调
+    /// 走格子动画结束事件回调
     /// </summary>
-    private void OnSlotAnimationEnded()
+    private async void OnSlotAnimationEnded()
     {
+        await UpdateRoleInfo(_currentRoleId);
         gameObject.SetActive(true);
-        UpdateRoleInfo(_currentRoleId);
     }
     #endregion
 }

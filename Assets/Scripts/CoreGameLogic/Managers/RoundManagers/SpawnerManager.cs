@@ -239,7 +239,7 @@ namespace Hunting.Game.Animal
             go.transform.position = spawnInfo.Position;
 
             var animal = go.GetComponent<BaseAnimalBehaviour>();
-            animal.Init(specie, spawnInfo.MovePolicy);
+            animal.Init(specie);
             animal.Moveable.SetDirection(spawnInfo.Direction);
 
             TriggerAnimalGenerated(new AnimalGeneratedEventArgs

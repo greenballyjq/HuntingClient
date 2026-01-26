@@ -354,9 +354,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _giftType: 3
   _imageGift: {fileID: 4198180806794968741}
-  _giftOpenSprites:
-  - {fileID: 21300000, guid: c35ae71c4956ffb43b8b40cf0344d463, type: 3}
-  _animationFPS: 12
+  _giftOpenSprite: {fileID: 21300000, guid: b9d069e33747b2049ba3afac9814f81f, type: 3}
+  _giftRectTransform: {fileID: 1601922613063470003}
+  _shakeDuration: 2
+  _shakeStrength: 50
 --- !u!1 &6838714776443625935
 GameObject:
   m_ObjectHideFlags: 0

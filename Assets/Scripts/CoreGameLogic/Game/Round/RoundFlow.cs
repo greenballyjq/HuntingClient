@@ -191,7 +191,7 @@ public class RoundFlow : Singleton<RoundFlow>
         _currentRoundContext = context;
         CreateRoundManagers();
         InitRoundManagers();
-        await _uiManager.OpenUIAsync<UIGameplay>("UIHuntingGameplay", UIManager.UILayer.Fixed);
+        await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay", UIManager.UILayer.Fixed);
 
         // 触发单局开始事件
         TriggerRoundStarted(new RoundStartedEventArgs
@@ -315,7 +315,7 @@ public class RoundFlow : Singleton<RoundFlow>
         await UniTask.Delay(3000);
         
         // TODO: 打开结算面板三
-        var uiSnowMountainSettlement = await _uiManager.OpenUIAsync<UISnowMountainSettlement>("UISnowMountainSettlement", UIManager.UILayer.PopUp);
+        var uiSnowMountainSettlement = await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
         
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GameFramework.Manager;
 using GameFramework.Core.UI;
+using TMPro;
 
 /// <summary>
 /// 地图信息组件
@@ -18,7 +19,7 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
     /// <summary>
     /// 地图描述文本
     /// </summary>
-    [SerializeField] private Text _textMapDescription;
+    [SerializeField] private TextMeshProUGUI _textMapDescription;
 
     /// <summary>
     /// 配置管理器

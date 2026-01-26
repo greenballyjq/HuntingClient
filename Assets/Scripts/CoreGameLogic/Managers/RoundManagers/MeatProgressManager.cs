@@ -10,16 +10,36 @@ public class MeatProgressManager : IRoundManager
     /// 单刻度所需值
     /// </summary>
     private float _valuePerScale;
+    public float ValuePerScale => _valuePerScale;
 
     /// <summary>
     /// 总刻度数
     /// </summary>
     private int _totalScale;
+    public int TotalScale => _totalScale;
+
+    /// <summary>
+    /// 总肉度值
+    /// </summary>
+    private float _totalMeatValue;
+    public float TotalMeatValue => _totalMeatValue;
 
     /// <summary>
     /// 当前肉度值
     /// </summary>
     private float _currentMeatValue;
+    public float CurrentMeatProgress => _currentMeatValue;
+
+    /// <summary>
+    /// 已完成的刻度数
+    /// </summary>
+    private int _completedScaleCount;
+    public int CompletedScaleCount => _completedScaleCount;
+
+    /// <summary>
+    /// 总进度比例
+    /// </summary>
+    public float TotalProgressRatio => Mathf.Clamp01(_currentMeatValue / _totalMeatValue);
 
     /// <summary>
     /// 事件管理器
@@ -36,6 +56,8 @@ public class MeatProgressManager : IRoundManager
         var meatProgress = _configManager.GetMeatProgress(1);
         _valuePerScale = meatProgress.ValuePerScale;
         _totalScale = meatProgress.TotalScale;
+        _totalMeatValue = _valuePerScale * _totalScale;
+        _completedScaleCount = 0;
 
         RegisterEvents();
 
@@ -56,70 +78,31 @@ public class MeatProgressManager : IRoundManager
     /// <param name="amount">增加的肉度值</param>
     public void AddMeatValue(float amount)
     {
-        // 累加肉度值
+        int beforeScaleCount = _completedScaleCount;
+
         _currentMeatValue += amount;
+        if (_currentMeatValue > _totalMeatValue)
+            _currentMeatValue = _totalMeatValue;
 
-        // 超过则封顶
-        float totalMeatValue = GetTotalMeatValue();
-        if (_currentMeatValue > totalMeatValue)
-            _currentMeatValue = totalMeatValue;
+        _completedScaleCount = Mathf.FloorToInt(_currentMeatValue / _valuePerScale);
 
-        // 触发肉度值变化事件
         TriggerMeatValueChanged(new MeatValueChangedEventArgs
         {
             CurrentMeatValue = _currentMeatValue,
-            TotalProgressRatio = GetTotalProgressRatio(),
-            CompletedScaleCount = GetCompletedScaleCount()
+            TotalProgressRatio = TotalProgressRatio,
+            CompletedScaleCount = _completedScaleCount
         });
-    }
 
-    /// <summary>
-    /// 获取单刻度所需值
-    /// </summary>
-    /// <returns>单刻度所需值</returns>
-    public float GetValuePerScale()
-    {
-        return _valuePerScale;
-    }
+        if (_completedScaleCount > beforeScaleCount)
+        {
+            TriggerMeatScaleCompleted(new MeatScaleCompletedEventArgs
+            {
+                CompletedScaleCount = _completedScaleCount
+            });
 
-    /// <summary>
-    /// 获取当前肉度值
-    /// </summary>
-    /// <returns>当前肉度值</returns>
-    public float GetCurrentMeatValue()
-    {
-        return _currentMeatValue;
-    }
-
-    /// <summary>
-    /// 获取总肉度值
-    /// </summary>
-    /// <returns>总肉度值</returns>
-    public float GetTotalMeatValue()
-    {
-        return _valuePerScale * _totalScale;
-    }
-
-    /// <summary>
-    /// 获取已完成的刻度数
-    /// </summary>
-    /// <returns>已完成的刻度数</returns>
-    public int GetCompletedScaleCount()
-    {
-        return Mathf.FloorToInt(_currentMeatValue / _valuePerScale);
-    }
-
-    /// <summary>
-    /// 获取总进度比例
-    /// </summary>
-    /// <returns>总进度比例（0-1之间）</returns>
-    public float GetTotalProgressRatio()
-    {
-        float totalMeatValue = GetTotalMeatValue();
-        if (totalMeatValue <= 0f)
-            return 0f;
-
-        return Mathf.Clamp01(_currentMeatValue / totalMeatValue);
+            if (_completedScaleCount == _totalScale)
+                _eventManager.Trigger(MeatEvents.MeatScaleFull);
+        }
     }
     #endregion
 
@@ -155,6 +138,13 @@ public class MeatProgressManager : IRoundManager
     {
         _eventManager.Trigger(MeatEvents.MeatValueChanged, args);
     }
+
+    /// <summary>
+    /// 触发肉度刻度完成事件
+    /// </summary>
+    private void TriggerMeatScaleCompleted(MeatScaleCompletedEventArgs args)
+    {
+        _eventManager.Trigger(MeatEvents.MeatScaleCompleted, args);
+    }
     #endregion
 }
-

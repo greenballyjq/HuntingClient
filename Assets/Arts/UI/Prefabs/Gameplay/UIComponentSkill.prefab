@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 2171120751197899886}
   - component: {fileID: 773828381633590874}
   m_Layer: 5
-  m_Name: ImageSkillBarBK
+  m_Name: ImageSkillBarBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -155,7 +155,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10, y: -10}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2171120751197899886
 CanvasRenderer:
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 82551015749bbe94ba7c645fd4d95fde, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e31935306b0dc0643ad0d16a1f15d4a1, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -227,10 +227,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7299601718235459130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3179822372386751986
 CanvasRenderer:
@@ -305,10 +305,10 @@ RectTransform:
   - {fileID: 1343262320297388382}
   m_Father: {fileID: 2947265877959496745}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 199, y: 200}
+  m_SizeDelta: {x: -6, y: -12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3215618388057205336
 CanvasRenderer:
@@ -384,7 +384,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 205, y: 212}
+  m_SizeDelta: {x: 220, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6787456641884508747
 MonoBehaviour:
@@ -398,11 +398,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1586976d1ca08646ba5b2add47dff8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _imageEnergyFill: {fileID: 8905385022588365411}
-  _imageEnergyBackground: {fileID: 773828381633590874}
-  _textEnergyBars: {fileID: 7235352332590847597}
+  _imageSkillBarBackground: {fileID: 773828381633590874}
+  _imageSkillBarFill: {fileID: 8905385022588365411}
   _buttonSkill: {fileID: 8130695343347986975}
   _imageSkill: {fileID: 663398539946507464}
+  _textSkillBarAmount: {fileID: 7235352332590847597}
   _colors:
   - {r: 0.7877358, g: 1, b: 0.7917034, a: 1}
   - {r: 0.6650944, g: 1, b: 0.9625106, a: 1}

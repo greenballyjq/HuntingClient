@@ -8,94 +8,54 @@ using UnityEngine.UI;
 public class UIGameplay : UIBase
 {
     /// <summary>
-    /// 结算按钮
+    /// 返回/结算按钮组件
     /// </summary>
-    [SerializeField] private Button buttonSettlement;
+    [SerializeField] private UIComponentButtonReturnOrSettlement _uiComponentReturnOrSettlement;
 
     /// <summary>
     /// 肉度条组件
     /// </summary>
-    [SerializeField] private UIComponentMeatProgress uiComponentMeatProgress;
+    [SerializeField] private UIComponentMeatProgress _uiComponentMeatProgress;
 
     /// <summary>
     /// 能量条组件
     /// </summary>
-    [SerializeField] private UIComponentSkill uiComponentEnergyProgress;
+    [SerializeField] private UIComponentSkill _uiComponentSkill;
 
     /// <summary>
     /// 子弹状态组件
     /// </summary>
-    [SerializeField] private UIComponentBullet uiComponentBulletStatus;
+    [SerializeField] private UIComponentBullet _uiComponentBulletStatus;
 
     /// <summary>
     /// 道具组组件
     /// </summary>
-    [SerializeField] private UIComponentPropGroup uiComponentPropGroup;
+    [SerializeField] private UIComponentPropGroup _uiComponentPropGroup;
     
     /// <summary>
     /// 动态任务组件
     /// </summary>
     //[SerializeField] private UIComponentQuest uiComponentQuest;
 
-    /// <summary>
-    /// UI管理器
-    /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
-
-    /// <summary>
-    /// 结算管理器
-    /// </summary>
-    private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
-
-    private void Awake()
-    {
-        buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
-    }
-
     public override void OnInit(object userData)
     {
         base.OnInit(userData);
-        uiComponentMeatProgress.Init();
-        uiComponentEnergyProgress.Init();
-        uiComponentBulletStatus.Init();
-        uiComponentPropGroup.Init();
+        _uiComponentMeatProgress.Init();
+        _uiComponentSkill.Init();
+        _uiComponentBulletStatus.Init();
+        _uiComponentPropGroup.Init();
+        _uiComponentReturnOrSettlement.Init();
         //uiComponentQuest.Init();
     }
 
     public override void OnClose()
     {
-        uiComponentPropGroup.CleanUp();
-        uiComponentBulletStatus.CleanUp();
-        uiComponentEnergyProgress.CleanUp();
-        uiComponentMeatProgress.CleanUp();
+        _uiComponentPropGroup.CleanUp();
+        _uiComponentBulletStatus.CleanUp();
+        _uiComponentSkill.CleanUp();
+        _uiComponentMeatProgress.CleanUp();
+        _uiComponentReturnOrSettlement.CleanUp();
         //uiComponentQuest.CleanUp();
         base.OnClose();
     }
-
-    private void OnDestroy()
-    {
-        buttonSettlement.onClick.RemoveListener(OnSettlementButtonClicked);
-    }
-
-    #region 事件相关
-    /// <summary>
-    /// 结算按钮点击回调
-    /// </summary>
-    private async void OnSettlementButtonClicked()
-    {
-        var roundContext = RoundFlow.Instance.GetRoundContext();
-        
-        if (roundContext.HasHiddenMap)
-        {
-            // 打开假结算面板
-            await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-        }
-        else
-        {
-            // 打开正常结算面板
-            await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
-            _settlementRewardManager.CalculateReward();
-        }
-    }
-    #endregion
 }

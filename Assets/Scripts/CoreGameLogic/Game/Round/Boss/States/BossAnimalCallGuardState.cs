@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CoreGameLogic.Game.Round.Animals.Spawners;
 using Hunting.Game.Animal;
 
 namespace CoreGameLogic.Game.Round.Boss.States

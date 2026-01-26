@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920.5342, y: 1079.8383}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8821424825872685512
 CanvasRenderer:
@@ -107,8 +107,8 @@ RectTransform:
   - {fileID: 2350219270193064492}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -129,4 +129,4 @@ MonoBehaviour:
     Frequency: 1
     Duration: 3
     FlashColor: {r: 0.6509434, g: 0, b: 0, a: 0.39215687}
-    UseUnscaledTime: 1
+    UseUnscaledTime: 0

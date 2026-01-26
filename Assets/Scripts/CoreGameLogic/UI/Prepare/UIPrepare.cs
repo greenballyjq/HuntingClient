@@ -15,12 +15,17 @@ public class UIPrepare : UIBase
     /// <summary>
     /// 随机角色组件
     /// </summary>
-    [SerializeField] private UIComponentRollRole _uiComponentRoleChoice;
+    [SerializeField] private UIComponentRollRole _uiComponentRollRole;
 
     /// <summary>
     /// 角色信息组件
     /// </summary>
     [SerializeField] private UIComponentRoleInfo _uiComponentRoleInfo;
+
+    /// <summary>
+    /// 技能信息组件
+    /// </summary>
+    [SerializeField] private UIComponentSkillInfo _uiComponentSkillInfo;
 
     /// <summary>
     /// 地图信息组件
@@ -35,7 +40,7 @@ public class UIPrepare : UIBase
     /// <summary>
     /// 幸运仪式按钮
     /// </summary>
-    [SerializeField] private Button _buttonLuckyRitual;
+    [SerializeField] private Button _buttonLucky;
 
     /// <summary>
     /// 排行榜按钮
@@ -70,14 +75,14 @@ public class UIPrepare : UIBase
     private void Awake()
     {
         _buttonStartRound.onClick.AddListener(OnClickStartRound);
-        _buttonLuckyRitual.onClick.AddListener(OnClickLuckyRitual);
+        _buttonLucky.onClick.AddListener(OnClickLuckyRitual);
         _buttonRanking.onClick.AddListener(OnClickRanking);
     }
 
     private void OnDestroy()
     {
         _buttonStartRound.onClick.RemoveListener(OnClickStartRound);
-        _buttonLuckyRitual.onClick.RemoveListener(OnClickLuckyRitual);
+        _buttonLucky.onClick.RemoveListener(OnClickLuckyRitual);
         _buttonRanking.onClick.RemoveListener(OnClickRanking);
     }
 
@@ -85,8 +90,9 @@ public class UIPrepare : UIBase
     {
         base.OnInit(userData);
 
-        _uiComponentRoleChoice.Init();
+        _uiComponentRollRole.Init();
         _uiComponentRoleInfo.Init();
+        _uiComponentSkillInfo.Init();
         _uiComponentMapInfo.Init();
 
         // 默认开始单据单局按钮不可用
@@ -100,8 +106,9 @@ public class UIPrepare : UIBase
 
     public override void OnClose()
     {
-        _uiComponentRoleChoice.CleanUp();
+        _uiComponentRollRole.CleanUp();
         _uiComponentRoleInfo.CleanUp();
+        _uiComponentSkillInfo.CleanUp();
         _uiComponentMapInfo.CleanUp();
 
         _eventManager.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
@@ -127,7 +134,7 @@ public class UIPrepare : UIBase
     private void OnDiceAnimationStarted()
     {
         _buttonStartRound.interactable = false;
-        _buttonLuckyRitual.interactable = false;
+        _buttonLucky.interactable = false;
     }
 
     /// <summary>
@@ -135,7 +142,7 @@ public class UIPrepare : UIBase
     /// </summary>
     private void OnSlotAnimationEnded()
     {
-        _buttonLuckyRitual.interactable = true;
+        _buttonLucky.interactable = true;
         _buttonStartRound.interactable = true;
     }
 
