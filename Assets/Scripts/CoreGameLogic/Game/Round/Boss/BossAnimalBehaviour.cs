@@ -7,6 +7,7 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
 {
     private BossAnimalDeathState _bossDeathState;
     private BossAnimalCallGuardState _bossCallGuardState;
+    private BossAnimalEnterState _bossEnterState;
     
     private int _callGuardTimerId;
     private const float CALL_GUARD_DURATION = 30f;
@@ -17,15 +18,18 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
     
     public override void Init(Specie data)
     {
-        _bossCallGuardState = new BossAnimalCallGuardState(_stateMachine, this);
-        
         base.Init(data);
         _bossDeathState = new BossAnimalDeathState(_stateMachine, this);
-        
-        Health.OnDamaged += OnDamaged;
-        Health.OnDeath += OnDeath;
+        _bossEnterState = new BossAnimalEnterState(_stateMachine, this);
+        _bossCallGuardState = new BossAnimalCallGuardState(_stateMachine, this);
 
         _callGuardTimerId = _timerManager.StartTimer(CALL_GUARD_DURATION, CallGuard, repeat: TimerManager.LOOP);
+    }
+
+    protected override void InitState()
+    {
+        base.InitState();
+        _stateMachine.Init(_bossEnterState);
     }
 
     private void CallGuard()
@@ -40,5 +44,12 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
         var spawnerManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
         var autoSpawners = spawnerManager.GetSpawners<AutoSpawner>("Random");
         autoSpawners.ForEach(spawner => spawner.SetEnabled(false));
+
+        _timerManager.StopTimer(_callGuardTimerId);
+    }
+
+    public void EnterCombat()
+    {
+        _stateMachine.ChangeState(MoveState);
     }
 }

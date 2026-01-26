@@ -76,41 +76,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     }
 
     #region 公共方法
-    /// <summary>
-    /// 生成动物
-    /// </summary>
-    public async UniTask<BaseAnimalBehaviour> GenerateAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, bool inHiddenMap = false)
-    {
-        var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
-        var animal = go.GetComponent<BaseAnimalBehaviour>();
-        go.transform.position = position;
-        // go.AddComponent<AnimalMovement>();
-
-        animal.Init(specieData);
-        animal.GetComponent<IMoveable>().SetDirection(direction);
-
-        // 添加到活跃动物集合
-        _activeAnimals.Add(animal);
-        return animal;
-    }
-
-     /// <summary>
-     /// 生成Boss
-     /// </summary>
-     /// <returns>Boss实例</returns>
-    public async UniTask<BossAnimalBehaviour> GenerateBossAsync(Specie bossSpecie, Transform spawnPoint)
-    {
-        // var configManager = GameServiceLocator.ConfigManager;
-        // var bossSpecie = configManager.GetRandomBoss();
-        // var spawnPoint = GameObject.Find("BossSpawnerPoint");
-        var prefab = await _resourceManager.LoadAssetAsync<GameObject>(bossSpecie.PrefabResourcePath);
-        var go = Object.Instantiate(prefab, spawnPoint);
-        var boss = go.GetComponent<BossAnimalBehaviour>();
-        _activeAnimals.Add(boss);
-        go.transform.position = spawnPoint.position;
-        boss.Init(bossSpecie);
-        return boss;
-    }
     
     /// <summary>
     /// 是否还有活跃的动物
@@ -142,6 +107,24 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
             .OrderBy(animal => Vector3.SqrMagnitude(animal.transform.position - position))
             .Take(animalCount)
             .ToList();
+    }
+
+    /// <summary>
+    /// 获取BossAnimalBehaviour，没有则返回空
+    /// </summary>
+    /// <returns></returns>
+    public BossAnimalBehaviour GetBossAnimalBehaviour()
+    {
+        BossAnimalBehaviour result = null;
+        foreach (var animal in _activeAnimals)
+        {
+            if (animal is BossAnimalBehaviour bossAnimalBehaviour)
+            {
+                result = bossAnimalBehaviour;
+                break;
+            }
+        }
+        return result;
     }
     
     #endregion

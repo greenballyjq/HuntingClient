@@ -1,7 +1,5 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
-using GameFramework.Game;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -39,10 +37,17 @@ public class UIPopupSettlementSnowVictory : UIBase
     /// </summary>
     [SerializeField] private Transform _dicePrefab;
 
+    /// <summary>
+    /// 骰子动画父物体
+    /// </summary>
+    [SerializeField] private Transform _diceParent;
+
     private UIManager _uiManager => GameServiceLocator.UIManager;
     
     private int _totalCoin;
     private int _totalMastery;
+
+    private Transform _diceTransform;
 
     private void Awake()
     {
@@ -84,7 +89,7 @@ public class UIPopupSettlementSnowVictory : UIBase
 
     private async void OnSettleAndReturnButtonClick()
     {
-        // TODO: 返回主菜单
+        // 返回主菜单
         await SceneManager.LoadSceneAsync("PrepareScene").ToUniTask();
         _uiManager.CloseUI("UIPopupSettlementSnowVictory");
         _uiManager.CloseUI("UIGameplay");
@@ -98,10 +103,13 @@ public class UIPopupSettlementSnowVictory : UIBase
     
     private async void OnDiceButtonClick()
     {
-        // TODO: 掷骰子动画
+        // 掷骰子动画
         int point = UnityEngine.Random.Range(0, 7);
-        var dice = Instantiate(_dicePrefab);
-        await dice.GetComponent<DiceAnimation>().PlayRoll(point);
+        if (!_diceTransform)
+        {
+            _diceTransform = Instantiate(_dicePrefab, _diceParent);
+        }
+        await _diceTransform.GetComponent<DiceAnimation>().PlayRoll(point);
         
         _textCoin.text = (point * _totalCoin).ToString();
         _textMastery.text = (point * _totalMastery).ToString();
