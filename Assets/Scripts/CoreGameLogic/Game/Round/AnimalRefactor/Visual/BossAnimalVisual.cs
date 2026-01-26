@@ -2,6 +2,11 @@
 {
     public class BossAnimalVisual : BaseAnimalVisual
     {
+        public void PlayEnter()
+        {
+            ResetAnimationStates();
+            _animator.SetBool("Enter", true);
+        }
         public void PlayCall()
         {
             ResetAnimationStates();

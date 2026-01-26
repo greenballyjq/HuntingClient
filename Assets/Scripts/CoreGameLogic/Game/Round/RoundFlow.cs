@@ -262,6 +262,16 @@ public class RoundFlow : Singleton<RoundFlow>
         uiAlertRed.PlayFlashAsync().Forget(); // 播放红屏闪动动画
         _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_alert").Forget(); // 播放警报声
         await UniTask.Delay(2000);
+        
+        // Boss 登场
+        var spawnManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
+        var bossSpawner = spawnManager.GetSpawner<ManualSpawner>("Boss");
+        bossSpawner.Spawn();
+
+        var animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
+        var bossAnimalBehaviour = animalManager.GetBossAnimalBehaviour();
+        bossAnimalBehaviour.EnterCombat();
+
         //_soundManager.PlaySound2DByPathAsync("Audio/BGM/bgm_snow", AudioChannel.Bgm, volume: 0.1f).Forget(); // 播放远古雪山BGM
         _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_laugh").Forget(); // 播放Boss台词
         await UniTask.Delay(3000);
@@ -269,14 +279,11 @@ public class RoundFlow : Singleton<RoundFlow>
         // 准备倒计时
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync();
+        
+        // TODO 倒计时结束后，让Boss进入Move
 
         //boss.EnterCombat();
         _currentState = RoundFlowState.Playing;
-        
-        // _eventManager.Trigger(HiddenMapEvents.HiddenMapPlayStart);
-        var spawnManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
-        var bossSpawner = spawnManager.GetSpawner<ManualSpawner>("Boss");
-        bossSpawner.Spawn();
 
         _currentRoundContext.HiddenRoundEndTrigger.Init();
     }

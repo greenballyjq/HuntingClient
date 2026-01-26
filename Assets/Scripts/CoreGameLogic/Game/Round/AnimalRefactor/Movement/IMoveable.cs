@@ -27,10 +27,10 @@ namespace Hunting.Game.Animal
         /// </summary>
         Vector3 CurrentMoveDirection { get; }
         
-        /// <summary>
-        /// 移动策略
-        /// </summary>
-        IMovePolicy MovePolicy { get; }
+        // /// <summary>
+        // /// 移动策略
+        // /// </summary>
+        // IMovePolicy MovePolicy { get; }
         
         /// <summary>
         /// 是否正在移动

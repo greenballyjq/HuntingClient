@@ -14,7 +14,7 @@ public class LinearMovementTest : MonoBehaviour
     /// <summary>
     /// 移动组件
     /// </summary>
-    private LinearMovement _movement;
+    private AnimalMovement _movement;
     
     /// <summary>
     /// 初始位置
@@ -98,7 +98,7 @@ public class LinearMovementTest : MonoBehaviour
         _testObject.transform.position = Vector3.zero;
         _initialPosition = Vector3.zero;
         
-        _movement = _testObject.AddComponent<LinearMovement>();
+        _movement = _testObject.AddComponent<AnimalMovement>();
         
         Debug.Log("[LinearMovementTest] 测试对象已创建");
     }
