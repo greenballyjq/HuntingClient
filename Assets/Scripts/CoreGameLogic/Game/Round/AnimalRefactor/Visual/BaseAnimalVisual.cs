@@ -123,15 +123,6 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
-        /// 播放逃跑动画
-        /// </summary>
-        public void PlayFlee()
-        {
-            ResetAnimationStates();
-            _animator.SetBool("Flee", true);
-        }
-
-        /// <summary>
         /// 重置所有状态
         /// </summary>
         protected virtual void ResetAnimationStates()
@@ -139,7 +130,6 @@ namespace Hunting.Game.Animal
             _animator.SetBool("Move", false);
             _animator.SetBool("Hit", false);
             _animator.SetBool("Death", false);
-            _animator.SetBool("Flee", false);
         }
         #endregion
 

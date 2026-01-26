@@ -135,6 +135,7 @@ public class UIPrepare : UIBase
     {
         _buttonStartRound.interactable = false;
         _buttonLucky.interactable = false;
+        _buttonRanking.interactable = false;
     }
 
     /// <summary>
@@ -144,6 +145,7 @@ public class UIPrepare : UIBase
     {
         _buttonLucky.interactable = true;
         _buttonStartRound.interactable = true;
+        _buttonRanking.interactable = true;
     }
 
     /// <summary>

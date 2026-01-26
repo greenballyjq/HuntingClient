@@ -113,21 +113,23 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
             else
             {
                 // 打开正常结算面板
-                await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
+                //await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
+                await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
                 var settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementRewardManager>();
                 settlementRewardManager.CalculateReward();
             }
         }
         else
         {
+            await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
             // 返回主界面
-            _uiManager.CloseUI("UIGameplay");
-            await HuntingAppFlow.Instance.EnterPrepareAsync();
-            _gameObjectPoolManager.ClearAllPools();
-            SceneManager.LoadSceneAsync("PrepareScene").completed += async (ao) =>
-            {
-                await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
-            };
+            //_uiManager.CloseUI("UIGameplay");
+            //await HuntingAppFlow.Instance.EnterPrepareAsync();
+            //_gameObjectPoolManager.ClearAllPools();
+            //SceneManager.LoadSceneAsync("PrepareScene").completed += async (ao) =>
+            //{
+            //    await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
+            //};
         }
         #endregion
     }

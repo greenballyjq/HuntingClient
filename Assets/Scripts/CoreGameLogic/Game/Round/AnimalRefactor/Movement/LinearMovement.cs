@@ -7,7 +7,7 @@ namespace Hunting.Game.Animal
     /// </summary>
     public class LinearMovement : MonoBehaviour, IMoveable
     {
-        [SerializeField] private MovePolicyType currentMovePolicyType;
+        [SerializeField] private MovePolicyType _currentMovePolicyType;
         
         /// <summary>
         /// 基础速度
@@ -79,6 +79,8 @@ namespace Hunting.Game.Animal
             _currentTargetDirection = Vector3.zero;
             _currentMoveDirection = Vector3.zero;
             _isMoving = false;
+
+            _currentMovePolicyType = MovePolicyType.Linear;
         }
         
         /// <summary>
@@ -97,7 +99,7 @@ namespace Hunting.Game.Animal
             // Vector3 movement = _currentTargetDirection * actualSpeed * dt;
             // transform.position += movement;
             // Debug.Log($"[{GetType().Name}] DoUpdate");
-            if (currentMovePolicyType == MovePolicyType.Linear)
+            if (_currentMovePolicyType == MovePolicyType.Linear)
             {
                 _currentMoveDirection = _currentTargetDirection;
                 float actualSpeed = _baseSpeed * _moveRate;
@@ -192,7 +194,7 @@ namespace Hunting.Game.Animal
 
         public void ChangeMovePolicy(MovePolicyType policyType)
         {
-            currentMovePolicyType = policyType;
+            _currentMovePolicyType = policyType;
             switch (policyType)
             {
                 case MovePolicyType.Linear:

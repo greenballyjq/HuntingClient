@@ -207,7 +207,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnAnimalDied(AnimalDiedEventArgs args)
     {
-        // _gameObjectPoolManager.Despawn(args.Animal.gameObject);
         _animalsToRemove.Add(args.Animal);
     }
     
@@ -218,7 +217,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void OnBossDied(BossDiedEventArgs args)
     {
         _animalsToRemove.Add(args.Boss);
-        Object.Destroy(args.Boss.gameObject);
     }
 
     /// <summary>
@@ -226,7 +224,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnAnimalFled(AnimalFledEventArgs args)
     {
-        // _gameObjectPoolManager.Despawn(args.Animal.gameObject);
         _animalsToRemove.Add(args.Animal);
     }
     
@@ -235,7 +232,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnAnimalReachedWall(AnimalReachedWallEventArgs args)
     {
-        // _gameObjectPoolManager.Despawn(args.Animal.gameObject);
         _animalsToRemove.Add(args.Animal);
     }
     #endregion

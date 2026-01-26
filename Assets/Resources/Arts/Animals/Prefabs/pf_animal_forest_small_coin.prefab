@@ -174,10 +174,10 @@ GameObject:
   - component: {fileID: 1320609610325134233}
   - component: {fileID: -131283913995888600}
   - component: {fileID: 1641490604025192362}
-  - component: {fileID: -6615693117745165472}
   - component: {fileID: -8136710366484236829}
   - component: {fileID: 6227245616253859786}
   - component: {fileID: 9047236382943894702}
+  - component: {fileID: -7183096870885006594}
   m_Layer: 6
   m_Name: pf_animal_forest_small_coin
   m_TagString: Animal
@@ -234,18 +234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53bf92a233e35954c8a4f0fe37be933e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6615693117745165472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1972760201598442951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6adc6e46b8e10f04d9a601004754768d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-8136710366484236829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,5 +268,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e242d194236f1db438e37c8f24556898, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentMovePolicyType: 0
+--- !u!114 &-7183096870885006594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972760201598442951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9712d984ffb6f5846b878fdb17d9a784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
