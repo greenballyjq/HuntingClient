@@ -27,7 +27,7 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     {
         _eventManager.AddListener(MeatEvents.MeatValueChanged, OnMeatValueChanged);
 
-        _imageMeatBarFill.fillAmount = _meatProgressManager.GetTotalProgressRatio();
+        _imageMeatBarFill.fillAmount = _meatProgressManager.TotalProgressRatio;
     }
 
     public void CleanUp()

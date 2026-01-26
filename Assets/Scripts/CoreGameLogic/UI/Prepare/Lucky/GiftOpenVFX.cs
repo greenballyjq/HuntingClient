@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,15 +21,24 @@ public class GiftOpenVFX : MonoBehaviour
     [SerializeField] private Image _imageGift;
 
     /// <summary>
-    /// 礼包打开序列帧图片数组
+    /// 礼包打开后的图片
     /// </summary>
-    [SerializeField] private Sprite[] _giftOpenSprites;
+    [SerializeField] private Sprite _giftOpenSprite;
 
     /// <summary>
-    /// 动画帧率
+    /// 礼包矩形变换组件
     /// </summary>
-    [SerializeField, Range(1, 60)] private int _animationFPS = 12;
+    [SerializeField] private RectTransform _giftRectTransform;
 
+    /// <summary>
+    /// 抖动时长
+    /// </summary>
+    [SerializeField] private float _shakeDuration = 0.5f;
+
+    /// <summary>
+    /// 抖动强度
+    /// </summary>
+    [SerializeField] private float _shakeStrength = 50f;
     /// <summary>
     /// 初始礼包图像
     /// </summary>
@@ -55,7 +65,7 @@ public class GiftOpenVFX : MonoBehaviour
 
     #region 私有方法
     /// <summary>
-    /// 播放礼包动画
+    /// 播放礼包开启动画
     /// </summary>
     /// <param name="buffData">幸运仪式增益配置</param>
     private async UniTask PlayGiftAnimationAsync(LuckyBuff buffData)
@@ -63,34 +73,18 @@ public class GiftOpenVFX : MonoBehaviour
         // 触发礼包开启动画开始事件
         _eventManager.Trigger(LuckyEvents.GiftOpenAnimationStarted);
 
-        // 播放礼包开启动画
-        await PlayOpenAnimationAsync();
+        // 播放抖动动画
+        _giftRectTransform.DOShakePosition(_shakeDuration, _shakeStrength);
+        await UniTask.Delay((int)(_shakeDuration * 1000));
+
+        // 切换到打开后的图片
+        _imageGift.sprite = _giftOpenSprite;
 
         // 触发礼包开启动画结束事件
         _eventManager.Trigger(LuckyEvents.GiftOpenAnimationEnded, new GiftOpenAnimationEndedEventArgs
         {
             LuckyBuffData = buffData
         });
-    }
-
-    /// <summary>
-    /// 播放礼包动画
-    /// </summary>
-    private async UniTask PlayOpenAnimationAsync()
-    {
-        
-        // float frameInterval = totalDuration / _giftOpenSprites.Length;
-        // 测试阶段：无论有多少帧，总时长固定约为 2 秒，方便观察
-        const float totalDuration = 2f;
-        float frameInterval = totalDuration / _giftOpenSprites.Length;
-
-        for (int i = 0; i < _giftOpenSprites.Length; i++)
-        {
-            if (_imageGift != null)
-                _imageGift.sprite = _giftOpenSprites[i];
-
-            await UniTask.Delay((int)(frameInterval * 1000));
-        }
     }
     #endregion
 

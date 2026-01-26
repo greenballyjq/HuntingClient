@@ -602,9 +602,13 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3491978505992525384, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
+      propertyPath: _giftOpenSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f828ea0c556974b49956911b372180f0, type: 3}
+    - target: {fileID: 3491978505992525384, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: _giftOpenSprites.Array.data[0]
       value: 
-      objectReference: {fileID: 21300000, guid: 819245463f2b64b4b96e8b4c86fd5e0a, type: 3}
+      objectReference: {fileID: 21300000, guid: f828ea0c556974b49956911b372180f0, type: 3}
     - target: {fileID: 4741597970607825781, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: m_Name
       value: UIComponentGiftStandard
@@ -733,7 +737,7 @@ PrefabInstance:
     - target: {fileID: 889592839053800166, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d891ba688480faf4b8e991e0d352cca6, type: 3}
+      objectReference: {fileID: 21300000, guid: d53681bfc9a1ae34fbdd2946907c630b, type: 3}
     - target: {fileID: 2462692863395780620, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -743,24 +747,28 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3491978505992525384, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
+      propertyPath: _giftOpenSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7c397683f75e8dc43aa1fbb2bd00a1a9, type: 3}
+    - target: {fileID: 3491978505992525384, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: _giftOpenSprites.Array.data[0]
       value: 
-      objectReference: {fileID: 21300000, guid: d891ba688480faf4b8e991e0d352cca6, type: 3}
+      objectReference: {fileID: 21300000, guid: 7c397683f75e8dc43aa1fbb2bd00a1a9, type: 3}
     - target: {fileID: 4741597970607825781, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: m_Name
       value: UIComponentGiftAdvanced
       objectReference: {fileID: 0}
     - target: {fileID: 6275828794041517022, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 273
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 6275828794041517022, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 293
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 6275828794041517022, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 169.45999
+      value: 165
       objectReference: {fileID: 0}
     - target: {fileID: 6275828794041517022, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -887,6 +895,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1531046651434212490}
     m_Modifications:
+    - target: {fileID: 3491978505992525384, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
+      propertyPath: _giftOpenSprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: d24c6e5ed9bf701499c9a4cd5b37ccdb, type: 3}
     - target: {fileID: 4741597970607825781, guid: aa5e9f42e6affc3479919af630ddfe06, type: 3}
       propertyPath: m_Name
       value: UIComponentGiftBasic
@@ -1080,6 +1092,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1601922613063470003, guid: 08dd5f4f1aadce44495672945d1b274a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 1601922613063470003, guid: 08dd5f4f1aadce44495672945d1b274a, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836999742201458639, guid: 08dd5f4f1aadce44495672945d1b274a, type: 3}
+      propertyPath: _giftOpenSprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: b9d069e33747b2049ba3afac9814f81f, type: 3}
     - target: {fileID: 4810676198993884007, guid: 08dd5f4f1aadce44495672945d1b274a, type: 3}
       propertyPath: m_Name
       value: UIComponentGiftAd

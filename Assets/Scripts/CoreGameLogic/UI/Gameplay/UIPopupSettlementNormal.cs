@@ -80,13 +80,12 @@ public class UIPopupSettlementNormal : UIBase
         Close();
 
         //TODO : 测试代码，正式版本需要移除
-        _uiManager.CloseUI("UIHuntingGameplay");
+        _uiManager.CloseUI("UIGameplay");
         await HuntingAppFlow.Instance.EnterPrepareAsync();
         _gameObjectPoolManager.ClearAllPools();
         SceneManager.LoadSceneAsync("PrepareScene").completed += async (ao) =>
         {
             await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
-            Time.timeScale = 1;
         };
     }
 

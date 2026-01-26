@@ -11,19 +11,14 @@ using GameFramework.Manager;
 public class UIComponentSkill : MonoBehaviour, IUIComponent
 {
     /// <summary>
-    /// 能量填充图像
+    /// 技能条填充背景
     /// </summary>
-    [SerializeField] private Image _imageEnergyFill;
+    [SerializeField] private Image _imageSkillBarBackground;
 
     /// <summary>
-    /// 能量底图图像
+    /// 技能条填充
     /// </summary>
-    [SerializeField] private Image _imageEnergyBackground;
-
-    /// <summary>
-    /// 能量条文本
-    /// </summary>
-    [SerializeField] private TextMeshProUGUI _textEnergyBars;
+    [SerializeField] private Image _imageSkillBarFill;
 
     /// <summary>
     /// 技能按钮
@@ -36,6 +31,11 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     [SerializeField] private Image _imageSkill;
 
     /// <summary>
+    /// 技能条文本
+    /// </summary>
+    [SerializeField] private TextMeshProUGUI _textSkillBarAmount;
+
+    /// <summary>
     /// 颜色数组
     /// </summary>
     [SerializeField] private Color[] _colors;
@@ -46,6 +46,11 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
+    /// 资源管理器
+    /// </summary>
+    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
+
+    /// <summary>
     /// 技能管理器
     /// </summary>
     private SkillManager _skillManager => GameServiceLocator.GetRoundManager<SkillManager>();
@@ -54,11 +59,6 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// 丰收能量条管理器
     /// </summary>
     private EnergyProgressManager _energyProgressManager => GameServiceLocator.GetRoundManager<EnergyProgressManager>();
-
-    /// <summary>
-    /// 资源管理器
-    /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
 
     private void Awake()
     {
@@ -74,18 +74,18 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
         UpdateBarText(currentBars, totalBar);
         UpdateBackgroundColor(currentBars);
 
+        _eventManager.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
         _eventManager.AddListener(EnergyEvents.EnergyProgressChanged, OnEnergyProgressChanged);
         _eventManager.AddListener(EnergyEvents.EnergyBarCountChanged, OnEnergyBarCountChanged);
         _eventManager.AddListener(EnergyEvents.EnergyMaxBarsReached, OnEnergyMaxBarsReached);
-        _eventManager.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
     }
 
     public void CleanUp()
     {
+        _eventManager.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
         _eventManager.RemoveListener(EnergyEvents.EnergyProgressChanged, OnEnergyProgressChanged);
         _eventManager.RemoveListener(EnergyEvents.EnergyBarCountChanged, OnEnergyBarCountChanged);
         _eventManager.RemoveListener(EnergyEvents.EnergyMaxBarsReached, OnEnergyMaxBarsReached);
-        _eventManager.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
     }
 
     private void OnDestroy()
@@ -100,9 +100,9 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void UpdateFill(float currentEnergy, int currentBars)
     {
-        _imageEnergyFill.fillAmount = currentEnergy / _energyProgressManager.GetValuePerBar();
+        _imageSkillBarFill.fillAmount = currentEnergy / _energyProgressManager.GetValuePerBar();
         int colorIndex = currentBars >= _colors.Length ? _colors.Length - 1 : currentBars;
-        _imageEnergyFill.color = _colors[colorIndex];
+        _imageSkillBarFill.color = _colors[colorIndex];
     }
 
     /// <summary>
@@ -110,7 +110,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void UpdateBarText(int currentBars, int maxBars)
     {
-        _textEnergyBars.text = $"{currentBars}/{maxBars}";
+        _textSkillBarAmount.text = $"{currentBars}/{maxBars}";
     }
 
     /// <summary>
@@ -120,13 +120,12 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     {
         if (currentBars <= 0)
         {
-            _imageEnergyBackground.color = Color.clear;
+            _imageSkillBarBackground.color = Color.clear;
             return;
         }
         int colorIndex = currentBars - 1 >= _colors.Length ? _colors.Length - 1 : currentBars - 1;
-        _imageEnergyBackground.color = _colors[colorIndex];
+        _imageSkillBarBackground.color = _colors[colorIndex];
     }
-
 
     /// <summary>
     /// 异步加载技能图标
@@ -136,11 +135,18 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     {
         var sprite = await _resourceManager.LoadAssetAsync<Sprite>(assetPath);
         _imageSkill.sprite = sprite;
-        Debug.Log($"加载技能图标: {assetPath}");
     }
     #endregion
 
     #region 事件相关
+    /// <summary>
+    /// 单局开始事件回调
+    /// </summary>
+    private void OnRoundStarted(RoundStartedEventArgs args)
+    {
+        LoadSkillIconAsync(args.RoundContext.SkillData.IconResourcePath).Forget();
+    }
+
     /// <summary>
     /// 能量值变化回调
     /// </summary>
@@ -154,9 +160,9 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnEnergyBarCountChanged(EnergyBarCountChangedEventArgs args)
     {
+        UpdateFill(_energyProgressManager.GetCurrentEnergyValue(), args.CurrentBars);
         UpdateBarText(args.CurrentBars, _energyProgressManager.GetTotalBar());
         UpdateBackgroundColor(args.CurrentBars);
-        UpdateFill(_energyProgressManager.GetCurrentEnergyValue(), args.CurrentBars);
     }
 
     /// <summary>
@@ -167,9 +173,9 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
         int maxBars = _energyProgressManager.GetTotalBar();
         UpdateBarText(maxBars, maxBars);
         int colorIndex = maxBars - 1 >= _colors.Length ? _colors.Length - 1 : maxBars - 1;
-        _imageEnergyBackground.color = _colors[colorIndex];
-        _imageEnergyFill.color = _colors[colorIndex];
-        _imageEnergyFill.fillAmount = 1f;
+        _imageSkillBarBackground.color = _colors[colorIndex];
+        _imageSkillBarFill.color = _colors[colorIndex];
+        _imageSkillBarFill.fillAmount = 1f;
     }
 
     /// <summary>
@@ -178,14 +184,6 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     private void OnSkillButtonClicked()
     {
         _skillManager.TryStartSkill();
-    }
-
-    /// <summary>
-    /// 单局开始事件回调
-    /// </summary>
-    private void OnRoundStarted(RoundStartedEventArgs args)
-    {
-        LoadSkillIconAsync(args.RoundContext.SkillData.IconResourcePath).Forget();
     }
     #endregion
 }
