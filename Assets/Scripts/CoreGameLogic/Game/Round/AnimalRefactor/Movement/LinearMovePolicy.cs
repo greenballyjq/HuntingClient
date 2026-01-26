@@ -23,7 +23,6 @@ namespace Hunting.Game.Animal
         public void DoMove(in Transform transform, float dt)
         {
             float actualSpeed = BaseSpeed * MoveRate;
-            Debug.Log($"[{GetType().Name}] actualSpeed: {actualSpeed}, TargetDirection: {TargetDirection}, dt: {dt}");
             Vector3 movement = TargetDirection * actualSpeed * dt;
             transform.position += movement;
         }

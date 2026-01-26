@@ -28,6 +28,11 @@ namespace Hunting.Game.Animal
         Vector3 CurrentMoveDirection { get; }
         
         /// <summary>
+        /// 移动策略
+        /// </summary>
+        IMovePolicy MovePolicy { get; }
+        
+        /// <summary>
         /// 是否正在移动
         /// </summary>
         bool IsMoving { get; }
@@ -36,12 +41,6 @@ namespace Hunting.Game.Animal
         /// 初始化移动组件
         /// </summary>
         void Init();
-
-        /// <summary>
-        /// 初始化移动组件
-        /// </summary>
-        /// <param name="movePolicy">移动策略</param>
-        void Init(IMovePolicy movePolicy);
         
         /// <summary>
         /// 每帧更新移动
@@ -82,6 +81,12 @@ namespace Hunting.Game.Animal
         /// 停止移动
         /// </summary>
         void StopMove();
+        
+        /// <summary>
+        /// 切换移动策略
+        /// </summary>
+        /// <param name="policyType"></param>
+        void ChangeMovePolicy(MovePolicyType policyType);
     }
 }
 

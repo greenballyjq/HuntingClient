@@ -53,6 +53,8 @@ public class BossMovement : MonoBehaviour, IMoveable
     public Vector3 CurrentTargetDirection => _currentTargetDirection;
 
     public Vector3 CurrentMoveDirection => _currentMoveDirection;
+    
+    public IMovePolicy MovePolicy { get; private set; }
 
     public bool IsMoving => _isMoving;
 
@@ -130,6 +132,11 @@ public class BossMovement : MonoBehaviour, IMoveable
     public void StopMove()
     {
         _isMoving = false;
+    }
+
+    public void ChangeMovePolicy(MovePolicyType policyType)
+    {
+        
     }
 
     /// <summary>

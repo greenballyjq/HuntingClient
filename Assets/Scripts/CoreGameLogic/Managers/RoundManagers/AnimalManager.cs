@@ -94,21 +94,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
         return animal;
     }
 
-    public async UniTask<BaseAnimalBehaviour> GenerateGuardAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, bool inHiddenMap = false)
-    {
-        var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
-        var animal = go.GetComponent<BaseAnimalBehaviour>();
-        go.transform.position = position;
-        go.AddComponent<GuardMovement>();
-
-        animal.Init(specieData);
-        animal.GetComponent<IMoveable>().SetDirection(direction);
-
-        // 添加到活跃动物集合
-        _activeAnimals.Add(animal);
-        return animal;
-    }
-
      /// <summary>
      /// 生成Boss
      /// </summary>

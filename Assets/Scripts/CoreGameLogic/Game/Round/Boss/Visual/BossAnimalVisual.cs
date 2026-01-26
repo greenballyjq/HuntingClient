@@ -2,14 +2,14 @@
 
 public class BossAnimalVisual : BaseAnimalVisual
 {
-
-    public void PlayEnter()
+    public void PlayCall()
     {
-        _animator.SetBool("Enter", true);
+        _animator.SetBool("Call", true);
     }
     
     protected override void ResetAnimationStates()
     {
         base.ResetAnimationStates();
+        _animator.SetBool("Call", false);
     }
 }

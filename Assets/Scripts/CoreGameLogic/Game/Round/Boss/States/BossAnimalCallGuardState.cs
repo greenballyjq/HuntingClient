@@ -1,29 +1,56 @@
 ﻿using System.Collections.Generic;
-using CoreGameLogic.Game.Round.Animals.Spawners;
 using Hunting.Game.Animal;
 
 namespace CoreGameLogic.Game.Round.Boss.States
 {
     public class BossAnimalCallGuardState : AnimalState
     {
-        private List<ManualSpawner> _manualSpawners;
+        private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
         
-        public BossAnimalCallGuardState(StateMachine stateMachine, BaseAnimalBehaviour animalBehavior, List<ManualSpawner> manualSpawners) : base(
+        private List<BaseAnimalBehaviour> _calledAnimals;
+        
+        public BossAnimalCallGuardState(StateMachine stateMachine, BaseAnimalBehaviour animalBehavior) : base(
             stateMachine, animalBehavior)
         {
-            _manualSpawners = manualSpawners;
+            
         }
 
         public override void Enter()
         {
-            _manualSpawners.ForEach(spawner => spawner.SetMovePolicyType(MovePolicyType.Guard));
-            _manualSpawners.ForEach(spawner => spawner.Spawn());
+            ((BossAnimalVisual)animalBehavior.AnimalVisual).PlayCall();
+            stateTimer = 0f;
+
+            // if (bossAnimalBehaviour.CalledGuardCount >= 5)
+            // {
+            //     return;
+            // }
+            
+            _calledAnimals = _animalManager.GetCloseAnimalsFromTargetPosition(animalBehavior.transform.position, 5);
+
+            _calledAnimals?.ForEach(animal =>
+            {
+                if (animal.Moveable.MovePolicy is GuardMovePolicy) return;
+                animal.Moveable.ChangeMovePolicy(MovePolicyType.Guard);
+                // bossAnimalBehaviour.CalledGuardCount++;
+            });
+        }
+
+        public override void DoUpdate(float dt)
+        {
+            base.DoUpdate(dt);
+            if (stateTimer > 20f)
+            {
+                stateMachine.ExitTempState();
+            }
         }
 
         public override void Exit()
         {
             base.Exit();
-            _manualSpawners.ForEach(spawner => spawner.SetMovePolicyType(MovePolicyType.Linear));
+            _calledAnimals?.ForEach(animal =>
+            {
+                animal.Moveable.ChangeMovePolicy(MovePolicyType.Linear);
+            });
         }
     }
 }

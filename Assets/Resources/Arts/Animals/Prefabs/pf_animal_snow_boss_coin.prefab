@@ -175,9 +175,9 @@ GameObject:
   - component: {fileID: 8459504412770068652}
   - component: {fileID: 5716644830670931316}
   - component: {fileID: 4020049064753921601}
-  - component: {fileID: 948681967898752482}
   - component: {fileID: 4161281172654174583}
   - component: {fileID: 7439709641031741953}
+  - component: {fileID: -1599530797589076379}
   m_Layer: 6
   m_Name: pf_animal_snow_boss_coin
   m_TagString: Animal
@@ -246,18 +246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53bf92a233e35954c8a4f0fe37be933e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &948681967898752482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3866530701558865069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6adc6e46b8e10f04d9a601004754768d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4161281172654174583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,5 +268,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 145d8c965e804295a33a408a29826122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-1599530797589076379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866530701558865069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3880b6014014b3f84b720acfea2450a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

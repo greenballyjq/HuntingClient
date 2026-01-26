@@ -7,6 +7,8 @@ namespace Hunting.Game.Animal
     /// </summary>
     public class LinearMovement : MonoBehaviour, IMoveable
     {
+        [SerializeField] private MovePolicyType currentMovePolicyType;
+        
         /// <summary>
         /// 基础速度
         /// </summary>
@@ -32,10 +34,12 @@ namespace Hunting.Game.Animal
         /// </summary>
         private bool _isMoving;
         
-        /// <summary>
-        /// 移动策略
-        /// </summary>
-        private IMovePolicy _movePolicy;
+        // /// <summary>
+        // /// 移动策略
+        // /// </summary>
+        // private IMovePolicy _movePolicy;
+        
+        private Transform _guardTargetTransform;
 
         /// <summary>
         /// 当前速度
@@ -56,7 +60,9 @@ namespace Hunting.Game.Animal
         /// 当前移动方向
         /// </summary>
         public Vector3 CurrentMoveDirection => _currentMoveDirection;
-        
+
+        public IMovePolicy MovePolicy { get; private set; } = new LinearMovePolicy();
+
         /// <summary>
         /// 是否正在移动
         /// </summary>
@@ -73,21 +79,6 @@ namespace Hunting.Game.Animal
             _currentTargetDirection = Vector3.zero;
             _currentMoveDirection = Vector3.zero;
             _isMoving = false;
-
-            _movePolicy = new LinearMovePolicy(_baseSpeed, _moveRate);
-        }
-
-        public void Init(IMovePolicy movePolicy)
-        {
-            _baseSpeed = 0f;
-            _moveRate = 1f;
-            _currentTargetDirection = Vector3.zero;
-            _currentMoveDirection = Vector3.zero;
-            _isMoving = false;
-            
-            _movePolicy = movePolicy;
-            _movePolicy.BaseSpeed = _baseSpeed;
-            _movePolicy.MoveRate = _moveRate;
         }
         
         /// <summary>
@@ -97,17 +88,48 @@ namespace Hunting.Game.Animal
         public void DoUpdate(float dt)
         {
             // 更新当前移动方向
-            _currentMoveDirection = _currentTargetDirection;
             
             if (!_isMoving || _currentTargetDirection == Vector3.zero)
                 return;
             
             // 更新位置
-            float actualSpeed = _baseSpeed * _moveRate;
-            Vector3 movement = _currentTargetDirection * actualSpeed * dt;
-            transform.position += movement;
+            // float actualSpeed = _baseSpeed * _moveRate;
+            // Vector3 movement = _currentTargetDirection * actualSpeed * dt;
+            // transform.position += movement;
             // Debug.Log($"[{GetType().Name}] DoUpdate");
-            // _movePolicy.DoMove(transform, dt);
+            if (currentMovePolicyType == MovePolicyType.Linear)
+            {
+                _currentMoveDirection = _currentTargetDirection;
+                float actualSpeed = _baseSpeed * _moveRate;
+                Vector3 movement = _currentTargetDirection * actualSpeed * dt;
+                transform.position += movement;
+            }
+            else
+            {
+                if (Vector3.Distance(transform.position, _guardTargetTransform.position) > 5f)
+                {
+                    var dir = (_guardTargetTransform.position - transform.position).normalized;
+                    _currentMoveDirection = dir;
+                    float actualSpeed = _baseSpeed * _moveRate;
+                    Vector3 movement = dir * actualSpeed * dt;
+                    transform.position += movement;
+                }
+                else
+                {
+                    transform.RotateAround(_guardTargetTransform.position, Vector3.up, 36f * dt);
+                    var angle = Vector3.SignedAngle(_guardTargetTransform.right, transform.position - _guardTargetTransform.position, Vector3.up);
+                    if (angle > 0f)
+                    {
+                        _currentMoveDirection = Vector3.right;
+                    }
+                    else
+                    {
+                        _currentMoveDirection = Vector3.left;
+                    }
+                }
+            }
+            
+            // MovePolicy.DoMove(transform, dt);
         }
         
         /// <summary>
@@ -117,7 +139,7 @@ namespace Hunting.Game.Animal
         public void SetSpeed(float speed)
         {
             _baseSpeed = speed;
-            _movePolicy.BaseSpeed = speed;
+            MovePolicy.BaseSpeed = speed;
         }
         
         /// <summary>
@@ -127,7 +149,7 @@ namespace Hunting.Game.Animal
         public void SetMoveRate(float rate)
         {
             _moveRate = rate;
-            _movePolicy.MoveRate = rate;
+            MovePolicy.MoveRate = rate;
         }
         
         /// <summary>
@@ -143,7 +165,7 @@ namespace Hunting.Game.Animal
             }
             
             _currentTargetDirection = direction.normalized;
-            _movePolicy.TargetDirection = _currentTargetDirection;
+            MovePolicy.TargetDirection = _currentTargetDirection;
         }
         
         /// <summary>
@@ -167,6 +189,28 @@ namespace Hunting.Game.Animal
         {
             _isMoving = false;
         }
+
+        public void ChangeMovePolicy(MovePolicyType policyType)
+        {
+            currentMovePolicyType = policyType;
+            switch (policyType)
+            {
+                case MovePolicyType.Linear:
+                    MovePolicy = new LinearMovePolicy(_baseSpeed, _moveRate);
+                    Debug.Log("[LinearMovement] 切换到线性策略");
+                    break;
+                case MovePolicyType.Guard:
+                    _guardTargetTransform = Object.FindObjectOfType<BossAnimalBehaviour>().transform;
+                    if (_guardTargetTransform == null)
+                    {
+                        Debug.LogError("[GuardMovePolicy] Could not find BossAnimalBehaviour");
+                    }
+                    MovePolicy = new GuardMovePolicy(_baseSpeed, _moveRate);
+                    Debug.Log("[LinearMovement] 切换到守卫策略");
+                    break;
+            }
+        }
+
         #endregion
     }
 }

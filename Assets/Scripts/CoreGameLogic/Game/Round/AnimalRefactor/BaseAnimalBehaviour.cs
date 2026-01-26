@@ -113,38 +113,6 @@ namespace Hunting.Game.Animal
         }
         
         /// <summary>
-        /// 初始化动物行为类
-        /// </summary>
-        /// <param name="data">配置数据</param>
-        /// <param name="movePolicy">移动策略</param>
-        public virtual void Init(Specie data, IMovePolicy movePolicy)
-        {
-            SpecieData = data;
-
-            // 初始化血量组件
-            Health.Init(data.HP);
-
-            // 初始化移动组件
-            Moveable.Init(movePolicy);
-            Moveable.SetSpeed(data.MoveSpeed);
-            Moveable.StartMove();
-
-            // 初始化视觉组件
-            AnimalVisual.Init(this);
-
-            // 初始化事件触发器组件
-            AnimalEventTrigger.Init(this);
-
-            // 创建状态实例
-            MoveState = new AnimalMoveState(_stateMachine, this);
-            HitState = new AnimalHitState(_stateMachine, this);
-            DeathState = new AnimalDeathState(_stateMachine, this);
-
-            // 初始化状态机
-            _stateMachine.Init(MoveState);
-        }
-
-        /// <summary>
         /// 每帧更新
         /// </summary>
         /// <param name="dt">时间增量</param>

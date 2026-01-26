@@ -28,7 +28,6 @@ namespace Hunting.Game.Animal
         public override void DoUpdate(float dt)
         {
             base.DoUpdate(dt);
-            Debug.Log($"[{GetType().Name}] DoUpdate");
             animalBehavior.Moveable.DoUpdate(dt);
         }
 

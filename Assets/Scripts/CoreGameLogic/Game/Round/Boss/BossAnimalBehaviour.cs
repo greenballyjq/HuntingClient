@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using CoreGameLogic.Game.Round.Boss.States;
+using GameFramework.Manager;
 using Hunting.Game.Animal;
 
 public class BossAnimalBehaviour : BaseAnimalBehaviour
@@ -8,15 +8,16 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
     private BossAnimalDeathState _bossDeathState;
     private BossAnimalCallGuardState _bossCallGuardState;
     
-    private int _spawnedAnimalTimerId;
+    private int _callGuardTimerId;
+    private const float CALL_GUARD_DURATION = 30f;
 
-    private List<ManualSpawner> _manualSpawners;
+    private TimerManager _timerManager => GameServiceLocator.TimerManager;
     
-    private SpawnerManager _spawnerManager => GameServiceLocator.GetRoundManager<SpawnerManager>();
+    public int CalledGuardCount { get; set; }
     
     public override void Init(Specie data)
     {
-        _bossCallGuardState = new BossAnimalCallGuardState(_stateMachine, this, _manualSpawners);
+        _bossCallGuardState = new BossAnimalCallGuardState(_stateMachine, this);
         
         base.Init(data);
         _bossDeathState = new BossAnimalDeathState(_stateMachine, this);
@@ -24,16 +25,20 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
         Health.OnDamaged += OnDamaged;
         Health.OnDeath += OnDeath;
 
-        _manualSpawners = _spawnerManager.GetSpawners<ManualSpawner>("Random");
+        _callGuardTimerId = _timerManager.StartTimer(CALL_GUARD_DURATION, CallGuard, repeat: TimerManager.LOOP);
     }
 
-    // protected override void InitState()
-    // {
-    //     // _stateMachine.Init(_bossCallGuardState);
-    // }
+    private void CallGuard()
+    {
+        _stateMachine.EnterTempState(_bossCallGuardState);
+    }
 
     protected override void OnDeath()
     {
         _stateMachine.ChangeState(_bossDeathState);
+
+        var spawnerManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
+        var autoSpawners = spawnerManager.GetSpawners<AutoSpawner>("Random");
+        autoSpawners.ForEach(spawner => spawner.SetEnabled(false));
     }
 }

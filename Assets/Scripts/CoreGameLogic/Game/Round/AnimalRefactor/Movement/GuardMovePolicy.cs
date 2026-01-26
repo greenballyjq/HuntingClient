@@ -32,7 +32,10 @@ namespace Hunting.Game.Animal
         public Vector3 TargetDirection { get; set; }
         public void DoMove(in Transform transform, float dt)
         {
-            
+            float actualSpeed = BaseSpeed * MoveRate;
+            Vector3 movement = TargetDirection * actualSpeed * dt;
+            transform.position += movement;
+            // transform.RotateAround(_guardTargetTransform.position, Vector3.up, actualSpeed * dt);
         }
     }
 }

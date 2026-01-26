@@ -36,23 +36,10 @@ namespace Hunting.Game.Animal
         /// </summary>
         public Vector3 Direction;
         
-        /// <summary>
-        /// 移动策略
-        /// </summary>
-        public IMovePolicy MovePolicy;
-        
         public SpawnInfo(Vector3 pos, Vector3 dir)
         {
             Position = pos;
             Direction = dir.normalized;
-            MovePolicy = new LinearMovePolicy();
-        }
-
-        public SpawnInfo(Vector3 pos, Vector3 dir, IMovePolicy movePolicy)
-        {
-            Position = pos;
-            Direction = dir.normalized;
-            MovePolicy = movePolicy;
         }
     }
 
