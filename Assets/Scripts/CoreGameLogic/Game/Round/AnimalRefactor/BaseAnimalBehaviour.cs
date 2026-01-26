@@ -1,7 +1,5 @@
 ﻿using cfg.HuntingConfig;
-using Cysharp.Threading.Tasks;
 using GameFramework.Core.Pool;
-using GameFramework.Manager;
 using UnityEngine;
 
 

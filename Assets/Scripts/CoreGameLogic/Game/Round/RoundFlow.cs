@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GameFramework.Core;
 using GameFramework.Manager;
-using Hunting.Events;
 using Hunting.Game.Animal;
 
 /// <summary>
@@ -114,6 +113,7 @@ public class RoundFlow : Singleton<RoundFlow>
 
         /// <summary>
         /// 过渡状态
+        /// 进入单局加载 进入雪山加载
         /// </summary>
         Transitioning,
 
@@ -139,10 +139,16 @@ public class RoundFlow : Singleton<RoundFlow>
     private readonly List<IRoundManager> _roundManagers = new List<IRoundManager>();
 
     /// <summary>
+    /// 事件管理器
+    /// </summary>
+    private EventManager _eventManager => GameServiceLocator.EventManager;
+
+    /// <summary>
     /// UI管理器
     /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
+    private UIManager _uiManager => GameServiceLocator.UIManager; 
 
+    #region 测试
     /// <summary>
     /// 特效管理器
     /// </summary>
@@ -152,11 +158,7 @@ public class RoundFlow : Singleton<RoundFlow>
     /// 音效管理器
     /// </summary>
     private SoundManager _soundManager => GameServiceLocator.GetFrameworkManager<SoundManager>();
-
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    #endregion
 
     #region 公共方法
     /// <summary>
@@ -173,14 +175,6 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
-    /// 获取当前单局上下文
-    /// </summary>
-    public RoundContext GetRoundContext()
-    {
-        return _currentRoundContext;
-    }
-
-    /// <summary>
     /// 开始单局
     /// </summary>
     /// <param name="context">单局上下文</param>
@@ -188,12 +182,15 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         #region 测试代码 将来会正式化
         _currentState = RoundFlowState.Transitioning;
+
         _currentRoundContext = context;
+
         CreateRoundManagers();
+
         InitRoundManagers();
+
         await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay", UIManager.UILayer.Fixed);
 
-        // 触发单局开始事件
         TriggerRoundStarted(new RoundStartedEventArgs
         {
             RoundContext = _currentRoundContext

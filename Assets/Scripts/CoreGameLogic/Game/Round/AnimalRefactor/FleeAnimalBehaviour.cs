@@ -36,7 +36,6 @@ namespace Hunting.Game.Animal
         #region 公共方法
         public override void Init(Specie data)
         {
-            // 设置驻场时间
             _stayTime = data.StayTime;
             _stayTimer = 0f;
 

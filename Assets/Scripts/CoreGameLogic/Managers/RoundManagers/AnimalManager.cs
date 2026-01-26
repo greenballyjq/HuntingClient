@@ -3,10 +3,8 @@ using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using UnityEngine;
 using GameFramework.Manager;
-using System;
 using System.Linq;
 using Hunting.Game.Animal;
-using Object = UnityEngine.Object;
 
 /// <summary>
 /// 动物管理器
@@ -19,15 +17,15 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
+    /// 资源加载管理器
+    /// </summary>
+    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
+
+    /// <summary>
     /// 对象池管理器
     /// </summary>
     private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
 
-    /// <summary>
-    /// 资源加载管理器
-    /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-    
     /// <summary>
     /// 追踪所有活跃的动物
     /// </summary>
@@ -64,8 +62,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <param name="dt">时间增量</param>
     public void DoUpdate(float dt)
     {
-        // _animalsToRemove.Clear();
-        
         foreach (var animal in _activeAnimals)
             animal.DoUpdate(dt);
         
@@ -76,42 +72,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     }
 
     #region 公共方法
-    /// <summary>
-    /// 生成动物
-    /// </summary>
-    public async UniTask<BaseAnimalBehaviour> GenerateAnimalAsync(Specie specieData, Vector3 position, Vector3 direction, bool inHiddenMap = false)
-    {
-        var go = await _gameObjectPoolManager.SpawnAsync(specieData.PrefabResourcePath);
-        var animal = go.GetComponent<BaseAnimalBehaviour>();
-        go.transform.position = position;
-        go.AddComponent<LinearMovement>();
-
-        animal.Init(specieData);
-        animal.GetComponent<IMoveable>().SetDirection(direction);
-
-        // 添加到活跃动物集合
-        _activeAnimals.Add(animal);
-        return animal;
-    }
-
-     /// <summary>
-     /// 生成Boss
-     /// </summary>
-     /// <returns>Boss实例</returns>
-    public async UniTask<BossAnimalBehaviour> GenerateBossAsync(Specie bossSpecie, Transform spawnPoint)
-    {
-        // var configManager = GameServiceLocator.ConfigManager;
-        // var bossSpecie = configManager.GetRandomBoss();
-        // var spawnPoint = GameObject.Find("BossSpawnerPoint");
-        var prefab = await _resourceManager.LoadAssetAsync<GameObject>(bossSpecie.PrefabResourcePath);
-        var go = Object.Instantiate(prefab, spawnPoint);
-        var boss = go.GetComponent<BossAnimalBehaviour>();
-        _activeAnimals.Add(boss);
-        go.transform.position = spawnPoint.position;
-        boss.Init(bossSpecie);
-        return boss;
-    }
-    
     /// <summary>
     /// 是否还有活跃的动物
     /// </summary>
@@ -137,7 +97,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
         var validAnimals = _activeAnimals.Except(_animalsToRemove).ToList();
         if (validAnimals.Count <= 0) return null;
 
-        animalCount = Math.Min(validAnimals.Count, animalCount);
+        animalCount = Mathf.Min(validAnimals.Count, animalCount);
         return validAnimals
             .OrderBy(animal => Vector3.SqrMagnitude(animal.transform.position - position))
             .Take(animalCount)

@@ -59,12 +59,15 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     private RoundFlow _currentRoundFlow;
 
-    #region 测试
+    /// <summary>
+    /// UI管理器
+    /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
+    #region 测试
     private void Start()
     {
-        // TODO: 可能由外部调用，暂时在这里启动应用，之后会按需调整
+        // TODO: 将来可能在别处调用
         StartAppAsync().Forget();
     }
     #endregion
@@ -75,11 +78,13 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     public async UniTask EnterPrepareAsync()
     {
-        #region 测试 将来这些逻辑可能在别处
-        _currentRoundFlow?.EndRound();
-        _currentRoundFlow = null;
+        if(_currentRoundFlow != null)
+        {
+            await _currentRoundFlow.EndRound();
+            _currentRoundFlow = null;
+        }
+            
         await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
-        #endregion
 
         _currentState = HuntingAppFlowState.Prepare;
     }
@@ -90,12 +95,9 @@ public class HuntingAppFlow : GameAppFlow
     /// <param name="context">单局上下文</param>
     public async UniTask EnterRound(RoundContext context)
     {
-        #region 测试 将来这些逻辑可能在别处
-        // 创建单局流程并开始
         _currentRoundFlow = new RoundFlow();
         await _currentRoundFlow.StartRound(context);
-        #endregion
-
+        
         _currentState = HuntingAppFlowState.Round;
     }
     #endregion
@@ -114,9 +116,11 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     protected override void RegisterAppManagers()
     {
+        // TODO: 将来按需调整顺序
         RegisterAppManager(new PlayerDataManager());
         RegisterAppManager(new InputManager());
         RegisterAppManager(new CameraManager());
+        
     }
     #endregion
 
@@ -126,9 +130,20 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     protected override async UniTask OnAppStartAsync()
     {
-        #region 测试 将来不一定就是在这里进入准备
+        // TODO: 预加载所有会用到的UIBase预制体 将来可能在别处调用
+        await _uiManager.PreloadUIAsync("UIPrepare");
+        await _uiManager.PreloadUIAsync("UIPopupLucky");
+        await _uiManager.PreloadUIAsync("UIPopupLuckyBuff");
+        await _uiManager.PreloadUIAsync("UIPopupLucky");
+        await _uiManager.PreloadUIAsync("UIRanking");
+
+        await _uiManager.PreloadUIAsync("UIGameplay");
+        await _uiManager.PreloadUIAsync("UICountDown");
+
+        await _uiManager.PreloadUIAsync("UIPopupSettlementNormal");
+
+        // TODO: 将来可能在别处调用
         await EnterPrepareAsync();
-        #endregion
     }
 
     /// <summary>

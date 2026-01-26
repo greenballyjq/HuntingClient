@@ -54,13 +54,13 @@ public class GiftOpenVFX : MonoBehaviour
         _originalGiftSprite = _imageGift.sprite;
 
         _eventManager.AddListener(LuckyEvents.GiftOpened, OnGiftOpened);
-        _eventManager.AddListener(LuckyEvents.LuckyBuffConfirmClicked, OnLuckyBuffConfirmClicked);
+        _eventManager.AddListener(LuckyEvents.LuckyBuffConfirmButtonClicked, OnLuckyBuffConfirmClicked);
     }
 
     private void OnDestroy()
     {
         _eventManager.RemoveListener(LuckyEvents.GiftOpened, OnGiftOpened);
-        _eventManager.RemoveListener(LuckyEvents.LuckyBuffConfirmClicked, OnLuckyBuffConfirmClicked);
+        _eventManager.RemoveListener(LuckyEvents.LuckyBuffConfirmButtonClicked, OnLuckyBuffConfirmClicked);
     }
 
     #region 私有方法

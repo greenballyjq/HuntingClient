@@ -127,7 +127,7 @@ public class UIPopupLucky : UIBase
     {
         _buttonClose.interactable = true;
 
-        await _uiManager.OpenUIAsync<UILuckyBuffShow>("UILuckyBuffShow", UIManager.UILayer.PopUp, args.LuckyBuffData);
+        await _uiManager.OpenUIAsync<UIPopupLuckyBuff>("UIPopupLuckyBuff", UIManager.UILayer.PopUp, args.LuckyBuffData);
     }
     #endregion
 }

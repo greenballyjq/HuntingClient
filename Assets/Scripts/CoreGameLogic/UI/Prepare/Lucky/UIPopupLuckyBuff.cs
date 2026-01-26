@@ -1,23 +1,23 @@
 ﻿using cfg.HuntingConfig;
 using GameFramework.Core.UI;
-using Hunting.Events;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 幸运增益展示界面
+/// 幸运仪式增益弹窗
 /// </summary>
-public class UILuckyBuffShow : UIBase
+public class UIPopupLuckyBuff : UIBase
 {
     /// <summary>
     /// 标题文本
     /// </summary>
-    [SerializeField] private Text _textTitle;
+    [SerializeField] private TextMeshProUGUI _textTitle;
 
     /// <summary>
-    /// 增益描述文本
+    /// 描述文本
     /// </summary>
-    [SerializeField] private Text _textBuffDescription;
+    [SerializeField] private TextMeshProUGUI _textDescription;
 
     /// <summary>
     /// 确认按钮
@@ -30,56 +30,56 @@ public class UILuckyBuffShow : UIBase
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
-    /// 当前增益配置
+    /// 当前幸运仪式增益配置
     /// </summary>
-    private LuckyBuff _currentLuckyBuff;
+    private LuckyBuff _currentLuckyBuffData;
 
     private void Awake()
     {
-        _buttonConfirm.onClick.AddListener(OnClickConfirm);
+        _buttonConfirm.onClick.AddListener(OnConfirmButtonClicked);
     }
 
     private void OnDestroy()
     {
-        _buttonConfirm.onClick.RemoveListener(OnClickConfirm);
+        _buttonConfirm.onClick.RemoveListener(OnConfirmButtonClicked);
     }
 
     public override void OnInit(object userData)
     {
         base.OnInit(userData);
 
-        _currentLuckyBuff = userData as LuckyBuff;
-        if (_currentLuckyBuff != null)
-            UpdateBuffDisplay(_currentLuckyBuff);
+        _currentLuckyBuffData = userData as LuckyBuff;
+
+        UpdateBuffDisplay(_currentLuckyBuffData);
     }
 
     #region 私有方法
     /// <summary>
-    /// 更新展示内容
+    /// 更新增益展示
     /// </summary>
     /// <param name="buffData">幸运仪式增益配置</param>
     private void UpdateBuffDisplay(LuckyBuff buffData)
     {
         _textTitle.text = buffData.Name;
-        _textBuffDescription.text = buffData.Description;
-    }
-
-    /// <summary>
-    /// 触发增益确认点击事件
-    /// </summary>
-    private void TriggerLuckyBuffConfirmClicked()
-    {
-        _eventManager.Trigger(LuckyEvents.LuckyBuffConfirmClicked);
+        _textDescription.text = buffData.Description;
     }
     #endregion
 
     #region 事件相关
     /// <summary>
+    /// 触发幸运仪式增益确认按钮点击事件
+    /// </summary>
+    private void TriggerLuckyBuffConfirmButtonClicked()
+    {
+        _eventManager.Trigger(LuckyEvents.LuckyBuffConfirmButtonClicked);
+    }
+
+    /// <summary>
     /// 确认按钮点击回调
     /// </summary>
-    private void OnClickConfirm()
+    private void OnConfirmButtonClicked()
     {
-        TriggerLuckyBuffConfirmClicked();
+        TriggerLuckyBuffConfirmButtonClicked();
         Close();
     }
     #endregion

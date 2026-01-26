@@ -1,11 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
-using GameFramework.Core.UI;
-using GameFramework.Core;
+﻿using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-using GameFramework.Manager;
 
 /// <summary>
 /// 返回/结算按钮组件
@@ -33,9 +30,9 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
     /// <summary>
-    /// 对象池管理器
+    /// 结算管理器
     /// </summary>
-    private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
+    private SettlementRewardManager _settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementRewardManager>();
 
     /// <summary>
     /// 是否为结算模式
@@ -46,6 +43,11 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     /// 肉条刻度是否集满
     /// </summary>
     private bool _isMeatScaleFull;
+
+    /// <summary>
+    /// 是否有隐藏地图
+    /// </summary>
+    private bool _hasHiddenMap;
 
     private void Awake()
     {
@@ -62,9 +64,11 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
         _textReturnOrSettlement.text = "返回";
         _isSettlementMode = false;
         _isMeatScaleFull = false;
+        _hasHiddenMap = false;
 
         _eventManager.AddListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
         _eventManager.AddListener(MeatEvents.MeatScaleFull, OnMeatScaleFull);
+        _eventManager.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
 
         Debug.Log("[UIComponentReturnOrSettlement] 初始化完成");
     }
@@ -96,42 +100,37 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 返回/结算按钮点击回调
+    /// 单局开始事件回调
+    /// </summary>
+    private void OnRoundStarted(RoundStartedEventArgs args)
+    {
+        _hasHiddenMap = args.RoundContext.HasHiddenMap;
+    }
+
+    /// <summary>
+    /// 返回/结算按钮点击事件回调
     /// </summary>
     private async void OnReturnOrSettlementButtonClicked()
     {
-        #region 非正式代码，测试用
         if (_isSettlementMode)
         {
-            var roundContext = RoundFlow.Instance.GetRoundContext();
-
-            if (_isMeatScaleFull && roundContext.HasHiddenMap)
-            {
-                // 打开假结算面板
+            if (_isMeatScaleFull && _hasHiddenMap)
                 await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-            }
             else
-            {
-                // 打开正常结算面板
-                //await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
-                await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-                var settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementRewardManager>();
-                settlementRewardManager.CalculateReward();
-            }
+                await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
+
+            _settlementRewardManager.CalculateReward();
         }
         else
-        {
-            await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-            // 返回主界面
-            //_uiManager.CloseUI("UIGameplay");
-            //await HuntingAppFlow.Instance.EnterPrepareAsync();
-            //_gameObjectPoolManager.ClearAllPools();
-            //SceneManager.LoadSceneAsync("PrepareScene").completed += async (ao) =>
-            //{
-            //    await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
-            //};
+        {   
+            // TODO: 将来可能正式化
+            _uiManager.CloseUI("UIGameplay");
+            await HuntingAppFlow.Instance.EnterPrepareAsync();
+            SceneManager.LoadSceneAsync("PrepareScene").completed += async (ao) =>
+            {
+                await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
+            };
         }
-        #endregion
     }
     #endregion
 }

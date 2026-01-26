@@ -1,7 +1,6 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
-using GameFramework.Game;
 
 /// <summary>
 /// 幸运仪式事件
@@ -29,9 +28,9 @@ public static class LuckyEvents
     public static readonly EventKey<GiftOpenAnimationEndedEventArgs> GiftOpenAnimationEnded = new EventKey<GiftOpenAnimationEndedEventArgs>();
 
     /// <summary>
-    /// 幸运增益确认点击事件
+    /// 幸运仪式增益确认按钮点击事件
     /// </summary>
-    public static readonly EventKey LuckyBuffConfirmClicked = new EventKey();
+    public static readonly EventKey LuckyBuffConfirmButtonClicked = new EventKey();
 }
 
 /// <summary>
