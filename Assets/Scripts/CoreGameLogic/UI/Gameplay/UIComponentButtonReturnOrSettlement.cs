@@ -68,7 +68,7 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
 
         _eventManager.AddListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
         _eventManager.AddListener(MeatEvents.MeatScaleFull, OnMeatScaleFull);
-        _eventManager.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
+        _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
 
         Debug.Log("[UIComponentReturnOrSettlement] 初始化完成");
     }
@@ -77,6 +77,7 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     {
         _eventManager.RemoveListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
         _eventManager.RemoveListener(MeatEvents.MeatScaleFull, OnMeatScaleFull);
+        _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
 
         Debug.Log("[UIComponentReturnOrSettlement] 已清理");
     }
@@ -102,7 +103,7 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     /// <summary>
     /// 单局开始事件回调
     /// </summary>
-    private void OnRoundStarted(RoundStartedEventArgs args)
+    private void OnRoundEntered(RoundEnteredEventArgs args)
     {
         _hasHiddenMap = args.RoundContext.HasHiddenMap;
     }
@@ -112,6 +113,7 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     /// </summary>
     private async void OnReturnOrSettlementButtonClicked()
     {
+        RoundFlow.Instance.StartSettlement();
         if (_isSettlementMode)
         {
             if (_isMeatScaleFull && _hasHiddenMap)
@@ -122,15 +124,17 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
             _settlementRewardManager.CalculateReward();
         }
         else
-        {   
+        {
+            await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
             // TODO: 将来可能正式化
-            _uiManager.CloseUI("UIGameplay");
-            await HuntingAppFlow.Instance.EnterPrepareAsync();
-            SceneManager.LoadSceneAsync("PrepareScene").completed += async (ao) =>
-            {
-                await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
-            };
+            //    _uiManager.CloseUI("UIGameplay");
+            //    await HuntingAppFlow.Instance.EnterPrepareAsync();
+            //    SceneManager.LoadSceneAsync("PrepareScene").completed += async (ao) =>
+            //    {
+            //        await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
+            //    };
+            //}
         }
+        #endregion
     }
-    #endregion
 }

@@ -22,6 +22,7 @@
         public override void Enter()
         {
             base.Enter();
+
             animalBehavior.Moveable.SetMoveRate(_fleeSpeedRate);
             
             (animalBehavior.AnimalVisual as FleeAnimalVisual).PlayFlee();

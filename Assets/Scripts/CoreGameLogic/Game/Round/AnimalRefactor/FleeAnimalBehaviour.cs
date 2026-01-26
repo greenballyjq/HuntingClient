@@ -27,12 +27,6 @@ namespace Hunting.Game.Animal
         /// </summary>
         private bool _stayFinished;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            
-        }
-
         #region 公共方法
         public override void Init(Specie data)
         {

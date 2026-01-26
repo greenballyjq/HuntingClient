@@ -56,8 +56,6 @@ namespace Hunting.Game.Animal
         /// </summary>
         public Vector3 CurrentMoveDirection => _currentMoveDirection;
 
-        // public IMovePolicy MovePolicy { get; private set; } = new LinearMovePolicy();
-
         /// <summary>
         /// 是否正在移动
         /// </summary>
@@ -134,7 +132,6 @@ namespace Hunting.Game.Animal
         public void SetSpeed(float speed)
         {
             _baseSpeed = speed;
-            // MovePolicy.BaseSpeed = speed;
         }
         
         /// <summary>
@@ -144,7 +141,6 @@ namespace Hunting.Game.Animal
         public void SetMoveRate(float rate)
         {
             _moveRate = rate;
-            // MovePolicy.MoveRate = rate;
         }
         
         /// <summary>
@@ -160,7 +156,6 @@ namespace Hunting.Game.Animal
             }
             
             _currentTargetDirection = direction.normalized;
-            // MovePolicy.TargetDirection = _currentTargetDirection;
         }
         
         /// <summary>

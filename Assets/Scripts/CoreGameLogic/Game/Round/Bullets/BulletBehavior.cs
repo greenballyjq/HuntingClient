@@ -90,7 +90,11 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
         _bulletEffect = BulletEffectFactory.CreateEffect(bulletData.BulletType, bulletData);
     }
 
-    private void Update()
+    /// <summary>
+    /// 每帧更新
+    /// </summary>
+    /// <param name="dt">时间增量</param>
+    public void DoUpdate(float dt)
     {
         UpdateMovement();
         UpdateLifetime();

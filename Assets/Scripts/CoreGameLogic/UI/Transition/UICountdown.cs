@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class UICountdown : UIBase
     /// <summary>
     /// 倒计时配置
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     private class CountdownConfig
     {
         /// <summary>

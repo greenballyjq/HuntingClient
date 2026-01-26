@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Hunting.Game.Animal
+﻿namespace Hunting.Game.Animal
 {
     public class StateMachine
     {

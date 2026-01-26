@@ -74,7 +74,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
         UpdateBarText(currentBars, totalBar);
         UpdateBackgroundColor(currentBars);
 
-        _eventManager.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
+        _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
         _eventManager.AddListener(EnergyEvents.EnergyProgressChanged, OnEnergyProgressChanged);
         _eventManager.AddListener(EnergyEvents.EnergyBarCountChanged, OnEnergyBarCountChanged);
         _eventManager.AddListener(EnergyEvents.EnergyMaxBarsReached, OnEnergyMaxBarsReached);
@@ -82,7 +82,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
 
     public void CleanUp()
     {
-        _eventManager.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
+        _eventManager.RemoveListener(RoundEvents.RoundEntered, OnRoundEntered);
         _eventManager.RemoveListener(EnergyEvents.EnergyProgressChanged, OnEnergyProgressChanged);
         _eventManager.RemoveListener(EnergyEvents.EnergyBarCountChanged, OnEnergyBarCountChanged);
         _eventManager.RemoveListener(EnergyEvents.EnergyMaxBarsReached, OnEnergyMaxBarsReached);
@@ -142,7 +142,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// <summary>
     /// 单局开始事件回调
     /// </summary>
-    private void OnRoundStarted(RoundStartedEventArgs args)
+    private void OnRoundEntered(RoundEnteredEventArgs args)
     {
         LoadSkillIconAsync(args.RoundContext.SkillData.IconResourcePath).Forget();
     }

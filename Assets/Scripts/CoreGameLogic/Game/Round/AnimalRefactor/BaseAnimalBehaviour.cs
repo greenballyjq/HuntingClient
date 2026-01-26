@@ -102,14 +102,9 @@ namespace Hunting.Game.Animal
             DeathState = new AnimalDeathState(_stateMachine, this);
 
             // 初始化状态机
-            InitState();
-        }
-
-        protected virtual void InitState()
-        {
             _stateMachine.Init(MoveState);
         }
-        
+
         /// <summary>
         /// 每帧更新
         /// </summary>

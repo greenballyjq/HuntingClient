@@ -1523,11 +1523,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fec75df01534ad69ff927308a6d0cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _textCoin: {fileID: 3557956564106087789}
-  _textMastery: {fileID: 1024381160357789370}
-  _settleAndReturnButton: {fileID: 1486191634010822080}
-  _shareButton: {fileID: 1447447687312415249}
-  _diceButton: {fileID: 5766763918547038505}
+  _textThreeKPCoin: {fileID: 3557956564106087789}
+  _textPoint: {fileID: 1024381160357789370}
+  _buttonConfirm: {fileID: 1486191634010822080}
+  _buttonShare: {fileID: 1447447687312415249}
+  _buttonDice: {fileID: 5766763918547038505}
   _dicePrefab: {fileID: 8633554459481619185, guid: 658a676b153a7b64c9612bc32299418b, type: 3}
   _diceParent: {fileID: 4854653818908099863}
 --- !u!1 &7634461635402593859
@@ -1881,6 +1881,18 @@ PrefabInstance:
     - target: {fileID: 8633554459481619185, guid: 658a676b153a7b64c9612bc32299418b, type: 3}
       propertyPath: m_SizeDelta.y
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633554459481619185, guid: 658a676b153a7b64c9612bc32299418b, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633554459481619185, guid: 658a676b153a7b64c9612bc32299418b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8633554459481619185, guid: 658a676b153a7b64c9612bc32299418b, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8633554459481619185, guid: 658a676b153a7b64c9612bc32299418b, type: 3}
       propertyPath: m_LocalPosition.x

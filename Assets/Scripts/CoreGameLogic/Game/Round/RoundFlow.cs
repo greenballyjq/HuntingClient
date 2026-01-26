@@ -113,7 +113,6 @@ public class RoundFlow : Singleton<RoundFlow>
 
         /// <summary>
         /// 过渡状态
-        /// 进入单局加载 进入雪山加载
         /// </summary>
         Transitioning,
 
@@ -121,6 +120,16 @@ public class RoundFlow : Singleton<RoundFlow>
         /// 游玩状态
         /// </summary>
         Playing,
+
+        /// <summary>
+        /// 结算状态
+        /// </summary>
+        Settlement,
+
+        /// <summary>
+        /// 暂停状态
+        /// </summary>
+        Paused,
     }
 
     /// <summary>
@@ -148,6 +157,16 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager; 
 
+    /// <summary>
+    /// 派发管理器
+    /// </summary>
+    private SpawnerManager _spawnerManager => GameServiceLocator.GetRoundManager<SpawnerManager>();
+
+    /// <summary>
+    /// 动物管理器
+    /// </summary>
+    private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
+
     #region 测试
     /// <summary>
     /// 特效管理器
@@ -158,6 +177,8 @@ public class RoundFlow : Singleton<RoundFlow>
     /// 音效管理器
     /// </summary>
     private SoundManager _soundManager => GameServiceLocator.GetFrameworkManager<SoundManager>();
+
+    GameObject fxSnow;
     #endregion
 
     #region 公共方法
@@ -180,30 +201,35 @@ public class RoundFlow : Singleton<RoundFlow>
     /// <param name="context">单局上下文</param>
     public async UniTask StartRound(RoundContext context)
     {
-        #region 测试代码 将来会正式化
         _currentState = RoundFlowState.Transitioning;
 
         _currentRoundContext = context;
 
-        CreateRoundManagers();
+        _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
 
+        // 创建并初始化单局管理器
+        CreateRoundManagers();
         InitRoundManagers();
 
         await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay", UIManager.UILayer.Fixed);
 
+        // 触发单局进入事件
+        TriggerRoundEntered(new RoundEnteredEventArgs
+        {
+            RoundContext = _currentRoundContext
+        });
+
+        // 倒计时
+        var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown",UIManager.UILayer.Fixed);
+        await uiCountDown.PlayCountdownAsync();
+
+        // 触发单局开始事件
         TriggerRoundStarted(new RoundStartedEventArgs
         {
             RoundContext = _currentRoundContext
         });
 
-        var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown",UIManager.UILayer.Fixed);
-        await uiCountDown.PlayCountdownAsync();
-
         _currentState = RoundFlowState.Playing;
-        
-        _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
-
-        #endregion
     }
 
     /// <summary>
@@ -211,21 +237,64 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     public async UniTask EndRound()
     {
-        #region 测试代码 将来会正式化
         _currentState = RoundFlowState.Transitioning;
+
+        // 清理单局管理器
         DisposeRoundManagers();
         _roundManagers.Clear();
         _currentRoundContext = null;
-        _currentState = RoundFlowState.None;
-        #endregion
-        
-        _uiManager.CloseUI("UISnowMountainSettlement");
-        _uiManager.CloseUI("UIHuntingGameplay");
 
-        await UniTask.CompletedTask;
+        _uiManager.CloseUI("UIPopupSettlementSnowVictory");
+        _uiManager.CloseUI("UIGameplay");
+
+        await SceneManager.LoadSceneAsync("PrepareScene").ToUniTask();
+
+        _currentState = RoundFlowState.None;
     }
 
-    GameObject fxSnow;
+    /// <summary>
+    /// 每帧更新
+    /// </summary>
+    /// <param name="dt">时间增量</param>
+    public void DoUpdate(float dt)
+    {
+        switch (_currentState)
+        {
+            case RoundFlowState.Playing:
+                OnRoundPlaying(dt);
+                break;
+
+            case RoundFlowState.None:
+            default:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 开始结算
+    /// </summary>
+    /// <returns></returns>
+    public void StartSettlement()
+    {
+        _currentState = RoundFlowState.Settlement;
+    }
+
+    /// <summary>
+    /// 暂停
+    /// </summary>
+    public void Pause()
+    {
+        _currentState = RoundFlowState.Paused;
+    }
+
+    /// <summary>
+    /// 恢复
+    /// </summary>
+    public void Resume()
+    {
+        _currentState = RoundFlowState.Playing;
+    }
+
     /// <summary>
     /// 进入隐藏地图
     /// </summary>
@@ -244,7 +313,7 @@ public class RoundFlow : Singleton<RoundFlow>
         // 伪结算面板爆米花动画  
         _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity,persistAcrossScenes: true).Forget();
 
-        // 下雪动画（循环特效，过场景不移除）
+        // 下雪动画
         fxSnow = await _effectManager.PlayLoopAsync("Arts/Prefabs/Particles/FX_Snow", new Vector3(0,5,0), Quaternion.identity, persistAcrossScenes: true);
 
         // 地图过渡动画
@@ -258,52 +327,25 @@ public class RoundFlow : Singleton<RoundFlow>
         _uiManager.CloseUI("UILoading");
 
         var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
-        //var boss = await GetRoundManager<AnimalManager>().GenerateBossAsync(); // Boss登场动画
+        _spawnerManager.GetSpawner<ManualSpawner>("Boss").Spawn(); // Boss登场动画
         uiAlertRed.PlayFlashAsync().Forget(); // 播放红屏闪动动画
         _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_alert").Forget(); // 播放警报声
         await UniTask.Delay(2000);
-        
-        // Boss 登场
-        var spawnManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
-        var bossSpawner = spawnManager.GetSpawner<ManualSpawner>("Boss");
-        bossSpawner.Spawn();
-
-        var animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
-        var bossAnimalBehaviour = animalManager.GetBossAnimalBehaviour();
-        bossAnimalBehaviour.EnterCombat();
 
         //_soundManager.PlaySound2DByPathAsync("Audio/BGM/bgm_snow", AudioChannel.Bgm, volume: 0.1f).Forget(); // 播放远古雪山BGM
         _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_laugh").Forget(); // 播放Boss台词
         await UniTask.Delay(3000);
 
-        // 准备倒计时
+        // 倒计时
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync();
-        
-        // TODO 倒计时结束后，让Boss进入Move
 
-        //boss.EnterCombat();
-        _currentState = RoundFlowState.Playing;
+        // Boss进入战斗状态        
+        _animalManager.GetBossAnimalBehaviour().EnterCombat();
 
         _currentRoundContext.HiddenRoundEndTrigger.Init();
-    }
 
-    /// <summary>
-    /// 每帧更新
-    /// </summary>
-    /// <param name="dt">时间增量</param>
-    public void DoUpdate(float dt)
-    {
-        switch (_currentState)
-        {
-            case RoundFlowState.Playing:
-                OnRoundPlaying(dt);
-                break;
-            
-            case RoundFlowState.None:
-            default:
-                break;
-        }
+        _currentState = RoundFlowState.Playing;
     }
 
     /// <summary>
@@ -311,18 +353,18 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     public async UniTask EndHiddenMapProcessAsync()
     {
+        _currentState = RoundFlowState.Transitioning;
+
         _currentRoundContext.HiddenRoundEndTrigger.Release();
 
-        // TODO: 特效动画
         await _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/FX_DGB_PTFH", new Vector3(0, 0, 5), Quaternion.identity);
         _effectManager.Stop(fxSnow,EffectStopMode.Graceful);
         await UniTask.Delay(3000);
         
-        // TODO: 打开结算面板三
         var uiSnowMountainSettlement = await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
-        
-    }
 
+        _currentState = RoundFlowState.None;
+    }
     #endregion
 
     #region 私有方法
@@ -331,7 +373,7 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private void CreateRoundManagers()
     {
-        // TODO: 未来会根据情况调整顺序
+        // TODO: 根据实际效果调整顺序
         _roundManagers.Add(new WeaponManager());
         _roundManagers.Add(new AnimalManager());
         _roundManagers.Add(new EnergyProgressManager());
@@ -399,8 +441,15 @@ public class RoundFlow : Singleton<RoundFlow>
         {
             if (_roundManagers[i] is IRoundUpdatable updatable)
                 updatable.DoUpdate(dt);
-            // _currentRoundContext.
         }
+    }
+
+    /// <summary>
+    /// 触发进入单局事件
+    /// </summary>
+    private void TriggerRoundEntered(RoundEnteredEventArgs args)
+    {
+        _eventManager.Trigger(RoundEvents.RoundEntered, args);
     }
 
     /// <summary>
@@ -410,6 +459,5 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _eventManager.Trigger(RoundEvents.RoundStarted, args);
     }
-    
     #endregion
 }

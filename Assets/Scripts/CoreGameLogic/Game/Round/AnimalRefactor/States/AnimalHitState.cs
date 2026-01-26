@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Hunting.Game.Animal
+﻿namespace Hunting.Game.Animal
 {
     /// <summary>
     /// 动物受击状态

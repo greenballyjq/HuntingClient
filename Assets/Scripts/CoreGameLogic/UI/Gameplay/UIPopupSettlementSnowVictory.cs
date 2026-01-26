@@ -2,35 +2,34 @@
 using GameFramework.Core.UI;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIPopupSettlementSnowVictory : UIBase
 {
     /// <summary>
-    /// 金币文本
+    /// 三千盘金币文本
     /// </summary>
-    [SerializeField] private TextMeshProUGUI _textCoin;
+    [SerializeField] private TextMeshProUGUI _textThreeKPCoin;
 
     /// <summary>
-    /// 熟练度文本
+    /// 积分文本
     /// </summary>
-    [SerializeField] private TextMeshProUGUI _textMastery;
+    [SerializeField] private TextMeshProUGUI _textPoint;
 
     /// <summary>
-    /// 回到主菜单按钮
+    /// 确认按钮
     /// </summary>
-    [SerializeField] private Button _settleAndReturnButton;
+    [SerializeField] private Button _buttonConfirm;
     
     /// <summary>
     /// 分享按钮
     /// </summary>
-    [SerializeField] private Button _shareButton;
+    [SerializeField] private Button _buttonShare;
     
     /// <summary>
     /// 掷骰子按钮
     /// </summary>
-    [SerializeField] private Button _diceButton;
+    [SerializeField] private Button _buttonDice;
 
     /// <summary>
     /// 骰子动画预制体
@@ -41,8 +40,6 @@ public class UIPopupSettlementSnowVictory : UIBase
     /// 骰子动画父物体
     /// </summary>
     [SerializeField] private Transform _diceParent;
-
-    private UIManager _uiManager => GameServiceLocator.UIManager;
     
     private int _totalCoin;
     private int _totalMastery;
@@ -51,16 +48,16 @@ public class UIPopupSettlementSnowVictory : UIBase
 
     private void Awake()
     {
-        _settleAndReturnButton.onClick.AddListener(OnSettleAndReturnButtonClick);
-        _shareButton.onClick.AddListener(OnShareButtonClick);
-        _diceButton.onClick.AddListener(OnDiceButtonClick);
+        _buttonConfirm.onClick.AddListener(OnSettleAndReturnButtonClick);
+        _buttonShare.onClick.AddListener(OnShareButtonClick);
+        _buttonDice.onClick.AddListener(OnDiceButtonClick);
     }
 
     private void OnDestroy()
     {
-        _settleAndReturnButton.onClick.RemoveListener(OnSettleAndReturnButtonClick);
-        _shareButton.onClick.RemoveListener(OnShareButtonClick);
-        _diceButton.onClick.RemoveListener(OnDiceButtonClick);
+        _buttonConfirm.onClick.RemoveListener(OnSettleAndReturnButtonClick);
+        _buttonShare.onClick.RemoveListener(OnShareButtonClick);
+        _buttonDice.onClick.RemoveListener(OnDiceButtonClick);
     }
 
     public override void OnInit(object userData)
@@ -83,16 +80,12 @@ public class UIPopupSettlementSnowVictory : UIBase
     {
         _totalCoin = obj.TotalCoin;
         _totalMastery = obj.TotalMastery;
-        _textCoin.text = obj.TotalCoin.ToString();
-        _textMastery.text = obj.TotalMastery.ToString();
+        _textThreeKPCoin.text = obj.TotalCoin.ToString();
+        _textPoint.text = obj.TotalMastery.ToString();
     }
 
-    private async void OnSettleAndReturnButtonClick()
+    private void OnSettleAndReturnButtonClick()
     {
-        // 返回主菜单
-        await SceneManager.LoadSceneAsync("PrepareScene").ToUniTask();
-        _uiManager.CloseUI("UIPopupSettlementSnowVictory");
-        _uiManager.CloseUI("UIGameplay");
         HuntingAppFlow.Instance.EnterPrepareAsync().Forget();
     }
 
@@ -111,7 +104,7 @@ public class UIPopupSettlementSnowVictory : UIBase
         }
         await _diceTransform.GetComponent<DiceAnimation>().PlayRoll(point);
         
-        _textCoin.text = (point * _totalCoin).ToString();
-        _textMastery.text = (point * _totalMastery).ToString();
+        _textThreeKPCoin.text = (point * _totalCoin).ToString();
+        _textPoint.text = (point * _totalMastery).ToString();
     }
 }

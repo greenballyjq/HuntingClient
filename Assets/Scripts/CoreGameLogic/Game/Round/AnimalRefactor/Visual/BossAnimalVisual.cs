@@ -16,6 +16,7 @@
         protected override void ResetAnimationStates()
         {
             base.ResetAnimationStates();
+            _animator.SetBool("Enter", false);
             _animator.SetBool("Call", false);
         }
     }

@@ -24,11 +24,7 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
         _bossCallGuardState = new BossAnimalCallGuardState(_stateMachine, this);
 
         _callGuardTimerId = _timerManager.StartTimer(CALL_GUARD_DURATION, CallGuard, repeat: TimerManager.LOOP);
-    }
 
-    protected override void InitState()
-    {
-        base.InitState();
         _stateMachine.Init(_bossEnterState);
     }
 
