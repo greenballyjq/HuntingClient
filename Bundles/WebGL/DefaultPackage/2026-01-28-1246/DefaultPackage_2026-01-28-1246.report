@@ -1,0 +1,1332 @@
+{
+    "Summary": {
+        "YooVersion": "2.3.14",
+        "UnityVersion": "2022.3.7f1c1",
+        "BuildDate": "2026/1/28 20:46:55",
+        "BuildSeconds": 6,
+        "BuildTarget": 20,
+        "BuildPipeline": "ScriptableBuildPipeline",
+        "BuildBundleType": 2,
+        "BuildPackageName": "DefaultPackage",
+        "BuildPackageVersion": "2026-01-28-1246",
+        "BuildPackageNote": "2026/1/28 20:46:47",
+        "UniqueBundleName": false,
+        "EnableAddressable": true,
+        "LocationToLower": false,
+        "IncludeAssetGUID": false,
+        "AutoCollectShaders": true,
+        "IgnoreRuleName": "YooAsset.Editor.NormalIgnoreRule",
+        "ClearBuildCacheFiles": false,
+        "UseAssetDependencyDB": false,
+        "EnableSharePackRule": true,
+        "SingleReferencedPackAlone": true,
+        "EncryptionServicesClassName": "YooAsset.Editor.EncryptionNone",
+        "ManifestProcessServicesClassName": "YooAsset.Editor.ManifestProcessNone",
+        "ManifestRestoreServicesClassName": "YooAsset.Editor.ManifestRestoreNone",
+        "FileNameStyle": 0,
+        "CompressOption": 2,
+        "DisableWriteTypeTree": false,
+        "IgnoreTypeTreeChanges": true,
+        "WriteLinkXML": true,
+        "CacheServerHost": "",
+        "CacheServerPort": 0,
+        "BuiltinShadersBundleName": "unityshaders.bundle",
+        "MonoScriptsBundleName": "",
+        "AssetFileTotalCount": 96,
+        "MainAssetTotalCount": 2,
+        "AllBundleTotalCount": 23,
+        "AllBundleTotalSize": 3630113,
+        "EncryptedBundleTotalCount": 0,
+        "EncryptedBundleTotalSize": 0
+    },
+    "AssetInfos": [
+        {
+            "Address": "ui_UIGameplay",
+            "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIGameplay.prefab",
+            "AssetGUID": "a25e6b62e80db0b4ea38094d2fc06e30",
+            "AssetTags": [],
+            "MainBundleName": "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+            "MainBundleSize": 20043,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/Arts/Common/Fonts/Materials/DouyinSansBold Atlas Material_Outline.mat",
+                    "AssetGUID": "1741cc85752af58439c44fe335b2ab6a"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Common/Fonts/Raw/DouyinSansBold SDF.asset",
+                    "AssetGUID": "0b96a80c863108747921ea9c81169448"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Common/Fonts/Raw/DouyinSansBold.otf",
+                    "AssetGUID": "4424a2fc92d1f8a408f41942c29ac3d5"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentAnimalCounter.prefab",
+                    "AssetGUID": "cbfe247c3a4bbfc429282046bc4a599f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentAnimalCounterItem.prefab",
+                    "AssetGUID": "a6a7a7f80ca685548b5571e1172758fa"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentBossHealth.prefab",
+                    "AssetGUID": "412c68d18173f5a4eb9fcc12e9903abf"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentBullet.prefab",
+                    "AssetGUID": "2837a59765d86554286ed8d1239506ef"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentButtonReturnOrSettlement.prefab",
+                    "AssetGUID": "f8e716d087393004ca1d4fde4907be18"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentMeatProgress.prefab",
+                    "AssetGUID": "208720f34df6e714e821e6e74568aa02"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentPropGroup.prefab",
+                    "AssetGUID": "787bd128ec6ccdb478fac6f98863e064"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentPropItem.prefab",
+                    "AssetGUID": "ed72ea3086e5cfe4fbc65f74cc834634"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentSkill.prefab",
+                    "AssetGUID": "734ec27ad62aca8459556db64b0eb0f6"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentTime.prefab",
+                    "AssetGUID": "b23b1a98794ec974182b2ff5a885a766"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Common/Skill/TB_bangbangwoma_0002.png",
+                    "AssetGUID": "1b6724d2db0a7674292729fd60d34957"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/img_icon_0005.png",
+                    "AssetGUID": "46618732e546dee41840b2537a70a873"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_putongzidan_0001.png",
+                    "AssetGUID": "02c7825bf21c9e04a8883f5ace8ca264"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_beijing_jishutiao_0002.png",
+                    "AssetGUID": "465842f8523edc44aa18d524884076fd"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_jishutiao_0002.png",
+                    "AssetGUID": "ca705de2d7a7f114ab358a95c988d3e4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_kedu_0001.png",
+                    "AssetGUID": "ec62f96d5169e154aa91961e2f0f16a4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_keduqipao_0001.png",
+                    "AssetGUID": "9df57f29603ef05459a996c489d69922"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_rou_0001.png",
+                    "AssetGUID": "06185b9a3184356438ef3490cd91eecb"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_routiao_0002.png",
+                    "AssetGUID": "a276bf1f1ab02b84dae449e859a53425"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_routiao_beijing_0002.png",
+                    "AssetGUID": "b3469aa89ed92ac41ad7a3906a86e75f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_tuxiangkuang_002.png",
+                    "AssetGUID": "88660e38e490ec343b9127f6b0ed4e20"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_xuetiao_0003.png",
+                    "AssetGUID": "1508018cf6fbdac4fb5955e8587f04aa"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/btn_daojuhuoqu_001.png",
+                    "AssetGUID": "e26e21aad2b074341bcfec03cf942978"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/img_icon_0003.png",
+                    "AssetGUID": "54ae10a5d1072cd438cca9b12af60c67"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/TB_fufeidaojuA_0001.png",
+                    "AssetGUID": "3cce0e7d69ab9f74b81992d06fa0365a"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/TB_fufeidaojuB_0001.png",
+                    "AssetGUID": "77a341f9708b6a84f989a0af86b143ef"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/TB_fufeidaojuC_0001.png",
+                    "AssetGUID": "7a483afa44c85ad4b9f16d0ce44e3cca"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Skill/TB_chongneng_beijing_0009.png",
+                    "AssetGUID": "95d6f0efab9be4d4ca8baf4a4b1f0851"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Skill/TB_red_0009.png",
+                    "AssetGUID": "e31935306b0dc0643ad0d16a1f15d4a1"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/TB_btn_fanhui.png",
+                    "AssetGUID": "755865b213f7e374c9f0119606871818"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/TB_putong_beijing_0001.png",
+                    "AssetGUID": "11db585abea744748aafe1b72a110c73"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/TB_xueshan_beijing_0001.png",
+                    "AssetGUID": "0f9bcb12c08507942ab39c8aa7f0a0ad"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Time/TB_timeclock_0001.png",
+                    "AssetGUID": "2a2f8e1d366d57249a4d3e58f2f857c9"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Time/TB_timeline_0001.png",
+                    "AssetGUID": "acb2d6d8a6522524fa715893a5a93f02"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Time/TB_timeline_beijing_0001.png",
+                    "AssetGUID": "2a2ede68ac0577a4aae9c5a58547dcca"
+                },
+                {
+                    "AssetPath": "Assets/TextMesh Pro/Shaders/TMP_SDF.shader",
+                    "AssetGUID": "68e6db2ebdc24f95958faec2be5558d6"
+                }
+            ],
+            "DependBundles": [
+                "share_assets_arts_common_fonts_materials.bundle",
+                "share_assets_arts_common_fonts_raw.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle",
+                "share_assets_arts_ui_sprites_common_skill.bundle",
+                "share_assets_arts_ui_sprites_gameplay.bundle",
+                "share_assets_arts_ui_sprites_gameplay_bullet.bundle",
+                "share_assets_arts_ui_sprites_gameplay_meat.bundle",
+                "share_assets_arts_ui_sprites_gameplay_prop.bundle",
+                "share_assets_arts_ui_sprites_gameplay_skill.bundle",
+                "share_assets_arts_ui_sprites_gameplay_time.bundle",
+                "unityshaders.bundle"
+            ]
+        },
+        {
+            "Address": "ui_UIPrepare",
+            "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIPrepare.prefab",
+            "AssetGUID": "30b87b64f8cce0648a190f07a635810c",
+            "AssetTags": [],
+            "MainBundleName": "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+            "MainBundleSize": 25468,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/Arts/Common/Fonts/Materials/DouyinSansBold Atlas Material_Outline.mat",
+                    "AssetGUID": "1741cc85752af58439c44fe335b2ab6a"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Common/Fonts/Raw/DouyinSansBold SDF.asset",
+                    "AssetGUID": "0b96a80c863108747921ea9c81169448"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Common/Fonts/Raw/DouyinSansBold.otf",
+                    "AssetGUID": "4424a2fc92d1f8a408f41942c29ac3d5"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Animations/ac_role_dice.controller",
+                    "AssetGUID": "64dc25930d459dc4fbe312124b0a5728"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Prefabs/pf_role_dice.prefab",
+                    "AssetGUID": "658a676b153a7b64c9612bc32299418b"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi.atlas.txt",
+                    "AssetGUID": "235b6475ab131174a8e042b9ed3e7dd4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi.png",
+                    "AssetGUID": "b022eb665de36ae4ba87a5716dc91fb0"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi.skel.bytes",
+                    "AssetGUID": "3754b6b3e0d47754f81f6b09260e0fab"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi_Atlas.asset",
+                    "AssetGUID": "69922febeadeef34e840bf5bf8e841b4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi_Material.mat",
+                    "AssetGUID": "6eb5bf84213693f4dbba3a1cff63b68b"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi_SkeletonData.asset",
+                    "AssetGUID": "a4516446c89193949870019bbc04dc49"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Animations/ac_role_threekpcoin.controller",
+                    "AssetGUID": "de1b5fa0a207e7145b148f6b0d40bb19"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Prefabs/pf_role_threekpcoin.prefab",
+                    "AssetGUID": "f5a09b880173ef447955c057cd8351b3"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01.atlas.txt",
+                    "AssetGUID": "96713faa3983f034692e6e76cc90b59e"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01.png",
+                    "AssetGUID": "78353a62a7b42cf40b6447e75e9c6f30"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01.skel.bytes",
+                    "AssetGUID": "332985b62bbba884383dc159516daa07"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01_Atlas.asset",
+                    "AssetGUID": "f675331bb50ab8d458a9095131803344"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01_Material.mat",
+                    "AssetGUID": "470864d21b23c0b448fe9dde186623d4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01_SkeletonData.asset",
+                    "AssetGUID": "4154f8541cdca464abdc65f35549b56c"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Material/mat_ui_outline.mat",
+                    "AssetGUID": "c5d77afa21c7e484d8c73ad04a2a94b8"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Material/mat_ui_shadow.mat",
+                    "AssetGUID": "ee068b58323769d4fbd85559b175d8a3"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentLuckyWheel.prefab",
+                    "AssetGUID": "c1703bee0671f324ca38777aa504234f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentMapInfo.prefab",
+                    "AssetGUID": "0f1ea090b2925ed4a811727411c6bc71"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentRoleInfo.prefab",
+                    "AssetGUID": "19c48988d906f27478d2b19371ac97bf"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentRoleSlot.prefab",
+                    "AssetGUID": "fc7eb8d6a6b57a44db1c50423da02e31"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentRollRole.prefab",
+                    "AssetGUID": "2d021afac7122154fad4621370e0b50f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentSkillInfo.prefab",
+                    "AssetGUID": "ae6b0badaf6a77c46a55d2243a69c379"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Shader/UI_Outline.shader",
+                    "AssetGUID": "75334733c9d5ceb48943fb758b181fe6"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Common/Skill/TB_bangbangwoma_0002.png",
+                    "AssetGUID": "1b6724d2db0a7674292729fd60d34957"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/btn_bd.png",
+                    "AssetGUID": "1c95851917a671745895d42aed6c728b"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/btn_kaishidarou.png",
+                    "AssetGUID": "ad7ef56ad760bcd46ac1f84ad32bf6fb"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/btn_xinyunyishi.png",
+                    "AssetGUID": "fc394a648b42eae44af7d6248481f531"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/btn_xuanren.png",
+                    "AssetGUID": "b5b164bddb6e67442a0374821358c281"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/imb_rou.png",
+                    "AssetGUID": "ba2c0d13d09f4ab4a9d3cf576c017ab7"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_01.png",
+                    "AssetGUID": "1b8a137a9dfd6314688cda9c300416d0"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_02.png",
+                    "AssetGUID": "ee14288e2155d9b4f8c88d82df1dfdbe"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_02_1.png",
+                    "AssetGUID": "f6292540861650548936a02c1a7f41ee"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_03.png",
+                    "AssetGUID": "0b1bdd23c5c386e419401e14b842933a"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_04new.png",
+                    "AssetGUID": "f8b68a55bb0978a4bbbe3c1cfea9e788"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_05.png",
+                    "AssetGUID": "74f4a7c8aa6e95142bb5ecb2c6cb27a4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bx.png",
+                    "AssetGUID": "346573815f5fd3741b100e073a6c7018"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_center_bg.png",
+                    "AssetGUID": "e8fd07dfe31500a4ab381adf84feb609"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_huishang.png",
+                    "AssetGUID": "047a583f42540cb4ebe68058108c9d9a"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_jiantou 1.png",
+                    "AssetGUID": "4fa95bb48510b9e48a4e649794ba1ef6"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_jinriditu.png",
+                    "AssetGUID": "17a32d88ee523614392ee0abeb56e31c"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_kacao.png",
+                    "AssetGUID": "aa94747d0c61c124494b60d02ac78edf"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_kacao_2.png",
+                    "AssetGUID": "ce9a6f5b90044dd429e935420aa9b84f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_map.png",
+                    "AssetGUID": "2e406f1c48b4b6e42941faad62538949"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_shouji.png",
+                    "AssetGUID": "2621d61c6446d714d9a99b4347c8d9dc"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_tiezhi.png",
+                    "AssetGUID": "6f3ce53ac907cdd4284a06ddef8e37e4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_wangge.png",
+                    "AssetGUID": "44bbae80a409a9f48836fc611ed84af5"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/JS_C_ziwei_0001.png",
+                    "AssetGUID": "c209e0d0192f3a248b98b0011d3e9f5f"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/Shaders/BlendModes/Spine-Skeleton-PMA-Additive.shader",
+                    "AssetGUID": "53efa1d97f5d9f74285d4330cda14e36"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/Shaders/BlendModes/Spine-Skeleton-PMA-Multiply.shader",
+                    "AssetGUID": "8bdcdc7ee298e594a9c20c61d25c33b6"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/Shaders/BlendModes/Spine-Skeleton-PMA-Screen.shader",
+                    "AssetGUID": "4e8caa36c07aacf4ab270da00784e4d9"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/Shaders/Spine-Skeleton.shader",
+                    "AssetGUID": "1e8a610c9e01c3648bac42585e5fc676"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/SkeletonDataModifierAssets/BlendModeMaterials/SkeletonPMAAdditive.mat",
+                    "AssetGUID": "4deba332d47209e4780b3c5fcf0e3745"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/SkeletonDataModifierAssets/BlendModeMaterials/SkeletonPMAMultiply.mat",
+                    "AssetGUID": "53bf0ab317d032d418cf1252d68f51df"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/SkeletonDataModifierAssets/BlendModeMaterials/SkeletonPMAScreen.mat",
+                    "AssetGUID": "73f0f46d3177c614baf0fa48d646a9be"
+                },
+                {
+                    "AssetPath": "Assets/TextMesh Pro/Shaders/TMP_SDF.shader",
+                    "AssetGUID": "68e6db2ebdc24f95958faec2be5558d6"
+                }
+            ],
+            "DependBundles": [
+                "share_assets_arts_common_fonts_materials.bundle",
+                "share_assets_arts_common_fonts_raw.bundle",
+                "share_assets_arts_models_role_role_dice_animations.bundle",
+                "share_assets_arts_models_role_role_dice_prefabs.bundle",
+                "share_assets_arts_models_role_role_dice_spine.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_animations.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_prefabs.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_spine.bundle",
+                "share_assets_arts_ui_material.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle",
+                "share_assets_arts_ui_sprites_common_skill.bundle",
+                "share_assets_arts_ui_sprites_prepare.bundle",
+                "share_assets_plugins_spine_runtime_spine-unity_skeletondatamodifierassets_blendmodematerials.bundle",
+                "unityshaders.bundle"
+            ]
+        }
+    ],
+    "BundleInfos": [
+        {
+            "BundleName": "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+            "FileName": "21a1050500b7badde37f1ceb3397e149.bundle",
+            "FileHash": "21a1050500b7badde37f1ceb3397e149",
+            "FileCRC": "d33eb9fe",
+            "FileSize": 20043,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_common_fonts_materials.bundle",
+                "share_assets_arts_common_fonts_raw.bundle",
+                "share_assets_arts_ui_sprites_common_skill.bundle",
+                "share_assets_arts_ui_sprites_gameplay.bundle",
+                "share_assets_arts_ui_sprites_gameplay_bullet.bundle",
+                "share_assets_arts_ui_sprites_gameplay_meat.bundle",
+                "share_assets_arts_ui_sprites_gameplay_prop.bundle",
+                "share_assets_arts_ui_sprites_gameplay_skill.bundle",
+                "share_assets_arts_ui_sprites_gameplay_time.bundle",
+                "share_assets_arts_ui_sprites_prepare.bundle",
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIGameplay.prefab",
+                    "AssetGUID": "a25e6b62e80db0b4ea38094d2fc06e30"
+                }
+            ]
+        },
+        {
+            "BundleName": "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+            "FileName": "264fa2e56799423b83c580cf19ecc285.bundle",
+            "FileHash": "264fa2e56799423b83c580cf19ecc285",
+            "FileCRC": "5b23c1eb",
+            "FileSize": 25468,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_common_fonts_materials.bundle",
+                "share_assets_arts_common_fonts_raw.bundle",
+                "share_assets_arts_models_role_role_dice_animations.bundle",
+                "share_assets_arts_models_role_role_dice_prefabs.bundle",
+                "share_assets_arts_models_role_role_dice_spine.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_animations.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_spine.bundle",
+                "share_assets_arts_ui_material.bundle",
+                "share_assets_arts_ui_sprites_common_skill.bundle",
+                "share_assets_arts_ui_sprites_prepare.bundle",
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIPrepare.prefab",
+                    "AssetGUID": "30b87b64f8cce0648a190f07a635810c"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_common_fonts_materials.bundle",
+            "FileName": "2a86697989d3769d7d8c90852f8a21a1.bundle",
+            "FileHash": "2a86697989d3769d7d8c90852f8a21a1",
+            "FileCRC": "d542f31d",
+            "FileSize": 3145,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_common_fonts_raw.bundle",
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/Common/Fonts/Materials/DouyinSansBold Atlas Material_Outline.mat",
+                    "AssetGUID": "1741cc85752af58439c44fe335b2ab6a"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_common_fonts_raw.bundle",
+            "FileName": "1272336a0cd39b1fcfa499a646562c00.bundle",
+            "FileHash": "1272336a0cd39b1fcfa499a646562c00",
+            "FileCRC": "8643ab88",
+            "FileSize": 2596183,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_common_fonts_materials.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/Common/Fonts/Raw/DouyinSansBold SDF.asset",
+                    "AssetGUID": "0b96a80c863108747921ea9c81169448"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Common/Fonts/Raw/DouyinSansBold.otf",
+                    "AssetGUID": "4424a2fc92d1f8a408f41942c29ac3d5"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_dice_animations.bundle",
+            "FileName": "c3d1e182cdb1e44acc5dd9afbd12cb26.bundle",
+            "FileHash": "c3d1e182cdb1e44acc5dd9afbd12cb26",
+            "FileCRC": "0873ed8d",
+            "FileSize": 9873,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_models_role_role_dice_prefabs.bundle",
+                "share_assets_arts_models_role_role_dice_spine.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_prefabs.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Animations/ac_role_dice.controller",
+                    "AssetGUID": "64dc25930d459dc4fbe312124b0a5728"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_dice_prefabs.bundle",
+            "FileName": "d19bbc9edc150e4704733238302c74e4.bundle",
+            "FileHash": "d19bbc9edc150e4704733238302c74e4",
+            "FileCRC": "11966500",
+            "FileSize": 16096,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_models_role_role_dice_animations.bundle",
+                "share_assets_arts_models_role_role_dice_spine.bundle",
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_prefabs.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Prefabs/pf_role_dice.prefab",
+                    "AssetGUID": "658a676b153a7b64c9612bc32299418b"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_dice_spine.bundle",
+            "FileName": "b4ccb5add2460b20b4f55a4c04f3cb98.bundle",
+            "FileHash": "b4ccb5add2460b20b4f55a4c04f3cb98",
+            "FileCRC": "630862a8",
+            "FileSize": 101148,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_models_role_role_dice_animations.bundle",
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_models_role_role_dice_prefabs.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_prefabs.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi.atlas.txt",
+                    "AssetGUID": "235b6475ab131174a8e042b9ed3e7dd4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi.png",
+                    "AssetGUID": "b022eb665de36ae4ba87a5716dc91fb0"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi.skel.bytes",
+                    "AssetGUID": "3754b6b3e0d47754f81f6b09260e0fab"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi_Atlas.asset",
+                    "AssetGUID": "69922febeadeef34e840bf5bf8e841b4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi_Material.mat",
+                    "AssetGUID": "6eb5bf84213693f4dbba3a1cff63b68b"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_Dice/Spine/touzi_SkeletonData.asset",
+                    "AssetGUID": "a4516446c89193949870019bbc04dc49"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_threekpcoin_animations.bundle",
+            "FileName": "7177a754c85a1706b4fd36142940b4db.bundle",
+            "FileHash": "7177a754c85a1706b4fd36142940b4db",
+            "FileCRC": "fb1553a3",
+            "FileSize": 9827,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_prefabs.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Animations/ac_role_threekpcoin.controller",
+                    "AssetGUID": "de1b5fa0a207e7145b148f6b0d40bb19"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_threekpcoin_prefabs.bundle",
+            "FileName": "e869086926f8ef324a515fc4383f81b2.bundle",
+            "FileHash": "e869086926f8ef324a515fc4383f81b2",
+            "FileCRC": "5d4e5ba9",
+            "FileSize": 11859,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_models_role_role_dice_animations.bundle",
+                "share_assets_arts_models_role_role_dice_prefabs.bundle",
+                "share_assets_arts_models_role_role_dice_spine.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_animations.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_spine.bundle",
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Prefabs/pf_role_threekpcoin.prefab",
+                    "AssetGUID": "f5a09b880173ef447955c057cd8351b3"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_threekpcoin_spine.bundle",
+            "FileName": "ff62d953ebba22ab7c75ecbb0e734065.bundle",
+            "FileHash": "ff62d953ebba22ab7c75ecbb0e734065",
+            "FileCRC": "e1298202",
+            "FileSize": 44289,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_prefabs.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01.atlas.txt",
+                    "AssetGUID": "96713faa3983f034692e6e76cc90b59e"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01.png",
+                    "AssetGUID": "78353a62a7b42cf40b6447e75e9c6f30"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01.skel.bytes",
+                    "AssetGUID": "332985b62bbba884383dc159516daa07"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01_Atlas.asset",
+                    "AssetGUID": "f675331bb50ab8d458a9095131803344"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01_Material.mat",
+                    "AssetGUID": "470864d21b23c0b448fe9dde186623d4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/Models/Role/Role_ThreeKPCoin/Spine/jinbiren_gao_01_SkeletonData.asset",
+                    "AssetGUID": "4154f8541cdca464abdc65f35549b56c"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_material.bundle",
+            "FileName": "b5be6240c8420b7285954cdcd7bbe778.bundle",
+            "FileHash": "b5be6240c8420b7285954cdcd7bbe778",
+            "FileCRC": "fe4f27f4",
+            "FileSize": 2740,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Material/mat_ui_outline.mat",
+                    "AssetGUID": "c5d77afa21c7e484d8c73ad04a2a94b8"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Material/mat_ui_shadow.mat",
+                    "AssetGUID": "ee068b58323769d4fbd85559b175d8a3"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_prefabs_gameplay.bundle",
+            "FileName": "1ea5f94ea3e95113a826e0ead7f43382.bundle",
+            "FileHash": "1ea5f94ea3e95113a826e0ead7f43382",
+            "FileCRC": "613e9089",
+            "FileSize": 20868,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_common_fonts_materials.bundle",
+                "share_assets_arts_common_fonts_raw.bundle",
+                "share_assets_arts_ui_sprites_common_skill.bundle",
+                "share_assets_arts_ui_sprites_gameplay.bundle",
+                "share_assets_arts_ui_sprites_gameplay_bullet.bundle",
+                "share_assets_arts_ui_sprites_gameplay_meat.bundle",
+                "share_assets_arts_ui_sprites_gameplay_prop.bundle",
+                "share_assets_arts_ui_sprites_gameplay_skill.bundle",
+                "share_assets_arts_ui_sprites_gameplay_time.bundle",
+                "share_assets_arts_ui_sprites_prepare.bundle",
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentAnimalCounter.prefab",
+                    "AssetGUID": "cbfe247c3a4bbfc429282046bc4a599f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentAnimalCounterItem.prefab",
+                    "AssetGUID": "a6a7a7f80ca685548b5571e1172758fa"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentBossHealth.prefab",
+                    "AssetGUID": "412c68d18173f5a4eb9fcc12e9903abf"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentBullet.prefab",
+                    "AssetGUID": "2837a59765d86554286ed8d1239506ef"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentButtonReturnOrSettlement.prefab",
+                    "AssetGUID": "f8e716d087393004ca1d4fde4907be18"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentMeatProgress.prefab",
+                    "AssetGUID": "208720f34df6e714e821e6e74568aa02"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentPropGroup.prefab",
+                    "AssetGUID": "787bd128ec6ccdb478fac6f98863e064"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentPropItem.prefab",
+                    "AssetGUID": "ed72ea3086e5cfe4fbc65f74cc834634"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentSkill.prefab",
+                    "AssetGUID": "734ec27ad62aca8459556db64b0eb0f6"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIComponentTime.prefab",
+                    "AssetGUID": "b23b1a98794ec974182b2ff5a885a766"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_prefabs_prepare.bundle",
+            "FileName": "d94f74f11374662d7248154e10519441.bundle",
+            "FileHash": "d94f74f11374662d7248154e10519441",
+            "FileCRC": "000deb46",
+            "FileSize": 24316,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_common_fonts_materials.bundle",
+                "share_assets_arts_common_fonts_raw.bundle",
+                "share_assets_arts_models_role_role_dice_animations.bundle",
+                "share_assets_arts_models_role_role_dice_prefabs.bundle",
+                "share_assets_arts_models_role_role_dice_spine.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_animations.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_spine.bundle",
+                "share_assets_arts_ui_material.bundle",
+                "share_assets_arts_ui_sprites_common_skill.bundle",
+                "share_assets_arts_ui_sprites_prepare.bundle",
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentLuckyWheel.prefab",
+                    "AssetGUID": "c1703bee0671f324ca38777aa504234f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentMapInfo.prefab",
+                    "AssetGUID": "0f1ea090b2925ed4a811727411c6bc71"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentRoleInfo.prefab",
+                    "AssetGUID": "19c48988d906f27478d2b19371ac97bf"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentRoleSlot.prefab",
+                    "AssetGUID": "fc7eb8d6a6b57a44db1c50423da02e31"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentRollRole.prefab",
+                    "AssetGUID": "2d021afac7122154fad4621370e0b50f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIComponentSkillInfo.prefab",
+                    "AssetGUID": "ae6b0badaf6a77c46a55d2243a69c379"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_common_skill.bundle",
+            "FileName": "3c3a9ac226e93c2cf2a9d961b0bf80a9.bundle",
+            "FileHash": "3c3a9ac226e93c2cf2a9d961b0bf80a9",
+            "FileCRC": "5a3e0499",
+            "FileSize": 4251,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_ui_sprites_prepare.bundle"
+            ],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle",
+                "share_assets_arts_ui_sprites_prepare.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Common/Skill/TB_bangbangwoma_0002.png",
+                    "AssetGUID": "1b6724d2db0a7674292729fd60d34957"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay.bundle",
+            "FileName": "c7171b750731db0f47507b6cb0c5a6d6.bundle",
+            "FileHash": "c7171b750731db0f47507b6cb0c5a6d6",
+            "FileCRC": "989e19c7",
+            "FileSize": 41430,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/TB_btn_fanhui.png",
+                    "AssetGUID": "755865b213f7e374c9f0119606871818"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/TB_putong_beijing_0001.png",
+                    "AssetGUID": "11db585abea744748aafe1b72a110c73"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/TB_xueshan_beijing_0001.png",
+                    "AssetGUID": "0f9bcb12c08507942ab39c8aa7f0a0ad"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_bullet.bundle",
+            "FileName": "c846d4d6066a51cd7df4439102068c88.bundle",
+            "FileHash": "c846d4d6066a51cd7df4439102068c88",
+            "FileCRC": "28c6b08e",
+            "FileSize": 9404,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/img_icon_0005.png",
+                    "AssetGUID": "46618732e546dee41840b2537a70a873"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_putongzidan_0001.png",
+                    "AssetGUID": "02c7825bf21c9e04a8883f5ace8ca264"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_meat.bundle",
+            "FileName": "81b4bf4c45c762bff00bd93f046a6e23.bundle",
+            "FileHash": "81b4bf4c45c762bff00bd93f046a6e23",
+            "FileCRC": "526ccb9c",
+            "FileSize": 23717,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_beijing_jishutiao_0002.png",
+                    "AssetGUID": "465842f8523edc44aa18d524884076fd"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_jishutiao_0002.png",
+                    "AssetGUID": "ca705de2d7a7f114ab358a95c988d3e4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_kedu_0001.png",
+                    "AssetGUID": "ec62f96d5169e154aa91961e2f0f16a4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_keduqipao_0001.png",
+                    "AssetGUID": "9df57f29603ef05459a996c489d69922"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_rou_0001.png",
+                    "AssetGUID": "06185b9a3184356438ef3490cd91eecb"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_routiao_0002.png",
+                    "AssetGUID": "a276bf1f1ab02b84dae449e859a53425"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_routiao_beijing_0002.png",
+                    "AssetGUID": "b3469aa89ed92ac41ad7a3906a86e75f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_tuxiangkuang_002.png",
+                    "AssetGUID": "88660e38e490ec343b9127f6b0ed4e20"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Meat/TB_xuetiao_0003.png",
+                    "AssetGUID": "1508018cf6fbdac4fb5955e8587f04aa"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_prop.bundle",
+            "FileName": "274e49ab2809f89c059bd1b165b4a48a.bundle",
+            "FileHash": "274e49ab2809f89c059bd1b165b4a48a",
+            "FileCRC": "3934d016",
+            "FileSize": 22243,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/btn_daojuhuoqu_001.png",
+                    "AssetGUID": "e26e21aad2b074341bcfec03cf942978"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/img_icon_0003.png",
+                    "AssetGUID": "54ae10a5d1072cd438cca9b12af60c67"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/TB_fufeidaojuA_0001.png",
+                    "AssetGUID": "3cce0e7d69ab9f74b81992d06fa0365a"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/TB_fufeidaojuB_0001.png",
+                    "AssetGUID": "77a341f9708b6a84f989a0af86b143ef"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Prop/TB_fufeidaojuC_0001.png",
+                    "AssetGUID": "7a483afa44c85ad4b9f16d0ce44e3cca"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_skill.bundle",
+            "FileName": "d8a5c47cf8223162ad9d2d2c266b243d.bundle",
+            "FileHash": "d8a5c47cf8223162ad9d2d2c266b243d",
+            "FileCRC": "a611be52",
+            "FileSize": 16206,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Skill/TB_chongneng_beijing_0009.png",
+                    "AssetGUID": "95d6f0efab9be4d4ca8baf4a4b1f0851"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Skill/TB_red_0009.png",
+                    "AssetGUID": "e31935306b0dc0643ad0d16a1f15d4a1"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_time.bundle",
+            "FileName": "fffd7a28ed6d1001123eac41a8300139.bundle",
+            "FileHash": "fffd7a28ed6d1001123eac41a8300139",
+            "FileCRC": "53d01990",
+            "FileSize": 13826,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Time/TB_timeclock_0001.png",
+                    "AssetGUID": "2a2f8e1d366d57249a4d3e58f2f857c9"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Time/TB_timeline_0001.png",
+                    "AssetGUID": "acb2d6d8a6522524fa715893a5a93f02"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Time/TB_timeline_beijing_0001.png",
+                    "AssetGUID": "2a2ede68ac0577a4aae9c5a58547dcca"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_prepare.bundle",
+            "FileName": "0fe520a91c52787643d03c58fe924608.bundle",
+            "FileHash": "0fe520a91c52787643d03c58fe924608",
+            "FileCRC": "90e6d93d",
+            "FileSize": 582057,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "share_assets_arts_ui_sprites_common_skill.bundle"
+            ],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle",
+                "share_assets_arts_ui_sprites_common_skill.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/btn_bd.png",
+                    "AssetGUID": "1c95851917a671745895d42aed6c728b"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/btn_kaishidarou.png",
+                    "AssetGUID": "ad7ef56ad760bcd46ac1f84ad32bf6fb"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/btn_xinyunyishi.png",
+                    "AssetGUID": "fc394a648b42eae44af7d6248481f531"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/btn_xuanren.png",
+                    "AssetGUID": "b5b164bddb6e67442a0374821358c281"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/imb_rou.png",
+                    "AssetGUID": "ba2c0d13d09f4ab4a9d3cf576c017ab7"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_01.png",
+                    "AssetGUID": "1b8a137a9dfd6314688cda9c300416d0"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_02.png",
+                    "AssetGUID": "ee14288e2155d9b4f8c88d82df1dfdbe"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_02_1.png",
+                    "AssetGUID": "f6292540861650548936a02c1a7f41ee"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_03.png",
+                    "AssetGUID": "0b1bdd23c5c386e419401e14b842933a"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_04new.png",
+                    "AssetGUID": "f8b68a55bb0978a4bbbe3c1cfea9e788"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bg_05.png",
+                    "AssetGUID": "74f4a7c8aa6e95142bb5ecb2c6cb27a4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_bx.png",
+                    "AssetGUID": "346573815f5fd3741b100e073a6c7018"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_center_bg.png",
+                    "AssetGUID": "e8fd07dfe31500a4ab381adf84feb609"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_huishang.png",
+                    "AssetGUID": "047a583f42540cb4ebe68058108c9d9a"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_jiantou 1.png",
+                    "AssetGUID": "4fa95bb48510b9e48a4e649794ba1ef6"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_jinriditu.png",
+                    "AssetGUID": "17a32d88ee523614392ee0abeb56e31c"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_kacao.png",
+                    "AssetGUID": "aa94747d0c61c124494b60d02ac78edf"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_kacao_2.png",
+                    "AssetGUID": "ce9a6f5b90044dd429e935420aa9b84f"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_map.png",
+                    "AssetGUID": "2e406f1c48b4b6e42941faad62538949"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_shouji.png",
+                    "AssetGUID": "2621d61c6446d714d9a99b4347c8d9dc"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_tiezhi.png",
+                    "AssetGUID": "6f3ce53ac907cdd4284a06ddef8e37e4"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/img_wangge.png",
+                    "AssetGUID": "44bbae80a409a9f48836fc611ed84af5"
+                },
+                {
+                    "AssetPath": "Assets/Arts/UI/Sprites/Prepare/JS_C_ziwei_0001.png",
+                    "AssetGUID": "c209e0d0192f3a248b98b0011d3e9f5f"
+                }
+            ]
+        },
+        {
+            "BundleName": "share_assets_plugins_spine_runtime_spine-unity_skeletondatamodifierassets_blendmodematerials.bundle",
+            "FileName": "bda4267f0fecbb5269ae2b760509c895.bundle",
+            "FileHash": "bda4267f0fecbb5269ae2b760509c895",
+            "FileCRC": "5d60244e",
+            "FileSize": 2788,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "unityshaders.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/SkeletonDataModifierAssets/BlendModeMaterials/SkeletonPMAAdditive.mat",
+                    "AssetGUID": "4deba332d47209e4780b3c5fcf0e3745"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/SkeletonDataModifierAssets/BlendModeMaterials/SkeletonPMAMultiply.mat",
+                    "AssetGUID": "53bf0ab317d032d418cf1252d68f51df"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/SkeletonDataModifierAssets/BlendModeMaterials/SkeletonPMAScreen.mat",
+                    "AssetGUID": "73f0f46d3177c614baf0fa48d646a9be"
+                }
+            ]
+        },
+        {
+            "BundleName": "unityshaders.bundle",
+            "FileName": "1a91b40ce7e962443b01ced406796a39.bundle",
+            "FileHash": "1a91b40ce7e962443b01ced406796a39",
+            "FileCRC": "74ef05ca",
+            "FileSize": 28336,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+                "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+                "share_assets_arts_common_fonts_materials.bundle",
+                "share_assets_arts_common_fonts_raw.bundle",
+                "share_assets_arts_models_role_role_dice_prefabs.bundle",
+                "share_assets_arts_models_role_role_dice_spine.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_prefabs.bundle",
+                "share_assets_arts_models_role_role_threekpcoin_spine.bundle",
+                "share_assets_arts_ui_material.bundle",
+                "share_assets_arts_ui_prefabs_gameplay.bundle",
+                "share_assets_arts_ui_prefabs_prepare.bundle",
+                "share_assets_plugins_spine_runtime_spine-unity_skeletondatamodifierassets_blendmodematerials.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Arts/UI/Shader/UI_Outline.shader",
+                    "AssetGUID": "75334733c9d5ceb48943fb758b181fe6"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/Shaders/BlendModes/Spine-Skeleton-PMA-Additive.shader",
+                    "AssetGUID": "53efa1d97f5d9f74285d4330cda14e36"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/Shaders/BlendModes/Spine-Skeleton-PMA-Multiply.shader",
+                    "AssetGUID": "8bdcdc7ee298e594a9c20c61d25c33b6"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/Shaders/BlendModes/Spine-Skeleton-PMA-Screen.shader",
+                    "AssetGUID": "4e8caa36c07aacf4ab270da00784e4d9"
+                },
+                {
+                    "AssetPath": "Assets/Plugins/Spine/Runtime/spine-unity/Shaders/Spine-Skeleton.shader",
+                    "AssetGUID": "1e8a610c9e01c3648bac42585e5fc676"
+                },
+                {
+                    "AssetPath": "Assets/TextMesh Pro/Shaders/TMP_SDF.shader",
+                    "AssetGUID": "68e6db2ebdc24f95958faec2be5558d6"
+                }
+            ]
+        }
+    ],
+    "IndependAssets": []
+}

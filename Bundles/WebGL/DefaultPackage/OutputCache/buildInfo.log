@@ -1,0 +1,34 @@
+﻿2026-01-28 20:46:47.908 [INFO] Begin to build package : DefaultPackage by ScriptableBuildPipeline
+2026-01-28 20:46:47.909 [INFO] --------------------------------------------->TaskPrepare<--------------------------------------------
+2026-01-28 20:46:47.909 [INFO] TaskPrepare It takes 0 seconds in total
+2026-01-28 20:46:47.910 [INFO] --------------------------------------------->TaskGetBuildMap<--------------------------------------------
+2026-01-28 20:46:52.434 [INFO] TaskGetBuildMap It takes 4 seconds in total
+2026-01-28 20:46:52.435 [INFO] --------------------------------------------->TaskBuilding<--------------------------------------------
+2026-01-28 20:46:55.389 [INFO] UnityEngine build success!
+2026-01-28 20:46:55.389 [INFO] TaskBuilding It takes 2 seconds in total
+2026-01-28 20:46:55.389 [INFO] --------------------------------------------->TaskVerifyBuildResult<--------------------------------------------
+2026-01-28 20:46:55.390 [INFO] Build results verify success!
+2026-01-28 20:46:55.390 [INFO] TaskVerifyBuildResult It takes 0 seconds in total
+2026-01-28 20:46:55.390 [INFO] --------------------------------------------->TaskEncryption<--------------------------------------------
+2026-01-28 20:46:55.391 [INFO] TaskEncryption It takes 0 seconds in total
+2026-01-28 20:46:55.391 [INFO] --------------------------------------------->TaskUpdateBundleInfo<--------------------------------------------
+2026-01-28 20:46:55.463 [INFO] TaskUpdateBundleInfo It takes 0 seconds in total
+2026-01-28 20:46:55.464 [INFO] --------------------------------------------->TaskCreateManifest<--------------------------------------------
+2026-01-28 20:46:55.467 [INFO] Create package manifest file: E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/2026-01-28-1246/DefaultPackage_2026-01-28-1246.json
+2026-01-28 20:46:55.492 [INFO] Create package manifest file: E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/2026-01-28-1246/DefaultPackage_2026-01-28-1246.bytes
+2026-01-28 20:46:55.494 [INFO] Create package manifest hash file: E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/2026-01-28-1246/DefaultPackage_2026-01-28-1246.hash
+2026-01-28 20:46:55.496 [INFO] Create package manifest version file: E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/2026-01-28-1246/DefaultPackage.version
+2026-01-28 20:46:55.497 [INFO] TaskCreateManifest It takes 0 seconds in total
+2026-01-28 20:46:55.497 [INFO] --------------------------------------------->TaskCreateReport<--------------------------------------------
+2026-01-28 20:46:55.503 [INFO] Create build report file: E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/2026-01-28-1246/DefaultPackage_2026-01-28-1246.report
+2026-01-28 20:46:55.504 [INFO] TaskCreateReport It takes 0 seconds in total
+2026-01-28 20:46:55.504 [INFO] --------------------------------------------->TaskCreatePackage<--------------------------------------------
+2026-01-28 20:46:55.504 [INFO] Start making patch package: E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/2026-01-28-1246
+2026-01-28 20:46:55.542 [INFO] TaskCreatePackage It takes 0 seconds in total
+2026-01-28 20:46:55.543 [INFO] --------------------------------------------->TaskCopyBuildinFiles<--------------------------------------------
+2026-01-28 20:46:56.316 [INFO] Buildin files copy complete: E:/WorkSpace/HuntingClient/Assets/StreamingAssets/yoo/DefaultPackage
+2026-01-28 20:46:56.316 [INFO] TaskCopyBuildinFiles It takes 0 seconds in total
+2026-01-28 20:46:56.316 [INFO] --------------------------------------------->TaskCreateCatalog<--------------------------------------------
+2026-01-28 20:46:56.813 [INFO] TaskCreateCatalog It takes 0 seconds in total
+2026-01-28 20:46:56.814 [INFO] Total build process time: 6 seconds
+2026-01-28 20:46:56.814 [INFO] Resource pipeline build success

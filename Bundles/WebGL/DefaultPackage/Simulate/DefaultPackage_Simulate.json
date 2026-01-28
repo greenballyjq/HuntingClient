@@ -1,0 +1,52 @@
+{
+    "FileVersion": "2.3.1",
+    "EnableAddressable": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "OutputNameStyle": 0,
+    "BuildBundleType": 1,
+    "BuildPipeline": "EditorSimulateBuildPipeline",
+    "PackageName": "DefaultPackage",
+    "PackageVersion": "Simulate",
+    "PackageNote": "2026/1/28 20:48:06",
+    "AssetList": [
+        {
+            "Address": "ui_UIGameplay",
+            "AssetPath": "Assets/Arts/UI/Prefabs/Gameplay/UIGameplay.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "ui_UIPrepare",
+            "AssetPath": "Assets/Arts/UI/Prefabs/Prepare/UIPrepare.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "assets_arts_ui_prefabs_gameplay_uigameplay.bundle",
+            "UnityCRC": 0,
+            "FileHash": "e85ead10bd5f1f247810164d6f3f7a69",
+            "FileCRC": "00000000",
+            "FileSize": 45288,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_arts_ui_prefabs_prepare_uiprepare.bundle",
+            "UnityCRC": 0,
+            "FileHash": "81c48b7e2fc86138acf0912d3deff7d8",
+            "FileCRC": "00000000",
+            "FileSize": 57738,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        }
+    ]
+}

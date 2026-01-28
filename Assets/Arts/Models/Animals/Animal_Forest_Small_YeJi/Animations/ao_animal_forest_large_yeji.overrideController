@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ao_animal_forest_large_yeji
+  m_Controller: {fileID: 9100000, guid: b2bca7e4258d47f44b42b193278882b0, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 6981380591617569062, guid: b2bca7e4258d47f44b42b193278882b0, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 279ffe5cba5ce4543b1667d10609f3cf, type: 2}
+  - m_OriginalClip: {fileID: -1684553227113188050, guid: b2bca7e4258d47f44b42b193278882b0, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2d5f6363863b56c4e9aa6778d874c8c0, type: 2}
