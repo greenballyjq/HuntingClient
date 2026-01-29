@@ -1,0 +1,50 @@
+ManifestFileVersion: 0
+CRC: 3918432756
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a5c762d846b1bd88bedc5875c2370bb2
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 38237f94da8279b985cb2166e6caf384
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: f9db98c60740638449864eb028fbe7ad, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 870d2eec8895a0840aa8737a5334fd55, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 210
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.SkeletonMecanim/MecanimTranslator
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.SkeletonRenderer/SpriteMaskInteractionMaterials
+Assets:
+- Assets/Arts/Models/Role/Role_ThreeKPCoin/Prefabs/pf_role_threekpcoin.prefab
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_role_role_dice_prefabs.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_role_role_threekpcoin_animations.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_role_role_threekpcoin_spine.bundle

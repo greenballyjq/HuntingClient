@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 3224211905
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e4ee13cac665a3ee91bcebd162014206
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5e762ccb57c4caaabbb5a4199ac82c23
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/UI/Material/mat_ui_shadow.mat
+- Assets/Arts/UI/Material/mat_ui_outline.mat
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_shader.bundle

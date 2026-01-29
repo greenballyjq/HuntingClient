@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 2582414512
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 889773087bf693fac128d8224eeaf3e5
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b30fce1a9ad74efb72be6c308c56e365
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtsTemp/Models/Weapons/Weapon_01/Models/Old Deringer Gun/Builtin/Materials/Metal
+  Body.mat
+- Assets/ArtsTemp/Models/Weapons/Weapon_01/Models/Old Deringer Gun/Builtin/Materials/Wooden
+  Handle.mat
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_textures.bundle

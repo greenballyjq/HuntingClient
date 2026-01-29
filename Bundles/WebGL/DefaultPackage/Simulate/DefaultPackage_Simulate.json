@@ -8,7 +8,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "DefaultPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2026/1/29 5:01:01",
+    "PackageNote": "2026/1/29 17:27:29",
     "AssetList": [
         {
             "Address": "",
@@ -559,7 +559,7 @@
         {
             "BundleName": "assets_arts_audio_sfx.bundle",
             "UnityCRC": 0,
-            "FileHash": "54910549c493d4b3849408b5f7a4648a",
+            "FileHash": "7df775a4b9e810968df7dca2368c82ee",
             "FileCRC": "00000000",
             "FileSize": 106105,
             "Encrypted": false,
@@ -569,9 +569,9 @@
         {
             "BundleName": "assets_arts_prefabs_bullets.bundle",
             "UnityCRC": 0,
-            "FileHash": "6f3be48b854bac2f599aa6a6abe1d757",
+            "FileHash": "84f3c7b799e5b6425c7c3a28c07bdeba",
             "FileCRC": "00000000",
-            "FileSize": 21346,
+            "FileSize": 21438,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -579,9 +579,9 @@
         {
             "BundleName": "assets_arts_prefabs_effects.bundle",
             "UnityCRC": 0,
-            "FileHash": "fa14d67fa56d09c2a2f03563f7cbbfe4",
+            "FileHash": "1e577a069363bf48d9ec53a4253f4009",
             "FileCRC": "00000000",
-            "FileSize": 12432125,
+            "FileSize": 12944908,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -589,7 +589,7 @@
         {
             "BundleName": "assets_arts_prefabs_particles.bundle",
             "UnityCRC": 0,
-            "FileHash": "8e3b6f1f9cb2597a9ae32280b425d314",
+            "FileHash": "6c495af9acd90c1d2951734cff0f4b03",
             "FileCRC": "00000000",
             "FileSize": 1846595,
             "Encrypted": false,
@@ -599,7 +599,7 @@
         {
             "BundleName": "assets_arts_prefabs_props.bundle",
             "UnityCRC": 0,
-            "FileHash": "0e584a0e7fc6205617ff503f160d5290",
+            "FileHash": "ae9b2f9a5f25f66450856283fd48d367",
             "FileCRC": "00000000",
             "FileSize": 4458,
             "Encrypted": false,
@@ -609,9 +609,9 @@
         {
             "BundleName": "assets_arts_prefabs_skills.bundle",
             "UnityCRC": 0,
-            "FileHash": "aa8df25b7af892d49a5793482e3f6721",
+            "FileHash": "35a967232a71f1b088a4d5c5ec29cddc",
             "FileCRC": "00000000",
-            "FileSize": 7682,
+            "FileSize": 7709,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -619,9 +619,9 @@
         {
             "BundleName": "assets_arts_prefabs_ui.bundle",
             "UnityCRC": 0,
-            "FileHash": "336d34e5632ad94cb14255674a2c8738",
+            "FileHash": "702950ad08d46a0f20e7c244c6cbe4f2",
             "FileCRC": "00000000",
-            "FileSize": 367802,
+            "FileSize": 372704,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -629,7 +629,7 @@
         {
             "BundleName": "assets_arts_ui_sprites_common_skills.bundle",
             "UnityCRC": 0,
-            "FileHash": "e494b2ddd3367b3ce1ff1b41bb9056cf",
+            "FileHash": "9e314c14346bf7f9d8deab6ee071d837",
             "FileCRC": "00000000",
             "FileSize": 52687,
             "Encrypted": false,
@@ -639,7 +639,7 @@
         {
             "BundleName": "assets_arts_ui_sprites_gameplay.bundle",
             "UnityCRC": 0,
-            "FileHash": "d84716da23946cdaec13e3c0342b1f48",
+            "FileHash": "33160edce166289033549f137512dd96",
             "FileCRC": "00000000",
             "FileSize": 61120,
             "Encrypted": false,
@@ -649,7 +649,7 @@
         {
             "BundleName": "assets_arts_ui_sprites_gameplay_bullet.bundle",
             "UnityCRC": 0,
-            "FileHash": "2fab15b33361e53453739000048c4595",
+            "FileHash": "56f6c24be26b62e0f2b0031437983723",
             "FileCRC": "00000000",
             "FileSize": 64966,
             "Encrypted": false,
@@ -659,7 +659,7 @@
         {
             "BundleName": "assets_arts_ui_sprites_prepare_maps.bundle",
             "UnityCRC": 0,
-            "FileHash": "0c2a88fe4a2faa51f01353996532db6b",
+            "FileHash": "eba81670de46df87317ac7a383296517",
             "FileCRC": "00000000",
             "FileSize": 1487361,
             "Encrypted": false,
@@ -669,7 +669,7 @@
         {
             "BundleName": "assets_arts_ui_sprites_prepare_roles.bundle",
             "UnityCRC": 0,
-            "FileHash": "e0e138c37fb16c2277ffb5155d4541c4",
+            "FileHash": "95bfe316141343f77ff11464c91cbfbc",
             "FileCRC": "00000000",
             "FileSize": 216427,
             "Encrypted": false,
@@ -679,9 +679,9 @@
         {
             "BundleName": "game.bundle",
             "UnityCRC": 0,
-            "FileHash": "9b41e8b32c5a0d66ab76af683e1658df",
+            "FileHash": "3f076820f4a9f6a41a21ca28c1073f9c",
             "FileCRC": "00000000",
-            "FileSize": 68763,
+            "FileSize": 69333,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

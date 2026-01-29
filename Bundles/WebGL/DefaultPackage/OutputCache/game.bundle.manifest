@@ -1,0 +1,83 @@
+ManifestFileVersion: 0
+CRC: 1729989153
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 096afa2a810fc66fd61bd33840d388d0
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 66d163951645ab6482442687c7d7e893
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: f9db98c60740638449864eb028fbe7ad, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 97c6162bb7e62594db7bdd409ca38826, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 145d8c965e804295a33a408a29826122, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9712d984ffb6f5846b878fdb17d9a784, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6232693e03c49ddaf2bffd7638e02c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e242d194236f1db438e37c8f24556898, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d3880b6014014b3f84b720acfea2450a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d387c33aba9246cf968e9273556b8d59, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 53bf92a233e35954c8a4f0fe37be933e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 895fe87122853aa40b318da92aaf40b5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 99b3f47d703613f4d9a2c433889f176e, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 221
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.SkeletonMecanim/MecanimTranslator
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.SkeletonRenderer/SpriteMaskInteractionMaterials
+Assets:
+- Assets/Arts/Prefabs/Animals/pf_animal_snow_small_baozi.prefab
+- Assets/Arts/Prefabs/Animals/pf_animal_forest_small_yeji.prefab
+- Assets/Arts/Prefabs/Animals/pf_animal_forest_special_threekpcoin.prefab
+- Assets/Arts/Prefabs/Animals/pf_animal_forest_special_bulletcoin.prefab
+- Assets/Arts/Prefabs/Animals/pf_animal_forest_medium_yezhu.prefab
+- Assets/Arts/Prefabs/Animals/pf_animal_forest_large_baozi.prefab
+- Assets/Arts/Prefabs/Animals/pf_animal_snow_small_yeji.prefab
+- Assets/Arts/Prefabs/Animals/pf_animal_snow_boss_yezhu.prefab
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_large_baozi_animation.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_large_baozi_spine.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_medium_yezhu_animations.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_medium_yezhu_spine.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_small_yeji_animations.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_small_yeji_spine.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_special_bulletcoin_animations.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_special_bulletcoin_spine.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_special_threekpcoin_animations.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_special_threekpcoin_spine.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_snow_boss_yezhu_animations.bundle

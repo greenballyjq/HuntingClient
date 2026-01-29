@@ -161,7 +161,7 @@ MonoBehaviour:
     ShowFPS: 0
     ResourceLoadMode: 0
     IsCDNEnabled: 1
-    CDNUrl: https://equivalent-changes-wednesday-bookstore.trycloudflare.com
+    CDNUrl: https://3kp-panggu-1342832102.cos.ap-shanghai.myqcloud.com/game/hunt/CDN/StreamingAssets/yoo/DefaultPackage
     loading: {fileID: 136192759375765479}
   _updatePanel: {fileID: 0}
   _progressBar: {fileID: 0}

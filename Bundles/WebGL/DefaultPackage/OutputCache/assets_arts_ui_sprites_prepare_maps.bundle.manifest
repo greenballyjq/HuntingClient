@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 971294046
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9328a49dcd61bf285eb25dad06f26ec1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0005.JPG
+- Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0002.JPG
+- Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0004.JPG
+- Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0003.JPG
+- Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0001.JPG
+Dependencies: []

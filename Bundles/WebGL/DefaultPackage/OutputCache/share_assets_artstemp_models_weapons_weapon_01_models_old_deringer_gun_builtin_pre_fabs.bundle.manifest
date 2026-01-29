@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 1384747762
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a692f2c6cbda81f7329252ae1c469fa9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 134b7874faf1e4f485ed3c5a681e862b
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtsTemp/Models/Weapons/Weapon_01/Models/Old Deringer Gun/Builtin/Pre fabs/Gun.prefab
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_materials.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_mesh.bundle

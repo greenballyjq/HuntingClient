@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 4223843232
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 169b4d9787cb6406a2409add218fc8e1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e8df1f9f82371e82de919a94edcc7dd6
+HashAppended: 0
+ClassTypes:
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/Models/Animals/Animal_Forest_Medium_YeZhu/Animations/ac_animal_forest_medium_yezhu.controller
+Dependencies: []

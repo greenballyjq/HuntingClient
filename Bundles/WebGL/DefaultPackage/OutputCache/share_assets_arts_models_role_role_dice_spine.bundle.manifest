@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 1558953917
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9e16912dee9389460d30a699ef78250c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 8cf8429f42f4684239d47a8177bcd3cf
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+Assets:
+- Assets/Arts/Models/Role/Role_Dice/Spine/touzi_SkeletonData.asset
+- Assets/Arts/Models/Role/Role_Dice/Spine/touzi.atlas.txt
+- Assets/Arts/Models/Role/Role_Dice/Spine/touzi.png
+- Assets/Arts/Models/Role/Role_Dice/Spine/touzi_Atlas.asset
+- Assets/Arts/Models/Role/Role_Dice/Spine/touzi.skel.bytes
+- Assets/Arts/Models/Role/Role_Dice/Spine/touzi_Material.mat
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_role_role_dice_animations.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_plugins_spine_runtime_spine-unity_shaders.bundle

@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 1355769950
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 624f0d8148d1bc179da0b0a3c09017e8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0df1dec30b5d061d422d3e6493d27647
+HashAppended: 0
+ClassTypes:
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtsTemp/Effects/SandalStudio/Snow FX/Shaider/Snow FX.shader
+Dependencies: []

@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 1634916260
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: af02555caec314c1271d896344bfd67c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2612ac43db082a73502ee80f2eceb73f
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtsTemp/Models/Weapons/Weapon_01/Models/Old Deringer Gun/Textures/Metal_MetallicSmoothness.png
+- Assets/ArtsTemp/Models/Weapons/Weapon_01/Models/Old Deringer Gun/Textures/Wooden_Normal.png
+- Assets/ArtsTemp/Models/Weapons/Weapon_01/Models/Old Deringer Gun/Textures/Wooden_AlbedoTransparency.png
+- Assets/ArtsTemp/Models/Weapons/Weapon_01/Models/Old Deringer Gun/Textures/Wooden_MetallicSmoothness.png
+- Assets/ArtsTemp/Models/Weapons/Weapon_01/Models/Old Deringer Gun/Textures/Metal_Normal.png
+- Assets/ArtsTemp/Models/Weapons/Weapon_01/Models/Old Deringer Gun/Textures/Metal_AlbedoTransparency.png
+Dependencies: []

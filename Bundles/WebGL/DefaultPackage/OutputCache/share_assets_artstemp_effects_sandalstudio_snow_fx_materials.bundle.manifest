@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 745599389
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 488b763b53bf3d1d1205520d38e37373
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5e762ccb57c4caaabbb5a4199ac82c23
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtsTemp/Effects/SandalStudio/Snow FX/Materials/SandalStudio_Snow 10.mat
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_artstemp_effects_sandalstudio_snow_fx_shaider.bundle

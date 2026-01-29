@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 708640535
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e56bb81ee45e1b0d24029284ccb5caec
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/UI/Sprites/Popup/Popup_Settlement/Normal/img_jitiu_0001.png
+- Assets/Arts/UI/Sprites/Popup/Popup_Settlement/Normal/img_daroujiesuan_0001.png
+- Assets/Arts/UI/Sprites/Popup/Popup_Settlement/Normal/btn_shuangbeilingqu_001.png
+- Assets/Arts/UI/Sprites/Popup/Popup_Settlement/Normal/TC_B_beijing_0001.png
+- Assets/Arts/UI/Sprites/Popup/Popup_Settlement/Normal/btn_lingqu_001.png
+- Assets/Arts/UI/Sprites/Popup/Popup_Settlement/Normal/img_rouchuan_0001.png
+Dependencies: []

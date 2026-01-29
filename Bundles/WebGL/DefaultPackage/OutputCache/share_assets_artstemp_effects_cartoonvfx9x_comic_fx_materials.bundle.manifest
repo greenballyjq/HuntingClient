@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 1334199423
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 73659558771ae72543f9b465be6d1943
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b30fce1a9ad74efb72be6c308c56e365
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtsTemp/Effects/CartoonVFX9x/Comic_FX/Materials/Smoke.mat
+- Assets/ArtsTemp/Effects/CartoonVFX9x/Comic_FX/Materials/Impact4_Blue.mat
+- Assets/ArtsTemp/Effects/CartoonVFX9x/Comic_FX/Materials/Circle_Impact_Blue.mat
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_artstemp_effects_cartoonvfx9x_comic_fx_textures.bundle

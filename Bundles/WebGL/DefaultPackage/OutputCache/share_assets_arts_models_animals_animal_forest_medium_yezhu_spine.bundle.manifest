@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 3672520324
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cdc94db4e78fbebf90bb0af5336732d4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 8cf8429f42f4684239d47a8177bcd3cf
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+Assets:
+- Assets/Arts/Models/Animals/Animal_Forest_Medium_YeZhu/Spine/yezhu_Atlas.asset
+- Assets/Arts/Models/Animals/Animal_Forest_Medium_YeZhu/Spine/yezhu_SkeletonData.asset
+- Assets/Arts/Models/Animals/Animal_Forest_Medium_YeZhu/Spine/yezhu.skel.bytes
+- Assets/Arts/Models/Animals/Animal_Forest_Medium_YeZhu/Spine/yezhu.png
+- Assets/Arts/Models/Animals/Animal_Forest_Medium_YeZhu/Spine/yezhu.atlas.txt
+- Assets/Arts/Models/Animals/Animal_Forest_Medium_YeZhu/Spine/yezhu_Material.mat
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_animals_animal_forest_medium_yezhu_animations.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_plugins_spine_runtime_spine-unity_shaders.bundle

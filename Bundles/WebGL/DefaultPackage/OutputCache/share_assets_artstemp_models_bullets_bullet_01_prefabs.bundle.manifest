@@ -1,0 +1,30 @@
+ManifestFileVersion: 0
+CRC: 344304411
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 15c73b08427eb35e4f488339833cab8c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 134b7874faf1e4f485ed3c5a681e862b
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtsTemp/Models/Bullets/Bullet_01/Prefabs/SM_Bullet_09.prefab
+- Assets/ArtsTemp/Models/Bullets/Bullet_01/Prefabs/SM_Bullet_01.prefab
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_artstemp_models_bullets_bullet_01_model.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_artstemp_models_bullets_bullet_01_texture_materials.bundle

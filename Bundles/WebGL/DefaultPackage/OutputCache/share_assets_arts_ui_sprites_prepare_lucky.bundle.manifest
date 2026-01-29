@@ -1,0 +1,30 @@
+ManifestFileVersion: 0
+CRC: 3250611838
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0edb05d5fa1673ebc6f2a2214ed4575c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_bx_chuji_0001.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_bx_gapji_0001.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_bx_suiji_0001.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_purple_0002.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_yellow_0003.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_gray_0001.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/btn_guanggao_001.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_bx_zhongji_0001.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_0004_0001.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/TC_C_beijing_0001.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_blue_0004.png
+- Assets/Arts/UI/Sprites/Prepare/Lucky/img_xingyunyishi_0001.png
+Dependencies: []

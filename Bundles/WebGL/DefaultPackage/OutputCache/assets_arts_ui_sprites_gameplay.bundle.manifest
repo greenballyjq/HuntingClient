@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 3210044290
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c0397a1f00ba634b5be11d98751fc103
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/UI/Sprites/Gameplay/TB_xueshan_beijing_0001.png
+Dependencies: []

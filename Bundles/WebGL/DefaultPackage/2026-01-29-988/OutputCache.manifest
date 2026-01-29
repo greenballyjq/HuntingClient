@@ -1,0 +1,373 @@
+ManifestFileVersion: 0
+CRC: 2531144711
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: assets_arts_ui_sprites_common_skills.bundle
+      Dependencies: {}
+    Info_1:
+      Name: assets_arts_ui_sprites_gameplay_bullet.bundle
+      Dependencies: {}
+    Info_2:
+      Name: assets_arts_ui_sprites_gameplay.bundle
+      Dependencies: {}
+    Info_3:
+      Name: assets_arts_ui_sprites_prepare_roles.bundle
+      Dependencies: {}
+    Info_4:
+      Name: assets_arts_ui_sprites_prepare_maps.bundle
+      Dependencies: {}
+    Info_5:
+      Name: assets_arts_prefabs_ui.bundle
+      Dependencies:
+        Dependency_0: assets_arts_ui_sprites_common_skills.bundle
+        Dependency_1: assets_arts_ui_sprites_gameplay_bullet.bundle
+        Dependency_2: assets_arts_ui_sprites_gameplay.bundle
+        Dependency_3: assets_arts_ui_sprites_prepare_roles.bundle
+        Dependency_4: share_assets_arts_common_fonts_raw.bundle
+        Dependency_5: share_assets_arts_ui_sprites_gameplay.bundle
+        Dependency_6: share_assets_arts_common_fonts_materials.bundle
+        Dependency_7: share_assets_arts_ui_sprites_gameplay_time.bundle
+        Dependency_8: share_assets_arts_ui_sprites_gameplay_bullet.bundle
+        Dependency_9: share_assets_arts_ui_sprites_gameplay_skill.bundle
+        Dependency_10: share_assets_arts_ui_sprites_gameplay_prop.bundle
+        Dependency_11: share_assets_arts_ui_sprites_gameplay_meat.bundle
+        Dependency_12: share_assets_arts_ui_sprites_prepare_lucky.bundle
+        Dependency_13: share_assets_arts_ui_prefabs_prepare.bundle
+        Dependency_14: share_assets_arts_ui_sprites_common.bundle
+        Dependency_15: share_assets_arts_ui_sprites_popup.bundle
+        Dependency_16: share_assets_arts_ui_sprites_popup_popup_prop.bundle
+        Dependency_17: share_assets_arts_ui_sprites_prepare.bundle
+        Dependency_18: share_assets_arts_ui_sprites_popup_popup_settlement_normal.bundle
+        Dependency_19: share_assets_arts_ui_sprites_popup_popup_settlement.bundle
+        Dependency_20: share_assets_arts_ui_sprites_popup_popup_settlement_snow_fake.bundle
+        Dependency_21: share_assets_arts_ui_sprites_popup_popup_settlement_snow_vectory.bundle
+        Dependency_22: share_assets_arts_models_role_role_dice_prefabs.bundle
+        Dependency_23: share_assets_arts_models_role_role_threekpcoin_spine.bundle
+        Dependency_24: share_assets_arts_models_role_role_threekpcoin_animations.bundle
+        Dependency_25: share_assets_arts_ui_material.bundle
+    Info_6:
+      Name: game.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_models_animals_animal_forest_large_baozi_spine.bundle
+        Dependency_1: share_assets_arts_models_animals_animal_forest_large_baozi_animation.bundle
+        Dependency_2: share_assets_arts_models_animals_animal_forest_medium_yezhu_animations.bundle
+        Dependency_3: share_assets_arts_models_animals_animal_forest_medium_yezhu_spine.bundle
+        Dependency_4: share_assets_arts_models_animals_animal_forest_small_yeji_animations.bundle
+        Dependency_5: share_assets_arts_models_animals_animal_forest_small_yeji_spine.bundle
+        Dependency_6: share_assets_arts_models_animals_animal_forest_special_bulletcoin_animations.bundle
+        Dependency_7: share_assets_arts_models_animals_animal_forest_special_bulletcoin_spine.bundle
+        Dependency_8: share_assets_arts_models_animals_animal_forest_special_threekpcoin_spine.bundle
+        Dependency_9: share_assets_arts_models_animals_animal_forest_special_threekpcoin_animations.bundle
+        Dependency_10: share_assets_arts_models_animals_animal_snow_boss_yezhu_animations.bundle
+    Info_7:
+      Name: assets_arts_prefabs_bullets.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_models_bullets_bullet_01_model.bundle
+        Dependency_1: share_assets_artstemp_models_bullets_bullet_01_texture_materials.bundle
+    Info_8:
+      Name: assets_arts_prefabs_props.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_models_props_trap_01_models.bundle
+    Info_9:
+      Name: assets_arts_prefabs_skills.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_audio_sfx.bundle
+        Dependency_1: share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_materials.bundle
+        Dependency_2: share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_mesh.bundle
+    Info_10:
+      Name: assets_arts_prefabs_effects.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_effects_mat.bundle
+        Dependency_1: share_assets_arts_effects_emesh.bundle
+        Dependency_2: share_assets_arts_effects_emesh_xianjin_01.bundle
+        Dependency_3: share_assets_arts_effects_animatons.bundle
+        Dependency_4: share_assets_arts_effects_emesh_jinbi.bundle
+        Dependency_5: share_assets_arts_effects_emesh_rou_kaorou_01.bundle
+        Dependency_6: share_assets_arts_effects_emesh_rou_jitui_01.bundle
+        Dependency_7: share_assets_arts_effects_emesh_rou_kaoruzhu_01.bundle
+    Info_11:
+      Name: assets_arts_prefabs_particles.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_common_materials.bundle
+        Dependency_1: share_assets_artstemp_effects_sandalstudio_snow_fx_materials.bundle
+        Dependency_2: share_assets_artstemp_effects_cartoonvfx9x_comic_fx_materials.bundle
+    Info_12:
+      Name: assets_arts_audio_sfx.bundle
+      Dependencies: {}
+    Info_13:
+      Name: share_assets_arts_common_fonts_raw.bundle
+      Dependencies:
+        Dependency_0: share_assets_textmesh_pro_shaders.bundle
+    Info_14:
+      Name: share_assets_textmesh_pro_shaders.bundle
+      Dependencies: {}
+    Info_15:
+      Name: share_assets_arts_ui_sprites_gameplay.bundle
+      Dependencies: {}
+    Info_16:
+      Name: share_assets_arts_ui_prefabs_gameplay.bundle
+      Dependencies:
+        Dependency_0: assets_arts_ui_sprites_common_skills.bundle
+        Dependency_1: assets_arts_ui_sprites_gameplay_bullet.bundle
+        Dependency_2: share_assets_arts_common_fonts_raw.bundle
+        Dependency_3: share_assets_arts_ui_sprites_gameplay.bundle
+        Dependency_4: share_assets_arts_common_fonts_materials.bundle
+        Dependency_5: share_assets_arts_ui_sprites_gameplay_time.bundle
+        Dependency_6: share_assets_arts_ui_sprites_gameplay_bullet.bundle
+        Dependency_7: share_assets_arts_ui_sprites_gameplay_skill.bundle
+        Dependency_8: share_assets_arts_ui_sprites_gameplay_prop.bundle
+        Dependency_9: share_assets_arts_ui_sprites_gameplay_meat.bundle
+    Info_17:
+      Name: share_assets_arts_common_fonts_materials.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_common_fonts_raw.bundle
+        Dependency_1: share_assets_textmesh_pro_shaders.bundle
+    Info_18:
+      Name: share_assets_arts_ui_sprites_gameplay_time.bundle
+      Dependencies: {}
+    Info_19:
+      Name: share_assets_arts_ui_sprites_gameplay_bullet.bundle
+      Dependencies: {}
+    Info_20:
+      Name: share_assets_arts_ui_sprites_gameplay_skill.bundle
+      Dependencies: {}
+    Info_21:
+      Name: share_assets_arts_ui_sprites_gameplay_prop.bundle
+      Dependencies: {}
+    Info_22:
+      Name: share_assets_arts_ui_sprites_gameplay_meat.bundle
+      Dependencies: {}
+    Info_23:
+      Name: share_assets_arts_ui_sprites_prepare_lucky.bundle
+      Dependencies: {}
+    Info_24:
+      Name: share_assets_arts_ui_prefabs_prepare.bundle
+      Dependencies:
+        Dependency_0: assets_arts_ui_sprites_common_skills.bundle
+        Dependency_1: assets_arts_ui_sprites_prepare_roles.bundle
+        Dependency_2: share_assets_arts_common_fonts_raw.bundle
+        Dependency_3: share_assets_arts_common_fonts_materials.bundle
+        Dependency_4: share_assets_arts_ui_sprites_prepare_lucky.bundle
+        Dependency_5: share_assets_arts_ui_sprites_common.bundle
+        Dependency_6: share_assets_arts_ui_sprites_prepare.bundle
+        Dependency_7: share_assets_arts_models_role_role_dice_prefabs.bundle
+        Dependency_8: share_assets_arts_models_role_role_threekpcoin_spine.bundle
+        Dependency_9: share_assets_arts_models_role_role_threekpcoin_animations.bundle
+        Dependency_10: share_assets_arts_ui_material.bundle
+    Info_25:
+      Name: share_assets_arts_ui_sprites_common.bundle
+      Dependencies: {}
+    Info_26:
+      Name: share_assets_arts_ui_sprites_popup.bundle
+      Dependencies: {}
+    Info_27:
+      Name: share_assets_arts_ui_sprites_popup_popup_prop.bundle
+      Dependencies: {}
+    Info_28:
+      Name: share_assets_arts_ui_sprites_prepare.bundle
+      Dependencies: {}
+    Info_29:
+      Name: share_assets_arts_ui_sprites_popup_popup_settlement_normal.bundle
+      Dependencies: {}
+    Info_30:
+      Name: share_assets_arts_ui_sprites_popup_popup_settlement.bundle
+      Dependencies: {}
+    Info_31:
+      Name: share_assets_arts_ui_sprites_popup_popup_settlement_snow_fake.bundle
+      Dependencies: {}
+    Info_32:
+      Name: share_assets_arts_ui_sprites_popup_popup_settlement_snow_vectory.bundle
+      Dependencies: {}
+    Info_33:
+      Name: share_assets_arts_models_role_role_dice_prefabs.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_models_role_role_dice_animations.bundle
+        Dependency_1: share_assets_arts_models_role_role_dice_spine.bundle
+    Info_34:
+      Name: share_assets_arts_models_role_role_dice_animations.bundle
+      Dependencies: {}
+    Info_35:
+      Name: share_assets_arts_models_role_role_dice_spine.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_models_role_role_dice_animations.bundle
+        Dependency_1: share_assets_plugins_spine_runtime_spine-unity_shaders.bundle
+    Info_36:
+      Name: share_assets_plugins_spine_runtime_spine-unity_shaders.bundle
+      Dependencies: {}
+    Info_37:
+      Name: share_assets_plugins_spine_runtime_spine-unity_skeletondatamodifierassets_blendmodematerials.bundle
+      Dependencies:
+        Dependency_0: share_assets_plugins_spine_runtime_spine-unity_shaders_blendmodes.bundle
+    Info_38:
+      Name: share_assets_plugins_spine_runtime_spine-unity_shaders_blendmodes.bundle
+      Dependencies: {}
+    Info_39:
+      Name: share_assets_arts_models_role_role_threekpcoin_prefabs.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_models_role_role_dice_prefabs.bundle
+        Dependency_1: share_assets_arts_models_role_role_threekpcoin_spine.bundle
+        Dependency_2: share_assets_arts_models_role_role_threekpcoin_animations.bundle
+    Info_40:
+      Name: share_assets_arts_models_role_role_threekpcoin_spine.bundle
+      Dependencies:
+        Dependency_0: share_assets_plugins_spine_runtime_spine-unity_shaders.bundle
+    Info_41:
+      Name: share_assets_arts_models_role_role_threekpcoin_animations.bundle
+      Dependencies: {}
+    Info_42:
+      Name: share_assets_arts_ui_material.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_ui_shader.bundle
+    Info_43:
+      Name: share_assets_arts_ui_shader.bundle
+      Dependencies: {}
+    Info_44:
+      Name: share_assets_arts_models_animals_animal_forest_large_baozi_spine.bundle
+      Dependencies:
+        Dependency_0: share_assets_plugins_spine_runtime_spine-unity_shaders.bundle
+    Info_45:
+      Name: share_assets_arts_models_animals_animal_forest_large_baozi_animation.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_models_animals_animal_forest_medium_yezhu_animations.bundle
+    Info_46:
+      Name: share_assets_arts_models_animals_animal_forest_medium_yezhu_animations.bundle
+      Dependencies: {}
+    Info_47:
+      Name: share_assets_arts_models_animals_animal_forest_medium_yezhu_spine.bundle
+      Dependencies:
+        Dependency_0: share_assets_plugins_spine_runtime_spine-unity_shaders.bundle
+        Dependency_1: share_assets_arts_models_animals_animal_forest_medium_yezhu_animations.bundle
+    Info_48:
+      Name: share_assets_arts_models_animals_animal_forest_small_yeji_animations.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_models_animals_animal_forest_medium_yezhu_animations.bundle
+    Info_49:
+      Name: share_assets_arts_models_animals_animal_forest_small_yeji_spine.bundle
+      Dependencies:
+        Dependency_0: share_assets_plugins_spine_runtime_spine-unity_shaders.bundle
+    Info_50:
+      Name: share_assets_arts_models_animals_animal_forest_special_bulletcoin_animations.bundle
+      Dependencies: {}
+    Info_51:
+      Name: share_assets_arts_models_animals_animal_forest_special_bulletcoin_spine.bundle
+      Dependencies:
+        Dependency_0: share_assets_plugins_spine_runtime_spine-unity_shaders.bundle
+    Info_52:
+      Name: share_assets_arts_models_animals_animal_forest_special_threekpcoin_spine.bundle
+      Dependencies:
+        Dependency_0: share_assets_plugins_spine_runtime_spine-unity_shaders.bundle
+    Info_53:
+      Name: share_assets_arts_models_animals_animal_forest_special_threekpcoin_animations.bundle
+      Dependencies: {}
+    Info_54:
+      Name: share_assets_arts_models_animals_animal_snow_boss_yezhu_animations.bundle
+      Dependencies: {}
+    Info_55:
+      Name: share_assets_artstemp_models_bullets_bullet_01_prefabs.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_models_bullets_bullet_01_model.bundle
+        Dependency_1: share_assets_artstemp_models_bullets_bullet_01_texture_materials.bundle
+    Info_56:
+      Name: share_assets_artstemp_models_bullets_bullet_01_model.bundle
+      Dependencies: {}
+    Info_57:
+      Name: share_assets_artstemp_models_bullets_bullet_01_texture_materials.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_models_bullets_bullet_01_texture.bundle
+    Info_58:
+      Name: share_assets_artstemp_models_bullets_bullet_01_texture.bundle
+      Dependencies: {}
+    Info_59:
+      Name: share_assets_artstemp_models_props_trap_01_models.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_models_props_trap_01_materials-pallettes.bundle
+    Info_60:
+      Name: share_assets_artstemp_models_props_trap_01_materials-pallettes.bundle
+      Dependencies: {}
+    Info_61:
+      Name: share_assets_artstemp_audio_sfx.bundle
+      Dependencies: {}
+    Info_62:
+      Name: share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_pre_fabs.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_materials.bundle
+        Dependency_1: share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_mesh.bundle
+    Info_63:
+      Name: share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_materials.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_textures.bundle
+    Info_64:
+      Name: share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_textures.bundle
+      Dependencies: {}
+    Info_65:
+      Name: share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_mesh.bundle
+      Dependencies: {}
+    Info_66:
+      Name: share_assets_arts_effects_mat.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_environments_map_01.bundle
+        Dependency_1: share_assets_arts_effects_texture.bundle
+        Dependency_2: share_assets_arts_effects_shader.bundle
+        Dependency_3: share_assets_arts_effects_emesh_rou_kaorou_01.bundle
+        Dependency_4: share_assets_arts_effects_emesh_rou_jitui_01.bundle
+        Dependency_5: share_assets_arts_effects_emesh_rou_kaoruzhu_01.bundle
+    Info_67:
+      Name: share_assets_artstemp_environments_map_01.bundle
+      Dependencies: {}
+    Info_68:
+      Name: share_assets_arts_effects_texture.bundle
+      Dependencies: {}
+    Info_69:
+      Name: share_assets_arts_effects_shader.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_effects_texture.bundle
+    Info_70:
+      Name: share_assets_arts_effects_emesh.bundle
+      Dependencies: {}
+    Info_71:
+      Name: share_assets_arts_effects_emesh_xianjin_01.bundle
+      Dependencies:
+        Dependency_0: share_assets_arts_effects_texture.bundle
+        Dependency_1: share_assets_arts_effects_shader.bundle
+    Info_72:
+      Name: share_assets_arts_effects_animatons.bundle
+      Dependencies: {}
+    Info_73:
+      Name: share_assets_arts_effects_emesh_jinbi.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_environments_map_01.bundle
+    Info_74:
+      Name: share_assets_arts_effects_emesh_rou_kaorou_01.bundle
+      Dependencies: {}
+    Info_75:
+      Name: share_assets_arts_effects_emesh_rou_jitui_01.bundle
+      Dependencies: {}
+    Info_76:
+      Name: share_assets_arts_effects_emesh_rou_kaoruzhu_01.bundle
+      Dependencies: {}
+    Info_77:
+      Name: share_assets_artstemp_common_materials.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_common_shader.bundle
+        Dependency_1: share_assets_artstemp_common_textures.bundle
+    Info_78:
+      Name: share_assets_artstemp_common_shader.bundle
+      Dependencies: {}
+    Info_79:
+      Name: share_assets_artstemp_common_textures.bundle
+      Dependencies: {}
+    Info_80:
+      Name: share_assets_artstemp_effects_sandalstudio_snow_fx_materials.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_effects_sandalstudio_snow_fx_shaider.bundle
+    Info_81:
+      Name: share_assets_artstemp_effects_sandalstudio_snow_fx_shaider.bundle
+      Dependencies: {}
+    Info_82:
+      Name: share_assets_artstemp_effects_cartoonvfx9x_comic_fx_materials.bundle
+      Dependencies:
+        Dependency_0: share_assets_artstemp_effects_cartoonvfx9x_comic_fx_textures.bundle
+    Info_83:
+      Name: share_assets_artstemp_effects_cartoonvfx9x_comic_fx_textures.bundle
+      Dependencies: {}

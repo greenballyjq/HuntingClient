@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 793575835
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ae8f00fbed8778a8ac815f8ecd194a76
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0df1dec30b5d061d422d3e6493d27647
+HashAppended: 0
+ClassTypes:
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtsTemp/Environments/Map_01/Blend_HDR.shader
+Dependencies: []

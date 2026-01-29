@@ -1,0 +1,32 @@
+ManifestFileVersion: 0
+CRC: 895024564
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8b0827eb7c36ef49cd834b3458b10833
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7a750a85d32f37027cf6cc34f593094b
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/ArtsTemp/Models/Props/Trap_01/Models/Bomb.fbx
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_artstemp_models_props_trap_01_materials-pallettes.bundle

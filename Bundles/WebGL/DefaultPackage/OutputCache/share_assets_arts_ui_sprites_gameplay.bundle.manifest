@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 4235332513
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 7da10835ac845025a3d2a1ba73531811
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/UI/Sprites/Gameplay/TB_putong_beijing_0001.png
+- Assets/Arts/UI/Sprites/Gameplay/TB_btn_fanhui.png
+Dependencies: []

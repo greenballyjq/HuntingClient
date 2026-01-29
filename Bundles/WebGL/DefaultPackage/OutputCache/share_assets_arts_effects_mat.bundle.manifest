@@ -1,0 +1,57 @@
+ManifestFileVersion: 0
+CRC: 2536263827
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0d990dfd932806ff3f988556bac66dc0
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b30fce1a9ad74efb72be6c308c56e365
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/Effects/Mat/Shader_Clip_14.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_07_2.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_06_1.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_25.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_28.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_12.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_20.mat
+- Assets/Arts/Effects/Mat/KaoRou_02.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_04.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_21.mat
+- Assets/Arts/Effects/Mat/KaoRou_03.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_16.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_09.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_08.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_06.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_26.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_23.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_29.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_15.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_07_1.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_04_1.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_27.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_24.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_07.mat
+- Assets/Arts/Effects/Mat/New Material_01.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_04_2.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_10.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_05.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_19.mat
+- Assets/Arts/Effects/Mat/KaoRou_01.mat
+- Assets/Arts/Effects/Mat/Shader_Clip_11.mat
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_effects_emesh_rou_jitui_01.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_effects_emesh_rou_kaorou_01.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_effects_emesh_rou_kaoruzhu_01.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_effects_shader.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_effects_texture.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_artstemp_environments_map_01.bundle

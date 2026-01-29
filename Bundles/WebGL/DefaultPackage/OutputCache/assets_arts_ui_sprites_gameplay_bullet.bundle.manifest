@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 1056490481
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e7ca5dbf9c9a8a869a2f5dc87eee4f5a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_baozhazidan_0002.png
+- Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaosuzidan_0004.png
+- Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaoshangzidan_0003.png
+- Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_putongzidan_0001.png
+Dependencies: []

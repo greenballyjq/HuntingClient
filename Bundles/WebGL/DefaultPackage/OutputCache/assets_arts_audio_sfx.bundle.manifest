@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 2765541249
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 6fa39130677031c9ee7d503a5d97eab9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/Audio/SFX/sfx_laugh.mp3
+- Assets/Arts/Audio/SFX/sfx_alert.mp3
+Dependencies: []

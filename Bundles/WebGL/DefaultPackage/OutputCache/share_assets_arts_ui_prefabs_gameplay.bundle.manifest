@@ -1,0 +1,96 @@
+ManifestFileVersion: 0
+CRC: 14584873
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 27768c80392ea383404e1de03d5502ef
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2ca4d8ffab27f3e4d8dd86903a818897
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 75d4361c65c18c7498e5d84631362667, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: dbce9631ba8dfa642a9cbc7e664880eb, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 498b99b7409fc7644806a2ee8c270142, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8789a49694b1d6745a565d0a5479ff4a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7c5750b8cef578e4db228084c1d9a004, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 92aa32723a5337743b48032dcb3ab1bf, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 621ad196ea05d044ea11e19e8767dbfa, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 368b6a3e5e4d3d8469133d17b2e222c0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 51d35766db57ebb4bb2936bff77faaff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e1586976d1ca08646ba5b2add47dff8b, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: UIComponentBossHealth/BossHealthAnimationConfig
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
+Assets:
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentButtonReturnOrSettlement.prefab
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentAnimalCounterItem.prefab
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentPropItem.prefab
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentTime.prefab
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentBullet.prefab
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentSkill.prefab
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentPropGroup.prefab
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentAnimalCounter.prefab
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentMeatProgress.prefab
+- Assets/Arts/UI/Prefabs/Gameplay/UIComponentBossHealth.prefab
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/assets_arts_ui_sprites_common_skills.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/assets_arts_ui_sprites_gameplay_bullet.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_common_fonts_materials.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_common_fonts_raw.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_sprites_gameplay.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_sprites_gameplay_bullet.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_sprites_gameplay_meat.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_sprites_gameplay_prop.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_sprites_gameplay_skill.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_sprites_gameplay_time.bundle

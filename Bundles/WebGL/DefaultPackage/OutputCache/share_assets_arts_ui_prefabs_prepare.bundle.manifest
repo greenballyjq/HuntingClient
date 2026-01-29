@@ -1,0 +1,114 @@
+ManifestFileVersion: 0
+CRC: 3136653455
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: aabaab0a29e5f3ddea50331e7573ab06
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a7653764266e59ae047c33ac8315ff01
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f9db98c60740638449864eb028fbe7ad, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9c2f7c54f2610464398deeac338bc8ba, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 870d2eec8895a0840aa8737a5334fd55, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d7075ef4ac9891545a6f617b43d9f208, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7b3122e7492996347a181d141ac38a27, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e83177e0b582f2f43af3025599b0c7e9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a1e10f0be272e654fa47d82dd9a30a68, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 65c4347657ddcde4a903434867afc823, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2521ccd0ee148804ea0d4a05692c11f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a451b93068214b843a3b8b764df2cb75, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 81c098668eff7854fa591ccf93cf6ade, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 210
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.SkeletonMecanim/MecanimTranslator
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.SkeletonRenderer/SpriteMaskInteractionMaterials
+Assets:
+- Assets/Arts/UI/Prefabs/Prepare/UIComponentMapInfo.prefab
+- Assets/Arts/UI/Prefabs/Prepare/UIComponentRollRole.prefab
+- Assets/Arts/UI/Prefabs/Prepare/UIComponentGift.prefab
+- Assets/Arts/UI/Prefabs/Prepare/UIComponentRoleInfo.prefab
+- Assets/Arts/UI/Prefabs/Prepare/UIComponentRankingItem.prefab
+- Assets/Arts/UI/Prefabs/Prepare/UIComponentGiftAd.prefab
+- Assets/Arts/UI/Prefabs/Prepare/UIComponentRoleSlot.prefab
+- Assets/Arts/UI/Prefabs/Prepare/UIComponentLuckyWheel.prefab
+- Assets/Arts/UI/Prefabs/Prepare/UIComponentSkillInfo.prefab
+Dependencies:
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/assets_arts_ui_sprites_common_skills.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/assets_arts_ui_sprites_prepare_roles.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_common_fonts_materials.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_common_fonts_raw.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_role_role_dice_prefabs.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_role_role_threekpcoin_animations.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_models_role_role_threekpcoin_spine.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_material.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_sprites_common.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_sprites_prepare.bundle
+- E:/WorkSpace/HuntingClient/Bundles/WebGL/DefaultPackage/OutputCache/share_assets_arts_ui_sprites_prepare_lucky.bundle

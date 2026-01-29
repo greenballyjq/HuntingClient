@@ -1,0 +1,1850 @@
+{
+    "FileVersion": "2.3.1",
+    "EnableAddressable": false,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "OutputNameStyle": 0,
+    "BuildBundleType": 2,
+    "BuildPipeline": "BuiltinBuildPipeline",
+    "PackageName": "DefaultPackage",
+    "PackageVersion": "2026-01-29-988",
+    "PackageNote": "2026/1/29 16:28:22",
+    "AssetList": [
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/SFX/sfx_alert.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/SFX/sfx_laugh.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_large_baozi.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": [
+                25,
+                26,
+                27,
+                80,
+                81,
+                82
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_medium_yezhu.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": [
+                27,
+                28,
+                80,
+                81,
+                82
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_small_yeji.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": [
+                27,
+                29,
+                30,
+                80,
+                81,
+                82
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_special_bulletcoin.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": [
+                31,
+                32,
+                80,
+                81,
+                82
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_special_threekpcoin.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": [
+                33,
+                34,
+                80,
+                81,
+                82
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_snow_boss_yezhu.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": [
+                27,
+                28,
+                35,
+                80,
+                81,
+                82
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_snow_small_baozi.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": [
+                25,
+                26,
+                27,
+                80,
+                81,
+                82
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_snow_small_yeji.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": [
+                27,
+                29,
+                30,
+                80,
+                81,
+                82
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Bullets/pf_bullet_explosive.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": [
+                70,
+                71,
+                72,
+                73
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Bullets/pf_bullet_highdamage.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": [
+                70,
+                71,
+                72,
+                73
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Bullets/pf_bullet_highspeed.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": [
+                70,
+                71,
+                72,
+                73
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Bullets/pf_bullet_normal.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": [
+                70,
+                71,
+                72,
+                73
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_CZXTTX008.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                22,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_CZXTTX012.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                16,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_DG_A.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_DG_B.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                22,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_DG_C.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                15,
+                16,
+                21,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_Hit_01.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                17,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_Hit_02.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                17,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_Hit_03.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                22,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX001.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                17,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX002_1.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                17,
+                22,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX002_2.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                17,
+                22,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX002_3.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                17,
+                22,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX002_4.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                17,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_JXTX001_01.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                19,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_JXTX001_02.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                18,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_JXTX001_03.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": [
+                20,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Particles/FX_DGB_PTFH.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": [
+                62,
+                63,
+                64
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Particles/FX_DGC_SJSL_fly_UI.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": [
+                62,
+                63,
+                64
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Particles/FX_Snow.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": [
+                67,
+                68
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Particles/Settlement_Explosion.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": [
+                65,
+                66
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Props/pf_prop_trap.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": [
+                74,
+                75
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/Skills/pf_skillweapon.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 5,
+            "DependBundleIDs": [
+                61,
+                76,
+                77,
+                78,
+                79
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UIAlertRed.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UICountdown.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                14,
+                83
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UIGameplay.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                7,
+                8,
+                9,
+                13,
+                14,
+                43,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                83
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UILoading.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupLucky.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                13,
+                14,
+                44,
+                46,
+                53,
+                60,
+                83
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupLuckyBuff.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                13,
+                14,
+                54,
+                56,
+                59,
+                83
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupSettlementNormal.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                13,
+                14,
+                46,
+                53,
+                55,
+                56,
+                83
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupSettlementSnowFake.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                13,
+                14,
+                46,
+                53,
+                55,
+                57,
+                83
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupSettlementSnowVictory.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                13,
+                14,
+                36,
+                37,
+                38,
+                46,
+                53,
+                55,
+                58,
+                80,
+                81,
+                82,
+                83
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UIPrepare.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                7,
+                11,
+                13,
+                14,
+                36,
+                37,
+                38,
+                39,
+                40,
+                41,
+                42,
+                44,
+                45,
+                59,
+                80,
+                81,
+                82,
+                83
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Prefabs/UI/UIRanking.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": [
+                14,
+                44,
+                83
+            ]
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_aixinlaolongi_0004.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_bangbangwoma_0002.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_huojiantouwei_0003.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_huoliquankai_0001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_shiqianruming_0005.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_baozhazidan_0002.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 9,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaoshangzidan_0003.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 9,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaosuzidan_0004.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 9,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_putongzidan_0001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 9,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/TB_xueshan_beijing_0001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 8,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0001.JPG",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 10,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0002.JPG",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 10,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0003.JPG",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 10,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0004.JPG",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 10,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0005.JPG",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 10,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_A_boy_0001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 11,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_B_gril_0001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 11,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_C_ziwei_0001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 11,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_D_dameiri_0001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 11,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_E_jinzhuangyuan_0001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 11,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_F_yakedong_0001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 11,
+            "DependBundleIDs": []
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "assets_arts_audio_sfx.bundle",
+            "UnityCRC": 2765541249,
+            "FileHash": "4d5f7bdb0576be6d3cbac572d482dc46",
+            "FileCRC": "37950888",
+            "FileSize": 143261,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_arts_prefabs_bullets.bundle",
+            "UnityCRC": 3395867205,
+            "FileHash": "b97db5b9fe4e75b96bafa24a8f28b329",
+            "FileCRC": "64869cb5",
+            "FileSize": 4505,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                70,
+                72,
+                73
+            ]
+        },
+        {
+            "BundleName": "assets_arts_prefabs_effects.bundle",
+            "UnityCRC": 3093342613,
+            "FileHash": "c269d0dee11c49d5f9985aad19f0237f",
+            "FileCRC": "1c1a889f",
+            "FileSize": 74463,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "BundleName": "assets_arts_prefabs_particles.bundle",
+            "UnityCRC": 2450379690,
+            "FileHash": "f0a6667b7cefcabbb6351a85a5880cf7",
+            "FileCRC": "f855fa29",
+            "FileSize": 61673,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                62,
+                63,
+                64,
+                65,
+                66,
+                67,
+                68
+            ]
+        },
+        {
+            "BundleName": "assets_arts_prefabs_props.bundle",
+            "UnityCRC": 3567734331,
+            "FileHash": "854dbd212734e70e121b5b153fb3352e",
+            "FileCRC": "ab585ba7",
+            "FileSize": 3796,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                74,
+                75
+            ]
+        },
+        {
+            "BundleName": "assets_arts_prefabs_skills.bundle",
+            "UnityCRC": 601469836,
+            "FileHash": "088aad46615afdd0c5eb7be65b067a70",
+            "FileCRC": "2bcbee6d",
+            "FileSize": 5158,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                61,
+                76,
+                77,
+                79
+            ]
+        },
+        {
+            "BundleName": "assets_arts_prefabs_ui.bundle",
+            "UnityCRC": 1136800032,
+            "FileHash": "e51e7982c0849976d909a330a3aeb09d",
+            "FileCRC": "110978e2",
+            "FileSize": 79526,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                7,
+                8,
+                9,
+                11,
+                13,
+                14,
+                36,
+                37,
+                38,
+                39,
+                41,
+                42,
+                44,
+                45,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                80,
+                83
+            ]
+        },
+        {
+            "BundleName": "assets_arts_ui_sprites_common_skills.bundle",
+            "UnityCRC": 539480552,
+            "FileHash": "3330e758a3e87bb61e20e09828d19078",
+            "FileCRC": "a2501925",
+            "FileSize": 44087,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_arts_ui_sprites_gameplay.bundle",
+            "UnityCRC": 3210044290,
+            "FileHash": "547746de332acbdf2251e36df80519fa",
+            "FileCRC": "07ce3d09",
+            "FileSize": 33029,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_arts_ui_sprites_gameplay_bullet.bundle",
+            "UnityCRC": 1056490481,
+            "FileHash": "e2663724e8c78fefc4c7d85db4f21ec4",
+            "FileCRC": "3b06e40e",
+            "FileSize": 21745,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_arts_ui_sprites_prepare_maps.bundle",
+            "UnityCRC": 971294046,
+            "FileHash": "a4155cf961bcac637554b41a0c4d950d",
+            "FileCRC": "53e1343a",
+            "FileSize": 312762,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_arts_ui_sprites_prepare_roles.bundle",
+            "UnityCRC": 2154982603,
+            "FileHash": "7eee62c843844d29d62dee627a7854c7",
+            "FileCRC": "16b755ab",
+            "FileSize": 71823,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "game.bundle",
+            "UnityCRC": 1729989153,
+            "FileHash": "39030f0bcba846d4bf3f1a79adfec837",
+            "FileCRC": "df11cb49",
+            "FileSize": 31572,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33,
+                34,
+                35,
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_common_fonts_materials.bundle",
+            "UnityCRC": 875102217,
+            "FileHash": "2571e4c2c2674825df3e477eb9e304a4",
+            "FileCRC": "3f75e031",
+            "FileSize": 3462,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                14,
+                83
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_common_fonts_raw.bundle",
+            "UnityCRC": 1991502787,
+            "FileHash": "4c71c64f51e765d238df4a5aaab4edae",
+            "FileCRC": "f2fbecff",
+            "FileSize": 2592166,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                83
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_effects_animatons.bundle",
+            "UnityCRC": 977473252,
+            "FileHash": "122ebb0cdd56f95b80eafc635c2b2f6c",
+            "FileCRC": "8e346480",
+            "FileSize": 10748,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_effects_emesh.bundle",
+            "UnityCRC": 3610365996,
+            "FileHash": "cbc1d759ab2b6bb2c0858cc20dbc8321",
+            "FileCRC": "5daf2d85",
+            "FileSize": 63076,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_effects_emesh_jinbi.bundle",
+            "UnityCRC": 2457871855,
+            "FileHash": "895464450f405dae3e75a823ded90f3c",
+            "FileCRC": "cd92115a",
+            "FileSize": 88339,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                69
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_effects_emesh_rou_jitui_01.bundle",
+            "UnityCRC": 262606439,
+            "FileHash": "39c159e0fa8da8bb0aaa61c74f204d33",
+            "FileCRC": "feff170a",
+            "FileSize": 2712326,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_effects_emesh_rou_kaorou_01.bundle",
+            "UnityCRC": 3521536584,
+            "FileHash": "9620c84c5d48f11e75a46457fbe6fe84",
+            "FileCRC": "8ce0b6af",
+            "FileSize": 2734523,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_effects_emesh_rou_kaoruzhu_01.bundle",
+            "UnityCRC": 3315005559,
+            "FileHash": "d496fe20fbcba595f4add39ac4b09643",
+            "FileCRC": "d467d5bf",
+            "FileSize": 2991970,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_effects_emesh_xianjin_01.bundle",
+            "UnityCRC": 991695984,
+            "FileHash": "802147f05481b36b03aa60baad888f34",
+            "FileCRC": "285d2b17",
+            "FileSize": 1604812,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                23,
+                24
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_effects_mat.bundle",
+            "UnityCRC": 2536263827,
+            "FileHash": "46907367e7270d7cad5370090d7cfc7a",
+            "FileCRC": "da58bbce",
+            "FileSize": 5597,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                18,
+                19,
+                20,
+                23,
+                24,
+                69
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_effects_shader.bundle",
+            "UnityCRC": 1447680581,
+            "FileHash": "1efa4091925cdc4d1c36c9a0fa716d40",
+            "FileCRC": "b7cd002e",
+            "FileSize": 33456,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                24
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_effects_texture.bundle",
+            "UnityCRC": 3802912990,
+            "FileHash": "83c686521dbfa137d8a1ea17b52bd5fb",
+            "FileCRC": "dc5ea6d6",
+            "FileSize": 860248,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_large_baozi_animation.bundle",
+            "UnityCRC": 1602372454,
+            "FileHash": "b4eb9791741bac42c1c508bf2404c35a",
+            "FileCRC": "7884a4bc",
+            "FileSize": 6525,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                27
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_large_baozi_spine.bundle",
+            "UnityCRC": 1745255335,
+            "FileHash": "a15af7fd7753087e0b07ab726b7fae9d",
+            "FileCRC": "4b1b037f",
+            "FileSize": 187268,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_medium_yezhu_animations.bundle",
+            "UnityCRC": 4223843232,
+            "FileHash": "d5b7235778bd5f0cc41527309fbfecb3",
+            "FileCRC": "cad4f1ba",
+            "FileSize": 9728,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_medium_yezhu_spine.bundle",
+            "UnityCRC": 3672520324,
+            "FileHash": "04a16b18463fcadde519edc1cce933a2",
+            "FileCRC": "442c11a6",
+            "FileSize": 121916,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                27,
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_small_yeji_animations.bundle",
+            "UnityCRC": 913936144,
+            "FileHash": "72f0a570dc962a0bc4dcc465a003a476",
+            "FileCRC": "db513e34",
+            "FileSize": 6528,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                27
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_small_yeji_spine.bundle",
+            "UnityCRC": 2172516245,
+            "FileHash": "3d8524bac9a25704aa614308be59fd68",
+            "FileCRC": "64c7861b",
+            "FileSize": 151842,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_special_bulletcoin_animations.bundle",
+            "UnityCRC": 2304380675,
+            "FileHash": "cf4f0fb928771495103d6d612400cffc",
+            "FileCRC": "37c17084",
+            "FileSize": 9818,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_special_bulletcoin_spine.bundle",
+            "UnityCRC": 2225555129,
+            "FileHash": "4742b6c695e79dcc80aadc31d7418f16",
+            "FileCRC": "654438db",
+            "FileSize": 49876,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_special_threekpcoin_animations.bundle",
+            "UnityCRC": 2061060831,
+            "FileHash": "1ce48c8636c5b8a0d178b54df75219c0",
+            "FileCRC": "2e1b5656",
+            "FileSize": 9804,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_forest_special_threekpcoin_spine.bundle",
+            "UnityCRC": 3158678493,
+            "FileHash": "ac644816b1fcbda549a7abea45d2952c",
+            "FileCRC": "09703041",
+            "FileSize": 49782,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_animals_animal_snow_boss_yezhu_animations.bundle",
+            "UnityCRC": 4050740610,
+            "FileHash": "3e9e97f77bf1717a5fb2109549e8b278",
+            "FileCRC": "9f927db4",
+            "FileSize": 10000,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_dice_animations.bundle",
+            "UnityCRC": 1225098204,
+            "FileHash": "259fcb9434f0d6675a489d1c182cdd48",
+            "FileCRC": "35b1a4dd",
+            "FileSize": 9922,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_dice_prefabs.bundle",
+            "UnityCRC": 4274580524,
+            "FileHash": "9eb7247351d10e02624403e37886a07f",
+            "FileCRC": "d247b158",
+            "FileSize": 16143,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                36,
+                38,
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_dice_spine.bundle",
+            "UnityCRC": 1558953917,
+            "FileHash": "59de58a18ed144ffa6810862d2c67450",
+            "FileCRC": "e903e680",
+            "FileSize": 111151,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                36,
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_threekpcoin_animations.bundle",
+            "UnityCRC": 67787386,
+            "FileHash": "a396eb42c34fa3240d74ae8806cd412b",
+            "FileCRC": "82ad48ca",
+            "FileSize": 9824,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_threekpcoin_prefabs.bundle",
+            "UnityCRC": 3918432756,
+            "FileHash": "485041a3a46081c6a3b09133733e7883",
+            "FileCRC": "88b5f2c0",
+            "FileSize": 11924,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                36,
+                37,
+                38,
+                39,
+                41,
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_models_role_role_threekpcoin_spine.bundle",
+            "UnityCRC": 2089289582,
+            "FileHash": "e8a42523dadd7e0b4d45469b53cc5c2e",
+            "FileCRC": "4bce2bef",
+            "FileSize": 49780,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                80
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_material.bundle",
+            "UnityCRC": 3224211905,
+            "FileHash": "1d095341bb878872dcc8202654bb8fa6",
+            "FileCRC": "0b9e2c62",
+            "FileSize": 2781,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                45
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_prefabs_gameplay.bundle",
+            "UnityCRC": 14584873,
+            "FileHash": "4cf9452e45e36aeb9a41aeb81441c00f",
+            "FileCRC": "e71e75f4",
+            "FileSize": 21093,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                7,
+                9,
+                13,
+                14,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52,
+                83
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_prefabs_prepare.bundle",
+            "UnityCRC": 3136653455,
+            "FileHash": "5745f14746f12406127ef4afdd37e92d",
+            "FileCRC": "4947ed3f",
+            "FileSize": 28383,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                7,
+                11,
+                13,
+                14,
+                36,
+                37,
+                38,
+                39,
+                41,
+                42,
+                45,
+                46,
+                59,
+                60,
+                80,
+                83
+            ]
+        },
+        {
+            "BundleName": "share_assets_arts_ui_shader.bundle",
+            "UnityCRC": 4072165410,
+            "FileHash": "77f4b67c8996f01ca9900451a4034d25",
+            "FileCRC": "7c698d7a",
+            "FileSize": 18168,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_common.bundle",
+            "UnityCRC": 2833187374,
+            "FileHash": "58e852dea893c01b308dae606ae83b20",
+            "FileCRC": "4e0d206e",
+            "FileSize": 8392,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay.bundle",
+            "UnityCRC": 4235332513,
+            "FileHash": "c9159cc13533071f1caef42adb5d6bdf",
+            "FileCRC": "593c51fc",
+            "FileSize": 9385,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_bullet.bundle",
+            "UnityCRC": 932476986,
+            "FileHash": "96c2dba17415a6a81793eee1ab42da43",
+            "FileCRC": "f82c6ae7",
+            "FileSize": 4854,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_meat.bundle",
+            "UnityCRC": 791083043,
+            "FileHash": "ba0af422dfed6f3cb6962794b6cd76b0",
+            "FileCRC": "09b3a247",
+            "FileSize": 20391,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_prop.bundle",
+            "UnityCRC": 2884470492,
+            "FileHash": "0bbf9282f368f24ea4579c551fa70d90",
+            "FileCRC": "7ada6f78",
+            "FileSize": 19393,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_skill.bundle",
+            "UnityCRC": 3438922118,
+            "FileHash": "161356bbf651ac9f7d545e3c8495a918",
+            "FileCRC": "ac693035",
+            "FileSize": 16215,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_gameplay_time.bundle",
+            "UnityCRC": 513514901,
+            "FileHash": "13207b551bd9fa58aeaba709bbbcbec2",
+            "FileCRC": "5c06350a",
+            "FileSize": 11242,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_popup.bundle",
+            "UnityCRC": 622923687,
+            "FileHash": "fac282174d011673d12b6967d6225ff4",
+            "FileCRC": "84b35c03",
+            "FileSize": 13460,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_popup_popup_prop.bundle",
+            "UnityCRC": 3910676153,
+            "FileHash": "7c275809fd19edb01a5876dda89b8e81",
+            "FileCRC": "d8f9b1a0",
+            "FileSize": 11571,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_popup_popup_settlement.bundle",
+            "UnityCRC": 2207935942,
+            "FileHash": "4b7c860de843b7be72b8dc40a987f92a",
+            "FileCRC": "0939672b",
+            "FileSize": 57745,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_popup_popup_settlement_normal.bundle",
+            "UnityCRC": 708640535,
+            "FileHash": "2c46c5b7ef64004fc47ec42f1f964f98",
+            "FileCRC": "099db37f",
+            "FileSize": 74602,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_popup_popup_settlement_snow_fake.bundle",
+            "UnityCRC": 1884519287,
+            "FileHash": "33e46af03b5b6718f0e12d5299a69853",
+            "FileCRC": "1d042c69",
+            "FileSize": 14685,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_popup_popup_settlement_snow_vectory.bundle",
+            "UnityCRC": 2537888482,
+            "FileHash": "e81fb57757365bad8c14b7f7f95b9adb",
+            "FileCRC": "4ecdf3cd",
+            "FileSize": 59280,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_prepare.bundle",
+            "UnityCRC": 4129119263,
+            "FileHash": "3dc0a3ac4789b2e08fa1edb3ebb5ee16",
+            "FileCRC": "a197bab1",
+            "FileSize": 261872,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_arts_ui_sprites_prepare_lucky.bundle",
+            "UnityCRC": 3250611838,
+            "FileHash": "09e6cfb4b6b97210ff2d2cc48cacbdea",
+            "FileCRC": "11939689",
+            "FileSize": 143777,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_audio_sfx.bundle",
+            "UnityCRC": 2692452393,
+            "FileHash": "011c20718b7e9d6a8c32f59ae14837f9",
+            "FileCRC": "a9730fba",
+            "FileSize": 12986,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_common_materials.bundle",
+            "UnityCRC": 1478211445,
+            "FileHash": "24ca31d0d08f34ff8f9ca49160848f91",
+            "FileCRC": "f7ba8310",
+            "FileSize": 2645,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                63,
+                64
+            ]
+        },
+        {
+            "BundleName": "share_assets_artstemp_common_shader.bundle",
+            "UnityCRC": 908983771,
+            "FileHash": "5b9737300c8aafd61da0609b1c06f51a",
+            "FileCRC": "ba2564ba",
+            "FileSize": 17652,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_common_textures.bundle",
+            "UnityCRC": 905375888,
+            "FileHash": "6aa6ef65bff958dc59732da69ecfa327",
+            "FileCRC": "3d4662ed",
+            "FileSize": 32751,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_effects_cartoonvfx9x_comic_fx_materials.bundle",
+            "UnityCRC": 1334199423,
+            "FileHash": "c8a9e0b1ad13049d5b0c3bf0939a8d1f",
+            "FileCRC": "e35b5f8f",
+            "FileSize": 110770,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                66
+            ]
+        },
+        {
+            "BundleName": "share_assets_artstemp_effects_cartoonvfx9x_comic_fx_textures.bundle",
+            "UnityCRC": 2945352225,
+            "FileHash": "0b7e798885b85104b58726e4cf32510d",
+            "FileCRC": "f24f3de2",
+            "FileSize": 97000,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_effects_sandalstudio_snow_fx_materials.bundle",
+            "UnityCRC": 745599389,
+            "FileHash": "9b404d4d38fa420303eb424b8fa8c7f5",
+            "FileCRC": "b3a54cd7",
+            "FileSize": 2533,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                68
+            ]
+        },
+        {
+            "BundleName": "share_assets_artstemp_effects_sandalstudio_snow_fx_shaider.bundle",
+            "UnityCRC": 1355769950,
+            "FileHash": "bcdc3eae1b847e1f6ca1c46d83c96d60",
+            "FileCRC": "705a2d7b",
+            "FileSize": 18919,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_environments_map_01.bundle",
+            "UnityCRC": 793575835,
+            "FileHash": "3c066adc85c75fa8698f71db98292626",
+            "FileCRC": "76a5a8a4",
+            "FileSize": 17636,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_bullets_bullet_01_model.bundle",
+            "UnityCRC": 3400276774,
+            "FileHash": "f0c34f5bd3b057b3f9fcd9043d92c079",
+            "FileCRC": "4fb81d88",
+            "FileSize": 56565,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_bullets_bullet_01_prefabs.bundle",
+            "UnityCRC": 344304411,
+            "FileHash": "9ee9f046e6ea03af9aa881da9789b84f",
+            "FileCRC": "59458544",
+            "FileSize": 3195,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                70,
+                72,
+                73
+            ]
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_bullets_bullet_01_texture.bundle",
+            "UnityCRC": 363048215,
+            "FileHash": "a8527e44bd3d28921900570c02e1aaf9",
+            "FileCRC": "2934ebee",
+            "FileSize": 2697,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_bullets_bullet_01_texture_materials.bundle",
+            "UnityCRC": 1631632347,
+            "FileHash": "97bc2bc01b02da3a367aaaddc1f91ce5",
+            "FileCRC": "ec5011cd",
+            "FileSize": 39550,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                72
+            ]
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_props_trap_01_materials-pallettes.bundle",
+            "UnityCRC": 2533116112,
+            "FileHash": "00141571bf05a55b2aad0aa963251a81",
+            "FileCRC": "1c60db98",
+            "FileSize": 2464,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_props_trap_01_models.bundle",
+            "UnityCRC": 895024564,
+            "FileHash": "38139611788c6dabede602683d474d67",
+            "FileCRC": "4903ec96",
+            "FileSize": 82579,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                74
+            ]
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_materials.bundle",
+            "UnityCRC": 2582414512,
+            "FileHash": "8d3fab92b45aef7e0db896a0c84421e0",
+            "FileCRC": "332238b3",
+            "FileSize": 62520,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                79
+            ]
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_mesh.bundle",
+            "UnityCRC": 536787684,
+            "FileHash": "94902f7594fd76e415820705b3309fdd",
+            "FileCRC": "97e0ca42",
+            "FileSize": 178326,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_builtin_pre_fabs.bundle",
+            "UnityCRC": 1384747762,
+            "FileHash": "e149517f9e49037575c06fd388e35147",
+            "FileCRC": "92ebda5a",
+            "FileSize": 3195,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                76,
+                77,
+                79
+            ]
+        },
+        {
+            "BundleName": "share_assets_artstemp_models_weapons_weapon_01_models_old_deringer_gun_textures.bundle",
+            "UnityCRC": 1634916260,
+            "FileHash": "896d949146cdce1d7bcd47b41aa43edb",
+            "FileCRC": "6a672520",
+            "FileSize": 193723,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_plugins_spine_runtime_spine-unity_shaders.bundle",
+            "UnityCRC": 1144717824,
+            "FileHash": "9725b6d7314775777f2352e39b4ea1b2",
+            "FileCRC": "9acdbbda",
+            "FileSize": 19766,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_plugins_spine_runtime_spine-unity_shaders_blendmodes.bundle",
+            "UnityCRC": 1444813111,
+            "FileHash": "7295406ac478e940dcf5b4cdf9aace31",
+            "FileCRC": "a92dcd20",
+            "FileSize": 19221,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "share_assets_plugins_spine_runtime_spine-unity_skeletondatamodifierassets_blendmodematerials.bundle",
+            "UnityCRC": 3681374752,
+            "FileHash": "83d399196ffd72b800c007022cde8361",
+            "FileCRC": "74cb9f84",
+            "FileSize": 2788,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": [
+                81
+            ]
+        },
+        {
+            "BundleName": "share_assets_textmesh_pro_shaders.bundle",
+            "UnityCRC": 3418575107,
+            "FileHash": "01217a8c239a23bc934bc728aeea56c3",
+            "FileCRC": "ea02bf65",
+            "FileSize": 22931,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        }
+    ]
+}

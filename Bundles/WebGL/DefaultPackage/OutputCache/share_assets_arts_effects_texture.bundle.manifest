@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 3802912990
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fe24a1c71bcab7745ef2c3613f07fe3d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2612ac43db082a73502ee80f2eceb73f
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Arts/Effects/Texture/Fire_001.png
+- Assets/Arts/Effects/Texture/Ink_daoguang07.png
+- Assets/Arts/Effects/Texture/TL_ice_spark.png
+- Assets/Arts/Effects/Texture/zd_wx03_ect.png
+- Assets/Arts/Effects/Texture/FX_Mosaic01.png
+- Assets/Arts/Effects/Texture/fazhen_411.tga
+- Assets/Arts/Effects/Texture/ra_target.tga
+- Assets/Arts/Effects/Texture/FX_Mask12.tga
+- Assets/Arts/Effects/Texture/Smoke_03.png
+- Assets/Arts/Effects/Texture/lx_mask_03.png
+- Assets/Arts/Effects/Texture/gq_zx_smoke_04.tga
+- Assets/Arts/Effects/Texture/T_obj_gm_2022.tga
+- Assets/Arts/Effects/Texture/gw_ray_12.tga
+- Assets/Arts/Effects/Texture/Fire_WB_lq_002.png
+- Assets/Arts/Effects/Texture/glow_006_shadq.tga
+- Assets/Arts/Effects/Texture/T_obj_gm_2025.tga
+- Assets/Arts/Effects/Texture/ZJ_Tex_026.tga
+- Assets/Arts/Effects/Texture/Icon_02.png
+- Assets/Arts/Effects/Texture/GroundFractur_WB_lq_02.png
+- Assets/Arts/Effects/Texture/gw_star_01.tga
+- Assets/Arts/Effects/Texture/TL_star2.png
+- Assets/Arts/Effects/Texture/Aura_10.tga
+- Assets/Arts/Effects/Texture/ring_gw_09.png
+- Assets/Arts/Effects/Texture/FA_Glow_02.png
+- Assets/Arts/Effects/Texture/IMG_6201.PNG
+- Assets/Arts/Effects/Texture/FX_Ray01.png
+- Assets/Arts/Effects/Texture/gw07_star_04.tga
+Dependencies: []
