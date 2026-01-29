@@ -153,6 +153,7 @@ internal class WechatFileSystem : IFileSystem
     {
         string mainURL = RemoteServices.GetRemoteMainURL(bundle.FileName);
         string fallbackURL = RemoteServices.GetRemoteFallbackURL(bundle.FileName);
+        UnityEngine.Debug.Log($"[WechatFileSystem] 准备下载文件\nBundle: {bundle.FileName}\n主URL: {mainURL}");
         options.SetURL(mainURL, fallbackURL);
         var operation = new WXFSDownloadFileOperation(this, bundle, options);
         return operation;
@@ -161,12 +162,14 @@ internal class WechatFileSystem : IFileSystem
     {
         if (bundle.BundleType == (int)EBuildBundleType.AssetBundle)
         {
+            UnityEngine.Debug.Log($"[WechatFileSystem] 准备加载 Bundle 文件: {bundle.FileName}");
             var operation = new WXFSLoadBundleOperation(this, bundle);
             return operation;
         }
         else
         {
             string error = $"{nameof(WechatFileSystem)} not support load bundle type : {bundle.BundleType}";
+            UnityEngine.Debug.LogError($"[WechatFileSystem] 不支持的 Bundle 类型: {bundle.BundleType}");
             var operation = new FSLoadBundleCompleteOperation(error);
             return operation;
         }
@@ -196,6 +199,8 @@ internal class WechatFileSystem : IFileSystem
         PackageName = packageName;
         _wxCacheRoot = packageRoot;
 
+        UnityEngine.Debug.Log($"[WechatFileSystem] 初始化微信文件系统\n包名: {packageName}\n缓存根目录: {packageRoot}");
+
         if (string.IsNullOrEmpty(_wxCacheRoot))
         {
             throw new System.Exception("请配置微信小游戏缓存根目录！");
@@ -205,7 +210,13 @@ internal class WechatFileSystem : IFileSystem
         if (RemoteServices == null)
         {
             string webRoot = PathUtility.Combine(Application.streamingAssetsPath, YooAssetSettingsData.Setting.DefaultYooFolderName, packageName);
+            UnityEngine.Debug.Log($"[WechatFileSystem] RemoteServices 为空，使用本地 Web 服务器: {webRoot}");
             RemoteServices = new WebRemoteServices(webRoot);
+        }
+        else
+        {
+            var testURL = RemoteServices.GetRemoteMainURL("test.bundle");
+            UnityEngine.Debug.Log($"[WechatFileSystem] 使用远程服务: {testURL}");
         }
 
         // 检查URL双斜杠
@@ -230,14 +241,26 @@ internal class WechatFileSystem : IFileSystem
     public virtual bool Exists(PackageBundle bundle)
     {
         string filePath = GetCacheFileLoadPath(bundle);
-        return CheckCacheFileExist(filePath);
+        bool exists = CheckCacheFileExist(filePath);
+
+        if (exists)
+        {
+            UnityEngine.Debug.Log($"[WechatFileSystem] 文件已缓存: {bundle.FileName}");
+        }
+
+        return exists;
     }
     public virtual bool NeedDownload(PackageBundle bundle)
     {
         if (Belong(bundle) == false)
             return false;
 
-        return Exists(bundle) == false;
+        bool needDownload = Exists(bundle) == false;
+        if (needDownload)
+        {
+            UnityEngine.Debug.Log($"[WechatFileSystem] ⬇️ Bundle 需要下载: {bundle.FileName}");
+        }
+        return needDownload;
     }
     public virtual bool NeedUnpack(PackageBundle bundle)
     {
@@ -279,8 +302,17 @@ internal class WechatFileSystem : IFileSystem
         string result = WX.GetCachePath(filePath);
         if (string.IsNullOrEmpty(result))
             return false;
-        else
+
+        // WX.GetCachePath 可能返回路径但文件实际不存在，需要用 AccessSync 验证
+        try
+        {
+            _fileSystemMgr.AccessSync(result);
             return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
     public string GetCacheFileLoadPath(PackageBundle bundle)
     {

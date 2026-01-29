@@ -32,6 +32,7 @@ namespace YooAsset
         }
         internal override void InternalStart()
         {
+            UnityEngine.Debug.Log($"[LoadWechatAssetBundleOperation] 开始加载微信 AssetBundle: {_bundle.FileName}");
             _steps = ESteps.CreateRequest;
         }
         internal override void InternalUpdate()
@@ -43,6 +44,7 @@ namespace YooAsset
             if (_steps == ESteps.CreateRequest)
             {
                 string url = GetRequestURL();
+                UnityEngine.Debug.Log($"[LoadWechatAssetBundleOperation] 创建微信 AssetBundle 请求\nBundle: {_bundle.FileName}\nURL: {url}");
                 _unityAssetBundleRequestOp = new UnityWechatAssetBundleRequestOperation(_bundle, url);
                 _unityAssetBundleRequestOp.StartOperation();
                 AddChildOperation(_unityAssetBundleRequestOp);
@@ -61,6 +63,7 @@ namespace YooAsset
 
                 if (_unityAssetBundleRequestOp.Status == EOperationStatus.Succeed)
                 {
+                    UnityEngine.Debug.Log($"[LoadWechatAssetBundleOperation] ✅ AssetBundle 加载成功: {_bundle.FileName}");
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Succeed;
                     Result = _unityAssetBundleRequestOp.Result;
@@ -69,11 +72,13 @@ namespace YooAsset
                 {
                     if (_failedTryAgain > 0)
                     {
+                        UnityEngine.Debug.LogWarning($"[LoadWechatAssetBundleOperation] ⚠️ AssetBundle 加载失败，准备重试: {_bundle.FileName}\n错误: {_unityAssetBundleRequestOp.Error}");
                         _steps = ESteps.TryAgain;
                         YooLogger.Warning($"Failed download : {_unityAssetBundleRequestOp.URL} Try again !");
                     }
                     else
                     {
+                        UnityEngine.Debug.LogError($"[LoadWechatAssetBundleOperation] ❌ AssetBundle 加载失败: {_bundle.FileName}\n错误: {_unityAssetBundleRequestOp.Error}");
                         _steps = ESteps.Done;
                         Status = EOperationStatus.Failed;
                         Error = _unityAssetBundleRequestOp.Error;

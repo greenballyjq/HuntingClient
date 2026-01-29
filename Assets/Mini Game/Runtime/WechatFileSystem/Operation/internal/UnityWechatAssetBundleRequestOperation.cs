@@ -40,6 +40,7 @@ namespace YooAsset
 
             if (_steps == ESteps.CreateRequest)
             {
+                UnityEngine.Debug.Log($"[UnityWechatAssetBundleRequestOperation] 🌐 开始从 CDN 下载 Bundle\nBundle: {_packageBundle.FileName}\nURL: {_requestURL}\n预期大小: {_packageBundle.FileSize} 字节");
                 CreateWebRequest();
                 _steps = ESteps.Download;
             }
@@ -49,8 +50,18 @@ namespace YooAsset
                 DownloadProgress = _webRequest.downloadProgress;
                 DownloadedBytes = (long)_webRequest.downloadedBytes;
                 Progress = _requestOperation.progress;
+                
+                // 定期打印下载进度
                 if (_requestOperation.isDone == false)
+                {
+                    if (DownloadedBytes > 0 && (int)(DownloadProgress * 100) % 25 == 0)
+                    {
+                        UnityEngine.Debug.Log($"[UnityWechatAssetBundleRequestOperation] 📥 下载进度: {_packageBundle.FileName} - {DownloadProgress:P0} ({DownloadedBytes} / {_packageBundle.FileSize} 字节)");
+                    }
                     return;
+                }
+
+                UnityEngine.Debug.Log($"[UnityWechatAssetBundleRequestOperation] 下载请求完成\nBundle: {_packageBundle.FileName}\n已下载: {DownloadedBytes} 字节\nHTTP 状态: {_webRequest.responseCode}\n是否错误: {(_webRequest.result != UnityWebRequest.Result.Success)}");
 
                 if (CheckRequestResult())
                 {
@@ -61,12 +72,15 @@ namespace YooAsset
                         _steps = ESteps.Done;
                         Status = EOperationStatus.Failed;
                         Error = $"URL : {_requestURL} Download handler asset bundle object is null !";
+                        UnityEngine.Debug.LogError($"[UnityWechatAssetBundleRequestOperation] ❌ AssetBundle 为 null\nBundle: {_packageBundle.FileName}\nURL: {_requestURL}\nHTTP 状态: {_webRequest.responseCode}\n已下载字节: {DownloadedBytes}\n可能原因:\n1. CDN 上文件不存在 (404)\n2. 文件格式不是有效的 AssetBundle\n3. 文件已损坏\n4. CORS 配置问题");
                     }
                     else
                     {
                         _steps = ESteps.Done;
                         Result = assetBundle;
                         Status = EOperationStatus.Succeed;
+
+                        UnityEngine.Debug.Log($"[UnityWechatAssetBundleRequestOperation] ✅ Bundle 下载并加载成功\nBundle: {_packageBundle.FileName}\n大小: {DownloadedBytes} 字节\nAssetBundle 名称: {assetBundle.name}");
 
                         //TODO 解决微信小游戏插件问题
                         // Issue : https://github.com/wechat-miniprogram/minigame-unity-webgl-transform/issues/108#
@@ -79,6 +93,7 @@ namespace YooAsset
                 {
                     _steps = ESteps.Done;
                     Status = EOperationStatus.Failed;
+                    UnityEngine.Debug.LogError($"[UnityWechatAssetBundleRequestOperation] ❌ Web 请求失败\nBundle: {_packageBundle.FileName}\nURL: {_requestURL}\nHTTP 状态: {_webRequest.responseCode}\n错误: {_webRequest.error}\n结果: {_webRequest.result}");
                 }
 
                 // 注意：最终释放请求器
