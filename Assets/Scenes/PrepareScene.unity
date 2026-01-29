@@ -159,9 +159,9 @@ MonoBehaviour:
     DefaultLanguage: 40
     TargetFrameRate: 60
     ShowFPS: 0
-    ResourceLoadMode: 1
+    ResourceLoadMode: 0
     IsCDNEnabled: 1
-    CDNUrl: http://127.0.0.1/CDN/
+    CDNUrl: https://equivalent-changes-wednesday-bookstore.trycloudflare.com
     loading: {fileID: 136192759375765479}
   _updatePanel: {fileID: 0}
   _progressBar: {fileID: 0}

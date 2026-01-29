@@ -11,7 +11,7 @@ public class SkillZiWeiHandler : ISkillHandler
     /// <summary>
     /// 技能武器预制体资源路径
     /// </summary>
-    private const string SkillWeaponPrefabPath = "Arts/Skills/Prefabs/SkillWeapon";
+    private const string SkillWeaponPrefabPath = "Assets/Arts/Prefabs/Skills/pf_skillweapon";
 
     /// <summary>
     /// 技能武器预制体缓存

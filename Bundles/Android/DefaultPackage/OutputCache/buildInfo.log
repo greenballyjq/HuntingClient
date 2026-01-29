@@ -1,0 +1,14 @@
+﻿2026-01-29 03:33:56.569 [INFO] Begin to build package : DefaultPackage by BuiltinBuildPipeline
+2026-01-29 03:33:56.570 [INFO] --------------------------------------------->TaskPrepare<--------------------------------------------
+2026-01-29 03:33:56.590 [INFO] Create pipeline output directory: E:/HuntingClient/Bundles/Android/DefaultPackage/OutputCache
+2026-01-29 03:33:56.590 [WARN] [ErrorCode130] Starting with UnityEngine2021, recommend use script build pipeline (SBP) !
+2026-01-29 03:33:56.591 [INFO] TaskPrepare It takes 0 seconds in total
+2026-01-29 03:33:56.591 [INFO] --------------------------------------------->TaskGetBuildMap<--------------------------------------------
+2026-01-29 03:33:58.697 [INFO] TaskGetBuildMap It takes 2 seconds in total
+2026-01-29 03:33:58.697 [INFO] --------------------------------------------->TaskBuilding<--------------------------------------------
+2026-01-29 03:34:07.511 [INFO] Total build process time: 2 seconds
+2026-01-29 03:34:07.511 [ERROR] BuiltinBuildPipeline build failed !
+2026-01-29 03:34:07.511 [ERROR] An error occurred in build task TaskBuilding_BBP
+2026-01-29 03:34:07.511 [ERROR] System.Exception: [ErrorCode300] UnityEngine build failed !
+  at YooAsset.Editor.TaskBuilding_BBP.YooAsset.Editor.IBuildTask.Run (YooAsset.Editor.BuildContext context) [0x00065] in .\Library\PackageCache\com.tuyoogame.yooasset@2.3.14\Editor\AssetBundleBuilder\BuildPipeline\BuiltinBuildPipeline\BuildTasks\TaskBuilding_BBP.cs:30 
+  at YooAsset.Editor.BuildRunner.Run (System.Collections.Generic.List`1[T] pipeline, YooAsset.Editor.BuildContext context) [0x00085] in .\Library\PackageCache\com.tuyoogame.yooasset@2.3.14\Editor\AssetBundleBuilder\BuildSystem\BuildRunner.cs:41 

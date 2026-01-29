@@ -326,10 +326,10 @@ public class RoundFlow : Singleton<RoundFlow>
         _uiManager.CloseUI("UIPopupSettlementSnowFake");
 
         // 伪结算面板爆米花动画  
-        _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity,dontDestroyOnLoad: true).Forget();
+        _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity,dontDestroyOnLoad: true).Forget();
 
         // 下雪动画
-        _snowEffect = await _effectManager.PlayLoopAsync("Arts/Prefabs/Particles/FX_Snow", new Vector3(0,5,0), Quaternion.identity, dontDestroyOnLoad: true);
+        _snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Particles/FX_Snow", new Vector3(0,5,0), Quaternion.identity, dontDestroyOnLoad: true);
 
         #region 地图过渡
         // 打开加载界面
@@ -365,7 +365,7 @@ public class RoundFlow : Singleton<RoundFlow>
         #endregion
 
         // 播放警报声
-        _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_alert").Forget();
+        _soundManager.PlaySound2DByPathAsync("Assets/Arts/Audio/SFX/sfx_alert").Forget();
 
         // 播放闪烁动画
         var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
@@ -378,7 +378,7 @@ public class RoundFlow : Singleton<RoundFlow>
         await uiGameplay.PlayBossHealthIncreaseAnimationAsync();
 
         // 播放Boss笑声
-        await _soundManager.PlaySound2DByPathAsync("Audio/SFX/sfx_laugh");
+        await _soundManager.PlaySound2DByPathAsync("Assets/Arts/Audio/SFX/sfx_laugh");
         await UniTask.Delay(3000);
 
         // 播放倒计时动画
@@ -405,7 +405,7 @@ public class RoundFlow : Singleton<RoundFlow>
 
         #region 测试
         _currentRoundContext.HiddenRoundEndTrigger.Release();
-        await _effectManager.PlayOneShotAsync("Arts/Prefabs/Particles/FX_DGB_PTFH", new Vector3(0, 0, 5), Quaternion.identity);
+        await _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Particles/FX_DGB_PTFH", new Vector3(0, 0, 5), Quaternion.identity);
         _effectManager.Stop(_snowEffect);
         await UniTask.Delay(3000);
         #endregion

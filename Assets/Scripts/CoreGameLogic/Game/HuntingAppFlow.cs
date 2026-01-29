@@ -1,6 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Diagnostics;
+using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -67,6 +69,7 @@ public class HuntingAppFlow : GameAppFlow
 
     private void Start()
     {
+        
         StartAppAsync().Forget();
     }
 
@@ -138,7 +141,7 @@ public class HuntingAppFlow : GameAppFlow
         await _uiManager.PreloadUIAsync("UIRanking");
 
         await _uiManager.PreloadUIAsync("UIGameplay");
-        await _uiManager.PreloadUIAsync("UICountDown");
+        await _uiManager.PreloadUIAsync("UICountdown");
 
         await _uiManager.PreloadUIAsync("UIPopupSettlementNormal");
 

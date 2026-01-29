@@ -271,7 +271,7 @@ MonoBehaviour:
   - {fileID: 4571069195776845642}
   - {fileID: 3267365977781165148}
   _buttonStartRoll: {fileID: 8788460586343775508}
-  _threeKPCoinAnimator: {fileID: 0}
+  _threeKPCoinAnimator: {fileID: 5438571571402572124}
 --- !u!1 &6254350673099268734
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,6 +632,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5202846304873741663, guid: f5a09b880173ef447955c057cd8351b3, type: 3}
   m_PrefabInstance: {fileID: 6007853052946957026}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5438571571402572124 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1736593415956284350, guid: f5a09b880173ef447955c057cd8351b3, type: 3}
+  m_PrefabInstance: {fileID: 6007853052946957026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870d2eec8895a0840aa8737a5334fd55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6292152075661106283
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -17,8 +17,7 @@
         public override void Enter()
         {
             base.Enter();
-
-            animalBehavior.Moveable.SetMoveRate(0.5f);
+            animalBehavior.AnimalVisual.PlayHit();
         }
 
         public override void DoUpdate(float dt)

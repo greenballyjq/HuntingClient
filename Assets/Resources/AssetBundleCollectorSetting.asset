@@ -18,35 +18,157 @@ MonoBehaviour:
   Packages:
   - PackageName: DefaultPackage
     PackageDesc: 
-    EnableAddressable: 1
+    EnableAddressable: 0
     LocationToLower: 0
     IncludeAssetGUID: 0
-    AutoCollectShaders: 1
+    AutoCollectShaders: 0
     IgnoreRuleName: NormalIgnoreRule
     Groups:
     - GroupName: ui
-      GroupDesc: "ui\u754C\u9762"
-      AssetTags: 
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/Arts/UI/Prefabs/Prepare/UIPrepare.prefab
-        CollectorGUID: 30b87b64f8cce0648a190f07a635810c
-        CollectorType: 0
-        AddressRuleName: AddressByGroupAndFileName
-        PackRuleName: PackSeparately
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/UI/Prefabs/Gameplay/UIGameplay.prefab
-        CollectorGUID: a25e6b62e80db0b4ea38094d2fc06e30
-        CollectorType: 0
-        AddressRuleName: AddressByGroupAndFileName
-        PackRuleName: PackSeparately
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-    - GroupName: Default Group
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
-      Collectors: []
+      Collectors:
+      - CollectPath: Assets/Arts/UI/Sprites/Common/Skills
+        CollectorGUID: 97798c4cc78949841aaf9b6ab29a20b8
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_baozhazidan_0002.png
+        CollectorGUID: 412de1a0a427640429ee5ffea226b24c
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaoshangzidan_0003.png
+        CollectorGUID: a17c6c806a5593342ba3211012bf9cfe
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaosuzidan_0004.png
+        CollectorGUID: 05eb2dbcce7f2d648989c1d0ca2425ad
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_putongzidan_0001.png
+        CollectorGUID: 02c7825bf21c9e04a8883f5ace8ca264
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/TB_xueshan_beijing_0001.png
+        CollectorGUID: 0f9bcb12c08507942ab39c8aa7f0a0ad
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Prepare/Roles
+        CollectorGUID: b7046e97df1ff6e40a5cff3095d3c3d3
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Prepare/Maps
+        CollectorGUID: b3443c1d3e4a0f440b3c2d99bdbd0e19
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/Prefabs/UI
+        CollectorGUID: 181baa3dc0572944b8004f2d77bf5026
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: game
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Arts/Prefabs/Animals
+        CollectorGUID: a4bc3c2791ba1884dac530e1f0b7062c
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackGroup
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/Prefabs/Bullets
+        CollectorGUID: 54216bfccb230d34f9683885c3a79d46
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/Prefabs/Props
+        CollectorGUID: 04d3dc51a1e46e845b40da2b421d8655
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/Prefabs/Skills
+        CollectorGUID: af5a9171901e2f643976c15bf5d09d0a
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: effect
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Arts/Prefabs/Effects
+        CollectorGUID: 3a9b1e0d1f2c08c4f91ba4510ec5b6ca
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/Prefabs/Particles
+        CollectorGUID: ce23f49a07772f749916653c4d355a9b
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: audio
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Arts/Audio
+        CollectorGUID: a83f16934f8809741b5501b6e597f688
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
