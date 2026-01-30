@@ -143,6 +143,9 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
                 continue;
 
             // 进行吸引
+            if (animal.SpecieData.SpecieType == ESpecieType.Boss)
+                continue;
+
             Vector3 targetPoint = GetTargetPointForAnimal(animal);
             Vector3 direction = (targetPoint - animal.transform.position).normalized;
             animal.GetComponent<IMoveable>().SetDirection(direction);
@@ -236,7 +239,7 @@ public class TrapBehavior : MonoBehaviour, IPoolItem
         });
 
         // 造成伤害
-        animal.GetComponent<IDamageable>().TakeDamage(animal.GetComponent<IHealth>().MaxHealth);
+        animal.GetComponent<IDamageable>().TakeDamage(200);
     }
     #endregion
 

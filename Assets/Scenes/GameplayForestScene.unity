@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9625,13 +9625,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1355987720146453421}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.9864523, z: -0, w: -0.16404878}
-  m_LocalPosition: {x: 48.4, y: 0, z: 25.300001}
+  m_LocalRotation: {x: -0, y: -0.9989784, z: -0, w: -0.045190684}
+  m_LocalPosition: {x: 46.8, y: 0, z: 26.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -198.884, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -185.18, z: 0}
 --- !u!4 &30525252611725016
 Transform:
   m_ObjectHideFlags: 0
@@ -9801,10 +9801,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnerTag: Random
   areaType: 1
-  lineHalfLength: 4
+  lineHalfLength: 1.98
   rectHalfSize: {x: 0, y: 0}
   minSpawnAngle: 67.5
-  maxSpawnAngle: 98.8
+  maxSpawnAngle: 88.9
   cooldownTime: 4
   spawnCount: 2
   spawnInterval: 0
@@ -10027,7 +10027,7 @@ Transform:
   m_GameObject: {fileID: 1571691177756688291}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.9823635, z: -0, w: 0.18698147}
-  m_LocalPosition: {x: 27.4, y: 0, z: 11.6}
+  m_LocalPosition: {x: 30.24, y: 0, z: 15.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10234,7 +10234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnerTag: Random
   areaType: 1
-  lineHalfLength: 6.27
+  lineHalfLength: 2.93
   rectHalfSize: {x: 0, y: 0}
   minSpawnAngle: 61.4
   maxSpawnAngle: 128.1
@@ -10519,13 +10519,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4533028200410574663}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.11999529, z: -0, w: -0.9927744}
+  m_LocalRotation: {x: -0, y: 0.2175388, z: -0, w: -0.9760517}
   m_LocalPosition: {x: -40.78, y: 0, z: 25.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -373.784, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -385.129, z: 0}
 --- !u!54 &2693740017686838834
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10829,13 +10829,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 393975014956331783}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.1568406, z: -0, w: 0.98762393}
-  m_LocalPosition: {x: -26.4, y: 0, z: 10.4}
+  m_LocalRotation: {x: -0, y: -0.21691087, z: -0, w: 0.97619146}
+  m_LocalPosition: {x: -28.08, y: 0, z: 13.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -18.047, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -25.055, z: 0}
 --- !u!1 &3596082801653221076
 GameObject:
   m_ObjectHideFlags: 0
@@ -11669,9 +11669,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnerTag: Random
   areaType: 1
-  lineHalfLength: 5.5
+  lineHalfLength: 2.88
   rectHalfSize: {x: 0, y: 0}
-  minSpawnAngle: 114
+  minSpawnAngle: 132.5
   maxSpawnAngle: 150.1
   cooldownTime: 4
   spawnCount: 1

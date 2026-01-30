@@ -131,13 +131,13 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
         else
         {
             // 临时测试代码
-            _roundFlow.StartSettlement();
-            await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-            _settlementRewardManager.CalculateReward();
+            //_roundFlow.StartSettlement();
+            //await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+            //_settlementRewardManager.CalculateReward();
             
 
             // 正式代码
-            // await HuntingAppFlow.Instance.EnterPrepareAsync();
+            await HuntingAppFlow.Instance.EnterPrepareAsync();
         }
     }
     #endregion

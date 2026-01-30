@@ -21,7 +21,7 @@ MonoBehaviour:
     EnableAddressable: 0
     LocationToLower: 0
     IncludeAssetGUID: 0
-    AutoCollectShaders: 0
+    AutoCollectShaders: 1
     IgnoreRuleName: NormalIgnoreRule
     Groups:
     - GroupName: ui
@@ -33,7 +33,7 @@ MonoBehaviour:
         CollectorGUID: 97798c4cc78949841aaf9b6ab29a20b8
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -41,7 +41,7 @@ MonoBehaviour:
         CollectorGUID: 412de1a0a427640429ee5ffea226b24c
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -49,7 +49,7 @@ MonoBehaviour:
         CollectorGUID: a17c6c806a5593342ba3211012bf9cfe
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -57,7 +57,7 @@ MonoBehaviour:
         CollectorGUID: 05eb2dbcce7f2d648989c1d0ca2425ad
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -65,7 +65,7 @@ MonoBehaviour:
         CollectorGUID: 02c7825bf21c9e04a8883f5ace8ca264
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -73,7 +73,7 @@ MonoBehaviour:
         CollectorGUID: 0f9bcb12c08507942ab39c8aa7f0a0ad
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -81,7 +81,7 @@ MonoBehaviour:
         CollectorGUID: b7046e97df1ff6e40a5cff3095d3c3d3
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -89,7 +89,7 @@ MonoBehaviour:
         CollectorGUID: b3443c1d3e4a0f440b3c2d99bdbd0e19
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -97,7 +97,7 @@ MonoBehaviour:
         CollectorGUID: 181baa3dc0572944b8004f2d77bf5026
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -118,7 +118,7 @@ MonoBehaviour:
         CollectorGUID: 54216bfccb230d34f9683885c3a79d46
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -126,7 +126,7 @@ MonoBehaviour:
         CollectorGUID: 04d3dc51a1e46e845b40da2b421d8655
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -134,7 +134,7 @@ MonoBehaviour:
         CollectorGUID: af5a9171901e2f643976c15bf5d09d0a
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -147,7 +147,7 @@ MonoBehaviour:
         CollectorGUID: 3a9b1e0d1f2c08c4f91ba4510ec5b6ca
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -155,7 +155,7 @@ MonoBehaviour:
         CollectorGUID: ce23f49a07772f749916653c4d355a9b
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
@@ -168,7 +168,7 @@ MonoBehaviour:
         CollectorGUID: a83f16934f8809741b5501b6e597f688
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
