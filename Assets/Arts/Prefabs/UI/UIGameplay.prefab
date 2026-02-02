@@ -502,6 +502,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6037383438632139027}
     m_Modifications:
+    - target: {fileID: 2151635714327380712, guid: cbfe247c3a4bbfc429282046bc4a599f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3569606603746645751, guid: cbfe247c3a4bbfc429282046bc4a599f, type: 3}
       propertyPath: m_Name
       value: UIComponentAnimalCounter
@@ -677,7 +681,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3053918847213040509, guid: 208720f34df6e714e821e6e74568aa02, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 89
+      value: 167
       objectReference: {fileID: 0}
     - target: {fileID: 3053918847213040509, guid: 208720f34df6e714e821e6e74568aa02, type: 3}
       propertyPath: m_AnchoredPosition.y

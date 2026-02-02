@@ -161,7 +161,7 @@ MonoBehaviour:
     ShowFPS: 0
     ResourceLoadMode: 0
     IsCDNEnabled: 1
-    CDNUrl: https://3kp-panggu-1342832102.cos.ap-shanghai.myqcloud.com/game/hunt/yoo
+    CDNUrl: https://3kp-panggu-1342832102.cos.ap-shanghai.myqcloud.com/game/hunt/yoo/DefaultPackage
     loading: {fileID: 136192759375765479}
   _updatePanel: {fileID: 0}
   _progressBar: {fileID: 0}
@@ -531,7 +531,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: e3d2ed67c9ff61f4792a72689acf25bd, type: 3}
+  m_Texture: {fileID: 2800000, guid: aa7256c22f8a23e4bb150b6e7051dcdb, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

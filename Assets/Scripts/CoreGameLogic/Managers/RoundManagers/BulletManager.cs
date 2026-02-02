@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
@@ -20,12 +20,12 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private GameObjectPoolManager _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
 
     /// <summary>
-    /// 追踪所有活跃的子弹
+    /// 活跃子弹集合
     /// </summary>
     private readonly HashSet<BulletBehavior> _activeBullets = new HashSet<BulletBehavior>();
 
     /// <summary>
-    /// 待移除的子弹列表（防止在遍历时修改集合）
+    /// 待移除子弹列表
     /// </summary>
     private readonly List<BulletBehavior> _pendingRemovalBullets = new List<BulletBehavior>();
 
@@ -61,11 +61,9 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     public void DoUpdate(float dt)
     {
-        // 先更新所有子弹
         foreach (var bullet in _activeBullets)
             bullet.DoUpdate(dt);
 
-        // 处理待移除的子弹
         ProcessPendingRemovals();
     }
 
@@ -101,6 +99,34 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     }
     #endregion
 
+    #region 私有方法
+    /// <summary>
+    /// 处理待移除的子弹
+    /// </summary>
+    private void ProcessPendingRemovals()
+    {
+        foreach (var bullet in _pendingRemovalBullets)
+        {
+            _activeBullets.Remove(bullet);
+            _gameObjectPoolManager.Despawn(bullet.gameObject);
+        }
+
+        _pendingRemovalBullets.Clear();
+    }
+
+    /// <summary>
+    /// 回收所有子弹
+    /// </summary>
+    private void RecycleAllBullets()
+    {
+        foreach (var bullet in _activeBullets)
+            _gameObjectPoolManager.Despawn(bullet.gameObject);
+
+        _activeBullets.Clear();
+        _pendingRemovalBullets.Clear();
+    }
+    #endregion
+
     #region 事件相关
     /// <summary>
     /// 注册事件
@@ -132,34 +158,6 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private void TriggerBulletSpawned(BulletSpawnedEventArgs args)
     {
         _eventManager.Trigger(BulletEvents.BulletSpawned, args);
-    }
-    #endregion
-
-    #region 私有方法
-    /// <summary>
-    /// 处理待移除的子弹
-    /// </summary>
-    private void ProcessPendingRemovals()
-    {
-        foreach (var bullet in _pendingRemovalBullets)
-        {
-            _activeBullets.Remove(bullet);
-            _gameObjectPoolManager.Despawn(bullet.gameObject);
-        }
-
-        _pendingRemovalBullets.Clear();
-    }
-
-    /// <summary>
-    /// 回收所有子弹
-    /// </summary>
-    private void RecycleAllBullets()
-    {
-        foreach (var bullet in _activeBullets)
-            _gameObjectPoolManager.Despawn(bullet.gameObject);
-                    
-        _activeBullets.Clear();
-        _pendingRemovalBullets.Clear();
     }
     #endregion
 }
