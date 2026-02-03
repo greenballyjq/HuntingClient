@@ -179,7 +179,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 点击技能按钮回调
+    /// 技能按钮点击回调
     /// </summary>
     private void OnSkillButtonClicked()
     {

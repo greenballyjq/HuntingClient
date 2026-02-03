@@ -23,7 +23,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
     /// <summary>
     /// 金币人动画控制器
     /// </summary>
-    [SerializeField] private ThreeKPCoinAnimator _threeKPCoinAnimator;
+    [SerializeField] private ThreeKPCoinManThrowDiceAnimator _threeKPCoinManThrowDiceAnimator;
 
     /// <summary>
     /// 角色图片缓存字典
@@ -149,13 +149,13 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
         _eventManager.Trigger(PrepareEvents.DiceAnimationStarted);
 
         // 播放金币人投骰子动画
-        DiceAnimation diceAnimation = await _threeKPCoinAnimator.PlayThrowDiceAsync();
+        DiceRollAnimator diceAnimation = await _threeKPCoinManThrowDiceAnimator.PlayThrowDiceAsync();
 
         // 播放骰子滚动动画
         await diceAnimation.PlayRoll(_diceValue);
 
         // 等待投骰子动画结束
-        await _threeKPCoinAnimator.WaitForThrowAnimationEndAsync();
+        await _threeKPCoinManThrowDiceAnimator.WaitForThrowAnimationEndAsync();
 
         // 触发骰子动画结束事件
         _eventManager.Trigger(PrepareEvents.DiceAnimationEnded);
@@ -169,7 +169,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
         _eventManager.Trigger(PrepareEvents.SlotAnimationStarted);
 
         // 播放金币人行走动画
-        await _threeKPCoinAnimator.PlayWalk(positionSequence, directions);
+        await _threeKPCoinManThrowDiceAnimator.PlayWalkSlot(positionSequence, directions);
 
         // 触发走格子动画结束事件
         _eventManager.Trigger(PrepareEvents.SlotAnimationEnded);

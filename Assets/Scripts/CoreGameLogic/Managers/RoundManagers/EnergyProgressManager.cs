@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// 丰收能量条管理器
+/// 能量条管理器
 /// </summary>
 public class EnergyProgressManager : IRoundManager, IRoundUpdatable
 {

@@ -2,7 +2,7 @@
 using GameFramework.Core;
 
 /// <summary>
-/// 技能系统事件键
+/// 技能相关事件
 /// </summary>
 public static class SkillEvents
 {

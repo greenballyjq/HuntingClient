@@ -110,7 +110,7 @@ public class UIPopupSettlementSnowVictory : UIBase
         {
             _diceTransform = Instantiate(_dicePrefab, _diceParent);
         }
-        await _diceTransform.GetComponent<DiceAnimation>().PlayRoll(point);
+        await _diceTransform.GetComponent<DiceRollAnimator>().PlayRoll(point);
         
         _textThreeKPCoin.text = (point * _totalCoin).ToString();
         _textPoint.text = (point * _totalMastery).ToString();
