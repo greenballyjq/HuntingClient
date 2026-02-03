@@ -20,7 +20,6 @@ public sealed partial class Skill : Luban.BeanBase
         SkillType = (HuntingConfig.Enum.ESkillType)_buf.ReadInt();
         Name = _buf.ReadString();
         Description = _buf.ReadString();
-        Duration = _buf.ReadFloat();
         IconResourcePath = _buf.ReadString();
         ParamTableID = _buf.ReadInt();
         Comment = _buf.ReadString();
@@ -48,10 +47,6 @@ public sealed partial class Skill : Luban.BeanBase
     /// </summary>
     public readonly string Description;
     /// <summary>
-    /// 持续时间
-    /// </summary>
-    public readonly float Duration;
-    /// <summary>
     /// 图标资源路径
     /// </summary>
     public readonly string IconResourcePath;
@@ -78,7 +73,6 @@ public sealed partial class Skill : Luban.BeanBase
         + "SkillType:" + SkillType + ","
         + "Name:" + Name + ","
         + "Description:" + Description + ","
-        + "Duration:" + Duration + ","
         + "IconResourcePath:" + IconResourcePath + ","
         + "ParamTableID:" + ParamTableID + ","
         + "Comment:" + Comment + ","

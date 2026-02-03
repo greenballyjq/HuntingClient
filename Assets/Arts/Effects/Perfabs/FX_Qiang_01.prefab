@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FX_Qiang_Attack
       objectReference: {fileID: 0}
+    - target: {fileID: 6888566635954308207, guid: 1cd5d39f330b3134880256f87b7fdb1d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7040165281416368603, guid: 1cd5d39f330b3134880256f87b7fdb1d, type: 3}
       propertyPath: InitialModule.startLifetime.minScalar
       value: 0.1
@@ -74,6 +78,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4469278603337472482}
     m_Modifications:
+    - target: {fileID: 1327752195131073188, guid: c2717c6ff3a0a46408889d85a5423380, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2319790136668469180, guid: c2717c6ff3a0a46408889d85a5423380, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2959087705513710663, guid: c2717c6ff3a0a46408889d85a5423380, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -120,7 +132,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4319900340637397322, guid: c2717c6ff3a0a46408889d85a5423380, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -143,6 +155,10 @@ PrefabInstance:
     - target: {fileID: 1842708580810422857, guid: ebd6f45e8a8bca544abe874c05486882, type: 3}
       propertyPath: m_Name
       value: FX_Qiang_Attack_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 1842708580810422857, guid: ebd6f45e8a8bca544abe874c05486882, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6314650057465005797, guid: ebd6f45e8a8bca544abe874c05486882, type: 3}
       propertyPath: m_LocalPosition.x

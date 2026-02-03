@@ -17,6 +17,7 @@ public sealed partial class Skill3KP : Luban.BeanBase
     public Skill3KP(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
+        Duration = _buf.ReadFloat();
         DamageMultiplier = _buf.ReadFloat();
         FireRateMultiplier = _buf.ReadFloat();
         Comment = _buf.ReadString();
@@ -31,6 +32,10 @@ public sealed partial class Skill3KP : Luban.BeanBase
     /// 参数ID
     /// </summary>
     public readonly int ID;
+    /// <summary>
+    /// 持续时间
+    /// </summary>
+    public readonly float Duration;
     /// <summary>
     /// 伤害倍率
     /// </summary>
@@ -55,6 +60,7 @@ public sealed partial class Skill3KP : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
+        + "Duration:" + Duration + ","
         + "DamageMultiplier:" + DamageMultiplier + ","
         + "FireRateMultiplier:" + FireRateMultiplier + ","
         + "Comment:" + Comment + ","

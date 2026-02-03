@@ -8,7 +8,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "DefaultPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2026/2/3 14:38:08",
+    "PackageNote": "2026/2/3 19:29:28",
     "AssetList": [
         {
             "Address": "",
@@ -140,14 +140,6 @@
         },
         {
             "Address": "",
-            "AssetPath": "Assets/Arts/Prefabs/Effects/FX_DG_C.prefab",
-            "AssetGUID": "",
-            "AssetTags": [],
-            "BundleID": 2,
-            "DependBundleIDs": []
-        },
-        {
-            "Address": "",
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_Hit_01.prefab",
             "AssetGUID": "",
             "AssetTags": [],
@@ -268,7 +260,7 @@
         },
         {
             "Address": "",
-            "AssetPath": "Assets/Arts/Prefabs/Props/FX_DG_C.prefab",
+            "AssetPath": "Assets/Arts/Prefabs/Props/pf_prop_trap.prefab",
             "AssetGUID": "",
             "AssetTags": [],
             "BundleID": 3,
@@ -613,7 +605,7 @@
             "UnityCRC": 0,
             "FileHash": "9c2b80f81633b5b0831add7db1335c42",
             "FileCRC": "00000000",
-            "FileSize": 13805444,
+            "FileSize": 12062684,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -623,7 +615,7 @@
             "UnityCRC": 0,
             "FileHash": "3f076820f4a9f6a41a21ca28c1073f9c",
             "FileCRC": "00000000",
-            "FileSize": 2785520,
+            "FileSize": 2713222,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

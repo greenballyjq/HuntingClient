@@ -4,19 +4,19 @@ using Hunting.Events;
 using UnityEngine;
 
 /// <summary>
-/// 武器类
+/// 玩家武器类
 /// </summary>
-public class MainWeapon : MonoBehaviour
+public class PlayerWeapon : MonoBehaviour
 {
     /// <summary>
-    /// 武器旋转速度
+    /// 旋转速度
     /// </summary>
-    [SerializeField] private float _rotationSpeed = 20f;
+    [SerializeField] private float _rotationSpeed;
 
     /// <summary>
     /// 开火点
     /// </summary>
-    [SerializeField] private Transform _muzzlePoint;
+    [SerializeField] private Transform _firePoint;
 
     /// <summary>
     /// 当前子弹ID
@@ -170,7 +170,6 @@ public class MainWeapon : MonoBehaviour
 
         // 执行射击
         SpawnBulletAsync().Forget();
-        PlayFireSound();
         _lastFireTime = Time.time;
     }
     #endregion
@@ -190,7 +189,7 @@ public class MainWeapon : MonoBehaviour
     /// </summary>
     private async UniTask SpawnBulletAsync()
     {
-        await _bulletManager.SpawnBullet(_currentBulletId, _muzzlePoint.position, _muzzlePoint.forward);
+        await _bulletManager.SpawnBullet(_currentBulletId, _firePoint.position, _firePoint.forward);
     }
 
     /// <summary>
@@ -288,30 +287,6 @@ public class MainWeapon : MonoBehaviour
     private void TriggerSpecialBulletEffectEnded(SpecialBulletEffectEndedEventArgs args)
     {
         _eventManager.Trigger(BulletEvents.SpecialBulletEffectEnded, args);
-    }
-    #endregion
-
-    #region TODO: 待音效系统待实现
-    [Header("音效")]
-    [SerializeField] private AudioClip fireAudioClip;
-    private AudioSource _audioSource;
-
-    protected virtual void Awake()
-    {
-        _audioSource = GetComponent<AudioSource>();
-        if (_audioSource == null)
-        {
-            _audioSource = gameObject.AddComponent<AudioSource>();
-        }
-    }
-
-    private void PlayFireSound()
-    {
-        if (fireAudioClip != null && _audioSource != null)
-        {
-            _audioSource.clip = fireAudioClip;
-            _audioSource.Play();
-        }
     }
     #endregion
 }

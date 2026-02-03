@@ -36,11 +36,6 @@ public static class GameServiceLocator
     public static TimerManager TimerManager => GameFrameworkManager.Instance.GetManager<TimerManager>();
 
     /// <summary>
-    /// 游戏场景管理器
-    /// </summary>
-    public static GameSceneManager SceneManager => GameFrameworkManager.Instance.GetManager<GameSceneManager>();
-
-    /// <summary>
     /// 配置管理器
     /// </summary>
     public static HuntingConfigManager ConfigManager => HuntingConfigManager.Instance;

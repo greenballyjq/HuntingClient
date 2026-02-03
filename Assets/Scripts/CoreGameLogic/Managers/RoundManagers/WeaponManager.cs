@@ -8,9 +8,9 @@ using UnityEngine;
 public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
-    /// 主武器
+    /// 玩家武器
     /// </summary>
-    private MainWeapon _mainWeapon;
+    private PlayerWeapon _playerWeapon;
 
     /// <summary>
     /// 射速修正倍率字典
@@ -38,15 +38,15 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     public void Init(RoundContext context)
     {
-        CollectMainWeapon();
-        _mainWeapon.Init();
+        FindPlayerWeapon();
+        _playerWeapon.Init();
         Debug.Log("[WeaponManager] 初始化完成");
     }
 
     public void DoUpdate(float deltaTime)
     {
-        if (_mainWeapon != null)
-            _mainWeapon.UpdateSpecialBulletTimer();
+        if (_playerWeapon != null)
+            _playerWeapon.UpdateSpecialBulletTimer();
     }
 
     public void Dispose()
@@ -56,23 +56,23 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     public void Cleanup()
     {
-        _mainWeapon.SetCurrentBullet(1);
-        _mainWeapon = null;
+        _playerWeapon.SetCurrentBullet(1);
+        _playerWeapon = null;
     }
 
     public void ReInit(RoundContext context)
     {
-        CollectMainWeapon();
-        _mainWeapon.Init();
+        FindPlayerWeapon();
+        _playerWeapon.Init();
     }
 
     #region 公共方法
     /// <summary>
     /// 获取主武器实例
     /// </summary>
-    public MainWeapon GetMainWeapon()
+    public PlayerWeapon GetMainWeapon()
     {
-        return _mainWeapon;
+        return _playerWeapon;
     }
 
     /// <summary>
@@ -160,12 +160,12 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     #region 私有方法
     /// <summary>
-    /// 收集场景中的主武器
+    /// 寻找玩家武器
     /// </summary>
-    private void CollectMainWeapon()
+    private void FindPlayerWeapon()
     {
-        GameObject weaponObj = GameObject.Find("MainWeapon");
-        _mainWeapon = weaponObj.GetComponent<MainWeapon>();
+        GameObject weaponObj = GameObject.Find("PlayerWeapon");
+        _playerWeapon = weaponObj.GetComponent<PlayerWeapon>();
     }
 
     /// <summary>
@@ -181,8 +181,8 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
         _fireRateMultiplier = total;
 
         // 通知主武器更新射速
-        if (_mainWeapon != null)
-            _mainWeapon.OnFireRateChanged();
+        if (_playerWeapon != null)
+            _playerWeapon.OnFireRateChanged();
     }
 
     /// <summary>

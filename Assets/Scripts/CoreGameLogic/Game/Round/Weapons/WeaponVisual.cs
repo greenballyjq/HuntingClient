@@ -5,21 +5,29 @@
 /// </summary>
 public class WeaponVisual : MonoBehaviour
 {
-    [Header("枪口Transform")] [SerializeField]
-    private Transform muzzlePoint;
-    
+
     /// <summary>
     /// 枪口位置
     /// </summary>
-    public Transform MuzzlePoint => muzzlePoint;
-    
-    [Header("瞄准线设置")]
-    [SerializeField] private Color aimLineColor = Color.red; // 瞄准线颜色
-    [SerializeField] private float aimLineWidth = 0.05f; // 瞄准线宽度
-    [SerializeField] private float aimLineLength = 20f; // 瞄准线长度
+    [SerializeField] private Transform _firePoint;
 
     /// <summary>
-    /// 枪口瞄准辅助线
+    /// 瞄准线颜色
+    /// </summary>
+    [SerializeField] private Color aimLineColor;
+
+    /// <summary>
+    /// 瞄准线宽度
+    /// </summary>
+    [SerializeField] private float aimLineWidth;
+
+    /// <summary>
+    /// 瞄准线长度
+    /// </summary>
+    [SerializeField] private float aimLineLength;
+
+    /// <summary>
+    /// 瞄准线组件
     /// </summary>
     private LineRenderer _aimLine;
     
@@ -60,14 +68,14 @@ public class WeaponVisual : MonoBehaviour
 
     private void UpdateAimLine()
     {
-        if (_aimLine == null || muzzlePoint == null) return;
+        if (_aimLine == null || _firePoint == null) return;
         // 设置瞄准线起点为枪口位置
-        Vector3 startPoint = muzzlePoint.position;
+        Vector3 startPoint = _firePoint.position;
         // 获取枪口方向
-        Vector3 direction = muzzlePoint.forward;
+        Vector3 direction = _firePoint.forward;
 
-        // 进行射线检测，排除子弹层
-        int layerMask = LayerMask.NameToLayer("Animal");
+        // 进行射线检测
+        int layerMask = 1 << LayerMask.NameToLayer("Animal");
         RaycastHit hit;
         bool hasHit = Physics.Raycast(startPoint, direction, out hit, aimLineLength, layerMask);
 

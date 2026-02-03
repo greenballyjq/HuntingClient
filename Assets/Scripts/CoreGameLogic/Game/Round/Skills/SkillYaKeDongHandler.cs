@@ -1,8 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig.Skill;
-using GameFramework.Core;
 using GameFramework.Manager;
-using Hunting.Events;
 using Hunting.Game.Animal;
 using UnityEngine;
 
@@ -11,27 +9,10 @@ using UnityEngine;
 /// </summary>
 public class SkillYaKeDongHandler : ISkillHandler
 {
-    #region TODO：未来可配置化
     /// <summary>
-    /// 生成前方距离
+    /// 事件管理器
     /// </summary>
-    private const float SpawnForwardDistance = 5f;
-
-    /// <summary>
-    /// 左右偏移距离
-    /// </summary>
-    private const float SpawnSideOffset = 8f;
-
-    /// <summary>
-    /// 玩家Transform
-    /// </summary>
-    private Transform _playerTransform;
-    #endregion
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
     /// 对象池管理器
@@ -39,16 +20,29 @@ public class SkillYaKeDongHandler : ISkillHandler
     private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
 
     /// <summary>
-    /// 事件管理器
+    /// 配置管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+
+    /// <summary>
+    /// 技能上下文
+    /// </summary>
+    private SkillContext _skillContext;
+
+    public SkillPhase SkillPhase { get; set; }
 
     public void OnSkillStart(SkillContext context)
     {
-        SpawnCoinAnimalsAsync(context).Forget();
+        SkillPhase = SkillPhase.Starting;
+
+        var skillParam = _configManager.GetSkillYaKeDong(context.SkillData.ParamTableID);
+
+        SpawnCoinAnimalsAsync(skillParam).Forget();
+
+        SkillPhase = SkillPhase.Finished;
     }
 
-    public void OnSkillUpdate(float dt){}
+    public void DoUpdate(float dt){}
 
     public void OnSkillEnd(){}
 
@@ -56,13 +50,12 @@ public class SkillYaKeDongHandler : ISkillHandler
     /// <summary>
     /// 生成金币怪
     /// </summary>
-    private async UniTask SpawnCoinAnimalsAsync(SkillContext context)
+    private async UniTask SpawnCoinAnimalsAsync(SkillYaKeDong skillParam)
     {
-        var parameter = _configManager.GetSkillYaKeDong(context.SkillData.ParamTableID);
-        var specie = _configManager.GetSpecie(parameter.SpawnAnimalID);
+        var specie = _configManager.GetSpecie(skillParam.SpawnAnimalID);
         var player = FindPlayerTransform();
 
-        int spawnCount = GetSpawnCount(parameter);
+        int spawnCount = GetSpawnCount(skillParam);
 
         Vector3 forward = player.forward;
         Vector3 right = player.right;
@@ -128,5 +121,22 @@ public class SkillYaKeDongHandler : ISkillHandler
 
         return _playerTransform;
     }
+    #endregion
+
+    #region TODO：未来可配置化
+    /// <summary>
+    /// 生成前方距离
+    /// </summary>
+    private const float SpawnForwardDistance = 5f;
+
+    /// <summary>
+    /// 左右偏移距离
+    /// </summary>
+    private const float SpawnSideOffset = 8f;
+
+    /// <summary>
+    /// 玩家Transform
+    /// </summary>
+    private Transform _playerTransform;
     #endregion
 }

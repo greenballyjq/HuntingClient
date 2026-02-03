@@ -19,7 +19,7 @@ public static class SkillHandlerFactory
             case ESkillType.ZiWeiSkill:
                 return new SkillZiWeiHandler();
             case ESkillType.DaMeiLiSkill:
-                return null;
+                return new SkillDaMeiLiHandler();
             case ESkillType.JinZhuangYuanSkill:
                 return new SkillJinZhuangYuanHandler();
             case ESkillType.YaKeDongSkill:

@@ -9,7 +9,7 @@ public class AimAssistHandler : IPlayerControlHandler
     /// <summary>
     /// 主武器
     /// </summary>
-    private MainWeapon _weapon;
+    private PlayerWeapon _weapon;
 
     /// <summary>
     /// 当前锁定的目标

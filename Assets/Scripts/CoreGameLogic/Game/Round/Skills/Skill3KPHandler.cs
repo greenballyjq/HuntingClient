@@ -9,6 +9,13 @@ public class Skill3KPHandler : ISkillHandler
     private const string ModifierSourceId = "Skill_3KP";
 
     /// <summary>
+    /// 剩余时间
+    /// </summary>
+    private float _remainingTime;
+
+    public SkillPhase SkillPhase { get; set; }
+
+    /// <summary>
     /// 配置管理器
     /// </summary>
     private HuntingConfigManager _configManager = GameServiceLocator.ConfigManager;
@@ -18,18 +25,26 @@ public class Skill3KPHandler : ISkillHandler
     /// </summary>
     private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
 
-    /// <summary>
-    /// 技能开始
-    /// </summary>
     public void OnSkillStart(SkillContext context)
     {
-        var parameter = _configManager.GetSkill3KP(context.SkillData.ParamTableID);
+        SkillPhase = SkillPhase.Starting;
 
-        _weaponManager.RegisterFireRateModifier(ModifierSourceId, parameter.FireRateMultiplier);
-        _weaponManager.RegisterDamageModifier(ModifierSourceId, parameter.DamageMultiplier);
+        var skillParam = _configManager.GetSkill3KP(context.SkillData.ParamTableID);
+        _remainingTime = skillParam.Duration;   
+
+        _weaponManager.RegisterFireRateModifier(ModifierSourceId, skillParam.FireRateMultiplier);
+        _weaponManager.RegisterDamageModifier(ModifierSourceId, skillParam.DamageMultiplier);
+
+        SkillPhase = SkillPhase.Running;
     }
 
-    public void OnSkillUpdate(float dt){}
+    public void DoUpdate(float dt)
+    {
+        _remainingTime -= dt;
+
+        if (_remainingTime <= 0)
+            SkillPhase = SkillPhase.Finished;
+    }
 
     public void OnSkillEnd()
     {

@@ -8,7 +8,7 @@ public class DefaultShootingHandler : IPlayerControlHandler
     /// <summary>
     /// 主武器
     /// </summary>
-    private MainWeapon _weapon;
+    private PlayerWeapon _weapon;
 
     /// <summary>
     /// 输入管理器

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using UnityEngine;
@@ -9,35 +10,11 @@ using UnityEngine;
 public class SkillZiWeiHandler : ISkillHandler
 {
     /// <summary>
-    /// 技能武器预制体资源路径
+    /// 剩余时间
     /// </summary>
-    private const string SkillWeaponPrefabPath = "Assets/Arts/Prefabs/Skills/pf_skillweapon";
+    private float _remainingTime;
 
-    /// <summary>
-    /// 技能武器预制体缓存
-    /// </summary>
-    private GameObject _weaponPrefabCache;
-
-    /// <summary>
-    /// 技能武器列表
-    /// </summary>
-    private List<SkillWeapon> _skillWeapons = new List<SkillWeapon>();
-
-    /// <summary>
-    /// 武器管理器
-    /// </summary>
-    private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
-
-    /// <summary>
-    /// 玩家Transform
-    /// </summary>
-    /// <remarks>TODO: 将来可配置化</remarks>
-    private Transform _playerTransform;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    public SkillPhase SkillPhase { get; set; }
 
     /// <summary>
     /// 资源管理器
@@ -45,14 +22,37 @@ public class SkillZiWeiHandler : ISkillHandler
     private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
 
     /// <summary>
+    /// 配置管理器
+    /// </summary>
+    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+
+    /// <summary>
+    /// 武器管理器
+    /// </summary>
+    private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
+
+    /// <summary>
     /// 技能开始
     /// </summary>
     public void OnSkillStart(SkillContext context)
     {
-        CreateSkillWeaponsAsync(context).Forget();
+        SkillPhase = SkillPhase.Starting;
+
+        var skillParam = _configManager.GetSkillZiWei(context.SkillData.ParamTableID);
+        _remainingTime = skillParam.Duration;
+
+        CreateSkillWeaponsAsync(skillParam).Forget();
+
+        SkillPhase = SkillPhase.Running;
     }
 
-    public void OnSkillUpdate(float dt){ }
+    public void DoUpdate(float dt)
+    {
+        _remainingTime -= dt;
+
+        if (_remainingTime <= 0)
+            SkillPhase = SkillPhase.Finished;
+    }
 
     public void OnSkillEnd()
     {
@@ -63,10 +63,8 @@ public class SkillZiWeiHandler : ISkillHandler
     /// <summary>
     /// 创建技能武器
     /// </summary>
-    private async UniTask CreateSkillWeaponsAsync(SkillContext context)
+    private async UniTask CreateSkillWeaponsAsync(SkillZiWei skillParam)
     {
-        var parameter = _configManager.GetSkillZiWei(context.SkillData.ParamTableID);
-
         var player = FindPlayerTransform();
 
         // 加载或使用缓存的武器预制体
@@ -74,7 +72,7 @@ public class SkillZiWeiHandler : ISkillHandler
             _weaponPrefabCache = await _resourceManager.LoadAssetAsync<GameObject>(SkillWeaponPrefabPath);
 
         // 计算生成位置并创建武器
-        int gunCountPerSide = Mathf.RoundToInt(parameter.GunCountPerSide);
+        int gunCountPerSide = Mathf.RoundToInt(skillParam.GunCountPerSide);
         Vector3 playerPosition = player.position;
 
         Vector3 worldRight = Vector3.right;
@@ -82,15 +80,15 @@ public class SkillZiWeiHandler : ISkillHandler
         // 创建左侧武器
         for (int i = 0; i < gunCountPerSide; i++)
         {
-            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, worldRight, parameter.GunOffsetX, i, true);
-            CreateSkillWeapon(spawnPosition, parameter.FireInterval);
+            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, worldRight, skillParam.GunOffsetX, i, true);
+            CreateSkillWeapon(spawnPosition, skillParam.FireInterval);
         }
 
         // 创建右侧武器
         for (int i = 0; i < gunCountPerSide; i++)
         {
-            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, worldRight, parameter.GunOffsetX, i, false);
-            CreateSkillWeapon(spawnPosition, parameter.FireInterval);
+            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, worldRight, skillParam.GunOffsetX, i, false);
+            CreateSkillWeapon(spawnPosition, skillParam.FireInterval);
         }
     }
 
@@ -136,6 +134,14 @@ public class SkillZiWeiHandler : ISkillHandler
         }
         _skillWeapons.Clear();
     }
+    #endregion
+
+    #region 测试
+    /// <summary>
+    /// 玩家Transform
+    /// </summary>
+    /// <remarks>TODO: 将来可配置化</remarks>
+    private Transform _playerTransform;
 
     /// <summary>
     /// 获取玩家Transform
@@ -146,5 +152,23 @@ public class SkillZiWeiHandler : ISkillHandler
             _playerTransform = _weaponManager.GetMainWeapon().transform;
         return _playerTransform;
     }
+    #endregion
+
+    #region 测试
+    /// <summary>
+    /// 技能武器预制体资源路径
+    /// </summary>
+    private const string SkillWeaponPrefabPath = "Assets/Arts/Prefabs/Skills/pf_skillweapon";
+
+    /// <summary>
+    /// 技能武器预制体缓存
+    /// </summary>
+    private GameObject _weaponPrefabCache;
+
+    /// <summary>
+    /// 技能武器列表
+    /// </summary>
+    private List<SkillWeapon> _skillWeapons = new List<SkillWeapon>();
+
     #endregion
 }

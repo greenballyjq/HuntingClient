@@ -4,9 +4,16 @@
 public class SkillJinZhuangYuanHandler : ISkillHandler
 {
     /// <summary>
-    /// 每秒增加的肉量
+    /// 每秒增加肉量
     /// </summary>
     private float _meatIncreasePerSecond;
+
+    /// <summary>
+    /// 剩余时间
+    /// </summary>
+    private float _remainingTime;
+
+    public SkillPhase SkillPhase { get; set; }
 
     /// <summary>
     /// 配置管理器
@@ -14,36 +21,32 @@ public class SkillJinZhuangYuanHandler : ISkillHandler
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
-    /// 肉度条管理器
+    /// 肉条管理器
     /// </summary>
     private MeatProgressManager _meatManager => GameServiceLocator.GetRoundManager<MeatProgressManager>();
 
     public void OnSkillStart(SkillContext context)
     {
-        var parameter = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
+        SkillPhase = SkillPhase.Starting;
 
-        // 计算总增加量 = 单条所需值 * 肉量百分比
-        float requiredPerBar = _meatManager.TotalMeatValue;
-        float totalMeatAmount = requiredPerBar * parameter.MeatPercent;
+        var skillParam = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
+        _remainingTime = skillParam.Duration;
 
-        // 计算每秒增加量 = 总增加量 / 技能持续时间
-        float skillDuration = context.SkillData.Duration;
-        _meatIncreasePerSecond = totalMeatAmount / skillDuration;
+        float totalMeatAmount = _meatManager.TotalMeatValue * skillParam.MeatPercent;
+        _meatIncreasePerSecond = totalMeatAmount / skillParam.Duration;
+
+        SkillPhase = SkillPhase.Running;
     }
 
-    public void OnSkillUpdate(float dt)
+    public void DoUpdate(float dt)
     {
-        if (_meatIncreasePerSecond <= 0f)
-            return;
+        _remainingTime -= dt;
 
-        // 累积本帧增加的肉量
-        float deltaMeat = dt * _meatIncreasePerSecond;
-        if (deltaMeat > 0f)
-            _meatManager.AddMeatValue(deltaMeat);
+        _meatManager.AddMeatValue(dt * _meatIncreasePerSecond);
+
+        if (_remainingTime <= 0)
+            SkillPhase = SkillPhase.Finished;
     }
 
-    public void OnSkillEnd()
-    {
-        _meatIncreasePerSecond = 0f;
-    }
+    public void OnSkillEnd(){}
 }

@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 3335859478022066305}
   - component: {fileID: 2593258856961640196}
   - component: {fileID: 3387176879445994411}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Animator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
