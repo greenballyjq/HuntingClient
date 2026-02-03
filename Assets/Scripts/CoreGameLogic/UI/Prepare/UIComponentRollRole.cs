@@ -21,7 +21,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
     [SerializeField] private Button _buttonStartRoll;
 
     /// <summary>
-    /// 金币人物动画器组件
+    /// 金币人动画控制器
     /// </summary>
     [SerializeField] private ThreeKPCoinAnimator _threeKPCoinAnimator;
 

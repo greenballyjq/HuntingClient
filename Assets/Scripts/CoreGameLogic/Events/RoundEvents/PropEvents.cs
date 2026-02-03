@@ -110,7 +110,7 @@ public sealed class TrapTriggeredEventArgs : EventArgs
     /// <summary>
     /// 触发的陷阱实例
     /// </summary>
-    public TrapBehavior Trap { get; set; }
+    public TrapBehaviour Trap { get; set; }
 
     /// <summary>
     /// 触发陷阱的动物实例

@@ -9,7 +9,7 @@ using UnityEngine;
 /// <summary>
 /// 陷阱管理器
 /// </summary>
-public class TrapManager : IRoundManager, IRoundResettable
+public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
     /// 事件管理器
@@ -22,9 +22,14 @@ public class TrapManager : IRoundManager, IRoundResettable
     private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
 
     /// <summary>
-    /// 场上所有陷阱列表
+    /// 活跃陷阱集合
     /// </summary>
-    private List<GameObject> _activeTraps = new List<GameObject>();
+    private readonly HashSet<TrapBehaviour> _activeTraps = new HashSet<TrapBehaviour>();
+
+    /// <summary>
+    /// 待移除陷阱列表
+    /// </summary>
+    private readonly List<TrapBehaviour> _pendingRemovalTraps = new List<TrapBehaviour>();
 
     public void Init(RoundContext context)
     {
@@ -35,16 +40,24 @@ public class TrapManager : IRoundManager, IRoundResettable
     public void Dispose()
     {
         UnregisterEvents();
-        ClearAllTraps();
+        RecycleAllTraps();
         Debug.Log("[TrapManager] 已释放");
     }
-
+    
     public void Cleanup()
     {
-        ClearAllTraps();
+        RecycleAllTraps();
     }
-
+    
     public void ReInit(RoundContext context){}
+    
+    public void DoUpdate(float dt)
+    {
+        foreach (var trap in _activeTraps)
+            trap.DoUpdate(dt);
+
+        ProcessPendingRemovals();
+    }
 
     #region 公共方法
     /// <summary>
@@ -68,16 +81,14 @@ public class TrapManager : IRoundManager, IRoundResettable
         GameObject trap = await _gameObjectPoolManager.SpawnAsync(prefabPath);
 
         // 初始化陷阱
-        IPoolItem poolItem = trap.GetComponent<IPoolItem>();
-
         trap.transform.position = position;
         trap.transform.rotation = Quaternion.identity;
 
-        TrapBehavior trapBehavior = trap.GetComponent<TrapBehavior>();
+        TrapBehaviour trapBehavior = trap.GetComponent<TrapBehaviour>();
         trapBehavior.Init(attractRadius, triggerRadius, attractRadiusRangeByVolume);
 
-        // 注册到列表
-        _activeTraps.Add(trap);
+        // 注册到活跃集合
+        _activeTraps.Add(trapBehavior);
 
         return trap;
     }
@@ -89,7 +100,7 @@ public class TrapManager : IRoundManager, IRoundResettable
     public List<Vector3> GetAllTrapPositions()
     {
         List<Vector3> positions = new List<Vector3>();
-        foreach (GameObject trap in _activeTraps)
+        foreach (var trap in _activeTraps)
             positions.Add(trap.transform.position);
 
         return positions;
@@ -98,15 +109,31 @@ public class TrapManager : IRoundManager, IRoundResettable
 
     #region 私有方法
     /// <summary>
-    /// 清理所有陷阱
+    /// 回收所有陷阱
     /// </summary>
-    private void ClearAllTraps()
+    private void RecycleAllTraps()
     {
-        foreach (GameObject trap in _activeTraps)
-            _gameObjectPoolManager.Despawn(trap);
+        foreach (var trap in _activeTraps)
+            _gameObjectPoolManager.Despawn(trap.gameObject);
 
         _activeTraps.Clear();
+        _pendingRemovalTraps.Clear();
     }
+
+    /// <summary>
+    /// 处理待移除的陷阱
+    /// </summary>
+    private void ProcessPendingRemovals()
+    {
+        foreach (var trap in _pendingRemovalTraps)
+        {
+            _activeTraps.Remove(trap);
+            _gameObjectPoolManager.Despawn(trap.gameObject);
+        }
+
+        _pendingRemovalTraps.Clear();
+    }
+
     #endregion
 
     #region 事件相关
@@ -131,8 +158,7 @@ public class TrapManager : IRoundManager, IRoundResettable
     /// </summary>
     private void OnTrapTriggered(TrapTriggeredEventArgs args)
     {
-        _activeTraps.Remove(args.Trap.gameObject);
-        _gameObjectPoolManager.Despawn(args.Trap.gameObject);
+        _pendingRemovalTraps.Add(args.Trap);
     }
     #endregion
 }

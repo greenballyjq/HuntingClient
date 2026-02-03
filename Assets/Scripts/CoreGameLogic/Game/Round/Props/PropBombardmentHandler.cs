@@ -70,7 +70,7 @@ public class PropBombardmentHandler : IPropHandler
         _effectManager.PlayOneShotAsync(parameter.EffectPrefabPath, _bombardmentCenter, Quaternion.identity).Forget();
 
         // 创建范围指示器（测试用）
-        //CreateRangeIndicator();
+        CreateRangeIndicator();
 
         _damageTimer = 0f;
     }
@@ -95,7 +95,7 @@ public class PropBombardmentHandler : IPropHandler
     public void OnPropEnd(PropContext context)
     {
         // 销毁范围指示器（测试用）
-        //DestroyRangeIndicator();
+        DestroyRangeIndicator();
     }
 
     #region 私有方法

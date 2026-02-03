@@ -37,9 +37,9 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private readonly List<BaseAnimalBehaviour> _pendingRemovalAnimals = new List<BaseAnimalBehaviour>();
 
     /// <summary>
-    /// 地图物种配置缓存
+    /// 地图物种配置缓存字典
     /// </summary>
-    private readonly Dictionary<int, Specie> _mapSpeciesDataCache = new Dictionary<int, Specie>();
+    private readonly Dictionary<int, Specie> _mapSpeciesDataCacheDic = new Dictionary<int, Specie>();
 
     public void Init(RoundContext context)
     {
@@ -80,7 +80,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     public Dictionary<int, Specie> GetCachedSpeciesData()
     {
-        return _mapSpeciesDataCache;
+        return _mapSpeciesDataCacheDic;
     }
 
     /// <summary>
@@ -233,20 +233,11 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <param name="mapId">地图ID</param>
     private void CacheMapSpeciesData(int mapId)
     {
-        _mapSpeciesDataCache.Clear();
+        _mapSpeciesDataCacheDic.Clear();
 
         var mapSpecies = _configManager.GetMapSpecies(mapId);
-        foreach (var specieEntry in mapSpecies)
-        {
-            foreach (int specieId in specieEntry.Value)
-            {
-                if (!_mapSpeciesDataCache.ContainsKey(specieId))
-                {
-                    var specieData = _configManager.GetSpecie(specieId);
-                    if (specieData != null)
-                        _mapSpeciesDataCache.Add(specieId, specieData);
-                }
-            }
-        }
+        foreach (var specieIds in mapSpecies.Values)
+            foreach (var specieId in specieIds)
+                _mapSpeciesDataCacheDic[specieId] = _configManager.GetSpecie(specieId);
     }
 }

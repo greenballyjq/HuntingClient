@@ -1,4 +1,7 @@
-﻿namespace Hunting.Game.Animal
+﻿using System.Diagnostics;
+using UnityEngine;
+
+namespace Hunting.Game.Animal
 {
     /// <summary>
     /// 动物逃跑状态
@@ -6,14 +9,9 @@
     public class AnimalFleeState : AnimalState
     {
         /// <summary>
-        /// 逃跑速度倍率
+        /// 逃跑移动速率
         /// </summary>
-        protected float _fleeSpeedRate = 2f;
-        
-        /// <summary>
-        /// 逃跑持续时间
-        /// </summary>
-        protected float _fleeDuration = 8f;
+        protected float _fleeMoveSpeedRate = 2f;
 
         public AnimalFleeState(StateMachine stateMachine, BaseAnimalBehaviour animalBehavior) : base(stateMachine, animalBehavior)
         {
@@ -23,7 +21,7 @@
         {
             base.Enter();
 
-            animalBehavior.Moveable.SetMoveRate(_fleeSpeedRate);
+            animalBehavior.Moveable.SetMoveRate(_fleeMoveSpeedRate);
             
             (animalBehavior.AnimalVisual as FleeAnimalVisual).PlayFlee();
         }
@@ -33,12 +31,6 @@
             base.DoUpdate(dt);
 
             animalBehavior.Moveable.DoUpdate(dt);
-
-            // 检查是否到达逃跑持续时间
-            if (stateTimer >= _fleeDuration)
-            {
-                //(animalBehavior.AnimalEventTrigger as FleeAnimalEventTrigger).TriggerAnimalFled();
-            }
         }
 
         public override void Exit()
@@ -49,7 +41,9 @@
         public override void Resume()
         {
             base.Resume();
-            
+
+            animalBehavior.Moveable.SetMoveRate(_fleeMoveSpeedRate);
+
             (animalBehavior.AnimalVisual as FleeAnimalVisual).PlayFlee();
         }
     }

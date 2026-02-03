@@ -101,6 +101,14 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Animals
+        CollectorGUID: 2f48985d9c2b2f545aa965d80dcfab16
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: game
       GroupDesc: 
       AssetTags: 

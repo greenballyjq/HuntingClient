@@ -8,7 +8,7 @@ using UnityEngine;
 public class UIComponentAnimalCounter : MonoBehaviour, IUIComponent
 {
     /// <summary>
-    /// 统计项数组
+    /// 动物统计项组件数组
     /// </summary>
     [SerializeField] private UIComponentAnimalCounterItem[] _animalCounterItems;
 
@@ -23,7 +23,7 @@ public class UIComponentAnimalCounter : MonoBehaviour, IUIComponent
     private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
 
     /// <summary>
-    /// 统计项组件字典
+    /// 动物统计项组件字典
     /// </summary>
     private Dictionary<int, UIComponentAnimalCounterItem> _animalCounterItemsDic = new Dictionary<int, UIComponentAnimalCounterItem>();
 
@@ -45,24 +45,21 @@ public class UIComponentAnimalCounter : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 初始化统计项
+    /// 初始化动物统计项组件
     /// </summary>
     private void InitializeItems()
     {
         var cachedSpecies = _animalManager.GetCachedSpeciesData();
         int index = 0;
 
-        foreach (var specieEntry in cachedSpecies)
+        foreach (var specieData in cachedSpecies.Values)
         {
             if (index >= _animalCounterItems.Length)
                 break;
 
-            int specieId = specieEntry.Key;
-            var specieData = specieEntry.Value;
             var item = _animalCounterItems[index];
-
             item.Init(specieData);
-            _animalCounterItemsDic.Add(specieId, item);
+            _animalCounterItemsDic.Add(specieData.ID, item);
             index++;
         }
     }

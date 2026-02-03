@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -55,7 +53,7 @@ public class HuntingAppFlow : GameAppFlow
     /// <summary>
     /// 打猎应用流程当前状态
     /// </summary>
-    private HuntingAppFlowState  _currentState = HuntingAppFlowState.None;
+    private HuntingAppFlowState _currentState = HuntingAppFlowState.None;
 
     /// <summary>
     /// 当前单局流程
@@ -67,11 +65,13 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
+    #region 测试
     private void Start()
     {
-        
+        // TODO: 将来可能在别处调用
         StartAppAsync().Forget();
     }
+    #endregion
 
     #region 公共方法
     /// <summary>

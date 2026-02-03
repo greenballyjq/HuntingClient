@@ -121,7 +121,7 @@ namespace Hunting.Game.Animal
         /// </summary>
         protected virtual void OnDamaged()
         {
-            _stateMachine.EnterTempState(HitState);
+            _stateMachine.EnterTempState(HitState,true);
         }
 
         /// <summary>

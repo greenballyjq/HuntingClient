@@ -105,15 +105,6 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
-        /// 播放受击动画
-        /// </summary>
-        public void PlayHit()
-        {
-            ResetAnimationStates();
-            _animator.SetBool("Hit", true);
-        }
-
-        /// <summary>
         /// 播放死亡动画
         /// </summary>
         public void PlayDeath()
@@ -128,7 +119,6 @@ namespace Hunting.Game.Animal
         protected virtual void ResetAnimationStates()
         {
             _animator.SetBool("Move", false);
-            _animator.SetBool("Hit", false);
             _animator.SetBool("Death", false);
         }
         #endregion
@@ -144,7 +134,7 @@ namespace Hunting.Game.Animal
         /// </summary>
         public void PlayDeathEffect()
         {
-            _effectManager.PlayOneShotAsync(_animalBehaviour.SpecieData.EffectPrefabPath, transform.position, Quaternion.identity).Forget();
+            _effectManager.PlayOneShotAsync(_animalBehaviour.SpecieData.EffectPrefabResourcePath, transform.position, Quaternion.identity).Forget();
         }
         #endregion
     }
