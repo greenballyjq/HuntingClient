@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig.Skill;
 using GameFramework.Core;
 using GameFramework.Manager;
@@ -43,29 +43,14 @@ public class SkillYaKeDongHandler : ISkillHandler
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
-    /// <summary>
-    /// 技能开始
-    /// </summary>
     public void OnSkillStart(SkillContext context)
     {
         SpawnCoinAnimalsAsync(context).Forget();
     }
 
-    /// <summary>
-    /// 技能更新
-    /// </summary>
-    public void OnSkillUpdate(SkillContext context, float deltaTime)
-    {
+    public void OnSkillUpdate(float dt){}
 
-    }
-
-    /// <summary>
-    /// 技能结束
-    /// </summary>
-    public void OnSkillEnd(SkillContext context)
-    {
-
-    }
+    public void OnSkillEnd(){}
 
     #region 私有方法
     /// <summary>

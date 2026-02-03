@@ -114,7 +114,7 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
-        /// 重置所有状态
+        /// 重置动画状态
         /// </summary>
         protected virtual void ResetAnimationStates()
         {

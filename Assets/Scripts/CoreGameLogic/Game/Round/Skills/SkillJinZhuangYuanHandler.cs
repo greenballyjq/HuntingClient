@@ -18,9 +18,6 @@ public class SkillJinZhuangYuanHandler : ISkillHandler
     /// </summary>
     private MeatProgressManager _meatManager => GameServiceLocator.GetRoundManager<MeatProgressManager>();
 
-    /// <summary>
-    /// 技能开始
-    /// </summary>
     public void OnSkillStart(SkillContext context)
     {
         var parameter = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
@@ -34,24 +31,18 @@ public class SkillJinZhuangYuanHandler : ISkillHandler
         _meatIncreasePerSecond = totalMeatAmount / skillDuration;
     }
 
-    /// <summary>
-    /// 技能更新
-    /// </summary>
-    public void OnSkillUpdate(SkillContext context, float deltaTime)
+    public void OnSkillUpdate(float dt)
     {
         if (_meatIncreasePerSecond <= 0f)
             return;
 
         // 累积本帧增加的肉量
-        float deltaMeat = deltaTime * _meatIncreasePerSecond;
+        float deltaMeat = dt * _meatIncreasePerSecond;
         if (deltaMeat > 0f)
             _meatManager.AddMeatValue(deltaMeat);
     }
 
-    /// <summary>
-    /// 技能结束
-    /// </summary>
-    public void OnSkillEnd(SkillContext context)
+    public void OnSkillEnd()
     {
         _meatIncreasePerSecond = 0f;
     }

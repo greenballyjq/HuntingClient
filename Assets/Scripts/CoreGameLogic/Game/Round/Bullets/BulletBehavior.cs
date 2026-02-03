@@ -184,7 +184,7 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
     /// <param name="hitPoint">命中位置</param>
     private void PlayHitEffect(Vector3 hitPoint)
     {
-        _effectManager.PlayOneShotAsync(_bulletData.EffectPrefabPath, hitPoint, Quaternion.identity).Forget();
+        _effectManager.PlayOneShotAsync(_bulletData.EffectPrefabResourcePath, hitPoint, Quaternion.identity).Forget();
     }
     #endregion
 

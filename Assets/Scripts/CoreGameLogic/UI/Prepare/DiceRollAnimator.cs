@@ -1,11 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
-using System;
 using UnityEngine;
 
 /// <summary>
-/// 骰子动画控制器
+/// 骰子滚动动画器组件
 /// </summary>
-public class DiceAnimation : MonoBehaviour
+public class DiceRollAnimator : MonoBehaviour
 {
     /// <summary>
     /// 动画器组件

@@ -52,18 +52,9 @@ public class SkillZiWeiHandler : ISkillHandler
         CreateSkillWeaponsAsync(context).Forget();
     }
 
-    /// <summary>
-    /// 技能更新
-    /// </summary>
-    public void OnSkillUpdate(SkillContext context, float deltaTime)
-    {
+    public void OnSkillUpdate(float dt){ }
 
-    }
-
-    /// <summary>
-    /// 技能结束
-    /// </summary>
-    public void OnSkillEnd(SkillContext context)
+    public void OnSkillEnd()
     {
         DestroyAllSkillWeapons();
     }
@@ -101,8 +92,6 @@ public class SkillZiWeiHandler : ISkillHandler
             Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, worldRight, parameter.GunOffsetX, i, false);
             CreateSkillWeapon(spawnPosition, parameter.FireInterval);
         }
-
-        Debug.Log($"[SkillZiWeiHandler] 创建了 {_skillWeapons.Count} 把技能武器");
     }
 
     /// <summary>
@@ -112,7 +101,6 @@ public class SkillZiWeiHandler : ISkillHandler
     {
         var weaponObj = GameObject.Instantiate(_weaponPrefabCache);
         weaponObj.transform.position = position;
-        weaponObj.name = "SkillWeapon";
 
         var skillWeapon = weaponObj.GetComponent<SkillWeapon>();
         skillWeapon.Init(fireInterval);
@@ -147,7 +135,6 @@ public class SkillZiWeiHandler : ISkillHandler
                 GameObject.Destroy(weapon.gameObject);
         }
         _skillWeapons.Clear();
-        Debug.Log("[SkillZiWeiHandler] 已销毁所有技能武器");
     }
 
     /// <summary>

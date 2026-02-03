@@ -3,9 +3,9 @@ using DG.Tweening;
 using UnityEngine;
 
 /// <summary>
-/// 三千盘金币人动画控制器
+/// 三千盘金币人投骰子动画器组件
 /// </summary>
-public class ThreeKPCoinAnimator : MonoBehaviour
+public class ThreeKPCoinManThrowDiceAnimator : MonoBehaviour
 {
     /// <summary>
     /// 动画器组件
@@ -40,7 +40,7 @@ public class ThreeKPCoinAnimator : MonoBehaviour
     /// <summary>
     /// 骰子投出等待源
     /// </summary>
-    private UniTaskCompletionSource<DiceAnimation> _diceThrowedCompletionSource;
+    private UniTaskCompletionSource<DiceRollAnimator> _diceThrowedCompletionSource;
 
     /// <summary>
     /// 投骰子动画结束等待源
@@ -55,27 +55,15 @@ public class ThreeKPCoinAnimator : MonoBehaviour
 
     #region 公共方法
     /// <summary>
-    /// 播放闲置动画
-    /// </summary>
-    public void PlayIdle()
-    {
-        _animator.SetBool("Idle", true);
-        _animator.SetBool("Roll", false);
-        _animator.SetBool("Walk", false);
-    }
-
-    /// <summary>
     /// 播放投骰子动画
     /// </summary>
     /// <returns>创建的骰子动画器组件</returns>
-    public async UniTask<DiceAnimation> PlayThrowDiceAsync()
+    public async UniTask<DiceRollAnimator> PlayThrowDiceAsync()
     {
-        _diceThrowedCompletionSource = new UniTaskCompletionSource<DiceAnimation>();
+        _diceThrowedCompletionSource = new UniTaskCompletionSource<DiceRollAnimator>();
         _throwAnimationEndedCompletionSource = new UniTaskCompletionSource<bool>();
 
-        _animator.SetBool("Roll", true);
-        _animator.SetBool("Idle", false);
-        _animator.SetBool("Walk", false);
+        PlayRoll();
 
         return await _diceThrowedCompletionSource.Task;
     }
@@ -89,15 +77,13 @@ public class ThreeKPCoinAnimator : MonoBehaviour
     }
 
     /// <summary>
-    /// 播放行走动画
+    /// 播放走格子动画
     /// </summary>
     /// <param name="targetPoints">目标点序列</param>
     /// <param name="directions">朝向序列</param>
-    public async UniTask PlayWalk(Vector3[] targetPoints, bool[] directions)
+    public async UniTask PlayWalkSlot(Vector3[] targetPoints, bool[] directions)
     {
-        _animator.SetBool("Walk", true);
-        _animator.SetBool("Idle", false);
-        _animator.SetBool("Roll", false);
+        PlayWalk();
 
         for (int i = 0; i < targetPoints.Length; i++)
         {
@@ -122,8 +108,7 @@ public class ThreeKPCoinAnimator : MonoBehaviour
             transform.localScale = scale;
         }
 
-        _animator.SetBool("Walk", false);
-        _animator.SetBool("Idle", true);
+        PlayIdle();
     }
 
     /// <summary>
@@ -133,7 +118,7 @@ public class ThreeKPCoinAnimator : MonoBehaviour
     {
         // 创建骰子
         GameObject diceObj = Instantiate(_dicePrefab, _diceThrowStartPosition.position, Quaternion.identity, transform.parent);
-        DiceAnimation diceAnimation = diceObj.GetComponent<DiceAnimation>();
+        DiceRollAnimator diceAnimation = diceObj.GetComponent<DiceRollAnimator>();
 
         // 完成等待
         _diceThrowedCompletionSource.TrySetResult(diceAnimation);
@@ -145,6 +130,36 @@ public class ThreeKPCoinAnimator : MonoBehaviour
     public void OnThrowAnimationEnded()
     {
         _throwAnimationEndedCompletionSource.TrySetResult(true);
+    }
+    #endregion
+
+    #region 私有方法
+    /// <summary>
+    /// 重置动画状态
+    /// </summary>
+    private void ResetAnimationStates()
+    {
+        _animator.SetBool("Idle", false);
+        _animator.SetBool("Walk", false);
+        _animator.SetBool("Roll", false);
+    }
+
+    private void PlayIdle()
+    {
+        ResetAnimationStates();
+        _animator.SetBool("Idle", true);
+    }
+
+    private void PlayWalk()
+    {
+        ResetAnimationStates();
+        _animator.SetBool("Walk", true);
+    }
+
+    private void PlayRoll()
+    {
+        ResetAnimationStates();
+        _animator.SetBool("Roll", true);
     }
     #endregion
 }

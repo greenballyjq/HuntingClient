@@ -8,12 +8,12 @@ using UnityEngine;
 public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
-    /// 当局技能处理器
+    /// 当前技能处理器
     /// </summary>
-    private ISkillHandler _currentHandler;
+    private ISkillHandler _currentSkillHandler;
 
     /// <summary>
-    /// 当局技能上下文
+    /// 当前技能上下文
     /// </summary>
     private SkillContext _currentSkillContext;
 
@@ -21,11 +21,6 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// 技能剩余时间
     /// </summary>
     private float _remainingTime;
-
-    /// <summary>
-    /// 技能是否正在运行
-    /// </summary>
-    private bool _isRunning;
 
     /// <summary>
     /// 事件管理器
@@ -43,7 +38,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
         Skill skillData = context.SkillData;
 
         // 创建处理器
-        _currentHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
+        _currentSkillHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
 
         // 构造上下文
         _currentSkillContext = new SkillContext
@@ -55,13 +50,10 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
         Debug.Log("[SkillManager] 初始化完成");
     }
 
-    public void DoUpdate(float deltaTime)
+    public void DoUpdate(float dt)
     {
-        if (!_isRunning)
-            return;
-
-        _remainingTime -= deltaTime;
-        _currentHandler?.OnSkillUpdate(_currentSkillContext, deltaTime);
+        _remainingTime -= dt;
+        _currentSkillHandler.OnSkillUpdate(dt);
 
         if (_remainingTime <= 0f)
             EndSkill();
@@ -86,7 +78,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     public bool TryStartSkill()
     {
-        if (_currentHandler == null || _isRunning || !_energyProgressManager.UseEnergyOneBar())
+        if (!_energyProgressManager.UseEnergyOneBar())
             return false;
 
         BeginSkill();
@@ -101,18 +93,14 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private void BeginSkill()
     {
         _remainingTime = _currentSkillContext.SkillData.Duration;
-        _isRunning = true;
 
-        // 通知处理器执行开始逻辑
-        _currentHandler?.OnSkillStart(_currentSkillContext);
+        _currentSkillHandler.OnSkillStart(_currentSkillContext);
 
         TriggerSkillStarted(new SkillStartedEventArgs
         {
             Sender = this,
             SkillData = _currentSkillContext.SkillData
         });
-
-        Debug.Log($"[SkillManager] 技能开始，持续 {_remainingTime:F2} 秒");
     }
 
     /// <summary>
@@ -120,13 +108,8 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private void EndSkill()
     {
-        if (!_isRunning)
-            return;
+        _currentSkillHandler.OnSkillEnd();
 
-        // 通知处理器执行结束逻辑
-        _currentHandler?.OnSkillEnd(_currentSkillContext);
-
-        _isRunning = false;
         _remainingTime = 0f;
 
         TriggerSkillEnded(new SkillEndedEventArgs
@@ -134,13 +117,10 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
             Sender = this,
             SkillData = _currentSkillContext.SkillData
         });
-
-        Debug.Log("[SkillManager] 技能结束");
     }
     #endregion
 
     #region 事件相关
-
     /// <summary>
     /// 触发技能开始事件
     /// </summary>

@@ -25,25 +25,14 @@ public class Skill3KPHandler : ISkillHandler
     {
         var parameter = _configManager.GetSkill3KP(context.SkillData.ParamTableID);
 
-        // 注册射速和伤害倍率修正
         _weaponManager.RegisterFireRateModifier(ModifierSourceId, parameter.FireRateMultiplier);
         _weaponManager.RegisterDamageModifier(ModifierSourceId, parameter.DamageMultiplier);
     }
 
-    /// <summary>
-    /// 技能更新
-    /// </summary>
-    public void OnSkillUpdate(SkillContext context, float deltaTime)
-    {
+    public void OnSkillUpdate(float dt){}
 
-    }
-
-    /// <summary>
-    /// 技能结束
-    /// </summary>
-    public void OnSkillEnd(SkillContext context)
+    public void OnSkillEnd()
     {
-        // 注销射速和伤害倍率修正
         _weaponManager.UnregisterFireRateModifier(ModifierSourceId);
         _weaponManager.UnregisterDamageModifier(ModifierSourceId);
     }
