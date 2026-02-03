@@ -172,8 +172,8 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Arts/Audio
-        CollectorGUID: a83f16934f8809741b5501b6e597f688
+      - CollectPath: Assets/SO/HuntingAudioRefSo.asset
+        CollectorGUID: 7e7f312c5139a0543804c7fd98ff14aa
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackGroup
