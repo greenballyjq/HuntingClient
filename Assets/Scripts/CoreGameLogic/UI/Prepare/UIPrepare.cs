@@ -34,6 +34,11 @@ public class UIPrepare : UIBase
     [SerializeField] private UIComponentMapInfo _uiComponentMapInfo;
 
     /// <summary>
+    /// 准备界面测试组件
+    /// </summary>
+    [SerializeField] private UIComponentPrepareTest _uiComponentPrepareTest;
+
+    /// <summary>
     /// 开始单局按钮
     /// </summary>
     [SerializeField] private Button _buttonStartRound;
@@ -95,6 +100,7 @@ public class UIPrepare : UIBase
         _uiComponentRoleInfo.Init();
         _uiComponentSkillInfo.Init();
         _uiComponentMapInfo.Init();
+        _uiComponentPrepareTest.Init();
 
         // 默认开始单据单局按钮不可用
         _buttonStartRound.interactable = false;
@@ -111,6 +117,7 @@ public class UIPrepare : UIBase
         _uiComponentRoleInfo.CleanUp();
         _uiComponentSkillInfo.CleanUp();
         _uiComponentMapInfo.CleanUp();
+        _uiComponentPrepareTest.CleanUp();
 
         _eventManager.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
         _eventManager.RemoveListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);

@@ -8,7 +8,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "DefaultPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2026/2/3 21:35:43",
+    "PackageNote": "2026/2/4 15:56:46",
     "AssetList": [
         {
             "Address": "",
@@ -575,7 +575,7 @@
         {
             "BundleName": "assets_arts_ui_sprites_gameplay_animals.bundle",
             "UnityCRC": 0,
-            "FileHash": "89c6ba4cd7edb37de994dd17c9c28046",
+            "FileHash": "cdf2055ab247ea210a0d8860ffaaef37",
             "FileCRC": "00000000",
             "FileSize": 245450,
             "Encrypted": false,
@@ -585,9 +585,9 @@
         {
             "BundleName": "audio.bundle",
             "UnityCRC": 0,
-            "FileHash": "aa20f96db600a088d73ca163d6fede1f",
+            "FileHash": "857b7221e075d536b68ac69d3316a900",
             "FileCRC": "00000000",
-            "FileSize": 600,
+            "FileSize": 619,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -595,9 +595,9 @@
         {
             "BundleName": "effect.bundle",
             "UnityCRC": 0,
-            "FileHash": "a261e3a71dc16c762cbdecf333e6ea88",
+            "FileHash": "9c2b80f81633b5b0831add7db1335c42",
             "FileCRC": "00000000",
-            "FileSize": 11657844,
+            "FileSize": 12062684,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -605,9 +605,9 @@
         {
             "BundleName": "game.bundle",
             "UnityCRC": 0,
-            "FileHash": "9b41e8b32c5a0d66ab76af683e1658df",
+            "FileHash": "3f076820f4a9f6a41a21ca28c1073f9c",
             "FileCRC": "00000000",
-            "FileSize": 2824153,
+            "FileSize": 2713222,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -615,9 +615,9 @@
         {
             "BundleName": "ui.bundle",
             "UnityCRC": 0,
-            "FileHash": "1821d4a6e0f8f6e32bacb8f3db9a897e",
+            "FileHash": "2f6718f8e69b97ba7cb48fa0edd737ea",
             "FileCRC": "00000000",
-            "FileSize": 2251845,
+            "FileSize": 2258038,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
