@@ -365,7 +365,7 @@ public class RoundFlow : Singleton<RoundFlow>
         #endregion
 
         // 播放警报声
-        _soundManager.PlaySound2DAsync("Assets/Arts/Audio/SFX/sfx_alert").Forget();
+        //_soundManager.PlaySound2DAsync("Assets/Arts/Audio/SFX/sfx_alert").Forget();
 
         // 播放闪烁动画
         var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
@@ -378,7 +378,7 @@ public class RoundFlow : Singleton<RoundFlow>
         await uiGameplay.PlayBossHealthIncreaseAnimationAsync();
 
         // 播放Boss笑声
-        await _soundManager.PlaySound2DAsync("Assets/Arts/Audio/SFX/sfx_laugh");
+        //await _soundManager.PlaySound2DAsync("Assets/Arts/Audio/SFX/sfx_laugh");
         await UniTask.Delay(3000);
 
         // 播放倒计时动画

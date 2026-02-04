@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 
 /// <summary>
 /// 打猎应用流程
@@ -65,13 +65,11 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
-    #region 测试
     private void Start()
     {
         // TODO: 将来可能在别处调用
         StartAppAsync().Forget();
     }
-    #endregion
 
     #region 公共方法
     /// <summary>
@@ -145,8 +143,12 @@ public class HuntingAppFlow : GameAppFlow
 
         await _uiManager.PreloadUIAsync("UIPopupSettlementNormal");
 
+        Test();
+
         // TODO: 将来可能在别处调用
         await EnterPrepareAsync();
+
+        
     }
 
     /// <summary>
@@ -156,6 +158,16 @@ public class HuntingAppFlow : GameAppFlow
     protected override void OnAppRunning(float dt)
     {
         _currentRoundFlow?.DoUpdate(dt);
+    }
+    #endregion
+
+    #region 测试
+    [SerializeField] private HuntingAudioRefSo HuntingAudioRefSo;
+    [SerializeField] private AudioSource AudioSource;
+    private void Test()
+    {
+        AudioSource.clip = HuntingAudioRefSo.GetAudioFromType(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_Beatch);
+        AudioSource.Play();
     }
     #endregion
 }
