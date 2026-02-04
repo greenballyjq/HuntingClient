@@ -21,20 +21,22 @@ public class UIComponentPrepareTest : MonoBehaviour, IUIComponent
     
     public void OnCreateVideoTestButtonClicked()
     {
+
+        var systemInfo = GameServiceLocator.GetFrameworkManager<PlatformManager>().CurrentPlatform.GetSystemInfo();
+
         _wxVideo = WXBase.CreateVideo(new WXCreateVideoParam()
         {
             x = 0,
             y = 0,
-
-            width = 1920,
-            height = 1080,
+            width = (int)systemInfo.ScreenWidth,
+            height = (int)systemInfo.ScreenHeight,
 
             src = Application.streamingAssetsPath + "/YaKeDong.mp4",
-            poster = Application.streamingAssetsPath + "/YaKeDong.jpg",
+            poster = null,
 
             initialTime = 0,
             playbackRate = 1f,
-            live = false,
+
             controls = false,
             showProgress = false,
             showProgressInControlMode = false,
@@ -42,10 +44,12 @@ public class UIComponentPrepareTest : MonoBehaviour, IUIComponent
             autoplay = false,
             loop = false,
             muted = false,
-            enablePlayGesture = false,
+
             enableProgressGesture = false,
+            enablePlayGesture = false,
             showCenterPlayBtn = false,
 
+            objectFit = "cover",
             underGameView = false
         });
 
@@ -57,6 +61,12 @@ public class UIComponentPrepareTest : MonoBehaviour, IUIComponent
         _wxVideo.OnEnded(() =>
         {
             Debug.Log("播放结束");
+        });
+
+        _wxVideo.OnError(() =>
+        {
+            Debug.Log("错误");
+            _wxVideo.Destroy();
         });
 
         _wxVideo.Play();
