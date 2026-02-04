@@ -135,12 +135,14 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
             _targetSlotIndex += _roleSlots.Length;
         }
 
+        var roleId = _roleSlots[_targetSlotIndex].GetRoleId();
+
         // 触发角色选择事件
         TriggerRoleSelected(new RoleSelectedEventArgs
         {
             FromSlotIndex = fromSlotIndex,
             TargetSlotIndex = _targetSlotIndex,
-            RoleId = _roleSlots[_targetSlotIndex].GetRoleId(),
+            RoleId = roleId,
             DiceValue = _diceValue,
             RoleSlots = _roleSlots
         });
@@ -173,6 +175,12 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
 
         // 触发走格子动画结束事件
         _eventManager.Trigger(PrepareEvents.SlotAnimationEnded);
+        
+        // 触发角色选择结束事件
+        _eventManager.Trigger(PrepareEvents.RoleSelectedEnd, new RoleSelectedOverEventArgs
+        {
+            RoleType = _configManager.GetRole(roleId).RoleType,
+        });
 
         // 销毁骰子
         diceAnimation.DestroyDice();

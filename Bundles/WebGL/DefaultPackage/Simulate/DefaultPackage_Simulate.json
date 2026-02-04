@@ -8,7 +8,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "DefaultPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2026/2/4 15:56:46",
+    "PackageNote": "2026/2/4 20:40:00",
     "AssetList": [
         {
             "Address": "",
@@ -575,7 +575,7 @@
         {
             "BundleName": "assets_arts_ui_sprites_gameplay_animals.bundle",
             "UnityCRC": 0,
-            "FileHash": "cdf2055ab247ea210a0d8860ffaaef37",
+            "FileHash": "cc2ff33ece14fff1ccfff90099352f84",
             "FileCRC": "00000000",
             "FileSize": 245450,
             "Encrypted": false,
@@ -585,9 +585,9 @@
         {
             "BundleName": "audio.bundle",
             "UnityCRC": 0,
-            "FileHash": "857b7221e075d536b68ac69d3316a900",
+            "FileHash": "94f0bf255ee71e165334767eec0f6871",
             "FileCRC": "00000000",
-            "FileSize": 619,
+            "FileSize": 6311,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -595,7 +595,7 @@
         {
             "BundleName": "effect.bundle",
             "UnityCRC": 0,
-            "FileHash": "9c2b80f81633b5b0831add7db1335c42",
+            "FileHash": "0365a0f26046b5e1b9d3cbd316826506",
             "FileCRC": "00000000",
             "FileSize": 12062684,
             "Encrypted": false,
@@ -605,9 +605,9 @@
         {
             "BundleName": "game.bundle",
             "UnityCRC": 0,
-            "FileHash": "3f076820f4a9f6a41a21ca28c1073f9c",
+            "FileHash": "fe0d9037de8528bad1971ae5f02a9fea",
             "FileCRC": "00000000",
-            "FileSize": 2713222,
+            "FileSize": 2824180,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -615,9 +615,9 @@
         {
             "BundleName": "ui.bundle",
             "UnityCRC": 0,
-            "FileHash": "2f6718f8e69b97ba7cb48fa0edd737ea",
+            "FileHash": "532c5dd74c858980314bac6988c9d2d9",
             "FileCRC": "00000000",
-            "FileSize": 2258038,
+            "FileSize": 2262062,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

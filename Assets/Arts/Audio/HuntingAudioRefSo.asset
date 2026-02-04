@@ -13,7 +13,139 @@ MonoBehaviour:
   m_Name: HuntingAudioRefSo
   m_EditorClassIdentifier: 
   audioRefList:
-  - type: 1
+  - type: 0
     clip: {fileID: 8300000, guid: d8f78674b1ff9aa41a83ab68b323421d, type: 3}
   - type: 1
     clip: {fileID: 8300000, guid: a8d608ddbc18c5142a481273da2343e3, type: 3}
+  - type: 2
+    clip: {fileID: 8300000, guid: 4b0ff31e314ea0a43a5f1b31f1e8da01, type: 3}
+  - type: 3
+    clip: {fileID: 8300000, guid: b589d56465bfd234ca227a64c2b92613, type: 3}
+  - type: 4
+    clip: {fileID: 8300000, guid: a8beeba577de5474894751d7525f30d8, type: 3}
+  - type: 5
+    clip: {fileID: 8300000, guid: dc3d28f76951e7c4187728d4edf8b810, type: 3}
+  - type: 6
+    clip: {fileID: 8300000, guid: b22422fbe1c38b54cbc2d07516d7745a, type: 3}
+  - type: 6
+    clip: {fileID: 8300000, guid: b22422fbe1c38b54cbc2d07516d7745a, type: 3}
+  - type: 7
+    clip: {fileID: 8300000, guid: 9ab6096e2e20c2c4cb1507e8c72b2229, type: 3}
+  - type: 8
+    clip: {fileID: 8300000, guid: 7fbdebaab2c685a4bae0ade2e2db83e5, type: 3}
+  - type: 9
+    clip: {fileID: 8300000, guid: dccf01eb9ecd0604285e179ead7d5565, type: 3}
+  - type: 10
+    clip: {fileID: 8300000, guid: fe97d608792e8ad4da5db078808f7b8b, type: 3}
+  - type: 11
+    clip: {fileID: 8300000, guid: 08f4ec2f675394149bf0450c4e1844c2, type: 3}
+  - type: 12
+    clip: {fileID: 0}
+  - type: 13
+    clip: {fileID: 8300000, guid: ef208277f15b31f4ba394f7c7075652a, type: 3}
+  - type: 14
+    clip: {fileID: 8300000, guid: f5abca9a513a79846b06ad0856093917, type: 3}
+  - type: 15
+    clip: {fileID: 8300000, guid: 7a1b019fa0e103741a5075cc495f29d0, type: 3}
+  - type: 16
+    clip: {fileID: 8300000, guid: a7b1f20f5ccfe3540825f56e279280ff, type: 3}
+  - type: 17
+    clip: {fileID: 8300000, guid: be05fa8717179984584350cb9f2ac9ca, type: 3}
+  - type: 18
+    clip: {fileID: 8300000, guid: be05fa8717179984584350cb9f2ac9ca, type: 3}
+  - type: 19
+    clip: {fileID: 8300000, guid: 9ab6096e2e20c2c4cb1507e8c72b2229, type: 3}
+  - type: 20
+    clip: {fileID: 8300000, guid: a0e8e52446aef7049a7bc875eac24f20, type: 3}
+  - type: 21
+    clip: {fileID: 8300000, guid: 37511b24bed5ab84b84fce6c52dbcc48, type: 3}
+  - type: 22
+    clip: {fileID: 0}
+  - type: 23
+    clip: {fileID: 8300000, guid: 7a999e2f66b5e874aaa0e178e3d29ebd, type: 3}
+  - type: 24
+    clip: {fileID: 0}
+  - type: 25
+    clip: {fileID: 8300000, guid: a2e0a7d2f1bae0b4d909ee865479a270, type: 3}
+  - type: 26
+    clip: {fileID: 8300000, guid: aed645f33374d1247bf04a786f22ea7e, type: 3}
+  - type: 27
+    clip: {fileID: 8300000, guid: 443f9d0b22d3f064082dde4ae2f11110, type: 3}
+  - type: 28
+    clip: {fileID: 8300000, guid: 90854faae4091964eadb1a7bf0f12e38, type: 3}
+  - type: 29
+    clip: {fileID: 8300000, guid: 2996b96a57df050469c3da68cb7d680c, type: 3}
+  - type: 30
+    clip: {fileID: 0}
+  - type: 31
+    clip: {fileID: 8300000, guid: b62b895335360394d908530511eabf3d, type: 3}
+  - type: 32
+    clip: {fileID: 8300000, guid: 7824d4eb9e00b9d4c92b43954283c01e, type: 3}
+  - type: 33
+    clip: {fileID: 8300000, guid: 878cc3522d0e72b4487f657b79857ec8, type: 3}
+  - type: 34
+    clip: {fileID: 8300000, guid: b89dd514a52a1d8479e3c2b09667d30b, type: 3}
+  - type: 35
+    clip: {fileID: 8300000, guid: b527550ccc1cdd6498d0c1857658afb3, type: 3}
+  - type: 36
+    clip: {fileID: 8300000, guid: fe5c829376368e443bfbe6c8d539e5bc, type: 3}
+  - type: 37
+    clip: {fileID: 8300000, guid: 8090d8469b4c06648a9df61b09023533, type: 3}
+  - type: 38
+    clip: {fileID: 8300000, guid: f5546d04e69e9c94fa19ca3e8043c333, type: 3}
+  - type: 39
+    clip: {fileID: 8300000, guid: 4e4409021360d6f4b8a83fcb638c64ec, type: 3}
+  - type: 40
+    clip: {fileID: 8300000, guid: 7a999e2f66b5e874aaa0e178e3d29ebd, type: 3}
+  - type: 41
+    clip: {fileID: 8300000, guid: b0b38c81ec504b243b63e2df2f249239, type: 3}
+  - type: 42
+    clip: {fileID: 8300000, guid: 5d2e46d761102a5438388c5789aa2173, type: 3}
+  - type: 43
+    clip: {fileID: 8300000, guid: 09b4b870a5912d14198106dcbf5678bf, type: 3}
+  - type: 44
+    clip: {fileID: 8300000, guid: 4fabb5e4cf8ad734b9c6d9b8744e1287, type: 3}
+  - type: 45
+    clip: {fileID: 8300000, guid: a79c4606a490017488a3a04eb68e36af, type: 3}
+  - type: 46
+    clip: {fileID: 8300000, guid: c57263e64658d2541b3fb2329460f6bc, type: 3}
+  - type: 47
+    clip: {fileID: 8300000, guid: a7096653f8c401947a58a391c5e7def8, type: 3}
+  - type: 48
+    clip: {fileID: 8300000, guid: 3d4b687a04de3be49beed4b9a92d9a80, type: 3}
+  - type: 49
+    clip: {fileID: 8300000, guid: c453942ab5d34e04781698bbb7f71436, type: 3}
+  - type: 50
+    clip: {fileID: 8300000, guid: 7a7533a1073e2af4eb7654b05fd71821, type: 3}
+  - type: 51
+    clip: {fileID: 8300000, guid: 7169368d7ce7aaa49a4d89dc3548d1e7, type: 3}
+  - type: 52
+    clip: {fileID: 8300000, guid: bed11f29aa1640241b1860066c10fc3c, type: 3}
+  - type: 53
+    clip: {fileID: 8300000, guid: 894a14aeedcaa0c478fff9b7723c1fd3, type: 3}
+  - type: 54
+    clip: {fileID: 8300000, guid: bec743dd1c2131747bf741510ad24689, type: 3}
+  - type: 55
+    clip: {fileID: 8300000, guid: 76a35bd849ef3f74085c74b03b813bc2, type: 3}
+  - type: 56
+    clip: {fileID: 8300000, guid: f26cf80500a5b874abd267acd559e171, type: 3}
+  - type: 57
+    clip: {fileID: 8300000, guid: a77adc6eef7388d4a8db464655271621, type: 3}
+  - type: 58
+    clip: {fileID: 8300000, guid: 4a6142df7b6d77b429eac2f3213dac25, type: 3}
+  - type: 59
+    clip: {fileID: 8300000, guid: c6d952f16e60f544eb01a45f408ad2e5, type: 3}
+  - type: 60
+    clip: {fileID: 8300000, guid: 3022e6257134d5940ae6396b026937e8, type: 3}
+  - type: 61
+    clip: {fileID: 8300000, guid: 6614d0e6cf73c4343959ef945030dbf0, type: 3}
+  - type: 62
+    clip: {fileID: 8300000, guid: 5e93a28022d35724fad3ac5a23da9839, type: 3}
+  - type: 63
+    clip: {fileID: 8300000, guid: 044e2fa877f758242b85f7921ff88283, type: 3}
+  - type: 64
+    clip: {fileID: 8300000, guid: 7c437e114e1cb4943b6277deae0b93eb, type: 3}
+  - type: 65
+    clip: {fileID: 8300000, guid: 9136e11cca7c13e469d08856d220de57, type: 3}
+  - type: 66
+    clip: {fileID: 8300000, guid: 9136e11cca7c13e469d08856d220de57, type: 3}
