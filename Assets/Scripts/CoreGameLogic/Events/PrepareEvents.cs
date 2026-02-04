@@ -1,4 +1,5 @@
-﻿using GameFramework.Core;
+﻿using cfg.HuntingConfig.Enum;
+using GameFramework.Core;
 using GameFramework.Game;
 
 /// <summary>
@@ -30,6 +31,11 @@ public static class PrepareEvents
     /// 走格子动画结束事件
     /// </summary>
     public static readonly EventKey SlotAnimationEnded = new EventKey();
+    
+    /// <summary>
+    /// 角色选中结束事件
+    /// </summary>
+    public static readonly EventKey<RoleSelectedOverEventArgs> RoleSelectedEnd = new EventKey<RoleSelectedOverEventArgs>();
 }
 
 /// <summary>
@@ -61,4 +67,12 @@ public sealed class RoleSelectedEventArgs : EventArgs
     /// 角色格子列表
     /// </summary>
     public UIComponentRoleSlot[] RoleSlots { get; set; }
+}
+
+/// <summary>
+/// 角色选中结束事件参数
+/// </summary>
+public sealed class RoleSelectedOverEventArgs : EventArgs
+{
+    public ERoleType RoleType { get; set; }
 }

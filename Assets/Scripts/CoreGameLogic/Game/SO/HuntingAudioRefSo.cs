@@ -81,19 +81,19 @@ public class HuntingAudioRefSo : ScriptableObject
         Skill_JinZhuangYuan,
 
         /// <summary>金状元专属地图丰收技音效</summary>
-        Skill_JinZhuangYuanUnique,
+        Skill_JinZhuangYuan_UniqueMap,
 
         /// <summary>亚克东丰收技音效</summary>
         Skill_YaKeDong,
 
         /// <summary>亚克东专属地图丰收技音效</summary>
-        Skill_YaKeDongUnique,
+        Skill_YaKeDong_UniqueMap,
 
         /// <summary>紫薇丰收技音效</summary>
         Skill_ZiWei,
 
         /// <summary>紫薇专属地图丰收技音效（预备）</summary>
-        Skill_ZiWeiUniqueMape_Before,
+        Skill_ZiWeiUniqueMap_Before,
 
         /// <summary>紫薇专属地图丰收技音效（射击）</summary>
         Skill_ZiWeiUniqueMap_After,
@@ -190,7 +190,61 @@ public class HuntingAudioRefSo : ScriptableObject
 
         /// <summary>大美丽游戏结算</summary>
         IP_DaMeiLi_Settlement,
+        
+        /// <summary>金状元个性化台词 - 被选中触发</summary>
+        IP_JinZhuangYuan_Selected,
 
+        /// <summary>金状元自我个性语 - 常规地图开场白</summary>
+        IP_JinZhuangYuan_Opening,
+
+        /// <summary>金状元自我个性语 - 专属地图开场白</summary>
+        IP_JinZhuangYuan_UniqueMap_Opening,
+
+        /// <summary>金状元使用道具A-炮火轰炸</summary>
+        IP_JinZhuangYuan_UseProps_Bombardment,
+
+        /// <summary>金状元使用道具B-指哪打哪</summary>
+        IP_JinZhuangYuan_UseProps_AimAssist,
+
+        /// <summary>金状元使用道具C-智能诱捕陷阱</summary>
+        IP_JinZhuangYuan_UseProps_Trap,
+
+        /// <summary>金状元使用丰收技时，在两句中随机抓取一条</summary>
+        IP_JinZhuangYuan_UseSkill_1,
+
+        /// <summary>金状元使用丰收技时，在两句中随机抓取一条</summary>
+        IP_JinZhuangYuan_UseSkill_2,
+
+        /// <summary>金状元游戏结算</summary>
+        IP_JinZhuangYuan_Settlement,
+
+        
+        /// <summary>亚克东个性化台词 - 被选中触发</summary>
+        IP_YaKeDong_Selected,
+
+        /// <summary>亚克东自我个性语 - 常规地图开场白</summary>
+        IP_YaKeDong_Opening,
+
+        /// <summary>亚克东自我个性语 - 专属地图开场白</summary>
+        IP_YaKeDong_UniqueMap_Opening,
+
+        /// <summary>亚克东使用道具A-炮火轰炸</summary>
+        IP_YaKeDong_UseProps_Bombardment,
+
+        /// <summary>亚克东使用道具B-指哪打哪</summary>
+        IP_YaKeDong_UseProps_AimAssist,
+
+        /// <summary>亚克东使用道具C-智能诱捕陷阱</summary>
+        IP_YaKeDong_UseProps_Trap,
+
+        /// <summary>亚克东使用丰收技时，在两句中随机抓取一条</summary>
+        IP_YaKeDong_UseSkill_1,
+
+        /// <summary>亚克东使用丰收技时，在两句中随机抓取一条</summary>
+        IP_YaKeDong_UseSkill_2,
+
+        /// <summary>亚克东游戏结算</summary>
+        IP_YaKeDong_Settlement,
         #endregion
     }
 

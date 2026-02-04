@@ -1,4 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using CoreGameLogic.Managers.AppManagers;
+using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;
 using UnityEngine;
@@ -10,6 +12,12 @@ public class HuntingAppFlow : GameAppFlow
 {
     private static HuntingAppFlow _instance;
     public static HuntingAppFlow Instance => _instance;
+
+    public event EventHandler<OnRoundEnteredEventArgs> OnRoundEntered;
+    public sealed class OnRoundEnteredEventArgs : EventArgs
+    {
+        public RoundContext RoundContext { get; set; }
+    }
 
     private void Awake()
     {
@@ -65,6 +73,11 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
+    /// <summary>
+    /// 打猎音效管理器
+    /// </summary>
+    private HuntingSoundManager _huntingSoundManager => GameServiceLocator.GetAppManager<HuntingSoundManager>();
+
     private void Start()
     {
         // TODO: 将来可能在别处调用
@@ -100,7 +113,15 @@ public class HuntingAppFlow : GameAppFlow
         await _currentRoundFlow.StartRound(context);
         
         _currentState = HuntingAppFlowState.Round;
+        OnRoundEntered?.Invoke(this, new OnRoundEnteredEventArgs { RoundContext = context });
     }
+
+    /// <summary>
+    /// 获取单局流
+    /// </summary>
+    /// <returns></returns>
+    public RoundFlow GetCurrentRoundFlow() => _currentRoundFlow;
+    
     #endregion
 
     #region 私有方法
@@ -121,6 +142,8 @@ public class HuntingAppFlow : GameAppFlow
         RegisterAppManager(new PlayerDataManager());
         RegisterAppManager(new InputManager());
         RegisterAppManager(new CameraManager());
+        
+        RegisterAppManager(new HuntingSoundManager());
         
     }
     #endregion
@@ -164,10 +187,11 @@ public class HuntingAppFlow : GameAppFlow
     #region 测试
     [SerializeField] private HuntingAudioRefSo HuntingAudioRefSo;
     [SerializeField] private AudioSource AudioSource;
+    
     private void Test()
     {
-        AudioSource.clip = HuntingAudioRefSo.GetAudioFromType(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_Beatch);
-        AudioSource.Play();
+        // AudioSource.clip = HuntingAudioRefSo.GetAudioFromType(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_Beatch);
+        // AudioSource.Play();
     }
     #endregion
 }

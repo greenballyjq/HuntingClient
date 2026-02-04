@@ -1,4 +1,5 @@
-﻿using GameFramework.Core.UI;
+﻿using CoreGameLogic.Managers.AppManagers;
+using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -135,7 +136,7 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
             //await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
             //_settlementRewardManager.CalculateReward();
             
-
+            // huntingSoundManager.PlaySound2D()
             // 正式代码
             await HuntingAppFlow.Instance.EnterPrepareAsync();
         }

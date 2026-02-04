@@ -416,6 +416,13 @@ public class RoundFlow : Singleton<RoundFlow>
 
         _currentState = RoundFlowState.None;
     }
+    
+    /// <summary>
+    /// 获取当前单局上下文
+    /// </summary>
+    /// <returns>单局上下文</returns>
+    public RoundContext GetCurrentRoundContext() => _currentRoundContext;
+    
     #endregion
 
     #region 私有方法
