@@ -88,13 +88,13 @@ namespace CoreGameLogic.Managers.AppManagers
             _eventManager.AddListener(SkillEvents.SkillStarted, OnSkillStarted);
             _eventManager.AddListener(SettlementEvents.SettlementStarted, OnSettlementStarted);
             _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
-            _eventManager.AddListener(RoundEvents.RoundStarted, OnRoundStared);
             _eventManager.AddListener(BulletEvents.BulletHit, OnBulletHit);
             _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
             _eventManager.AddListener(PropEvents.TrapTriggered, OnTrapTriggered);
             _eventManager.AddListener(HiddenMapEvents.HiddenMapEntered, OnHiddenMapEntered);
+            _eventManager.AddListener(QuestEvents.QuestDispatched, OnQuestDispatched);
         }
-
+        
         /// <summary>
         /// 取消订阅事件
         /// </summary>
@@ -105,12 +105,10 @@ namespace CoreGameLogic.Managers.AppManagers
             _eventManager.RemoveListener(SkillEvents.SkillStarted, OnSkillStarted);
             _eventManager.RemoveListener(SettlementEvents.SettlementStarted, OnSettlementStarted);
             _eventManager.RemoveListener(RoundEvents.RoundEntered, OnRoundEntered);
-            _eventManager.RemoveListener(RoundEvents.RoundStarted, OnRoundStared);
             _eventManager.RemoveListener(BulletEvents.BulletHit, OnBulletHit);
             _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
-            _eventManager.RemoveListener(PropEvents.TrapTriggered, OnTrapTriggered);
-            _eventManager.RemoveListener(HiddenMapEvents.HiddenMapEntered, OnHiddenMapEntered);
-
+            _eventManager.RemoveListener(QuestEvents.QuestDispatched, OnQuestDispatched);
+            _eventManager.RemoveListener(QuestEvents.QuestCompleted, OnQuestComplete);
         }
 
         /// <summary>
@@ -128,11 +126,6 @@ namespace CoreGameLogic.Managers.AppManagers
         /// </summary>
         /// <param name="args"></param>
         private void OnRoundEntered(RoundEnteredEventArgs args)
-        {
-            
-        }
-
-        private void OnRoundStared(RoundStartedEventArgs args)
         {
             var roundContext = args.RoundContext;
             var roleType = roundContext.RoleData.RoleType;
@@ -174,6 +167,24 @@ namespace CoreGameLogic.Managers.AppManagers
         private void OnHiddenMapEntered()
         {
             PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_SnowMountain);
+        }
+        
+        /// <summary>
+        /// 动态人物派发音效播放事件
+        /// </summary>
+        /// <param name="args"></param>
+        private void OnQuestDispatched(QuestDispatchedEventArgs args)
+        {
+            PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Quest_Start);
+        }
+        
+        /// <summary>
+        /// 动态任务完成音效播放事件
+        /// </summary>
+        /// <param name="args"></param>
+        private void OnQuestComplete(QuestCompletedEventArgs args)
+        {
+            PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Quest_Complete);
         }
 
         /// <summary>
