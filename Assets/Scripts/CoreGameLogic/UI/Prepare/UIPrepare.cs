@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using WeChatWASM;
 
 /// <summary>
 /// 准备界面
@@ -67,6 +68,11 @@ public class UIPrepare : UIBase
     /// UI管理器
     /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
+
+    /// <summary>
+    /// 平台管理器
+    /// </summary>
+    private PlatformManager _platformManager => GameServiceLocator.GetFrameworkManager<PlatformManager>();
 
     /// <summary>
     /// 当前选中的角色ID
@@ -180,22 +186,40 @@ public class UIPrepare : UIBase
         Map mapData = _configManager.GetMap(mapId);
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
 
-        // TODO: 测试，未来根据不同地图加载不同场景，以及判断是否有隐藏地图
-        SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
+        (_platformManager.CurrentPlatform as WeChatPlatform).WXCreateVideo(Application.streamingAssetsPath + "/" + roleData.VideoResourcePath, null, (video) =>
         {
-            Close();
-            HuntingAppFlow.Instance.EnterRound(new RoundContext
+            video.OnEnded(() =>
             {
-                RoleData = roleData,
-                MapData = mapData,
-                SkillData = skillData,
-                LuckyBuffData = _currentLuckyBuffData,
-                HasLinkage = roleData.LinkedMapId == mapId,
-                HasHiddenMap = true,
-                HiddenMapData = _configManager.GetMap(EMapType.Hidden)
-            }).Forget();
-            DynamicGI.UpdateEnvironment();
-        };
+                SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
+                {
+
+                    HuntingAppFlow.Instance.EnterRound(new RoundContext
+                    {
+                        RoleData = roleData,
+                        MapData = mapData,
+                        SkillData = skillData,
+                        LuckyBuffData = _currentLuckyBuffData,
+                        HasLinkage = roleData.LinkedMapId == mapId,
+                        HasHiddenMap = true,
+                        HiddenMapData = _configManager.GetMap(EMapType.Hidden)
+                    }).Forget();
+                    DynamicGI.UpdateEnvironment();
+                };
+
+                video.Destroy();
+            });
+
+            SceneManager.LoadSceneAsync("VideoScene").completed += (ao) =>
+            {
+                Close();
+
+                video.x = 0;
+                video.y = 0;
+
+                video.Play();
+            };
+             
+        });
     }
 
     /// <summary>

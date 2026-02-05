@@ -219,6 +219,7 @@ public class RoundFlow : Singleton<RoundFlow>
             RoundContext = _currentRoundContext
         });
 
+
         // 播放倒计时动画
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync();

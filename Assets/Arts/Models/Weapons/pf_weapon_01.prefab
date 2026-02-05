@@ -94,8 +94,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6257114471290374843}
-  - component: {fileID: 1300827369107449358}
-  - component: {fileID: 6488649499310154879}
+  - component: {fileID: 8261380921547600607}
+  - component: {fileID: 3461676436977371545}
   m_Layer: 0
   m_Name: pf_weapon_01
   m_TagString: Untagged
@@ -119,7 +119,7 @@ Transform:
   - {fileID: 3837196048367303090}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1300827369107449358
+--- !u!114 &8261380921547600607
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rotationSpeed: 60
   _firePoint: {fileID: 8482113958655312128}
---- !u!114 &6488649499310154879
+--- !u!114 &3461676436977371545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firePoint: {fileID: 8482113958655312128}
-  aimLineColor: {r: 1, g: 0, b: 0, a: 1}
+  aimLineColor: {r: 0.4838608, g: 1, b: 0.3820755, a: 1}
   aimLineWidth: 0.05
   aimLineLength: 40
 --- !u!1 &6944680695074845829

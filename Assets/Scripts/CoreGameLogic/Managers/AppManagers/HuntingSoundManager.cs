@@ -88,6 +88,7 @@ namespace CoreGameLogic.Managers.AppManagers
             _eventManager.AddListener(SkillEvents.SkillStarted, OnSkillStarted);
             _eventManager.AddListener(SettlementEvents.SettlementStarted, OnSettlementStarted);
             _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
+            _eventManager.AddListener(RoundEvents.RoundStarted, OnRoundStared);
             _eventManager.AddListener(BulletEvents.BulletHit, OnBulletHit);
             _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
             _eventManager.AddListener(PropEvents.TrapTriggered, OnTrapTriggered);
@@ -104,8 +105,12 @@ namespace CoreGameLogic.Managers.AppManagers
             _eventManager.RemoveListener(SkillEvents.SkillStarted, OnSkillStarted);
             _eventManager.RemoveListener(SettlementEvents.SettlementStarted, OnSettlementStarted);
             _eventManager.RemoveListener(RoundEvents.RoundEntered, OnRoundEntered);
+            _eventManager.RemoveListener(RoundEvents.RoundStarted, OnRoundStared);
             _eventManager.RemoveListener(BulletEvents.BulletHit, OnBulletHit);
             _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
+            _eventManager.RemoveListener(PropEvents.TrapTriggered, OnTrapTriggered);
+            _eventManager.RemoveListener(HiddenMapEvents.HiddenMapEntered, OnHiddenMapEntered);
+
         }
 
         /// <summary>
@@ -123,6 +128,11 @@ namespace CoreGameLogic.Managers.AppManagers
         /// </summary>
         /// <param name="args"></param>
         private void OnRoundEntered(RoundEnteredEventArgs args)
+        {
+            
+        }
+
+        private void OnRoundStared(RoundStartedEventArgs args)
         {
             var roundContext = args.RoundContext;
             var roleType = roundContext.RoleData.RoleType;
