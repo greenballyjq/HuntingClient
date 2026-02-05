@@ -8,7 +8,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "DefaultPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2026/2/5 12:47:11",
+    "PackageNote": "2026/2/5 18:08:58",
     "AssetList": [
         {
             "Address": "",
@@ -1303,7 +1303,7 @@
         {
             "BundleName": "assets_arts_ui_sprites_gameplay_animals.bundle",
             "UnityCRC": 0,
-            "FileHash": "89c6ba4cd7edb37de994dd17c9c28046",
+            "FileHash": "cdf2055ab247ea210a0d8860ffaaef37",
             "FileCRC": "00000000",
             "FileSize": 245450,
             "Encrypted": false,
@@ -1313,9 +1313,9 @@
         {
             "BundleName": "assets_artstemp_environments_map_01_materials.bundle",
             "UnityCRC": 0,
-            "FileHash": "1c5eb9053f75ad88b0966129c7270d03",
+            "FileHash": "f2725a2a70b780ecbccb5e80872e7a6d",
             "FileCRC": "00000000",
-            "FileSize": 22788,
+            "FileSize": 21987,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -1323,9 +1323,9 @@
         {
             "BundleName": "assets_artstemp_environments_map_01_prefabs.bundle",
             "UnityCRC": 0,
-            "FileHash": "78b00389da103c6164c0b6986a5c950c",
+            "FileHash": "bf2da62f03648c1783cd68cc2a8b08cf",
             "FileCRC": "00000000",
-            "FileSize": 50419,
+            "FileSize": 49678,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -1333,7 +1333,7 @@
         {
             "BundleName": "assets_artstemp_environments_map_01_textures.bundle",
             "UnityCRC": 0,
-            "FileHash": "919c3fc1b3124acca5896de4a16e5690",
+            "FileHash": "89a27ce9664842534418afcdaaeb64ae",
             "FileCRC": "00000000",
             "FileSize": 11035301,
             "Encrypted": false,
@@ -1343,9 +1343,9 @@
         {
             "BundleName": "assets_artstemp_environments_map_02.bundle",
             "UnityCRC": 0,
-            "FileHash": "51edd85a48ba6a7f436d5637e4d229f2",
+            "FileHash": "5354d38217c1bcfa0714d86b6f825d45",
             "FileCRC": "00000000",
-            "FileSize": 2112617,
+            "FileSize": 2112795,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -1353,9 +1353,9 @@
         {
             "BundleName": "assets_artstemp_environments_map_02_materials.bundle",
             "UnityCRC": 0,
-            "FileHash": "717da06439a2b4089c9a1fcbea438fa6",
+            "FileHash": "05a584a83ac77728b83fada8cb486bba",
             "FileCRC": "00000000",
-            "FileSize": 1054,
+            "FileSize": 1093,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -1363,7 +1363,7 @@
         {
             "BundleName": "audio.bundle",
             "UnityCRC": 0,
-            "FileHash": "aa20f96db600a088d73ca163d6fede1f",
+            "FileHash": "857b7221e075d536b68ac69d3316a900",
             "FileCRC": "00000000",
             "FileSize": 52018725,
             "Encrypted": false,
@@ -1373,9 +1373,9 @@
         {
             "BundleName": "effect.bundle",
             "UnityCRC": 0,
-            "FileHash": "a261e3a71dc16c762cbdecf333e6ea88",
+            "FileHash": "9c2b80f81633b5b0831add7db1335c42",
             "FileCRC": "00000000",
-            "FileSize": 11657844,
+            "FileSize": 12062684,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -1383,9 +1383,9 @@
         {
             "BundleName": "game.bundle",
             "UnityCRC": 0,
-            "FileHash": "9b41e8b32c5a0d66ab76af683e1658df",
+            "FileHash": "3f076820f4a9f6a41a21ca28c1073f9c",
             "FileCRC": "00000000",
-            "FileSize": 2824153,
+            "FileSize": 2713270,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -1393,9 +1393,9 @@
         {
             "BundleName": "ui.bundle",
             "UnityCRC": 0,
-            "FileHash": "1821d4a6e0f8f6e32bacb8f3db9a897e",
+            "FileHash": "2f6718f8e69b97ba7cb48fa0edd737ea",
             "FileCRC": "00000000",
-            "FileSize": 2255867,
+            "FileSize": 2267599,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

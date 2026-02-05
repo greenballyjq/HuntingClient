@@ -161,7 +161,7 @@ MonoBehaviour:
     ShowFPS: 0
     ResourceLoadMode: 0
     IsCDNEnabled: 1
-    CDNUrl: https://bakafunky-1303839359.cos.ap-guangzhou.myqcloud.com/game/hunt/yoo/DefaultPackage
+    CDNUrl: https://3kp-panggu-1342832102.cos.ap-shanghai.myqcloud.com/game/hunt/yoo/DefaultPackage
     loading: {fileID: 136192759375765479}
   _updatePanel: {fileID: 0}
   _progressBar: {fileID: 0}

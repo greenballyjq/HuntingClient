@@ -209,8 +209,8 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
 
             positionList.Add(_roleSlots[currentIndex].GetPosition());
 
-            // 5 0 1 朝右,2 3 4 朝左
-            directionList.Add(currentIndex == 5 || currentIndex <= 1);
+            // 0 1 2朝右，3 4 5朝左
+            directionList.Add(currentIndex <= 2);
         }
 
         positions = positionList.ToArray();

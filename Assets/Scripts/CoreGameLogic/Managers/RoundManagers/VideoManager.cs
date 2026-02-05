@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
+using WeChatWASM;
 
 public class VideoManager : IRoundManager
 {
@@ -9,33 +10,61 @@ public class VideoManager : IRoundManager
     private PlatformManager _platformManager => GameServiceLocator.GetFrameworkManager<PlatformManager>();
 
     /// <summary>
-    /// 单局上下文
+    /// 视频组件
     /// </summary>
-    private RoundContext _roundContext;
+    private WXVideo _video;
 
     public void Init(RoundContext context)
     {
-        _roundContext = context;
+        CreateVideo(context);
     }
 
     public void Dispose(){}
 
-    /// <summary>
-    /// 播放角色CG
-    /// </summary>
-    public void PlayRoleCG(Action OnEnded)
+    public async UniTask PlayRoleCGAsync()
     {
-        (_platformManager.CurrentPlatform as WeChatPlatform).WXCreateVideo(Application.streamingAssetsPath + "/" + _roundContext.RoleData.VideoResourcePath, null,
-        (video) =>
+        var completionSource = new UniTaskCompletionSource();
+
+        _video.OnPlay(() =>
         {
-            video.OnEnded(() =>
-            {
-                Debug.Log("视频播放结束");
-                video.Destroy();
-                video = null;
-                Debug.Log("触发结束事件");
-                OnEnded.Invoke();
-            });
+            Debug.LogWarning("[VideoManager] 视频开始播放");
         });
+
+        _video.OnEnded(() =>
+        {
+            _video.Destroy();
+            _video = null;
+            completionSource.TrySetResult();
+
+            Debug.LogWarning("[VideoManager] 视频播放结束");
+        });
+
+        _video.x = 0;
+        _video.y = 0;
+        _video.Play();
+
+        await completionSource.Task;
+    }
+
+    /// <summary>
+    /// 创建视频组件
+    /// </summary>
+    /// <param name="context">单局上下文</param>
+    private void CreateVideo(RoundContext context)
+    {
+        float beginTime = Time.time;
+        Debug.LogWarning($"[VideoManager] 创建视频开始时间{beginTime}");
+        Debug.LogWarning(Application.streamingAssetsPath + "/" + context.RoleData.VideoResourcePath);
+
+        (_platformManager.CurrentPlatform as WeChatPlatform).WXCreateVideo(
+           Application.streamingAssetsPath + "/" + context.RoleData.VideoResourcePath,
+           null, 
+           (video) =>
+           {
+               Debug.LogWarning("[VideoManager] 创建视频成功" + " " + video + " " + _video);
+               Debug.LogWarning($"[VideoManager] 创建视频结束时间{Time.time}， 耗时{Time.time - beginTime}");
+               _video = video;
+           }
+        );
     }
 }

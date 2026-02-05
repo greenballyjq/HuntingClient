@@ -9,49 +9,43 @@ public class UIComponentPrepareTest : MonoBehaviour, IUIComponent
 {
     [SerializeField] private Button _buttonCreateVideoTest;
 
-    private WXVideo _wxVideo;
+    private PlatformManager _platformManager => GameServiceLocator.GetFrameworkManager<PlatformManager>();
 
-    private UIManager _uiManager => GameServiceLocator.UIManager;
+
+    private WXVideo _wxVideo;
 
     public void Init()
     {
        _buttonCreateVideoTest.onClick.AddListener(OnCreateVideoTestButtonClicked);
 
-        var systemInfo = GameServiceLocator.GetFrameworkManager<PlatformManager>().CurrentPlatform.GetSystemInfo();
+        float beginTime = Time.time;
+        Debug.LogWarning($"[UIComponentPrepareTest] 创建视频开始时间{beginTime}");
 
-        _wxVideo = WXBase.CreateVideo(new WXCreateVideoParam()
+        Debug.LogWarning(Application.streamingAssetsPath + "/DaMeiLi.mp4");
+
+        (_platformManager.CurrentPlatform as WeChatPlatform).WXCreateVideo(Application.streamingAssetsPath + "/YaKeDong.mp4", null, (video) =>
         {
-            width = (int)systemInfo.ScreenWidth,
-            height = (int)systemInfo.ScreenHeight,
+            _wxVideo = video;
 
-            src = Application.streamingAssetsPath + "/YaKeDongA.mp4",
-            poster = null,
+            Debug.LogWarning("[UIComponentPrepareTest] 创建视频成功" + " " + video + " " + _wxVideo);
 
-            autoplay = false,
-            muted = false,
+            Debug.LogWarning($"[UIComponentPrepareTest] 创建视频结束时间{Time.time}， 耗时{Time.time - beginTime}");
 
-            objectFit = "cover",
-            underGameView = true,
+            video.OnPlay(() =>
+            {
+                Debug.LogWarning("[UIComponentPrepareTest] 视频开始播放");
+            });
 
-            controls = false,
-            showProgress = false,
-            showProgressInControlMode = false,
-            enableProgressGesture = false,
-            enablePlayGesture = false,
-            showCenterPlayBtn = false,
+            
+
+            video.OnEnded(() =>
+            {
+                Debug.LogWarning("[UIComponentPrepareTest] 视频播放结束");
+                video.Destroy();
+                Debug.LogWarning("[UIComponentPrepareTest] 视频销毁");
+            });
         });
-
-        _wxVideo.OnPlay(() =>
-        {
-            Debug.Log("视频开始播放");
-        });
-
-        _wxVideo.OnEnded(() =>
-        {
-            Debug.Log("视频播放结束");
-            _wxVideo.Destroy();
-        });
-
+        
     }
 
     public void CleanUp()
@@ -61,15 +55,14 @@ public class UIComponentPrepareTest : MonoBehaviour, IUIComponent
     
     public async void OnCreateVideoTestButtonClicked()
     {
-        await UniTask.DelayFrame(1);
+        Debug.LogWarning("[UIComponentPrepareTest] 调用视频播放");
 
-        _uiManager.CloseUI("UIPrepare");
+        await UniTask.Yield();
 
-        SceneManager.LoadSceneAsync("VideoScene").completed += ((res) =>
-        {
-            Debug.Log("场景加载完成，开始播放视频");
-            _wxVideo.Play();
-        });
+        _wxVideo.x = 0;
+        _wxVideo.y = 0;
+
+        _wxVideo.Play();
 
         
     }

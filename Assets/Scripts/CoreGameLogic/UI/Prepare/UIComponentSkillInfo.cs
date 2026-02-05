@@ -18,11 +18,6 @@ public class UIComponentSkillInfo : MonoBehaviour, IUIComponent
     [SerializeField] private Image _imageSkill;
 
     /// <summary>
-    /// 技能名称文本
-    /// </summary>
-    [SerializeField] private TextMeshProUGUI _textSkillName;
-
-    /// <summary>
     /// 技能描述文本
     /// </summary>
     [SerializeField] private TextMeshProUGUI _textSkillDescription;
@@ -71,7 +66,6 @@ public class UIComponentSkillInfo : MonoBehaviour, IUIComponent
         Role roleData = _configManager.GetRole(roleId);
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
 
-        _textSkillName.text = skillData.Name;
         _textSkillDescription.text = skillData.Description;
 
         var sprite = await _resourceManager.LoadAssetAsync<Sprite>(skillData.IconResourcePath);
