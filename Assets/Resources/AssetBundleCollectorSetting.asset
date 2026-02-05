@@ -172,11 +172,24 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Arts/Audio/HuntingAudioRefSo.asset
-        CollectorGUID: 6bdaef14b8be7d346944c239b01a2485
+      - CollectPath: Assets/Arts/Audio
+        CollectorGUID: a83f16934f8809741b5501b6e597f688
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackGroup
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: scene
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/ArtsTemp/Environments
+        CollectorGUID: f9dac1abf391b7441b7304ab6b17461f
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
