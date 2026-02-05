@@ -13,11 +13,11 @@ public class HuntingAppFlow : GameAppFlow
     private static HuntingAppFlow _instance;
     public static HuntingAppFlow Instance => _instance;
 
-    public event EventHandler<OnRoundEnteredEventArgs> OnRoundEntered;
-    public sealed class OnRoundEnteredEventArgs : EventArgs
-    {
-        public RoundContext RoundContext { get; set; }
-    }
+    // public event EventHandler<OnRoundEnteredEventArgs> OnRoundEntered;
+    // public sealed class OnRoundEnteredEventArgs : EventArgs
+    // {
+    //     public RoundContext RoundContext { get; set; }
+    // }
 
     private void Awake()
     {
@@ -108,7 +108,7 @@ public class HuntingAppFlow : GameAppFlow
         await _currentRoundFlow.StartRound(context);
         
         _currentState = HuntingAppFlowState.Round;
-        OnRoundEntered?.Invoke(this, new OnRoundEnteredEventArgs { RoundContext = context });
+        // OnRoundEntered?.Invoke(this, new OnRoundEnteredEventArgs { RoundContext = context });
     }
 
     /// <summary>

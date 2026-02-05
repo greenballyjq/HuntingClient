@@ -1,4 +1,5 @@
 ﻿using cfg.HuntingConfig.Enum;
+using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using Hunting.Events;
 using UnityEngine;
@@ -62,6 +63,11 @@ public class PlayerWeapon : MonoBehaviour
     /// 子弹管理器
     /// </summary>
     private BulletManager _bulletManager => GameServiceLocator.GetRoundManager<BulletManager>();
+
+    /// <summary>
+    /// 打猎音效管理器
+    /// </summary>
+    private HuntingSoundManager _huntingSoundManager => GameServiceLocator.GetAppManager<HuntingSoundManager>();
 
     private void OnDestroy()
     {
@@ -170,6 +176,7 @@ public class PlayerWeapon : MonoBehaviour
 
         // 执行射击
         SpawnBulletAsync().Forget();
+        _huntingSoundManager.PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.GunShoot_Default);
         _lastFireTime = Time.time;
     }
     #endregion

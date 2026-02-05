@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GameFramework.Core;
 using GameFramework.Manager;
+using Hunting.Events;
 using Hunting.Game.Animal;
 
 /// <summary>
@@ -331,6 +332,9 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // 加载场景
         await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
+        
+        // 触发隐藏地图进入事件
+        _eventManager.Trigger(HiddenMapEvents.HiddenMapEntered);
 
         // 重新初始化本局管理器
         ReInitManagers();
