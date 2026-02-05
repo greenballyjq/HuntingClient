@@ -73,11 +73,6 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
-    /// <summary>
-    /// 打猎音效管理器
-    /// </summary>
-    private HuntingSoundManager _huntingSoundManager => GameServiceLocator.GetAppManager<HuntingSoundManager>();
-
     private void Start()
     {
         // TODO: 将来可能在别处调用
@@ -142,9 +137,7 @@ public class HuntingAppFlow : GameAppFlow
         RegisterAppManager(new PlayerDataManager());
         RegisterAppManager(new InputManager());
         RegisterAppManager(new CameraManager());
-        
         RegisterAppManager(new HuntingSoundManager());
-        
     }
     #endregion
 
@@ -166,12 +159,8 @@ public class HuntingAppFlow : GameAppFlow
 
         await _uiManager.PreloadUIAsync("UIPopupSettlementNormal");
 
-        Test();
-
         // TODO: 将来可能在别处调用
         await EnterPrepareAsync();
-
-        
     }
 
     /// <summary>
@@ -181,17 +170,6 @@ public class HuntingAppFlow : GameAppFlow
     protected override void OnAppRunning(float dt)
     {
         _currentRoundFlow?.DoUpdate(dt);
-    }
-    #endregion
-
-    #region 测试
-    [SerializeField] private HuntingAudioRefSo HuntingAudioRefSo;
-    [SerializeField] private AudioSource AudioSource;
-    
-    private void Test()
-    {
-        // AudioSource.clip = HuntingAudioRefSo.GetAudioFromType(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_Beatch);
-        // AudioSource.Play();
     }
     #endregion
 }

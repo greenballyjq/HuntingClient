@@ -82,7 +82,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
         var allRoles = _configManager.RoleTable.DataList;
         foreach (var role in allRoles)
         {
-            var sprite = await _resourceManager.LoadAssetAsync<Sprite>(role.RoleImageResourcePath);
+            var sprite = await _resourceManager.LoadAssetAsync<Sprite>(role.IconResourcePath);
             _roleSprites[role.ID] = sprite;
         }
 

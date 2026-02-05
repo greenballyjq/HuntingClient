@@ -1,0 +1,47 @@
+﻿<wxlog>
+  <threadId>#main</threadId>
+  <timestamp>23:38:06:9091</timestamp>
+  <msgtype>MsgWXLogLaunch</msgtype>
+  <content>[The WXLogger is launched!]</content>
+  <stackFrames>
+[CALL STACK][0]: Method:WXTextureTools.Application.Options.OptionsConfig..ctor; File:.0
+[CALL STACK][1]: Method:WXTextureTools.Application.App..ctor; File:.0
+[CALL STACK][2]: Method:WXTextureTools.Program.Main; File:.0
+</stackFrames>
+</wxlog>
+<wxlog>
+  <threadId>#main</threadId>
+  <timestamp>23:38:07:0517</timestamp>
+  <msgtype>MsgMixture</msgtype>
+  <content>string|String[]
+OptionsConfig,-option=mirrorImage
+-dataDir=E:/HuntingClient/TextToolDatas
+-inPath=E:/HuntingClient/TextToolDatas\firstBundleTextures\png\77\img_kacao_2.0ee2c125.png
+-outPath=E:/HuntingClient/TextToolDatas\mirrorImageTemp\temp2707.png
+-execRoot=E:/HuntingClient/Assets\WX-WASM-SDK-V2\Editor\TextureEditor\Node
+</content>
+  <stackFrames>
+[CALL STACK][0]: Method:WXTextureTools.Application.App..ctor; File:.0
+[CALL STACK][1]: Method:WXTextureTools.Program.Main; File:.0
+</stackFrames>
+</wxlog>
+<wxlog>
+  <threadId>#main</threadId>
+  <timestamp>23:38:07:0617</timestamp>
+  <msgtype>MsgMixture</msgtype>
+  <content>string|string
+UnityBridgeHandler - SetDataDir,E:/HuntingClient/TextToolDatas\temp</content>
+  <stackFrames>
+[CALL STACK][0]: Method:WXTextureTools.Program.Main; File:.0
+</stackFrames>
+</wxlog>
+<wxlog>
+  <threadId>#main</threadId>
+  <timestamp>23:38:07:1091</timestamp>
+  <msgtype>MsgString</msgtype>
+  <content>WXMirrorImageExec</content>
+  <stackFrames>
+[CALL STACK][0]: Method:WXTextureTools.Application.App..ctor; File:.0
+[CALL STACK][1]: Method:WXTextureTools.Program.Main; File:.0
+</stackFrames>
+</wxlog>

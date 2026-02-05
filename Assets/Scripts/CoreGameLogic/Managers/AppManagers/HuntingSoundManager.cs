@@ -69,6 +69,7 @@ namespace CoreGameLogic.Managers.AppManagers
         {
             var audioClip = _huntingAudioRefSo.GetAudioFromType(audioType);
             return _soundManager.PlaySound2D(audioClip, channel, loop, volume);
+            
         }
 
         #endregion
@@ -158,7 +159,7 @@ namespace CoreGameLogic.Managers.AppManagers
         private void OnPropStarted(PropStartedEventArgs args)
         {
             var propType = args.PropData.PropType;
-            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().GetCurrentRoundContext();
+            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().CurrentRoundContext;
             var roleType = roundContext.RoleData.RoleType;
 
             switch (propType)
@@ -226,7 +227,7 @@ namespace CoreGameLogic.Managers.AppManagers
         /// <param name="args"></param>
         private void OnSkillStarted(SkillStartedEventArgs args)
         {
-            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().GetCurrentRoundContext();
+            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().CurrentRoundContext;
             var roleType = roundContext.RoleData.RoleType;
             var hasLinkage = roundContext.HasLinkage;
             
@@ -239,7 +240,7 @@ namespace CoreGameLogic.Managers.AppManagers
         /// </summary>
         private void OnSettlementStarted()
         {
-            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().GetCurrentRoundContext();
+            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().CurrentRoundContext;
             var roleType = roundContext.RoleData.RoleType;
 
             switch (roleType)

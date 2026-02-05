@@ -1,5 +1,7 @@
-﻿using GameFramework.Core.UI;
+﻿using Cysharp.Threading.Tasks;
+using GameFramework.Core.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using WeChatWASM;
 
@@ -9,9 +11,47 @@ public class UIComponentPrepareTest : MonoBehaviour, IUIComponent
 
     private WXVideo _wxVideo;
 
+    private UIManager _uiManager => GameServiceLocator.UIManager;
+
     public void Init()
     {
        _buttonCreateVideoTest.onClick.AddListener(OnCreateVideoTestButtonClicked);
+
+        var systemInfo = GameServiceLocator.GetFrameworkManager<PlatformManager>().CurrentPlatform.GetSystemInfo();
+
+        _wxVideo = WXBase.CreateVideo(new WXCreateVideoParam()
+        {
+            width = (int)systemInfo.ScreenWidth,
+            height = (int)systemInfo.ScreenHeight,
+
+            src = Application.streamingAssetsPath + "/YaKeDongA.mp4",
+            poster = null,
+
+            autoplay = false,
+            muted = false,
+
+            objectFit = "cover",
+            underGameView = true,
+
+            controls = false,
+            showProgress = false,
+            showProgressInControlMode = false,
+            enableProgressGesture = false,
+            enablePlayGesture = false,
+            showCenterPlayBtn = false,
+        });
+
+        _wxVideo.OnPlay(() =>
+        {
+            Debug.Log("视频开始播放");
+        });
+
+        _wxVideo.OnEnded(() =>
+        {
+            Debug.Log("视频播放结束");
+            _wxVideo.Destroy();
+        });
+
     }
 
     public void CleanUp()
@@ -19,56 +59,18 @@ public class UIComponentPrepareTest : MonoBehaviour, IUIComponent
         _buttonCreateVideoTest.onClick.RemoveListener(OnCreateVideoTestButtonClicked);
     }  
     
-    public void OnCreateVideoTestButtonClicked()
+    public async void OnCreateVideoTestButtonClicked()
     {
+        await UniTask.DelayFrame(1);
 
-        var systemInfo = GameServiceLocator.GetFrameworkManager<PlatformManager>().CurrentPlatform.GetSystemInfo();
+        _uiManager.CloseUI("UIPrepare");
 
-        _wxVideo = WXBase.CreateVideo(new WXCreateVideoParam()
+        SceneManager.LoadSceneAsync("VideoScene").completed += ((res) =>
         {
-            x = 0,
-            y = 0,
-            width = (int)systemInfo.ScreenWidth,
-            height = (int)systemInfo.ScreenHeight,
-
-            src = Application.streamingAssetsPath + "/YaKeDong.mp4",
-            poster = null,
-
-            initialTime = 0,
-            playbackRate = 1f,
-
-            controls = false,
-            showProgress = false,
-            showProgressInControlMode = false,
-
-            autoplay = false,
-            loop = false,
-            muted = false,
-
-            enableProgressGesture = false,
-            enablePlayGesture = false,
-            showCenterPlayBtn = false,
-
-            objectFit = "cover",
-            underGameView = false
+            Debug.Log("场景加载完成，开始播放视频");
+            _wxVideo.Play();
         });
 
-        _wxVideo.OnPlay(() =>
-        {
-            Debug.Log("开始播放");
-        });
-
-        _wxVideo.OnEnded(() =>
-        {
-            Debug.Log("播放结束");
-        });
-
-        _wxVideo.OnError(() =>
-        {
-            Debug.Log("错误");
-            _wxVideo.Destroy();
-        });
-
-        _wxVideo.Play();
+        
     }
 }

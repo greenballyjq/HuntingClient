@@ -141,6 +141,7 @@ public class RoundFlow : Singleton<RoundFlow>
     /// 当前单局上下文
     /// </summary>
     private RoundContext _currentRoundContext;
+    public RoundContext CurrentRoundContext => _currentRoundContext;
 
     /// <summary>
     /// 单局已用时间（秒）
@@ -168,19 +169,10 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
 
-    #region 测试
     /// <summary>
     /// 特效管理器
     /// </summary>
     private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
-
-    /// <summary>
-    /// 音效管理器
-    /// </summary>
-    private SoundManager _soundManager => GameServiceLocator.GetFrameworkManager<SoundManager>();
-
-    GameObject fxSnow;
-    #endregion
 
     #region 公共方法
     /// <summary>
@@ -217,7 +209,7 @@ public class RoundFlow : Singleton<RoundFlow>
         // 打开游玩界面
         var uiGameplay = await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay", UIManager.UILayer.Fixed);
 
-        // 禁止操作
+        // 禁止游玩界面操作
         uiGameplay.SetRaycast(false);
 
         // 触发单局进入事件
@@ -227,10 +219,10 @@ public class RoundFlow : Singleton<RoundFlow>
         });
 
         // 播放倒计时动画
-        var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown",UIManager.UILayer.Fixed);
+        var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync();
 
-        // 恢复操作
+        // 恢复游玩界面操作
         uiGameplay.SetRaycast(true);
 
         // 触发单局开始事件
@@ -277,10 +269,6 @@ public class RoundFlow : Singleton<RoundFlow>
             case RoundFlowState.Playing:
                 OnRoundPlaying(dt);
                 break;
-
-            case RoundFlowState.None:
-            default:
-                break;
         }
     }
 
@@ -294,17 +282,17 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
-    /// 暂停
+    /// 暂停单局
     /// </summary>
-    public void Pause()
+    public void PauseRound()
     {
         _currentState = RoundFlowState.Paused;
     }
 
     /// <summary>
-    /// 恢复
+    /// 恢复单局
     /// </summary>
-    public void Resume()
+    public void ResumeRound()
     {
         _currentState = RoundFlowState.Playing;
     }
@@ -354,7 +342,7 @@ public class RoundFlow : Singleton<RoundFlow>
         var uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay"); 
         uiGameplay.SwitchSnow();
 
-        // 禁止操作
+        // 禁止游玩界面操作
         uiGameplay.SetRaycast(false);
 
         // 播放淡出动画
@@ -385,7 +373,7 @@ public class RoundFlow : Singleton<RoundFlow>
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync();
 
-        // 恢复操作
+        // 恢复游玩界面操作
         uiGameplay.SetRaycast(true);
 
         // Boss进入战斗状态
@@ -416,13 +404,6 @@ public class RoundFlow : Singleton<RoundFlow>
 
         _currentState = RoundFlowState.None;
     }
-    
-    /// <summary>
-    /// 获取当前单局上下文
-    /// </summary>
-    /// <returns>单局上下文</returns>
-    public RoundContext GetCurrentRoundContext() => _currentRoundContext;
-    
     #endregion
 
     #region 私有方法
@@ -445,10 +426,11 @@ public class RoundFlow : Singleton<RoundFlow>
         _roundManagers.Add(new PropManager());
         _roundManagers.Add(new BulletManager());
         _roundManagers.Add(new SkillManager());
+        _roundManagers.Add(new VideoManager());
     }
 
     /// <summary>
-    /// 初始化本局管理器
+    /// 初始化单局管理器
     /// </summary>
     private void InitRoundManagers()
     {
@@ -457,7 +439,7 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
-    /// 释放本局管理器
+    /// 释放单局管理器
     /// </summary>
     private void DisposeRoundManagers()
     {
@@ -466,7 +448,7 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
-    /// 清理本局管理器
+    /// 清理单局管理器
     /// </summary>
     private void CleanupManagers()
     {
@@ -478,7 +460,7 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
-    /// 重新初始化本局管理器
+    /// 重新初始化单局管理器
     /// </summary>
     private void ReInitManagers()
     {
@@ -495,7 +477,6 @@ public class RoundFlow : Singleton<RoundFlow>
     /// <param name="dt">时间增量</param>
     private void OnRoundPlaying(float dt)
     {
-        // 累加单局时间
         _roundElapsedTime += dt;
 
         for (int i = 0; i < _roundManagers.Count; i++)
@@ -504,7 +485,9 @@ public class RoundFlow : Singleton<RoundFlow>
                 updatable.DoUpdate(dt);
         }
     }
+    #endregion
 
+    #region 事件相关
     /// <summary>
     /// 触发进入单局事件
     /// </summary>
