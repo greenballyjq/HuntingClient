@@ -245,6 +245,16 @@ public class HuntingAudioRefSo : ScriptableObject
         /// <summary>亚克东游戏结算</summary>
         IP_YaKeDong_Settlement,
         #endregion
+
+        #region 操作音
+        
+        /// <summary>动态人物派发</summary>
+        Quest_Start,
+        
+        /// <summary>动态人物完成</summary>
+        Quest_Complete
+
+        #endregion
     }
 
     [Serializable]
