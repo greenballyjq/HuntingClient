@@ -217,7 +217,6 @@ public class HuntingAudioRefSo : ScriptableObject
 
         /// <summary>金状元游戏结算</summary>
         IP_JinZhuangYuan_Settlement,
-
         
         /// <summary>亚克东个性化台词 - 被选中触发</summary>
         IP_YaKeDong_Selected,
@@ -253,10 +252,16 @@ public class HuntingAudioRefSo : ScriptableObject
     {
         public HuntingGameAudioType type;
         public AudioClip clip;
+        [Range(0, 1f)] public float volume;
     }
 
     public AudioClip GetAudioFromType(HuntingGameAudioType type)
     {
         return audioRefList.FirstOrDefault(x => x.type == type)?.clip;
+    }
+
+    public HuntingAudioRef GetAudioRefFromType(HuntingGameAudioType type)
+    {
+        return audioRefList.FirstOrDefault(x => x.type == type);
     }
 }
