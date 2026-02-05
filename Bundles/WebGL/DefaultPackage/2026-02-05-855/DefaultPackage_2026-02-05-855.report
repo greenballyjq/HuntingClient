@@ -2,14 +2,14 @@
     "Summary": {
         "YooVersion": "2.3.14",
         "UnityVersion": "2022.3.7f1c1",
-        "BuildDate": "2026/2/5 1:22:56",
-        "BuildSeconds": 9,
+        "BuildDate": "2026/2/5 14:15:44",
+        "BuildSeconds": 20,
         "BuildTarget": 20,
         "BuildPipeline": "ScriptableBuildPipeline",
         "BuildBundleType": 2,
         "BuildPackageName": "DefaultPackage",
-        "BuildPackageVersion": "2026-02-05-82",
-        "BuildPackageNote": "2026/2/5 1:22:45",
+        "BuildPackageVersion": "2026-02-05-855",
+        "BuildPackageNote": "2026/2/5 14:15:21",
         "UniqueBundleName": false,
         "EnableAddressable": false,
         "LocationToLower": false,
@@ -35,7 +35,7 @@
         "AssetFileTotalCount": 462,
         "MainAssetTotalCount": 161,
         "AllBundleTotalCount": 68,
-        "AllBundleTotalSize": 36425018,
+        "AllBundleTotalSize": 36419092,
         "EncryptedBundleTotalCount": 0,
         "EncryptedBundleTotalSize": 0
     },
@@ -4719,7 +4719,7 @@
             "AssetGUID": "0ee9127d872c2ff47b6cd31e8c3ebc05",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_01_textures.bundle",
-            "MainBundleSize": 688240,
+            "MainBundleSize": 688244,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -4729,7 +4729,7 @@
             "AssetGUID": "714c73541da4e3449a054a5af52efb1d",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_01_textures.bundle",
-            "MainBundleSize": 688240,
+            "MainBundleSize": 688244,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -4739,7 +4739,7 @@
             "AssetGUID": "d51e791e9d8a71d49aaaebfe49a25787",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_01_textures.bundle",
-            "MainBundleSize": 688240,
+            "MainBundleSize": 688244,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -4749,7 +4749,7 @@
             "AssetGUID": "d0e62b269984b9d40adefd9641e8f62a",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_01_textures.bundle",
-            "MainBundleSize": 688240,
+            "MainBundleSize": 688244,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -4759,7 +4759,7 @@
             "AssetGUID": "0ac3a6ea3faf34c4d97c8c797839e87c",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_01_textures.bundle",
-            "MainBundleSize": 688240,
+            "MainBundleSize": 688244,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -4769,7 +4769,7 @@
             "AssetGUID": "e16516279262b2646b0ea700ab7da739",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_01_textures.bundle",
-            "MainBundleSize": 688240,
+            "MainBundleSize": 688244,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -4779,7 +4779,7 @@
             "AssetGUID": "4f51a97f848dcdf45bf9278aeb239e6a",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_01_textures.bundle",
-            "MainBundleSize": 688240,
+            "MainBundleSize": 688244,
             "DependAssets": [],
             "DependBundles": []
         },
@@ -4789,7 +4789,7 @@
             "AssetGUID": "28ef184b39a0cd049bd8defcdb9fb5ce",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_02.bundle",
-            "MainBundleSize": 365709,
+            "MainBundleSize": 365720,
             "DependAssets": [],
             "DependBundles": [
                 "unityshaders.bundle"
@@ -4801,7 +4801,7 @@
             "AssetGUID": "08db8af2ee3e35d458c278637fb79020",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_02.bundle",
-            "MainBundleSize": 365709,
+            "MainBundleSize": 365720,
             "DependAssets": [
                 {
                     "AssetPath": "Assets/Arts/Effects/Shader/Blend_HDR.shader",
@@ -4822,7 +4822,7 @@
             "AssetGUID": "35456d173e932344e954f68b01407d7c",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_02.bundle",
-            "MainBundleSize": 365709,
+            "MainBundleSize": 365720,
             "DependAssets": [],
             "DependBundles": [
                 "unityshaders.bundle"
@@ -4834,7 +4834,7 @@
             "AssetGUID": "8990ec9c16343e84c803330d713320c1",
             "AssetTags": [],
             "MainBundleName": "assets_artstemp_environments_map_02.bundle",
-            "MainBundleSize": 365709,
+            "MainBundleSize": 365720,
             "DependAssets": [
                 {
                     "AssetPath": "Assets/Arts/Effects/Shader/Blend_HDR.shader",
@@ -5009,10 +5009,10 @@
         },
         {
             "BundleName": "assets_artstemp_environments_map_01_textures.bundle",
-            "FileName": "06de9126e2abdcb2575958f8632e27fd.bundle",
-            "FileHash": "06de9126e2abdcb2575958f8632e27fd",
-            "FileCRC": "6e5e770b",
-            "FileSize": 688240,
+            "FileName": "37ca22a5a27afe5fda144227f1ba2236.bundle",
+            "FileHash": "37ca22a5a27afe5fda144227f1ba2236",
+            "FileCRC": "786c9bde",
+            "FileSize": 688244,
             "Encrypted": false,
             "Tags": [],
             "DependBundles": [],
@@ -5053,10 +5053,10 @@
         },
         {
             "BundleName": "assets_artstemp_environments_map_02.bundle",
-            "FileName": "944bcdee8b972565f1708d2fb4165e83.bundle",
-            "FileHash": "944bcdee8b972565f1708d2fb4165e83",
-            "FileCRC": "b1bcddc5",
-            "FileSize": 365709,
+            "FileName": "55ff6954ad6319ab1afbb8cee48bf40d.bundle",
+            "FileHash": "55ff6954ad6319ab1afbb8cee48bf40d",
+            "FileCRC": "efcaae22",
+            "FileSize": 365720,
             "Encrypted": false,
             "Tags": [],
             "DependBundles": [
@@ -5106,9 +5106,9 @@
         },
         {
             "BundleName": "audio.bundle",
-            "FileName": "af5916b168bf165a506f184cd31facb8.bundle",
-            "FileHash": "af5916b168bf165a506f184cd31facb8",
-            "FileCRC": "c1a8a6b7",
+            "FileName": "de5344ce7714c2c7f22cc50d8158a828.bundle",
+            "FileHash": "de5344ce7714c2c7f22cc50d8158a828",
+            "FileCRC": "02e70581",
             "FileSize": 19127066,
             "Encrypted": false,
             "Tags": [],
@@ -5659,10 +5659,10 @@
         },
         {
             "BundleName": "share_assets_arts_effects_emesh.bundle",
-            "FileName": "0ea07ad5c5a299b376a9d3925d615c2f.bundle",
-            "FileHash": "0ea07ad5c5a299b376a9d3925d615c2f",
-            "FileCRC": "70476134",
-            "FileSize": 17984,
+            "FileName": "8f5ac5e138f5238f5fefc6604d34d010.bundle",
+            "FileHash": "8f5ac5e138f5238f5fefc6604d34d010",
+            "FileCRC": "e00657b2",
+            "FileSize": 17973,
             "Encrypted": false,
             "Tags": [],
             "DependBundles": [
@@ -5688,10 +5688,10 @@
         },
         {
             "BundleName": "share_assets_arts_effects_emesh_jinbi.bundle",
-            "FileName": "0021a366f1b49bb26e0d277f4c31246d.bundle",
-            "FileHash": "0021a366f1b49bb26e0d277f4c31246d",
-            "FileCRC": "e96913dc",
-            "FileSize": 45154,
+            "FileName": "b04d4e3d34dc4949056147be82721be2.bundle",
+            "FileHash": "b04d4e3d34dc4949056147be82721be2",
+            "FileCRC": "0cf109a3",
+            "FileSize": 45144,
             "Encrypted": false,
             "Tags": [],
             "DependBundles": [
@@ -5818,10 +5818,10 @@
         },
         {
             "BundleName": "share_assets_arts_effects_emesh_xianjin_01.bundle",
-            "FileName": "e8b02edaae7325a66dfd397b4f72cbca.bundle",
-            "FileHash": "e8b02edaae7325a66dfd397b4f72cbca",
-            "FileCRC": "1a489d72",
-            "FileSize": 1560091,
+            "FileName": "1c3e848cf8fa0e90909b6b9b92312b20.bundle",
+            "FileHash": "1c3e848cf8fa0e90909b6b9b92312b20",
+            "FileCRC": "d68e6bfe",
+            "FileSize": 1560088,
             "Encrypted": false,
             "Tags": [],
             "DependBundles": [
@@ -7573,9 +7573,9 @@
         },
         {
             "BundleName": "share_assets_artstemp_audio_sfx.bundle",
-            "FileName": "84b33707d38092619d0b7189c6aac7f4.bundle",
-            "FileHash": "84b33707d38092619d0b7189c6aac7f4",
-            "FileCRC": "6a7acadb",
+            "FileName": "6bbe7d35d60378bb959b0db61ffb6da7.bundle",
+            "FileHash": "6bbe7d35d60378bb959b0db61ffb6da7",
+            "FileCRC": "836032a3",
             "FileSize": 12993,
             "Encrypted": false,
             "Tags": [],
@@ -7771,9 +7771,9 @@
         },
         {
             "BundleName": "ui.bundle",
-            "FileName": "5addfc2afbfb093be8cbb7af58254ae8.bundle",
-            "FileHash": "5addfc2afbfb093be8cbb7af58254ae8",
-            "FileCRC": "a6b7f5b7",
+            "FileName": "28b114d5e273010da1a014cb515d5881.bundle",
+            "FileHash": "28b114d5e273010da1a014cb515d5881",
+            "FileCRC": "0de1dab4",
             "FileSize": 332598,
             "Encrypted": false,
             "Tags": [],
@@ -7942,10 +7942,10 @@
         },
         {
             "BundleName": "unityshaders.bundle",
-            "FileName": "551b7ffce8985c765ae98dccfb7ef092.bundle",
-            "FileHash": "551b7ffce8985c765ae98dccfb7ef092",
-            "FileCRC": "0e08f3d9",
-            "FileSize": 179028,
+            "FileName": "46ab5f81f4174ec943bae3fe5077aef6.bundle",
+            "FileHash": "46ab5f81f4174ec943bae3fe5077aef6",
+            "FileCRC": "0dd71c11",
+            "FileSize": 173111,
             "Encrypted": false,
             "Tags": [],
             "DependBundles": [],

@@ -54,11 +54,6 @@ public class UIPrepare : UIBase
     [SerializeField] private Button _buttonRanking;
 
     /// <summary>
-    /// 画布组
-    /// </summary>
-    private CanvasGroup _canvasGroup;
-
-    /// <summary>
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
@@ -88,8 +83,6 @@ public class UIPrepare : UIBase
         _buttonStartRound.onClick.AddListener(OnClickStartRound);
         _buttonLucky.onClick.AddListener(OnClickLuckyRitual);
         _buttonRanking.onClick.AddListener(OnClickRanking);
-
-        _canvasGroup = GetComponent<CanvasGroup>();
     }
 
     private void OnDestroy()
@@ -146,11 +139,6 @@ public class UIPrepare : UIBase
             tasks.Add(preloader.PreloadAsync());
         
         await UniTask.WhenAll(tasks);
-    }
-
-    public void SetAlpha(float amount)
-    {
-        _canvasGroup.alpha = amount;
     }
 
     #region 事件相关

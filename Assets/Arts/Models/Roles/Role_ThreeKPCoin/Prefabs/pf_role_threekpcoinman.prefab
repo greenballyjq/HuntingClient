@@ -216,7 +216,7 @@ MonoBehaviour:
   _dicePrefab: {fileID: 4741585598212227209, guid: 658a676b153a7b64c9612bc32299418b, type: 3}
   _diceThrowStartPosition: {fileID: 8351003866705426749}
   _moveSpeed: 300
-  _yMoveOffset: -30
+  _yMoveOffset: -70
 --- !u!210 &392188529692567146
 SortingGroup:
   m_ObjectHideFlags: 0

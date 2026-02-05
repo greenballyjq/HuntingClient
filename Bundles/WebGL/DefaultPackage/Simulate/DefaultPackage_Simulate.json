@@ -8,14 +8,526 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "DefaultPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2026/2/5 17:43:55",
+    "PackageNote": "2026/2/5 18:08:58",
     "AssetList": [
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC01.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC02.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC03.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC04.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC05.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC06.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC07.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC08.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC09.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC10.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC11.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC12.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC16.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC17.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC18.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC18_19.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC21.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC23_after.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC23_before.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC25.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC27.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC28.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC29.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC30.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/DRC/DRC31.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
         {
             "Address": "",
             "AssetPath": "Assets/Arts/Audio/HuntingAudioRefSo.asset",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 1,
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/DaMeiLi/DML01.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/DaMeiLi/DML02.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/DaMeiLi/DML03.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/DaMeiLi/DML04.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/DaMeiLi/DML05.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/DaMeiLi/DML06.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/DaMeiLi/DML07.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/DaMeiLi/DML08.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/DaMeiLi/DML09.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/JinZhuangYuan/JZY01.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/JinZhuangYuan/JZY02.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/JinZhuangYuan/JZY03.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/JinZhuangYuan/JZY04.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/JinZhuangYuan/JZY05.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/JinZhuangYuan/JZY06.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/JinZhuangYuan/JZY07.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/JinZhuangYuan/JZY08.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/JinZhuangYuan/JZY09.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD02.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD03.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD04.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD05.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD08.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD09.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD10.WAV",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD11.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD12.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/YaKeDong/YKD13.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/ZiWei/ZW01.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/ZiWei/ZW02.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/ZiWei/ZW03.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/ZiWei/ZW04.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/ZiWei/ZW05.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/ZiWei/ZW06.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/ZiWei/ZW07.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/ZiWei/ZW08.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/IP/ZiWei/ZW09.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/SFX/sfx_alert.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/SFX/sfx_laugh.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
             "DependBundleIDs": []
         },
         {
@@ -23,7 +535,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_large_baozi.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -31,7 +543,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_medium_lu.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -39,7 +551,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_medium_yezhu.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -47,7 +559,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_small_tuzi.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -55,7 +567,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_forest_small_yeji.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -63,7 +575,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_snow_boss_yezhu.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -71,7 +583,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_snow_small_baozi.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -79,7 +591,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_snow_small_yeji.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -87,7 +599,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_special_bulletcoin.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -95,7 +607,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Animals/pf_animal_special_threekpcoin.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -103,7 +615,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Bullets/pf_bullet_explosive.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -111,7 +623,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Bullets/pf_bullet_normal.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -119,7 +631,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_DG_A.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -127,7 +639,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_DG_B.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -135,7 +647,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_Hit_01.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -143,7 +655,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_Hit_02.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -151,7 +663,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_Hit_03.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -159,7 +671,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX001.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -167,7 +679,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX002_1.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -175,7 +687,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX002_2.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -183,7 +695,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX002_3.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -191,7 +703,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_IPJSTX002_4.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -199,7 +711,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_JXTX001_01.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -207,7 +719,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_JXTX001_02.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -215,7 +727,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Effects/FX_JXTX001_03.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -223,7 +735,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Particles/FX_DGB_PTFH.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -231,7 +743,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Particles/FX_DGC_SJSL_fly_UI.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -239,7 +751,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Particles/FX_Snow.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -247,7 +759,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Particles/Settlement_Explosion.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 7,
             "DependBundleIDs": []
         },
         {
@@ -255,7 +767,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Props/pf_prop_trap.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -263,7 +775,7 @@
             "AssetPath": "Assets/Arts/Prefabs/Skills/pf_skillweapon.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 3,
+            "BundleID": 8,
             "DependBundleIDs": []
         },
         {
@@ -271,7 +783,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UIAlertRed.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -279,7 +791,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UICountdown.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -287,7 +799,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UIGameplay.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -295,7 +807,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UILoading.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -303,7 +815,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupLucky.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -311,7 +823,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupLuckyBuff.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -319,7 +831,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupSettlementNormal.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -327,7 +839,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupSettlementSnowFake.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -335,7 +847,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UIPopupSettlementSnowVictory.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -343,7 +855,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UIPrepare.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -351,7 +863,7 @@
             "AssetPath": "Assets/Arts/Prefabs/UI/UIRanking.prefab",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -359,7 +871,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_aixinlaolongi_0004.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -367,7 +879,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_bangbangwoma_0002.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -375,7 +887,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_huojiantouwei_0003.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -383,7 +895,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_huoliquankai_0001.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -391,7 +903,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Common/Skills/TB_shiqianruming_0005.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -447,7 +959,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_baozhazidan_0002.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -455,7 +967,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaoshangzidan_0003.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -463,7 +975,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaosuzidan_0004.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -471,7 +983,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_putongzidan_0001.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -479,7 +991,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Gameplay/TB_xueshan_beijing_0001.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -487,7 +999,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0001.JPG",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -495,7 +1007,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0002.JPG",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -503,7 +1015,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0003.JPG",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -511,7 +1023,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0004.JPG",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -519,7 +1031,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Maps/TB_beijing_0005.JPG",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -527,7 +1039,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_A_boy_0001.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -535,7 +1047,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_B_gril_0001.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -543,7 +1055,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_C_ziwei_0001.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -551,7 +1063,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_D_dameiri_0001.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -559,7 +1071,7 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_E_jinzhuangyuan_0001.png",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 4,
+            "BundleID": 9,
             "DependBundleIDs": []
         },
         {
@@ -567,7 +1079,223 @@
             "AssetPath": "Assets/Arts/UI/Sprites/Prepare/Roles/JS_F_yakedong_0001.png",
             "AssetGUID": "",
             "AssetTags": [],
+            "BundleID": 9,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Materials/BG_001.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Materials/BG_001_Change.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Materials/Map_001.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Materials/Shadow_001.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Materials/Tree_001.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Materials/Tree_002.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Materials/Tree_003.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Materials/Tree_004.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Materials/Tree_005.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Prefabs/Map_01_BG.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Prefabs/Tree_001.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Prefabs/Tree_002.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Prefabs/Tree_003.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Prefabs/Tree_004.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Prefabs/Tree_005.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Textures/Maps01_BG_01.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Textures/Maps01_BG_02.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Textures/Maps01_Trees_001.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Textures/Maps01_Trees_002.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Textures/Maps01_Trees_003.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Textures/Maps01_Trees_004.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_01/Textures/Maps01_Trees_005.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_02/bg.png",
+            "AssetGUID": "",
+            "AssetTags": [],
             "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_02/BG_002.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_02/dm.png",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_02/Map_002.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/ArtsTemp/Environments/Map_02/Materials/dm.mat",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 5,
             "DependBundleIDs": []
         }
     ],
@@ -575,7 +1303,7 @@
         {
             "BundleName": "assets_arts_ui_sprites_gameplay_animals.bundle",
             "UnityCRC": 0,
-            "FileHash": "cc2ff33ece14fff1ccfff90099352f84",
+            "FileHash": "cdf2055ab247ea210a0d8860ffaaef37",
             "FileCRC": "00000000",
             "FileSize": 245450,
             "Encrypted": false,
@@ -583,11 +1311,61 @@
             "DependBundleIDs": []
         },
         {
+            "BundleName": "assets_artstemp_environments_map_01_materials.bundle",
+            "UnityCRC": 0,
+            "FileHash": "f2725a2a70b780ecbccb5e80872e7a6d",
+            "FileCRC": "00000000",
+            "FileSize": 21987,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_artstemp_environments_map_01_prefabs.bundle",
+            "UnityCRC": 0,
+            "FileHash": "bf2da62f03648c1783cd68cc2a8b08cf",
+            "FileCRC": "00000000",
+            "FileSize": 49678,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_artstemp_environments_map_01_textures.bundle",
+            "UnityCRC": 0,
+            "FileHash": "89a27ce9664842534418afcdaaeb64ae",
+            "FileCRC": "00000000",
+            "FileSize": 11035301,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_artstemp_environments_map_02.bundle",
+            "UnityCRC": 0,
+            "FileHash": "5354d38217c1bcfa0714d86b6f825d45",
+            "FileCRC": "00000000",
+            "FileSize": 2112795,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_artstemp_environments_map_02_materials.bundle",
+            "UnityCRC": 0,
+            "FileHash": "05a584a83ac77728b83fada8cb486bba",
+            "FileCRC": "00000000",
+            "FileSize": 1093,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
             "BundleName": "audio.bundle",
             "UnityCRC": 0,
-            "FileHash": "94f0bf255ee71e165334767eec0f6871",
+            "FileHash": "857b7221e075d536b68ac69d3316a900",
             "FileCRC": "00000000",
-            "FileSize": 7443,
+            "FileSize": 52018725,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -595,7 +1373,7 @@
         {
             "BundleName": "effect.bundle",
             "UnityCRC": 0,
-            "FileHash": "0365a0f26046b5e1b9d3cbd316826506",
+            "FileHash": "9c2b80f81633b5b0831add7db1335c42",
             "FileCRC": "00000000",
             "FileSize": 12062684,
             "Encrypted": false,
@@ -605,9 +1383,9 @@
         {
             "BundleName": "game.bundle",
             "UnityCRC": 0,
-            "FileHash": "fe0d9037de8528bad1971ae5f02a9fea",
+            "FileHash": "3f076820f4a9f6a41a21ca28c1073f9c",
             "FileCRC": "00000000",
-            "FileSize": 2824180,
+            "FileSize": 2713270,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -615,9 +1393,9 @@
         {
             "BundleName": "ui.bundle",
             "UnityCRC": 0,
-            "FileHash": "532c5dd74c858980314bac6988c9d2d9",
+            "FileHash": "2f6718f8e69b97ba7cb48fa0edd737ea",
             "FileCRC": "00000000",
-            "FileSize": 2262062,
+            "FileSize": 2267599,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
