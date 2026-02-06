@@ -91,9 +91,7 @@ public class HuntingAppFlow : GameAppFlow
             _currentRoundFlow = null;
         }
 
-        var uiPrepare = await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare", isActive : false);
-        await uiPrepare.PreloadResourcesAsync();
-        uiPrepare.gameObject.SetActive(true);
+        await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
 
         _currentState = HuntingAppFlowState.Prepare;
     }
@@ -105,10 +103,9 @@ public class HuntingAppFlow : GameAppFlow
     public async UniTask EnterRound(RoundContext context)
     {
         _currentRoundFlow = new RoundFlow();
-        await _currentRoundFlow.StartRound(context);
+        await _currentRoundFlow.EnterRound(context);
         
         _currentState = HuntingAppFlowState.Round;
-        // OnRoundEntered?.Invoke(this, new OnRoundEnteredEventArgs { RoundContext = context });
     }
 
     /// <summary>
@@ -137,6 +134,7 @@ public class HuntingAppFlow : GameAppFlow
         RegisterAppManager(new PlayerDataManager());
         RegisterAppManager(new InputManager());
         RegisterAppManager(new CameraManager());
+        RegisterAppManager(new CGManager());
         RegisterAppManager(new HuntingSoundManager());
     }
     #endregion

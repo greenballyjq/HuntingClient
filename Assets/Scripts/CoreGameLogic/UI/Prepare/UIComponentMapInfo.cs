@@ -17,6 +17,11 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
     [SerializeField] private Image _imageMap;
 
     /// <summary>
+    /// 地图名称文本
+    /// </summary>
+    [SerializeField] private TextMeshProUGUI _textMapName;
+
+    /// <summary>
     /// 地图描述文本
     /// </summary>
     [SerializeField] private TextMeshProUGUI _textMapDescription;
@@ -34,30 +39,17 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
     /// <summary>
     /// 当前地图ID
     /// </summary>
-    private int _currentMapId;
+    private Map _currentMapData;
+    public Map CurrentMapData => _currentMapData;
 
     public void Init()
     {
         Map map = _configManager.GetRandomMap();
-        _currentMapId = map.ID;
+        _currentMapData = map;
         UpdateMapInfo(map);
     }
 
-    public void CleanUp()
-    {
-
-    }
-
-    #region 公共方法
-    /// <summary>
-    /// 获取当前地图ID
-    /// </summary>
-    /// <returns>地图ID</returns>
-    public int GetCurrentMapId()
-    {
-        return _currentMapId;
-    }
-    #endregion
+    public void CleanUp(){}
 
     #region 私有方法
     /// <summary>
@@ -67,6 +59,8 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
     private void UpdateMapInfo(Map map)
     {
         _textMapDescription.text = map.Description;
+
+        _textMapName.text = map.Name;
 
         LoadMapSpriteAsync(map.MapImageResourcePath).Forget();
     }

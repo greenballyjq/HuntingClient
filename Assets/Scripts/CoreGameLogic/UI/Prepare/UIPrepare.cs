@@ -1,13 +1,12 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
+using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using WeChatWASM;
 
 /// <summary>
 /// 准备界面
@@ -60,19 +59,24 @@ public class UIPrepare : UIBase
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
-    /// <summary>
     /// UI管理器
     /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
     /// <summary>
-    /// 平台管理器
+    /// 配置管理器
     /// </summary>
-    private PlatformManager _platformManager => GameServiceLocator.GetFrameworkManager<PlatformManager>();
+    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+
+    /// <summary>
+    /// 打猎音效管理器
+    /// </summary>
+    private HuntingSoundManager _soundManager => GameServiceLocator.GetAppManager<HuntingSoundManager>();
+
+    /// <summary>
+    /// CG管理器
+    /// </summary>
+    private CGManager _cgManager => GameServiceLocator.GetAppManager<CGManager>();
 
     /// <summary>
     /// 当前选中的角色ID
@@ -108,12 +112,8 @@ public class UIPrepare : UIBase
         _uiComponentMapInfo.Init();
         _uiComponentPrepareTest.Init();
 
-        // 默认开始单据单局按钮不可用
-        _buttonStartRound.interactable = false;
-
         _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
         _eventManager.AddListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
-        _eventManager.AddListener(PrepareEvents.SlotAnimationEnded, OnSlotAnimationEnded);
         _eventManager.AddListener(LuckyEvents.GiftOpened, OnGiftOpened);
     }
 
@@ -127,27 +127,91 @@ public class UIPrepare : UIBase
 
         _eventManager.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
         _eventManager.RemoveListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
-        _eventManager.RemoveListener(PrepareEvents.SlotAnimationEnded, OnSlotAnimationEnded);
         _eventManager.RemoveListener(LuckyEvents.GiftOpened, OnGiftOpened);
 
         base.OnClose();
     }
 
+    #region 事件相关
     /// <summary>
-    /// 预加载所有资源
+    /// 开始单局按钮回调
     /// </summary>
-    public async UniTask PreloadResourcesAsync()
+    private async void OnClickStartRound()
     {
-        var preloaders = GetComponentsInChildren<IResourcePreloader>(true);
-        
-        var tasks = new List<UniTask>();
-        foreach (var preloader in preloaders)
-            tasks.Add(preloader.PreloadAsync());
-        
-        await UniTask.WhenAll(tasks);
+        // 播放投骰子动画
+        await _uiComponentRollRole.PlayRollDiceAsync();
+
+        Role roleData = _configManager.GetRole(_currentRoleId);
+        Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
+        Map mapData = _uiComponentMapInfo.CurrentMapData;
+
+        // 是否有隐藏地图 TODO: 以后转移到配置表
+        bool hasHiddenMap = Random.Range(0, 100) < 100;
+
+        // 创建角色CG视频
+        if (hasHiddenMap)
+            await _cgManager.CreateCGAsync(roleData.VideoResourcePath);
+
+        // 播放角色语音
+        if(roleData.RoleType == ERoleType.Bule || roleData.RoleType == ERoleType.Red)
+        {
+            await UniTask.Delay(6000);
+        }
+        else
+        {
+            UniTaskCompletionSource audioCompletionSource = new UniTaskCompletionSource();
+            _soundManager.PlayIPOpening(roleData.RoleType).AddCallback(() =>
+            {
+                audioCompletionSource.TrySetResult();
+            });
+
+            await audioCompletionSource.Task;
+        }
+
+        // 加载地图
+        await SceneManager.LoadSceneAsync("GameplayForestScene").ToUniTask();
+        DynamicGI.UpdateEnvironment();
+
+        // 播放角色CG视频
+        if (hasHiddenMap)
+        {
+#if !UNITY_EDITOR
+                await _cgManager.PlayCGAsync();
+#endif
+        }
+
+        _uiManager.CloseUI("UIPrepare");
+
+        // 进入单局
+        await HuntingAppFlow.Instance.EnterRound(new RoundContext
+        {
+            RoleData = roleData,
+            MapData = mapData,
+            SkillData = skillData,
+            LuckyBuffData = _currentLuckyBuffData,
+            HasLinkage = roleData.LinkedMapId == mapData.ID,
+            HasHiddenMap = hasHiddenMap,
+            HiddenMapData = hasHiddenMap ? _configManager.GetMap(EMapType.Hidden) : null
+        });
     }
 
-    #region 事件相关
+    /// <summary>
+    /// 幸运仪式按钮回调
+    /// </summary>
+    private async void OnClickLuckyRitual()
+    {
+        await _uiManager.OpenUIAsync<UIPopupLucky>("UIPopupLucky",UIManager.UILayer.PopUp);
+    }
+
+    /// <summary>
+    /// 排行榜按钮回调
+    /// </summary>
+    private async void OnClickRanking()
+    {
+        var rankingData = _configManager.GetMockRankingData();
+        await _uiManager.OpenUIAsync<UIRanking>("UIRanking", UIManager.UILayer.PopUp, rankingData);
+    }
+
     /// <summary>
     /// 角色选中事件回调
     /// </summary>
@@ -167,70 +231,6 @@ public class UIPrepare : UIBase
     }
 
     /// <summary>
-    /// 走格子动画结束事件
-    /// </summary>
-    private void OnSlotAnimationEnded()
-    {
-        _buttonLucky.interactable = true;
-        _buttonStartRound.interactable = true;
-        _buttonRanking.interactable = true;
-    }
-
-    /// <summary>
-    /// 开始单局按钮回调
-    /// </summary>
-    private void OnClickStartRound()
-    {
-        Role roleData = _configManager.GetRole(_currentRoleId);
-        int mapId = _uiComponentMapInfo.GetCurrentMapId();
-        Map mapData = _configManager.GetMap(mapId);
-        Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
-
-        (_platformManager.CurrentPlatform as WeChatPlatform).WXCreateVideo(Application.streamingAssetsPath + "/" + roleData.VideoResourcePath, null, (video) =>
-        {
-            video.OnEnded(() =>
-            {
-                SceneManager.LoadSceneAsync("GameplayForestScene").completed += (ao) =>
-                {
-
-                    HuntingAppFlow.Instance.EnterRound(new RoundContext
-                    {
-                        RoleData = roleData,
-                        MapData = mapData,
-                        SkillData = skillData,
-                        LuckyBuffData = _currentLuckyBuffData,
-                        HasLinkage = roleData.LinkedMapId == mapId,
-                        HasHiddenMap = true,
-                        HiddenMapData = _configManager.GetMap(EMapType.Hidden)
-                    }).Forget();
-                    DynamicGI.UpdateEnvironment();
-                };
-
-                video.Destroy();
-            });
-
-            SceneManager.LoadSceneAsync("VideoScene").completed += (ao) =>
-            {
-                Close();
-
-                video.x = 0;
-                video.y = 0;
-
-                video.Play();
-            };
-             
-        });
-    }
-
-    /// <summary>
-    /// 幸运仪式按钮回调
-    /// </summary>
-    private async void OnClickLuckyRitual()
-    {
-        await _uiManager.OpenUIAsync<UIPopupLucky>("UIPopupLucky",UIManager.UILayer.PopUp);
-    }
-
-    /// <summary>
     /// 礼包开启事件回调
     /// </summary>
     private void OnGiftOpened(GiftOpenedEventArgs args)
@@ -238,13 +238,5 @@ public class UIPrepare : UIBase
         _currentLuckyBuffData = args.LuckyBuffData;
     }
 
-    /// <summary>
-    /// 排行榜按钮回调
-    /// </summary>
-    private async void OnClickRanking()
-    {
-        var rankingData = _configManager.GetMockRankingData();
-        await _uiManager.OpenUIAsync<UIRanking>("UIRanking", UIManager.UILayer.PopUp, rankingData);
-    }
     #endregion
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Audio;
 using GameFramework.Game;
@@ -77,22 +75,21 @@ namespace CoreGameLogic.Managers.AppManagers
         #endregion
 
         #region 事件处理
-
         /// <summary>
         /// 订阅事件
         /// </summary>
         private void SubscribeAudioEvents()
         {
-            _eventManager.AddListener(PrepareEvents.RoleSelectedEnd, OnRoleSelectedEnd);
             _eventManager.AddListener(PropEvents.PropStarted, OnPropStarted);
             _eventManager.AddListener(SkillEvents.SkillStarted, OnSkillStarted);
             _eventManager.AddListener(SettlementEvents.SettlementStarted, OnSettlementStarted);
             _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
-            _eventManager.AddListener(BulletEvents.BulletHit, OnBulletHit);
+            _eventManager.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
             _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
             _eventManager.AddListener(PropEvents.TrapTriggered, OnTrapTriggered);
             _eventManager.AddListener(HiddenMapEvents.HiddenMapEntered, OnHiddenMapEntered);
             _eventManager.AddListener(QuestEvents.QuestDispatched, OnQuestDispatched);
+            _eventManager.AddListener(QuestEvents.QuestCompleted, OnQuestComplete);
         }
         
         /// <summary>
@@ -100,41 +97,41 @@ namespace CoreGameLogic.Managers.AppManagers
         /// </summary>
         private void UnsubscribeAudioEvents()
         {
-            _eventManager.RemoveListener(PrepareEvents.RoleSelectedEnd, OnRoleSelectedEnd);
             _eventManager.RemoveListener(PropEvents.PropStarted, OnPropStarted);
             _eventManager.RemoveListener(SkillEvents.SkillStarted, OnSkillStarted);
             _eventManager.RemoveListener(SettlementEvents.SettlementStarted, OnSettlementStarted);
-            _eventManager.RemoveListener(RoundEvents.RoundEntered, OnRoundEntered);
-            _eventManager.RemoveListener(BulletEvents.BulletHit, OnBulletHit);
+            _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
+            _eventManager.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
             _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
+            _eventManager.RemoveListener(PropEvents.TrapTriggered, OnTrapTriggered);
+            _eventManager.RemoveListener(HiddenMapEvents.HiddenMapEntered, OnHiddenMapEntered);
             _eventManager.RemoveListener(QuestEvents.QuestDispatched, OnQuestDispatched);
             _eventManager.RemoveListener(QuestEvents.QuestCompleted, OnQuestComplete);
         }
 
         /// <summary>
-        /// 角色选择结束音效播放事件
+        /// 单局开始事件回调
         /// </summary>
-        /// <param name="args"></param>
-        private void OnRoleSelectedEnd(RoleSelectedOverEventArgs args)
-        {
-            var roleType = args.RoleType;
-            PlayIPOpening(roleType);
-        }
-        
-        /// <summary>
-        /// 开局播放开场白事件
-        /// </summary>
-        /// <param name="args"></param>
-        private void OnRoundEntered(RoundEnteredEventArgs args)
+        private void OnRoundStarted(RoundStartedEventArgs args)
         {
             var roundContext = args.RoundContext;
             var roleType = roundContext.RoleData.RoleType;
             var hasLinkage = roundContext.HasLinkage;
 
-            PlayMapEnvSound(roundContext);
             PlayRoleOpening(roleType, hasLinkage);
         }
-        
+
+        /// <summary>
+        /// 进入单局事件回调
+        /// </summary>
+        private void OnRoundEntered(RoundEnteredEventArgs args)
+        {
+            var roundContext = args.RoundContext;
+            var mapType = roundContext.MapData.MapType;
+
+            PlayMapEnvSound(mapType);
+        }
+
         /// <summary>
         /// 子弹命中播放音效事件
         /// </summary>
@@ -248,9 +245,8 @@ namespace CoreGameLogic.Managers.AppManagers
         /// 播放地图环境应
         /// </summary>
         /// <param name="roundContext"></param>
-        private void PlayMapEnvSound(RoundContext roundContext)
+        private void PlayMapEnvSound(EMapType mapType)
         {
-            var mapType = roundContext.MapData.MapType;
             switch (mapType)
             {
                 case EMapType.Beach:
@@ -472,22 +468,20 @@ namespace CoreGameLogic.Managers.AppManagers
         /// 播放IP人物开场白
         /// </summary>
         /// <param name="roleType"></param>
-        private void PlayIPOpening(ERoleType roleType)
+        public AudioCallback PlayIPOpening(ERoleType roleType)
         {
             switch (roleType)
             {
                 case ERoleType.ZiWei:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.IP_ZiWei_Selected, AudioChannel.Voice);
-                    break;
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.IP_ZiWei_Selected, AudioChannel.Voice);
                 case ERoleType.DaMeiLi:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.IP_DaMeiLi_Selected, AudioChannel.Voice);
-                    break;
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.IP_DaMeiLi_Selected, AudioChannel.Voice);
                 case ERoleType.JinZhuangYuan:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.IP_JinZhuangYuan_Selected, AudioChannel.Voice);
-                    break;
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.IP_JinZhuangYuan_Selected, AudioChannel.Voice);
                 case ERoleType.YaKeDong:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.IP_YaKeDong_Selected, AudioChannel.Voice);
-                    break;
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.IP_YaKeDong_Selected, AudioChannel.Voice);
+                default:
+                    return null;
             }
         }
         

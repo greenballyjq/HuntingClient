@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 随机角色组件
 /// </summary>
-public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreloader
+public class UIComponentRollRole : MonoBehaviour, IUIComponent
 {
     /// <summary>
     /// 角色格子列表
@@ -16,22 +16,12 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
     [SerializeField] private UIComponentRoleSlot[] _roleSlots;
 
     /// <summary>
-    /// 开始投按钮
-    /// </summary>
-    [SerializeField] private Button _buttonStartRoll;
-
-    /// <summary>
     /// 金币人动画控制器
     /// </summary>
     [SerializeField] private ThreeKPCoinManThrowDiceAnimator _threeKPCoinManThrowDiceAnimator;
 
     /// <summary>
-    /// 角色图片缓存字典
-    /// </summary>
-    private Dictionary<int, Sprite> _roleSprites = new Dictionary<int, Sprite>();
-
-    /// <summary>
-    /// 当前格子索引（-1表示在场外）
+    /// 当前格子索引
     /// </summary>
     private int _currentSlotIndex = -1;
 
@@ -55,76 +45,17 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
     /// </summary>
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
-    /// <summary>
-    /// 资源管理器
-    /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-
-    private void Awake()
-    {
-        _buttonStartRoll.onClick.AddListener(OnDiceButtonClicked);
-    }
-
-    private void OnDestroy()
-    {
-        _buttonStartRoll.onClick.RemoveListener(OnDiceButtonClicked);
-    }
-
     public void Init(){}
 
     public void CleanUp(){}
 
-    /// <summary>
-    /// 预加载资源
-    /// </summary>
-    public async UniTask PreloadAsync()
-    {
-        var allRoles = _configManager.RoleTable.DataList;
-        foreach (var role in allRoles)
-        {
-            var sprite = await _resourceManager.LoadAssetAsync<Sprite>(role.IconResourcePath);
-            _roleSprites[role.ID] = sprite;
-        }
 
-        InitializeRoleSlots();
-    }
-
-    #region 私有方法
-    /// <summary>
-    /// 初始化角色格子
-    /// </summary>
-    private void InitializeRoleSlots()
-    {
-        // 生成角色ID列表
-        List<int> roleIds = new List<int>();
-        for (int i = 1; i <= _roleSlots.Length; i++)
-            roleIds.Add(i);
-
-        // 打乱顺序
-        for (int i = roleIds.Count - 1; i > 0; i--)
-        {
-            int j = Random.Range(0, i + 1);
-            int temp = roleIds[i];
-            roleIds[i] = roleIds[j];
-            roleIds[j] = temp;
-        }
-
-        // 分配给各个Slot
-        for (int i = 0; i < _roleSlots.Length; i++)
-        {
-            int roleId = roleIds[i];
-            Sprite roleSprite = _roleSprites[roleId];
-            _roleSlots[i].SetRole(roleId, roleSprite);
-        }
-    }
-
+    #region 公共方法
     /// <summary>
     /// 投骰子
     /// </summary>
-    private async UniTask RollDiceAsync()
+    public async UniTask PlayRollDiceAsync()
     {
-        _buttonStartRoll.interactable = false;
-
         // 随机骰子点数
         _diceValue = Random.Range(1, 7);
         int fromSlotIndex = _currentSlotIndex;
@@ -135,7 +66,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
             _targetSlotIndex += _roleSlots.Length;
         }
 
-        var roleId = _roleSlots[_targetSlotIndex].GetRoleId();
+        var roleId = _roleSlots[_targetSlotIndex].RoleID;
 
         // 触发角色选择事件
         TriggerRoleSelected(new RoleSelectedEventArgs
@@ -175,21 +106,12 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
 
         // 触发走格子动画结束事件
         _eventManager.Trigger(PrepareEvents.SlotAnimationEnded);
-        
-        // 触发角色选择结束事件
-        _eventManager.Trigger(PrepareEvents.RoleSelectedEnd, new RoleSelectedOverEventArgs
-        {
-            RoleType = _configManager.GetRole(roleId).RoleType,
-        });
 
         // 销毁骰子
         diceAnimation.DestroyDice();
 
         // 更新当前格子索引
         _currentSlotIndex = _targetSlotIndex;
-
-        // 激活按钮
-        _buttonStartRoll.interactable = true;
     }
 
     /// <summary>
@@ -219,11 +141,6 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent, IResourcePreload
     #endregion
 
     #region 事件相关
-    private void OnDiceButtonClicked()
-    {
-        RollDiceAsync().Forget();
-    }
-
     private void TriggerRoleSelected(RoleSelectedEventArgs args)
     {
         _eventManager.Trigger(PrepareEvents.RoleSelected, args);

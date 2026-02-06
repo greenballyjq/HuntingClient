@@ -185,9 +185,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _textCountdown: {fileID: 7206858927208934944}
   _countDownConfig:
-    TotalDuration: 4
+    TotalDuration: 8
     TextSequence:
+    - 5
+    - 4
+    - 3
+    - 2
+    - 1
     - "\u51C6\u5907..."
-    - "\u5F00\u59CB..."
-    - "\u72E9\u730E!!"
+    - "\u5F00\u59CB.."
+    - "\u72E9\u730E!"
     UseUnscaledTime: 0

@@ -193,7 +193,7 @@ public class RoundFlow : Singleton<RoundFlow>
     /// 开始单局
     /// </summary>
     /// <param name="context">单局上下文</param>
-    public async UniTask StartRound(RoundContext context)
+    public async UniTask EnterRound(RoundContext context)
     {
         _currentState = RoundFlowState.Transitioning;
 
@@ -201,7 +201,7 @@ public class RoundFlow : Singleton<RoundFlow>
         _currentRoundContext = context;
         _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
 
-        // 创建单据管理器
+        // 创建单局管理器
         CreateRoundManagers();
 
         // 初始化单局管理器
@@ -218,7 +218,6 @@ public class RoundFlow : Singleton<RoundFlow>
         {
             RoundContext = _currentRoundContext
         });
-
 
         // 播放倒计时动画
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
@@ -430,8 +429,7 @@ public class RoundFlow : Singleton<RoundFlow>
         _roundManagers.Add(new PlayerControlManager());
         _roundManagers.Add(new PropManager());
         _roundManagers.Add(new BulletManager());
-        _roundManagers.Add(new SkillManager());
-        _roundManagers.Add(new VideoManager());
+        _roundManagers.Add(new SkillManager());    
     }
 
     /// <summary>

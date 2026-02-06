@@ -8,8 +8,24 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "DefaultPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2026/2/5 20:19:59",
+    "PackageNote": "2026/2/6 19:29:58",
     "AssetList": [
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/CZ/CZ11.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "",
+            "AssetPath": "Assets/Arts/Audio/CZ/CZ12.MP3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
         {
             "Address": "",
             "AssetPath": "Assets/Arts/Audio/DRC/DRC01.WAV",
@@ -1389,7 +1405,7 @@
             "UnityCRC": 0,
             "FileHash": "857b7221e075d536b68ac69d3316a900",
             "FileCRC": "00000000",
-            "FileSize": 56153193,
+            "FileSize": 57225317,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -1419,7 +1435,7 @@
             "UnityCRC": 0,
             "FileHash": "2f6718f8e69b97ba7cb48fa0edd737ea",
             "FileCRC": "00000000",
-            "FileSize": 2267599,
+            "FileSize": 2268246,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

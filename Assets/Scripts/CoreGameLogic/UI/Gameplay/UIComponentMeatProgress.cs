@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 /// <summary>
 /// 肉度条展示组件
@@ -12,6 +13,11 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// 肉条填充图像
     /// </summary>
     [SerializeField] private Image _imageMeatBarFill;
+
+    /// <summary>
+    /// 肉条进度文本
+    /// </summary>
+    [SerializeField] private TextMeshProUGUI _textProgress;
 
     /// <summary>
     /// 事件管理器
@@ -48,6 +54,8 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     private void UpdateMeatProgress(float progressRatio)
     {
         _imageMeatBarFill.DOFillAmount(progressRatio, 0.3f);
+
+        _textProgress.text = $"{(int) (progressRatio * 100)}%";
     }
     #endregion
 
