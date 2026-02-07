@@ -39,6 +39,11 @@ public class PropAimAssistHandler : IPropHandler
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
+    /// UI管理器
+    /// </summary>
+    private UIManager _uiManager => GameServiceLocator.UIManager;
+
+    /// <summary>
     /// 配置管理器
     /// </summary>
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
@@ -74,6 +79,9 @@ public class PropAimAssistHandler : IPropHandler
         // 获取特效控制器组件
         _effectController = _effectInstance.GetComponent<AimAssistEffectController>();
         _effectController.SetTarget(null);
+
+        // 播放道具使用文字提示动画
+        _uiManager.GetUI<UIGameplay>("UIGameplay").PlayPropUseTipAnimationAsync().Forget();
 
         // 切换到指哪打哪模式
         _playerControlManager.SwitchToAimAssist(_minLockDistance, _maxLockDistance);

@@ -90,6 +90,7 @@ namespace CoreGameLogic.Managers.AppManagers
             _eventManager.AddListener(HiddenMapEvents.HiddenMapEntered, OnHiddenMapEntered);
             _eventManager.AddListener(QuestEvents.QuestDispatched, OnQuestDispatched);
             _eventManager.AddListener(QuestEvents.QuestCompleted, OnQuestComplete);
+            _eventManager.AddListener(BulletEvents.BulletHit, OnBulletHit);
         }
         
         /// <summary>
@@ -107,6 +108,7 @@ namespace CoreGameLogic.Managers.AppManagers
             _eventManager.RemoveListener(HiddenMapEvents.HiddenMapEntered, OnHiddenMapEntered);
             _eventManager.RemoveListener(QuestEvents.QuestDispatched, OnQuestDispatched);
             _eventManager.RemoveListener(QuestEvents.QuestCompleted, OnQuestComplete);
+            _eventManager.RemoveListener(BulletEvents.BulletHit, OnBulletHit);
         }
 
         /// <summary>
@@ -140,7 +142,7 @@ namespace CoreGameLogic.Managers.AppManagers
         {
             var bulletType = args.BulletData.BulletType;
             PlayBulletHitSound(bulletType);
-            PlayAnimalHitSound();
+            //PlayAnimalHitSound();
         }
         
         /// <summary>
@@ -239,8 +241,7 @@ namespace CoreGameLogic.Managers.AppManagers
 
         #endregion
 
-        #region 私有方法
-        
+        #region 私有方法 
         /// <summary>
         /// 播放地图环境应
         /// </summary>

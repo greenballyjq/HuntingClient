@@ -31,13 +31,17 @@ public class SkillYaKeDongHandler : ISkillHandler
 
     public SkillPhase SkillPhase { get; set; }
 
-    public void OnSkillStart(SkillContext context)
+    public async void OnSkillStart(SkillContext context)
     {
         SkillPhase = SkillPhase.Starting;
 
         var skillParam = _configManager.GetSkillYaKeDong(context.SkillData.ParamTableID);
 
+        // TODO: 配置
         SpawnCoinAnimalsAsync(skillParam).Forget();
+
+        // 模拟播放动画播放时长
+        await UniTask.Delay(6000);
 
         SkillPhase = SkillPhase.Finished;
     }

@@ -67,7 +67,6 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
 
     public void Init()
     {
-        _textReturnOrSettlement.text = "返回";
         _isSettlementMode = false;
         _isMeatScaleFull = false;
         _hasHiddenMap = false;
@@ -123,9 +122,15 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
         {
             _roundFlow.StartSettlement();
             if (_isMeatScaleFull && _hasHiddenMap)
+            {
                 await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+            }
             else
-                await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
+            {
+                await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+                //await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
+            }
+                
 
             _settlementRewardManager.CalculateReward();
         }
@@ -136,7 +141,6 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
             //await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
             //_settlementRewardManager.CalculateReward();
             
-            // huntingSoundManager.PlaySound2D()
             // 正式代码
             await HuntingAppFlow.Instance.EnterPrepareAsync();
         }

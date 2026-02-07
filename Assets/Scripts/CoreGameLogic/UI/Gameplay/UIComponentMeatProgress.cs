@@ -24,16 +24,13 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
-    /// <summary>
-    /// 肉条进度管理器
-    /// </summary>
-    private MeatProgressManager _meatProgressManager => GameServiceLocator.GetRoundManager<MeatProgressManager>();
-
     public void Init()
     {
         _eventManager.AddListener(MeatEvents.MeatValueChanged, OnMeatValueChanged);
 
-        _imageMeatBarFill.fillAmount = _meatProgressManager.TotalProgressRatio;
+        UpdateMeatProgressFill(0);
+
+        UpdateMeatProgressText(0);
     }
 
     public void CleanUp()
@@ -48,14 +45,21 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
 
     #region 私有方法
     /// <summary>
-    /// 更新肉度进度显示
+    /// 更新肉条进度填充
     /// </summary>
-    /// <param name="progressRatio">进度比例（0-1之间）</param>
-    private void UpdateMeatProgress(float progressRatio)
+    /// <param name="progressRatio">进度比例</param>
+    private void UpdateMeatProgressFill(float progressRatio)
     {
         _imageMeatBarFill.DOFillAmount(progressRatio, 0.3f);
+    }
 
-        _textProgress.text = $"{(int) (progressRatio * 100)}%";
+    /// <summary>
+    /// 更新肉条进度文本
+    /// </summary>
+    /// <param name="progressRatio">进度比例</param>
+    private void UpdateMeatProgressText(float progressRatio)
+    {
+        _textProgress.text = $"{(int)(progressRatio * 100)}%";
     }
     #endregion
 
@@ -65,7 +69,8 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnMeatValueChanged(MeatValueChangedEventArgs args)
     {
-        UpdateMeatProgress(args.TotalProgressRatio);
+        UpdateMeatProgressFill(args.TotalProgressRatio);
+        UpdateMeatProgressText(args.TotalProgressRatio);
     }
     #endregion
 }

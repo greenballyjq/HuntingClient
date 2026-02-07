@@ -211,7 +211,7 @@ public class RoundFlow : Singleton<RoundFlow>
         var uiGameplay = await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay", UIManager.UILayer.Fixed);
 
         // 禁止游玩界面操作
-        uiGameplay.SetRaycast(false);
+        uiGameplay.SetClickable(false);
 
         // 触发单局进入事件
         TriggerRoundEntered(new RoundEnteredEventArgs
@@ -224,7 +224,7 @@ public class RoundFlow : Singleton<RoundFlow>
         await uiCountDown.PlayCountdownAsync();
 
         // 恢复游玩界面操作
-        uiGameplay.SetRaycast(true);
+        uiGameplay.SetClickable(true);
 
         // 触发单局开始事件
         TriggerRoundStarted(new RoundStartedEventArgs
@@ -347,7 +347,7 @@ public class RoundFlow : Singleton<RoundFlow>
         uiGameplay.SwitchSnow();
 
         // 禁止游玩界面操作
-        uiGameplay.SetRaycast(false);
+        uiGameplay.SetClickable(false);
 
         // 播放淡出动画
         await uiLoading.PlayFadeOutAsync(); 
@@ -378,7 +378,7 @@ public class RoundFlow : Singleton<RoundFlow>
         await uiCountDown.PlayCountdownAsync();
 
         // 恢复游玩界面操作
-        uiGameplay.SetRaycast(true);
+        uiGameplay.SetClickable(true);
 
         // Boss进入战斗状态
         GetRoundManager<AnimalManager>().GetBossAnimalBehaviour().EnterCombat();

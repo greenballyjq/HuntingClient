@@ -69,9 +69,6 @@ public class PropBombardmentHandler : IPropHandler
         // 播放特效
         _effectManager.PlayOneShotAsync(parameter.EffectPrefabPath, _bombardmentCenter, Quaternion.identity).Forget();
 
-        // 创建范围指示器（测试用）
-        CreateRangeIndicator();
-
         _damageTimer = 0f;
     }
 
@@ -92,11 +89,7 @@ public class PropBombardmentHandler : IPropHandler
     /// <summary>
     /// 道具效果结束
     /// </summary>
-    public void OnPropEnd(PropContext context)
-    {
-        // 销毁范围指示器（测试用）
-        DestroyRangeIndicator();
-    }
+    public void OnPropEnd(PropContext context) { }
 
     #region 私有方法
     /// <summary>
@@ -136,52 +129,4 @@ public class PropBombardmentHandler : IPropHandler
 
         return _playerTransform;
     }
-
-    #region 测试
-    /// <summary>
-    /// 范围指示器（测试用）
-    /// </summary>
-    private GameObject _rangeIndicator;
-
-    /// <summary>
-    /// 创建范围指示器（测试用）
-    /// </summary>
-    private void CreateRangeIndicator()
-    {
-        _rangeIndicator = new GameObject("BombardmentRangeIndicator");
-        _rangeIndicator.transform.position = _bombardmentCenter;
-        _rangeIndicator.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-
-        LineRenderer lineRenderer = _rangeIndicator.AddComponent<LineRenderer>();
-        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        lineRenderer.startColor = new Color(1f, 0f, 0f, 0.6f);
-        lineRenderer.endColor = new Color(1f, 0f, 0f, 0.6f);
-        lineRenderer.startWidth = 0.2f;
-        lineRenderer.endWidth = 0.2f;
-        lineRenderer.useWorldSpace = true;
-        lineRenderer.loop = true;
-
-        const int segments = 64;
-        lineRenderer.positionCount = segments + 1;
-        for (int i = 0; i <= segments; i++)
-        {
-            float angle = i / (float)segments * Mathf.PI * 2f;
-            Vector3 point = _bombardmentCenter + new Vector3(Mathf.Cos(angle) * _zoneRadius, 0.05f, Mathf.Sin(angle) * _zoneRadius);
-            lineRenderer.SetPosition(i, point);
-        }
-    }
-
-    /// <summary>
-    /// 销毁范围指示器（测试用）
-    /// </summary>
-    private void DestroyRangeIndicator()
-    {
-        if (_rangeIndicator == null)
-            return;
-
-        Object.Destroy(_rangeIndicator);
-        _rangeIndicator = null;
-    }
-    #endregion
-
 }

@@ -33,16 +33,16 @@ MonoBehaviour:
     volume: 0.5
   - type: 6
     clip: {fileID: 8300000, guid: b22422fbe1c38b54cbc2d07516d7745a, type: 3}
-    volume: 0.5
+    volume: 0.05
   - type: 7
     clip: {fileID: 8300000, guid: 9ab6096e2e20c2c4cb1507e8c72b2229, type: 3}
-    volume: 0.5
+    volume: 0.05
   - type: 8
     clip: {fileID: 8300000, guid: 7fbdebaab2c685a4bae0ade2e2db83e5, type: 3}
-    volume: 0.5
+    volume: 0.05
   - type: 9
     clip: {fileID: 8300000, guid: dccf01eb9ecd0604285e179ead7d5565, type: 3}
-    volume: 0.2
+    volume: 0.05
   - type: 10
     clip: {fileID: 8300000, guid: fe97d608792e8ad4da5db078808f7b8b, type: 3}
     volume: 0.5

@@ -155,7 +155,7 @@ public class UIPrepare : UIBase
         // 播放角色语音
         if(roleData.RoleType == ERoleType.Bule || roleData.RoleType == ERoleType.Red)
         {
-            await UniTask.Delay(6000);
+            await UniTask.Delay(2000);
         }
         else
         {

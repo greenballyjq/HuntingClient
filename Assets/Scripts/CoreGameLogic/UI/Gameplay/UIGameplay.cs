@@ -49,6 +49,11 @@ public class UIGameplay : UIBase
     [SerializeField] private UIComponentPropGroup _uiComponentPropGroup;
 
     /// <summary>
+    /// 道具使用提示组件
+    /// </summary>
+    [SerializeField] private UIComponentPropUseTip _uiComponentPropUseTip;
+
+    /// <summary>
     /// 背景图像
     /// </summary>
     [SerializeField] private Image _imageBackground;
@@ -81,7 +86,9 @@ public class UIGameplay : UIBase
         _uiComponentSkill.Init();
         _uiComponentBullet.Init();
         _uiComponentPropGroup.Init();
-        
+        _uiComponentPropUseTip.Init();
+        _uiComponentPropUseTip.gameObject.SetActive(false);
+
         //uiComponentQuest.Init();
     }
 
@@ -95,6 +102,7 @@ public class UIGameplay : UIBase
         _uiComponentSkill.CleanUp();
         _uiComponentBullet.CleanUp();
         _uiComponentPropGroup.CleanUp();
+        _uiComponentPropUseTip.CleanUp();
 
         //uiComponentQuest.CleanUp();
 
@@ -127,11 +135,26 @@ public class UIGameplay : UIBase
     }
 
     /// <summary>
-    /// 设置射线检测
+    /// 设置是否可点击
     /// </summary>
-    public void SetRaycast(bool enable)
+    /// <param name="enable"></param>
+    public void SetClickable(bool enable)
     {
         _canvasGroup.blocksRaycasts = enable;
+    }
+
+    /// <summary>
+    /// 播放道具使用提示动画
+    /// </summary>
+    public async UniTask PlayPropUseTipAnimationAsync()
+    {
+        _uiComponentPropUseTip.Init();
+        _uiComponentPropUseTip.gameObject.SetActive(true);
+
+        await _uiComponentPropUseTip.PlayBlinkAsync();
+        
+        _uiComponentPropUseTip.CleanUp();
+        _uiComponentPropUseTip.gameObject.SetActive(false);
     }
     #endregion
 }

@@ -48,6 +48,11 @@ public class HuntingAppFlow : GameAppFlow
         None,
 
         /// <summary>
+        /// 登录状态
+        /// </summary>
+        Login,
+
+        /// <summary>
         /// 准备状态
         /// </summary>
         Prepare,
@@ -156,9 +161,6 @@ public class HuntingAppFlow : GameAppFlow
         await _uiManager.PreloadUIAsync("UICountdown");
 
         await _uiManager.PreloadUIAsync("UIPopupSettlementNormal");
-
-        // TODO: 将来可能在别处调用
-        await EnterPrepareAsync();
     }
 
     /// <summary>
