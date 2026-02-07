@@ -23,6 +23,12 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
     [SerializeField] private TextMeshProUGUI _textCountdown;
 
     /// <summary>
+    /// 子弹图像矩形变换组件
+    /// </summary>
+    private RectTransform _rectTransformBulletImage;
+    public RectTransform RectTransformBulletImage => _rectTransformBulletImage;
+
+    /// <summary>
     /// 当前子弹ID
     /// </summary>
     private int _currentBulletId;
@@ -52,7 +58,10 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
     /// </summary>
     private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
 
-    public RectTransform BulletTransform => _imageBullet.GetComponent<RectTransform>();
+    private void Awake()
+    {
+        _rectTransformBulletImage = _imageBullet.GetComponent<RectTransform>();
+    }
 
     public void Init()
     {
@@ -68,11 +77,6 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
         _eventManager.RemoveListener(BulletEvents.BulletChanged, OnBulletChanged);
         _eventManager.RemoveListener(BulletEvents.SpecialBulletCountdown, OnSpecialBulletCountdown);
         _eventManager.RemoveListener(BulletEvents.SpecialBulletEffectEnded, OnSpecialBulletEffectEnded);
-    }
-
-    private void OnDestroy()
-    {
-        CleanUp();
     }
 
     #region 私有方法

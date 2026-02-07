@@ -9,6 +9,7 @@ using GameFramework.Core;
 using GameFramework.Manager;
 using Hunting.Events;
 using Hunting.Game.Animal;
+using Unity.Burst.CompilerServices;
 
 /// <summary>
 /// 单局上下文
@@ -61,31 +62,14 @@ public class HiddenRoundEndTrigger
     private EventManager _eventManager => GameServiceLocator.EventManager;
     private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
     
-    private bool _bossDied;
-
-    private bool _isLastOne;
-    
     public void Init()
     {
-        _eventManager.AddListener(AnimalEvents.AnimalRemoved, OnAnimalRemoved);
         _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnterDeath);
-        // _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
-        _bossDied = false;
     }
     
     public void Release()
     {
-        _eventManager.RemoveListener(AnimalEvents.AnimalRemoved, OnAnimalRemoved);
         _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnterDeath);
-        // _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
-    }
-
-    private void OnAnimalRemoved(AnimalRemovedEventArgs _)
-    {
-        // if (_isLastOne) return;
-        // var activeAnimalCount = _animalManager.GetActiveAnimalCount();
-        // _isLastOne = activeAnimalCount == 1;
-        // Debug.Log($"[{GetType().Name}] 最后一只? {_isLastOne}, activeAnimalCount: {activeAnimalCount}");
     }
     
     private void OnAnimalEnterDeath(AnimalEnteredDeathEventArgs args)
@@ -93,17 +77,9 @@ public class HiddenRoundEndTrigger
         CheckIsHiddenRoundEnd();
     }
 
-    private void OnBossDied(BossDiedEventArgs _)
-    {
-        _bossDied = true;
-        CheckIsHiddenRoundEnd();
-    }
-    
     private async void CheckIsHiddenRoundEnd()
     {
         var isLastOne = _animalManager.GetUnDeathAnimalCount() == 0;
-        
-        Debug.Log($"[{GetType().Name}] 检测雪山地图是否结束, _isLastOne: {isLastOne}，{_animalManager.GetUnDeathAnimalCount()}");
         
         if (isLastOne)
         {
@@ -113,25 +89,7 @@ public class HiddenRoundEndTrigger
             Time.timeScale = 1f;
             RoundFlow.Instance.EndHiddenMapAsync().Forget();
         }
-        
-        // if (_bossDied && !_animalManager.HasActiveAnimal())
-        // {
-        //     // 隐藏地图结束
-        //     RoundFlow.Instance.EndHiddenMapAsync().Forget();
-        // }
     }
-
-    // private void CheckIsLastOne()
-    // {
-    //     Debug.Log($"[{GetType().Name}] 检测是否最后一只, count: {_animalManager.GetActiveAnimalCount()}");
-    //
-    //     if (_animalManager.GetActiveAnimalCount() == 1)
-    //     {
-    //         
-    //         Time.timeScale = 0.25f;
-    //         // await UniTask
-    //     }
-    // }
 }
 
 /// <summary>
@@ -211,7 +169,7 @@ public class RoundFlow : Singleton<RoundFlow>
     /// 特效管理器
     /// </summary>
     private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
-
+   
     #region 公共方法
     /// <summary>
     /// 获取单局管理器
@@ -284,11 +242,11 @@ public class RoundFlow : Singleton<RoundFlow>
         _roundManagers.Clear();
         _currentRoundContext = null;
 
-        // 清理对象池
-        _gameObjectPoolManager.ClearAllPools();
-
         // 关闭游玩界面
         _uiManager.CloseUI("UIGameplay");
+
+        // 清理对象池
+        _gameObjectPoolManager.ClearAllPools();
 
         // 加载准备场景
         await SceneManager.LoadSceneAsync("PrepareScene").ToUniTask();
@@ -441,17 +399,17 @@ public class RoundFlow : Singleton<RoundFlow>
         _effectManager.Stop(_snowEffect);
             
         // 全家福透明渐变 3s
-        var quanJiaFuObj = new GameObject("QuanJiaFu");
-        quanJiaFuObj.transform.position = new Vector3(1000, 0, 0);
-        LayerMask backgroundLayer = LayerMask.NameToLayer("Background");
-        quanJiaFuObj.layer = backgroundLayer;
-        var spriteRenderer = quanJiaFuObj.AddComponent<SpriteRenderer>();
-        Sprite sprite = Resources.Load<Sprite>("UI/Sprites/Login/img_denglu");
-        spriteRenderer.sprite = sprite;
-        var initialColor = new Color(1, 1, 1, 0);
-        spriteRenderer.color = initialColor;
-        spriteRenderer.sortingOrder = 1;
-        await spriteRenderer.DOFade(1f, 2f).ToUniTask();
+        //var quanJiaFuObj = new GameObject("QuanJiaFu");
+        //quanJiaFuObj.transform.position = new Vector3(1000, 0, 0);
+        //LayerMask backgroundLayer = LayerMask.NameToLayer("Background");
+        //quanJiaFuObj.layer = backgroundLayer;
+        //var spriteRenderer = quanJiaFuObj.AddComponent<SpriteRenderer>();
+        //Sprite sprite = Resources.Load<Sprite>("UI/Sprites/Login/img_denglu");
+        //spriteRenderer.sprite = sprite;
+        //var initialColor = new Color(1, 1, 1, 0);
+        //spriteRenderer.color = initialColor;
+        //spriteRenderer.sortingOrder = 1;
+        //await spriteRenderer.DOFade(1f, 2f).ToUniTask();
 
         await UniTask.Delay(1000);
         
@@ -464,12 +422,6 @@ public class RoundFlow : Singleton<RoundFlow>
         // await UniTask.Delay(3000);
         
         #endregion
-
-        // 打开结算界面
-        // await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
-        // GetRoundManager<SettlementRewardManager>().CalculateReward();
-        //
-        // _currentState = RoundFlowState.None;
     }
     #endregion
 
@@ -494,7 +446,6 @@ public class RoundFlow : Singleton<RoundFlow>
         _roundManagers.Add(new PropManager());
         _roundManagers.Add(new BulletManager());
         _roundManagers.Add(new SkillManager());
-        _roundManagers.Add(new DropRewardManager());
     }
 
     /// <summary>
@@ -516,18 +467,6 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
-    /// 清理单局管理器
-    /// </summary>
-    private void CleanupManagers()
-    {
-        for (int i = 0; i < _roundManagers.Count; i++)
-        {
-            if (_roundManagers[i] is IRoundResettable resettable)
-                resettable.Cleanup();
-        }
-    }
-
-    /// <summary>
     /// 重新初始化单局管理器
     /// </summary>
     private void ReInitManagers()
@@ -536,6 +475,18 @@ public class RoundFlow : Singleton<RoundFlow>
         {
             if (_roundManagers[i] is IRoundResettable resettable)
                 resettable.ReInit(_currentRoundContext);
+        }
+    }
+
+    /// <summary>
+    /// 清理单局管理器
+    /// </summary>
+    private void CleanupManagers()
+    {
+        for (int i = _roundManagers.Count - 1; i >= 0; i--)
+        {
+            if (_roundManagers[i] is IRoundResettable resettable)
+                resettable.Cleanup();
         }
     }
 

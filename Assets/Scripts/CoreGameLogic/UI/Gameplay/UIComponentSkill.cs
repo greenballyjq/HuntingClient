@@ -41,6 +41,23 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     [SerializeField] private Color[] _colors;
 
     /// <summary>
+    /// 技能图像矩形变换组件
+    /// </summary>
+    private RectTransform _rectTransformSkillImage;
+
+    public RectTransform RectTransformSkillImage => _rectTransformSkillImage;
+
+    /// <summary>
+    /// 单条所需值
+    /// </summary>
+    private float _valuePerBar;
+
+    /// <summary>
+    /// 总条数
+    /// </summary>
+    private int _totalBar;
+
+    /// <summary>
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
@@ -51,30 +68,31 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
 
     /// <summary>
-    /// 技能管理器
-    /// </summary>
-    private SkillManager _skillManager => GameServiceLocator.GetRoundManager<SkillManager>();
-
-    /// <summary>
     /// 丰收能量条管理器
     /// </summary>
     private EnergyProgressManager _energyProgressManager => GameServiceLocator.GetRoundManager<EnergyProgressManager>();
 
-    public RectTransform SkillTransform => _imageSkill.GetComponent<RectTransform>();
+    /// <summary>
+    /// 技能管理器
+    /// </summary>
+    private SkillManager _skillManager => GameServiceLocator.GetRoundManager<SkillManager>();
 
     private void Awake()
     {
         _buttonSkill.onClick.AddListener(OnSkillButtonClicked);
+
+        _rectTransformSkillImage =  _imageSkill.GetComponent<RectTransform>();
     }
 
     public void Init()
     {
-        float currentEnergy = _energyProgressManager.GetCurrentEnergyValue();
-        int currentBars = _energyProgressManager.GetCompletedBars();
-        int totalBar = _energyProgressManager.GetTotalBar();
-        UpdateFill(currentEnergy, currentBars);
-        UpdateBarText(currentBars, totalBar);
-        UpdateBackgroundColor(currentBars);
+        _totalBar = _energyProgressManager.TotalBar;
+
+        _valuePerBar = _energyProgressManager.ValuePerBar;
+
+        UpdateFill(0,0);
+        UpdateBarText(0);
+        UpdateBackgroundColor(0);
 
         _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
         _eventManager.AddListener(EnergyEvents.EnergyProgressChanged, OnEnergyProgressChanged);
@@ -93,16 +111,15 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     private void OnDestroy()
     {
         _buttonSkill.onClick.RemoveListener(OnSkillButtonClicked);
-        CleanUp();
     }
 
-    #region 更新逻辑
+    #region 私有方法
     /// <summary>
     /// 更新填充图像
     /// </summary>
     private void UpdateFill(float currentEnergy, int currentBars)
     {
-        _imageSkillBarFill.fillAmount = currentEnergy / _energyProgressManager.GetValuePerBar();
+        _imageSkillBarFill.fillAmount = currentEnergy / _valuePerBar;
         int colorIndex = currentBars >= _colors.Length ? _colors.Length - 1 : currentBars;
         _imageSkillBarFill.color = _colors[colorIndex];
     }
@@ -110,9 +127,9 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// <summary>
     /// 更新文本
     /// </summary>
-    private void UpdateBarText(int currentBars, int maxBars)
+    private void UpdateBarText(int currentBars)
     {
-        _textSkillBarAmount.text = $"{currentBars}/{maxBars}";
+        _textSkillBarAmount.text = $"{currentBars}/{_totalBar}";
     }
 
     /// <summary>
@@ -162,8 +179,8 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnEnergyBarCountChanged(EnergyBarCountChangedEventArgs args)
     {
-        UpdateFill(_energyProgressManager.GetCurrentEnergyValue(), args.CurrentBars);
-        UpdateBarText(args.CurrentBars, _energyProgressManager.GetTotalBar());
+        UpdateFill(_energyProgressManager.CurrentEnergyValue, args.CurrentBars);
+        UpdateBarText(args.CurrentBars);
         UpdateBackgroundColor(args.CurrentBars);
     }
 
@@ -172,9 +189,8 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnEnergyMaxBarsReached()
     {
-        int maxBars = _energyProgressManager.GetTotalBar();
-        UpdateBarText(maxBars, maxBars);
-        int colorIndex = maxBars - 1 >= _colors.Length ? _colors.Length - 1 : maxBars - 1;
+        UpdateBarText(_totalBar);
+        int colorIndex = _totalBar - 1 >= _colors.Length ? _colors.Length - 1 : _totalBar - 1;
         _imageSkillBarBackground.color = _colors[colorIndex];
         _imageSkillBarFill.color = _colors[colorIndex];
         _imageSkillBarFill.fillAmount = 1f;

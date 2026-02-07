@@ -12,6 +12,7 @@ public class UIGameplay : UIBase
     /// 返回/结算按钮组件
     /// </summary>
     [SerializeField] private UIComponentButtonReturnOrSettlement _uiComponentReturnOrSettlement;
+    public UIComponentButtonReturnOrSettlement UIComponentReturnOrSettlement => _uiComponentReturnOrSettlement;
 
     /// <summary>
     /// 动物计数器组件
@@ -32,16 +33,19 @@ public class UIGameplay : UIBase
     /// 肉度条组件
     /// </summary>
     [SerializeField] private UIComponentMeatProgress _uiComponentMeatProgress;
+    public UIComponentMeatProgress UIComponentMeatProgress => _uiComponentMeatProgress;
 
     /// <summary>
     /// 技能组件
     /// </summary>
     [SerializeField] private UIComponentSkill _uiComponentSkill;
+    public UIComponentSkill UIComponentSkill => _uiComponentSkill;
 
     /// <summary>
     /// 子弹组件
     /// </summary>
     [SerializeField] private UIComponentBullet _uiComponentBullet;
+    public UIComponentBullet UIComponentBullet => _uiComponentBullet;
 
     /// <summary>
     /// 道具组组件
@@ -52,6 +56,11 @@ public class UIGameplay : UIBase
     /// 道具使用提示组件
     /// </summary>
     [SerializeField] private UIComponentPropUseTip _uiComponentPropUseTip;
+
+    /// <summary>
+    /// 掉落奖励组件
+    /// </summary>
+    [SerializeField] private UIComponentDropReward _uiComponentDropReward;
 
     /// <summary>
     /// 背景图像
@@ -68,13 +77,6 @@ public class UIGameplay : UIBase
     /// </summary>
     private CanvasGroup _canvasGroup;
     
-    
-    public UIComponentBullet UIComponentBullet => _uiComponentBullet;
-    public UIComponentMeatProgress UIComponentMeatProgress => _uiComponentMeatProgress;
-    public UIComponentSkill UIComponentSkill => _uiComponentSkill;
-
-    public UIComponentButtonReturnOrSettlement UIComponentReturnOrSettlement => _uiComponentReturnOrSettlement;
-
     private void Awake()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
@@ -93,8 +95,11 @@ public class UIGameplay : UIBase
         _uiComponentSkill.Init();
         _uiComponentBullet.Init();
         _uiComponentPropGroup.Init();
+
         _uiComponentPropUseTip.Init();
         _uiComponentPropUseTip.gameObject.SetActive(false);
+
+        _uiComponentDropReward.Init(this);
 
         //uiComponentQuest.Init();
     }
@@ -110,6 +115,8 @@ public class UIGameplay : UIBase
         _uiComponentBullet.CleanUp();
         _uiComponentPropGroup.CleanUp();
         _uiComponentPropUseTip.CleanUp();
+
+        _uiComponentDropReward.CleanUp();
 
         //uiComponentQuest.CleanUp();
 

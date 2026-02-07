@@ -112,8 +112,7 @@ public class MeatProgressManager : IRoundManager
     /// </summary>
     private void RegisterEvents()
     {
-        // _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.AddListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
+        _eventManager.AddListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
     
     /// <summary>
@@ -121,29 +120,18 @@ public class MeatProgressManager : IRoundManager
     /// </summary>
     private void UnregisterEvents()
     {
-        // _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.RemoveListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
+        _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
 
     /// <summary>
-    /// 动物掉落奖励到达事件回调
+    /// 掉落奖励生效事件回调
     /// </summary>
     private void OnDropRewardArrived(RewardArrivedEventArgs args)
     {
         if (args.DropType == EDropType.Meat)
-        {
             AddMeatValue(args.DropCount);
-        }
     }
     
-    /// <summary>
-    /// 动物掉落奖励事件回调
-    /// </summary>
-    private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
-    {
-        AddMeatValue(args.DropRewards[EDropType.Meat]);
-    }
-
     /// <summary>
     /// 触发肉度值变化事件
     /// </summary>

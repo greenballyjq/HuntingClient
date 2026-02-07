@@ -41,6 +41,12 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     private RoundFlow _roundFlow => RoundFlow.Instance;
 
     /// <summary>
+    /// 返回/结算按钮矩形变换组件
+    /// </summary>
+    private RectTransform _rectTransformReturnOrSettlementButton;
+    public RectTransform RectTransformReturnOrSettlementButton => _rectTransformReturnOrSettlementButton;
+
+    /// <summary>
     /// 是否为结算模式
     /// </summary>
     private bool _isSettlementMode;
@@ -55,11 +61,11 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     /// </summary>
     private bool _hasHiddenMap;
 
-    public RectTransform SettlementTransform => _buttonReturnOrSettlement.GetComponent<RectTransform>();
-
     private void Awake()
     {
         _buttonReturnOrSettlement.onClick.AddListener(OnReturnOrSettlementButtonClicked);
+
+        _rectTransformReturnOrSettlementButton = _buttonReturnOrSettlement.GetComponent<RectTransform>();
     }
 
     private void OnDestroy()

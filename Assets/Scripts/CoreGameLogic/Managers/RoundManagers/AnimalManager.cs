@@ -181,7 +181,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
         _eventManager.AddListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
         _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
         _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
-        _eventManager.AddListener(AnimalEvents.AnimalFled, OnAnimalFled);
+        _eventManager.AddListener(AnimalEvents.AnimalLeft, OnAnimalFled);
         _eventManager.AddListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
         _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
     }
@@ -193,7 +193,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     {
         _eventManager.RemoveListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
         _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
-        _eventManager.RemoveListener(AnimalEvents.AnimalFled, OnAnimalFled);
+        _eventManager.RemoveListener(AnimalEvents.AnimalLeft, OnAnimalFled);
         _eventManager.RemoveListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
         _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
     }
@@ -227,7 +227,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <summary>
     /// 动物逃跑事件回调
     /// </summary>
-    private void OnAnimalFled(AnimalFledEventArgs args)
+    private void OnAnimalFled(AnimalLeftEventArgs args)
     {
         _pendingRemovalAnimals.Add(args.Animal);
     }

@@ -3,14 +3,14 @@
 namespace Hunting.Game.Animal
 {
     /// <summary>
-    /// 逃跑动物行为类
+    /// 离场动物行为类
     /// </summary>
-    public class FleeAnimalBehaviour : BaseAnimalBehaviour
+    public class LeaveAnimalBehaviour : BaseAnimalBehaviour
     {
         /// <summary>
-        /// 逃跑状态
+        /// 离场状态
         /// </summary>
-        public AnimalFleeState FleeState { get; private set; }
+        public AnimalLeaveState LeaveState { get; private set; }
 
         /// <summary>
         /// 驻场时间
@@ -34,7 +34,7 @@ namespace Hunting.Game.Animal
             _stayTimer = 0f;
             _stayFinished = false;
 
-            FleeState = new AnimalFleeState(_stateMachine, this);
+            LeaveState = new AnimalLeaveState(_stateMachine, this);
 
             base.Init(data);
         }
@@ -54,7 +54,7 @@ namespace Hunting.Game.Animal
         /// <param name="dt"></param>
         private void UpdateStayTime(float dt)
         {
-            if (_stateMachine.CurrentState is AnimalDeathState || _stateMachine.CurrentState is AnimalFleeState)
+            if (_stateMachine.CurrentState is AnimalDeathState || _stateMachine.CurrentState is AnimalLeaveState)
                 return;
 
             if (_stayFinished)
@@ -64,7 +64,7 @@ namespace Hunting.Game.Animal
             if (_stayTimer >= _stayTime)
             {
                 _stayFinished = true;
-                _stateMachine.ChangeState(FleeState);
+                _stateMachine.ChangeState(LeaveState);
             }
         }
         #endregion

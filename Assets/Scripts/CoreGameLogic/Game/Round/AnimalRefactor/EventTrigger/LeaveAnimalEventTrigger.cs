@@ -1,14 +1,16 @@
 ﻿using Hunting.Game.Animal;
 
-
-public class FleeAnimalEventTrigger : BaseAnimalEventTrigger
+/// <summary>
+/// 离场动物事件触发器组件
+/// </summary>
+public class LeaveAnimalEventTrigger : BaseAnimalEventTrigger
 {
     /// <summary>
-    /// 触发动物逃跑事件
+    /// 触发动物离场事件
     /// </summary>
     public void TriggerAnimalFled()
     {
-        _eventManager.Trigger(AnimalEvents.AnimalFled, new AnimalFledEventArgs
+        _eventManager.Trigger(AnimalEvents.AnimalLeft, new AnimalLeftEventArgs
         {
             Sender = this,
             Animal = _animalBehaviour,

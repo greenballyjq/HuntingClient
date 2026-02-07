@@ -9,7 +9,11 @@ using TMPro;
 /// </summary>
 public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
 {
+    /// <summary>
+    /// 肉图像
+    /// </summary>
     [SerializeField] private Image _imageMeat;
+
     /// <summary>
     /// 肉条填充图像
     /// </summary>
@@ -25,25 +29,28 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
-    public RectTransform MeatTransform => _imageMeat.GetComponent<RectTransform>();
+    /// <summary>
+    /// 肉图像矩形变换组件
+    /// </summary>
+    private RectTransform _rectTransformMeatImage;
+    public RectTransform RectTransformMeatImage => _rectTransformMeatImage;
+
+    private void Awake()
+    {
+        _rectTransformMeatImage = _imageMeat.GetComponent<RectTransform>();
+    }
 
     public void Init()
     {
         _eventManager.AddListener(MeatEvents.MeatValueChanged, OnMeatValueChanged);
 
         UpdateMeatProgressFill(0);
-
         UpdateMeatProgressText(0);
     }
 
     public void CleanUp()
     {
         _eventManager.RemoveListener(MeatEvents.MeatValueChanged, OnMeatValueChanged);
-    }
-
-    private void OnDestroy()
-    {
-        CleanUp();
     }
 
     #region 私有方法

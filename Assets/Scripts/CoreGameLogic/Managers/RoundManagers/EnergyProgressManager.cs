@@ -12,26 +12,31 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     /// 单条所需值
     /// </summary>
     private float _valuePerBar;
+    public float ValuePerBar => _valuePerBar;
 
     /// <summary>
     /// 总条数
     /// </summary>
     private int _totalBar;
+    public int TotalBar => _totalBar;
 
     /// <summary>
     /// 每秒增加量
     /// </summary>
     private float _increasePerSecond;
+    public float IncreasePerSecond => _increasePerSecond;
 
     /// <summary>
     /// 当前能量值
     /// </summary>
     private float _currentEnergyValue;
+    public float CurrentEnergyValue => _currentEnergyValue;
 
     /// <summary>
     /// 已完成的能量条数
     /// </summary>
     private int _completedBars;
+    public int CompletedBars => _completedBars;
 
     /// <summary>
     /// 事件管理器
@@ -112,38 +117,6 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     }
 
     /// <summary>
-    /// 获取单条所需值
-    /// </summary>
-    public float GetValuePerBar()
-    {
-        return _valuePerBar;
-    }
-
-    /// <summary>
-    /// 获取当前能量值
-    /// </summary>
-    public float GetCurrentEnergyValue()
-    {
-        return _currentEnergyValue;
-    }
-
-    /// <summary>
-    /// 获取总条数
-    /// </summary>
-    public int GetTotalBar()
-    {
-        return _totalBar;
-    }
-
-    /// <summary>
-    /// 获取已完成的能量条数
-    /// </summary>
-    public int GetCompletedBars()
-    {
-        return _completedBars;
-    }
-
-    /// <summary>
     /// 使用一条能量条
     /// </summary>
     public bool UseEnergyOneBar()
@@ -178,8 +151,7 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     /// </summary>
     private void RegisterEvents()
     {
-        // _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.AddListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
+        _eventManager.AddListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
 
     /// <summary>
@@ -187,27 +159,16 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     /// </summary>
     private void UnregisterEvents()
     {
-        // _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.RemoveListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
+        _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
     
     /// <summary>
-    /// 动物掉落奖励到达事件回调
+    /// 掉落奖励生效事件回调
     /// </summary>
     private void OnDropRewardArrived(RewardArrivedEventArgs args)
     {
         if (args.DropType == EDropType.Energy)
-        {
             AddEnergyValue(args.DropCount);
-        }
-    }
-
-    /// <summary>
-    /// 动物掉落奖励回调
-    /// </summary>
-    private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
-    {
-        AddEnergyValue(args.DropRewards[EDropType.Energy]);
     }
 
     /// <summary>

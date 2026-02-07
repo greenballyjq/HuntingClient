@@ -28,12 +28,17 @@ public static class AnimalEvents
     /// <summary>
     /// 动物逃跑事件
     /// </summary>
-    public static readonly EventKey<AnimalFledEventArgs> AnimalFled = new EventKey<AnimalFledEventArgs>();
+    public static readonly EventKey<AnimalLeftEventArgs> AnimalLeft = new EventKey<AnimalLeftEventArgs>();
 
     /// <summary>
     /// 动物掉落奖励事件
     /// </summary>
     public static readonly EventKey<AnimalDropRewardEventArgs> AnimalDropReward = new EventKey<AnimalDropRewardEventArgs>();
+
+    /// <summary>
+    /// 掉落奖励生效事件
+    /// </summary>
+    public static readonly EventKey<RewardArrivedEventArgs> DropRewardArrived = new EventKey<RewardArrivedEventArgs>();
 
     /// <summary>
     /// 动物生成事件
@@ -84,7 +89,7 @@ public sealed class AnimalDiedEventArgs : EventArgs
 }
 
 /// <summary>
-/// 动物死亡事件参数
+/// 动物移除事件参数
 /// </summary>
 public sealed class AnimalRemovedEventArgs : EventArgs
 {
@@ -97,7 +102,7 @@ public sealed class AnimalRemovedEventArgs : EventArgs
 /// <summary>
 /// 动物逃跑事件参数
 /// </summary>
-public sealed class AnimalFledEventArgs : EventArgs
+public sealed class AnimalLeftEventArgs : EventArgs
 {
     /// <summary>
     /// 逃跑的动物实例
@@ -124,6 +129,22 @@ public sealed class AnimalDropRewardEventArgs : EventArgs
     /// 掉落奖励
     /// </summary>
     public Dictionary<EDropType, int> DropRewards { get; set; }
+}
+
+/// <summary>
+/// 掉落奖励生效事件参数
+/// </summary>
+public sealed class RewardArrivedEventArgs : EventArgs
+{
+    /// <summary>
+    /// 掉落类型
+    /// </summary>
+    public EDropType DropType { get; set; }
+
+    /// <summary>
+    /// 掉落数量
+    /// </summary>
+    public int DropCount { get; set; }
 }
 
 /// <summary>

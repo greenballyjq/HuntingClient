@@ -255,8 +255,7 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     private void RegisterEvents()
     {
-        // _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.AddListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
+        _eventManager.AddListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
 
     /// <summary>
@@ -264,40 +263,18 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     private void UnregisterEvents()
     {
-        // _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.RemoveListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
+        _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
     
     /// <summary>
-    /// 动物掉落奖励到达事件回调
+    /// 掉落奖励生效事件回调
     /// </summary>
     private void OnDropRewardArrived(RewardArrivedEventArgs args)
     {
-        if (args.DropType == EDropType.Bullet && args.DropCount > 0)
-        {
-            // 获取随机特殊子弹
-            var specialBullet = _configManager.GetRandomSpecialBullet();
-            // 切换到特殊子弹
-            ChangeBullet(specialBullet.ID);
-        }
+        if (args.DropType == EDropType.Bullet)
+            ChangeBullet(_configManager.GetRandomSpecialBullet().ID);
     }
-    
-    /// <summary>
-    /// 动物掉落奖励事件回调
-    /// </summary>
-    private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
-    {
-        // 检查是否掉落子弹奖励
-        if (!args.DropRewards.TryGetValue(EDropType.Bullet, out int bulletAmount) || bulletAmount <= 0)
-            return;
-
-        // 获取随机特殊子弹
-        var specialBullet = _configManager.GetRandomSpecialBullet();
-
-        // 切换到特殊子弹
-        ChangeBullet(specialBullet.ID);
-    }
-
+   
     /// <summary>
     /// 触发子弹切换事件
     /// </summary>

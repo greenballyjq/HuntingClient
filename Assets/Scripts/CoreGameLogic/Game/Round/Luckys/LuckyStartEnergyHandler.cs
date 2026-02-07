@@ -22,7 +22,7 @@ public class LuckyBuffStartEnergyHandler : ILuckyBuffHandler
         int barCount = param.EnergyBarCount;
 
         // 获取单条所需能量值
-        float requiredPerBar = _energyProgressManager.GetValuePerBar();
+        float requiredPerBar = _energyProgressManager.ValuePerBar;
 
         // 计算需要增加的能量总量 = 单条所需值 * 条数
         float totalEnergy = requiredPerBar * barCount;

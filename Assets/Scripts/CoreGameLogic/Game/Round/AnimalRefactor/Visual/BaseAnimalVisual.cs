@@ -110,7 +110,7 @@ namespace Hunting.Game.Animal
         public void PlayDeath()
         {
             ResetAnimationStates();
-            _animator.SetBool("Death", true);
+            _animator.SetBool("Die", true);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Hunting.Game.Animal
         protected virtual void ResetAnimationStates()
         {
             _animator.SetBool("Move", false);
-            _animator.SetBool("Death", false);
+            _animator.SetBool("Die", false);
         }
         #endregion
 

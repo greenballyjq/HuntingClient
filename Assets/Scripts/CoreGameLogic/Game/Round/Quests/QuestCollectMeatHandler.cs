@@ -21,12 +21,9 @@ public class QuestCollectMeatHandler : IQuestHandler
     /// </summary>
     public void OnQuestStart(QuestContext context)
     {
-        // 重置进度
         _currentProgress = 0;
 
-        // 订阅动物掉落奖励事件
-        // _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.AddListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
+        _eventManager.AddListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
 
     /// <summary>
@@ -42,9 +39,7 @@ public class QuestCollectMeatHandler : IQuestHandler
     /// </summary>
     public void OnQuestEnd(QuestContext context)
     {
-        // 取消订阅动物掉落奖励事件
-        // _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-        _eventManager.RemoveListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
+        _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
 
     /// <summary>
@@ -58,24 +53,12 @@ public class QuestCollectMeatHandler : IQuestHandler
     #region 事件回调
     
     /// <summary>
-    /// 动物掉落奖励到达事件回调
+    /// 掉落奖励生效事件回调
     /// </summary>
     private void OnDropRewardArrived(RewardArrivedEventArgs args)
     {
-        if (args.DropType == EDropType.Meat && args.DropCount > 0)
-        {
+        if (args.DropType == EDropType.Meat)
             _currentProgress += args.DropCount;
-        }
-    }
-    
-    /// <summary>
-    /// 动物掉落奖励事件回调
-    /// </summary>
-    private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
-    {
-        // 从掉落奖励中获取肉类数量
-        if (args.DropRewards.TryGetValue(EDropType.Meat, out var meatAmount) && meatAmount > 0)
-            _currentProgress += meatAmount;
     }
     #endregion
 }
