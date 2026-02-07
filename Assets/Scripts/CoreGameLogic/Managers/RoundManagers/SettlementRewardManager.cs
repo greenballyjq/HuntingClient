@@ -173,7 +173,8 @@ public class SettlementRewardManager : IRoundManager
     /// </summary>
     private void RegisterEvents()
     {
-        _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        // _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        _eventManager.AddListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
         _eventManager.AddListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
         _eventManager.AddListener(QuestEvents.QuestCompleted, OnQuestCompleted);
     }
@@ -183,7 +184,8 @@ public class SettlementRewardManager : IRoundManager
     /// </summary>
     private void UnregisterEvents()
     {
-        _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        // _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        _eventManager.RemoveListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
         _eventManager.RemoveListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
         _eventManager.RemoveListener(QuestEvents.QuestCompleted, OnQuestCompleted);
     }
@@ -194,6 +196,17 @@ public class SettlementRewardManager : IRoundManager
     private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
     {
         _coinFromSpecie += args.DropRewards[EDropType.ThreeKPCoin];
+    }
+    
+    /// <summary>
+    /// 掉落奖励到达回调
+    /// </summary>
+    private void OnDropRewardArrived(RewardArrivedEventArgs args)
+    {
+        if (args.DropType == EDropType.ThreeKPCoin)
+        {
+            _coinFromSpecie += args.DropCount;
+        }
     }
 
     /// <summary>

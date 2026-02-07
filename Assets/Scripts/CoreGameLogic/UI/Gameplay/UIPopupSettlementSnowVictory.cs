@@ -104,6 +104,7 @@ public class UIPopupSettlementSnowVictory : UIBase
     /// </summary>
     private async void OnDiceButtonClicked()
     {
+        _buttonDice.enabled = false;
         // 掷骰子动画
         int point = Random.Range(1, 7);
         if (!_diceTransform)

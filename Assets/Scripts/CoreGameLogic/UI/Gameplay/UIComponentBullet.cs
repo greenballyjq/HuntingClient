@@ -52,6 +52,8 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
     /// </summary>
     private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
 
+    public RectTransform BulletTransform => _imageBullet.GetComponent<RectTransform>();
+
     public void Init()
     {
         UpdateCountdown(false, 0, 0);

@@ -67,6 +67,13 @@ public class UIGameplay : UIBase
     /// 画布组
     /// </summary>
     private CanvasGroup _canvasGroup;
+    
+    
+    public UIComponentBullet UIComponentBullet => _uiComponentBullet;
+    public UIComponentMeatProgress UIComponentMeatProgress => _uiComponentMeatProgress;
+    public UIComponentSkill UIComponentSkill => _uiComponentSkill;
+
+    public UIComponentButtonReturnOrSettlement UIComponentReturnOrSettlement => _uiComponentReturnOrSettlement;
 
     private void Awake()
     {

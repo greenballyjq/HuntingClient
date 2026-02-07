@@ -7,6 +7,11 @@
 public static class BossEvents
 {
     /// <summary>
+    /// Boss 进入死亡事件
+    /// </summary>
+    public static readonly EventKey<BossEnterDeathEventArgs> BossEnterDeath = new EventKey<BossEnterDeathEventArgs>();
+    
+    /// <summary>
     /// Boss 死亡事件
     /// </summary>
     public static readonly EventKey<BossDiedEventArgs> BossDied = new EventKey<BossDiedEventArgs>();
@@ -20,6 +25,17 @@ public static class BossEvents
     /// Boss 召唤小怪事件
     /// </summary>
     public static readonly EventKey<BossCallEventArgs> BossCall = new EventKey<BossCallEventArgs>();
+}
+
+/// <summary>
+/// Boss 死亡事件参数
+/// </summary>
+public sealed class BossEnterDeathEventArgs : EventArgs
+{
+    /// <summary>
+    /// 死亡的Boss实例
+    /// </summary>
+    public BossAnimalBehaviour Boss { get; set; }
 }
 
 /// <summary>

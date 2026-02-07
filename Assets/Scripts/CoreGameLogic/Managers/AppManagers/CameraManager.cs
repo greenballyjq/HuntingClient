@@ -17,6 +17,11 @@ public class CameraManager : IAppManager
     private Camera _particleCamera;
     public Camera ParticleCamera => _particleCamera;
 
+    /// <summary>
+    /// UI摄像机
+    /// </summary>
+    public Camera UICamera => GameServiceLocator.UIManager.UICamera;
+
     public void Init()
     {
         _particleCamera = GameObject.FindGameObjectWithTag("Particle Camera").GetComponent<Camera>();

@@ -245,7 +245,8 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     private void RegisterEvents()
     {
-        _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        // _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        _eventManager.AddListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
     }
 
     /// <summary>
@@ -253,9 +254,24 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     private void UnregisterEvents()
     {
-        _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        // _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        _eventManager.RemoveListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
     }
-
+    
+    /// <summary>
+    /// 动物掉落奖励到达事件回调
+    /// </summary>
+    private void OnDropRewardArrived(RewardArrivedEventArgs args)
+    {
+        if (args.DropType == EDropType.Bullet && args.DropCount > 0)
+        {
+            // 获取随机特殊子弹
+            var specialBullet = _configManager.GetRandomSpecialBullet();
+            // 切换到特殊子弹
+            ChangeBullet(specialBullet.ID);
+        }
+    }
+    
     /// <summary>
     /// 动物掉落奖励事件回调
     /// </summary>

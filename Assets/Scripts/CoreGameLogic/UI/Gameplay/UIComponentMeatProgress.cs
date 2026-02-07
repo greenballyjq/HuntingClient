@@ -9,6 +9,7 @@ using TMPro;
 /// </summary>
 public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
 {
+    [SerializeField] private Image _imageMeat;
     /// <summary>
     /// 肉条填充图像
     /// </summary>
@@ -23,6 +24,8 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
+
+    public RectTransform MeatTransform => _imageMeat.GetComponent<RectTransform>();
 
     public void Init()
     {

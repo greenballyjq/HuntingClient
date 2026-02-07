@@ -60,6 +60,8 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private EnergyProgressManager _energyProgressManager => GameServiceLocator.GetRoundManager<EnergyProgressManager>();
 
+    public RectTransform SkillTransform => _imageSkill.GetComponent<RectTransform>();
+
     private void Awake()
     {
         _buttonSkill.onClick.AddListener(OnSkillButtonClicked);
