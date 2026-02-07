@@ -178,7 +178,8 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     /// </summary>
     private void RegisterEvents()
     {
-        _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        // _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        _eventManager.AddListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
     }
 
     /// <summary>
@@ -186,7 +187,19 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     /// </summary>
     private void UnregisterEvents()
     {
-        _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        // _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+        _eventManager.RemoveListener(DropRewardEvents.DropRewardArrived, OnDropRewardArrived);
+    }
+    
+    /// <summary>
+    /// 动物掉落奖励到达事件回调
+    /// </summary>
+    private void OnDropRewardArrived(RewardArrivedEventArgs args)
+    {
+        if (args.DropType == EDropType.Energy)
+        {
+            AddEnergyValue(args.DropCount);
+        }
     }
 
     /// <summary>

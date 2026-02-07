@@ -55,6 +55,8 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     /// </summary>
     private bool _hasHiddenMap;
 
+    public RectTransform SettlementTransform => _buttonReturnOrSettlement.GetComponent<RectTransform>();
+
     private void Awake()
     {
         _buttonReturnOrSettlement.onClick.AddListener(OnReturnOrSettlementButtonClicked);

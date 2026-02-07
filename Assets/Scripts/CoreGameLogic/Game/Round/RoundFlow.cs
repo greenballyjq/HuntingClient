@@ -2,6 +2,7 @@
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using GameFramework.Core;
@@ -61,21 +62,33 @@ public class HiddenRoundEndTrigger
     private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
     
     private bool _bossDied;
+
+    private bool _isLastOne;
     
     public void Init()
     {
         _eventManager.AddListener(AnimalEvents.AnimalRemoved, OnAnimalRemoved);
-        _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
+        _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnterDeath);
+        // _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
         _bossDied = false;
     }
-
+    
     public void Release()
     {
         _eventManager.RemoveListener(AnimalEvents.AnimalRemoved, OnAnimalRemoved);
-        _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
+        _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnterDeath);
+        // _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
     }
 
     private void OnAnimalRemoved(AnimalRemovedEventArgs _)
+    {
+        // if (_isLastOne) return;
+        // var activeAnimalCount = _animalManager.GetActiveAnimalCount();
+        // _isLastOne = activeAnimalCount == 1;
+        // Debug.Log($"[{GetType().Name}] 最后一只? {_isLastOne}, activeAnimalCount: {activeAnimalCount}");
+    }
+    
+    private void OnAnimalEnterDeath(AnimalEnteredDeathEventArgs args)
     {
         CheckIsHiddenRoundEnd();
     }
@@ -86,15 +99,39 @@ public class HiddenRoundEndTrigger
         CheckIsHiddenRoundEnd();
     }
     
-    private void CheckIsHiddenRoundEnd()
+    private async void CheckIsHiddenRoundEnd()
     {
-        Debug.Log($"[{GetType().Name}] 检测雪山地图是否结束, bossDied: {_bossDied}, count: {_animalManager.GetActiveAnimalCount()}");
-        if (_bossDied && !_animalManager.HasActiveAnimal())
+        var isLastOne = _animalManager.GetUnDeathAnimalCount() == 0;
+        
+        Debug.Log($"[{GetType().Name}] 检测雪山地图是否结束, _isLastOne: {isLastOne}，{_animalManager.GetUnDeathAnimalCount()}");
+        
+        if (isLastOne)
         {
-            // 隐藏地图结束
+            // todo 时间缩放为 1/4 3s  放大光圈  3s 全家福 2s
+            Time.timeScale = 0.25f;
+            await UniTask.Delay(3000);
+            Time.timeScale = 1f;
             RoundFlow.Instance.EndHiddenMapAsync().Forget();
         }
+        
+        // if (_bossDied && !_animalManager.HasActiveAnimal())
+        // {
+        //     // 隐藏地图结束
+        //     RoundFlow.Instance.EndHiddenMapAsync().Forget();
+        // }
     }
+
+    // private void CheckIsLastOne()
+    // {
+    //     Debug.Log($"[{GetType().Name}] 检测是否最后一只, count: {_animalManager.GetActiveAnimalCount()}");
+    //
+    //     if (_animalManager.GetActiveAnimalCount() == 1)
+    //     {
+    //         
+    //         Time.timeScale = 0.25f;
+    //         // await UniTask
+    //     }
+    // }
 }
 
 /// <summary>
@@ -397,16 +434,42 @@ public class RoundFlow : Singleton<RoundFlow>
 
         #region 测试
         _currentRoundContext.HiddenRoundEndTrigger.Release();
-        await _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Particles/FX_DGB_PTFH", new Vector3(0, 0, 5), Quaternion.identity);
-        _effectManager.Stop(_snowEffect);
-        await UniTask.Delay(3000);
-        #endregion
+        var lightEffectObj = await _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Particles/FX_DGB_PTFH"
+            , new Vector3(0, 0, 5), Quaternion.identity);
 
+        await lightEffectObj.transform.DOScale(Vector3.one * 6f, 3f).ToUniTask();
+        _effectManager.Stop(_snowEffect);
+            
+        // 全家福透明渐变 3s
+        var quanJiaFuObj = new GameObject("QuanJiaFu");
+        quanJiaFuObj.transform.position = new Vector3(1000, 0, 0);
+        LayerMask backgroundLayer = LayerMask.NameToLayer("Background");
+        quanJiaFuObj.layer = backgroundLayer;
+        var spriteRenderer = quanJiaFuObj.AddComponent<SpriteRenderer>();
+        Sprite sprite = Resources.Load<Sprite>("UI/Sprites/Login/img_denglu");
+        spriteRenderer.sprite = sprite;
+        var initialColor = new Color(1, 1, 1, 0);
+        spriteRenderer.color = initialColor;
+        spriteRenderer.sortingOrder = 1;
+        await spriteRenderer.DOFade(1f, 2f).ToUniTask();
+
+        await UniTask.Delay(1000);
+        
         // 打开结算界面
         await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
         GetRoundManager<SettlementRewardManager>().CalculateReward();
 
         _currentState = RoundFlowState.None;
+        // _effectManager.Stop(_snowEffect);
+        // await UniTask.Delay(3000);
+        
+        #endregion
+
+        // 打开结算界面
+        // await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
+        // GetRoundManager<SettlementRewardManager>().CalculateReward();
+        //
+        // _currentState = RoundFlowState.None;
     }
     #endregion
 
@@ -430,7 +493,8 @@ public class RoundFlow : Singleton<RoundFlow>
         _roundManagers.Add(new PlayerControlManager());
         _roundManagers.Add(new PropManager());
         _roundManagers.Add(new BulletManager());
-        _roundManagers.Add(new SkillManager());    
+        _roundManagers.Add(new SkillManager());
+        _roundManagers.Add(new DropRewardManager());
     }
 
     /// <summary>

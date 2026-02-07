@@ -278,6 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 368b6a3e5e4d3d8469133d17b2e222c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _imageMeat: {fileID: 3909290182137266812}
   _imageMeatBarFill: {fileID: 5567011728863524034}
   _textProgress: {fileID: 2989574782331409673}
 --- !u!1 &8851147711822363151

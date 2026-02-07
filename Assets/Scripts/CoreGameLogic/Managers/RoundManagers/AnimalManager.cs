@@ -27,6 +27,11 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
+    /// 未进入死亡状态动物集合
+    /// </summary>
+    private readonly HashSet<BaseAnimalBehaviour> _unDeathAnimals = new HashSet<BaseAnimalBehaviour>();
+
+    /// <summary>
     /// 活跃动物集合
     /// </summary>
     private readonly HashSet<BaseAnimalBehaviour> _activeAnimals = new HashSet<BaseAnimalBehaviour>();
@@ -94,6 +99,12 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     public int GetActiveAnimalCount() => _activeAnimals.Count;
 
     /// <summary>
+    /// 获取未进入死亡状态的动物数量
+    /// </summary>
+    /// <returns></returns>
+    public int GetUnDeathAnimalCount() => _unDeathAnimals.Count;
+
+    /// <summary>
     /// 获取真实活跃动物数量
     /// </summary>
     public int GetRealActiveAnimalCount() => _activeAnimals.Count - _pendingRemovalAnimals.Count;
@@ -155,6 +166,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
             _gameObjectPoolManager.Despawn(animal.gameObject);
 
         _activeAnimals.Clear();
+        _unDeathAnimals.Clear();
         _pendingRemovalAnimals.Clear();
     }
 
@@ -167,6 +179,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void RegisterEvents()
     {
         _eventManager.AddListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
+        _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
         _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
         _eventManager.AddListener(AnimalEvents.AnimalFled, OnAnimalFled);
         _eventManager.AddListener(AnimalEvents.AnimalReachedWall, OnAnimalReachedWall);
@@ -191,6 +204,16 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void OnAnimalGenerated(AnimalGeneratedEventArgs args)
     {
         _activeAnimals.Add(args.Animal);
+        _unDeathAnimals.Add(args.Animal);
+    }
+    
+    /// <summary>
+    /// 动物进入死亡状态事件回调
+    /// </summary>
+    /// <param name="args"></param>
+    private void OnAnimalEnteredDeath(AnimalEnteredDeathEventArgs args)
+    {
+        _unDeathAnimals.Remove(args.Animal);
     }
 
     /// <summary>
