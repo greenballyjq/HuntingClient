@@ -17,7 +17,6 @@ public sealed partial class SkillJinZhuangYuan : Luban.BeanBase
     public SkillJinZhuangYuan(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        Duration = _buf.ReadFloat();
         MeatPercent = _buf.ReadFloat();
         Comment = _buf.ReadString();
     }
@@ -31,10 +30,6 @@ public sealed partial class SkillJinZhuangYuan : Luban.BeanBase
     /// 参数ID
     /// </summary>
     public readonly int ID;
-    /// <summary>
-    /// 持续时间
-    /// </summary>
-    public readonly float Duration;
     /// <summary>
     /// 肉量百分比
     /// </summary>
@@ -55,7 +50,6 @@ public sealed partial class SkillJinZhuangYuan : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
-        + "Duration:" + Duration + ","
         + "MeatPercent:" + MeatPercent + ","
         + "Comment:" + Comment + ","
         + "}";

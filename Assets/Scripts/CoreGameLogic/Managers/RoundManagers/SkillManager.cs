@@ -1,6 +1,6 @@
 ﻿using cfg.HuntingConfig.Skill;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
-
 
 /// <summary>
 /// 技能管理器
@@ -10,7 +10,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 当前技能处理器
     /// </summary>
-    private ISkillHandler _currentSkillHandler;
+    private BaseSkillHandler _currentSkillHandler;
 
     /// <summary>
     /// 当前技能上下文
@@ -46,7 +46,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         if (_currentSkillHandler.SkillPhase is SkillPhase.Finished)
             EndSkill();
-
+            
         if (_currentSkillHandler.SkillPhase is SkillPhase.Running)
             _currentSkillHandler.DoUpdate(dt);
     }
@@ -84,7 +84,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private void StartSkill()
     {
-        _currentSkillHandler.OnSkillStart(_currentSkillContext);
+        _currentSkillHandler.StartSkill(_currentSkillContext).Forget();
 
         TriggerSkillStarted(new SkillStartedEventArgs
         {
@@ -98,7 +98,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private void EndSkill()
     {
-        _currentSkillHandler.OnSkillEnd();
+        _currentSkillHandler.EndSkill();
 
         TriggerSkillEnded(new SkillEndedEventArgs
         {

@@ -145,10 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc5d4fc71704cb0b067aaa223634a3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firePoint: {fileID: 8482113958655312128}
-  aimLineColor: {r: 0.4838608, g: 1, b: 0.3820755, a: 1}
-  aimLineWidth: 0.05
-  aimLineLength: 40
+  _skillEffect: {fileID: 5965803183468667439}
 --- !u!1 &6944680695074845829
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,5 +245,10 @@ PrefabInstance:
 --- !u!4 &4623330451351815970 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2959087705513710663, guid: c2717c6ff3a0a46408889d85a5423380, type: 3}
+  m_PrefabInstance: {fileID: 7582254294733984613}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5965803183468667439 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4319900340637397322, guid: c2717c6ff3a0a46408889d85a5423380, type: 3}
   m_PrefabInstance: {fileID: 7582254294733984613}
   m_PrefabAsset: {fileID: 0}

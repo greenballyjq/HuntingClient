@@ -7,57 +7,28 @@ using UnityEngine;
 /// <summary>
 /// 紫薇技能处理器
 /// </summary>
-public class SkillZiWeiHandler : ISkillHandler
+public class SkillZiWeiHandler : BaseSkillHandler
 {
-    /// <summary>
-    /// 剩余时间
-    /// </summary>
-    private float _remainingTime;
-
-    public SkillPhase SkillPhase { get; set; }
-
     /// <summary>
     /// 资源管理器
     /// </summary>
     private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
 
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
-    /// <summary>
-    /// 武器管理器
-    /// </summary>
-    private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
-
-    /// <summary>
-    /// 技能开始
-    /// </summary>
-    public void OnSkillStart(SkillContext context)
+    protected override async UniTask OnSkillStart(SkillContext context)
     {
-        SkillPhase = SkillPhase.Starting;
-
         var skillParam = _configManager.GetSkillZiWei(context.SkillData.ParamTableID);
-        _remainingTime = skillParam.Duration;
-
         CreateSkillWeaponsAsync(skillParam).Forget();
 
-        SkillPhase = SkillPhase.Running;
+        await UniTask.CompletedTask;
     }
 
-    public void DoUpdate(float dt)
-    {
-        _remainingTime -= dt;
+    protected override void OnSkillUpdate(float dt) {}
 
-        if (_remainingTime <= 0)
-            SkillPhase = SkillPhase.Finished;
-    }
-
-    public void OnSkillEnd()
+    protected override void OnSkillEnd()
     {
         DestroyAllSkillWeapons();
     }
+
 
     #region 私有方法
     /// <summary>
@@ -65,15 +36,13 @@ public class SkillZiWeiHandler : ISkillHandler
     /// </summary>
     private async UniTask CreateSkillWeaponsAsync(SkillZiWei skillParam)
     {
-        var player = FindPlayerTransform();
-
         // 加载或使用缓存的武器预制体
         if (_weaponPrefabCache == null)
             _weaponPrefabCache = await _resourceManager.LoadAssetAsync<GameObject>(SkillWeaponPrefabPath);
 
         // 计算生成位置并创建武器
         int gunCountPerSide = Mathf.RoundToInt(skillParam.GunCountPerSide);
-        Vector3 playerPosition = player.position;
+        Vector3 playerPosition = _player.position;
 
         Vector3 worldRight = Vector3.right;
 
@@ -133,24 +102,6 @@ public class SkillZiWeiHandler : ISkillHandler
                 GameObject.Destroy(weapon.gameObject);
         }
         _skillWeapons.Clear();
-    }
-    #endregion
-
-    #region 测试
-    /// <summary>
-    /// 玩家Transform
-    /// </summary>
-    /// <remarks>TODO: 将来可配置化</remarks>
-    private Transform _playerTransform;
-
-    /// <summary>
-    /// 获取玩家Transform
-    /// </summary>
-    private Transform FindPlayerTransform()
-    {
-        if (_playerTransform == null)
-            _playerTransform = _weaponManager.GetMainWeapon().transform;
-        return _playerTransform;
     }
     #endregion
 

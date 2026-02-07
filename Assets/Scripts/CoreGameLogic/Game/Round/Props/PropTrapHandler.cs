@@ -13,6 +13,11 @@ public class PropTrapHandler : IPropHandler
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
+    /// 玩家管理器
+    /// </summary>
+    private PlayerManager _playerManager => GameServiceLocator.GetRoundManager<PlayerManager>();
+
+    /// <summary>
     /// 陷阱管理器
     /// </summary>
     private TrapManager _trapManager => GameServiceLocator.GetRoundManager<TrapManager>();
@@ -22,7 +27,7 @@ public class PropTrapHandler : IPropHandler
     /// </summary>
     public async void OnPropStart(PropContext context)
     {
-        Transform playerTransform = FindPlayerTransform();
+        var player = _playerManager.Player;
 
         // 读取配置参数
         PropTrap parameter = _configManager.GetPropTrap(context.PropData.ParamTableID);
@@ -32,7 +37,7 @@ public class PropTrapHandler : IPropHandler
 
         // 生成陷阱位置列表
         List<Vector3> trapPositions = GenerateTrapPositions(
-            playerTransform,
+            player,
             parameter.TrapCount,
             parameter.SpawnMinDistance,
             parameter.SpawnMaxDistance,
@@ -173,24 +178,6 @@ public class PropTrapHandler : IPropHandler
         }
 
         return true;
-    }
-    #endregion
-
-    #region TODO：未来可配置化
-    /// <summary>
-    /// 玩家Transform
-    /// </summary>
-    private Transform _playerTransform;
-
-    /// <summary>
-    /// 获取玩家Transform
-    /// </summary>
-    private Transform FindPlayerTransform()
-    {
-        if (_playerTransform == null)
-            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
-        return _playerTransform;
     }
     #endregion
 }

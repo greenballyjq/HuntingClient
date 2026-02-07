@@ -33,7 +33,7 @@ public class DefaultShootingHandler : IPlayerControlHandler
     public void OnControlStart()
     {
         Input.SwitchToFireMode();
-        _weapon = _weaponManager.GetMainWeapon();
+        _weapon = _weaponManager.PlayerWeapon;
     }
 
     public void OnControlUpdate(float deltaTime)

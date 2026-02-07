@@ -69,6 +69,16 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     private HuntingSoundManager _huntingSoundManager => GameServiceLocator.GetAppManager<HuntingSoundManager>();
 
+    /// <summary>
+    /// 武器视觉组件
+    /// </summary>
+    public WeaponVisual WeaponVisual { get; private set; }
+
+    private void Awake()
+    {
+        WeaponVisual = GetComponent<WeaponVisual>();
+    }
+
     private void OnDestroy()
     {
         UnregisterEvents();

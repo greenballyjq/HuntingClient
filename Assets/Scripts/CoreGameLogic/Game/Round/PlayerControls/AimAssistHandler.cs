@@ -57,7 +57,7 @@ public class AimAssistHandler : IPlayerControlHandler
         // TODO: 待以后实现LoadingManager后移除
         if (_weapon == null)
         {
-            _weapon = _weaponManager.GetMainWeapon();
+            _weapon = _weaponManager.PlayerWeapon;
             if (_weapon == null)
                 return;
         }

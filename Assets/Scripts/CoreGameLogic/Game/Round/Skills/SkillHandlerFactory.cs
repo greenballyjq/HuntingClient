@@ -10,7 +10,7 @@ public static class SkillHandlerFactory
     /// </summary>
     /// <param name="skillType">技能类型</param>
     /// <returns>技能处理器实例</returns>
-    public static ISkillHandler CreateSkillHandler(ESkillType skillType)
+    public static BaseSkillHandler CreateSkillHandler(ESkillType skillType)
     {
         switch (skillType)
         {

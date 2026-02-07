@@ -1,5 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Data.Common;
 using cfg.HuntingConfig.Skill;
+using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using Hunting.Game.Animal;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine;
 /// <summary>
 /// 亚克东技能处理器
 /// </summary>
-public class SkillYaKeDongHandler : ISkillHandler
+public class SkillYaKeDongHandler : BaseSkillHandler
 {
     /// <summary>
     /// 事件管理器
@@ -19,36 +20,18 @@ public class SkillYaKeDongHandler : ISkillHandler
     /// </summary>
     private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
 
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
-    /// <summary>
-    /// 技能上下文
-    /// </summary>
-    private SkillContext _skillContext;
-
-    public SkillPhase SkillPhase { get; set; }
-
-    public async void OnSkillStart(SkillContext context)
+    protected override async UniTask OnSkillStart(SkillContext context)
     {
-        SkillPhase = SkillPhase.Starting;
-
         var skillParam = _configManager.GetSkillYaKeDong(context.SkillData.ParamTableID);
-
-        // TODO: 配置
         SpawnCoinAnimalsAsync(skillParam).Forget();
 
-        // 模拟播放动画播放时长
+        // 模拟动画播放
         await UniTask.Delay(6000);
-
-        SkillPhase = SkillPhase.Finished;
     }
 
-    public void DoUpdate(float dt){}
+    protected override void OnSkillUpdate(float dt) {}
 
-    public void OnSkillEnd(){}
+    protected override void OnSkillEnd() { }
 
     #region 私有方法
     /// <summary>
@@ -57,13 +40,11 @@ public class SkillYaKeDongHandler : ISkillHandler
     private async UniTask SpawnCoinAnimalsAsync(SkillYaKeDong skillParam)
     {
         var specie = _configManager.GetSpecie(skillParam.SpawnAnimalID);
-        var player = FindPlayerTransform();
+        int spawnCount = Random.Range(skillParam.SpawnCount[0], skillParam.SpawnCount[1] + 1);
 
-        int spawnCount = GetSpawnCount(skillParam);
-
-        Vector3 forward = player.forward;
-        Vector3 right = player.right;
-        Vector3 basePosition = player.position + forward * SpawnForwardDistance;
+        Vector3 forward = _player.forward;
+        Vector3 right = _player.right;
+        Vector3 basePosition = _player.position + forward * SpawnForwardDistance;
 
         for (int i = 0; i < spawnCount; i++)
         {
@@ -106,28 +87,9 @@ public class SkillYaKeDongHandler : ISkillHandler
         Vector3 offset = right * directionSign * offsetLayer * SpawnSideOffset;
         return basePosition + offset;
     }
-
-    /// <summary>
-    /// 获取生成数量
-    /// </summary>
-    private int GetSpawnCount(SkillYaKeDong parameter)
-    {
-        return Random.Range(parameter.SpawnCount[0], parameter.SpawnCount[1] + 1);
-    }
-
-    /// <summary>
-    /// 获取玩家Transform
-    /// </summary>
-    private Transform FindPlayerTransform()
-    {
-        if (_playerTransform == null)
-            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
-        return _playerTransform;
-    }
     #endregion
 
-    #region TODO：未来可配置化
+    #region 测试 
     /// <summary>
     /// 生成前方距离
     /// </summary>
@@ -137,10 +99,5 @@ public class SkillYaKeDongHandler : ISkillHandler
     /// 左右偏移距离
     /// </summary>
     private const float SpawnSideOffset = 8f;
-
-    /// <summary>
-    /// 玩家Transform
-    /// </summary>
-    private Transform _playerTransform;
     #endregion
 }

@@ -1,4 +1,5 @@
-﻿using cfg.HuntingConfig.Prop;
+﻿using System.Runtime.CompilerServices;
+using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using Hunting.Game.Animal;
@@ -40,6 +41,11 @@ public class PropBombardmentHandler : IPropHandler
     private Vector3 _bombardmentCenter;
 
     /// <summary>
+    /// 玩家变换组件
+    /// </summary>
+    private Transform _playerTransform;
+
+    /// <summary>
     /// 配置管理器
     /// </summary>
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
@@ -50,11 +56,16 @@ public class PropBombardmentHandler : IPropHandler
     private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
 
     /// <summary>
+    /// 玩家管理器
+    /// </summary>
+    private PlayerManager _playerManager => GameServiceLocator.GetRoundManager<PlayerManager>();
+
+    /// <summary>
     /// 道具效果开始
     /// </summary>
     public void OnPropStart(PropContext context)
     {
-        Transform playerTransform = FindPlayerTransform();
+        _playerTransform = _playerManager.Player;
 
         // 读取配置参数
         PropBombardment parameter = _configManager.GetPropBombardment(context.PropData.ParamTableID);
@@ -113,20 +124,4 @@ public class PropBombardmentHandler : IPropHandler
             collider.GetComponent<IDamageable>().TakeDamage(_damageAmount);
     }
     #endregion
-
-    /// <summary>
-    /// 玩家Transform
-    /// </summary>
-    private Transform _playerTransform;
-
-    /// <summary>
-    /// 获取玩家Transform
-    /// </summary>
-    private Transform FindPlayerTransform()
-    {
-        if (_playerTransform == null)
-            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
-        return _playerTransform;
-    }
 }

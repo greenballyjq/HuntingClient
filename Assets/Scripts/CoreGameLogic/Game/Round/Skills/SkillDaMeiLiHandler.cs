@@ -1,21 +1,20 @@
-﻿public class SkillDaMeiLiHandler : ISkillHandler
+﻿using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+
+public class SkillDaMeiLiHandler : BaseSkillHandler
 {
-    public SkillPhase SkillPhase { get; set; }
+    protected override async UniTask OnSkillStart(SkillContext context)
+    {
+            await UniTask.CompletedTask;
+    }
 
-    public void OnSkillStart(SkillContext context)
+    protected override void OnSkillUpdate(float dt)
     {
 
     }
 
-    public void OnSkillEnd()
+    protected override void OnSkillEnd()
     {
-
+        
     }
-
-    public void DoUpdate(float dt)
-    {
-
-    }
-
-
 }

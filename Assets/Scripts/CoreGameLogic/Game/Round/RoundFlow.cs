@@ -418,6 +418,7 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         // TODO: 根据实际效果调整顺序
         _roundManagers.Add(new WeaponManager());
+        _roundManagers.Add(new PlayerManager());
         _roundManagers.Add(new AnimalManager());
         _roundManagers.Add(new EnergyProgressManager());
         _roundManagers.Add(new MeatProgressManager());

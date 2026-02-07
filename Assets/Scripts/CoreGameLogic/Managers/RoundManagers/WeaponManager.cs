@@ -11,6 +11,7 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// 玩家武器
     /// </summary>
     private PlayerWeapon _playerWeapon;
+    public PlayerWeapon PlayerWeapon => _playerWeapon;
 
     /// <summary>
     /// 射速修正倍率字典
@@ -68,14 +69,6 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     #region 公共方法
     /// <summary>
-    /// 获取主武器实例
-    /// </summary>
-    public PlayerWeapon GetMainWeapon()
-    {
-        return _playerWeapon;
-    }
-
-    /// <summary>
     /// 注册射速修正倍率
     /// </summary>
     /// <param name="sourceId">修正来源ID（如技能类型、幸运仪式类型等）</param>
@@ -84,7 +77,6 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         _fireRateModifiers[sourceId] = multiplier;
         UpdateFireRateMultiplier();
-        Debug.Log($"[WeaponManager] 注册射速修正，来源:{sourceId}，倍率:{multiplier:F2}，当前总倍率:{_fireRateMultiplier:F2}");
     }
 
     /// <summary>
@@ -93,11 +85,8 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <param name="sourceId">修正来源ID</param>
     public void UnregisterFireRateModifier(string sourceId)
     {
-        if (_fireRateModifiers.Remove(sourceId))
-        {
-            UpdateFireRateMultiplier();
-            Debug.Log($"[WeaponManager] 注销射速修正，来源:{sourceId}，当前总倍率:{_fireRateMultiplier:F2}");
-        }
+        _fireRateModifiers.Remove(sourceId);
+        UpdateFireRateMultiplier();
     }
 
     /// <summary>
@@ -109,7 +98,6 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         _damageModifiers[sourceId] = multiplier;
         UpdateDamageMultiplier();
-        Debug.Log($"[WeaponManager] 注册伤害修正，来源:{sourceId}，倍率:{multiplier:F2}，当前总倍率:{_damageMultiplier:F2}");
     }
 
     /// <summary>
@@ -118,11 +106,8 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <param name="sourceId">修正来源ID</param>
     public void UnregisterDamageModifier(string sourceId)
     {
-        if (_damageModifiers.Remove(sourceId))
-        {
-            UpdateDamageMultiplier();
-            Debug.Log($"[WeaponManager] 注销伤害修正，来源:{sourceId}，当前总倍率:{_damageMultiplier:F2}");
-        }
+        _damageModifiers.Remove(sourceId);
+        UpdateDamageMultiplier();
     }
 
     /// <summary>
@@ -132,12 +117,6 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         var configManager = GameServiceLocator.ConfigManager;
         var bulletData = configManager.GetBullet(bulletId);
-        if (bulletData == null)
-        {
-            Debug.LogWarning($"[WeaponManager] 子弹配置不存在: {bulletId}");
-            return 0f;
-        }
-
         return bulletData.FireRate * _fireRateMultiplier;
     }
 
@@ -148,12 +127,6 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         var configManager = GameServiceLocator.ConfigManager;
         var bulletData = configManager.GetBullet(bulletId);
-        if (bulletData == null)
-        {
-            Debug.LogWarning($"[WeaponManager] 子弹配置不存在: {bulletId}");
-            return 0f;
-        }
-
         return bulletData.BaseDamage * _damageMultiplier;
     }
     #endregion
