@@ -17,7 +17,7 @@
     <type fullname="Hunting.Game.Animal.LeaveAnimalVisual" preserve="all" />
     <type fullname="HuntingAudioRefSo" preserve="all" />
     <type fullname="LeaveAnimalEventTrigger" preserve="all" />
-    <type fullname="SkillThreeKPCoinAnimalBehaviour" preserve="all" />
+    <type fullname="SkillThreeKPCoinManAnimalBehaviour" preserve="all" />
     <type fullname="SkillThreeKPCoinManAnimalVisual" preserve="all" />
     <type fullname="SkillWeapon" preserve="all" />
     <type fullname="ThreeKPCoinManThrowDiceAnimator" preserve="all" />

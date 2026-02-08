@@ -16,7 +16,7 @@ public class CGManager : IAppManager
     /// <summary>
     /// CG播放完毕异步任务源
     /// </summary>
-    private UniTaskCompletionSource CGEnded = new UniTaskCompletionSource();
+    private UniTaskCompletionSource CGEnded;
 
     /// <summary>
     /// CG
@@ -61,6 +61,9 @@ public class CGManager : IAppManager
 
             cgCreated.TrySetResult(cg);
         });
+
+        CGEnded = null;
+        CGEnded = new UniTaskCompletionSource();
 
         return cgCreated.Task;
     }

@@ -37,6 +37,10 @@ public class AnimalChangeDirectionAreaTrigger : AreaTriggerBase
 
     protected override void OnEnter(Collider collider)
     {
+        if (collider.GetComponent<BaseAnimalBehaviour>().CurrentState is AnimalEnterState)
+            return;
+
+
         AngleRange selectedRange = _angleRanges[Random.Range(0, _angleRanges.Count)];
         float randomAngle = Random.Range(selectedRange.MinAngle, selectedRange.MaxAngle);
 

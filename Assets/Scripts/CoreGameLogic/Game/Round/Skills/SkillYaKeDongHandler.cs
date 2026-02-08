@@ -48,12 +48,12 @@ public class SkillYaKeDongHandler : BaseSkillHandler
     /// <summary>
     /// 目标点距离玩家距离
     /// </summary>
-    private const float  TARGET_DISTANCE_FROM_PLAYER = 8f;
+    private const float  TARGET_DISTANCE_FROM_PLAYER = 7f;
 
     /// <summary>
     /// 目标点随机范围X
     /// </summary>
-    private const float TARGET_RANDOM_RANGEX = 4f;
+    private const float TARGET_RANDOM_RANGEX = 4.5f;
 
     /// <summary>
     /// 目标点随机范围Z
@@ -63,12 +63,12 @@ public class SkillYaKeDongHandler : BaseSkillHandler
     /// <summary>
     /// 相机深度
     /// </summary>
-    private const float CAMERA_DEPTH = 4.5f;
+    private const float CAMERA_DEPTH = 3.5f;
 
     /// <summary>
     /// 底部屏幕角Y轴偏移
     /// </summary>
-    private const float BOTTOM_CORNER_Y_OFFSET = 0.3f;
+    private const float BOTTOM_CORNER_Y_OFFSET = 0.0f;
 
     /// <summary>
     /// 事件管理器

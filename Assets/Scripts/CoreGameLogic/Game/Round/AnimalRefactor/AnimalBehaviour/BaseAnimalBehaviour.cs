@@ -16,6 +16,11 @@ namespace Hunting.Game.Animal
         protected StateMachine _stateMachine;
 
         /// <summary>
+        /// 当前状态
+        /// </summary>
+        public AnimalState CurrentState => _stateMachine.CurrentState as AnimalState;
+
+        /// <summary>
         /// 移动状态
         /// </summary>
         public AnimalMoveState MoveState { get; private set; }

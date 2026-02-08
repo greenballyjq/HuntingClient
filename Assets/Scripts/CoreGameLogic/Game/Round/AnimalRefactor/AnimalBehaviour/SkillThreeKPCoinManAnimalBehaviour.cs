@@ -2,7 +2,7 @@
 using Hunting.Game.Animal;
 using UnityEngine;
 
-public class SkillThreeKPCoinAnimalBehaviour : LeaveAnimalBehaviour
+public class SkillThreeKPCoinManAnimalBehaviour : LeaveAnimalBehaviour
 {
     /// <summary>
     /// 入场状态
@@ -19,4 +19,12 @@ public class SkillThreeKPCoinAnimalBehaviour : LeaveAnimalBehaviour
         _stateMachine.Init(EnterState);
     }
     #endregion
+
+    protected override void OnDamaged()
+    {
+        if (_stateMachine.CurrentState is AnimalEnterState)
+            return;
+
+        base.OnDamaged();
+    }
 }

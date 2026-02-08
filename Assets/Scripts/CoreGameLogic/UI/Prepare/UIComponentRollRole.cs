@@ -58,6 +58,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     {
         // 随机骰子点数
         _diceValue = Random.Range(1, 7);
+        
         int fromSlotIndex = _currentSlotIndex;
 
         _targetSlotIndex = (_currentSlotIndex + _diceValue) % _roleSlots.Length;
