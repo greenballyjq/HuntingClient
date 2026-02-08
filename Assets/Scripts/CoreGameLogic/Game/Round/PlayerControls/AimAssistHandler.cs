@@ -192,7 +192,7 @@ public class AimAssistHandler : IPlayerControlHandler
     private void RegisterEvents()
     {
         _inputManager.OnTargetSelected += HandleTargetSelected;
-        _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalDying);
+        _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
     }
 
     /// <summary>
@@ -201,13 +201,13 @@ public class AimAssistHandler : IPlayerControlHandler
     private void UnregisterEvents()
     {
         _inputManager.OnTargetSelected -= HandleTargetSelected;
-        _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalDying);
+        _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
     }
 
     /// <summary>
     /// 动物进入死亡事件回调
     /// </summary>
-    private void OnAnimalDying(AnimalEnteredDeathEventArgs args)
+    private void OnAnimalEnteredDeath(AnimalEnteredDeathEventArgs args)
     {
         // 当死亡的动物是当前锁定目标时清除
         if (_currentTarget != null && args.Animal.transform == _currentTarget)

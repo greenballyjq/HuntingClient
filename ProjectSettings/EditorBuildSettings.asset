@@ -14,7 +14,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameplaySnowMountainScene.unity
     guid: c01956d4587f75145a10b0d43d86788c
-  - enabled: 1
-    path: Assets/Scenes/VideoScene.unity
-    guid: ea1774037e22a4444966debf8db4572b
   m_configObjects: {}

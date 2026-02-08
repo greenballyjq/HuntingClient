@@ -66,18 +66,5 @@ namespace Hunting.Game.Animal
                 DropRewards = new Dictionary<EDropType, int>(_animalBehaviour.SpecieData.DropRewards)
             });
         }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Border"))
-            {
-                _eventManager.Trigger(AnimalEvents.AnimalReachedWall,new AnimalReachedWallEventArgs 
-                { 
-                    Sender = this, 
-                    Animal = _animalBehaviour 
-                });
-            }
-        }
     }
-
 }

@@ -17,8 +17,9 @@ public sealed partial class SkillYaKeDong : Luban.BeanBase
     public SkillYaKeDong(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        SpawnAnimalID = _buf.ReadInt();
         {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SpawnCount = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); SpawnCount[__index0] = __e0;}}
+        SpecieDataID = _buf.ReadInt();
+        SkillPrefabResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -32,13 +33,17 @@ public sealed partial class SkillYaKeDong : Luban.BeanBase
     /// </summary>
     public readonly int ID;
     /// <summary>
-    /// 派发动物ID
-    /// </summary>
-    public readonly int SpawnAnimalID;
-    /// <summary>
     /// 生成数量
     /// </summary>
     public readonly int[] SpawnCount;
+    /// <summary>
+    /// 物种配置
+    /// </summary>
+    public readonly int SpecieDataID;
+    /// <summary>
+    /// 技能预制体路径
+    /// </summary>
+    public readonly string SkillPrefabResourcePath;
     /// <summary>
     /// 备注
     /// </summary>
@@ -55,8 +60,9 @@ public sealed partial class SkillYaKeDong : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
-        + "SpawnAnimalID:" + SpawnAnimalID + ","
         + "SpawnCount:" + Luban.StringUtil.CollectionToString(SpawnCount) + ","
+        + "SpecieDataID:" + SpecieDataID + ","
+        + "SkillPrefabResourcePath:" + SkillPrefabResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

@@ -58,6 +58,7 @@ public class BossMovement : MonoBehaviour, IMoveable
 
     public bool IsMoving => _isMoving;
 
+    public Vector3 CurrentTargetPosition => Vector3.zero;
 
     public void Init()
     {
@@ -118,7 +119,7 @@ public class BossMovement : MonoBehaviour, IMoveable
         _currentMoveDirection = direction;
     }
 
-    public void SetTarget(Vector3 target)
+    public void SetTargetPosition(Vector3 target)
     {
         _currentTargetPosition = target;
     }

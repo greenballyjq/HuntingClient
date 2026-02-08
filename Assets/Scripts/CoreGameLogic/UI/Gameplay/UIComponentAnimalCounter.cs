@@ -49,7 +49,7 @@ public class UIComponentAnimalCounter : MonoBehaviour, IUIComponent
     /// </summary>
     private void InitializeItems()
     {
-        var cachedSpecies = _animalManager.GetCachedSpeciesData();
+        var cachedSpecies = _animalManager.MapSpeciesDataCacheDic;
         int index = 0;
 
         foreach (var specieData in cachedSpecies.Values)

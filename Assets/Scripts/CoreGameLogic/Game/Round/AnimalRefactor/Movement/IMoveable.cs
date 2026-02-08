@@ -13,9 +13,9 @@ namespace Hunting.Game.Animal
         float CurrentSpeed { get; }
         
         /// <summary>
-        /// 当前目标变换组件
+        /// 当前目标位置
         /// </summary>
-        Transform CurrentTargetTransform { get; }
+        Vector3 CurrentTargetPosition { get; }
         
         /// <summary>
         /// 当前目标方向
@@ -26,12 +26,7 @@ namespace Hunting.Game.Animal
         /// 当前移动方向
         /// </summary>
         Vector3 CurrentMoveDirection { get; }
-        
-        // /// <summary>
-        // /// 移动策略
-        // /// </summary>
-        // IMovePolicy MovePolicy { get; }
-        
+
         /// <summary>
         /// 是否正在移动
         /// </summary>
@@ -67,10 +62,10 @@ namespace Hunting.Game.Animal
         void SetDirection(Vector3 direction);
         
         /// <summary>
-        /// 设置目标
+        /// 设置目标位置
         /// </summary>
-        /// <param name="target">目标</param>
-        void SetTarget(Vector3 target);
+        /// <param name="targetPosition">目标位置</param>
+        void SetTargetPosition(Vector3 targetPosition);
         
         /// <summary>
         /// 开始移动

@@ -36,14 +36,14 @@ public class PropBombardmentHandler : IPropHandler
     private float _damageTimer;
 
     /// <summary>
-    /// 轰炸中心点
+    /// 轰炸位置
     /// </summary>
-    private Vector3 _bombardmentCenter;
+    private Vector3 _bombardmentPos;
 
     /// <summary>
-    /// 玩家变换组件
+    /// 玩家组件
     /// </summary>
-    private Transform _playerTransform;
+    private Transform _player;
 
     /// <summary>
     /// 配置管理器
@@ -58,14 +58,14 @@ public class PropBombardmentHandler : IPropHandler
     /// <summary>
     /// 玩家管理器
     /// </summary>
-    private PlayerManager _playerManager => GameServiceLocator.GetRoundManager<PlayerManager>();
+    private GameplaySceneItemManager _playerManager => GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
 
     /// <summary>
     /// 道具效果开始
     /// </summary>
     public void OnPropStart(PropContext context)
     {
-        _playerTransform = _playerManager.Player;
+        _player = _playerManager.Player;
 
         // 读取配置参数
         PropBombardment parameter = _configManager.GetPropBombardment(context.PropData.ParamTableID);
@@ -75,10 +75,10 @@ public class PropBombardmentHandler : IPropHandler
         _damageInterval = parameter.DamageInterval;
 
         // 计算轰炸中心点
-        _bombardmentCenter = CalculateBombardmentCenter();
+        _bombardmentPos = CalculateBombardmentCenter();
 
         // 播放特效
-        _effectManager.PlayOneShotAsync(parameter.EffectPrefabPath, _bombardmentCenter, Quaternion.identity).Forget();
+        _effectManager.PlayOneShotAsync(parameter.EffectPrefabPath, _bombardmentPos, Quaternion.identity).Forget();
 
         _damageTimer = 0f;
     }
@@ -108,7 +108,7 @@ public class PropBombardmentHandler : IPropHandler
     /// </summary>
     private Vector3 CalculateBombardmentCenter()
     {
-        return _playerTransform.position + _playerTransform.forward * _fireDistance;
+        return _player.position + _player.forward * _fireDistance;
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ public class PropBombardmentHandler : IPropHandler
     private void ApplyBombardmentDamage()
     {
         // 检测范围内的所有动物
-        Collider[] colliders = Physics.OverlapSphere(_bombardmentCenter, _zoneRadius, LayerMask.GetMask("Animal"));
+        Collider[] colliders = Physics.OverlapSphere(_bombardmentPos, _zoneRadius, LayerMask.GetMask("Animal"));
 
         // 对范围内的动物造成伤害
         foreach (Collider collider in colliders)

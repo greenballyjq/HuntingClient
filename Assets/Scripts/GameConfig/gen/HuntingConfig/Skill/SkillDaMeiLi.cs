@@ -17,9 +17,9 @@ public sealed partial class SkillDaMeiLi : Luban.BeanBase
     public SkillDaMeiLi(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        ZoneRadius = _buf.ReadFloat();
         DamageAmount = _buf.ReadFloat();
-        DamageInterval = _buf.ReadFloat();
+        ControlDuration = _buf.ReadFloat();
+        SkillPrefabResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -33,17 +33,17 @@ public sealed partial class SkillDaMeiLi : Luban.BeanBase
     /// </summary>
     public readonly int ID;
     /// <summary>
-    /// 牢笼半径
-    /// </summary>
-    public readonly float ZoneRadius;
-    /// <summary>
     /// 伤害数值
     /// </summary>
     public readonly float DamageAmount;
     /// <summary>
-    /// 伤害间隔（秒）
+    /// 控制持续时间
     /// </summary>
-    public readonly float DamageInterval;
+    public readonly float ControlDuration;
+    /// <summary>
+    /// 技能预制体资源路径
+    /// </summary>
+    public readonly string SkillPrefabResourcePath;
     /// <summary>
     /// 备注
     /// </summary>
@@ -60,9 +60,9 @@ public sealed partial class SkillDaMeiLi : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
-        + "ZoneRadius:" + ZoneRadius + ","
         + "DamageAmount:" + DamageAmount + ","
-        + "DamageInterval:" + DamageInterval + ","
+        + "ControlDuration:" + ControlDuration + ","
+        + "SkillPrefabResourcePath:" + SkillPrefabResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

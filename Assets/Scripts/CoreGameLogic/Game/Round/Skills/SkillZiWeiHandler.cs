@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using cfg.HuntingConfig.Skill;
+﻿using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -10,6 +10,21 @@ using UnityEngine;
 public class SkillZiWeiHandler : BaseSkillHandler
 {
     /// <summary>
+    /// 武器预制体
+    /// </summary>
+    private GameObject _weaponPrefab;
+
+    /// <summary>
+    /// 武器列表
+    /// </summary>
+    private List<SkillWeapon> _weapons = new List<SkillWeapon>();
+
+    /// <summary>
+    /// X轴偏移
+    /// </summary>
+    private const float WEAPON_OFFSET_X = 2f;
+
+    /// <summary>
     /// 资源管理器
     /// </summary>
     private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
@@ -17,109 +32,75 @@ public class SkillZiWeiHandler : BaseSkillHandler
     protected override async UniTask OnSkillStart(SkillContext context)
     {
         var skillParam = _configManager.GetSkillZiWei(context.SkillData.ParamTableID);
-        CreateSkillWeaponsAsync(skillParam).Forget();
 
-        await UniTask.CompletedTask;
+        // 缓存武器预制体
+        _weaponPrefab = await _resourceManager.LoadAssetAsync<GameObject>(skillParam.SkillPrefabResourcePath);
+
+        // 生成武器
+        CreateWeapons(skillParam);
+
+        // 模拟播放动画
+        await UniTask.Delay(1000);
     }
 
-    protected override void OnSkillUpdate(float dt) {}
+    protected override void OnSkillUpdate(float dt)
+    {
+        foreach (var weapon in _weapons)
+            weapon.DoUpdate(dt);
+    }
 
     protected override void OnSkillEnd()
     {
-        DestroyAllSkillWeapons();
+        DestroyAllWeapons();
+        _weaponPrefab = null;
     }
-
 
     #region 私有方法
     /// <summary>
-    /// 创建技能武器
+    /// 生成武器
     /// </summary>
-    private async UniTask CreateSkillWeaponsAsync(SkillZiWei skillParam)
+    private void CreateWeapons(SkillZiWei skillParam)
     {
-        // 加载或使用缓存的武器预制体
-        if (_weaponPrefabCache == null)
-            _weaponPrefabCache = await _resourceManager.LoadAssetAsync<GameObject>(SkillWeaponPrefabPath);
-
-        // 计算生成位置并创建武器
-        int gunCountPerSide = Mathf.RoundToInt(skillParam.GunCountPerSide);
-        Vector3 playerPosition = _player.position;
-
-        Vector3 worldRight = Vector3.right;
+        Vector3 playerPos = _player.position;
+        Vector3 playerRight = Vector3.right;
 
         // 创建左侧武器
-        for (int i = 0; i < gunCountPerSide; i++)
+        for (int i = 0; i < skillParam.WeaponCountPerSide; i++)
         {
-            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, worldRight, skillParam.GunOffsetX, i, true);
-            CreateSkillWeapon(spawnPosition, skillParam.FireInterval);
+            Vector3 spawnPos = playerPos + playerRight * (-WEAPON_OFFSET_X * (i + 1));
+            CreateWeapon(spawnPos, skillParam.FireInterval);
         }
 
         // 创建右侧武器
-        for (int i = 0; i < gunCountPerSide; i++)
+        for (int i = 0; i < skillParam.WeaponCountPerSide; i++)
         {
-            Vector3 spawnPosition = CalculateSpawnPosition(playerPosition, worldRight, skillParam.GunOffsetX, i, false);
-            CreateSkillWeapon(spawnPosition, skillParam.FireInterval);
+            Vector3 spawnPos = playerPos + playerRight * (WEAPON_OFFSET_X * (i + 1));
+            CreateWeapon(spawnPos, skillParam.FireInterval);
         }
     }
 
     /// <summary>
-    /// 创建单个技能武器
+    /// 创建单个武器
     /// </summary>
-    private void CreateSkillWeapon(Vector3 position, float fireInterval)
+    private void CreateWeapon(Vector3 position, float fireInterval)
     {
-        var weaponObj = GameObject.Instantiate(_weaponPrefabCache);
+        GameObject weaponObj = GameObject.Instantiate(_weaponPrefab);
         weaponObj.transform.position = position;
 
-        var skillWeapon = weaponObj.GetComponent<SkillWeapon>();
-        skillWeapon.Init(fireInterval);
-        _skillWeapons.Add(skillWeapon);
+        var weapon = weaponObj.GetComponent<SkillWeapon>();
+        weapon.Init(fireInterval);
+        _weapons.Add(weapon);
     }
 
     /// <summary>
-    /// 计算生成位置
+    /// 销毁所有武器
     /// </summary>
-    /// <param name="playerPosition">玩家位置</param>
-    /// <param name="playerRight">玩家右侧方向</param>
-    /// <param name="offsetX">水平偏移</param>
-    /// <param name="index">索引</param>
-    /// <param name="isLeft">是否为左侧</param>
-    private Vector3 CalculateSpawnPosition(Vector3 playerPosition, Vector3 playerRight, float offsetX, int index, bool isLeft)
+    private void DestroyAllWeapons()
     {
-        float offset = (index + 1) * offsetX;
-        if (isLeft)
-            offset = -offset;
-        Vector3 position = playerPosition + playerRight * offset;
-        return position;
+        foreach (var weapon in _weapons)
+            GameObject.Destroy(weapon.gameObject);
+            
+        _weapons.Clear();
     }
-
-    /// <summary>
-    /// 销毁所有技能武器
-    /// </summary>
-    private void DestroyAllSkillWeapons()
-    {
-        foreach (var weapon in _skillWeapons)
-        {
-            if (weapon != null)
-                GameObject.Destroy(weapon.gameObject);
-        }
-        _skillWeapons.Clear();
-    }
-    #endregion
-
-    #region 测试
-    /// <summary>
-    /// 技能武器预制体资源路径
-    /// </summary>
-    private const string SkillWeaponPrefabPath = "Assets/Arts/Prefabs/Skills/pf_skillweapon";
-
-    /// <summary>
-    /// 技能武器预制体缓存
-    /// </summary>
-    private GameObject _weaponPrefabCache;
-
-    /// <summary>
-    /// 技能武器列表
-    /// </summary>
-    private List<SkillWeapon> _skillWeapons = new List<SkillWeapon>();
-
     #endregion
 }

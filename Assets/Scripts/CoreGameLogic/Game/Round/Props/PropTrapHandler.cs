@@ -15,7 +15,7 @@ public class PropTrapHandler : IPropHandler
     /// <summary>
     /// 玩家管理器
     /// </summary>
-    private PlayerManager _playerManager => GameServiceLocator.GetRoundManager<PlayerManager>();
+    private GameplaySceneItemManager _playerManager => GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
 
     /// <summary>
     /// 陷阱管理器

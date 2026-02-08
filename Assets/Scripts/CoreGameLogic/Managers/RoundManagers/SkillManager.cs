@@ -65,10 +65,10 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     public void ReInit(RoundContext context){}
 
-    #region 公有方法
+    #region 公共方法
     public void TryStartSkill()
     {
-        if(_currentSkillHandler.SkillPhase is SkillPhase.None || _currentSkillHandler.SkillPhase is SkillPhase.Finished)
+        if(_currentSkillHandler.SkillPhase is SkillPhase.None)
         {
             if (!_energyProgressManager.UseEnergyOneBar())
                 return;

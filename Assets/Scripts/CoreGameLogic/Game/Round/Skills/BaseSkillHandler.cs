@@ -31,7 +31,7 @@ public abstract class BaseSkillHandler : ISkillHandler
         SkillPhase = SkillPhase.Starting;
 
         _remainingTime = context.SkillData.Duration;
-        _player = GameServiceLocator.GetRoundManager<PlayerManager>().Player;
+        _player = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>().Player;
 
         await OnSkillStart(context);
 

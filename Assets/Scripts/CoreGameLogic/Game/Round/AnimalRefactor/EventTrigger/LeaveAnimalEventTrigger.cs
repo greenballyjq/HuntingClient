@@ -8,13 +8,12 @@ public class LeaveAnimalEventTrigger : BaseAnimalEventTrigger
     /// <summary>
     /// 触发动物离场事件
     /// </summary>
-    public void TriggerAnimalFled()
+    public void TriggerAnimalLeft()
     {
         _eventManager.Trigger(AnimalEvents.AnimalLeft, new AnimalLeftEventArgs
         {
             Sender = this,
             Animal = _animalBehaviour,
-            SpecieData = _animalBehaviour.SpecieData
         });
     }
 

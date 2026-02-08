@@ -6,7 +6,7 @@ namespace Hunting.Game.Animal
     /// <summary>
     /// 生命值组件
     /// </summary>
-    public class Health : MonoBehaviour, IDamageable, IHealth
+    public class Health : MonoBehaviour, IDamageable,IControlable, IHealth
     {
         /// <summary>
         /// 最大血量
@@ -48,6 +48,11 @@ namespace Hunting.Game.Animal
         /// </summary>
         public event Action OnDeath;
 
+        /// <summary>
+        /// 控制事件
+        /// </summary>
+        public event Action OnHeld;
+
         #region 公共方法
         /// <summary>
         /// 初始化生命值组件
@@ -78,6 +83,17 @@ namespace Hunting.Game.Animal
                 _isDead = true;
                 OnDeath?.Invoke();
             }
+        }
+
+        /// <summary>
+        /// 被控制
+        /// </summary>
+        public void TakeControl()
+        {
+            if (_isDead)
+                return;
+
+            OnHeld?.Invoke();
         }
         #endregion
     }

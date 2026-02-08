@@ -8,21 +8,32 @@ namespace Hunting.Game.Animal
     public class AnimalMovement : MonoBehaviour, IMoveable
     {
         [SerializeField] private MovePolicyType _currentMovePolicyType;
-        
+        private Transform _guardTargetTransform;
+        public void ChangeMovePolicy(MovePolicyType policyType)
+        {
+            _currentMovePolicyType = policyType;
+            switch (policyType)
+            {
+                case MovePolicyType.Linear:
+                    // MovePolicy = new LinearMovePolicy(_baseSpeed, _moveRate);
+                    Debug.Log("[LinearMovement] 切换到线性策略");
+                    break;
+                case MovePolicyType.Guard:
+                    _guardTargetTransform = Object.FindObjectOfType<BossAnimalBehaviour>().transform;
+                    if (_guardTargetTransform == null)
+                    {
+                        Debug.LogError("[GuardMovePolicy] Could not find BossAnimalBehaviour");
+                    }
+                    // MovePolicy = new GuardMovePolicy(_baseSpeed, _moveRate);
+                    Debug.Log("[LinearMovement] 切换到守卫策略");
+                    break;
+            }
+        }
+
         /// <summary>
         /// 基础速度
         /// </summary>
         private float _baseSpeed;
-
-        /// <summary>
-        /// 当前目标方向
-        /// </summary>
-        private Vector3 _currentTargetDirection;
-
-        /// <summary>
-        /// 当前移动方向
-        /// </summary>
-        private Vector3 _currentMoveDirection;
 
         /// <summary>
         /// 移动速率倍数
@@ -30,35 +41,32 @@ namespace Hunting.Game.Animal
         private float _moveRate;
 
         /// <summary>
-        /// 是否正在移动
-        /// </summary>
-        private bool _isMoving;
-        
-        private Transform _guardTargetTransform;
-
-        /// <summary>
         /// 当前速度
         /// </summary>
         public float CurrentSpeed => _isMoving ? _baseSpeed * _moveRate : 0f;
-        
+
         /// <summary>
-        /// 当前目标变换组件
+        /// 当前目标位置
         /// </summary>
-        public Transform CurrentTargetTransform => null;
-        
+        private Vector3 _currentTargetPosition;
+        public Vector3 CurrentTargetPosition => _currentTargetPosition;
+
         /// <summary>
         /// 当前目标方向
         /// </summary>
+        private Vector3 _currentTargetDirection;
         public Vector3 CurrentTargetDirection => _currentTargetDirection;
-        
+
         /// <summary>
         /// 当前移动方向
         /// </summary>
+        private Vector3 _currentMoveDirection;
         public Vector3 CurrentMoveDirection => _currentMoveDirection;
 
         /// <summary>
         /// 是否正在移动
         /// </summary>
+        private bool _isMoving;
         public bool IsMoving => _isMoving;
 
         #region 公共方法 
@@ -157,12 +165,15 @@ namespace Hunting.Game.Animal
             
             _currentTargetDirection = direction.normalized;
         }
-        
+
         /// <summary>
-        /// 设置目标
+        /// 设置目标位置
         /// </summary>
-        /// <param name="target">目标</param>
-        public void SetTarget(Vector3 target) { }
+        /// <param name="targetPosition">目标位置</param>
+        public void SetTargetPosition(Vector3 targetPosition) 
+        {
+            _currentTargetPosition = targetPosition;
+        }
         
         /// <summary>
         /// 开始移动
@@ -179,28 +190,6 @@ namespace Hunting.Game.Animal
         {
             _isMoving = false;
         }
-
-        public void ChangeMovePolicy(MovePolicyType policyType)
-        {
-            _currentMovePolicyType = policyType;
-            switch (policyType)
-            {
-                case MovePolicyType.Linear:
-                    // MovePolicy = new LinearMovePolicy(_baseSpeed, _moveRate);
-                    Debug.Log("[LinearMovement] 切换到线性策略");
-                    break;
-                case MovePolicyType.Guard:
-                    _guardTargetTransform = Object.FindObjectOfType<BossAnimalBehaviour>().transform;
-                    if (_guardTargetTransform == null)
-                    {
-                        Debug.LogError("[GuardMovePolicy] Could not find BossAnimalBehaviour");
-                    }
-                    // MovePolicy = new GuardMovePolicy(_baseSpeed, _moveRate);
-                    Debug.Log("[LinearMovement] 切换到守卫策略");
-                    break;
-            }
-        }
-
         #endregion
     }
 }

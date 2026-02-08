@@ -1,4 +1,4 @@
-﻿using System.Data.Common;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
@@ -11,93 +11,181 @@ using UnityEngine;
 public class SkillYaKeDongHandler : BaseSkillHandler
 {
     /// <summary>
+    /// 物种配置
+    /// </summary>
+    private Specie _specieData;
+
+    /// <summary>
+    /// 动物预制体
+    /// </summary>
+    private GameObject _animalPrefab;
+
+    /// <summary>
+    /// 生成数量
+    /// </summary>
+    private int _spawnCount;
+
+    /// <summary>
+    /// 生成间隔
+    /// </summary>
+    private float _spawnInterval;
+
+    /// <summary>
+    /// 生成计时器
+    /// </summary>
+    private float _spawnTimer;
+
+    /// <summary>
+    /// 已生成数量
+    /// </summary>
+    private int _spawnedCount;
+
+    /// <summary>
+    /// 屏幕四角世界坐标
+    /// </summary>
+    private Vector3[] _screenCorners = new Vector3[4];
+
+    /// <summary>
+    /// 目标点距离玩家距离
+    /// </summary>
+    private const float  TARGET_DISTANCE_FROM_PLAYER = 8f;
+
+    /// <summary>
+    /// 目标点随机范围X
+    /// </summary>
+    private const float TARGET_RANDOM_RANGEX = 4f;
+
+    /// <summary>
+    /// 目标点随机范围Z
+    /// </summary>
+    private const float TARGET_RANDOM_RANGEZ = 3f;
+
+    /// <summary>
+    /// 相机深度
+    /// </summary>
+    private const float CAMERA_DEPTH = 4.5f;
+
+    /// <summary>
+    /// 底部屏幕角Y轴偏移
+    /// </summary>
+    private const float BOTTOM_CORNER_Y_OFFSET = 0.3f;
+
+    /// <summary>
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
+
+    /// <summary>
+    /// 资源管理器
+    /// </summary>
+    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
 
     /// <summary>
     /// 对象池管理器
     /// </summary>
     private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
 
+    /// <summary>
+    /// 相机管理器
+    /// </summary>
+    private CameraManager _cameraManager => GameServiceLocator.GetAppManager<CameraManager>();
+
     protected override async UniTask OnSkillStart(SkillContext context)
     {
         var skillParam = _configManager.GetSkillYaKeDong(context.SkillData.ParamTableID);
-        SpawnCoinAnimalsAsync(skillParam).Forget();
 
-        // 模拟动画播放
-        await UniTask.Delay(6000);
+        // 初始化变量
+        _spawnTimer = 0f;
+        _spawnedCount = 0;
+
+        // 缓存配置
+        _specieData = _configManager.GetSpecie(skillParam.SpecieDataID);
+        _animalPrefab = await _resourceManager.LoadAssetAsync<GameObject>(skillParam.SkillPrefabResourcePath);
+
+        // 随机生成数量
+        _spawnCount = skillParam.SpawnCount[Random.Range(0, skillParam.SpawnCount.Length)];
+
+        // 根据技能持续时间计算召唤间隔
+        _spawnInterval = context.SkillData.Duration / _spawnCount;
+
+        // 缓存屏幕四角世界坐标
+        CacheScreenCorners();
+
+        // 模拟播放动画
+        await UniTask.Delay(1000);
     }
 
-    protected override void OnSkillUpdate(float dt) {}
-
-    protected override void OnSkillEnd() { }
-
-    #region 私有方法
-    /// <summary>
-    /// 生成金币怪
-    /// </summary>
-    private async UniTask SpawnCoinAnimalsAsync(SkillYaKeDong skillParam)
+    protected override void OnSkillUpdate(float dt)
     {
-        var specie = _configManager.GetSpecie(skillParam.SpawnAnimalID);
-        int spawnCount = Random.Range(skillParam.SpawnCount[0], skillParam.SpawnCount[1] + 1);
+        if (_spawnedCount >= _spawnCount)
+            return;
 
-        Vector3 forward = _player.forward;
-        Vector3 right = _player.right;
-        Vector3 basePosition = _player.position + forward * SpawnForwardDistance;
+        _spawnTimer += dt;
 
-        for (int i = 0; i < spawnCount; i++)
+        if (_spawnTimer >= _spawnInterval)
         {
-            Vector3 spawnPosition = CalculateSpawnPosition(basePosition, right, i);
-            await SpawnAnimalAsync(specie, spawnPosition, forward);
+            _spawnTimer = 0f;
+            SpawnThreeKPCoinManAnimal();
+            _spawnedCount++;
         }
     }
 
-    /// <summary>
-    /// 异步生成动物
-    /// </summary>
-    /// <param name="specie">物种数据</param>
-    /// <param name="position">生成位置</param>
-    /// <param name="direction">移动方向</param>
-    private async UniTask SpawnAnimalAsync(cfg.HuntingConfig.Specie specie, Vector3 position, Vector3 direction)
+    protected override void OnSkillEnd()
     {
-        var go = await _gameObjectPoolManager.SpawnAsync(specie.PrefabResourcePath);
-        var animal = go.GetComponent<BaseAnimalBehaviour>();
-        go.transform.position = position;
+        _specieData = null;
+        _animalPrefab = null;
+    }
 
-        animal.Init(specie);
+    #region 私有方法
+    /// <summary>
+    /// 缓存屏幕四角世界坐标
+    /// </summary>
+    private void CacheScreenCorners()
+    {
+        Camera cam = _cameraManager.MainCamera;
+
+        _screenCorners[0] = cam.ViewportToWorldPoint(new Vector3(0f, BOTTOM_CORNER_Y_OFFSET, CAMERA_DEPTH));
+
+        _screenCorners[1] = cam.ViewportToWorldPoint(new Vector3(1f, BOTTOM_CORNER_Y_OFFSET, CAMERA_DEPTH));
+
+        _screenCorners[2] = cam.ViewportToWorldPoint(new Vector3(1f, 1f, CAMERA_DEPTH));
+
+        _screenCorners[3] = cam.ViewportToWorldPoint(new Vector3(0f, 1f, CAMERA_DEPTH));
+    }
+
+    /// <summary>
+    /// 派发三千盘金币人动物
+    /// </summary>
+    private void SpawnThreeKPCoinManAnimal()
+    {
+        // 屏幕四角随机起点
+        Vector3 startPos = _screenCorners[Random.Range(0, 4)];
+
+        // 玩家面前指定距离，矩形范围内随机终点
+        Vector3 playerPos = _player.position;
+        Vector3 playerForward = _player.forward;
+        Vector3 targetCenter = playerPos + playerForward * TARGET_DISTANCE_FROM_PLAYER;
+        Vector3 endPos = targetCenter + new Vector3(
+            Random.Range(-TARGET_RANDOM_RANGEX, TARGET_RANDOM_RANGEX),
+            0f,
+            Random.Range(-TARGET_RANDOM_RANGEZ, TARGET_RANDOM_RANGEZ)
+        );
+
+        // 计算方向
+        Vector3 direction = (endPos - startPos).normalized;
+
+        GameObject go = _gameObjectPoolManager.Spawn(_animalPrefab);
+        go.transform.position = startPos;
+
+        var animal = go.GetComponent<BaseAnimalBehaviour>();
+        animal.Init(_specieData);
         animal.Moveable.SetDirection(direction);
+        animal.Moveable.SetTargetPosition(endPos);
 
         _eventManager.Trigger(AnimalEvents.AnimalGenerated, new AnimalGeneratedEventArgs
         {
             Animal = animal
         });
     }
-
-    /// <summary>
-    /// 计算单个生成位置
-    /// </summary>
-    private Vector3 CalculateSpawnPosition(Vector3 basePosition, Vector3 right, int index)
-    {
-        if (index == 0)
-            return basePosition;
-
-        int offsetLayer = (index + 1) / 2;
-        int directionSign = (index % 2 == 1) ? -1 : 1;
-        Vector3 offset = right * directionSign * offsetLayer * SpawnSideOffset;
-        return basePosition + offset;
-    }
-    #endregion
-
-    #region 测试 
-    /// <summary>
-    /// 生成前方距离
-    /// </summary>
-    private const float SpawnForwardDistance = 5f;
-
-    /// <summary>
-    /// 左右偏移距离
-    /// </summary>
-    private const float SpawnSideOffset = 8f;
     #endregion
 }

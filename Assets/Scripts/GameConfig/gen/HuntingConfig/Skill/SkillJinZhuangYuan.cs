@@ -17,7 +17,9 @@ public sealed partial class SkillJinZhuangYuan : Luban.BeanBase
     public SkillJinZhuangYuan(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        MeatPercent = _buf.ReadFloat();
+        {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SpawnCount = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); SpawnCount[__index0] = __e0;}}
+        MeatAmount = _buf.ReadFloat();
+        {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);EffectPrefabResourcePaths = new string[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { string __e0;__e0 = _buf.ReadString(); EffectPrefabResourcePaths[__index0] = __e0;}}
         Comment = _buf.ReadString();
     }
 
@@ -31,9 +33,17 @@ public sealed partial class SkillJinZhuangYuan : Luban.BeanBase
     /// </summary>
     public readonly int ID;
     /// <summary>
-    /// 肉量百分比
+    /// 生成数量
     /// </summary>
-    public readonly float MeatPercent;
+    public readonly int[] SpawnCount;
+    /// <summary>
+    /// 肉量
+    /// </summary>
+    public readonly float MeatAmount;
+    /// <summary>
+    /// 特效预制体资源路径列表
+    /// </summary>
+    public readonly string[] EffectPrefabResourcePaths;
     /// <summary>
     /// 备注
     /// </summary>
@@ -50,7 +60,9 @@ public sealed partial class SkillJinZhuangYuan : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
-        + "MeatPercent:" + MeatPercent + ","
+        + "SpawnCount:" + Luban.StringUtil.CollectionToString(SpawnCount) + ","
+        + "MeatAmount:" + MeatAmount + ","
+        + "EffectPrefabResourcePaths:" + Luban.StringUtil.CollectionToString(EffectPrefabResourcePaths) + ","
         + "Comment:" + Comment + ","
         + "}";
     }

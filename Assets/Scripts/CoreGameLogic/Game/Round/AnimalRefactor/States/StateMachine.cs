@@ -14,12 +14,18 @@
         public IState CurrentState => _currentState;
 
         /// <summary>
+        /// 当前临时状态是否可以被新临时状态打断
+        /// </summary>
+        private bool _canCurrentTempBeInterrupted;
+
+        /// <summary>
         /// 初始化状态机
         /// </summary>
         /// <param name="initState">初始状态</param>
         public void Init(IState initState)
         {
             _stateBeforeTemp = null;
+            _canCurrentTempBeInterrupted = true;
             _currentState = initState;
             initState?.Enter();
         }
@@ -33,6 +39,7 @@
             if (_currentState == nextState) return;
 
             _stateBeforeTemp = null;
+            _canCurrentTempBeInterrupted = true;
 
             _currentState?.Exit();
             _currentState = nextState;
@@ -42,18 +49,26 @@
         /// <summary>
         /// 进入临时状态
         /// </summary>
-        /// <param name="tempState">临时状态</param>
-        /// <param name="ignore">是否忽略相同临时状态</param>
-        public void EnterTempState(IState tempState,bool ignore = false)
+        /// <param name="tempState">要进入的临时状态</param>
+        /// <param name="ignoreSameState">是否忽略相同状态</param>
+        /// <param name="canBeInterrupted">该临时状态是否可以被其他临时状态打断</param>
+        public void EnterTempState(IState tempState, bool ignoreSameState = false, bool canBeInterrupted = true)
         {
-            if (!ignore && _currentState == tempState)
+            if (!ignoreSameState && _currentState == tempState)
+                return;
+
+            bool isSameState = _currentState == tempState;
+            bool isEnteringSelf = _stateBeforeTemp != null && isSameState;
+
+            if (_stateBeforeTemp != null && !_canCurrentTempBeInterrupted && !isEnteringSelf)
                 return;
 
             if (_stateBeforeTemp == null)
                 _stateBeforeTemp = _currentState;
 
-            _currentState?.Pause(); 
+            _currentState?.Pause();
             _currentState = tempState;
+            _canCurrentTempBeInterrupted = canBeInterrupted;
             _currentState?.Enter();
         }
 
@@ -67,8 +82,9 @@
             _currentState?.Exit();
             _currentState = _stateBeforeTemp;
             _stateBeforeTemp = null;
-            
-            _currentState?.Resume(); 
+            _canCurrentTempBeInterrupted = true;
+
+            _currentState?.Resume();
         }
 
         /// <summary>

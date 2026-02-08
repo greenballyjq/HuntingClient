@@ -2,6 +2,9 @@
 {
     public class LeaveAnimalVisual : BaseAnimalVisual
     {
+        /// <summary>
+        /// 播放离场动画
+        /// </summary>
         public void PlayLeave()
         {
             ResetAnimationStates();

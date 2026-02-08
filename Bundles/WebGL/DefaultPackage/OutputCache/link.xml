@@ -1,20 +1,24 @@
 <linker>
   <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="AimAssistEffectController" preserve="all" />
+    <type fullname="AnimalControlAreaTrigger" preserve="all" />
+    <type fullname="AreaShapeHeart" preserve="all" />
     <type fullname="BossAnimalBehaviour" preserve="all" />
     <type fullname="BossMovement" preserve="all" />
     <type fullname="BulletBehavior" preserve="all" />
     <type fullname="DiceRollAnimator" preserve="all" />
-    <type fullname="FleeAnimalEventTrigger" preserve="all" />
     <type fullname="GameFramework.Core.Effect.ParticleEffectItem" preserve="all" />
     <type fullname="GiftOpenVFX" preserve="all" />
     <type fullname="Hunting.Game.Animal.AnimalMovement" preserve="all" />
     <type fullname="Hunting.Game.Animal.BossAnimalEventTrigger" preserve="all" />
     <type fullname="Hunting.Game.Animal.BossAnimalVisual" preserve="all" />
-    <type fullname="Hunting.Game.Animal.FleeAnimalBehaviour" preserve="all" />
-    <type fullname="Hunting.Game.Animal.FleeAnimalVisual" preserve="all" />
     <type fullname="Hunting.Game.Animal.Health" preserve="all" />
+    <type fullname="Hunting.Game.Animal.LeaveAnimalBehaviour" preserve="all" />
+    <type fullname="Hunting.Game.Animal.LeaveAnimalVisual" preserve="all" />
     <type fullname="HuntingAudioRefSo" preserve="all" />
+    <type fullname="LeaveAnimalEventTrigger" preserve="all" />
+    <type fullname="SkillThreeKPCoinAnimalBehaviour" preserve="all" />
+    <type fullname="SkillThreeKPCoinManAnimalVisual" preserve="all" />
     <type fullname="SkillWeapon" preserve="all" />
     <type fullname="ThreeKPCoinManThrowDiceAnimator" preserve="all" />
     <type fullname="TrapBehaviour" preserve="all" />
@@ -24,6 +28,7 @@
     <type fullname="UIComponentBossHealth" preserve="all" />
     <type fullname="UIComponentBullet" preserve="all" />
     <type fullname="UIComponentButtonReturnOrSettlement" preserve="all" />
+    <type fullname="UIComponentDropReward" preserve="all" />
     <type fullname="UIComponentGift" preserve="all" />
     <type fullname="UIComponentGiftAd" preserve="all" />
     <type fullname="UIComponentMapInfo" preserve="all" />
@@ -86,7 +91,6 @@
   </assembly>
   <assembly fullname="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="UnityEngine.AudioClip" preserve="all" />
-    <type fullname="UnityEngine.AudioSource" preserve="all" />
   </assembly>
   <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="UnityEngine.GameObject" preserve="all" />

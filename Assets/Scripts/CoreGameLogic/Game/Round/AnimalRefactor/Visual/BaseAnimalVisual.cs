@@ -114,12 +114,22 @@ namespace Hunting.Game.Animal
         }
 
         /// <summary>
+        /// 播放控制动画
+        /// </summary>
+        public void PlayHeld()
+        {
+            ResetAnimationStates();
+            _animator.SetBool("Held", true);
+        }
+
+        /// <summary>
         /// 重置动画状态
         /// </summary>
         protected virtual void ResetAnimationStates()
         {
             _animator.SetBool("Move", false);
             _animator.SetBool("Die", false);
+            _animator.SetBool("Held", false);
         }
         #endregion
 

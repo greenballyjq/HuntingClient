@@ -49,7 +49,12 @@ public class SkillWeapon : MonoBehaviour
     /// </summary>
     private BulletManager _bulletManager => GameServiceLocator.GetRoundManager<BulletManager>();
 
-    private void Update()
+    /// <summary>
+    /// 动物管理器
+    /// </summary>
+    private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
+
+    public void DoUpdate(float dt)
     {
         UpdateAiming();
         UpdateShooting();
@@ -97,8 +102,8 @@ public class SkillWeapon : MonoBehaviour
     /// </summary>
     private BaseAnimalBehaviour FindNearestAnimal()
     {
-        BaseAnimalBehaviour[] animals = Object.FindObjectsOfType<BaseAnimalBehaviour>();
-        if (animals == null || animals.Length == 0)
+        var  animals =_animalManager.GetAllAliveAnimals();
+        if (animals == null || animals.Count == 0)
             return null;
 
         BaseAnimalBehaviour nearestAnimal = null;
@@ -153,16 +158,8 @@ public class SkillWeapon : MonoBehaviour
         if (Time.time - _lastFireTime < _fireInterval)
             return;
 
-        // 检查枪口位置
-        if (muzzlePoint == null)
-        {
-            Debug.LogWarning("[SkillWeapon] 枪口位置为空，无法射击");
-            return;
-        }
-
         // 执行射击
         SpawnBulletAsync().Forget();
-        PlayFireSound();
         _lastFireTime = Time.time;
     }
 
@@ -175,49 +172,6 @@ public class SkillWeapon : MonoBehaviour
         Vector3 spawnDirection = muzzlePoint.forward;
 
         await _bulletManager.SpawnBullet(bulletId, spawnPosition, spawnDirection);
-    }
-    #endregion
-
-    #region TODO: 测试代码
-    // TODO: 音效系统待实现
-    /// <summary>
-    /// 射击音效
-    /// </summary>
-    [Header("音效")]
-    [SerializeField] private AudioClip fireAudioClip;
-
-    /// <summary>
-    /// 音效组件
-    /// </summary>
-    private AudioSource _audioSource;
-
-    private void Awake()
-    {
-        InitializeAudioSource();
-    }
-
-    /// <summary>
-    /// 初始化音效组件
-    /// </summary>
-    private void InitializeAudioSource()
-    {
-        _audioSource = GetComponent<AudioSource>();
-        if (_audioSource == null)
-        {
-            _audioSource = gameObject.AddComponent<AudioSource>();
-        }
-    }
-
-    /// <summary>
-    /// 播放射击音效
-    /// </summary>
-    private void PlayFireSound()
-    {
-        if (fireAudioClip != null && _audioSource != null)
-        {
-            _audioSource.clip = fireAudioClip;
-            _audioSource.Play();
-        }
     }
     #endregion
 }

@@ -37,5 +37,10 @@ namespace Hunting.Game.Animal
         /// 死亡事件
         /// </summary>
         event Action OnDeath;
+
+        /// <summary>
+        /// 控制事件
+        /// </summary>
+        event Action OnHeld;
     }
 }

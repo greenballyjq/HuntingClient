@@ -23,6 +23,8 @@
         {
             base.Enter();
 
+            _hitDuration = 0.2f;
+
             animalBehavior.Moveable.SetMoveRate(_hitMoveSpeedRate);
         }
 
