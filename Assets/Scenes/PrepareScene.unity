@@ -340,7 +340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameConfig:
-    GameName: GameName
+    GameName: "\u6211\u7ED9\u5168\u5BB6\u6253\u8089\u5403"
     GameVersion: 1.0.0
     StartScenePath: StartScenePath
     DefaultLanguage: 40

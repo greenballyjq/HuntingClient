@@ -104,6 +104,8 @@ public class UIComponentLoginButton : MonoBehaviour, IUIComponent
     private async void OnLoginButtonClicked()
     {
         // TODO: 在此处实现登录逻辑
+        GameFrameworkManager.Instance.Login();
+        
         _buttonLogin.targetGraphic.raycastTarget = false;
 
         await PlayBlinkAsync();

@@ -34,6 +34,9 @@ public class Skill3KPHandler : BaseSkillHandler
         _weaponManager.UnregisterFireRateModifier(ModifierSourceId);
         _weaponManager.UnregisterDamageModifier(ModifierSourceId);
 
-        _weaponManager.PlayerWeapon.WeaponVisual.SetSkillEffect(false);
+        // fixme PlayerWeapon is null 
+        // CleanUp 时被调用，同时 WeaponManager也被调用CleanUp方法，PlayerWeapon 被置为空
+        // 目前先加一个判空安全, 保证后续测试不会卡死
+        _weaponManager.PlayerWeapon?.WeaponVisual.SetSkillEffect(false);
     }
 }
