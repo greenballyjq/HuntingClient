@@ -130,26 +130,15 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
         {
             _roundFlow.StartSettlement();
             if (_isMeatScaleFull && _hasHiddenMap)
-            {
                 await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-            }
             else
-            {
                 await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-                //await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
-            }
-                
+                //await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);                
 
             _settlementRewardManager.CalculateReward();
         }
         else
         {
-            // 临时测试代码
-            //_roundFlow.StartSettlement();
-            //await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-            //_settlementRewardManager.CalculateReward();
-            
-            // 正式代码
             await HuntingAppFlow.Instance.EnterPrepareAsync();
         }
     }

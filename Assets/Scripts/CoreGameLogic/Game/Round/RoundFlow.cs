@@ -284,6 +284,9 @@ public class RoundFlow : Singleton<RoundFlow>
         _roundManagers.Clear();
         _currentRoundContext = null;
 
+        // 清理所有特效
+        _effectManager.ClearAllEffects();
+
         // 清理对象池
         _gameObjectPoolManager.ClearAllPools();
 

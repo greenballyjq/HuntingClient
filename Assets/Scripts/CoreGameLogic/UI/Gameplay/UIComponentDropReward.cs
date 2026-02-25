@@ -35,9 +35,9 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
-    /// 对象池管理器
+    /// 特效管理器
     /// </summary>
-    private GameObjectPoolManager _poolManager => GameFrameworkManager.Instance.GetManager<GameObjectPoolManager>();
+    private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
 
     /// <summary>
     /// 相机管理器
@@ -48,11 +48,6 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
     /// 掉落目标位置缓存字典
     /// </summary>
     private Dictionary<EDropType, Vector3> _dropTargetPositionCache;
-
-    /// <summary>
-    /// 活跃的掉落特效集合
-    /// </summary>
-    private readonly HashSet<GameObject> _activeEffects = new HashSet<GameObject>();
 
     private void Awake()
     {
@@ -68,7 +63,6 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
 
     public void CleanUp()
     {
-        RecycleAllEffects();
         _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
     }
 
@@ -109,43 +103,23 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
     /// <param name="worldPosition">世界位置</param>
     private async UniTask PlayDropRewardAnimation(EDropType dropType, int dropCount, Vector3 worldPosition)
     {
-        Vector3 endPosition = _dropTargetPositionCache.TryGetValue(dropType, out Vector3 position) ? position : Vector3.zero;
-        if (endPosition == Vector3.zero) return;
-
+        Vector3 endPosition = _dropTargetPositionCache[dropType];
         Vector3 startPosition = PointConverter.WorldPointToUiPoint(_rectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
 
-        GameObject effectObj = _poolManager.Spawn(_dropRewardEffectPrefab);
-        effectObj.transform.SetParent(transform, false);
+        GameObject effectObj = _effectManager.PlayOneShot(_dropRewardEffectPrefab);
         effectObj.transform.position = startPosition;
-        _activeEffects.Add(effectObj);
 
         await effectObj.transform
-        .DOMove(endPosition, 2f)
-        .SetLink(effectObj)
-        .ToUniTask();
-
-        _activeEffects.Remove(effectObj);
-        _poolManager.Despawn(effectObj);
+            .DOMove(endPosition, 2f)
+            .SetLink(effectObj)
+            .SetAutoKill()
+            .ToUniTask();
 
         TriggerDropRewardEffect(new RewardArrivedEventArgs 
         { 
             DropType = dropType, 
             DropCount = dropCount 
         });
-    }
-
-    /// <summary>
-    /// 回收所有活跃特效
-    /// </summary>
-    private void RecycleAllEffects()
-    {
-        foreach (GameObject effect in _activeEffects)
-        {
-            effect.transform.DOKill();
-            _poolManager.Despawn(effect);
-        }
-
-        _activeEffects.Clear();
     }
 
     /// <summary>
