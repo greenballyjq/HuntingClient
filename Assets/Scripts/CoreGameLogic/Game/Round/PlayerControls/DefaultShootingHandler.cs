@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// 默认射击控制处理器
@@ -6,9 +6,9 @@
 public class DefaultShootingHandler : IPlayerControlHandler
 {
     /// <summary>
-    /// 主武器
+    /// 玩家武器
     /// </summary>
-    private PlayerWeapon _weapon;
+    private PlayerWeapon _playerWeapon;
 
     /// <summary>
     /// 输入管理器
@@ -26,23 +26,28 @@ public class DefaultShootingHandler : IPlayerControlHandler
     private CameraManager _cameraManager => GameServiceLocator.GetAppManager<CameraManager>();
 
     /// <summary>
-    /// 瞄准深度
+    /// 瞄准平面高度（射线与该水平面的交点作为瞄准点）
     /// </summary>
-    private const float AimDepth = 6f;
+    private const float AimPlaneHeight = 0f;
 
     public void OnControlStart()
     {
         Input.SwitchToFireMode();
-        _weapon = _weaponManager.PlayerWeapon;
+        _playerWeapon = _weaponManager.PlayerWeapon;
     }
 
     public void OnControlUpdate(float deltaTime)
     {
         if (Input.IsFireHeld)
         {
-            Vector3 worldPos = _cameraManager.ScreenToWorldPoint(Input.PointerScreenPosition, AimDepth);
-            _weapon.SetAimTarget(worldPos);
-            _weapon.Fire();
+            Ray ray = _cameraManager.MainCamera.ScreenPointToRay(Input.PointerScreenPosition);
+            Plane plane = new Plane(Vector3.up, new Vector3(0f, AimPlaneHeight, 0f));
+            if (plane.Raycast(ray, out float enter))
+            {
+                Vector3 worldPos = ray.GetPoint(enter);
+                _playerWeapon.SetAimTarget(worldPos);
+            }
+            _playerWeapon.Fire();
         }
             
     }

@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig.Enum;
 using UnityEngine;
 using UnityEngine.UI;
@@ -62,9 +62,19 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
+    /// UI管理器
+    /// </summary>
+    private UIManager _uiManager => GameServiceLocator.UIManager;
+
+    /// <summary>
     /// 道具管理器
     /// </summary>
     private PropManager _propManager => GameServiceLocator.GetRoundManager<PropManager>();
+
+    /// <summary>
+    /// 玩家数据管理器
+    /// </summary>
+    private PlayerDataManager _playerDataManager => GameServiceLocator.GetAppManager<PlayerDataManager>();
 
     public void Init()
     {
@@ -74,9 +84,8 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
         _eventManager.AddListener(PropEvents.PropStarted, OnPropStarted);
         _eventManager.AddListener(PropEvents.PropUpdated, OnPropUpdated);
         _eventManager.AddListener(PropEvents.PropEnded, OnPropEnded);
-        _eventManager.AddListener(PropEvents.PropUseFailed, OnPropUseRejected);
+        _eventManager.AddListener(PlayerDataEvents.PropCountChanged, OnPropCountChanged);
 
-        // 初始化显示
         InitializeDisplay();
     }
 
@@ -88,7 +97,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
         _eventManager.RemoveListener(PropEvents.PropStarted, OnPropStarted);
         _eventManager.RemoveListener(PropEvents.PropUpdated, OnPropUpdated);
         _eventManager.RemoveListener(PropEvents.PropEnded, OnPropEnded);
-        _eventManager.RemoveListener(PropEvents.PropUseFailed, OnPropUseRejected);
+        _eventManager.RemoveListener(PlayerDataEvents.PropCountChanged, OnPropCountChanged);
     }
 
     private void OnDestroy()
@@ -102,10 +111,8 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private void InitializeDisplay()
     {
-        // 更新数量显示
         UpdateCount();
 
-        // 初始化冷却遮罩
         _imageCooldownMask.fillAmount = 0f;
     }
 
@@ -117,10 +124,8 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
         _cooldownTotalTime = duration;
         _cooldownRemainingTime = duration;
 
-        // 禁用按钮
         _buttonProp.interactable = false;
 
-        // 显示遮罩
         _imageCooldownMask.fillAmount = 1f;
     }
 
@@ -129,7 +134,6 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private void UpdateCooldown(float remainingTime, float totalTime)
     {
-        // 计算进度比例
         float progress = remainingTime / totalTime;
         _imageCooldownMask.fillAmount = progress;
     }
@@ -139,8 +143,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private void UpdateCount()
     {
-        // TODO: 从PlayerData获取道具数量，目前占位显示
-        _textCount.text = "0";
+        _textCount.text = _playerDataManager.GetPropCount(_propType).ToString();
     }
 
     /// <summary>
@@ -151,10 +154,8 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
         _cooldownRemainingTime = 0f;
         _cooldownTotalTime = 0f;
 
-        // 启用按钮
         _buttonProp.interactable = true;
 
-        // 隐藏遮罩
         _imageCooldownMask.fillAmount = 0f;
     }
     #endregion
@@ -171,9 +172,9 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// <summary>
     /// 加号按钮点击回调
     /// </summary>
-    private void OnAddButtonClicked()
+    private async void OnAddButtonClicked()
     {
-        // TODO: 实现看广告增加道具逻辑
+        await _uiManager.OpenUIAsync<UIPopupProp>("UIPopupProp", UIManager.UILayer.PopUp, _propType);
     }
 
     /// <summary>
@@ -184,7 +185,6 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
             if (args.PropData.PropType != _propType)
             return;
 
-        // 开始冷却
         StartCooldown(args.PropData.Duration);
     }
 
@@ -196,7 +196,6 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
         if (args.PropData.PropType != _propType)
             return;
 
-        // 更新冷却进度
         _cooldownRemainingTime = args.RemainingTime;
         UpdateCooldown(args.RemainingTime, args.PropData.Duration);
     }
@@ -209,22 +208,19 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
         if (args.PropData.PropType != _propType)
             return;
 
-        // 结束冷却
         EndCooldown();
 
-        // 更新数量
         UpdateCount();
     }
 
     /// <summary>
-    /// 道具使用被拒绝事件回调
+    /// 道具数量改变事件回调
     /// </summary>
-    private void OnPropUseRejected(PropUseFailedEventArgs args)
+    private void OnPropCountChanged(PropCountChangedEventArgs args)
     {
-        if (args.PropData.PropType != _propType)
+        if (args.PropType != _propType)
             return;
-
-        // TODO：显示提示
+        UpdateCount();
     }
     #endregion
 }

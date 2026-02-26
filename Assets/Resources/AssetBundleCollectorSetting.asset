@@ -109,6 +109,14 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Prop
+        CollectorGUID: 73e38f316033c274dbd8f81258ad6297
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: game
       GroupDesc: 
       AssetTags: 

@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using Hunting.Events;
@@ -158,21 +158,16 @@ public class PlayerWeapon : MonoBehaviour
     }
 
     /// <summary>
-    /// 设置瞄准目标
+    /// 设置瞄准目标（仅Y轴旋转，瞬时对准）
     /// </summary>
     /// <param name="worldPosition">目标世界坐标</param>
     public void SetAimTarget(Vector3 worldPosition)
     {
-        // 计算方向（保持Y轴水平）
         Vector3 direction = worldPosition - transform.position;
         direction.y = 0f;
-
-        // 旋转武器
-        if (direction != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _rotationSpeed);
-        }
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+        transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
     }
 
     /// <summary>

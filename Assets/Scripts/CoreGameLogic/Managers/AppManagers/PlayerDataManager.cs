@@ -1,16 +1,23 @@
-﻿using GameFramework.Game;
+using cfg.HuntingConfig.Enum;
+using GameFramework.Game;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-
 /// <summary>
-/// 玩家数据管理器（占位）
+/// 玩家数据管理器
 /// </summary>
 public class PlayerDataManager : IAppManager
 {
     /// <summary>
-    /// 3币数量
+    /// 三千盘金币数量
     /// </summary>
-    private int _threeKPCoin = 50;
+    private int _threeKPCoinAmount;
+
+    /// <summary>
+    /// 各道具数量
+    /// </summary>
+    private Dictionary<EPropType, int> _propCounts = new Dictionary<EPropType, int>();
 
     /// <summary>
     /// 事件管理器
@@ -19,7 +26,12 @@ public class PlayerDataManager : IAppManager
 
     public void Init()
     {
-        // TODO: 从服务器获取玩家数据
+        // TODO 未来从服务器获取玩家数据
+        _threeKPCoinAmount = 50;
+
+        foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
+            _propCounts[propType] = 1;
+        
         Debug.Log("[PlayerDataManager] 初始化完成");
     }
 
@@ -30,25 +42,48 @@ public class PlayerDataManager : IAppManager
 
     #region 公共方法
     /// <summary>
-    /// 获取3币数量
+    /// 获取三千盘金币数量
     /// </summary>
-    public int GetThreeKPCoin()
+    public int GetThreeKPCoinAmount()
     {
-        return _threeKPCoin;
+        return _threeKPCoinAmount;
     }
 
     /// <summary>
-    /// 更新3币数量
+    /// 更新三千盘金币数量
     /// </summary>
-    public void UpdateThreeKPCoin(int amount)
+    public void UpdateThreeKPCoinAmount(int amount)
     {
-        int oldAmount = _threeKPCoin;
-        _threeKPCoin += amount;
-
-        int deltaAmount = _threeKPCoin - oldAmount;
-        TriggerThreeKPCoinChanged(new ThreeKPCoinChangedEventArgs
+        int oldAmount = _threeKPCoinAmount;
+        _threeKPCoinAmount += amount;
+        int deltaAmount = _threeKPCoinAmount - oldAmount;
+        TriggerThreeKPCoinAmountChanged(new ThreeKPCoinAmountChangedEventArgs
         {
-            CurrentAmount = _threeKPCoin,
+            CurrentAmount = _threeKPCoinAmount,
+            DeltaAmount = deltaAmount
+        });
+    }
+
+    /// <summary>
+    /// 获取道具数量
+    /// </summary>
+    public int GetPropCount(EPropType propType)
+    {
+        return _propCounts[propType];
+    }
+
+    /// <summary>
+    /// 更新道具数量
+    /// </summary>
+    public void UpdatePropCount(EPropType propType, int deltaAmount)
+    {
+        int oldAmount = GetPropCount(propType);
+        _propCounts[propType] = oldAmount + deltaAmount;
+        int currentAmount = _propCounts[propType];
+        TriggerPropCountChanged(new PropCountChangedEventArgs
+        {
+            PropType = propType,
+            CurrentAmount = currentAmount,
             DeltaAmount = deltaAmount
         });
     }
@@ -56,11 +91,19 @@ public class PlayerDataManager : IAppManager
 
     #region 事件相关
     /// <summary>
-    /// 触发3币数量改变事件
+    /// 触发三千盘金币数量改变事件
     /// </summary>
-    private void TriggerThreeKPCoinChanged(ThreeKPCoinChangedEventArgs args)
+    private void TriggerThreeKPCoinAmountChanged(ThreeKPCoinAmountChangedEventArgs args)
     {
-        _eventManager.Trigger(PlayerDataEvents.ThreeKPCoinChanged, args);
+        _eventManager.Trigger(PlayerDataEvents.ThreeKPCoinAmountChanged, args);
+    }
+
+    /// <summary>
+    /// 触发道具数量改变事件
+    /// </summary>
+    private void TriggerPropCountChanged(PropCountChangedEventArgs args)
+    {
+        _eventManager.Trigger(PlayerDataEvents.PropCountChanged, args);
     }
     #endregion
 }

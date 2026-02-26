@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,6 +50,11 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
+    /// <summary>
+    /// 玩家数据管理器
+    /// </summary>
+    private PlayerDataManager _playerDataManager => GameServiceLocator.GetAppManager<PlayerDataManager>();
+
     public void Init(RoundContext context)
     {
         Debug.Log("[PropManager] 初始化完成");
@@ -81,22 +86,21 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <returns>是否使用成功</returns>
     public bool TryUseProp(EPropType propType)
     {
-        // 获取道具配置
         Prop propData = _configManager.GetProp(propType);
 
-        // 检查是否可以使用
-        if (!CanUseProp(propType, propData))
+        if (_playerDataManager.GetPropCount(propType) < 1)
         {
-            Debug.LogWarning($"[PropManager] 道具正在使用中，无法重复使用，PropType:{propType}");
-            TriggerPropUseFailed(new PropUseFailedEventArgs
-            {
-                Sender = this,
-                PropData = propData,
-            });
+            Debug.LogWarning($"[PropManager] 道具数量不足，PropType:{propType}");
             return false;
         }
 
-        // TODO: 将来从PlayerDataManager检查道具是否可以使用
+        if (!CanUseProp(propType, propData))
+        {
+            Debug.LogWarning($"[PropManager] 道具正在使用中，无法重复使用，PropType:{propType}");
+            return false;
+        }
+
+        _playerDataManager.UpdatePropCount(propType, -1);
 
         // 创建处理器
         IPropHandler handler = PropHandlerFactory.CreatePropHandler(propType);
@@ -268,14 +272,6 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private void TriggerPropEnded(PropEndedEventArgs args)
     {
         _eventManager.Trigger(PropEvents.PropEnded, args);
-    }
-
-    /// <summary>
-    /// 触发道具使用失败事件
-    /// </summary>
-    private void TriggerPropUseFailed(PropUseFailedEventArgs args)
-    {
-        _eventManager.Trigger(PropEvents.PropUseFailed, args);
     }
 
     /// <summary>

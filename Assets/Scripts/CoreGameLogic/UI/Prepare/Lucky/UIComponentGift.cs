@@ -66,16 +66,16 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
 
         _eventManager.AddListener(LuckyEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
         _eventManager.AddListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
-        _eventManager.AddListener(PlayerDataEvents.ThreeKPCoinChanged, OnThreeKPCoinChanged);
+        _eventManager.AddListener(PlayerDataEvents.ThreeKPCoinAmountChanged, OnThreeKPCoinChanged);
 
-        UpdateGiftButtonInteractable(PlayerData.GetThreeKPCoin());
+        UpdateGiftButtonInteractable(PlayerData.GetThreeKPCoinAmount());
     }
 
     public void CleanUp()
     {
         _eventManager.RemoveListener(LuckyEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
         _eventManager.RemoveListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
-        _eventManager.RemoveListener(PlayerDataEvents.ThreeKPCoinChanged, OnThreeKPCoinChanged);
+        _eventManager.RemoveListener(PlayerDataEvents.ThreeKPCoinAmountChanged, OnThreeKPCoinChanged);
     }
 
     #region 私有方法
@@ -99,8 +99,8 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
         // 抽到的幸运仪式增益配置
         LuckyBuff buff = _configManager.GetLuckyBuffFromGift(_giftType);
 
-        // 扣除3币
-        PlayerData.UpdateThreeKPCoin(-_giftPrice);
+        // 扣除三千盘金币
+        PlayerData.UpdateThreeKPCoinAmount(-_giftPrice);
 
         // 触发礼包开启事件
         TriggerGiftOpened(new GiftOpenedEventArgs
@@ -113,7 +113,7 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
     /// <summary>
     /// 更新礼包按钮交互状态
     /// </summary>
-    /// <param name="currentCoin">当前3币数量</param>
+    /// <param name="currentCoin">当前三千盘金币数量</param>
     private void UpdateGiftButtonInteractable(int currentCoin)
     {
         _buttonGift.interactable = currentCoin >= _giftPrice;
@@ -142,7 +142,7 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnGiftOpenAnimationEnded(GiftOpenAnimationEndedEventArgs args)
     {
-        int currentCoin = PlayerData.GetThreeKPCoin();
+        int currentCoin = PlayerData.GetThreeKPCoinAmount();
         UpdateGiftButtonInteractable(currentCoin);
     }
 
@@ -150,7 +150,7 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
     /// 3币数量改变事件回调
     /// </summary>
     /// 
-    private void OnThreeKPCoinChanged(ThreeKPCoinChangedEventArgs args)
+    private void OnThreeKPCoinChanged(ThreeKPCoinAmountChangedEventArgs args)
     {
         UpdateGiftButtonInteractable(args.CurrentAmount);
     }

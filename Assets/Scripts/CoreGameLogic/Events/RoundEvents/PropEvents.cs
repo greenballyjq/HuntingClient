@@ -27,11 +27,6 @@ public static class PropEvents
     public static readonly EventKey<PropEndedEventArgs> PropEnded = new EventKey<PropEndedEventArgs>();
 
     /// <summary>
-    /// 道具使用失败事件
-    /// </summary>
-    public static readonly EventKey<PropUseFailedEventArgs> PropUseFailed = new EventKey<PropUseFailedEventArgs>();
-
-    /// <summary>
     /// 道具使用成功事件
     /// </summary>
     public static readonly EventKey<PropUseSucceededEventArgs> PropUseSucceeded = new EventKey<PropUseSucceededEventArgs>();
@@ -73,17 +68,6 @@ public sealed class PropUpdatedEventArgs : EventArgs
 /// 道具效果结束事件参数
 /// </summary>
 public sealed class PropEndedEventArgs : EventArgs
-{
-    /// <summary>
-    /// 道具配置
-    /// </summary>
-    public Prop PropData { get; set; }
-}
-
-/// <summary>
-/// 道具使用失败事件参数
-/// </summary>
-public sealed class PropUseFailedEventArgs : EventArgs
 {
     /// <summary>
     /// 道具配置

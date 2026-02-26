@@ -504,6 +504,12 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     #endregion
 
     #region 道具相关特殊方法
+    /// <summary>
+    /// 随机获取一个道具配置
+    /// </summary>
+    /// <returns>随机道具配置</returns>
+    public Prop GetRandomProp()
+        => PropTable.DataList[Random.Range(0, PropTable.DataList.Count)];
     #endregion
 
     #region 测试

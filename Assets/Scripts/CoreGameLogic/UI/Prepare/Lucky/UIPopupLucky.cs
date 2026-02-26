@@ -62,9 +62,9 @@ public class UIPopupLucky : UIBase
         foreach (var giftAd in _uiComponentGiftAds)
             giftAd.Init();
 
-        UpdateThreeCoinDisplay(PlayerData.GetThreeKPCoin());
+        UpdateThreeCoinDisplay(PlayerData.GetThreeKPCoinAmount());
 
-        _eventManager.AddListener(PlayerDataEvents.ThreeKPCoinChanged, OnThreeKPCoinChanged);
+        _eventManager.AddListener(PlayerDataEvents.ThreeKPCoinAmountChanged, OnThreeKPCoinChanged);
         _eventManager.AddListener(LuckyEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
         _eventManager.AddListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
     }
@@ -77,7 +77,7 @@ public class UIPopupLucky : UIBase
         foreach (var giftAd in _uiComponentGiftAds)
             giftAd.CleanUp();
 
-        _eventManager.RemoveListener(PlayerDataEvents.ThreeKPCoinChanged, OnThreeKPCoinChanged);
+        _eventManager.RemoveListener(PlayerDataEvents.ThreeKPCoinAmountChanged, OnThreeKPCoinChanged);
         _eventManager.RemoveListener(LuckyEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
         _eventManager.RemoveListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
 
@@ -107,7 +107,7 @@ public class UIPopupLucky : UIBase
     /// <summary>
     /// 3币数量改变事件回调
     /// </summary>
-    private void OnThreeKPCoinChanged(ThreeKPCoinChangedEventArgs args)
+    private void OnThreeKPCoinChanged(ThreeKPCoinAmountChangedEventArgs args)
     {
         UpdateThreeCoinDisplay(args.CurrentAmount);
     }

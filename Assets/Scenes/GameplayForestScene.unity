@@ -7684,9 +7684,9 @@ MonoBehaviour:
   _lineWidth: 0.1
   _vertices:
   - {x: 0, y: 0, z: 3}
-  - {x: -6, y: 0, z: 3}
-  - {x: -6, y: 0, z: 2}
-  - {x: 0, y: 0, z: 2}
+  - {x: -9, y: 0, z: 3}
+  - {x: -9, y: 0, z: 1}
+  - {x: 0, y: 0, z: 1}
 --- !u!1 &1662585194
 GameObject:
   m_ObjectHideFlags: 0
@@ -7850,9 +7850,9 @@ MonoBehaviour:
   _lineWidth: 0.1
   _vertices:
   - {x: 0, y: 0, z: 3}
-  - {x: 0, y: 0, z: 2}
-  - {x: 6, y: 0, z: 2}
-  - {x: 6, y: 0, z: 3}
+  - {x: 0, y: 0, z: 1}
+  - {x: 9, y: 0, z: 1}
+  - {x: 9, y: 0, z: 3}
 --- !u!4 &1664231674
 Transform:
   m_ObjectHideFlags: 0

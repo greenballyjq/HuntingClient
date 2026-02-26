@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using GameFramework.Game;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -87,13 +89,16 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     {
         if (context.started)
         {
-            // Fire键按下
+            Vector2 screenPos = Pointer.current != null ? Pointer.current.position.ReadValue() : PointerScreenPosition;
+            
+            if (IsPointerOverUI(screenPos))
+                return;
+
             IsFireHeld = true;
             OnFireStarted?.Invoke();
         }
         else if (context.canceled)
         {
-            // Fire键松开
             IsFireHeld = false;
             OnFireCanceled?.Invoke();
         }
@@ -104,7 +109,6 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     /// </summary>
     public void OnPointerPosition(InputAction.CallbackContext context)
     {
-        // 更新指针屏幕坐标
         PointerScreenPosition = context.ReadValue<Vector2>();
     }
 
@@ -115,9 +119,26 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     {
         if (context.started)
         {
-            // 触发选择目标事件
+            Vector2 screenPos = Pointer.current != null ? Pointer.current.position.ReadValue() : PointerScreenPosition;
+
+            if (IsPointerOverUI(screenPos))
+                return;
+
             OnTargetSelected?.Invoke();
         }
+    }
+    #endregion
+
+    #region 私有方法
+    /// <summary>
+    /// 指定屏幕坐标是否点在UI
+    /// </summary>
+    private static bool IsPointerOverUI(Vector2 screenPosition)
+    {
+        var pointerData = new PointerEventData(EventSystem.current) { position = screenPosition };
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+        return results.Count > 0;
     }
     #endregion
 }

@@ -115,7 +115,6 @@ public class UIGameplay : UIBase
         _uiComponentBullet.CleanUp();
         _uiComponentPropGroup.CleanUp();
         _uiComponentPropUseTip.CleanUp();
-
         _uiComponentDropReward.CleanUp();
 
         //uiComponentQuest.CleanUp();
