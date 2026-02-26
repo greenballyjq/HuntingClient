@@ -38,9 +38,13 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
 
     protected override void OnDamaged()
     {
-        base.OnDamaged();
+        
 
         (AnimalEventTrigger as  BossAnimalEventTrigger).TriggerBossDamaged(Health.MaxHealth, Health.CurrentHealth);
+        
+        
+        
+        base.OnDamaged();
     }
 
     protected override void OnDeath()

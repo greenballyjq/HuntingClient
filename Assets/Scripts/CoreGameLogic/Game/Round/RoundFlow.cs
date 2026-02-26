@@ -109,7 +109,7 @@ public class HiddenRoundEndTrigger
         {
             // todo 时间缩放为 1/4 3s  放大光圈  3s 全家福 2s
             Time.timeScale = 0.25f;
-            await UniTask.Delay(3000);
+            await UniTask.Delay(3000, ignoreTimeScale: true);
             Time.timeScale = 1f;
             RoundFlow.Instance.EndHiddenMapAsync().Forget();
         }

@@ -166,6 +166,8 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
         foreach (var animal in _pendingRemovalAnimals)
         {
             _activeAnimals.Remove(animal);
+            
+            _unDeathAnimals.Remove(animal);
             _gameObjectPoolManager.Despawn(animal.gameObject);
 
             _eventManager.Trigger(AnimalEvents.AnimalRemoved, new AnimalRemovedEventArgs { Animal = animal });

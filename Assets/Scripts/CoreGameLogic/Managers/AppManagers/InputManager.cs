@@ -90,10 +90,12 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
         if (context.started)
         {
             Vector2 screenPos = Pointer.current != null ? Pointer.current.position.ReadValue() : PointerScreenPosition;
-            
-            if (IsPointerOverUI(screenPos))
-                return;
 
+            if (IsPointerOverUI(screenPos))
+            {
+                return;
+            }
+            
             IsFireHeld = true;
             OnFireStarted?.Invoke();
         }
@@ -122,8 +124,10 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
             Vector2 screenPos = Pointer.current != null ? Pointer.current.position.ReadValue() : PointerScreenPosition;
 
             if (IsPointerOverUI(screenPos))
+            {
                 return;
-
+            }
+            
             OnTargetSelected?.Invoke();
         }
     }
