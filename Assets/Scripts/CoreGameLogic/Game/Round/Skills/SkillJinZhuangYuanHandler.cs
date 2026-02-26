@@ -40,30 +40,37 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
     private float _meatAmount;
 
     /// <summary>
-    /// 特效管理器
-    /// </summary>
-    private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
-
-    /// <summary>
     /// 资源管理器
     /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
+    private ResourceManager _resourceManager;
+
+    /// <summary>
+    /// 特效管理器
+    /// </summary>
+    private EffectManager _effectManager;
 
     /// <summary>
     /// 肉条管理器
     /// </summary>
-    private MeatProgressManager _meatProgressManager => GameServiceLocator.GetRoundManager<MeatProgressManager>();
+    private MeatProgressManager _meatProgressManager;
 
     /// <summary>
     /// 游戏游玩场景元素管理器
     /// </summary>
-    private GameplaySceneItemManager _gameplaySceneItemManager => GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+    private GameplaySceneItemManager _gameplaySceneItemManager;
+
+    public SkillJinZhuangYuanHandler(SkillContext context)
+    {
+        _resourceManager = GameServiceLocator.ResourceManager;
+        _effectManager = GameServiceLocator.EffectManager;
+        _meatProgressManager = GameServiceLocator.GetRoundManager<MeatProgressManager>();
+        _gameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+    }
 
     protected override async UniTask OnSkillStart(SkillContext context)
     {
         var skillParam = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
 
-        // 初始化变量
         _spawnTimer = 0f;
         _spawnedCount = 0;
 

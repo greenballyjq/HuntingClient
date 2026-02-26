@@ -137,7 +137,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 特效管理器
         /// </summary>
-        private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
+        private EffectManager _effectManager => GameServiceLocator.EffectManager;
 
         /// <summary>
         /// 播放死亡特效

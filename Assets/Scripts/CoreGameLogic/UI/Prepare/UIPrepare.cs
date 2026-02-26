@@ -39,6 +39,11 @@ public class UIPrepare : UIBase
     [SerializeField] private UIComponentPrepareTest _uiComponentPrepareTest;
 
     /// <summary>
+    /// 调试组件
+    /// </summary>
+    [SerializeField] private UIComponentPrepareDebug _uiComponentPrepareDebug;
+
+    /// <summary>
     /// 开始单局按钮
     /// </summary>
     [SerializeField] private Button _buttonStartRound;
@@ -111,6 +116,7 @@ public class UIPrepare : UIBase
         _uiComponentSkillInfo.Init();
         _uiComponentMapInfo.Init();
         _uiComponentPrepareTest.Init();
+        _uiComponentPrepareDebug.Init();
 
         _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
         _eventManager.AddListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
@@ -124,6 +130,7 @@ public class UIPrepare : UIBase
         _uiComponentSkillInfo.CleanUp();
         _uiComponentMapInfo.CleanUp();
         _uiComponentPrepareTest.CleanUp();
+        _uiComponentPrepareDebug.CleanUp();
 
         _eventManager.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
         _eventManager.RemoveListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);

@@ -2,7 +2,6 @@
 using GameFramework.Core;
 using GameFramework.Game;
 using GameFramework.Manager;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 游戏服务定位器
@@ -31,6 +30,16 @@ public static class GameServiceLocator
     public static GameObjectPoolManager GameObjectPoolManager => GameFrameworkManager.Instance.GetManager<GameObjectPoolManager>();
 
     /// <summary>
+    /// 特效管理器
+    /// </summary>
+    public static EffectManager EffectManager => GameFrameworkManager.Instance.GetManager<EffectManager>();
+
+    /// <summary>
+    /// 音效管理器
+    /// </summary>
+    public static SoundManager SoundManager => GameFrameworkManager.Instance.GetManager<SoundManager>();
+
+    /// <summary>
     /// 定时器管理器
     /// </summary>
     public static TimerManager TimerManager => GameFrameworkManager.Instance.GetManager<TimerManager>();
@@ -38,7 +47,7 @@ public static class GameServiceLocator
     /// <summary>
     /// 配置管理器
     /// </summary>
-    public static HuntingConfigManager ConfigManager => HuntingConfigManager.Instance;
+    public static HuntingConfigManager ConfigManager => HuntingConfigManager.Instance;    
     #endregion
 
     /// <summary>
@@ -63,13 +72,5 @@ public static class GameServiceLocator
     public static T GetRoundManager<T>() where T : class, IRoundManager
     {
         return RoundFlow.Instance.GetRoundManager<T>();
-    }
-
-    /// <summary>
-    /// 等待初始化完成
-    /// </summary>
-    public static async UniTask WaitForInitializationAsync()
-    {
-        await HuntingAppFlow.Instance.WaitForAppStartedAsync();
     }
 }
