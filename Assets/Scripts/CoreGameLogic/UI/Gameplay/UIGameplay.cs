@@ -63,6 +63,11 @@ public class UIGameplay : UIBase
     [SerializeField] private UIComponentDropReward _uiComponentDropReward;
 
     /// <summary>
+    /// 雪山胜利光效组件
+    /// </summary>
+    [SerializeField] private UIComponentSnowMountainVictory _uiComponentSnowMountainVictory;
+
+    /// <summary>
     /// 背景图像
     /// </summary>
     [SerializeField] private Image _imageBackground;
@@ -86,20 +91,19 @@ public class UIGameplay : UIBase
     {
         base.OnInit(userData);
         _uiComponentReturnOrSettlement.Init();
-
+        _uiComponentBossHealth.Init();
+        _uiComponentBossHealth.gameObject.SetActive(false);
         _uiComponentAnimalCounter.Init();
-        _uiComponentAnimalCounter.gameObject.SetActive(true);
-
         _uiComponentTime.Init();
         _uiComponentMeatProgress.Init();
         _uiComponentSkill.Init();
         _uiComponentBullet.Init();
         _uiComponentPropGroup.Init();
-
         _uiComponentPropUseTip.Init();
         _uiComponentPropUseTip.gameObject.SetActive(false);
-
         _uiComponentDropReward.Init(this);
+        _uiComponentSnowMountainVictory.Init();
+        _uiComponentSnowMountainVictory.gameObject.SetActive(false);
 
         //uiComponentQuest.Init();
     }
@@ -116,6 +120,7 @@ public class UIGameplay : UIBase
         _uiComponentPropGroup.CleanUp();
         _uiComponentPropUseTip.CleanUp();
         _uiComponentDropReward.CleanUp();
+        _uiComponentSnowMountainVictory.CleanUp();
 
         //uiComponentQuest.CleanUp();
 
@@ -168,6 +173,17 @@ public class UIGameplay : UIBase
         
         _uiComponentPropUseTip.CleanUp();
         _uiComponentPropUseTip.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 播放雪山胜利光效动画
+    /// </summary>
+    /// <param name="worldPosition">起点世界坐标</param>
+    public async UniTask PlaySnowMountainVictoryAsync(Vector3 worldPosition)
+    {
+        _uiComponentSnowMountainVictory.gameObject.SetActive(true);
+        await _uiComponentSnowMountainVictory.PlayLightEffectAsync(worldPosition);
+        await _uiComponentSnowMountainVictory.PlayFamilyPortraitFadeInAsync();
     }
     #endregion
 }

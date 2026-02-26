@@ -94,26 +94,15 @@ public class HiddenRoundEndTrigger
         CheckIsHiddenRoundEnd();
     }
 
-    private void OnBossDied(BossDiedEventArgs _)
-    {
-        _bossDied = true;
-        CheckIsHiddenRoundEnd();
-    }
 
-    private async void CheckIsHiddenRoundEnd()
+    private void CheckIsHiddenRoundEnd()
     {
         var isLastOne = _animalManager.GetUnDeathAnimalCount() == 0;
 
         Debug.Log($"[{GetType().Name}] 检测雪山地图是否结束, _isLastOne: {isLastOne}，{_animalManager.GetUnDeathAnimalCount()}");
 
         if (isLastOne)
-        {
-            // todo 时间缩放为 1/4 3s  放大光圈  3s 全家福 2s
-            Time.timeScale = 0.25f;
-            await UniTask.Delay(3000, ignoreTimeScale: true);
-            Time.timeScale = 1f;
             RoundFlow.Instance.EndHiddenMapAsync().Forget();
-        }
     }
 }
 
@@ -341,10 +330,6 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // 伪结算面板爆米花动画  
         _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity, dontDestroyOnLoad: true).Forget();
-
-        // 下雪动画
-        _snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Particles/FX_Snow", new Vector3(0, 5, 0), Quaternion.identity, dontDestroyOnLoad: true);
-
         #region 地图过渡
         // 打开加载界面
         var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
@@ -357,6 +342,9 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // 清理单局
         ClearRound();
+
+        // 下雪动画
+        _snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Particles/FX_Snow", new Vector3(0, 5, 0), Quaternion.identity, dontDestroyOnLoad: true);
 
         // 加载场景
         await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
@@ -423,38 +411,28 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _currentState = RoundFlowState.Transitioning;
 
-        #region 测试
         _currentRoundContext.HiddenRoundEndTrigger.Release();
-        var lightEffectObj = await _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Particles/FX_DGB_PTFH"
-            , new Vector3(0, 0, 5), Quaternion.identity);
 
-        await lightEffectObj.transform.DOScale(Vector3.one * 6f, 3f).ToUniTask();
+        // 播放慢镜头动画
+        Time.timeScale = 0.25f;
+        await UniTask.Delay(3000, ignoreTimeScale: true);
+        Time.timeScale = 1f;
+
+        // 播放雪山胜利动画
+        await _uiManager.GetUI<UIGameplay>("UIGameplay").PlaySnowMountainVictoryAsync(
+            GetRoundManager<AnimalManager>().GetLastActiveAnimalPosition()
+        );
+
+        // 停止下雪
         _effectManager.Stop(_snowEffect);
-
-        // 全家福透明渐变 3s
-        var quanJiaFuObj = new GameObject("QuanJiaFu");
-        quanJiaFuObj.transform.position = new Vector3(1000, 0, 0);
-        LayerMask backgroundLayer = LayerMask.NameToLayer("Background");
-        quanJiaFuObj.layer = backgroundLayer;
-        var spriteRenderer = quanJiaFuObj.AddComponent<SpriteRenderer>();
-        Sprite sprite = Resources.Load<Sprite>("UI/Sprites/Login/img_denglu");
-        spriteRenderer.sprite = sprite;
-        var initialColor = new Color(1, 1, 1, 0);
-        spriteRenderer.color = initialColor;
-        spriteRenderer.sortingOrder = 1;
-        await spriteRenderer.DOFade(1f, 2f).ToUniTask();
-
-        await UniTask.Delay(1000);
 
         // 打开结算界面
         await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
+
+        // 结算奖励
         GetRoundManager<SettlementRewardManager>().CalculateReward();
 
         _currentState = RoundFlowState.None;
-        // _effectManager.Stop(_snowEffect);
-        // await UniTask.Delay(3000);
-
-        #endregion
     }
     #endregion
 
