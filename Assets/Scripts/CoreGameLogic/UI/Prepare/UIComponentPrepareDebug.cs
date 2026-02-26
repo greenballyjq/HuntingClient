@@ -1,4 +1,5 @@
 ﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
@@ -63,8 +64,9 @@ public class UIComponentPrepareDebug : MonoBehaviour, IUIComponent
             SkillData = skillData,
             LuckyBuffData = null,
             HasLinkage = roleData.LinkedMapId == mapData.ID,
-            HasHiddenMap = false
-        });
+            HasHiddenMap = true,
+            HiddenMapData = _configManager.GetMap(EMapType.Hidden)
+        }); 
     }
     #endregion
 }
