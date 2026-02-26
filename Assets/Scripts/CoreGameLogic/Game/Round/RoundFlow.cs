@@ -265,9 +265,12 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _currentState = RoundFlowState.Transitioning;
 
-        // 清理单局管理器
-        
+        // 释放单局管理器
+        DisposeRoundManagers();
+        _roundManagers.Clear();
+        _currentRoundContext = null;
 
+        // 清理单局
         ClearRound();
 
         // 关闭游玩界面
@@ -349,8 +352,11 @@ public class RoundFlow : Singleton<RoundFlow>
         // 播放淡入动画
         await uiLoading.PlayFadeInAsync();
 
-        // 清理本局管理器
+        // 清理单局管理器
         CleanupManagers();
+
+        // 清理单局
+        ClearRound();
 
         // 加载场景
         await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
@@ -546,15 +552,8 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private void ClearRound()
     {
-        DisposeRoundManagers();
-        _roundManagers.Clear();
-
-        _currentRoundContext = null;
-
         _effectManager.ClearAllEffects();
-
         _soundManager.ClearAllSounds();
-
         _gameObjectPoolManager.ClearAllPools();
     }
     #endregion

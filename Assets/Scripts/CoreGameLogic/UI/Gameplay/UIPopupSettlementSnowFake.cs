@@ -116,11 +116,6 @@ public class UIPopupSettlementSnowFake : UIBase
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
-    /// 结算管理器
-    /// </summary>
-    private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
-
-    /// <summary>
     /// 原始锚点位置
     /// </summary>
     private Vector2 _originAnchoredPos;
@@ -226,7 +221,6 @@ public class UIPopupSettlementSnowFake : UIBase
     private async void OnButtonConfirmClicked()
     {
         _buttonConfirm.onClick.RemoveListener(OnButtonConfirmClicked);
-
         await RoundFlow.Instance.EnterHiddenMapAsync();
     }
 

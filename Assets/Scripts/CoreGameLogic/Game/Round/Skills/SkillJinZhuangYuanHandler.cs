@@ -59,7 +59,7 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
     /// </summary>
     private GameplaySceneItemManager _gameplaySceneItemManager;
 
-    public SkillJinZhuangYuanHandler(SkillContext context)
+    public SkillJinZhuangYuanHandler()
     {
         _resourceManager = GameServiceLocator.ResourceManager;
         _effectManager = GameServiceLocator.EffectManager;

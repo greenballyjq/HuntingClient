@@ -139,7 +139,8 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
         }
         else
         {
-            await HuntingAppFlow.Instance.EnterPrepareAsync();
+            await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+            //await HuntingAppFlow.Instance.EnterPrepareAsync();
         }
     }
     #endregion
