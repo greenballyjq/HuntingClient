@@ -38,11 +38,12 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
 
     protected override void OnDamaged()
     {
-        
-
         (AnimalEventTrigger as  BossAnimalEventTrigger).TriggerBossDamaged(Health.MaxHealth, Health.CurrentHealth);
-        
-        
+
+        if (_stateMachine.CurrentState == _bossCallGuardState)
+        {
+            return;
+        }
         
         base.OnDamaged();
     }

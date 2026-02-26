@@ -65,11 +65,15 @@ namespace CoreGameLogic.Managers.AppManagers
         public AudioCallback PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType audioType, AudioChannel channel = AudioChannel.Sound
             , int loop = 1)
         {
+            if (channel == AudioChannel.Voice && _soundManager.GetActivePlayerCountByChannel(AudioChannel.Voice) > 0)
+            {
+                // 人声播放中，后续的人声不播放
+                return new AudioCallback();
+            }
             var audioRef = _huntingAudioRefSo.GetAudioRefFromType(audioType);
             var audioClip = audioRef.clip;
             var volume = audioRef.volume;
             return _soundManager.PlaySound2D(audioClip, channel, loop, volume);
-            
         }
 
         #endregion
