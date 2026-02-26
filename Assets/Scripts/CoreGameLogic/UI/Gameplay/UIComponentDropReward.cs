@@ -25,9 +25,9 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
     private UIGameplay _uiGameplay;
 
     /// <summary>
-    /// 矩形变换组件
+    /// 掉落奖励组件矩形变换
     /// </summary>
-    private RectTransform _rectTransform;
+    private RectTransform _dropRewardRectTransform;
 
     /// <summary>
     /// 事件管理器
@@ -51,7 +51,7 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
 
     private void Awake()
     {
-        _rectTransform = GetComponent<RectTransform>();
+        _dropRewardRectTransform = GetComponent<RectTransform>();
     }
 
     public void Init(UIGameplay uiGameplay)
@@ -104,7 +104,7 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
     private async UniTask PlayDropRewardAnimation(EDropType dropType, int dropCount, Vector3 worldPosition)
     {
         Vector3 endPosition = _dropTargetPositionCache[dropType];
-        Vector3 startPosition = PointConverter.WorldPointToUiPoint(_rectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
+        Vector3 startPosition = PointConverter.WorldPointToUiPoint(_dropRewardRectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
 
         GameObject effectObj = _effectManager.PlayOneShot(_dropRewardEffectPrefab);
         effectObj.transform.position = startPosition;

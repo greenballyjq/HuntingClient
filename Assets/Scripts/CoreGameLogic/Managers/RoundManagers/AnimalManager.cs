@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using cfg.HuntingConfig;
 using UnityEngine;
 using GameFramework.Manager;
@@ -110,6 +110,18 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// 获取真实活跃动物数量
     /// </summary>
     public int GetRealActiveAnimalCount() => _activeAnimals.Count - _pendingRemovalAnimals.Count;
+
+    /// <summary>
+    /// 获取最后一只活跃动物位置
+    /// </summary>
+    public Vector3 GetLastActiveAnimalPosition()
+    {
+        BaseAnimalBehaviour lastAnimal = null;
+        foreach (var animal in _activeAnimals)
+            lastAnimal = animal;
+
+        return lastAnimal.transform.position;
+    }
 
     public List<BaseAnimalBehaviour> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
     {
