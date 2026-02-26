@@ -19,13 +19,8 @@ namespace CoreGameLogic.Game.Round.Boss.States
         {
             ((BossAnimalVisual)animalBehavior.AnimalVisual).PlayCall();
             stateTimer = 0f;
-
-            // if (bossAnimalBehaviour.CalledGuardCount >= 5)
-            // {
-            //     return;
-            // }
             
-            _calledAnimals = _animalManager.GetCloseAnimalsFromTargetPosition(animalBehavior.transform.position, 20);
+            _calledAnimals = _animalManager.GetCloseAnimalsFromTargetPosition(animalBehavior.transform.position, 10);
 
             _calledAnimals?.ForEach(animal =>
             {

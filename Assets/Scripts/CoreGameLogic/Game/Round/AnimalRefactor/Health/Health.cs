@@ -95,6 +95,12 @@ namespace Hunting.Game.Animal
 
             OnHeld?.Invoke();
         }
+
+        public void SetHealth(float amount)
+        {
+            _maxHealth = amount;
+            _currentHealth = amount;
+        }
         #endregion
     }
 }

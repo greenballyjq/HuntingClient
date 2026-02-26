@@ -27,6 +27,8 @@ namespace Hunting.Game.Animal
         /// </summary>
         /// <param name="maxHealth">最大血量</param>
         void Init(float maxHealth);
+
+        void SetHealth(float amount);
         
         /// <summary>
         /// 受伤事件

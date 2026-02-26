@@ -109,6 +109,11 @@ namespace Hunting.Game.Animal
             }
             else
             {
+                if (!_guardTargetTransform)
+                {
+                    _currentMovePolicyType = MovePolicyType.Linear;
+                    return;
+                } 
                 if (Vector3.Distance(transform.position, _guardTargetTransform.position) > 5f)
                 {
                     var dir = (_guardTargetTransform.position - transform.position).normalized;

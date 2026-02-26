@@ -149,7 +149,7 @@ Transform:
   m_GameObject: {fileID: 4630137}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.69999975, y: 0, z: 15.14}
+  m_LocalPosition: {x: -2.36, y: 0, z: 13.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -367,7 +367,6 @@ GameObject:
   m_Component:
   - component: {fileID: 108394484}
   - component: {fileID: 108394486}
-  - component: {fileID: 108394485}
   - component: {fileID: 108394487}
   m_Layer: 0
   m_Name: AnimalChangeDirectionAreaTrigger
@@ -391,25 +390,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 385879151}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &108394485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 108394483}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b9f07852b85ae4b9e28e12a9417c0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _triggerMode: 2
-  _targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  _checkInterval: 0.2
-  _borderTolerance: 2
-  _shape: {fileID: 108394486}
 --- !u!114 &108394486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,10 +406,10 @@ MonoBehaviour:
   _showInGame: 1
   _lineWidth: 0.1
   _vertices:
-  - {x: -20, y: 0, z: -10}
-  - {x: 20, y: 0, z: -10}
-  - {x: 20, y: 0, z: -10}
-  - {x: -20, y: 0, z: -10}
+  - {x: -8, y: 0, z: -6}
+  - {x: 12, y: 0, z: -6}
+  - {x: 12, y: 0, z: -6}
+  - {x: -8, y: 0, z: -6}
 --- !u!114 &108394487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,7 +426,7 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  _checkInterval: 0.1
+  _checkInterval: 0.05
   _borderTolerance: 1
   _shape: {fileID: 108394486}
   _angleRanges:
@@ -752,7 +732,7 @@ Transform:
   m_GameObject: {fileID: 701240269}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.8200003, y: 0, z: 3.3600025}
+  m_LocalPosition: {x: -0.1, y: 0, z: 8.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -780,7 +760,6 @@ GameObject:
   m_Component:
   - component: {fileID: 710473174}
   - component: {fileID: 710473176}
-  - component: {fileID: 710473175}
   - component: {fileID: 710473177}
   m_Layer: 0
   m_Name: AnimalChangeDirectionAreaTrigger
@@ -804,25 +783,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 385879151}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &710473175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 710473173}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b9f07852b85ae4b9e28e12a9417c0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _triggerMode: 2
-  _targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  _checkInterval: 0.2
-  _borderTolerance: 2
-  _shape: {fileID: 710473176}
 --- !u!114 &710473176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -839,10 +799,10 @@ MonoBehaviour:
   _showInGame: 1
   _lineWidth: 0.1
   _vertices:
-  - {x: 50, y: 0, z: 25}
-  - {x: 50, y: 0, z: 25}
-  - {x: 15, y: 0, z: -15}
-  - {x: 15, y: 0, z: -15}
+  - {x: 35, y: 0, z: 25}
+  - {x: 35, y: 0, z: 25}
+  - {x: 5, y: 0, z: -15}
+  - {x: 5, y: 0, z: -15}
 --- !u!114 &710473177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -859,12 +819,12 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  _checkInterval: 0.1
+  _checkInterval: 0.05
   _borderTolerance: 1
   _shape: {fileID: 710473176}
   _angleRanges:
-  - MinAngle: -80
-    MaxAngle: -34.8
+  - MinAngle: -96.7
+    MaxAngle: -63.2
 --- !u!1 &747978286
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,7 +851,7 @@ Transform:
   m_GameObject: {fileID: 747978286}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.11, y: 0, z: 6.670002}
+  m_LocalPosition: {x: 4.06, y: 0, z: 9.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -919,7 +879,6 @@ GameObject:
   m_Component:
   - component: {fileID: 831014594}
   - component: {fileID: 831014596}
-  - component: {fileID: 831014595}
   - component: {fileID: 831014597}
   m_Layer: 0
   m_Name: AnimalChangeDirectionAreaTrigger
@@ -943,25 +902,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 385879151}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &831014595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 831014593}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b9f07852b85ae4b9e28e12a9417c0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _triggerMode: 2
-  _targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  _checkInterval: 0.2
-  _borderTolerance: 2
-  _shape: {fileID: 831014596}
 --- !u!114 &831014596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -978,10 +918,10 @@ MonoBehaviour:
   _showInGame: 1
   _lineWidth: 0.1
   _vertices:
-  - {x: -50, y: 0, z: 20}
-  - {x: 50, y: 0, z: 20}
-  - {x: 50, y: 0, z: 20}
-  - {x: -50, y: 0, z: 20}
+  - {x: -50, y: 0, z: 12}
+  - {x: 50, y: 0, z: 12}
+  - {x: 50, y: 0, z: 12}
+  - {x: -50, y: 0, z: 12}
 --- !u!114 &831014597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -998,12 +938,12 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  _checkInterval: 0.1
+  _checkInterval: 0.05
   _borderTolerance: 1
   _shape: {fileID: 831014596}
   _angleRanges:
-  - MinAngle: 180
-    MaxAngle: 90
+  - MinAngle: 186.4
+    MaxAngle: 129.9
 --- !u!1 &952567382
 GameObject:
   m_ObjectHideFlags: 0
@@ -1030,7 +970,7 @@ Transform:
   m_GameObject: {fileID: 952567382}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.93, y: 0, z: 12.620001}
+  m_LocalPosition: {x: 4.45, y: 0, z: 13.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1058,7 +998,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1034743155}
   - component: {fileID: 1034743157}
-  - component: {fileID: 1034743156}
   - component: {fileID: 1034743158}
   m_Layer: 0
   m_Name: AnimalChangeDirectionAreaTrigger
@@ -1082,25 +1021,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 385879151}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1034743156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1034743154}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b9f07852b85ae4b9e28e12a9417c0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _triggerMode: 2
-  _targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  _checkInterval: 0.2
-  _borderTolerance: 2
-  _shape: {fileID: 1034743157}
 --- !u!114 &1034743157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1117,10 +1037,10 @@ MonoBehaviour:
   _showInGame: 1
   _lineWidth: 0.1
   _vertices:
-  - {x: -50, y: 0, z: 25}
-  - {x: -50, y: 0, z: 25}
-  - {x: -15, y: 0, z: -15}
-  - {x: -15, y: 0, z: -15}
+  - {x: -35, y: 0, z: 25}
+  - {x: -35, y: 0, z: 25}
+  - {x: 0, y: 0, z: -15}
+  - {x: 0, y: 0, z: -15}
 --- !u!114 &1034743158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1137,12 +1057,12 @@ MonoBehaviour:
   _targetLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  _checkInterval: 0.1
+  _checkInterval: 0.05
   _borderTolerance: 1
   _shape: {fileID: 1034743157}
   _angleRanges:
-  - MinAngle: 80
-    MaxAngle: 34
+  - MinAngle: 97
+    MaxAngle: 55
 --- !u!1 &1076143386
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,7 +1089,7 @@ Transform:
   m_GameObject: {fileID: 1076143386}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.62, y: 0, z: 5.670002}
+  m_LocalPosition: {x: -4.5, y: 0, z: 9.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1355,7 +1275,7 @@ Transform:
   m_GameObject: {fileID: 1289566448}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: -17.18, y: 0, z: 4.84}
+  m_LocalPosition: {x: -18.92, y: 0, z: 6.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1535,7 +1455,7 @@ Transform:
   m_GameObject: {fileID: 1709098176}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.69, y: 0, z: 12.090002}
+  m_LocalPosition: {x: -5.8599997, y: 0, z: 12.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1676,7 +1596,7 @@ Transform:
   m_GameObject: {fileID: 1781744173}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 20, y: 0, z: 5.5}
+  m_LocalPosition: {x: 21.99, y: 0, z: 9.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1897,7 +1817,7 @@ Transform:
   m_GameObject: {fileID: 2032436464}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.12000024, y: 0, z: 10.020002}
+  m_LocalPosition: {x: 0.99, y: 0, z: 12.71}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

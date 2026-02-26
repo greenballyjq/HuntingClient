@@ -105,11 +105,12 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     /// <returns></returns>
     public int GetUnDeathAnimalCount() => _unDeathAnimals.Count;
-
+    
     /// <summary>
-    /// 获取真实活跃动物数量
+    /// 获取活跃动物数量
     /// </summary>
-    public int GetRealActiveAnimalCount() => _activeAnimals.Count - _pendingRemovalAnimals.Count;
+    /// <returns></returns>
+    public int GetActiveAnimalCount() => _activeAnimals.Count;
 
     public List<BaseAnimalBehaviour> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
     {
