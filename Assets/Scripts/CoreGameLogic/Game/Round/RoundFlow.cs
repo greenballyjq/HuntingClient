@@ -1,6 +1,7 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -113,25 +114,7 @@ public class HiddenRoundEndTrigger
             Time.timeScale = 1f;
             RoundFlow.Instance.EndHiddenMapAsync().Forget();
         }
-
-        // if (_bossDied && !_animalManager.HasActiveAnimal())
-        // {
-        //     // 隐藏地图结束
-        //     RoundFlow.Instance.EndHiddenMapAsync().Forget();
-        // }
     }
-
-    // private void CheckIsLastOne()
-    // {
-    //     Debug.Log($"[{GetType().Name}] 检测是否最后一只, count: {_animalManager.GetActiveAnimalCount()}");
-    //
-    //     if (_animalManager.GetActiveAnimalCount() == 1)
-    //     {
-    //         
-    //         Time.timeScale = 0.25f;
-    //         // await UniTask
-    //     }
-    // }
 }
 
 /// <summary>
@@ -171,7 +154,7 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
-    /// 单局流程当前状态
+    /// 当前状态
     /// </summary>
     private RoundFlowState _currentState = RoundFlowState.None;
 
@@ -188,9 +171,9 @@ public class RoundFlow : Singleton<RoundFlow>
     public float RoundElapsedTime => _roundElapsedTime;
 
     /// <summary>
-    /// 单局管理器列表
+    /// 单局管理器字典
     /// </summary>
-    private readonly List<IRoundManager> _roundManagers = new List<IRoundManager>();
+    private readonly Dictionary<Type, IRoundManager> _roundManagers = new Dictionary<Type, IRoundManager>();
 
     /// <summary>
     /// 事件管理器
@@ -210,7 +193,12 @@ public class RoundFlow : Singleton<RoundFlow>
     /// <summary>
     /// 特效管理器
     /// </summary>
-    private EffectManager _effectManager => GameServiceLocator.GetFrameworkManager<EffectManager>();
+    private EffectManager _effectManager => GameServiceLocator.EffectManager;
+
+    /// <summary>
+    /// 音效管理器
+    /// </summary>
+    private SoundManager _soundManager => GameServiceLocator.SoundManager;
 
     #region 公共方法
     /// <summary>
@@ -218,11 +206,9 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     public T GetRoundManager<T>() where T : class, IRoundManager
     {
-        foreach (var manager in _roundManagers)
-        {
-            if (manager is T result)
-                return result;
-        }
+        if (_roundManagers.TryGetValue(typeof(T), out var manager))
+            return manager as T;
+
         return null;
     }
 
@@ -280,15 +266,9 @@ public class RoundFlow : Singleton<RoundFlow>
         _currentState = RoundFlowState.Transitioning;
 
         // 清理单局管理器
-        DisposeRoundManagers();
-        _roundManagers.Clear();
-        _currentRoundContext = null;
+        
 
-        // 清理所有特效
-        _effectManager.ClearAllEffects();
-
-        // 清理对象池
-        _gameObjectPoolManager.ClearAllPools();
+        ClearRound();
 
         // 关闭游玩界面
         _uiManager.CloseUI("UIGameplay");
@@ -298,6 +278,8 @@ public class RoundFlow : Singleton<RoundFlow>
 
         _currentState = RoundFlowState.None;
     }
+
+    
 
     /// <summary>
     /// 每帧更新
@@ -467,12 +449,6 @@ public class RoundFlow : Singleton<RoundFlow>
         // await UniTask.Delay(3000);
 
         #endregion
-
-        // 打开结算界面
-        // await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
-        // GetRoundManager<SettlementRewardManager>().CalculateReward();
-        //
-        // _currentState = RoundFlowState.None;
     }
     #endregion
 
@@ -483,20 +459,20 @@ public class RoundFlow : Singleton<RoundFlow>
     private void CreateRoundManagers()
     {
         // TODO: 根据实际效果调整顺序
-        _roundManagers.Add(new WeaponManager());
-        _roundManagers.Add(new AnimalManager());
-        _roundManagers.Add(new GameplaySceneItemManager());
-        _roundManagers.Add(new EnergyProgressManager());
-        _roundManagers.Add(new MeatProgressManager());
-        _roundManagers.Add(new QuestManager());
-        _roundManagers.Add(new SettlementRewardManager());
-        _roundManagers.Add(new SpawnerManager());
-        _roundManagers.Add(new TrapManager());
-        _roundManagers.Add(new LuckyBuffManager());
-        _roundManagers.Add(new PlayerControlManager());
-        _roundManagers.Add(new PropManager());
-        _roundManagers.Add(new BulletManager());
-        _roundManagers.Add(new SkillManager());
+        RegisterRoundManager(new WeaponManager());
+        RegisterRoundManager(new AnimalManager());
+        RegisterRoundManager(new GameplaySceneItemManager());
+        RegisterRoundManager(new EnergyProgressManager());
+        RegisterRoundManager(new MeatProgressManager());
+        RegisterRoundManager(new QuestManager());
+        RegisterRoundManager(new SettlementRewardManager());
+        RegisterRoundManager(new SpawnerManager());
+        RegisterRoundManager(new TrapManager());
+        RegisterRoundManager(new LuckyBuffManager());
+        RegisterRoundManager(new PlayerControlManager());
+        RegisterRoundManager(new PropManager());
+        RegisterRoundManager(new BulletManager());
+        RegisterRoundManager(new SkillManager());
     }
 
     /// <summary>
@@ -504,8 +480,8 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private void InitRoundManagers()
     {
-        for (int i = 0; i < _roundManagers.Count; i++)
-            _roundManagers[i].Init(_currentRoundContext);
+        foreach (var manager in _roundManagers.Values)
+            manager.Init(_currentRoundContext);
     }
 
     /// <summary>
@@ -513,8 +489,8 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private void DisposeRoundManagers()
     {
-        for (int i = _roundManagers.Count - 1; i >= 0; i--)
-            _roundManagers[i].Dispose();
+        foreach (var manager in _roundManagers.Values)
+            manager.Dispose();
     }
 
     /// <summary>
@@ -522,9 +498,9 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private void CleanupManagers()
     {
-        for (int i = 0; i < _roundManagers.Count; i++)
+        foreach (var manager in _roundManagers.Values)
         {
-            if (_roundManagers[i] is IRoundResettable resettable)
+            if (manager is IRoundResettable resettable)
                 resettable.Cleanup();
         }
     }
@@ -534,9 +510,9 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private void ReInitManagers()
     {
-        for (int i = 0; i < _roundManagers.Count; i++)
+        foreach (var manager in _roundManagers.Values)
         {
-            if (_roundManagers[i] is IRoundResettable resettable)
+            if (manager is IRoundResettable resettable)
                 resettable.ReInit(_currentRoundContext);
         }
     }
@@ -549,11 +525,37 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _roundElapsedTime += dt;
 
-        for (int i = 0; i < _roundManagers.Count; i++)
+        foreach (var manager in _roundManagers.Values)
         {
-            if (_roundManagers[i] is IRoundUpdatable updatable)
+            if (manager is IRoundUpdatable updatable)
                 updatable.DoUpdate(dt);
         }
+    }
+
+    /// <summary>
+    /// 注册单局管理器
+    /// </summary>
+    /// <param name="manager">管理器实例</param>
+    private void RegisterRoundManager(IRoundManager manager)
+    {
+        _roundManagers[manager.GetType()] = manager;
+    }
+
+    /// <summary>
+    /// 清理单局
+    /// </summary>
+    private void ClearRound()
+    {
+        DisposeRoundManagers();
+        _roundManagers.Clear();
+
+        _currentRoundContext = null;
+
+        _effectManager.ClearAllEffects();
+
+        _soundManager.ClearAllSounds();
+
+        _gameObjectPoolManager.ClearAllPools();
     }
     #endregion
 

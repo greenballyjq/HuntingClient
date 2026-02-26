@@ -253,7 +253,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <summary>
     /// Boss死亡事件回调
     /// </summary>
-    /// <param name="args"></param>
     private void OnBossDied(BossDiedEventArgs args)
     {
         _pendingRemovalAnimals.Add(args.Boss);

@@ -389,6 +389,12 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     #endregion
 
     #region 角色相关特殊方法
+    /// <summary>
+    /// 随机获取一个角色数据（调试用）
+    /// </summary>
+    /// <returns>随机角色配置</returns>
+    public Role GetRandomRole()
+        => RoleTable.DataList[Random.Range(0, RoleTable.DataList.Count)];
     #endregion
 
     #region 肉度条相关特殊方法
