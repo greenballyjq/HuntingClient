@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10439,7 +10439,7 @@ MonoBehaviour:
   rectHalfSize: {x: 0, y: 0}
   minSpawnAngle: 71.5
   maxSpawnAngle: 88.9
-  cooldownTime: 2.5
+  cooldownTime: 6
   spawnCount: 2
   spawnInterval: 0
   isEnabled: 1
@@ -10461,7 +10461,7 @@ MonoBehaviour:
   rectHalfSize: {x: 0, y: 0}
   minSpawnAngle: 64.4
   maxSpawnAngle: 121
-  cooldownTime: 3
+  cooldownTime: 6
   spawnCount: 1
   spawnInterval: 0
   isEnabled: 1
@@ -10483,7 +10483,7 @@ MonoBehaviour:
   rectHalfSize: {x: 0, y: 0}
   minSpawnAngle: 58.1
   maxSpawnAngle: 116.3
-  cooldownTime: 3
+  cooldownTime: 6
   spawnCount: 1
   spawnInterval: 0
   isEnabled: 1
@@ -10741,7 +10741,7 @@ MonoBehaviour:
   rectHalfSize: {x: 0, y: 0}
   minSpawnAngle: 104.1
   maxSpawnAngle: 123.1
-  cooldownTime: 3
+  cooldownTime: 6
   spawnCount: 1
   spawnInterval: 0
   isEnabled: 1
@@ -11805,7 +11805,7 @@ MonoBehaviour:
   rectHalfSize: {x: 0, y: 0}
   minSpawnAngle: 54.4
   maxSpawnAngle: 83.2
-  cooldownTime: 3
+  cooldownTime: 6
   spawnCount: 1
   spawnInterval: 0
   isEnabled: 1
@@ -11872,7 +11872,7 @@ MonoBehaviour:
   rectHalfSize: {x: 0, y: 0}
   minSpawnAngle: 125.9
   maxSpawnAngle: 138.5
-  cooldownTime: 4
+  cooldownTime: 6
   spawnCount: 1
   spawnInterval: 0
   isEnabled: 1

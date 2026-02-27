@@ -1587,7 +1587,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3869630107947258348, guid: 0f1ea090b2925ed4a811727411c6bc71, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 289
+      value: 278
       objectReference: {fileID: 0}
     - target: {fileID: 3869630107947258348, guid: 0f1ea090b2925ed4a811727411c6bc71, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2093,6 +2093,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIComponentRollRole
       objectReference: {fileID: 0}
+    - target: {fileID: 4307558890711897133, guid: 2d021afac7122154fad4621370e0b50f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6316933681611528443, guid: 2d021afac7122154fad4621370e0b50f, type: 3}
       propertyPath: m_LocalScale.x
       value: 104.99999
@@ -2131,7 +2135,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384764399432904581, guid: 2d021afac7122154fad4621370e0b50f, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7384764399432904581, guid: 2d021afac7122154fad4621370e0b50f, type: 3}
       propertyPath: m_AnchorMin.y
@@ -2139,7 +2143,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384764399432904581, guid: 2d021afac7122154fad4621370e0b50f, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1120
+      value: 1120.0001
       objectReference: {fileID: 0}
     - target: {fileID: 7384764399432904581, guid: 2d021afac7122154fad4621370e0b50f, type: 3}
       propertyPath: m_SizeDelta.y

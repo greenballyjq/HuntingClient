@@ -92,7 +92,18 @@ public class HuntingAppFlow : GameAppFlow
             _currentRoundFlow = null;
         }
 
-        await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
+        Debug.LogWarning("进入准备界面");
+
+        try
+        {
+            await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
+        }
+        catch
+        {
+            Debug.LogError("打开准备界面失败");
+        }
+        
+        Debug.LogWarning("准备界面打开");
 
         _currentState = HuntingAppFlowState.Prepare;
     }

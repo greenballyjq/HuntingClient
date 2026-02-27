@@ -110,7 +110,11 @@ public class UIComponentLoginButton : MonoBehaviour, IUIComponent
 
         await PlayBlinkAsync();
 
+        Debug.LogWarning("点击登录按钮");
+
         await HuntingAppFlow.Instance.EnterPrepareAsync();
+
+        Debug.LogWarning("关闭登录界面");
 
         GameFrameLauncher.Instance.HideLoading();
     }
