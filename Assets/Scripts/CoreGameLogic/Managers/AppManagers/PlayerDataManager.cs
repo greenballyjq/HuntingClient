@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using GameFramework.Game;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ public class PlayerDataManager : IAppManager
         _threeKPCoinAmount = 50;
 
         foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
-            _propCounts[propType] = 1;
+            _propCounts[propType] = 3;
         
         Debug.Log("[PlayerDataManager] 初始化完成");
     }

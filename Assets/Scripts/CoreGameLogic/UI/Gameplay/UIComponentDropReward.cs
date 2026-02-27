@@ -106,14 +106,17 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
         Vector3 endPosition = _dropTargetPositionCache[dropType];
         Vector3 startPosition = PointConverter.WorldPointToUiPoint(_dropRewardRectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
 
-        GameObject effectObj = _effectManager.PlayOneShot(_dropRewardEffectPrefab);
+        GameObject effectObj = _effectManager.PlayLoop(_dropRewardEffectPrefab);
         effectObj.transform.position = startPosition;
+        effectObj.transform.SetParent(_dropRewardRectTransform,true);
 
         await effectObj.transform
             .DOMove(endPosition, 2f)
             .SetLink(effectObj)
             .SetAutoKill()
             .ToUniTask();
+
+        _effectManager.Stop(effectObj);
 
         TriggerDropRewardEffect(new RewardArrivedEventArgs 
         { 

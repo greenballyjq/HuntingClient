@@ -14,12 +14,6 @@ public class HuntingAppFlow : GameAppFlow
     private static HuntingAppFlow _instance;
     public static HuntingAppFlow Instance => _instance;
 
-    // public event EventHandler<OnRoundEnteredEventArgs> OnRoundEntered;
-    // public sealed class OnRoundEnteredEventArgs : EventArgs
-    // {
-    //     public RoundContext RoundContext { get; set; }
-    // }
-
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -163,6 +157,7 @@ public class HuntingAppFlow : GameAppFlow
         await _uiManager.PreloadUIAsync("UICountdown");
 
         await _uiManager.PreloadUIAsync("UIPopupSettlementNormal");
+        await _uiManager.PreloadUIAsync("UISnowMountainVictory");
     }
 
     /// <summary>

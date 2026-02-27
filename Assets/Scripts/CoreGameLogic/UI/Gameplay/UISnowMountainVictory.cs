@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GameFramework.Core.UI;
 using GameFramework.Manager;
@@ -7,14 +8,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 雪山胜利组件
+/// 雪山胜利界面
 /// </summary>
-public class UIComponentSnowMountainVictory : MonoBehaviour, IUIComponent
+public class UISnowMountainVictory : UIBase
 {
     /// <summary>
     /// 光效配置
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     private class LightEffectConfig
     {
         /// <summary>
@@ -31,7 +32,7 @@ public class UIComponentSnowMountainVictory : MonoBehaviour, IUIComponent
     /// <summary>
     /// 全家福配置
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     private class FamilyPortraitConfig
     {
         /// <summary>
@@ -46,7 +47,7 @@ public class UIComponentSnowMountainVictory : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 掉落奖励特效预制体
+    /// 光效预制体
     /// </summary>
     [SerializeField] private GameObject _lightEffectPrefab;
 
@@ -68,12 +69,12 @@ public class UIComponentSnowMountainVictory : MonoBehaviour, IUIComponent
     /// <summary>
     /// 放大倍率
     /// </summary>
-    private const float ScaleMultiplier = 1000f;
+    private const float ScaleMultiplier = 100f;
 
     /// <summary>
     /// 雪山胜利矩形变换
     /// </summary>
-    private RectTransform _snowMountainVictoryRectTransform;
+    private RectTransform _rectTransform;
 
     /// <summary>
     /// 特效管理器
@@ -87,12 +88,8 @@ public class UIComponentSnowMountainVictory : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        _snowMountainVictoryRectTransform = GetComponent<RectTransform>();
+        _rectTransform = GetComponent<RectTransform>();
     }
-
-    public void Init() { }
-
-    public void CleanUp() { }
 
     #region 公共方法
     /// <summary>
@@ -101,10 +98,12 @@ public class UIComponentSnowMountainVictory : MonoBehaviour, IUIComponent
     /// <param name="worldPosition">起点世界坐标</param>
     public async UniTask PlayLightEffectAsync(Vector3 worldPosition)
     {
-        Vector3 startPosition = PointConverter.WorldPointToUiPoint(_snowMountainVictoryRectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
-        Vector3 endPosition = PointConverter.ScreenPointToUiPoint(_snowMountainVictoryRectTransform, new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), _cameraManager.UICamera);
+        Vector3 startPosition = PointConverter.WorldPointToUiPoint(_rectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
+        Vector3 endPosition = PointConverter.ScreenPointToUiPoint(_rectTransform, new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), _cameraManager.UICamera);
 
-        GameObject effectObj = _effectManager.PlayLoop(_lightEffectPrefab, startPosition, Quaternion.identity);
+        GameObject effectObj = _effectManager.PlayLoop(_lightEffectPrefab);
+        effectObj.transform.position = startPosition;
+
         Vector3 targetScale = effectObj.transform.localScale * ScaleMultiplier;
 
         Sequence sequence = DOTween.Sequence()

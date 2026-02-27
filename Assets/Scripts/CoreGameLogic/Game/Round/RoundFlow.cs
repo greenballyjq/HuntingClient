@@ -418,13 +418,13 @@ public class RoundFlow : Singleton<RoundFlow>
         await UniTask.Delay(3000, ignoreTimeScale: true);
         Time.timeScale = 1f;
 
-        // 播放雪山胜利动画
-        await _uiManager.GetUI<UIGameplay>("UIGameplay").PlaySnowMountainVictoryAsync(
-            GetRoundManager<AnimalManager>().GetLastActiveAnimalPosition()
-        );
-
         // 停止下雪
         _effectManager.Stop(_snowEffect);
+
+        // 播放雪山胜利动画
+        var uiMountainVictory = await _uiManager.OpenUIAsync<UISnowMountainVictory>("UISnowMountainVictory", UIManager.UILayer.PopUp);
+        await uiMountainVictory.PlayLightEffectAsync(GetRoundManager<AnimalManager>().GetLastActiveAnimalPosition());
+        await uiMountainVictory.PlayFamilyPortraitFadeInAsync();
 
         // 打开结算界面
         await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);

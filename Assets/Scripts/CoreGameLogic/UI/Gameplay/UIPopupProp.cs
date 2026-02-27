@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
@@ -99,6 +99,7 @@ public class UIPopupProp : UIBase
     private void OnGetButtonClicked()
     {
         _playerDataManager.UpdatePropCount(_currentProp.PropType, 1);
+        RoundFlow.Instance.ResumeRound();
         Close();
     }
 
@@ -107,6 +108,7 @@ public class UIPopupProp : UIBase
     /// </summary>
     private void OnCancelButtonClicked()
     {
+        RoundFlow.Instance.ResumeRound();
         Close();
     }
 
@@ -115,7 +117,9 @@ public class UIPopupProp : UIBase
     /// </summary>
     private void OnCloseButtonClicked()
     {
+        RoundFlow.Instance.ResumeRound();
         Close();
+       
     }             
     #endregion
 }

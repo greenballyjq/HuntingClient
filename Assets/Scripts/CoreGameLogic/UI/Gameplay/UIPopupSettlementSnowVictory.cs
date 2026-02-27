@@ -50,6 +50,11 @@ public class UIPopupSettlementSnowVictory : UIBase
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
+    /// <summary>
+    /// UI管理器
+    /// </summary>
+    private UIManager _uiManager => GameServiceLocator.UIManager;
+
     private int _totalCoin;
     private int _totalMastery;
     private Transform _diceTransform;
@@ -84,11 +89,13 @@ public class UIPopupSettlementSnowVictory : UIBase
     /// <summary>
     /// 结算按钮点击事件回调
     /// </summary>
-    private void OnSettlementButtonClicked()
+    private async void OnSettlementButtonClicked()
     {
         Close();
 
-        HuntingAppFlow.Instance.EnterPrepareAsync().Forget();
+        await HuntingAppFlow.Instance.EnterPrepareAsync();
+
+        _uiManager.CloseUI("UISnowMountainVictory");
     }
 
     /// <summary>

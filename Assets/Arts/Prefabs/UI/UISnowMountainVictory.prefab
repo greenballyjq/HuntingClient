@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5828754296208178598}
   - component: {fileID: 7020990751526269393}
   m_Layer: 5
-  m_Name: UIComponentSnowMountainVictory
+  m_Name: UISnowMountainVictory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,16 +46,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 509852896188897535}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06033c268062bba409cd86f45d431c7d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9cd388dfb9ddc464598f177489d602ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lightEffectPrefab: {fileID: 8616329831419384131, guid: 86ef8c5ca1aa202469f363a9d2dd8718, type: 3}
+  _lightEffectPrefab: {fileID: 8616329831419384131, guid: cc92dd01d2f62334e9966f5ceacc3b88, type: 3}
   _lightEffectConfig:
-    Duration: 3
+    Duration: 5
     UseUnscaledTime: 1
   _imageFamilyPortrait: {fileID: 5909980761524976397}
   _familyPortraitConfig:
-    Duration: 2
+    Duration: 5
     UseUnscaledTime: 1
 --- !u!1 &829707567004303993
 GameObject:

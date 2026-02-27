@@ -139,7 +139,10 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
         }
         else
         {
+            _roundFlow.StartSettlement();
             await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+            _settlementRewardManager.CalculateReward();
+
             //await HuntingAppFlow.Instance.EnterPrepareAsync();
         }
     }

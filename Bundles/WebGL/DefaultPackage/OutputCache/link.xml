@@ -33,6 +33,7 @@
     <type fullname="UIComponentGiftAd" preserve="all" />
     <type fullname="UIComponentMapInfo" preserve="all" />
     <type fullname="UIComponentMeatProgress" preserve="all" />
+    <type fullname="UIComponentPrepareDebug" preserve="all" />
     <type fullname="UIComponentPrepareTest" preserve="all" />
     <type fullname="UIComponentPropGroup" preserve="all" />
     <type fullname="UIComponentPropItem" preserve="all" />
@@ -49,11 +50,13 @@
     <type fullname="UILoading" preserve="all" />
     <type fullname="UIPopupLucky" preserve="all" />
     <type fullname="UIPopupLuckyBuff" preserve="all" />
+    <type fullname="UIPopupProp" preserve="all" />
     <type fullname="UIPopupSettlementNormal" preserve="all" />
     <type fullname="UIPopupSettlementSnowFake" preserve="all" />
     <type fullname="UIPopupSettlementSnowVictory" preserve="all" />
     <type fullname="UIPrepare" preserve="all" />
     <type fullname="UIRanking" preserve="all" />
+    <type fullname="UISnowMountainVictory" preserve="all" />
     <type fullname="XAxisTiltBillboard" preserve="all" />
     <type fullname="UIAlertRed/FlashConfig" preserve="nothing" serialized="true" />
     <type fullname="UIComponentBossHealth/BossHealthAnimationConfig" preserve="nothing" serialized="true" />
@@ -62,6 +65,8 @@
     <type fullname="UILoading/FadeConfig" preserve="nothing" serialized="true" />
     <type fullname="UIPopupSettlementSnowFake/ButtonGlowConfig" preserve="nothing" serialized="true" />
     <type fullname="UIPopupSettlementSnowFake/WindowShakeConfig" preserve="nothing" serialized="true" />
+    <type fullname="UISnowMountainVictory/FamilyPortraitConfig" preserve="nothing" serialized="true" />
+    <type fullname="UISnowMountainVictory/LightEffectConfig" preserve="nothing" serialized="true" />
     <type fullname="HuntingAudioRefSo/HuntingAudioRef" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="spine-unity, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">

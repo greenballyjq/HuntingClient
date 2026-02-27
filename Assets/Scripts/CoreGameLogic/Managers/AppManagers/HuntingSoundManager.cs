@@ -67,6 +67,7 @@ namespace CoreGameLogic.Managers.AppManagers
         {
             if (channel == AudioChannel.Voice && _soundManager.GetActivePlayerCountByChannel(AudioChannel.Voice) > 0)
             {
+                Debug.LogWarning("人声通道人声数量 " + _soundManager.GetActivePlayerCountByChannel(AudioChannel.Voice));
                 // 人声播放中，后续的人声不播放
                 return new AudioCallback();
             }

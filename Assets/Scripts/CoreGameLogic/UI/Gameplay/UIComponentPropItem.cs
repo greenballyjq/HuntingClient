@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig.Enum;
 using UnityEngine;
 using UnityEngine.UI;
@@ -174,6 +174,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private async void OnAddButtonClicked()
     {
+        RoundFlow.Instance.PauseRound();
         await _uiManager.OpenUIAsync<UIPopupProp>("UIPopupProp", UIManager.UILayer.PopUp, _propType);
     }
 
