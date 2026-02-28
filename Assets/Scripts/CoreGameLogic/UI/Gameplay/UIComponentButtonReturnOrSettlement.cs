@@ -1,13 +1,13 @@
-﻿using CoreGameLogic.Managers.AppManagers;
-using GameFramework.Core.UI;
+﻿using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
+using System;
 
 /// <summary>
 /// 返回/结算按钮组件
 /// </summary>
+[Obsolete("现已使用自动结算模式，无需手动结算按钮")]
 public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
 {
     /// <summary>
@@ -132,8 +132,7 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
             if (_isMeatScaleFull && _hasHiddenMap)
                 await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
             else
-                await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-                //await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);                
+                await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);                
 
             _settlementRewardManager.CalculateReward();
         }

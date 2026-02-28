@@ -233,7 +233,7 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // 播放倒计时动画
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
-        await uiCountDown.PlayCountdownAsync();
+        await uiCountDown.PlayCountdownAsync(new[] { "5", "4", "3", "2", "1", "准备..", "开始.", "战斗!!" }, 8f);
 
         // 恢复游玩界面操作
         uiGameplay.SetClickable(true);
@@ -244,7 +244,9 @@ public class RoundFlow : Singleton<RoundFlow>
             RoundContext = _currentRoundContext
         });
 
-        _currentState = RoundFlowState.Playing;
+        _eventManager.AddListener(MeatEvents.MeatScaleFull, OnMeatScaleFull);
+
+        _currentState = RoundFlowState.Playing;        
     }
 
     /// <summary>
@@ -253,6 +255,7 @@ public class RoundFlow : Singleton<RoundFlow>
     public async UniTask EndRound()
     {
         _currentState = RoundFlowState.Transitioning;
+        _eventManager.RemoveListener(MeatEvents.MeatScaleFull, OnMeatScaleFull);
 
         // 释放单局管理器
         DisposeRoundManagers();
@@ -391,7 +394,7 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // 播放倒计时动画
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
-        await uiCountDown.PlayCountdownAsync();
+        await uiCountDown.PlayCountdownAsync(new[] { "5", "4", "3", "2", "1", "准备..","开始.","战斗!!" }, 8f);
 
         // 恢复游玩界面操作
         uiGameplay.SetClickable(true);
@@ -537,6 +540,23 @@ public class RoundFlow : Singleton<RoundFlow>
     #endregion
 
     #region 事件相关
+    /// <summary>
+    /// 肉条满事件回调
+    /// </summary>
+    private async void OnMeatScaleFull()
+    {
+        var _uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
+        _uiManager.GetUI<UIGameplay>("UIGameplay").PlayTipAnimationAsync("肉条已满，即将结算！", Color.red, 10f).Forget();
+        await _uiCountDown.PlayCountdownAsync(new[] { "10", "9", "8", "7", "6", "5", "4", "3","2","1"}, 10f);
+
+        StartSettlement();
+        if (_currentRoundContext.HasHiddenMap)
+            await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
+        else
+            await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+        GetRoundManager<SettlementRewardManager>().CalculateReward();
+    }
+
     /// <summary>
     /// 触发进入单局事件
     /// </summary>

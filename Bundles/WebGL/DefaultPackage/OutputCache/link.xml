@@ -61,7 +61,6 @@
     <type fullname="UIAlertRed/FlashConfig" preserve="nothing" serialized="true" />
     <type fullname="UIComponentBossHealth/BossHealthAnimationConfig" preserve="nothing" serialized="true" />
     <type fullname="UIComponentPropUseTip/BlinkConfig" preserve="nothing" serialized="true" />
-    <type fullname="UICountdown/CountdownConfig" preserve="nothing" serialized="true" />
     <type fullname="UILoading/FadeConfig" preserve="nothing" serialized="true" />
     <type fullname="UIPopupSettlementSnowFake/ButtonGlowConfig" preserve="nothing" serialized="true" />
     <type fullname="UIPopupSettlementSnowFake/WindowShakeConfig" preserve="nothing" serialized="true" />

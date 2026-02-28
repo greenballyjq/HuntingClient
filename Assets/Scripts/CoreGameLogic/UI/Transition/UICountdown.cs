@@ -1,6 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
-using GameFramework.Core.UI;
 using System;
+using Cysharp.Threading.Tasks;
+using GameFramework.Core.UI;
 using TMPro;
 using UnityEngine;
 
@@ -10,53 +10,24 @@ using UnityEngine;
 public class UICountdown : UIBase
 {
     /// <summary>
-    /// 倒计时配置
-    /// </summary>
-    [Serializable]
-    private class CountdownConfig
-    {
-        /// <summary>
-        /// 总时长
-        /// </summary>
-        public float TotalDuration = 3f;
-
-        /// <summary>
-        /// 文本序列
-        /// </summary>
-        public string[] TextSequence = { "准备", "开始", "战斗" };
-
-        /// <summary>
-        /// 是否不受TimeScale影响
-        /// </summary>
-        public bool UseUnscaledTime;
-    }
-
-    /// <summary>
     /// 文本组件
     /// </summary>
     [SerializeField] private TextMeshProUGUI _textCountdown;
 
     /// <summary>
-    /// 倒计时配置
-    /// </summary>
-    [SerializeField] private CountdownConfig _countDownConfig;
-
-    /// <summary>
     /// 播放倒计时
     /// </summary>
-    public async UniTask PlayCountdownAsync()
+    /// <param name="textSequence">文本序列</param>
+    /// <param name="totalDuration">总时长（秒）</param>
+    public async UniTask PlayCountdownAsync(string[] textSequence, float totalDuration)
     {
-        int count = _countDownConfig.TextSequence.Length;
-        float segmentDuration = _countDownConfig.TotalDuration / count;
+        int count = textSequence.Length;
+        float segmentDuration = totalDuration / count;
 
         for (int i = 0; i < count; i++)
         {
-            _textCountdown.text = _countDownConfig.TextSequence[i];
-            
-            if (_countDownConfig.UseUnscaledTime)
-                await UniTask.Delay(System.TimeSpan.FromSeconds(segmentDuration), DelayType.UnscaledDeltaTime, cancellationToken: this.GetCancellationTokenOnDestroy());
-            else
-                await UniTask.Delay(System.TimeSpan.FromSeconds(segmentDuration), cancellationToken: this.GetCancellationTokenOnDestroy());
+            _textCountdown.text = textSequence[i];
+            await UniTask.Delay(TimeSpan.FromSeconds(segmentDuration), cancellationToken: this.GetCancellationTokenOnDestroy());
         }
 
         Close();

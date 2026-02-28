@@ -1,4 +1,4 @@
-using GameFramework.Core.UI;
+﻿using GameFramework.Core.UI;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -31,7 +31,12 @@ public class UIComponentTime : MonoBehaviour, IUIComponent
     /// <summary>
     /// 字符串构建器（复用避免GC）
     /// </summary>
-    private readonly StringBuilder _stringBuilder = new StringBuilder(8);
+    private readonly StringBuilder _stringBuilder = new StringBuilder(12);
+
+    /// <summary>
+    /// 毫秒字体大小百分比
+    /// </summary>
+    private const int FontSizePercentage = 80;
 
     public void Init()
     {
@@ -69,10 +74,12 @@ public class UIComponentTime : MonoBehaviour, IUIComponent
 
         _stringBuilder.Clear();
         _stringBuilder.Append(minutes.ToString("D2"));
-        _stringBuilder.Append(":");
+        _stringBuilder.Append("'");
         _stringBuilder.Append(seconds.ToString("D2"));
-        _stringBuilder.Append(":");
+        _stringBuilder.Append("''");
+        _stringBuilder.Append($"<size={FontSizePercentage}%>");
         _stringBuilder.Append(milliseconds.ToString("D2"));
+        _stringBuilder.Append("'''</size>");
 
         _textTime.text = _stringBuilder.ToString();
     }

@@ -91,7 +91,8 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
             { EDropType.Bullet, _uiGameplay.UIComponentBullet.RectTransformBulletImage.position },
             { EDropType.Energy, _uiGameplay.UIComponentSkill.RectTransformSkillImage.position },
             { EDropType.Meat, _uiGameplay.UIComponentMeatProgress.RectTransformMeatImage.position },
-            { EDropType.ThreeKPCoin, _uiGameplay.UIComponentReturnOrSettlement.RectTransformReturnOrSettlementButton.position }
+            { EDropType.ThreeKPCoin, _uiGameplay.UIComponentReturnButton.RectTransformReturnButton.position }
+            //{ EDropType.ThreeKPCoin, _uiGameplay.UIComponentReturnOrSettlement.RectTransformReturnOrSettlementButton.position }
         };
     }
 

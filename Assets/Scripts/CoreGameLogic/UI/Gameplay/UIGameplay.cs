@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,8 +11,10 @@ public class UIGameplay : UIBase
     /// <summary>
     /// 返回/结算按钮组件
     /// </summary>
-    [SerializeField] private UIComponentButtonReturnOrSettlement _uiComponentReturnOrSettlement;
-    public UIComponentButtonReturnOrSettlement UIComponentReturnOrSettlement => _uiComponentReturnOrSettlement;
+    //[SerializeField] private UIComponentButtonReturnOrSettlement _uiComponentReturnOrSettlement;
+    //public UIComponentButtonReturnOrSettlement UIComponentReturnOrSettlement => _uiComponentReturnOrSettlement;
+    [SerializeField] private UIComponentReturnButton _uiComponentReturnButton;
+    public UIComponentReturnButton UIComponentReturnButton => _uiComponentReturnButton;
 
     /// <summary>
     /// 动物计数器组件
@@ -55,7 +57,7 @@ public class UIGameplay : UIBase
     /// <summary>
     /// 道具使用提示组件
     /// </summary>
-    [SerializeField] private UIComponentPropUseTip _uiComponentPropUseTip;
+    [SerializeField] private UIComponentTip _uiComponentTip;
 
     /// <summary>
     /// 掉落奖励组件
@@ -85,7 +87,8 @@ public class UIGameplay : UIBase
     public override void OnInit(object userData)
     {
         base.OnInit(userData);
-        _uiComponentReturnOrSettlement.Init();
+        //_uiComponentReturnOrSettlement.Init();
+        _uiComponentReturnButton.Init();
         _uiComponentBossHealth.Init();
         _uiComponentBossHealth.gameObject.SetActive(false);
         _uiComponentAnimalCounter.Init();
@@ -94,8 +97,8 @@ public class UIGameplay : UIBase
         _uiComponentSkill.Init();
         _uiComponentBullet.Init();
         _uiComponentPropGroup.Init();
-        _uiComponentPropUseTip.Init();
-        _uiComponentPropUseTip.gameObject.SetActive(false);
+        _uiComponentTip.Init();
+        _uiComponentTip.gameObject.SetActive(false);
         _uiComponentDropReward.Init(this);
 
         //uiComponentQuest.Init();
@@ -103,7 +106,8 @@ public class UIGameplay : UIBase
 
     public override void OnClose()
     {
-        _uiComponentReturnOrSettlement.CleanUp();
+        //_uiComponentReturnOrSettlement.CleanUp();
+        _uiComponentReturnButton.CleanUp();
         _uiComponentAnimalCounter.CleanUp();
         _uiComponentBossHealth.CleanUp();
         _uiComponentTime.CleanUp();
@@ -111,7 +115,7 @@ public class UIGameplay : UIBase
         _uiComponentSkill.CleanUp();
         _uiComponentBullet.CleanUp();
         _uiComponentPropGroup.CleanUp();
-        _uiComponentPropUseTip.CleanUp();
+        _uiComponentTip.CleanUp();
         _uiComponentDropReward.CleanUp();
 
         //uiComponentQuest.CleanUp();
@@ -130,7 +134,8 @@ public class UIGameplay : UIBase
         _uiComponentAnimalCounter.CleanUp();
         _uiComponentAnimalCounter.gameObject.SetActive(false);
 
-        _uiComponentReturnOrSettlement.gameObject.SetActive(false);
+        //_uiComponentReturnOrSettlement.gameObject.SetActive(false);
+        _uiComponentReturnButton.gameObject.SetActive(false);
 
         _uiComponentBossHealth.Init();
         _uiComponentBossHealth.gameObject.SetActive(true);
@@ -154,17 +159,14 @@ public class UIGameplay : UIBase
     }
 
     /// <summary>
-    /// 播放道具使用提示动画
+    /// 播放提示动画
     /// </summary>
-    public async UniTask PlayPropUseTipAnimationAsync()
+    /// <param name="duration">播放总时长（秒）</param>
+    public async UniTask PlayTipAnimationAsync(string text, Color textColor, float duration)
     {
-        _uiComponentPropUseTip.Init();
-        _uiComponentPropUseTip.gameObject.SetActive(true);
-
-        await _uiComponentPropUseTip.PlayBlinkAsync();
-        
-        _uiComponentPropUseTip.CleanUp();
-        _uiComponentPropUseTip.gameObject.SetActive(false);
+        _uiComponentTip.gameObject.SetActive(true);
+        await _uiComponentTip.PlayTipAnimationAsync(text, textColor, duration);
+        _uiComponentTip?.gameObject.SetActive(false);
     }
 
     #endregion

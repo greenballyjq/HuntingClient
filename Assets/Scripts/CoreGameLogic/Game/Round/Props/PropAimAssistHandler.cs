@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Prop;
+using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using UnityEngine;
@@ -81,7 +81,7 @@ public class PropAimAssistHandler : IPropHandler
         _effectController.SetTarget(null);
 
         // 播放道具使用文字提示动画
-        _uiManager.GetUI<UIGameplay>("UIGameplay").PlayPropUseTipAnimationAsync().Forget();
+        _uiManager.GetUI<UIGameplay>("UIGameplay").PlayTipAnimationAsync("点击动物自动瞄准射击", Color.green, context.PropData.Duration).Forget();
 
         // 切换到指哪打哪模式
         _playerControlManager.SwitchToAimAssist(_minLockDistance, _maxLockDistance);
