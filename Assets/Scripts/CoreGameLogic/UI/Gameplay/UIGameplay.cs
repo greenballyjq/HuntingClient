@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+using System;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -164,9 +165,19 @@ public class UIGameplay : UIBase
     /// <param name="duration">播放总时长（秒）</param>
     public async UniTask PlayTipAnimationAsync(string text, Color textColor, float duration)
     {
+        if (_uiComponentTip == null)
+            return;
         _uiComponentTip.gameObject.SetActive(true);
-        await _uiComponentTip.PlayTipAnimationAsync(text, textColor, duration);
-        _uiComponentTip?.gameObject.SetActive(false);
+        try
+        {
+            await _uiComponentTip.PlayTipAnimationAsync(text, textColor, duration);
+        }
+        catch (OperationCanceledException)
+        {
+            // CleanUp 取消时忽略
+        }
+        if (_uiComponentTip != null)
+            _uiComponentTip.gameObject.SetActive(false);
     }
 
     #endregion
