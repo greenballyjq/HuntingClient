@@ -27,7 +27,6 @@
     <type fullname="UIComponentAnimalCounterItem" preserve="all" />
     <type fullname="UIComponentBossHealth" preserve="all" />
     <type fullname="UIComponentBullet" preserve="all" />
-    <type fullname="UIComponentButtonReturnOrSettlement" preserve="all" />
     <type fullname="UIComponentDropReward" preserve="all" />
     <type fullname="UIComponentGift" preserve="all" />
     <type fullname="UIComponentGiftAd" preserve="all" />
@@ -37,14 +36,15 @@
     <type fullname="UIComponentPrepareTest" preserve="all" />
     <type fullname="UIComponentPropGroup" preserve="all" />
     <type fullname="UIComponentPropItem" preserve="all" />
-    <type fullname="UIComponentPropUseTip" preserve="all" />
     <type fullname="UIComponentRankingItem" preserve="all" />
+    <type fullname="UIComponentReturnButton" preserve="all" />
     <type fullname="UIComponentRoleInfo" preserve="all" />
     <type fullname="UIComponentRoleSlot" preserve="all" />
     <type fullname="UIComponentRollRole" preserve="all" />
     <type fullname="UIComponentSkill" preserve="all" />
     <type fullname="UIComponentSkillInfo" preserve="all" />
     <type fullname="UIComponentTime" preserve="all" />
+    <type fullname="UIComponentTip" preserve="all" />
     <type fullname="UICountdown" preserve="all" />
     <type fullname="UIGameplay" preserve="all" />
     <type fullname="UILoading" preserve="all" />
@@ -60,7 +60,7 @@
     <type fullname="XAxisTiltBillboard" preserve="all" />
     <type fullname="UIAlertRed/FlashConfig" preserve="nothing" serialized="true" />
     <type fullname="UIComponentBossHealth/BossHealthAnimationConfig" preserve="nothing" serialized="true" />
-    <type fullname="UIComponentPropUseTip/BlinkConfig" preserve="nothing" serialized="true" />
+    <type fullname="UIComponentTip/BlinkConfig" preserve="nothing" serialized="true" />
     <type fullname="UILoading/FadeConfig" preserve="nothing" serialized="true" />
     <type fullname="UIPopupSettlementSnowFake/ButtonGlowConfig" preserve="nothing" serialized="true" />
     <type fullname="UIPopupSettlementSnowFake/WindowShakeConfig" preserve="nothing" serialized="true" />

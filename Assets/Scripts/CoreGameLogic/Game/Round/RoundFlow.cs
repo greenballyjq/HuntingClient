@@ -551,9 +551,9 @@ public class RoundFlow : Singleton<RoundFlow>
 
         StartSettlement();
         if (_currentRoundContext.HasHiddenMap)
-            await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
-        else
             await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+        else
+            await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
         GetRoundManager<SettlementRewardManager>().CalculateReward();
     }
 

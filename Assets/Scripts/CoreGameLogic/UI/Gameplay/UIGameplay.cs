@@ -165,19 +165,15 @@ public class UIGameplay : UIBase
     /// <param name="duration">播放总时长（秒）</param>
     public async UniTask PlayTipAnimationAsync(string text, Color textColor, float duration)
     {
-        if (_uiComponentTip == null)
-            return;
         _uiComponentTip.gameObject.SetActive(true);
         try
         {
             await _uiComponentTip.PlayTipAnimationAsync(text, textColor, duration);
+            if (this != null && _uiComponentTip != null)
+                _uiComponentTip.gameObject.SetActive(false);
         }
-        catch (OperationCanceledException)
-        {
-            // CleanUp 取消时忽略
-        }
-        if (_uiComponentTip != null)
-            _uiComponentTip.gameObject.SetActive(false);
+        catch (OperationCanceledException) { }
+        catch (MissingReferenceException) { }
     }
 
     #endregion
