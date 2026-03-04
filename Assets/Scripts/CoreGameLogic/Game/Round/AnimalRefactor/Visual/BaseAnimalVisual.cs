@@ -10,12 +10,19 @@ namespace Hunting.Game.Animal
     /// </summary>
     public class BaseAnimalVisual : MonoBehaviour
     {
+        private HuntingConfigManager _configManager;
+
+        private DropMeatSo _dropMeatSo;
+
         protected virtual void Awake()
         {
             _skeletonMecanim = GetComponentInChildren<SkeletonMecanim>();
             _moveable = GetComponentInChildren<IMoveable>();
 
             _animator = GetComponentInChildren<Animator>();
+
+            _configManager = GameServiceLocator.ConfigManager;
+            _dropMeatSo = _configManager.DropMeatSo;
         }
 
         /// <summary>
@@ -144,7 +151,8 @@ namespace Hunting.Game.Animal
         /// </summary>
         public void PlayDeathEffect()
         {
-            _effectManager.PlayOneShotAsync(_animalBehaviour.SpecieData.EffectPrefabResourcePath, transform.position, Quaternion.identity).Forget();
+            GameObject prefab = _dropMeatSo.GetRandomDropMeatByIds(_animalBehaviour.SpecieData.DropMeatEffectID);
+            _effectManager.PlayOneShot(prefab, transform.position, Quaternion.identity);
         }
         #endregion
     }

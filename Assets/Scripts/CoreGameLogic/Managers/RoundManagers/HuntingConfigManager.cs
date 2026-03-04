@@ -1,4 +1,4 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Bean;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
@@ -38,6 +38,26 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
         "huntingconfig_prop_tbpropaimassist",
         "huntingconfig_prop_tbproptrap",
     };
+
+    /// <summary>
+    /// 掉落肉配置
+    /// </summary>
+    private DropMeatSo _dropMeatSo;
+    public DropMeatSo DropMeatSo => _dropMeatSo;
+
+    protected override async void InitializeAsync()
+    {
+        try
+        {
+            await LoadTablesAsync();
+            _dropMeatSo = await GameServiceLocator.ResourceManager.LoadAssetAsync<DropMeatSo>("Assets/Arts/SO/DropMeatSo");
+            Initialized = true;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[{GetType().Name}] 配置加载失败: {ex.Message}");
+        }
+    }
 
     #region 数值表访问
     /// <summary>
@@ -390,9 +410,8 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
 
     #region 角色相关特殊方法
     /// <summary>
-    /// 随机获取一个角色数据（调试用）
+    /// 随机获取一个角色数据
     /// </summary>
-    /// <returns>随机角色配置</returns>
     public Role GetRandomRole()
         => RoleTable.DataList[Random.Range(0, RoleTable.DataList.Count)];
     #endregion
@@ -401,8 +420,6 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <summary>
     /// 根据完成的肉度条数量获取默认肉度条奖励
     /// </summary>
-    /// <param name="completedBars">已完成的肉度条数量</param>
-    /// <returns>对应的奖励配置</returns>
     public MeatProgressReward GetMeatProgressReward(int completedBars)
     {
         if (completedBars == 0)
@@ -559,11 +576,9 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
 
         return panelData;
     }
-    #endregion
 
-    #region 测试
     /// <summary>
-    /// 随机获取一个跟随Boss的物种 不是我写的代码，我不在乎
+    /// 随机获取一个跟随Boss的物种
     /// </summary>
     /// <returns></returns>
     public Specie GetRandomBossFollow()
@@ -573,7 +588,7 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     }
 
     /// <summary>
-    /// 随机获取一个物种 测试方法，是否适合放这里未知，我偏向于不适合
+    /// 随机获取一个物种
     /// </summary>
     /// <param name="mapId">地图ID</param>
     /// <returns></returns>
@@ -600,7 +615,7 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     }
 
     /// <summary>
-    /// 随机获取一个Boss物种的数据 测试代码，是否适合放这里未知，我偏向于这个简单的还算适合
+    /// 随机获取一个Boss物种的数据
     /// </summary>
     public Specie GetRandomBoss()
         => SpecieTable.DataList.Where(s => s.SpecieType == ESpecieType.Boss).ToList()[Random.Range(0, SpecieTable.DataList.Count(s => s.SpecieType == ESpecieType.Boss))];

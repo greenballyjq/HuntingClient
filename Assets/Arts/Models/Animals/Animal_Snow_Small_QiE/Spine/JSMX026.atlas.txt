@@ -1,0 +1,12 @@
+JSMX026.png
+size:512,512
+filter:Linear,Linear
+pma:true
+scale:0.5
+b
+bounds:2,2,325,469
+c
+bounds:329,266,102,205
+l1
+bounds:329,124,140,63
+rotate:90

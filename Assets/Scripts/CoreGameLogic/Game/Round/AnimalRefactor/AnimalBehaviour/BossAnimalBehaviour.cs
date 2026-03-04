@@ -22,19 +22,24 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
     
     public override void Init(Specie data)
     {
-        base.Init(data);
         _bossDeathState = new BossAnimalDeathState(_stateMachine, this);
         _bossEnterState = new BossAnimalEnterState(_stateMachine, this);
         _bossCallGuardState = new BossAnimalCallGuardState(_stateMachine, this);
-        
+
         _eventManager.AddListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
         _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
-        
-        Health.SetHealth(1000);
 
         _callGuardTimerId = _timerManager.StartTimer(CALL_GUARD_DURATION, CallGuard, repeat: TimerManager.LOOP);
+
+        base.Init(data);
+        
     }
-    
+
+    protected override void InitStateMachine()
+    {
+        _stateMachine.ChangeState(_bossEnterState);
+    }
+
     public void EnterCombat()
     {
         _stateMachine.ChangeState(MoveState);
@@ -58,10 +63,7 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
         }
     }
 
-    protected override void InitStateMachine()
-    {
-        _stateMachine.ChangeState(_bossEnterState);
-    }
+    
 
     private void CallGuard()
     {

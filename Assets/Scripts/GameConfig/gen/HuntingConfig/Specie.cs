@@ -24,7 +24,7 @@ public sealed partial class Specie : Luban.BeanBase
         StayTime = _buf.ReadFloat();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DropRewards = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.EDropType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.EDropType _k0;  _k0 = (HuntingConfig.Enum.EDropType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     DropRewards.Add(_k0, _v0);}}
         PrefabResourcePath = _buf.ReadString();
-        EffectPrefabResourcePath = _buf.ReadString();
+        {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DropMeatEffectID = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); DropMeatEffectID[__index0] = __e0;}}
         IconResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
@@ -67,9 +67,9 @@ public sealed partial class Specie : Luban.BeanBase
     /// </summary>
     public readonly string PrefabResourcePath;
     /// <summary>
-    /// 特效预制体资源路径
+    /// 掉落肉特效ID
     /// </summary>
-    public readonly string EffectPrefabResourcePath;
+    public readonly int[] DropMeatEffectID;
     /// <summary>
     /// 图标资源路径
     /// </summary>
@@ -97,7 +97,7 @@ public sealed partial class Specie : Luban.BeanBase
         + "StayTime:" + StayTime + ","
         + "DropRewards:" + Luban.StringUtil.CollectionToString(DropRewards) + ","
         + "PrefabResourcePath:" + PrefabResourcePath + ","
-        + "EffectPrefabResourcePath:" + EffectPrefabResourcePath + ","
+        + "DropMeatEffectID:" + Luban.StringUtil.CollectionToString(DropMeatEffectID) + ","
         + "IconResourcePath:" + IconResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";
