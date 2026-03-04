@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using GameFramework.Core;
 using GameFramework.Core.UI;
 using TMPro;
 using UnityEngine;
@@ -45,6 +45,7 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
 
     private async void OnReturnButtonClicked()
     {
+        //await GameServiceLocator.UIManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
         await HuntingAppFlow.Instance.EnterPrepareAsync();
     }
 }

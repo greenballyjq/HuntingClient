@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using UnityEngine;
@@ -12,8 +12,6 @@ public class UIGameplay : UIBase
     /// <summary>
     /// 返回/结算按钮组件
     /// </summary>
-    //[SerializeField] private UIComponentButtonReturnOrSettlement _uiComponentReturnOrSettlement;
-    //public UIComponentButtonReturnOrSettlement UIComponentReturnOrSettlement => _uiComponentReturnOrSettlement;
     [SerializeField] private UIComponentReturnButton _uiComponentReturnButton;
     public UIComponentReturnButton UIComponentReturnButton => _uiComponentReturnButton;
 
@@ -88,10 +86,8 @@ public class UIGameplay : UIBase
     public override void OnInit(object userData)
     {
         base.OnInit(userData);
-        //_uiComponentReturnOrSettlement.Init();
         _uiComponentReturnButton.Init();
         _uiComponentBossHealth.Init();
-        _uiComponentBossHealth.gameObject.SetActive(false);
         _uiComponentAnimalCounter.Init();
         _uiComponentTime.Init();
         _uiComponentMeatProgress.Init();
@@ -99,15 +95,14 @@ public class UIGameplay : UIBase
         _uiComponentBullet.Init();
         _uiComponentPropGroup.Init();
         _uiComponentTip.Init();
-        _uiComponentTip.gameObject.SetActive(false);
         _uiComponentDropReward.Init(this);
 
-        //uiComponentQuest.Init();
+        _uiComponentTip.gameObject.SetActive(false);
+        _uiComponentBossHealth.gameObject.SetActive(false);
     }
 
     public override void OnClose()
     {
-        //_uiComponentReturnOrSettlement.CleanUp();
         _uiComponentReturnButton.CleanUp();
         _uiComponentAnimalCounter.CleanUp();
         _uiComponentBossHealth.CleanUp();
@@ -118,9 +113,6 @@ public class UIGameplay : UIBase
         _uiComponentPropGroup.CleanUp();
         _uiComponentTip.CleanUp();
         _uiComponentDropReward.CleanUp();
-
-        //uiComponentQuest.CleanUp();
-
         base.OnClose();
     }
 
@@ -133,21 +125,10 @@ public class UIGameplay : UIBase
         _imageBackground.sprite = _snowBackgroundSprite;
 
         _uiComponentAnimalCounter.CleanUp();
+
         _uiComponentAnimalCounter.gameObject.SetActive(false);
-
-        //_uiComponentReturnOrSettlement.gameObject.SetActive(false);
         _uiComponentReturnButton.gameObject.SetActive(false);
-
-        _uiComponentBossHealth.Init();
         _uiComponentBossHealth.gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// 播放Boss血量增长动画
-    /// </summary>
-    public async UniTask PlayBossHealthIncreaseAnimationAsync()
-    {
-        await _uiComponentBossHealth.PlayBossHealthIncreaseAnimationAsync();
     }
 
     /// <summary>
@@ -157,6 +138,14 @@ public class UIGameplay : UIBase
     public void SetClickable(bool enable)
     {
         _canvasGroup.blocksRaycasts = enable;
+    }
+
+    /// <summary>
+    /// 播放Boss血量增长动画
+    /// </summary>
+    public async UniTask PlayBossHealthIncreaseAnimationAsync()
+    {
+        await _uiComponentBossHealth.PlayBossHealthIncreaseAnimationAsync();
     }
 
     /// <summary>

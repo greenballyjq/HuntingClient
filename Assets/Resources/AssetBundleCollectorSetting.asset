@@ -167,29 +167,13 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Arts/Prefabs/Particles
-        CollectorGUID: ce23f49a07772f749916653c4d355a9b
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
     - GroupName: audio
       GroupDesc: 
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Arts/Audio/HuntingAudioRefSo.asset
+      - CollectPath: Assets/Arts/SO/HuntingAudioRefSo.asset
         CollectorGUID: 6bdaef14b8be7d346944c239b01a2485
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/Audio/SFX
-        CollectorGUID: 12e7b34a7f388a64e8038601044d54b0
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
@@ -203,6 +187,19 @@ MonoBehaviour:
       Collectors:
       - CollectPath: Assets/ArtsTemp/Environments
         CollectorGUID: f9dac1abf391b7441b7304ab6b17461f
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackGroup
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: so
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/Arts/SO/DropMeatSo.asset
+        CollectorGUID: f6d9c43a7b9b4e148b1c6c43793a517e
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackGroup

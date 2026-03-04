@@ -1,4 +1,5 @@
 ﻿using Hunting.Game.Animal;
+using UnityEngine;
 
 namespace CoreGameLogic.Game.Round.Boss.States
 {

@@ -325,14 +325,14 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // 伪结算面板动画
         var uiFakeSettlement = _uiManager.GetUI<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake");
-        await UniTask.WhenAll(
-            uiFakeSettlement.PlayWindowShakeAsync(),
-            uiFakeSettlement.PlayButtonGlowAsync()
-        );
+        uiFakeSettlement.PlayWindowShakeAsync().Forget();
+        await uiFakeSettlement.PlayButtonGlowAsync();
+
         _uiManager.CloseUI("UIPopupSettlementSnowFake");
 
         // 伪结算面板爆米花动画  
-        _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Particles/Settlement_Explosion", Vector3.zero, Quaternion.identity, dontDestroyOnLoad: true).Forget();
+        _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Effects/Settlement_Explosion").Forget();
+
         #region 地图过渡
         // 打开加载界面
         var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
@@ -347,7 +347,7 @@ public class RoundFlow : Singleton<RoundFlow>
         ClearRound();
 
         // 下雪动画
-        _snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Particles/FX_Snow", new Vector3(0, 5, 0), Quaternion.identity, dontDestroyOnLoad: true);
+        _snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Effects/FX_Snow_For_SnowMountainScene_UICamera");
 
         // 加载场景
         await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();

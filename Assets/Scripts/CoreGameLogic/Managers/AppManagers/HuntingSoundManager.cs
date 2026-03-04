@@ -23,7 +23,7 @@ namespace CoreGameLogic.Managers.AppManagers
 
         public async void Init()
         {
-            _huntingAudioRefSo = await _resourceManager.LoadAssetAsync<HuntingAudioRefSo>("Assets/Arts/Audio/HuntingAudioRefSo");
+            _huntingAudioRefSo = await _resourceManager.LoadAssetAsync<HuntingAudioRefSo>("Assets/Arts/SO/HuntingAudioRefSo");
 
             if (_huntingAudioRefSo ==null)
             {
