@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ao_animal_snow_boss_beijixiong
+  m_Controller: {fileID: 9100000, guid: a009b6de5424ea64ab7e14de9f9bc26d, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: e640b645406409e4d9f41ed71aea7446, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b1402472714b48b439f5d048a3f3e4ab, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 1420c3fc022d26947983a067bf8403f3, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1c0555939a9081c4e9938a2daee844a6, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 734ef061abf8fc340be7f1d452101cc7, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e8a7fdd44954e6b409d964fb1e9d9f6f, type: 2}
