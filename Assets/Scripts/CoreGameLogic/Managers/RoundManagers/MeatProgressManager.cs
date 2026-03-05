@@ -97,6 +97,7 @@ public class MeatProgressManager : IRoundManager
         {
             TriggerMeatScaleCompleted(new MeatScaleCompletedEventArgs
             {
+                TotalScaleCount = _totalScale,
                 CompletedScaleCount = _completedScaleCount
             });
 

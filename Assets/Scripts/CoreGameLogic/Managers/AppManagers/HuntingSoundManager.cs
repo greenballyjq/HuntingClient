@@ -66,11 +66,8 @@ namespace CoreGameLogic.Managers.AppManagers
             , int loop = 1)
         {
             if (channel == AudioChannel.Voice && _soundManager.GetActivePlayerCountByChannel(AudioChannel.Voice) > 0)
-            {
-                Debug.LogWarning("人声通道人声数量 " + _soundManager.GetActivePlayerCountByChannel(AudioChannel.Voice));
-                // 人声播放中，后续的人声不播放
                 return new AudioCallback();
-            }
+
             var audioRef = _huntingAudioRefSo.GetAudioRefFromType(audioType);
             var audioClip = audioRef.clip;
             var volume = audioRef.volume;
@@ -512,14 +509,6 @@ namespace CoreGameLogic.Managers.AppManagers
                     PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.BulletHit_HighSpeed);
                     break;
             }
-        }
-        
-        /// <summary>
-        /// 播放动物受击音效
-        /// </summary>
-        private void PlayAnimalHitSound()
-        {
-            PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Animal_Hit);
         }
         
         /// <summary>

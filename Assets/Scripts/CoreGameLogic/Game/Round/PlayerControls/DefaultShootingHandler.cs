@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 默认射击控制处理器
 /// </summary>
-public class DefaultShootingHandler : IPlayerControlHandler
+public class DefaultShootingHandler : BasePlayerControlHandler
 {
     /// <summary>
     /// 玩家武器
@@ -30,13 +30,13 @@ public class DefaultShootingHandler : IPlayerControlHandler
     /// </summary>
     private const float AimPlaneHeight = 0f;
 
-    public void OnControlStart()
+    protected override void OnControlStart()
     {
         Input.SwitchToFireMode();
         _playerWeapon = _weaponManager.PlayerWeapon;
     }
 
-    public void OnControlUpdate(float deltaTime)
+    protected override void OnControlUpdate(float deltaTime)
     {
         if (Input.IsFireHeld)
         {
@@ -47,13 +47,10 @@ public class DefaultShootingHandler : IPlayerControlHandler
                 Vector3 worldPos = ray.GetPoint(enter);
                 _playerWeapon.SetAimTarget(worldPos);
             }
-            _playerWeapon.Fire();
+            _playerWeapon.TryFire();
         }
             
     }
 
-    public void OnControlEnd()
-    {
-
-    }
+    protected override void OnControlEnd() { }
 }

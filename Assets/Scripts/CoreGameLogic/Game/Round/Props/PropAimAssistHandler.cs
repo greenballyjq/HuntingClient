@@ -111,8 +111,8 @@ public class PropAimAssistHandler : IPropHandler
     /// </summary>
     public void OnPropEnd(PropContext context)
     {
-        // 切换回默认射击模式
-        _playerControlManager.SwitchToDefaultShooting();
+        // 切换回摇杆控制模式
+        _playerControlManager.SwitchToJoystick();
 
         // 停止并回收特效
         _effectManager.Stop(_effectInstance, EffectStopMode.Graceful);

@@ -52,8 +52,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     public async UniTask PlayRollDiceAsync()
     {
         // 随机骰子点数
-        //_diceValue = Random.Range(1, 7);
-         _diceValue = 6;
+        _diceValue = Random.Range(1, 7);
         
         int fromSlotIndex = _currentSlotIndex;
 

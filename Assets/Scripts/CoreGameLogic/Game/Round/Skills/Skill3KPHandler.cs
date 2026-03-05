@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using CoreGameLogic.Managers.AppManagers;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 色块人技能处理器
@@ -15,6 +16,11 @@ public class Skill3KPHandler : BaseSkillHandler
     /// </summary>
     private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
 
+    /// <summary>
+    /// 音效管理器
+    /// </summary>
+    private HuntingSoundManager _soundManager => GameServiceLocator.GetAppManager<HuntingSoundManager>();
+
     protected override async UniTask OnSkillStart(SkillContext context)
     {
         var skillParam = _configManager.GetSkill3KP(context.SkillData.ParamTableID);
@@ -23,6 +29,8 @@ public class Skill3KPHandler : BaseSkillHandler
         _weaponManager.RegisterDamageModifier(ModifierSourceId, skillParam.DamageMultiplier);
 
         _weaponManager.PlayerWeapon.WeaponVisual.SetSkillEffect(true);
+
+        _soundManager.PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_BlueRed);
 
         await UniTask.CompletedTask;
     }
@@ -34,9 +42,6 @@ public class Skill3KPHandler : BaseSkillHandler
         _weaponManager.UnregisterFireRateModifier(ModifierSourceId);
         _weaponManager.UnregisterDamageModifier(ModifierSourceId);
 
-        // fixme PlayerWeapon is null 
-        // CleanUp 时被调用，同时 WeaponManager也被调用CleanUp方法，PlayerWeapon 被置为空
-        // 目前先加一个判空安全, 保证后续测试不会卡死
-        _weaponManager.PlayerWeapon?.WeaponVisual.SetSkillEffect(false);
+        _weaponManager.PlayerWeapon.WeaponVisual.SetSkillEffect(false);
     }
 }

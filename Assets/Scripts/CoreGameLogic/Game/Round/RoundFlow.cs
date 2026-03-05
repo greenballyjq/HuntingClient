@@ -213,6 +213,9 @@ public class RoundFlow : Singleton<RoundFlow>
         _currentRoundContext = context;
         _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
 
+        // 订阅事件
+        RegisterEvents();
+
         // 创建单局管理器
         CreateRoundManagers();
 
@@ -224,6 +227,9 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // 禁止游玩界面操作
         uiGameplay.SetClickable(false);
+
+        // 切换到摇杆控制模式
+        GetRoundManager<PlayerControlManager>().SwitchToJoystick();
 
         // 触发单局进入事件
         TriggerRoundEntered(new RoundEnteredEventArgs
@@ -244,8 +250,6 @@ public class RoundFlow : Singleton<RoundFlow>
             RoundContext = _currentRoundContext
         });
 
-        _eventManager.AddListener(MeatEvents.MeatScaleFull, OnMeatScaleFull);
-
         _currentState = RoundFlowState.Playing;        
     }
 
@@ -255,7 +259,6 @@ public class RoundFlow : Singleton<RoundFlow>
     public async UniTask EndRound()
     {
         _currentState = RoundFlowState.Transitioning;
-        _eventManager.RemoveListener(MeatEvents.MeatScaleFull, OnMeatScaleFull);
 
         // 释放单局管理器
         DisposeRoundManagers();
@@ -268,13 +271,14 @@ public class RoundFlow : Singleton<RoundFlow>
         // 关闭游玩界面
         _uiManager.CloseUI("UIGameplay");
 
+        // 取消订阅事件
+        UnregisterEvents();
+
         // 加载准备场景
         await SceneManager.LoadSceneAsync("PrepareScene").ToUniTask();
 
         _currentState = RoundFlowState.None;
     }
-
-    
 
     /// <summary>
     /// 每帧更新
@@ -352,8 +356,8 @@ public class RoundFlow : Singleton<RoundFlow>
         // 加载场景
         await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
 
-        // 触发隐藏地图进入事件
-        _eventManager.Trigger(HiddenMapEvents.HiddenMapEntered);
+        // 触发进入隐藏地图事件
+        TriggerHiddenMapEntered();
 
         // 重新初始化本局管理器
         ReInitManagers();
@@ -541,20 +545,46 @@ public class RoundFlow : Singleton<RoundFlow>
 
     #region 事件相关
     /// <summary>
-    /// 肉条满事件回调
+    /// 注册事件
     /// </summary>
-    private async void OnMeatScaleFull()
+    private void RegisterEvents()
     {
-        var _uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
-        _uiManager.GetUI<UIGameplay>("UIGameplay").PlayTipAnimationAsync("肉条已满，即将结算！", Color.red, 10f).Forget();
-        await _uiCountDown.PlayCountdownAsync(new[] { "10", "9", "8", "7", "6", "5", "4", "3","2","1"}, 10f);
+        _eventManager.AddListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
+    }
 
-        StartSettlement();
-        if (_currentRoundContext.HasHiddenMap)
-            await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+    /// <summary>
+    /// 注销事件
+    /// </summary>
+    private void UnregisterEvents()
+    {
+        _eventManager.RemoveListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
+    }
+
+    /// <summary>
+    /// 肉条刻度完成事件回调
+    /// </summary>
+    private async void OnMeatScaleCompleted(MeatScaleCompletedEventArgs args)
+    {
+        var uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
+        int percent = args.CompletedScaleCount * 100 / args.TotalScaleCount;
+
+        if (args.CompletedScaleCount < args.TotalScaleCount)
+        {
+            uiGameplay.PlayTipAnimationAsync($"狩猎进度已完成{percent}%", Color.yellow, 6f).Forget();
+        }
         else
-            await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
-        GetRoundManager<SettlementRewardManager>().CalculateReward();
+        {
+            var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
+            uiGameplay.PlayTipAnimationAsync("肉条已满，即将结算！", Color.red, 10f).Forget();
+            await uiCountDown.PlayCountdownAsync(new[] { "10", "9", "8", "7", "6", "5", "4", "3", "2", "1" }, 10f);
+
+            StartSettlement();
+            if (_currentRoundContext != null && _currentRoundContext.HasHiddenMap)
+                await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+            else
+                await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
+            GetRoundManager<SettlementRewardManager>().CalculateReward();
+        }
     }
 
     /// <summary>
@@ -571,6 +601,14 @@ public class RoundFlow : Singleton<RoundFlow>
     private void TriggerRoundStarted(RoundStartedEventArgs args)
     {
         _eventManager.Trigger(RoundEvents.RoundStarted, args);
+    }
+
+    /// <summary>
+    /// 触发进入隐藏地图事件
+    /// </summary>
+    private void TriggerHiddenMapEntered()
+    {
+        _eventManager.Trigger(HiddenMapEvents.HiddenMapEntered);
     }
     #endregion
 }

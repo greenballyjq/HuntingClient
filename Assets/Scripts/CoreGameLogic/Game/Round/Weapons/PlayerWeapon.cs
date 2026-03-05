@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using Hunting.Events;
@@ -158,7 +158,7 @@ public class PlayerWeapon : MonoBehaviour
     }
 
     /// <summary>
-    /// 设置瞄准目标（仅Y轴旋转，瞬时对准）
+    /// 设置瞄准目标
     /// </summary>
     /// <param name="worldPosition">目标世界坐标</param>
     public void SetAimTarget(Vector3 worldPosition)
@@ -171,9 +171,27 @@ public class PlayerWeapon : MonoBehaviour
     }
 
     /// <summary>
-    /// 射击
+    /// 旋转武器
     /// </summary>
-    public void Fire()
+    /// <param name="deltaAngle">增量角度（度）</param>
+    public void RotateWeapon(float deltaAngle)
+    {
+        Vector3 forwardXZ = new Vector3(transform.forward.x, 0f, transform.forward.z);
+        if (forwardXZ.sqrMagnitude < 0.0001f)
+            return;
+
+        float currentAngle = Vector3.SignedAngle(Vector3.forward, forwardXZ.normalized, Vector3.up);
+        float newAngle = Mathf.Clamp(currentAngle + deltaAngle, -70f, 70f);
+
+        Vector3 direction = Quaternion.Euler(0f, newAngle, 0f) * Vector3.forward;
+        transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+    }
+
+
+    /// <summary>
+    /// 尝试射击
+    /// </summary>
+    public void TryFire()
     {
         // 检查射击间隔
         if (Time.time - _lastFireTime < _fireInterval)

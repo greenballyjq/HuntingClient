@@ -1,10 +1,10 @@
-﻿using Hunting.Game.Animal;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
 /// 指哪打哪控制处理器
 /// </summary>
-public class AimAssistHandler : IPlayerControlHandler
+public class AimAssistHandler : BasePlayerControlHandler
 {
     /// <summary>
     /// 主武器
@@ -46,13 +46,13 @@ public class AimAssistHandler : IPlayerControlHandler
     /// </summary>
     private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
 
-    public void OnControlStart()
+    protected override void OnControlStart()
     {
         _inputManager.SwitchToSelectTargetMode();
         RegisterEvents();
     }
 
-    public void OnControlUpdate(float deltaTime)
+    protected override void OnControlUpdate(float deltaTime)
     {
         // TODO: 待以后实现LoadingManager后移除
         if (_weapon == null)
@@ -88,10 +88,10 @@ public class AimAssistHandler : IPlayerControlHandler
         _weapon.SetAimTarget(targetPosition);
 
         // 持续射击
-        _weapon.Fire();
+        _weapon.TryFire();
     }
 
-    public void OnControlEnd()
+    protected override void OnControlEnd()
     {
         UnregisterEvents();
         if (_currentTarget != null)

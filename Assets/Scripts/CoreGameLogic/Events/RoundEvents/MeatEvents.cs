@@ -52,5 +52,10 @@ public sealed class MeatScaleCompletedEventArgs : EventArgs
     /// 已完成的刻度数
     /// </summary>
     public int CompletedScaleCount { get; set; }
+
+    /// <summary>
+    /// 总刻度数
+    /// </summary>
+    public int TotalScaleCount { get; set; }
 }
 

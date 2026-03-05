@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-
 /// <summary>
 /// 玩家控制管理器
 /// </summary>
@@ -9,17 +8,20 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// <summary>
     /// 当前玩家控制处理器
     /// </summary>
-    private IPlayerControlHandler _currentPlayerControlHandler;
+    private BasePlayerControlHandler _currentPlayerControlHandler;
 
     public void Init(RoundContext context)
     {
-        SwitchToDefaultShooting();
         Debug.Log("[PlayerControlManager] 初始化完成");
     }
 
     public void DoUpdate(float deltaTime)
     {
-        _currentPlayerControlHandler?.OnControlUpdate(deltaTime);
+        if (_currentPlayerControlHandler != null && 
+            _currentPlayerControlHandler.ControlPhase == PlayerControlHandlerPhase.Running)
+        {
+            _currentPlayerControlHandler.UpdateControl(deltaTime);
+        }
     }
 
     public void Dispose()
@@ -35,7 +37,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
 
     public void ReInit(RoundContext context)
     {
-        SwitchToDefaultShooting();
+        SwitchToJoystick();
     }
 
     #region 公共方法
@@ -44,7 +46,16 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// </summary>
     public void SwitchToDefaultShooting()
     {
-        IPlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.DefaultShooting);
+        BasePlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.DefaultShooting);
+        SwitchHandler(handler);
+    }
+
+    /// <summary>
+    /// 切换到摇杆控制模式
+    /// </summary>
+    public void SwitchToJoystick()
+    {
+        BasePlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.Joystick);
         SwitchHandler(handler);
     }
 
@@ -55,9 +66,8 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// <param name="maxLockDistance">最大锁定距离</param>
     public void SwitchToAimAssist(float minLockDistance, float maxLockDistance)
     {
-        IPlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.AimAssist);
+        BasePlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.AimAssist);
             
-        // 设置指哪打哪控制器的参数
         if (handler is AimAssistHandler aimAssistHandler)
         {
             aimAssistHandler.SetMinLockDistance(minLockDistance);
@@ -72,25 +82,17 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// <summary>
     /// 切换控制处理器
     /// </summary>
-    /// <param name="newHandler">新的控制处理器</param>
-    private void SwitchHandler(IPlayerControlHandler newHandler)
+    private void SwitchHandler(BasePlayerControlHandler newHandler)
     {
-        // 结束当前处理器
         EndCurrentControl();
 
-        // 切换到新处理器
         _currentPlayerControlHandler = newHandler;
-
-        // 启动新处理器
-        _currentPlayerControlHandler.OnControlStart();
+        _currentPlayerControlHandler.StartControl();
     }
 
-    /// <summary>
-    /// 结束当前控制
-    /// </summary>
     private void EndCurrentControl()
     {
-        _currentPlayerControlHandler?.OnControlEnd();
+        _currentPlayerControlHandler?.EndControl();
         _currentPlayerControlHandler = null;
     }
     #endregion

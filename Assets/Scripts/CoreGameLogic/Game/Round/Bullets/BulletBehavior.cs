@@ -6,7 +6,6 @@ using GameFramework.Utility;
 using Hunting.Events;
 using Hunting.Game.Animal;
 using System.Collections.Generic;
-using UnityEditor.Playables;
 using UnityEngine;
 
 /// <summary>

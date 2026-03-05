@@ -9,7 +9,8 @@ public class CameraManager : IAppManager
     /// <summary>
     /// 主摄像机
     /// </summary>
-    public Camera MainCamera => Camera.main;
+    private Camera _mainCamera => Camera.main;
+    public Camera MainCamera => _mainCamera;
 
     /// <summary>
     /// 粒子摄像机
@@ -20,12 +21,15 @@ public class CameraManager : IAppManager
     /// <summary>
     /// UI摄像机
     /// </summary>
-    public Camera UICamera => GameServiceLocator.UIManager.UICamera;
+    public Camera _uiCamera;
+    public Camera UICamera => _uiCamera;
 
     public void Init()
     {
         _particleCamera = GameObject.FindGameObjectWithTag("Particle Camera").GetComponent<Camera>();
-        Object.DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Particle Camera"));
+        Object.DontDestroyOnLoad(_particleCamera.gameObject);
+
+        _uiCamera = GameServiceLocator.UIManager.UICamera;
 
         Debug.Log("[CameraManager] 初始化完成");
     }
