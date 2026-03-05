@@ -40,11 +40,6 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
     public void Init(){}
 
     public void CleanUp(){}
@@ -57,8 +52,8 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     public async UniTask PlayRollDiceAsync()
     {
         // 随机骰子点数
-        _diceValue = Random.Range(1, 7);
-        // _diceValue = 1;
+        //_diceValue = Random.Range(1, 7);
+         _diceValue = 6;
         
         int fromSlotIndex = _currentSlotIndex;
 

@@ -10,11 +10,6 @@ using UnityEngine;
 public class SkillJinZhuangYuanHandler : BaseSkillHandler
 {
     /// <summary>
-    /// 特效预制体列表
-    /// </summary>
-    private List<GameObject> _effectPrefabs = new List<GameObject>();
-
-    /// <summary>
     /// 生成数量
     /// </summary>
     private int _spawnCount;
@@ -35,58 +30,42 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
     private int _spawnedCount;
 
     /// <summary>
-    /// 肉度值
+    /// 可游玩区域
     /// </summary>
-    private float _meatAmount;
+    private AreaShape _playableArea;
 
     /// <summary>
-    /// 资源管理器
+    /// 技能参数
     /// </summary>
-    private ResourceManager _resourceManager;
+    private SkillJinZhuangYuan  _skillParam;
 
     /// <summary>
-    /// 特效管理器
+    /// 掉落肉特效配置
     /// </summary>
+    private DropMeatSo _dropMeatSo;
+
     private EffectManager _effectManager;
 
-    /// <summary>
-    /// 肉条管理器
-    /// </summary>
     private MeatProgressManager _meatProgressManager;
-
-    /// <summary>
-    /// 游戏游玩场景元素管理器
-    /// </summary>
-    private GameplaySceneItemManager _gameplaySceneItemManager;
-
     public SkillJinZhuangYuanHandler()
     {
-        _resourceManager = GameServiceLocator.ResourceManager;
         _effectManager = GameServiceLocator.EffectManager;
         _meatProgressManager = GameServiceLocator.GetRoundManager<MeatProgressManager>();
-        _gameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+
+        _playableArea = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>().PlayableArea;
+
+        _dropMeatSo = _configManager.DropMeatSo;
     }
 
     protected override async UniTask OnSkillStart(SkillContext context)
     {
-        var skillParam = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
-
         _spawnTimer = 0f;
         _spawnedCount = 0;
 
-        // 缓存配置
-        _meatAmount = skillParam.MeatAmount;
-
-        // 缓存特效预制体
-        _effectPrefabs.Clear();
-        foreach (var effectPath in skillParam.EffectPrefabResourcePaths)
-        {
-            var prefab = await _resourceManager.LoadAssetAsync<GameObject>(effectPath);
-            _effectPrefabs.Add(prefab);
-        }
+        _skillParam = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
 
         // 随机生成数量
-        _spawnCount = skillParam.SpawnCount[Random.Range(0, skillParam.SpawnCount.Length)];
+        _spawnCount = _skillParam.SpawnCount[Random.Range(0, _skillParam.SpawnCount.Length)];
 
         // 根据技能持续时间计算生成间隔
         _spawnInterval = context.SkillData.Duration / _spawnCount;
@@ -105,32 +84,17 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
         if (_spawnTimer >= _spawnInterval)
         {
             _spawnTimer = 0f;
-            SpawnEffect();
+
+            // 增加肉度值并生成特效
+            _meatProgressManager.AddMeatValue(_skillParam.MeatAmount);
+            _effectManager.PlayOneShot(_dropMeatSo.GetRandomDropMeatByIds(_skillParam.DropMeatEffectID), _playableArea.GetRandomPoint());
+            
             _spawnedCount++;
         }
     }
 
     protected override void OnSkillEnd()
     {
-        _effectPrefabs.Clear();
+
     }
-
-    #region 私有方法
-    /// <summary>
-    /// 生成特效并增加肉度值
-    /// </summary>
-    private void SpawnEffect()
-    {
-        // 游玩区域随机位置
-        var playableArea = _gameplaySceneItemManager.PlayableArea;
-        Vector3 spawnPos = playableArea.GetRandomPoint();
-
-        // 随机播放特效
-        var randomEffectPrefab = _effectPrefabs[Random.Range(0, _effectPrefabs.Count)];
-        _effectManager.PlayOneShot(randomEffectPrefab, spawnPos, Quaternion.identity);
-
-        // 增加肉度值
-        _meatProgressManager.AddMeatValue(_meatAmount);
-    }
-    #endregion
 }

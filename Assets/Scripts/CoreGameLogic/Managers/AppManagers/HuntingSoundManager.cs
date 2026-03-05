@@ -121,11 +121,7 @@ namespace CoreGameLogic.Managers.AppManagers
         /// </summary>
         private void OnRoundStarted(RoundStartedEventArgs args)
         {
-            var roundContext = args.RoundContext;
-            var roleType = roundContext.RoleData.RoleType;
-            var hasLinkage = roundContext.HasLinkage;
 
-            PlayRoleOpening(roleType, hasLinkage);
         }
 
         /// <summary>
@@ -135,6 +131,10 @@ namespace CoreGameLogic.Managers.AppManagers
         {
             var roundContext = args.RoundContext;
             var mapType = roundContext.MapData.MapType;
+            var roleType = roundContext.RoleData.RoleType;
+            var hasLinkage = roundContext.HasLinkage;
+
+            PlayRoleOpening(roleType, hasLinkage);
 
             PlayMapEnvSound(mapType);
         }

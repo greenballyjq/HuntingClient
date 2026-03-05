@@ -2,9 +2,11 @@
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Pool;
 using GameFramework.Manager;
+using GameFramework.Utility;
 using Hunting.Events;
 using Hunting.Game.Animal;
 using System.Collections.Generic;
+using UnityEditor.Playables;
 using UnityEngine;
 
 /// <summary>
@@ -99,6 +101,17 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
         UpdateMovement();
         UpdateLifetime();
         CheckCollision();
+    }
+
+    private void OnBecameInvisible()
+    {
+        // 当子弹离开摄像机视野时销毁
+        TriggerBulletDestroyed(new BulletDestroyedEventArgs
+        {
+            BulletData = _bulletData,
+            Bullet = this
+        });
+        Log.Info("[BulletBehavior] 子弹碰到墙墙坏掉了", this);
     }
 
     #region 私有方法
