@@ -343,7 +343,7 @@ namespace CoreGameLogic.Managers.AppManagers
                     if (hasLinkage)
                     {
                         var callback = PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_ZiWeiUniqueMap_Before);
-                        callback.AddCallback(async () =>
+                        callback.AddCallback(async player =>
                         {
                             await UniTask.Delay(500);
                             PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_ZiWeiUniqueMap_After);
@@ -365,12 +365,14 @@ namespace CoreGameLogic.Managers.AppManagers
                         : HuntingAudioRefSo.HuntingGameAudioType.Skill_JinZhuangYuan);
                     break;
                 case ERoleType.YaKeDong:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_YaKeDong);
                     if (hasLinkage)
                     {
                         PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_YaKeDong_UniqueMap);
                     }
-
+                    else
+                    {
+                        PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_YaKeDong, AudioChannel.Voice);
+                    }
                     break;
                 case ERoleType.Bule:
                 case ERoleType.Red:

@@ -167,7 +167,7 @@ public class UIPrepare : UIBase
         else
         {
             UniTaskCompletionSource audioCompletionSource = new UniTaskCompletionSource();
-            _soundManager.PlayIPOpening(roleData.RoleType).AddCallback(() =>
+            _soundManager.PlayIPOpening(roleData.RoleType).AddCallback(player =>
             {
                 audioCompletionSource.TrySetResult();
             });
