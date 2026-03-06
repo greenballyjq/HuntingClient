@@ -48,17 +48,23 @@ public class PropBombardmentHandler : IPropHandler
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager;
 
     /// <summary>
     /// 特效管理器
     /// </summary>
-    private EffectManager _effectManager => GameServiceLocator.EffectManager;
+    private EffectManager _effectManager;
 
     /// <summary>
     /// 玩家管理器
     /// </summary>
     private GameplaySceneItemManager _playerManager => GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+
+    public PropBombardmentHandler()
+    {
+        _configManager = GameServiceLocator.ConfigManager;
+        _effectManager = GameServiceLocator.EffectManager;
+    }
 
     /// <summary>
     /// 道具效果开始
@@ -78,7 +84,7 @@ public class PropBombardmentHandler : IPropHandler
         _bombardmentPos = CalculateBombardmentCenter();
 
         // 播放特效
-        _effectManager.PlayOneShotAsync(parameter.EffectPrefabPath, _bombardmentPos, Quaternion.identity).Forget();
+        _effectManager.PlayOneShotAsync(parameter.EffectPrefabPath, _bombardmentPos).Forget();
 
         _damageTimer = 0f;
     }

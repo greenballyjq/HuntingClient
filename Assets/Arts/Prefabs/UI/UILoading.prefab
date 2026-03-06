@@ -135,10 +135,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fadeConfig:
-    FadeInDuration: 0.5
-    FadeOutDuration: 0.5
-    TotalDuration: 3
-    UseUnscaledTime: 1
+    FadeInDuration: 1
+    FadeOutDuration: 2
+    TotalDuration: 6
+    UseUnscaledTime: 0
 --- !u!225 &1478564389371465048
 CanvasGroup:
   m_ObjectHideFlags: 0

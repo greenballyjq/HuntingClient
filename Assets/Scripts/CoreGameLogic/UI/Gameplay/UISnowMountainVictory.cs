@@ -102,8 +102,8 @@ public class UISnowMountainVictory : UIBase
         Vector3 endPosition = PointConverter.ScreenPointToUiPoint(_rectTransform, new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), _cameraManager.UICamera);
 
         GameObject effectObj = _effectManager.PlayLoop(_lightEffectPrefab);
+        effectObj.transform.SetParent(_rectTransform,true);
         effectObj.transform.position = startPosition;
-
         Vector3 targetScale = effectObj.transform.localScale * ScaleMultiplier;
 
         Sequence sequence = DOTween.Sequence()

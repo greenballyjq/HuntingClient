@@ -1,15 +1,16 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using GameFramework.Core;
 using GameFramework.Manager;
 using Hunting.Events;
 using Hunting.Game.Animal;
+using CoreGameLogic.Managers.AppManagers;
+using GameFramework.Core.Audio;
 
 /// <summary>
 /// 单局上下文
@@ -164,30 +165,20 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private readonly Dictionary<Type, IRoundManager> _roundManagers = new Dictionary<Type, IRoundManager>();
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
+    private UIManager _uiManager;
+    private GameObjectPoolManager _gameObjectPoolManager;
+    private EffectManager _effectManager;
+    private HuntingSoundManager _soundManager;
 
-    /// <summary>
-    /// UI管理器
-    /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
-
-    /// <summary>
-    /// 对象池管理器
-    /// </summary>
-    private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
-
-    /// <summary>
-    /// 特效管理器
-    /// </summary>
-    private EffectManager _effectManager => GameServiceLocator.EffectManager;
-
-    /// <summary>
-    /// 音效管理器
-    /// </summary>
-    private SoundManager _soundManager => GameServiceLocator.SoundManager;
+    public RoundFlow()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+        _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+        _effectManager = GameServiceLocator.EffectManager;
+        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+    }
 
     #region 公共方法
     /// <summary>
@@ -211,7 +202,6 @@ public class RoundFlow : Singleton<RoundFlow>
 
         _roundElapsedTime = 0f;
         _currentRoundContext = context;
-        _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
 
         // 订阅事件
         RegisterEvents();
@@ -327,50 +317,53 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _currentState = RoundFlowState.Transitioning;
 
-        // 伪结算面板动画
+        _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
+        _currentRoundContext.HiddenRoundEndTrigger.Init();
+
+        // 播放伪结算面板动画
         var uiFakeSettlement = _uiManager.GetUI<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake");
-        uiFakeSettlement.PlayWindowShakeAsync().Forget();
-        await uiFakeSettlement.PlayButtonGlowAsync();
+        await UniTask.WhenAll(
+            uiFakeSettlement.PlayWindowShakeAsync(),
+            uiFakeSettlement.PlayButtonGlowAsync()
+        );
 
+        // 播放伪结算面板爆炸特效与音效
+        await _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Effects/Settlement_Explosion");
+        _soundManager.PlaySettlementPanelExplosion();
+
+        await UniTask.Delay(200); // 等待200毫秒
         _uiManager.CloseUI("UIPopupSettlementSnowFake");
-
-        // 伪结算面板爆米花动画  
-        _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Effects/Settlement_Explosion").Forget();
+        
 
         #region 地图过渡
-        // 打开加载界面
+        // 播放淡入动画与音效
+        _soundManager.PlayLightTransition();
         var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
-
-        // 播放淡入动画
         await uiLoading.PlayFadeInAsync();
+        
+        // 清理旧场景
+        CleanupManagers(); // 清理单局管理器
+        ClearRound(); // 清理单局
 
-        // 清理单局管理器
-        CleanupManagers();
-
-        // 清理单局
-        ClearRound();
-
-        // 下雪动画
-        _snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Effects/FX_Snow_For_SnowMountainScene_UICamera");
-
-        // 加载场景
+        // 加载新场景
         await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
 
-        // 触发进入隐藏地图事件
-        TriggerHiddenMapEntered();
-
-        // 重新初始化本局管理器
-        ReInitManagers();
-
-        // 更新环境光
-        DynamicGI.UpdateEnvironment();
-
-        // 切换雪山主题
-        var uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
-        uiGameplay.SwitchSnow();
+        // 初始化新场景
+        ReInitManagers(); // 重新初始化单局管理器
+        DynamicGI.UpdateEnvironment(); // 更新环境光
 
         // 禁止游玩界面操作
+        var uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
         uiGameplay.SetClickable(false);
+
+        // UI切换雪山主题
+        uiGameplay.SwitchSnow();
+
+        // 播放下雪特效
+        _snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Effects/FX_Snow_For_SnowMountainScene_UICamera");
+
+        // 播放雪山环境音效
+        _soundManager.PlaySnowMountainMapEnv();
 
         // 播放淡出动画
         await uiLoading.PlayFadeOutAsync();
@@ -378,35 +371,37 @@ public class RoundFlow : Singleton<RoundFlow>
         // 关闭加载界面
         _uiManager.CloseUI("UILoading");
         #endregion
+        // 触发进入隐藏地图事件
+        TriggerHiddenMapEntered();
 
-        // 播放警报声
-        //_soundManager.PlaySound2DAsync("Assets/Arts/Audio/SFX/sfx_alert").Forget();
-
-        // 播放闪烁动画
+        // 播放警报动画与音效
         var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
-        await uiAlertRed.PlayFlashAsync();
+        await UniTask.WhenAll(
+            uiAlertRed.PlayFlashAsync(),
+            _soundManager.PlayBossAlert().ToUniTask()
+        );
 
-        // Boss登场动画
-        GetRoundManager<SpawnerManager>().GetSpawner<ManualSpawner>("Boss").Spawn();
+        // 派发Boss
+        var bossAnimalBehavior = GetRoundManager<SpawnerManager>().GetSpawner<ManualSpawner>("Boss").Spawn() as BossAnimalBehaviour;
 
-        // 播放Boss血量增长动画
-        await uiGameplay.PlayBossHealthIncreaseAnimationAsync();
+        // 播放Boss血量增长动画和音效
+        await UniTask.WhenAll(
+            uiGameplay.PlayBossHealthIncreaseAnimationAsync(),
+            _soundManager.PlayBossHPGrowth().ToUniTask()
+        );
 
-        // 播放Boss笑声
-        //await _soundManager.PlaySound2DAsync("Assets/Arts/Audio/SFX/sfx_laugh");
-        await UniTask.Delay(3000);
+        // 播放Boss咆哮音效
+        await _soundManager.PlayBossRoar(bossAnimalBehavior.SpecieData.BossType).ToUniTask();
 
         // 播放倒计时动画
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
         await uiCountDown.PlayCountdownAsync(new[] { "5", "4", "3", "2", "1", "准备..","开始.","战斗!!" }, 8f);
 
+        // Boss进入战斗状态
+        bossAnimalBehavior.EnterCombat();
+
         // 恢复游玩界面操作
         uiGameplay.SetClickable(true);
-
-        // Boss进入战斗状态
-        GetRoundManager<AnimalManager>().GetBossAnimalBehaviour().EnterCombat();
-
-        _currentRoundContext.HiddenRoundEndTrigger.Init();
 
         _currentState = RoundFlowState.Playing;
     }

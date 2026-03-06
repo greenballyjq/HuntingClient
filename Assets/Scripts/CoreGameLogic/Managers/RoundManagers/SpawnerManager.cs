@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
@@ -111,11 +111,11 @@ namespace Hunting.Game.Animal
         /// </summary>
         /// <param name="spawner">派发器</param>
         /// <param name="spawnInfo">派发信息</param>
-        public void HandleSpawnRequest(BaseSpawner spawner, SpawnInfo spawnInfo)
+        /// <returns>生成的动物实例</returns>
+        public BaseAnimalBehaviour HandleSpawnRequest(BaseSpawner spawner, SpawnInfo spawnInfo)
         {
             Specie specie = GetSpecieByStrategy(spawner.Tag);
-
-            SpawnAnimal(specie, spawnInfo);
+            return SpawnAnimal(specie, spawnInfo);
         }
 
         /// <summary>
@@ -233,7 +233,8 @@ namespace Hunting.Game.Animal
         /// </summary>
         /// <param name="specie">物种数据</param>
         /// <param name="spawnInfo">派发信息</param>
-        private void SpawnAnimal(Specie specie, SpawnInfo spawnInfo)
+        /// <returns>生成的动物实例</returns>
+        private BaseAnimalBehaviour SpawnAnimal(Specie specie, SpawnInfo spawnInfo)
         {
             var go = _gameObjectPoolManager.Spawn(_cachedPrefabs[specie.ID]);
             go.transform.position = spawnInfo.Position;
@@ -246,6 +247,7 @@ namespace Hunting.Game.Animal
             {
                 Animal = animal,
             });
+            return animal;
         }
 
         /// <summary>

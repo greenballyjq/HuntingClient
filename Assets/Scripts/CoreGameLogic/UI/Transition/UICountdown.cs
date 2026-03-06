@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using TMPro;
@@ -21,6 +21,10 @@ public class UICountdown : UIBase
     /// <param name="totalDuration">总时长（秒）</param>
     public async UniTask PlayCountdownAsync(string[] textSequence, float totalDuration)
     {
+#if UNITY_EDITOR
+        totalDuration = 1;
+#endif
+
         int count = textSequence.Length;
         float segmentDuration = totalDuration / count;
 

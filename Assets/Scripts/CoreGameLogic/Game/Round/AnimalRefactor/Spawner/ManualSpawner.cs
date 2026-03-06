@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Hunting.Game.Animal
 {
@@ -15,9 +15,10 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 派发
         /// </summary>
-        public void Spawn()
+        /// <returns>生成的动物实例</returns>
+        public BaseAnimalBehaviour Spawn()
         {
-            _spawnerManager.HandleSpawnRequest(this, CalculateSpawnInfo());
+            return _spawnerManager.HandleSpawnRequest(this, CalculateSpawnInfo());
         }
 
     }

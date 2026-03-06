@@ -42,6 +42,6 @@ public class Skill3KPHandler : BaseSkillHandler
         _weaponManager.UnregisterFireRateModifier(ModifierSourceId);
         _weaponManager.UnregisterDamageModifier(ModifierSourceId);
 
-        _weaponManager.PlayerWeapon.WeaponVisual.SetSkillEffect(false);
+        _weaponManager.PlayerWeapon?.WeaponVisual?.SetSkillEffect(false);
     }
 }

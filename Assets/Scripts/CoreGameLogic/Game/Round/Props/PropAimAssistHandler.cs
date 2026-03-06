@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Prop;
+﻿using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using UnityEngine;
@@ -36,27 +36,35 @@ public class PropAimAssistHandler : IPropHandler
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// UI管理器
     /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
+    private UIManager _uiManager;
 
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager;
 
     /// <summary>
     /// 特效管理器
     /// </summary>
-    private EffectManager _effectManager => GameServiceLocator.EffectManager;
+    private EffectManager _effectManager;
 
     /// <summary>
     /// 玩家控制管理器
     /// </summary>
     private PlayerControlManager _playerControlManager => GameServiceLocator.GetRoundManager<PlayerControlManager>();
+
+    public PropAimAssistHandler()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _effectManager = GameServiceLocator.EffectManager;
+    }
 
     /// <summary>
     /// 道具效果开始
@@ -74,7 +82,7 @@ public class PropAimAssistHandler : IPropHandler
         string effectPath = parameter.EffectPrefabPath;
 
         // 播放循环特效
-        _effectInstance = await _effectManager.PlayLoopAsync(effectPath, Vector3.zero, Quaternion.identity);
+        _effectInstance = await _effectManager.PlayLoopAsync(effectPath);
 
         // 获取特效控制器组件
         _effectController = _effectInstance.GetComponent<AimAssistEffectController>();

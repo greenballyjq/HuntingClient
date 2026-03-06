@@ -220,3 +220,27 @@ MonoBehaviour:
   - type: 68
     clip: {fileID: 8300000, guid: fa0a30fc95a912848af645c492cebb6c, type: 3}
     volume: 0.5
+  - type: 69
+    clip: {fileID: 8300000, guid: 2972a487c6fd8cf49a29cbcbb0270119, type: 3}
+    volume: 0.5
+  - type: 70
+    clip: {fileID: 8300000, guid: db1913c6eba07a44c929bbb05ad2ad24, type: 3}
+    volume: 0.5
+  - type: 71
+    clip: {fileID: 8300000, guid: c44632269ac4a7b4d9b898e065382100, type: 3}
+    volume: 0.5
+  - type: 72
+    clip: {fileID: 8300000, guid: ed93958296ef75840addc703f0d52111, type: 3}
+    volume: 0.5
+  - type: 73
+    clip: {fileID: 8300000, guid: 4790971263d2e0b4680dd00a0f20207b, type: 3}
+    volume: 0.5
+  - type: 74
+    clip: {fileID: 8300000, guid: f2f928e106988ca4d849d39e7255fc95, type: 3}
+    volume: 0.5
+  - type: 75
+    clip: {fileID: 8300000, guid: 5aba4e3414422eb49b8818dff2ae8681, type: 3}
+    volume: 0.5
+  - type: 76
+    clip: {fileID: 8300000, guid: 88a97fd50e1d67a489d09819d6e85c3a, type: 3}
+    volume: 0.5

@@ -248,12 +248,46 @@ public class HuntingAudioRefSo : ScriptableObject
 
         #region 操作音
         
-        /// <summary>动态人物派发</summary>
+        /// <summary>动态任务派发</summary>
         Quest_Start,
         
-        /// <summary>动态人物完成</summary>
-        Quest_Complete
+        /// <summary>动态任务完成</summary>
+        Quest_Complete,
 
+        #endregion
+
+        #region Boss音效
+        /// <summary>Boss登场警报</summary>
+        Boss_Alert,
+
+        /// <summary>北极熊Boss咆哮</summary>
+        Boss_Roar_BeiJiXiong,
+
+        /// <summary>猛犸象Boss咆哮</summary>
+        Boss_Roar_MengMaXiang,
+
+        /// <summary>雪猩猩Boss咆哮</summary>
+        Boss_Roar_XueXingXing,
+
+        /// <summary>三角龙Boss咆哮</summary>
+        Boss_Roar_SanJiaoLong,
+        #endregion
+
+        #region 特效音效
+        /// <summary>
+        /// 结算面板爆炸音效
+        /// </summary>
+        Effect_Explosion_SettlementPanel,
+
+        /// <summary>
+        /// 光效转场音效
+        /// </summary>
+        Effect_Transition_Light,
+
+        /// <summary>
+        /// Boss血量增长音效
+        /// </summary>
+        Effect_Growth_BossHP
         #endregion
     }
 

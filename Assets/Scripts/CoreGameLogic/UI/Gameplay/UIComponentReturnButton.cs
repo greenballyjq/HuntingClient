@@ -45,7 +45,7 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
 
     private async void OnReturnButtonClicked()
     {
-        //await GameServiceLocator.UIManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-        await HuntingAppFlow.Instance.EnterPrepareAsync();
+        await GameServiceLocator.UIManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+        //await HuntingAppFlow.Instance.EnterPrepareAsync();
     }
 }

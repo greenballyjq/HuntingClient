@@ -16,17 +16,17 @@ public class UILoading : UIBase
         /// <summary>
         /// 淡入动画时长（秒）
         /// </summary>
-        public float FadeInDuration = 0.3f;
+        public float FadeInDuration = 1f;
 
         /// <summary>
         /// 淡出动画时长（秒）
         /// </summary>
-        public float FadeOutDuration = 0.3f;
+        public float FadeOutDuration = 1f;
 
         /// <summary>
         /// 总持续时长（秒）
         /// </summary>
-        public float TotalDuration = 3f;
+        public float TotalDuration = 5f;
 
         /// <summary>
         /// 是否不受TimeScale影响
@@ -58,29 +58,17 @@ public class UILoading : UIBase
     {
         float elapsed = 0f;
         float duration = _fadeConfig.FadeInDuration;
-        float deltaTime = _fadeConfig.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+        bool useUnscaled = _fadeConfig.UseUnscaledTime;
 
         while (elapsed < duration)
         {
-            elapsed += deltaTime;
+            float dt = useUnscaled ? Time.unscaledDeltaTime : Time.deltaTime;
+            elapsed += dt;
             _canvasGroup.alpha = Mathf.Lerp(0f, 1f, elapsed / duration);
             await UniTask.Yield();
         }
 
         _canvasGroup.alpha = 1f;
-
-        float waitTime = _fadeConfig.TotalDuration - _fadeConfig.FadeInDuration - _fadeConfig.FadeOutDuration;
-        if (waitTime > 0f)
-        {
-            float waitElapsed = 0f;
-            float waitDeltaTime = _fadeConfig.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
-            
-            while (waitElapsed < waitTime)
-            {
-                waitElapsed += waitDeltaTime;
-                await UniTask.Yield();
-            }
-        }
     }
 
     /// <summary>
@@ -88,13 +76,27 @@ public class UILoading : UIBase
     /// </summary>
     public async UniTask PlayFadeOutAsync()
     {
+        bool useUnscaled = _fadeConfig.UseUnscaledTime;
+
+        float waitTime = _fadeConfig.TotalDuration - _fadeConfig.FadeInDuration - _fadeConfig.FadeOutDuration;
+        if (waitTime > 0f)
+        {
+            float waitElapsed = 0f;
+            while (waitElapsed < waitTime)
+            {
+                float dt = useUnscaled ? Time.unscaledDeltaTime : Time.deltaTime;
+                waitElapsed += dt;
+                await UniTask.Yield();
+            }
+        }
+
         float elapsed = 0f;
         float duration = _fadeConfig.FadeOutDuration;
-        float deltaTime = _fadeConfig.UseUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
 
         while (elapsed < duration)
         {
-            elapsed += deltaTime;
+            float dt = useUnscaled ? Time.unscaledDeltaTime : Time.deltaTime;
+            elapsed += dt;
             _canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / duration);
             await UniTask.Yield();
         }

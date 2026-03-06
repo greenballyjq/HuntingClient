@@ -54,7 +54,6 @@ namespace CoreGameLogic.Managers.AppManagers
         #endregion
         
         #region 公共方法
-
         /// <summary>
         /// 播放指定2D音效（通过音频文件）
         /// </summary>
@@ -74,6 +73,75 @@ namespace CoreGameLogic.Managers.AppManagers
             return _soundManager.PlaySound2D(audioClip, channel, loop, volume);
         }
 
+        /// <summary>
+        /// 播放结算面板爆炸音效
+        /// </summary>
+        public AudioCallback PlaySettlementPanelExplosion()
+        {
+            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Effect_Explosion_SettlementPanel);
+        }
+
+        /// <summary>
+        /// 播放光效转场音效
+        /// </summary>
+        public AudioCallback PlayLightTransition()
+        {
+            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Effect_Transition_Light);
+        }
+
+        /// <summary>
+        /// 播放Boss登场警报音效
+        /// </summary>
+        public AudioCallback PlayBossAlert()
+        {
+            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Alert);
+        }
+
+        /// <summary>
+        /// 播放Boss怒吼音效
+        /// </summary>
+        /// <param name="bossType"></param>
+        public AudioCallback PlayBossRoar(EBossType bossType)
+        {
+            switch (bossType)
+            {
+                case EBossType.BeiJiXiong:
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_BeiJiXiong);
+                case EBossType.MengMaXiang:
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_MengMaXiang);
+                case EBossType.XueXingXing:
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_XueXingXing);
+                case EBossType.SanJiaoLong:
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_SanJiaoLong);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 播放Boss血量增长音效
+        /// </summary>
+        /// <returns></returns>
+        public AudioCallback PlayBossHPGrowth()
+        {
+            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Effect_Growth_BossHP);
+        }
+
+        /// <summary>
+        /// 播放雪山地图环境音效
+        /// </summary>
+        public AudioCallback PlaySnowMountainMapEnv()
+        {
+            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_SnowMountain);
+        }
+
+        /// <summary>
+        /// 清理所有音效
+        /// </summary>
+        public void ClearAllSounds()
+        {
+            _soundManager.ClearAllSounds();
+        }
         #endregion
 
         #region 事件处理
@@ -165,6 +233,9 @@ namespace CoreGameLogic.Managers.AppManagers
             PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Props_TrapCatch);
         }
         
+        /// <summary>
+        /// 进入隐藏地图事件
+        /// </summary>
         private void OnHiddenMapEntered()
         {
             PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_SnowMountain);
@@ -240,7 +311,6 @@ namespace CoreGameLogic.Managers.AppManagers
                     break;
             }
         }
-
         #endregion
 
         #region 私有方法 
@@ -265,7 +335,7 @@ namespace CoreGameLogic.Managers.AppManagers
                     PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_GrassLand);
                     break;
                 case EMapType.Hidden:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_SnowMountain);
+                    //PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_SnowMountain);
                     break;
             }
         }
@@ -409,6 +479,9 @@ namespace CoreGameLogic.Managers.AppManagers
             }
         }
         
+        /// <summary>
+        /// 根据道具类型和角色类型播放道具使用音效
+        /// </summary>
         private void PlayPropVoiceSound(EPropType propType, ERoleType roleType)
         {
             switch (propType)
@@ -526,7 +599,6 @@ namespace CoreGameLogic.Managers.AppManagers
         {
             PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_Use);
         }
-        
         #endregion
     }
 }

@@ -32,17 +32,17 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// 特效管理器
     /// </summary>
-    private EffectManager _effectManager => GameServiceLocator.EffectManager;
+    private EffectManager _effectManager;
 
     /// <summary>
     /// 相机管理器
     /// </summary>
-    private CameraManager _cameraManager => GameServiceLocator.GetAppManager<CameraManager>();
+    private CameraManager _cameraManager;
 
     /// <summary>
     /// 掉落目标位置缓存字典
@@ -52,6 +52,10 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
     private void Awake()
     {
         _dropRewardRectTransform = GetComponent<RectTransform>();
+
+        _eventManager = GameServiceLocator.EventManager;
+        _effectManager = GameServiceLocator.EffectManager;
+        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
     }
 
     public void Init(UIGameplay uiGameplay)
@@ -108,9 +112,9 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
         Vector3 startPosition = PointConverter.WorldPointToUiPoint(_dropRewardRectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
 
         GameObject effectObj = _effectManager.PlayLoop(_dropRewardEffectPrefab);
+        effectObj.transform.SetParent(_dropRewardRectTransform, true);
         effectObj.transform.position = startPosition;
-        effectObj.transform.SetParent(_dropRewardRectTransform,true);
-
+       
         await effectObj.transform
             .DOMove(endPosition, 2f)
             .SetLink(effectObj)

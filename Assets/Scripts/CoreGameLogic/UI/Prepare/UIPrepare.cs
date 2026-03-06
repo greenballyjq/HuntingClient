@@ -1,8 +1,9 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
+using GameFramework.Core.Audio;
 using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -161,19 +162,9 @@ public class UIPrepare : UIBase
 
         // 播放角色语音
         if(roleData.RoleType == ERoleType.Bule || roleData.RoleType == ERoleType.Red)
-        {
             await UniTask.Delay(2000);
-        }
         else
-        {
-            UniTaskCompletionSource audioCompletionSource = new UniTaskCompletionSource();
-            _soundManager.PlayIPOpening(roleData.RoleType).AddCallback(() =>
-            {
-                audioCompletionSource.TrySetResult();
-            });
-
-            await audioCompletionSource.Task;
-        }
+            await _soundManager.PlayIPOpening(roleData.RoleType).ToUniTask();
 
         // 加载地图
         await SceneManager.LoadSceneAsync("GameplayForestScene").ToUniTask();

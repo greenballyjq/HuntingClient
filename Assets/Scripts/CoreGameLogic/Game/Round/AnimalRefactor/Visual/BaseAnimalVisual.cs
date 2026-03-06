@@ -23,6 +23,8 @@ namespace Hunting.Game.Animal
 
             _configManager = GameServiceLocator.ConfigManager;
             _dropMeatSo = _configManager.DropMeatSo;
+
+            _effectManager = GameServiceLocator.EffectManager;
         }
 
         /// <summary>
@@ -144,7 +146,7 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 特效管理器
         /// </summary>
-        private EffectManager _effectManager => GameServiceLocator.EffectManager;
+        private EffectManager _effectManager;
 
         /// <summary>
         /// 播放死亡特效
@@ -152,7 +154,7 @@ namespace Hunting.Game.Animal
         public void PlayDeathEffect()
         {
             GameObject prefab = _dropMeatSo.GetRandomDropMeatByIds(_animalBehaviour.SpecieData.DropMeatEffectID);
-            _effectManager.PlayOneShot(prefab, transform.position, Quaternion.identity);
+            _effectManager.PlayOneShot(prefab, transform.position);
         }
         #endregion
     }

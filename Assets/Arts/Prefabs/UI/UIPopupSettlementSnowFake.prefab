@@ -975,8 +975,8 @@ MonoBehaviour:
   _windowRectTransform: {fileID: 1550019426214546594}
   _shakeConfig:
     Duration: 3
-    Strength: 30
-    Frequency: 10
+    Strength: 50
+    Frequency: 15
     StrengthCurve:
       serializedVersion: 2
       m_Curve:
