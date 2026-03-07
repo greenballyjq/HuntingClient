@@ -51,12 +51,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lightEffectPrefab: {fileID: 8616329831419384131, guid: cc92dd01d2f62334e9966f5ceacc3b88, type: 3}
   _lightEffectConfig:
-    Duration: 5
-    UseUnscaledTime: 1
+    Duration: 6
+    UseUnscaledTime: 0
+    ScaleEaseCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.7142678
+        value: 0.1855905
+        inSlope: 0.93005574
+        outSlope: 0.93005574
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.852165
+        value: 0.4012246
+        inSlope: 3.2661638
+        outSlope: 3.2661638
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.2289885
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   _imageFamilyPortrait: {fileID: 5909980761524976397}
   _familyPortraitConfig:
-    Duration: 5
-    UseUnscaledTime: 1
+    Duration: 4
+    UseUnscaledTime: 0
 --- !u!1 &829707567004303993
 GameObject:
   m_ObjectHideFlags: 0

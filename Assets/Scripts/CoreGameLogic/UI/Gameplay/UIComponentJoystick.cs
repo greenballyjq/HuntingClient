@@ -40,14 +40,34 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     private Canvas _canvas;
 
     /// <summary>
-    /// UI摄像机（Overlay模式为null）
+    /// UI摄像机
     /// </summary>
     private Camera _uiCamera;
 
     /// <summary>
-    /// 死区阈值
+    /// 左右可拖动范围占总宽度的比例
     /// </summary>
-    private const float DEAD_ZONE_THRESHOLD = 0.125f;
+    private const float DRAG_RANGE_RATIO = 0.33f;
+
+    /// <summary>
+    /// 死区占可拖动范围的比例
+    /// </summary>
+    private const float DEAD_ZONE_RATIO = 0.25f;
+
+    /// <summary>
+    /// 死区摇杆颜色（淡红色）
+    /// </summary>
+    private static readonly Color DEAD_ZONE_COLOR = new Color(1f, 0.75f, 0.75f, 1f);
+
+    /// <summary>
+    /// 可拖动范围摇杆颜色（淡绿色）
+    /// </summary>
+    private static readonly Color DRAG_RANGE_COLOR = new Color(0.75f, 1f, 0.75f, 1f);
+
+    /// <summary>
+    /// 默认摇杆颜色
+    /// </summary>
+    private static readonly Color DEFAULT_COLOR = Color.white;
 
     /// <summary>
     /// 是否处于按下/拖拽状态
@@ -85,7 +105,6 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
         _horizontalInput = 0f;
         ResetKnobPosition();
         Joystick = null;
-                
         Debug.Log("[UIComponentJoystick] 已清理");
     }
 
@@ -116,15 +135,19 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
 
         var rect = _rectBase.rect;
         float halfWidth = rect.width * 0.5f;
-        float thresholdX = halfWidth * DEAD_ZONE_THRESHOLD;
+        float dragRange = halfWidth * DRAG_RANGE_RATIO;
+        float deadZoneSize = dragRange * DEAD_ZONE_RATIO;
 
-        float knobX = Mathf.Clamp(localPoint.x, rect.xMin, rect.xMax);
-        if (localPoint.x > thresholdX)
+        float knobX = Mathf.Clamp(localPoint.x, -dragRange, dragRange);
+        bool inDeadZone = localPoint.x >= -deadZoneSize && localPoint.x <= deadZoneSize;
+        if (localPoint.x > deadZoneSize)
             _horizontalInput = 1f;
-        else if (localPoint.x < -thresholdX)
+        else if (localPoint.x < -deadZoneSize)
             _horizontalInput = -1f;
         else
             _horizontalInput = 0f;
+
+        _imageKnob.color = inDeadZone ? DEAD_ZONE_COLOR : DRAG_RANGE_COLOR;
 
         var anchoredPos = _rectKnob.anchoredPosition;
         anchoredPos.x = knobX;
@@ -137,6 +160,7 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     private void ResetKnobPosition()
     {
         _horizontalInput = 0f;
+        _imageKnob.color = DEFAULT_COLOR;
         var anchoredPos = _rectKnob.anchoredPosition;
         anchoredPos.x = 0f;
         _rectKnob.anchoredPosition = anchoredPos;

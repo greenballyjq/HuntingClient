@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GameFramework.Core;

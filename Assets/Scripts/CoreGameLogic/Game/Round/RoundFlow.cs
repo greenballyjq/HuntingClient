@@ -1,4 +1,4 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using System;
@@ -219,8 +219,9 @@ public class RoundFlow : Singleton<RoundFlow>
         uiGameplay.SetClickable(false);
 
         // 切换到摇杆控制模式
+        //GetRoundManager<PlayerControlManager>().SwitchToDefaultShooting();
         GetRoundManager<PlayerControlManager>().SwitchToJoystick();
-
+        
         // 触发单局进入事件
         TriggerRoundEntered(new RoundEnteredEventArgs
         {
@@ -255,8 +256,10 @@ public class RoundFlow : Singleton<RoundFlow>
         _roundManagers.Clear();
         _currentRoundContext = null;
 
-        // 清理单局
-        ClearRound();
+        // 清理对象池
+        _effectManager.ClearAllEffects(true);
+        _soundManager.ClearAllSounds(true);
+        _gameObjectPoolManager.ClearAllPools();
 
         // 关闭游玩界面
         _uiManager.CloseUI("UIGameplay");
@@ -331,7 +334,7 @@ public class RoundFlow : Singleton<RoundFlow>
         await _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Effects/Settlement_Explosion");
         _soundManager.PlaySettlementPanelExplosion();
 
-        await UniTask.Delay(200); // 等待200毫秒
+        await UniTask.Delay(200); // 等待200毫秒模拟爆炸动画
         _uiManager.CloseUI("UIPopupSettlementSnowFake");
         
 
@@ -340,10 +343,12 @@ public class RoundFlow : Singleton<RoundFlow>
         _soundManager.PlayLightTransition();
         var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
         await uiLoading.PlayFadeInAsync();
-        
+
         // 清理旧场景
         CleanupManagers(); // 清理单局管理器
-        ClearRound(); // 清理单局
+        _effectManager.ClearAllEffects(); // 清理对象池
+        _soundManager.ClearAllSounds();
+        _gameObjectPoolManager.ClearAllPools(); 
 
         // 加载新场景
         await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
@@ -358,6 +363,9 @@ public class RoundFlow : Singleton<RoundFlow>
 
         // UI切换雪山主题
         uiGameplay.SwitchSnow();
+
+        // 播放中间过渡动画
+        await uiLoading.PlayMiddleTransitionAsync();
 
         // 播放下雪特效
         _snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Effects/FX_Snow_For_SnowMountainScene_UICamera");
@@ -381,17 +389,20 @@ public class RoundFlow : Singleton<RoundFlow>
             _soundManager.PlayBossAlert().ToUniTask()
         );
 
-        // 派发Boss
+        // 派发并播放Boss入场动画
         var bossAnimalBehavior = GetRoundManager<SpawnerManager>().GetSpawner<ManualSpawner>("Boss").Spawn() as BossAnimalBehaviour;
+        await UniTask.Delay(2000); // 模拟Boss入场动画
+
+        // 播放Boss咆哮音效
+        await _soundManager.PlayBossRoar(bossAnimalBehavior.SpecieData.BossType).ToUniTask();
+        await UniTask.Delay(2000); // 等待固定时长控制节奏
 
         // 播放Boss血量增长动画和音效
         await UniTask.WhenAll(
             uiGameplay.PlayBossHealthIncreaseAnimationAsync(),
             _soundManager.PlayBossHPGrowth().ToUniTask()
         );
-
-        // 播放Boss咆哮音效
-        await _soundManager.PlayBossRoar(bossAnimalBehavior.SpecieData.BossType).ToUniTask();
+        await UniTask.Delay(2000); // 等待固定时长控制节奏
 
         // 播放倒计时动画
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
@@ -413,20 +424,17 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _currentState = RoundFlowState.Transitioning;
 
-        _currentRoundContext.HiddenRoundEndTrigger.Release();
-
         // 播放慢镜头动画
-        Time.timeScale = 0.25f;
-        await UniTask.Delay(3000, ignoreTimeScale: true);
-        Time.timeScale = 1f;
+        await PlaySlowMotion(0.3f,4f);
 
-        // 停止下雪
+        // 停止播放下雪特效
         _effectManager.Stop(_snowEffect);
 
         // 播放雪山胜利动画
         var uiMountainVictory = await _uiManager.OpenUIAsync<UISnowMountainVictory>("UISnowMountainVictory", UIManager.UILayer.PopUp);
-        await uiMountainVictory.PlayLightEffectAsync(GetRoundManager<AnimalManager>().GetLastActiveAnimalPosition());
-        await uiMountainVictory.PlayFamilyPortraitFadeInAsync();
+        _soundManager.PlayLightTransition();
+        await uiMountainVictory.PlayLightEffectAsync(GetRoundManager<AnimalManager>().GetLastActiveAnimalPosition()); // 播放光效动画
+        await uiMountainVictory.PlayFamilyPortraitFadeInAsync(); // 播放全家福动画
 
         // 打开结算界面
         await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
@@ -434,9 +442,11 @@ public class RoundFlow : Singleton<RoundFlow>
         // 结算奖励
         GetRoundManager<SettlementRewardManager>().CalculateReward();
 
+        _currentRoundContext.HiddenRoundEndTrigger.Release();
+
         _currentState = RoundFlowState.None;
     }
-    #endregion
+#endregion
 
     #region 私有方法
     /// <summary>
@@ -528,13 +538,17 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
-    /// 清理单局
+    /// 播放慢镜头效果
     /// </summary>
-    private void ClearRound()
+    private async UniTask PlaySlowMotion(float timeScale = 0.25f, float duration = 3f)
     {
-        _effectManager.ClearAllEffects();
-        _soundManager.ClearAllSounds();
-        _gameObjectPoolManager.ClearAllPools();
+        float originalTimeScale = Time.timeScale;
+
+        Time.timeScale = timeScale;
+
+        await UniTask.Delay(Mathf.RoundToInt(duration * 1000), ignoreTimeScale: true);
+
+        Time.timeScale = originalTimeScale;
     }
     #endregion
 
@@ -606,4 +620,6 @@ public class RoundFlow : Singleton<RoundFlow>
         _eventManager.Trigger(HiddenMapEvents.HiddenMapEntered);
     }
     #endregion
+
+
 }

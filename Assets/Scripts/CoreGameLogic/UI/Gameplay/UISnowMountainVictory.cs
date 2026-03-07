@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GameFramework.Core.UI;
@@ -27,6 +27,11 @@ public class UISnowMountainVictory : UIBase
         /// 是否不受TimeScale影响
         /// </summary>
         public bool UseUnscaledTime = true;
+
+        /// <summary>
+        /// 缩放动画曲线
+        /// </summary>
+        public AnimationCurve ScaleEaseCurve;
     }
 
     /// <summary>
@@ -74,7 +79,7 @@ public class UISnowMountainVictory : UIBase
     /// <summary>
     /// 雪山胜利矩形变换
     /// </summary>
-    private RectTransform _rectTransform;
+    private RectTransform _snowMountainVictoryRectTransform;
 
     /// <summary>
     /// 特效管理器
@@ -88,7 +93,7 @@ public class UISnowMountainVictory : UIBase
 
     private void Awake()
     {
-        _rectTransform = GetComponent<RectTransform>();
+        _snowMountainVictoryRectTransform = GetComponent<RectTransform>();
     }
 
     #region 公共方法
@@ -98,19 +103,21 @@ public class UISnowMountainVictory : UIBase
     /// <param name="worldPosition">起点世界坐标</param>
     public async UniTask PlayLightEffectAsync(Vector3 worldPosition)
     {
-        Vector3 startPosition = PointConverter.WorldPointToUiPoint(_rectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
-        Vector3 endPosition = PointConverter.ScreenPointToUiPoint(_rectTransform, new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), _cameraManager.UICamera);
+        Vector3 startPosition = PointConverter.WorldPointToUiPoint(_snowMountainVictoryRectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
+        Vector3 endPosition = PointConverter.ScreenPointToUiPoint(_snowMountainVictoryRectTransform, new Vector2(Screen.width * 0.5f, Screen.height * 0.5f), _cameraManager.UICamera);
 
         GameObject effectObj = _effectManager.PlayLoop(_lightEffectPrefab);
-        effectObj.transform.SetParent(_rectTransform,true);
         effectObj.transform.position = startPosition;
         Vector3 targetScale = effectObj.transform.localScale * ScaleMultiplier;
+
+        var scaleTween = effectObj.transform.DOScale(targetScale, _lightEffectConfig.Duration);
+        scaleTween.SetEase(_lightEffectConfig.ScaleEaseCurve);
 
         Sequence sequence = DOTween.Sequence()
             .SetLink(effectObj)
             .SetUpdate(_lightEffectConfig.UseUnscaledTime)
             .Join(effectObj.transform.DOMove(endPosition, _lightEffectConfig.Duration))
-            .Join(effectObj.transform.DOScale(targetScale, _lightEffectConfig.Duration));
+            .Join(scaleTween);
 
         await sequence.ToUniTask();
     }

@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using UnityEngine;
 
@@ -72,24 +72,30 @@ public class UILoading : UIBase
     }
 
     /// <summary>
+    /// 播放中间过渡动画
+    /// </summary>
+    public async UniTask PlayMiddleTransitionAsync()
+    {
+        float waitTime = _fadeConfig.TotalDuration - _fadeConfig.FadeInDuration - _fadeConfig.FadeOutDuration;
+        if (waitTime <= 0f) return;
+
+        bool useUnscaled = _fadeConfig.UseUnscaledTime;
+        float waitElapsed = 0f;
+
+        while (waitElapsed < waitTime)
+        {
+            float dt = useUnscaled ? Time.unscaledDeltaTime : Time.deltaTime;
+            waitElapsed += dt;
+            await UniTask.Yield();
+        }
+    }
+
+    /// <summary>
     /// 播放淡出动画
     /// </summary>
     public async UniTask PlayFadeOutAsync()
     {
         bool useUnscaled = _fadeConfig.UseUnscaledTime;
-
-        float waitTime = _fadeConfig.TotalDuration - _fadeConfig.FadeInDuration - _fadeConfig.FadeOutDuration;
-        if (waitTime > 0f)
-        {
-            float waitElapsed = 0f;
-            while (waitElapsed < waitTime)
-            {
-                float dt = useUnscaled ? Time.unscaledDeltaTime : Time.deltaTime;
-                waitElapsed += dt;
-                await UniTask.Yield();
-            }
-        }
-
         float elapsed = 0f;
         float duration = _fadeConfig.FadeOutDuration;
 

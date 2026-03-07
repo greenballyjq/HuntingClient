@@ -38,6 +38,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     public void ReInit(RoundContext context)
     {
         SwitchToJoystick();
+        //SwitchToDefaultShooting();
     }
 
     #region 公共方法

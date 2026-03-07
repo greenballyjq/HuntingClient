@@ -37,38 +37,6 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_baozhazidan_0002.png
-        CollectorGUID: 412de1a0a427640429ee5ffea226b24c
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaoshangzidan_0003.png
-        CollectorGUID: a17c6c806a5593342ba3211012bf9cfe
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_gaosuzidan_0004.png
-        CollectorGUID: 05eb2dbcce7f2d648989c1d0ca2425ad
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet/TB_putongzidan_0001.png
-        CollectorGUID: 02c7825bf21c9e04a8883f5ace8ca264
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
       - CollectPath: Assets/Arts/UI/Sprites/Gameplay/TB_xueshan_beijing_0001.png
         CollectorGUID: 0f9bcb12c08507942ab39c8aa7f0a0ad
         CollectorType: 0
@@ -111,6 +79,14 @@ MonoBehaviour:
         UserData: 
       - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Prop
         CollectorGUID: 73e38f316033c274dbd8f81258ad6297
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet
+        CollectorGUID: 128fc3e7041c7ce48ad33c38b8a30b76
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory

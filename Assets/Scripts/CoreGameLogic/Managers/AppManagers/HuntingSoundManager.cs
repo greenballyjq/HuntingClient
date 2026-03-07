@@ -62,7 +62,7 @@ namespace CoreGameLogic.Managers.AppManagers
         /// <param name="loop">播放次数（1表示播放一次，2表示播放2次，-1表示无限循环）</param>
         /// <returns></returns>
         public AudioCallback PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType audioType, AudioChannel channel = AudioChannel.Sound
-            , int loop = 1)
+            , int loop = 1, bool dontDestroyOnLoad = false)
         {
             if (channel == AudioChannel.Voice && _soundManager.GetActivePlayerCountByChannel(AudioChannel.Voice) > 0)
                 return new AudioCallback();
@@ -70,7 +70,7 @@ namespace CoreGameLogic.Managers.AppManagers
             var audioRef = _huntingAudioRefSo.GetAudioRefFromType(audioType);
             var audioClip = audioRef.clip;
             var volume = audioRef.volume;
-            return _soundManager.PlaySound2D(audioClip, channel, loop, volume);
+            return _soundManager.PlaySound2D(audioClip, channel, loop, volume,dontDestroyOnLoad);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace CoreGameLogic.Managers.AppManagers
         /// </summary>
         public AudioCallback PlayLightTransition()
         {
-            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Effect_Transition_Light);
+            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Effect_Transition_Light,dontDestroyOnLoad:true);
         }
 
         /// <summary>
@@ -138,9 +138,10 @@ namespace CoreGameLogic.Managers.AppManagers
         /// <summary>
         /// 清理所有音效
         /// </summary>
-        public void ClearAllSounds()
+        /// <param name="forceRemoveAll">强制移除所有音效</param>
+        public void ClearAllSounds(bool forceRemoveAll = false)
         {
-            _soundManager.ClearAllSounds();
+            _soundManager.ClearAllSounds(forceRemoveAll);
         }
         #endregion
 
@@ -413,7 +414,7 @@ namespace CoreGameLogic.Managers.AppManagers
                     if (hasLinkage)
                     {
                         var callback = PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_ZiWeiUniqueMap_Before);
-                        callback.AddCallback(async player =>
+                        callback.AddCallback(async () =>
                         {
                             await UniTask.Delay(500);
                             PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_ZiWeiUniqueMap_After);

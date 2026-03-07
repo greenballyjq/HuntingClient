@@ -1,4 +1,4 @@
-/// <summary>
+﻿/// <summary>
 /// 摇杆控制处理器
 /// </summary>
 public class JoystickControlHandler : BasePlayerControlHandler
@@ -6,7 +6,7 @@ public class JoystickControlHandler : BasePlayerControlHandler
     /// <summary>
     /// 旋转速度（度/秒）
     /// </summary>
-    private const float ROTATION_SPEED = 80f;
+    private const float ROTATION_SPEED = 90f;
 
     /// <summary>
     /// 摇杆组件

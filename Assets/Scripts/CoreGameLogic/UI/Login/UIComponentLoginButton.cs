@@ -108,13 +108,9 @@ public class UIComponentLoginButton : MonoBehaviour, IUIComponent
         
         _buttonLogin.targetGraphic.raycastTarget = false;
 
-        await HuntingAppFlow.Instance.EnterPrepareAsync();
-
-#if UNITY_EDITOR
-        _blinkConfig.IntervalDuration = 0;
-#endif
-
         await PlayBlinkAsync();
+
+        await HuntingAppFlow.Instance.EnterPrepareAsync();
 
         GameFrameLauncher.Instance.HideLoading();
     }
