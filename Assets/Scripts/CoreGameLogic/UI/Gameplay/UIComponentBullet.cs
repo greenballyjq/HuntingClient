@@ -1,4 +1,3 @@
-﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using Hunting.Events;
 using UnityEngine;
@@ -54,9 +53,9 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
-    /// 资源管理器
+    /// 配置管理器
     /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
+    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     private void Awake()
     {
@@ -84,9 +83,9 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
     /// 更新子弹图标
     /// </summary>
     /// <param name="bulletData">子弹配置</param>
-    private async UniTask UpdateBulletIconAsync(Bullet bulletData)
+    private void UpdateBulletIcon(Bullet bulletData)
     {
-        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(bulletData.IconResourcePath);
+        var sprite = _configManager.BulletRefSo.GetBulletIcon(bulletData.ID);
         _imageBullet.sprite = sprite;
     }
 
@@ -117,7 +116,7 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
         _duration = args.NewBulletData.Duration;
 
         // 更新子弹图标
-        UpdateBulletIconAsync(args.NewBulletData).Forget();
+        UpdateBulletIcon(args.NewBulletData);
 
         // 更新倒计时显示
         UpdateCountdown(args.IsSpecialBullet, args.RemainingTime, _duration);

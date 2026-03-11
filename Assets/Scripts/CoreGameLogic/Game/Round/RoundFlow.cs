@@ -394,7 +394,7 @@ public class RoundFlow : Singleton<RoundFlow>
         await UniTask.Delay(2000); // 模拟Boss入场动画
 
         // 播放Boss咆哮音效
-        //await _soundManager.PlayBossRoar(bossAnimalBehavior.SpecieData.BossType).ToUniTask();
+        await _soundManager.PlayBossRoar(bossAnimalBehavior.SpecieData.BossType).ToUniTask();
         await UniTask.Delay(2000); // 等待固定时长控制节奏
 
         // 播放Boss血量增长动画和音效

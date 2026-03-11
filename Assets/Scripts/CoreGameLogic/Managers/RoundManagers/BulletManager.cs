@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
@@ -71,13 +71,15 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 生成子弹
     /// </summary>
-    public async UniTask<BulletBehavior> SpawnBullet(int bulletId, Vector3 position, Vector3 direction)
+    public UniTask<BulletBehavior> SpawnBullet(int bulletId, Vector3 position, Vector3 direction)
     {
         Bullet bulletData = _configManager.GetBullet(bulletId);
 
+        GameObject prefab = _configManager.BulletRefSo.GetBulletPrefab(bulletId);
+
         float finalDamage = _weaponManager.GetCurrentDamage(bulletId);
 
-        GameObject gameObject = await _gameObjectPoolManager.SpawnAsync(bulletData.PrefabResourcePath);
+        GameObject gameObject = _gameObjectPoolManager.Spawn(prefab);
 
         // 初始化子弹
         gameObject.transform.position = position;
@@ -95,7 +97,7 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
             Bullet = bullet
         });
 
-        return bullet;
+        return UniTask.FromResult(bullet);
     }
     #endregion
 

@@ -1,21 +1,19 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using GameFramework.Core;
 using GameFramework.Core.UI;
 using GameFramework.Manager;
 using GameFramework.Utility;
-using Hunting.Events;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 掉落奖励组件
+/// 掉落奖励光效组件
 /// </summary>
-public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
+public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGameplay>
 {
     /// <summary>
-    /// 掉落奖励特效预制体
+    /// 掉落奖励光效预制体
     /// </summary>
     [SerializeField] private GameObject _dropRewardEffectPrefab;
 
@@ -25,33 +23,22 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
     private UIGameplay _uiGameplay;
 
     /// <summary>
-    /// 掉落奖励组件矩形变换
+    /// 掉落奖励光效组件矩形变换
     /// </summary>
-    private RectTransform _dropRewardRectTransform;
-
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager;
-
-    /// <summary>
-    /// 特效管理器
-    /// </summary>
-    private EffectManager _effectManager;
-
-    /// <summary>
-    /// 相机管理器
-    /// </summary>
-    private CameraManager _cameraManager;
+    private RectTransform _dropRewardLightEffectRectTransform;
 
     /// <summary>
     /// 掉落目标位置缓存字典
     /// </summary>
     private Dictionary<EDropType, Vector3> _dropTargetPositionCache;
 
+    private EventManager _eventManager;
+    private EffectManager _effectManager;
+    private CameraManager _cameraManager;
+
     private void Awake()
     {
-        _dropRewardRectTransform = GetComponent<RectTransform>();
+        _dropRewardLightEffectRectTransform = GetComponent<RectTransform>();
 
         _eventManager = GameServiceLocator.EventManager;
         _effectManager = GameServiceLocator.EffectManager;
@@ -109,10 +96,10 @@ public class UIComponentDropReward : MonoBehaviour, IUIComponent<UIGameplay>
     private async UniTask PlayDropRewardAnimation(EDropType dropType, int dropCount, Vector3 worldPosition)
     {
         Vector3 endPosition = _dropTargetPositionCache[dropType];
-        Vector3 startPosition = PointConverter.WorldPointToUiPoint(_dropRewardRectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
+        Vector3 startPosition = PointConverter.WorldPointToUiPoint(_dropRewardLightEffectRectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
 
         GameObject effectObj = _effectManager.PlayLoop(_dropRewardEffectPrefab);
-        effectObj.transform.SetParent(_dropRewardRectTransform, true);
+        effectObj.transform.SetParent(_dropRewardLightEffectRectTransform, true);
         effectObj.transform.position = startPosition;
        
         await effectObj.transform

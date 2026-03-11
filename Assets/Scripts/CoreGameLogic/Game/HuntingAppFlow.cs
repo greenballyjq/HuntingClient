@@ -5,6 +5,7 @@ using GameFramework.Game;
 using GameFramework.Manager;
 using GameFramework.Network.Utility;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 打猎应用流程
@@ -158,6 +159,8 @@ public class HuntingAppFlow : GameAppFlow
 
         await _uiManager.PreloadUIAsync("UIPopupSettlementNormal");
         await _uiManager.PreloadUIAsync("UISnowMountainVictory");
+
+        _uiManager.SetCanvasScaler(CanvasScaler.ScaleMode.ScaleWithScreenSize, new Vector2(1920, 1080), 1);
     }
 
     /// <summary>

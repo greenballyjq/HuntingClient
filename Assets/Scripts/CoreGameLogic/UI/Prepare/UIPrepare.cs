@@ -35,11 +35,6 @@ public class UIPrepare : UIBase
     [SerializeField] private UIComponentMapInfo _uiComponentMapInfo;
 
     /// <summary>
-    /// 准备界面测试组件
-    /// </summary>
-    [SerializeField] private UIComponentPrepareTest _uiComponentPrepareTest;
-
-    /// <summary>
     /// 调试组件
     /// </summary>
     [SerializeField] private UIComponentPrepareDebug _uiComponentPrepareDebug;
@@ -59,30 +54,11 @@ public class UIPrepare : UIBase
     /// </summary>
     [SerializeField] private Button _buttonRanking;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// UI管理器
-    /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
-    /// <summary>
-    /// 打猎音效管理器
-    /// </summary>
-    private HuntingSoundManager _soundManager => GameServiceLocator.GetAppManager<HuntingSoundManager>();
-
-    /// <summary>
-    /// CG管理器
-    /// </summary>
-    private CGManager _cgManager => GameServiceLocator.GetAppManager<CGManager>();
+    private EventManager _eventManager;
+    private UIManager _uiManager;
+    private HuntingConfigManager _configManager;
+    private HuntingSoundManager _soundManager;
+    private CGManager _cgManager;
 
     /// <summary>
     /// 当前选中的角色ID
@@ -96,6 +72,12 @@ public class UIPrepare : UIBase
 
     private void Awake()
     {
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+        _cgManager = GameServiceLocator.GetAppManager<CGManager>();
+
         _buttonStartRound.onClick.AddListener(OnClickStartRound);
         _buttonLucky.onClick.AddListener(OnClickLuckyRitual);
         _buttonRanking.onClick.AddListener(OnClickRanking);
@@ -112,16 +94,13 @@ public class UIPrepare : UIBase
     {
         base.OnInit(userData);
 
+        RegisterEvents();
+
         _uiComponentRollRole.Init();
         _uiComponentRoleInfo.Init();
         _uiComponentSkillInfo.Init();
         _uiComponentMapInfo.Init();
-        _uiComponentPrepareTest.Init();
         _uiComponentPrepareDebug.Init();
-
-        _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
-        _eventManager.AddListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
-        _eventManager.AddListener(LuckyEvents.GiftOpened, OnGiftOpened);
     }
 
     public override void OnClose()
@@ -130,17 +109,34 @@ public class UIPrepare : UIBase
         _uiComponentRoleInfo.CleanUp();
         _uiComponentSkillInfo.CleanUp();
         _uiComponentMapInfo.CleanUp();
-        _uiComponentPrepareTest.CleanUp();
         _uiComponentPrepareDebug.CleanUp();
 
-        _eventManager.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
-        _eventManager.RemoveListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
-        _eventManager.RemoveListener(LuckyEvents.GiftOpened, OnGiftOpened);
+        UnregisterEvents();
 
         base.OnClose();
     }
 
     #region 事件相关
+    /// <summary>
+    /// 注册事件
+    /// </summary>
+    public void RegisterEvents()
+    {
+        _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
+        _eventManager.AddListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
+        _eventManager.AddListener(LuckyEvents.GiftOpened, OnGiftOpened);
+    }
+
+    /// <summary>
+    /// 注销事件
+    /// </summary>
+    public void UnregisterEvents()
+    {
+        _eventManager.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
+        _eventManager.RemoveListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
+        _eventManager.RemoveListener(LuckyEvents.GiftOpened, OnGiftOpened);
+    }
+
     /// <summary>
     /// 开始单局按钮回调
     /// </summary>
@@ -235,6 +231,52 @@ public class UIPrepare : UIBase
     {
         _currentLuckyBuffData = args.LuckyBuffData;
     }
+    #endregion
 
+    #region 开发者测试方法
+    /// <summary>指定角色直接开始，跳过投骰子</summary>
+    public async void StartRoundWithRole(int roleId)
+    {
+        _buttonStartRound.interactable = false;
+        _buttonLucky.interactable = false;
+        _buttonRanking.interactable = false;
+
+        Role roleData = _configManager.GetRole(roleId);
+        Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
+        Map mapData = _uiComponentMapInfo.CurrentMapData;
+
+        bool hasHiddenMap = Random.Range(0, 100) < 100;
+
+        if (hasHiddenMap)
+            await _cgManager.CreateCGAsync(roleData.VideoResourcePath);
+
+        if (roleData.RoleType == ERoleType.Bule || roleData.RoleType == ERoleType.Red)
+            await UniTask.Delay(2000);
+        else
+            await _soundManager.PlayIPOpening(roleData.RoleType).ToUniTask();
+
+        await SceneManager.LoadSceneAsync("GameplayForestScene").ToUniTask();
+        DynamicGI.UpdateEnvironment();
+
+        if (hasHiddenMap)
+        {
+#if !UNITY_EDITOR
+            await _cgManager.PlayCGAsync();
+#endif
+        }
+
+        _uiManager.CloseUI("UIPrepare");
+
+        await HuntingAppFlow.Instance.EnterRound(new RoundContext
+        {
+            RoleData = roleData,
+            MapData = mapData,
+            SkillData = skillData,
+            LuckyBuffData = _currentLuckyBuffData,
+            HasLinkage = roleData.LinkedMapId == mapData.ID,
+            HasHiddenMap = hasHiddenMap,
+            HiddenMapData = hasHiddenMap ? _configManager.GetMap(EMapType.Hidden) : null
+        });
+    }
     #endregion
 }

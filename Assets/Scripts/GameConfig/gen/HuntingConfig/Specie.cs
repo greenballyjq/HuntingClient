@@ -19,6 +19,7 @@ public sealed partial class Specie : Luban.BeanBase
         ID = _buf.ReadInt();
         Name = _buf.ReadString();
         SpecieType = (HuntingConfig.Enum.ESpecieType)_buf.ReadInt();
+        BossType = (HuntingConfig.Enum.EBossType)_buf.ReadInt();
         HP = _buf.ReadFloat();
         MoveSpeed = _buf.ReadFloat();
         StayTime = _buf.ReadFloat();
@@ -46,6 +47,10 @@ public sealed partial class Specie : Luban.BeanBase
     /// 物种类型
     /// </summary>
     public readonly HuntingConfig.Enum.ESpecieType SpecieType;
+    /// <summary>
+    /// Boss类型
+    /// </summary>
+    public readonly HuntingConfig.Enum.EBossType BossType;
     /// <summary>
     /// 血量
     /// </summary>
@@ -92,6 +97,7 @@ public sealed partial class Specie : Luban.BeanBase
         + "ID:" + ID + ","
         + "Name:" + Name + ","
         + "SpecieType:" + SpecieType + ","
+        + "BossType:" + BossType + ","
         + "HP:" + HP + ","
         + "MoveSpeed:" + MoveSpeed + ","
         + "StayTime:" + StayTime + ","

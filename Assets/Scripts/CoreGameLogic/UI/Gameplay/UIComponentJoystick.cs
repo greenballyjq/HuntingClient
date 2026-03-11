@@ -65,9 +65,9 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     private static readonly Color DRAG_RANGE_COLOR = new Color(0.75f, 1f, 0.75f, 1f);
 
     /// <summary>
-    /// 默认摇杆颜色
+    /// 默认摇杆颜色（淡红色）
     /// </summary>
-    private static readonly Color DEFAULT_COLOR = Color.white;
+    private static readonly Color DEFAULT_COLOR = new Color(1f, 0.75f, 0.75f, 1f);
 
     /// <summary>
     /// 是否处于按下/拖拽状态
@@ -96,6 +96,7 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     public void Init()
     {
         Joystick = this;
+        SetKnobColor(DEFAULT_COLOR);
         Debug.Log("[UIComponentJoystick] 初始化完成");
     }
 
@@ -147,11 +148,21 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
         else
             _horizontalInput = 0f;
 
-        _imageKnob.color = inDeadZone ? DEAD_ZONE_COLOR : DRAG_RANGE_COLOR;
+        SetKnobColor(inDeadZone ? DEAD_ZONE_COLOR : DRAG_RANGE_COLOR);
 
         var anchoredPos = _rectKnob.anchoredPosition;
         anchoredPos.x = knobX;
         _rectKnob.anchoredPosition = anchoredPos;
+    }
+
+    /// <summary>
+    /// 设置摇杆颜色，保持当前透明度
+    /// </summary>
+    private void SetKnobColor(Color color)
+    {
+        var c = color;
+        c.a = _imageKnob.color.a;
+        _imageKnob.color = c;
     }
 
     /// <summary>
@@ -160,7 +171,7 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     private void ResetKnobPosition()
     {
         _horizontalInput = 0f;
-        _imageKnob.color = DEFAULT_COLOR;
+        SetKnobColor(DEFAULT_COLOR);
         var anchoredPos = _rectKnob.anchoredPosition;
         anchoredPos.x = 0f;
         _rectKnob.anchoredPosition = anchoredPos;

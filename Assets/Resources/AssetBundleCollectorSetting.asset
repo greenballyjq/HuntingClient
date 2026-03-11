@@ -29,23 +29,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Arts/UI/Sprites/Common/Skills
-        CollectorGUID: 97798c4cc78949841aaf9b6ab29a20b8
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/TB_xueshan_beijing_0001.png
-        CollectorGUID: 0f9bcb12c08507942ab39c8aa7f0a0ad
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/UI/Sprites/Prepare/Roles
+      - CollectPath: Assets/Arts/UI/Sprites/Prepare/Main/Roles
         CollectorGUID: b7046e97df1ff6e40a5cff3095d3c3d3
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -53,7 +37,7 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Arts/UI/Sprites/Prepare/Maps
+      - CollectPath: Assets/Arts/UI/Sprites/Prepare/Main/Maps
         CollectorGUID: b3443c1d3e4a0f440b3c2d99bdbd0e19
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -61,8 +45,8 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Arts/Prefabs/UI
-        CollectorGUID: 181baa3dc0572944b8004f2d77bf5026
+      - CollectPath: Assets/Arts/UI/Sprites/Common/Skills
+        CollectorGUID: 97798c4cc78949841aaf9b6ab29a20b8
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackGroup
@@ -73,20 +57,28 @@ MonoBehaviour:
         CollectorGUID: 2f48985d9c2b2f545aa965d80dcfab16
         CollectorType: 0
         AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
+        PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Prop
-        CollectorGUID: 73e38f316033c274dbd8f81258ad6297
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet
+        CollectorGUID: 128fc3e7041c7ce48ad33c38b8a30b76
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackGroup
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/Prefabs/UI
+        CollectorGUID: 181baa3dc0572944b8004f2d77bf5026
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Bullet
-        CollectorGUID: 128fc3e7041c7ce48ad33c38b8a30b76
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/TB_xueshan_beijing_0001.png
+        CollectorGUID: 0f9bcb12c08507942ab39c8aa7f0a0ad
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
@@ -143,19 +135,6 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-    - GroupName: audio
-      GroupDesc: 
-      AssetTags: 
-      ActiveRuleName: EnableGroup
-      Collectors:
-      - CollectPath: Assets/Arts/SO/HuntingAudioRefSo.asset
-        CollectorGUID: 6bdaef14b8be7d346944c239b01a2485
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
     - GroupName: scene
       GroupDesc: 
       AssetTags: 
@@ -174,11 +153,27 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Arts/SO/DropMeatSo.asset
+      - CollectPath: Assets/Arts/SO/DropRewardRefSo.asset
         CollectorGUID: f6d9c43a7b9b4e148b1c6c43793a517e
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackGroup
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/SO/HuntingAudioRefSo.asset
+        CollectorGUID: 6bdaef14b8be7d346944c239b01a2485
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/SO/BulletRefSo.asset
+        CollectorGUID: 8b610e0b40ed2be49bd8a6ee11b8d2b1
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 

@@ -2,13 +2,13 @@
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DropMeatSo", menuName = "SO/DropMeatSo", order = 2)]
-public class DropMeatSo : ScriptableObject
+[CreateAssetMenu(fileName = "DropRewardRefSo", menuName = "SO/DropRewardRefSo", order = 2)]
+public class DropRewardRefSo : ScriptableObject
 {
     /// <summary>
-    /// 掉落肉类型枚举
+    /// 掉落奖励类型
     /// </summary>
-    public enum DropMeatType
+    public enum EDropRewardType
     {
         /// <summary>
         /// 1.肉
@@ -91,18 +91,21 @@ public class DropMeatSo : ScriptableObject
         DanGao,
 
         /// <summary>
-        /// 三千盘金币
+        /// 101.三千盘金币
         /// </summary>
         ThreeKPCoin,
 
         /// <summary>
-        /// 子弹
+        /// 201.子弹
         /// </summary>
         Bullet,
     }
 
     [System.Serializable]
-    public class DropMeat
+    /// <summary>
+    /// 掉落奖励关联资源类
+    /// </summary>
+    public class DropRewardRef
     {
         /// <summary>
         /// ID
@@ -110,24 +113,28 @@ public class DropMeatSo : ScriptableObject
         public int Id;
 
         /// <summary>
-        /// 掉落肉类型
+        /// 掉落奖励类型
         /// </summary>
-        public DropMeatType Type;
+        public EDropRewardType Type;
 
         /// <summary>
-        /// 掉落肉预制体
+        /// 特效预制体
         /// </summary>
-        public GameObject Prefab;
+        public GameObject EffectPrefab;
     }
 
-    [SerializeField] private List<DropMeat> _dropMeatList;
+    /// <summary>
+    /// 掉落奖励关联资源配置列表
+    /// </summary>
+
+    [SerializeField] private List<DropRewardRef> _dropRewardRefList;
 
     /// <summary>
-    /// 根据ID数组随机返回一个掉落肉
+    /// 根据ID数组随机返回一个特效预制体资源
     /// </summary>
-    public GameObject GetRandomDropMeatByIds(int[] ids)
+    public GameObject GetRandomEffectPrefabByIds(int[] ids)
     {
-        var matched = _dropMeatList.Where(x => ids.Contains(x.Id)).ToList();
-        return matched[Random.Range(0, matched.Count)].Prefab;
+        var matched = _dropRewardRefList.Where(x => ids.Contains(x.Id)).ToList();
+        return matched[Random.Range(0, matched.Count)].EffectPrefab;
     }
 }

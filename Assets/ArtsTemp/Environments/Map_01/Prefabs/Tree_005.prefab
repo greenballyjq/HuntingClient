@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3956815761288762005}
   - component: {fileID: 6555520271199822438}
   m_Layer: 0
-  m_Name: Tree_006 (1)
+  m_Name: Tree_006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 4599932370907840226}
   - component: {fileID: 7946737222064094116}
   m_Layer: 0
-  m_Name: Shadow (5)
+  m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 154745621727042007}
   - component: {fileID: 1022021517659968155}
   m_Layer: 0
-  m_Name: Shadow (6)
+  m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -366,7 +366,7 @@ GameObject:
   - component: {fileID: 7393423702837601595}
   - component: {fileID: 3671017890814943199}
   m_Layer: 0
-  m_Name: Shadow (7)
+  m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -101,22 +101,22 @@ namespace CoreGameLogic.Managers.AppManagers
         /// 播放Boss怒吼音效
         /// </summary>
         /// <param name="bossType"></param>
-        //public AudioCallback PlayBossRoar(EBossType bossType)
-        //{
-            //switch (bossType)
-            //{
-            //    case EBossType.BeiJiXiong:
-            //        return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_BeiJiXiong);
-            //    case EBossType.MengMaXiang:
-            //        return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_MengMaXiang);
-            //    case EBossType.XueXingXing:
-            //        return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_XueXingXing);
-            //    case EBossType.SanJiaoLong:
-            //        return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_SanJiaoLong);
-            //}
+        public AudioCallback PlayBossRoar(EBossType bossType)
+        {
+            switch (bossType)
+            {
+                case EBossType.BeiJiXiong:
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_BeiJiXiong);
+                case EBossType.MengMaXiang:
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_MengMaXiang);
+                case EBossType.XueXingXing:
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_XueXingXing);
+                case EBossType.SanJiaoLong:
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Boss_Roar_SanJiaoLong);
+            }
 
-            //return null;
-        //}
+            return null;
+        }
 
         /// <summary>
         /// 播放Boss血量增长音效

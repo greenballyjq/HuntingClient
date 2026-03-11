@@ -1,8 +1,9 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Bean;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using cfg.HuntingConfig.Skill;
+using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,17 +41,31 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     };
 
     /// <summary>
-    /// 掉落肉配置
+    /// 掉落奖励关联资源配置
     /// </summary>
-    private DropMeatSo _dropMeatSo;
-    public DropMeatSo DropMeatSo => _dropMeatSo;
+    private DropRewardRefSo _dropRewardRefSo;
+    public DropRewardRefSo DropRewardRefSo => _dropRewardRefSo;
 
+    /// <summary>
+    /// 子弹关联资源配置
+    /// </summary>
+    private BulletRefSo _bulletRefSo;
+    public BulletRefSo BulletRefSo => _bulletRefSo;
+
+    private ResourceManager _resourceManager;
+
+
+    #region 内部方法
     protected override async void InitializeAsync()
     {
         try
         {
+            _resourceManager = GameServiceLocator.ResourceManager;
+
             await LoadTablesAsync();
-            _dropMeatSo = await GameServiceLocator.ResourceManager.LoadAssetAsync<DropMeatSo>("Assets/Arts/SO/DropMeatSo");
+
+            await LoadScriptableObjects();
+
             Initialized = true;
         }
         catch (System.Exception ex)
@@ -58,6 +73,17 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
             Debug.LogError($"[{GetType().Name}] 配置加载失败: {ex.Message}");
         }
     }
+
+    /// <summary>
+    /// 加载SO配置表
+    /// </summary>
+    /// <returns></returns>
+    private async UniTask LoadScriptableObjects()
+    {
+        _dropRewardRefSo = await _resourceManager.LoadAssetAsync<DropRewardRefSo>("Assets/Arts/SO/DropRewardRefSo");
+        _bulletRefSo = await _resourceManager.LoadAssetAsync<BulletRefSo>("Assets/Arts/SO/BulletRefSo");
+    }
+    #endregion
 
     #region 数值表访问
     /// <summary>

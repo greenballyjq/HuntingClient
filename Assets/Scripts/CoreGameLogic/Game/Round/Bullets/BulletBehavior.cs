@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Pool;
 using GameFramework.Manager;
@@ -52,6 +52,11 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
     /// 特效管理器
     /// </summary>
     private EffectManager _effectManager => GameServiceLocator.EffectManager;
+
+    /// <summary>
+    /// 配置管理器
+    /// </summary>
+    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     #region 对象池接口
     public void OnSpawned()
@@ -196,7 +201,8 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
     /// <param name="hitPoint">命中位置</param>
     private void PlayHitEffect(Vector3 hitPoint)
     {
-        _effectManager.PlayOneShotAsync(_bulletData.EffectPrefabResourcePath, hitPoint).Forget();
+        var prefab = _configManager.BulletRefSo.GetBulletEffectPrefab(_bulletData.ID);
+        _effectManager.PlayOneShot(prefab, hitPoint);
     }
     #endregion
 

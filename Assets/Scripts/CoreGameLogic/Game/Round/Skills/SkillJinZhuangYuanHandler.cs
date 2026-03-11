@@ -42,7 +42,7 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
     /// <summary>
     /// 掉落肉特效配置
     /// </summary>
-    private DropMeatSo _dropMeatSo;
+    private DropRewardRefSo _dropMeatSo;
 
     private EffectManager _effectManager;
 
@@ -54,7 +54,7 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
 
         _playableArea = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>().PlayableArea;
 
-        _dropMeatSo = _configManager.DropMeatSo;
+        _dropMeatSo = _configManager.DropRewardRefSo;
     }
 
     protected override async UniTask OnSkillStart(SkillContext context)
@@ -87,7 +87,7 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
 
             // 增加肉度值并生成特效
             _meatProgressManager.AddMeatValue(_skillParam.MeatAmount);
-            _effectManager.PlayOneShot(_dropMeatSo.GetRandomDropMeatByIds(_skillParam.DropMeatEffectID), _playableArea.GetRandomPoint());
+            _effectManager.PlayOneShot(_dropMeatSo.GetRandomEffectPrefabByIds(_skillParam.DropMeatEffectID), _playableArea.GetRandomPoint());
             
             _spawnedCount++;
         }

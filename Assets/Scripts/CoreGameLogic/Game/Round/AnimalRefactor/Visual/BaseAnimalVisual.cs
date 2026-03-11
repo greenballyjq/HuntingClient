@@ -2,6 +2,7 @@
 using GameFramework.Manager;
 using Spine.Unity;
 using UnityEngine;
+using UnityEngine.Diagnostics;
 
 namespace Hunting.Game.Animal
 {
@@ -12,7 +13,7 @@ namespace Hunting.Game.Animal
     {
         private HuntingConfigManager _configManager;
 
-        private DropMeatSo _dropMeatSo;
+        private DropRewardRefSo _dropMeatSo;
 
         protected virtual void Awake()
         {
@@ -22,7 +23,7 @@ namespace Hunting.Game.Animal
             _animator = GetComponentInChildren<Animator>();
 
             _configManager = GameServiceLocator.ConfigManager;
-            _dropMeatSo = _configManager.DropMeatSo;
+            _dropMeatSo = _configManager.DropRewardRefSo;
 
             _effectManager = GameServiceLocator.EffectManager;
         }
@@ -153,7 +154,7 @@ namespace Hunting.Game.Animal
         /// </summary>
         public void PlayDeathEffect()
         {
-            GameObject prefab = _dropMeatSo.GetRandomDropMeatByIds(_animalBehaviour.SpecieData.DropMeatEffectID);
+            GameObject prefab = _dropMeatSo.GetRandomEffectPrefabByIds(_animalBehaviour.SpecieData.DropMeatEffectID);
             _effectManager.PlayOneShot(prefab, transform.position);
         }
         #endregion

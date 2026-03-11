@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using UnityEngine;
@@ -59,9 +59,9 @@ public class UIGameplay : UIBase
     [SerializeField] private UIComponentTip _uiComponentTip;
 
     /// <summary>
-    /// 掉落奖励组件
+    /// 掉落奖励光效组件
     /// </summary>
-    [SerializeField] private UIComponentDropReward _uiComponentDropReward;
+    [SerializeField] private UIComponentDropRewardLightEffect _uiComponentDropRewardLightEffect;
 
     /// <summary>
     /// 摇杆组件（控制枪械旋转与开火）
@@ -101,7 +101,7 @@ public class UIGameplay : UIBase
         _uiComponentBullet.Init();
         _uiComponentPropGroup.Init();
         _uiComponentTip.Init();
-        _uiComponentDropReward.Init(this);
+        _uiComponentDropRewardLightEffect.Init(this);
         _uiComponentJoystick.Init();
 
         _uiComponentTip.gameObject.SetActive(false);
@@ -119,7 +119,7 @@ public class UIGameplay : UIBase
         _uiComponentBullet.CleanUp();
         _uiComponentPropGroup.CleanUp();
         _uiComponentTip.CleanUp();
-        _uiComponentDropReward.CleanUp();
+        _uiComponentDropRewardLightEffect.CleanUp();
         _uiComponentJoystick.CleanUp();
         base.OnClose();
     }
