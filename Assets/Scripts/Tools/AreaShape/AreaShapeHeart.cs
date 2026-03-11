@@ -38,7 +38,6 @@ public class AreaShapeHeart : AreaShape
 
     private void Awake()
     {
-        base.Awake();
         RebuildCache();
     }
 
@@ -95,29 +94,6 @@ public class AreaShapeHeart : AreaShape
     public override Vector3 GetCenter()
     {
         return _cachedCenter;
-    }
-
-    protected override Vector3[] GetShapePoints()
-    {
-        if (_precision < 3)
-            return null;
-
-        Vector3 position = transform.position;
-        Vector2 center2D = new Vector2(position.x, position.z);
-        Vector3[] points = new Vector3[_precision + 1];
-
-        for (int i = 0; i <= _precision; i++)
-        {
-            float t = (float)i / _precision * 2f * Mathf.PI;
-            
-            float x = 16f * Mathf.Pow(Mathf.Sin(t), 3f);
-            float y = 13f * Mathf.Cos(t) - 5f * Mathf.Cos(2f * t) - 2f * Mathf.Cos(3f * t) - Mathf.Cos(4f * t);
-
-            Vector2 point2D = center2D + new Vector2(x, y) * _scale * 0.1f;
-            points[i] = new Vector3(point2D.x, position.y, point2D.y);
-        }
-
-        return points;
     }
     #endregion
 
@@ -226,7 +202,7 @@ public class AreaShapeHeart : AreaShape
         if (_precision < 3)
             return;
 
-        Gizmos.color = BorderColor;
+        Gizmos.color = _borderColor;
 
         // 绘制爱心轮廓
         Vector3 position = transform.position;
@@ -241,7 +217,6 @@ public class AreaShapeHeart : AreaShape
         {
             float t = (float)i / _precision * 2f * Mathf.PI;
             
-            // 爱心参数方程
             float x = 16f * Mathf.Pow(Mathf.Sin(t), 3f);
             float y = 13f * Mathf.Cos(t) - 5f * Mathf.Cos(2f * t) - 2f * Mathf.Cos(3f * t) - Mathf.Cos(4f * t);
 

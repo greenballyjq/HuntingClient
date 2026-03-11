@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// 圆形区域形状
@@ -14,8 +14,8 @@ public class AreaShapeCircle : AreaShape
     {
         Vector2 center2D = new Vector2(transform.position.x, transform.position.z);
         Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.z);
-        float distance = Vector2.Distance(center2D, worldPos2D);
-        return distance <= _radius;
+        float sqrDistance = (center2D - worldPos2D).sqrMagnitude;
+        return sqrDistance <= _radius * _radius;
     }
 
     public override bool IsOnBorder(Vector3 worldPos, float tolerance)
@@ -50,31 +50,11 @@ public class AreaShapeCircle : AreaShape
         );
     }
 
-    protected override Vector3[] GetShapePoints()
-    {
-        Vector3 center = transform.position;
-        int segments = 32;
-        Vector3[] points = new Vector3[segments + 1];
-        float angleStep = 360f / segments;
-
-        for (int i = 0; i <= segments; i++)
-        {
-            float angle = i * angleStep * Mathf.Deg2Rad;
-            points[i] = center + new Vector3(
-                Mathf.Cos(angle) * _radius,
-                0,
-                Mathf.Sin(angle) * _radius
-            );
-        }
-
-        return points;
-    }
-    
 #if UNITY_EDITOR
     public override void OnDrawGizmos()
     {
         // 绘制圆形轮廓
-        Gizmos.color = BorderColor;
+        Gizmos.color = _borderColor;
         Vector3 center = transform.position;
 
         int segments = 32;

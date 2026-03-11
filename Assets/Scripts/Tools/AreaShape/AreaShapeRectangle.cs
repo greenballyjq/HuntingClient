@@ -67,27 +67,11 @@ public class AreaShapeRectangle : AreaShape
         );
     }
 
-    protected override Vector3[] GetShapePoints()
-    {
-        Vector3 center = transform.position;
-        float halfWidth = _width * 0.5f;
-        float halfHeight = _height * 0.5f;
-
-        return new Vector3[]
-        {
-            center + new Vector3(-halfWidth, 0, halfHeight),
-            center + new Vector3(halfWidth, 0, halfHeight),
-            center + new Vector3(halfWidth, 0, -halfHeight),
-            center + new Vector3(-halfWidth, 0, -halfHeight),
-            center + new Vector3(-halfWidth, 0, halfHeight)
-        };
-    }
-
 #if UNITY_EDITOR
     public override void OnDrawGizmos()
     {
         // 绘制矩形四条边
-        Gizmos.color = BorderColor;
+        Gizmos.color = _borderColor;
         Vector3 center = transform.position;
 
         float halfWidth = _width * 0.5f;

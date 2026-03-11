@@ -92,9 +92,9 @@ namespace Hunting.Game.Animal
         private void UpdateFlip(float directionX)
         {
             if (directionX > 0)
-                _skeletonMecanim.Skeleton.ScaleX = 1f;
-            else if (directionX < 0)
                 _skeletonMecanim.Skeleton.ScaleX = -1f;
+            else if (directionX < 0)
+                _skeletonMecanim.Skeleton.ScaleX = 1f;
         }
         #endregion
 

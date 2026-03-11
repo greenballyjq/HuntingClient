@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// 区域形状基类
@@ -8,23 +8,7 @@ public abstract class AreaShape : MonoBehaviour
     /// <summary>
     /// 边界颜色
     /// </summary>
-    [SerializeField] private Color _borderColor = Color.green;
-    protected Color BorderColor => _borderColor;
-
-    /// <summary>
-    /// 是否在游戏视图显示
-    /// </summary>
-    [SerializeField] private bool _showInGame = true;
-
-    /// <summary>
-    /// 线条宽度
-    /// </summary>
-    [SerializeField] private float _lineWidth = 0.1f;
-
-    /// <summary>
-    /// 线条渲染组件
-    /// </summary>
-    private LineRenderer _lineRenderer;
+    [SerializeField] protected Color _borderColor = Color.green;
 
     /// <summary>
     /// 是否在内部
@@ -42,7 +26,7 @@ public abstract class AreaShape : MonoBehaviour
     public abstract bool IsOnBorder(Vector3 worldPos, float tolerance);
 
     /// <summary>
-    /// 获取包围半径
+    /// 获取外接圆半径
     /// </summary>
     public abstract float GetBoundingRadius();
 
@@ -62,61 +46,20 @@ public abstract class AreaShape : MonoBehaviour
         Vector3 center = GetCenter();
         float boundingRadius = GetBoundingRadius();
         
-        // 在包围圆内随机采样，直到找到形状内的点
         for (int i = 0; i < maxAttempts; i++)
         {
             float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-
             float distance = Mathf.Sqrt(Random.Range(0f, 1f)) * boundingRadius;
-            
             Vector3 randomPoint = center + new Vector3(
                 Mathf.Cos(angle) * distance,
                 0,
                 Mathf.Sin(angle) * distance
             );
-            
             if (IsInside(randomPoint))
                 return randomPoint;
         }
 
-        // 尝试失败返回中心点
         return center;
-    }
-
-    /// <summary>
-    /// 获取形状点集
-    /// </summary>
-    /// <returns>形状轮廓的点集</returns>
-    protected abstract Vector3[] GetShapePoints();
-
-    protected virtual void Awake()
-    {
-        if (_showInGame)
-        {       
-            _lineRenderer = gameObject.AddComponent<LineRenderer>();
-            _lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-            _lineRenderer.startColor = _borderColor;
-            _lineRenderer.endColor = _borderColor;
-            _lineRenderer.startWidth = _lineWidth;
-            _lineRenderer.endWidth = _lineWidth;
-            _lineRenderer.useWorldSpace = true;
-            _lineRenderer.loop = true;
-        }
-    }
-
-    private void LateUpdate()
-    {
-        if (_showInGame && _lineRenderer != null)
-        {
-            Vector3[] points = GetShapePoints();
-            if (points != null && points.Length >= 2)
-            {
-                _lineRenderer.positionCount = points.Length;
-                _lineRenderer.SetPositions(points);
-                _lineRenderer.startColor = _borderColor;
-                _lineRenderer.endColor = _borderColor;
-            }
-        }
     }
 
 #if UNITY_EDITOR
@@ -126,4 +69,3 @@ public abstract class AreaShape : MonoBehaviour
     public virtual void OnDrawGizmos() {}
 #endif
 }
-

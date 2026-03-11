@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -33,7 +33,6 @@ public class AreaShapePolygon : AreaShape
 
     private void Awake()
     {
-        base.Awake();
         RebuildCache();
     }
 
@@ -89,28 +88,6 @@ public class AreaShapePolygon : AreaShape
     public override Vector3 GetCenter()
     {
         return _cachedCenter;
-    }
-
-    protected override Vector3[] GetShapePoints()
-    {
-        if (_vertices.Count < 3)
-            return null;
-
-        Vector3 position = transform.position;
-        Vector3[] points = new Vector3[_vertices.Count + 1];
-        
-        for (int i = 0; i < _vertices.Count; i++)
-        {
-            points[i] = new Vector3(
-                _vertices[i].x + position.x,
-                position.y,
-                _vertices[i].z + position.z
-            );
-        }
-        
-        points[_vertices.Count] = points[0];
-        
-        return points;
     }
     #endregion
 
@@ -212,7 +189,7 @@ public class AreaShapePolygon : AreaShape
         if (_vertices.Count < 3)
             return;
 
-        Gizmos.color = BorderColor;
+        Gizmos.color = _borderColor;
 
         // 绘制多边形轮廓
         Vector3 position = transform.position;
@@ -221,14 +198,6 @@ public class AreaShapePolygon : AreaShape
             Vector3 v1 = new Vector3(_vertices[i].x + position.x, position.y, _vertices[i].z + position.z);
             Vector3 v2 = new Vector3(_vertices[(i + 1) % _vertices.Count].x + position.x, position.y, _vertices[(i + 1) % _vertices.Count].z + position.z);
             Gizmos.DrawLine(v1, v2);
-        }
-
-        // 绘制顶点
-        Gizmos.color = Color.yellow;
-        foreach (var vertex in _vertices)
-        {
-            Vector3 worldVertex = new Vector3(vertex.x + position.x, position.y, vertex.z + position.z);
-            Gizmos.DrawWireSphere(worldVertex, 0.1f);
         }
 
         // 绘制中心点

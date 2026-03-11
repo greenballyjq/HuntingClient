@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -16,19 +16,43 @@ public abstract class AreaTriggerBase : MonoBehaviour
         /// </summary>
         Inside,
         /// <summary>
-        /// 内边界触发（在形状内部，但接近边界）
+        /// 内边界触发        
         /// </summary>
         InnerBorder,
         /// <summary>
-        /// 外边界触发（在形状外部，但接近边界）
+        /// 外边界触发
         /// </summary>
         OuterBorder
+    }
+
+    /// <summary>
+    /// 更新模式
+    /// </summary>
+    public enum UpdateMode
+    {
+        /// <summary>
+        /// 渲染帧更新
+        /// </summary>
+        Update,
+        /// <summary>
+        /// 物理帧更新
+        /// </summary>
+        FixedUpdate,
+        /// <summary>
+        /// 按间隔更新
+        /// </summary>
+        Interval
     }
     
     /// <summary>
     /// 触发模式
     /// </summary>
     [SerializeField] private TriggerMode _triggerMode = TriggerMode.Inside;
+
+    /// <summary>
+    /// 更新模式
+    /// </summary>
+    [SerializeField] private UpdateMode _updateMode = UpdateMode.Interval;
     
     /// <summary>
     /// 目标层遮罩
@@ -71,6 +95,11 @@ public abstract class AreaTriggerBase : MonoBehaviour
     private Dictionary<int, Collider> _colliderCache = new Dictionary<int, Collider>();
 
     /// <summary>
+    /// OverlapSphereNonAlloc复用缓冲区
+    /// </summary>
+    private readonly Collider[] _overlapBuffer = new Collider[128];
+
+    /// <summary>
     /// 进入触发
     /// </summary>
     /// <param name="collider">碰撞体</param>
@@ -90,13 +119,23 @@ public abstract class AreaTriggerBase : MonoBehaviour
     
     private void Update()
     {
-        _checkTimer += Time.deltaTime;
+        if (_updateMode == UpdateMode.FixedUpdate) return;
 
-        if (_checkTimer < _checkInterval)
+        if (_updateMode == UpdateMode.Update)
+        {
+            PerformDetection();
             return;
+        }
 
+        _checkTimer += Time.deltaTime;
+        if (_checkTimer < _checkInterval) return;
         _checkTimer = 0f;
-        
+        PerformDetection();
+    }
+
+    private void FixedUpdate()
+    {
+        if (_updateMode != UpdateMode.FixedUpdate) return;
         PerformDetection();
     }
     
@@ -108,24 +147,24 @@ public abstract class AreaTriggerBase : MonoBehaviour
         // 清空当前帧集合
         _currentIds.Clear();
 
-        // 区域检测
-        Collider[] candidates = Physics.OverlapSphere(
-        _shape.GetCenter(),
-        _shape.GetBoundingRadius(),
-        _targetLayerMask);
-        foreach (var collider in candidates)
+        // 区域检测（0GC）
+        int count = Physics.OverlapSphereNonAlloc(
+            _shape.GetCenter(),
+            _shape.GetBoundingRadius(),
+            _overlapBuffer,
+            _targetLayerMask);
+        for (int i = 0; i < count; i++)
         {
+            var collider = _overlapBuffer[i];
             if (collider == null) continue;
 
             Vector3 worldPos = collider.transform.position;
-            bool isInside = _shape.IsInside(worldPos);
-            bool isOnBorder = _shape.IsOnBorder(worldPos, _borderTolerance);
 
             bool isInRange = _triggerMode switch
             {
-                TriggerMode.Inside => isInside,
-                TriggerMode.InnerBorder => isInside && isOnBorder,
-                TriggerMode.OuterBorder => !isInside && isOnBorder,
+                TriggerMode.Inside => _shape.IsInside(worldPos),
+                TriggerMode.InnerBorder => _shape.IsInside(worldPos) && _shape.IsOnBorder(worldPos, _borderTolerance),
+                TriggerMode.OuterBorder => !_shape.IsInside(worldPos) && _shape.IsOnBorder(worldPos, _borderTolerance),
                 _ => false
             };
 

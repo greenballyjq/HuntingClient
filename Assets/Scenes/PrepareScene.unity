@@ -609,7 +609,7 @@ GameObject:
   - component: {fileID: 930458308}
   - component: {fileID: 930458307}
   m_Layer: 0
-  m_Name: HuntingAppFLow
+  m_Name: HuntingAppFlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
