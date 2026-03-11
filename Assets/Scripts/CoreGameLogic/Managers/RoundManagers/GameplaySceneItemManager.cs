@@ -14,8 +14,8 @@ public class GameplaySceneItemManager : IRoundManager, IRoundResettable
     /// <summary>
     /// 可游玩区域
     /// </summary>
-    private AreaShape _playableArea;
-    public AreaShape PlayableArea => _playableArea;
+    private BaseAreaShape _playableArea;
+    public BaseAreaShape PlayableArea => _playableArea;
 
     public void Init(RoundContext context)
     {
@@ -52,6 +52,6 @@ public class GameplaySceneItemManager : IRoundManager, IRoundResettable
     /// <summary>
     /// 查找可游玩区域
     /// </summary>
-    private void FindPlayableArea() => _playableArea = GameObject.Find("PlayableArea").GetComponent<AreaShape>();
+    private void FindPlayableArea() => _playableArea = GameObject.Find("PlayableArea").GetComponent<BaseAreaShape>();
     #endregion
 }

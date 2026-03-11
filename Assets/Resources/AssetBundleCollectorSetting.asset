@@ -85,6 +85,14 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
+      - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Prop
+        CollectorGUID: 73e38f316033c274dbd8f81258ad6297
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
     - GroupName: game
       GroupDesc: 
       AssetTags: 
@@ -140,8 +148,8 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/ArtsTemp/Environments
-        CollectorGUID: f9dac1abf391b7441b7304ab6b17461f
+      - CollectPath: Assets/Arts/Environments
+        CollectorGUID: 9f52740860aa03f45a6b8465efa815c9
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackGroup

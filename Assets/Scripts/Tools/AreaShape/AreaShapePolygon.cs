@@ -4,27 +4,27 @@ using UnityEngine;
 /// <summary>
 /// 多边形区域形状
 /// </summary>
-public class AreaShapePolygon : AreaShape
+public class AreaShapePolygon : BaseAreaShape
 {
     /// <summary>
-    /// 顶点列表
+    /// 顶点列表（本地空间，仅XY平面）
     /// </summary>
     [SerializeField] private List<Vector3> _vertices = new List<Vector3>();
 
     /// <summary>
-    /// 缓存中心点
+    /// 本地空间2D顶点缓存
     /// </summary>
-    private Vector3 _cachedCenter;
+    private Vector2[] _cachedVertices2D;
 
     /// <summary>
-    /// 缓存包围半径
+    /// 本地空间质心
     /// </summary>
-    private float _cachedBoundingRadius;
+    private Vector2 _cachedCenterLocal;
 
     /// <summary>
-    /// 缓存2D顶点列表
+    /// 质心到顶点的最大距离的平方
     /// </summary>
-    private List<Vector2> _cachedVertices2D;
+    private float _cachedBoundingRadiusSqr;
 
     private void OnValidate()
     {
@@ -39,41 +39,44 @@ public class AreaShapePolygon : AreaShape
     #region 公共方法
     public override bool IsInside(Vector3 worldPos)
     {
-        if (_cachedVertices2D == null || _cachedVertices2D.Count < 3)
+        // 射线法：从点向右发射水平射线，与多边形边交点为奇数则在内部
+
+        if (_cachedVertices2D == null || _cachedVertices2D.Length < 3)
             return false;
 
-        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.z);
+        Vector3 local = transform.InverseTransformPoint(worldPos);
+        Vector2 pos2D = new Vector2(local.x, local.z);
 
-        // 从点向右发射射线，计算与多边形边的交点数量
         int intersectionCount = 0;
-        for (int i = 0; i < _cachedVertices2D.Count; i++)
+        int vertexCount = _cachedVertices2D.Length;
+        for (int i = 0; i < vertexCount; i++)
         {
             Vector2 v1 = _cachedVertices2D[i];
-            Vector2 v2 = _cachedVertices2D[(i + 1) % _cachedVertices2D.Count];
+            Vector2 v2 = _cachedVertices2D[(i + 1) % vertexCount];
 
-            if (RayIntersectsEdge(worldPos2D, v1, v2))
+            if (RayIntersectsEdge(pos2D, v1, v2))
                 intersectionCount++;
         }
 
-        // 奇数个交点表示在内部
-        return intersectionCount % 2 == 1;
+        return (intersectionCount & 1) == 1;
     }
 
     public override bool IsOnBorder(Vector3 worldPos, float tolerance)
     {
-        if (_cachedVertices2D == null || _cachedVertices2D.Count < 3)
+        if (_cachedVertices2D == null || _cachedVertices2D.Length < 3)
             return false;
 
-        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.z);
+        Vector3 local = transform.InverseTransformPoint(worldPos);
+        Vector2 pos2D = new Vector2(local.x, local.z);
+        float toleranceSqr = tolerance * tolerance;
 
-        // 计算点到每条边的最短距离
-        for (int i = 0; i < _cachedVertices2D.Count; i++)
+        int vertexCount = _cachedVertices2D.Length;
+        for (int i = 0; i < vertexCount; i++)
         {
             Vector2 v1 = _cachedVertices2D[i];
-            Vector2 v2 = _cachedVertices2D[(i + 1) % _cachedVertices2D.Count];
+            Vector2 v2 = _cachedVertices2D[(i + 1) % vertexCount];
 
-            float distance = PointToEdgeDistance(worldPos2D, v1, v2);
-            if (distance <= tolerance)
+            if (PointToEdgeSqrDistance(pos2D, v1, v2) <= toleranceSqr)
                 return true;
         }
 
@@ -82,105 +85,111 @@ public class AreaShapePolygon : AreaShape
 
     public override float GetBoundingRadius()
     {
-        return _cachedBoundingRadius;
+        return Mathf.Sqrt(_cachedBoundingRadiusSqr);
     }
 
     public override Vector3 GetCenter()
     {
-        return _cachedCenter;
+        return transform.TransformPoint(new Vector3(_cachedCenterLocal.x, 0, _cachedCenterLocal.y));
     }
+
+    public override void GetOutlinePoints(List<Vector3> outPoints)
+    {
+        if (_vertices.Count < 3) return;
+
+        if (_cachedVertices2D == null || _cachedVertices2D.Length != _vertices.Count)
+            RebuildCache();
+
+        int count = _cachedVertices2D.Length;
+        for (int i = 0; i < count; i++)
+        {
+            Vector2 p = _cachedVertices2D[i];
+            outPoints.Add(transform.TransformPoint(new Vector3(p.x, 0, p.y)));
+        }
+    }
+
     #endregion
 
     #region 私有方法
     /// <summary>
-    /// 重建缓存
+    /// 重建本地空间顶点、质心、包围半径缓存
     /// </summary>
     private void RebuildCache()
     {
         if (_vertices.Count < 3)
         {
-            _cachedCenter = transform.position;
-            _cachedBoundingRadius = 0f;
-            _cachedVertices2D = new List<Vector2>();
+            _cachedVertices2D = null;
+            _cachedCenterLocal = Vector2.zero;
+            _cachedBoundingRadiusSqr = 0f;
             return;
         }
 
-        // 计算世界坐标下的2D顶点
-        _cachedVertices2D = new List<Vector2>();
-        Vector3 position = transform.position;
-        foreach (var vertex in _vertices)
+        int count = _vertices.Count;
+        if (_cachedVertices2D == null || _cachedVertices2D.Length != count)
+            _cachedVertices2D = new Vector2[count];
+
+        Vector2 sum = Vector2.zero;
+        for (int i = 0; i < count; i++)
         {
-            Vector3 worldVertex = new Vector3(vertex.x + position.x, position.y, vertex.z + position.z);
-            _cachedVertices2D.Add(new Vector2(worldVertex.x, worldVertex.z));
+            Vector3 v = _vertices[i];
+            Vector2 p = new Vector2(v.x, v.z);
+            _cachedVertices2D[i] = p;
+            sum += p;
         }
 
-        // 计算中心点
-        Vector2 center2D = Vector2.zero;
-        foreach (var vertex2D in _cachedVertices2D)
-        {
-            center2D += vertex2D;
-        }
-        center2D /= _cachedVertices2D.Count;
-        _cachedCenter = new Vector3(center2D.x, transform.position.y, center2D.y);
+        _cachedCenterLocal = sum / count;
 
-        // 计算包围半径
-        _cachedBoundingRadius = 0f;
-        foreach (var vertex2D in _cachedVertices2D)
+        float maxSqrDist = 0f;
+        for (int i = 0; i < count; i++)
         {
-            float distance = Vector2.Distance(center2D, vertex2D);
-            if (distance > _cachedBoundingRadius)
-                _cachedBoundingRadius = distance;
+            float sqrDist = (_cachedVertices2D[i] - _cachedCenterLocal).sqrMagnitude;
+            if (sqrDist > maxSqrDist)
+                maxSqrDist = sqrDist;
         }
+        _cachedBoundingRadiusSqr = maxSqrDist;
     }
 
-
     /// <summary>
-    /// 判断射线是否与边相交
+    /// 判断从pos向右的水平射线是否与边 (edgeStart, edgeEnd) 相交
     /// </summary>
-    private bool RayIntersectsEdge(Vector2 worldPos2D, Vector2 edgeStart, Vector2 edgeEnd)
+    private bool RayIntersectsEdge(Vector2 pos, Vector2 edgeStart, Vector2 edgeEnd)
     {
-        // 检查边的两个顶点是否在射线的不同侧
-        float y1 = edgeStart.y - worldPos2D.y;
-        float y2 = edgeEnd.y - worldPos2D.y;
-        
-        // 如果两个顶点在射线的同一侧，不相交
+        // 算法：两端点在射线上下两侧，且交点 x 非负
+
+        float y1 = edgeStart.y - pos.y;
+        float y2 = edgeEnd.y - pos.y;
         if ((y1 >= 0 && y2 >= 0) || (y1 < 0 && y2 < 0))
             return false;
-        
-        // 计算射线与边的交点X坐标
-        float x1 = edgeStart.x - worldPos2D.x;
-        float x2 = edgeEnd.x - worldPos2D.x;
-        
-        // 如果边的两个顶点都在射线左侧，不相交
+
+        float x1 = edgeStart.x - pos.x;
+        float x2 = edgeEnd.x - pos.x;
         if (x1 < 0 && x2 < 0)
             return false;
-        
-        // 计算交点的X坐标
+
         float t = -y1 / (y2 - y1);
         float intersectionX = x1 + t * (x2 - x1);
-        
-        // 交点必须在射线右侧
         return intersectionX >= 0;
     }
 
     /// <summary>
-    /// 计算点到边的最短距离
+    /// 点到边的最短距离的平方
     /// </summary>
-    private float PointToEdgeDistance(Vector2 worldPos2D, Vector2 edgeStart, Vector2 edgeEnd)
+    private float PointToEdgeSqrDistance(Vector2 pos, Vector2 edgeStart, Vector2 edgeEnd)
     {
+        // 算法：点在边上的投影 Clamp 到 [0,1]，最近点即为投影点或端点
+
         Vector2 edgeDir = edgeEnd - edgeStart;
-        Vector2 toPoint = worldPos2D - edgeStart;
+        Vector2 toPoint = pos - edgeStart;
 
-        float edgeLength = edgeDir.magnitude;
-        if (edgeLength < 0.0001f)
-            return Vector2.Distance(worldPos2D, edgeStart);
+        float sqrEdgeLen = edgeDir.sqrMagnitude;
+        if (sqrEdgeLen < 1e-8f)
+            return toPoint.sqrMagnitude;
 
-        // 计算投影
-        float t = Mathf.Clamp01(Vector2.Dot(toPoint, edgeDir) / (edgeLength * edgeLength));
+        float t = Mathf.Clamp01(Vector2.Dot(toPoint, edgeDir) / sqrEdgeLen);
         Vector2 projection = edgeStart + edgeDir * t;
-
-        return Vector2.Distance(worldPos2D, projection);
+        return (pos - projection).sqrMagnitude;
     }
+
     #endregion
 
 #if UNITY_EDITOR
@@ -191,18 +200,18 @@ public class AreaShapePolygon : AreaShape
 
         Gizmos.color = _borderColor;
 
-        // 绘制多边形轮廓
-        Vector3 position = transform.position;
-        for (int i = 0; i < _vertices.Count; i++)
+        int count = _vertices.Count;
+        for (int i = 0; i < count; i++)
         {
-            Vector3 v1 = new Vector3(_vertices[i].x + position.x, position.y, _vertices[i].z + position.z);
-            Vector3 v2 = new Vector3(_vertices[(i + 1) % _vertices.Count].x + position.x, position.y, _vertices[(i + 1) % _vertices.Count].z + position.z);
+            Vector3 v1 = transform.TransformPoint(_vertices[i]);
+            Vector3 v2 = transform.TransformPoint(_vertices[(i + 1) % count]);
             Gizmos.DrawLine(v1, v2);
         }
 
-        // 绘制中心点
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(GetCenter(), 0.15f);
+
+        base.OnDrawGizmos();
     }
 #endif
 }

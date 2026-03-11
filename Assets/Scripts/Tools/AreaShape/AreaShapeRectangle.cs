@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// 矩形区域形状
 /// </summary>
-public class AreaShapeRectangle : AreaShape
+public class AreaShapeRectangle : BaseAreaShape
 {
     /// <summary>
     /// 宽度
@@ -15,31 +16,26 @@ public class AreaShapeRectangle : AreaShape
     /// </summary>
     [SerializeField] private float _height = 10f;
 
+    #region 公共方法
     public override bool IsInside(Vector3 worldPos)
     {
-        Vector2 center2D = new Vector2(transform.position.x, transform.position.z);
-        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.z);
-        Vector2 offset = worldPos2D - center2D;
-
-        return Mathf.Abs(offset.x) <= _width * 0.5f && Mathf.Abs(offset.y) <= _height * 0.5f;
+        Vector3 local = transform.InverseTransformPoint(worldPos);
+        float halfWidth = _width * 0.5f;
+        float halfHeight = _height * 0.5f;
+        return Mathf.Abs(local.x) <= halfWidth && Mathf.Abs(local.z) <= halfHeight;
     }
 
     public override bool IsOnBorder(Vector3 worldPos, float tolerance)
     {
-        Vector2 center2D = new Vector2(transform.position.x, transform.position.z);
-        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.z);
-        Vector2 offset = worldPos2D - center2D;
-
+        Vector3 local = transform.InverseTransformPoint(worldPos);
         float halfWidth = _width * 0.5f;
         float halfHeight = _height * 0.5f;
 
-        bool onHorizontalEdge = Mathf.Abs(offset.y) <= halfHeight + tolerance &&
-                                 Mathf.Abs(offset.y) >= halfHeight - tolerance &&
-                                 Mathf.Abs(offset.x) <= halfWidth;
-        
-        bool onVerticalEdge = Mathf.Abs(offset.x) <= halfWidth + tolerance &&
-                              Mathf.Abs(offset.x) >= halfWidth - tolerance &&
-                              Mathf.Abs(offset.y) <= halfHeight;
+        bool onHorizontalEdge = Mathf.Abs(Mathf.Abs(local.z) - halfHeight) <= tolerance &&
+                                Mathf.Abs(local.x) <= halfWidth;
+
+        bool onVerticalEdge = Mathf.Abs(Mathf.Abs(local.x) - halfWidth) <= tolerance &&
+                             Mathf.Abs(local.z) <= halfHeight;
 
         return onHorizontalEdge || onVerticalEdge;
     }
@@ -53,44 +49,52 @@ public class AreaShapeRectangle : AreaShape
     {
         return transform.position;
     }
-    
-    public override Vector3 GetRandomPoint(int maxAttempts = 100)
+
+    public override void GetOutlinePoints(List<Vector3> outPoints)
     {
-        Vector3 center = transform.position;
         float halfWidth = _width * 0.5f;
         float halfHeight = _height * 0.5f;
-        
-        return center + new Vector3(
+
+        outPoints.Add(transform.TransformPoint(new Vector3(-halfWidth, 0, halfHeight)));
+        outPoints.Add(transform.TransformPoint(new Vector3(halfWidth, 0, halfHeight)));
+        outPoints.Add(transform.TransformPoint(new Vector3(halfWidth, 0, -halfHeight)));
+        outPoints.Add(transform.TransformPoint(new Vector3(-halfWidth, 0, -halfHeight)));
+    }
+
+    public override Vector3 GetRandomPoint(int maxAttempts = 100)
+    {
+        float halfWidth = _width * 0.5f;
+        float halfHeight = _height * 0.5f;
+        Vector3 local = new Vector3(
             Random.Range(-halfWidth, halfWidth),
             0,
-            Random.Range(-halfHeight, halfHeight)
-        );
+            Random.Range(-halfHeight, halfHeight));
+        return transform.TransformPoint(local);
     }
+    #endregion
 
 #if UNITY_EDITOR
     public override void OnDrawGizmos()
     {
-        // 绘制矩形四条边
         Gizmos.color = _borderColor;
-        Vector3 center = transform.position;
 
         float halfWidth = _width * 0.5f;
         float halfHeight = _height * 0.5f;
 
-        Vector3 topLeft = center + new Vector3(-halfWidth, 0, halfHeight);
-        Vector3 topRight = center + new Vector3(halfWidth, 0, halfHeight);
-        Vector3 bottomLeft = center + new Vector3(-halfWidth, 0, -halfHeight);
-        Vector3 bottomRight = center + new Vector3(halfWidth, 0, -halfHeight);
+        Vector3 topLeft = transform.TransformPoint(new Vector3(-halfWidth, 0, halfHeight));
+        Vector3 topRight = transform.TransformPoint(new Vector3(halfWidth, 0, halfHeight));
+        Vector3 bottomLeft = transform.TransformPoint(new Vector3(-halfWidth, 0, -halfHeight));
+        Vector3 bottomRight = transform.TransformPoint(new Vector3(halfWidth, 0, -halfHeight));
 
         Gizmos.DrawLine(topLeft, topRight);
         Gizmos.DrawLine(topRight, bottomRight);
         Gizmos.DrawLine(bottomRight, bottomLeft);
         Gizmos.DrawLine(bottomLeft, topLeft);
 
-        // 绘制中心点
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(center, 0.2f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 0.15f);
+
+        base.OnDrawGizmos();
     }
 #endif
 }
-

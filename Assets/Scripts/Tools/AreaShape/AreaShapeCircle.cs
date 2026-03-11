@@ -1,15 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// 圆形区域形状
 /// </summary>
-public class AreaShapeCircle : AreaShape
+public class AreaShapeCircle : BaseAreaShape
 {
     /// <summary>
     /// 半径
     /// </summary>
     [SerializeField] private float _radius = 5f;
 
+    #region 公共方法
     public override bool IsInside(Vector3 worldPos)
     {
         Vector2 center2D = new Vector2(transform.position.x, transform.position.z);
@@ -35,7 +37,19 @@ public class AreaShapeCircle : AreaShape
     {
         return transform.position;
     }
-    
+
+    public override void GetOutlinePoints(List<Vector3> outPoints)
+    {
+        Vector3 center = transform.position;
+        const int segments = 32;
+
+        for (int i = 0; i <= segments; i++)
+        {
+            float angle = (float)i / segments * 2f * Mathf.PI;
+            outPoints.Add(center + new Vector3(Mathf.Cos(angle) * _radius, 0, Mathf.Sin(angle) * _radius));
+        }
+    }
+
     public override Vector3 GetRandomPoint(int maxAttempts = 100)
     {
         Vector3 center = transform.position;
@@ -49,15 +63,15 @@ public class AreaShapeCircle : AreaShape
             Mathf.Sin(angle) * distance
         );
     }
+    #endregion
 
 #if UNITY_EDITOR
     public override void OnDrawGizmos()
     {
-        // 绘制圆形轮廓
         Gizmos.color = _borderColor;
         Vector3 center = transform.position;
 
-        int segments = 32;
+        const int segments = 32;
         float angleStep = 360f / segments;
         Vector3 prevPoint = center + new Vector3(_radius, 0, 0);
         
@@ -72,10 +86,11 @@ public class AreaShapeCircle : AreaShape
             Gizmos.DrawLine(prevPoint, currentPoint);
             prevPoint = currentPoint;
         }
-        
-        // 绘制中心点
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(center, 0.2f);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(center, 0.15f);
+
+        base.OnDrawGizmos();
     }
 #endif
 }

@@ -32,7 +32,7 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
     /// <summary>
     /// 可游玩区域
     /// </summary>
-    private AreaShape _playableArea;
+    private BaseAreaShape _playableArea;
 
     /// <summary>
     /// 技能参数

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -72,7 +72,7 @@ public abstract class AreaTriggerBase : MonoBehaviour
     /// <summary>
     /// 检测形状
     /// </summary>
-    [SerializeField] private AreaShape _shape;
+    [SerializeField] private BaseAreaShape _shape;
 
     /// <summary>
     /// 检测计时器

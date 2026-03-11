@@ -10,7 +10,7 @@ public class AreaTriggerTest : MonoBehaviour
     /// <summary>
     /// 检测形状
     /// </summary>
-    [SerializeField] private AreaShape _shape;
+    [SerializeField] private BaseAreaShape _shape;
 
     /// <summary>
     /// 目标层遮罩

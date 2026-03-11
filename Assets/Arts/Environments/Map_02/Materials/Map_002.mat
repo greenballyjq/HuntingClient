@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: dm
+  m_Name: Map_002
   m_Shader: {fileID: 4800000, guid: d4bb81b483e772f49a270a0b54055427, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
