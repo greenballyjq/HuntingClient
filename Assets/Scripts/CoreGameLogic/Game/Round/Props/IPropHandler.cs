@@ -1,15 +1,5 @@
 ﻿using cfg.HuntingConfig.Prop;
-
-/// <summary>
-/// 道具上下文
-/// </summary>
-public class PropContext
-{
-    /// <summary>
-    /// 道具配置
-    /// </summary>
-    public Prop PropData { get; set; }
-}
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 道具处理器接口
@@ -17,21 +7,45 @@ public class PropContext
 public interface IPropHandler
 {
     /// <summary>
-    /// 道具效果开始
+    /// 道具开始
     /// </summary>
-    /// <param name="context">道具上下文</param>
-    void OnPropStart(PropContext context);
+    /// <param name="propData">道具配置</param>
+    UniTask StartProp(Prop propData);
 
     /// <summary>
-    /// 道具效果更新
+    /// 每帧更新
     /// </summary>
-    /// <param name="context">道具上下文</param>
-    /// <param name="deltaTime">时间增量</param>
-    void OnPropUpdate(PropContext context, float deltaTime);
+    /// <param name="dt">时间增量</param>
+    void DoUpdate(float dt);
 
     /// <summary>
-    /// 道具效果结束
+    /// 道具结束
     /// </summary>
-    /// <param name="context">道具上下文</param>
-    void OnPropEnd(PropContext context);
+    void EndProp();
+}
+
+/// <summary>
+/// 道具阶段
+/// </summary>
+public enum PropPhase
+{
+    /// <summary>
+    /// 无阶段
+    /// </summary>
+    None,
+
+    ///<summary>
+    /// 道具开始阶段
+    /// </summary>
+    Starting,
+
+    /// <summary>
+    /// 道具运行阶段
+    /// </summary>
+    Running,
+
+    /// <summary>
+    /// 道具结束阶段
+    /// </summary>
+    Finished
 }

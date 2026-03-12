@@ -1,6 +1,5 @@
 ﻿using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
-using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using GameFramework.Manager;
 using TMPro;
@@ -52,11 +51,6 @@ public class UIPopupProp : UIBase
     /// </summary>
     private PlayerDataManager _playerDataManager => GameServiceLocator.GetAppManager<PlayerDataManager>();
 
-    /// <summary>
-    /// 资源管理器
-    /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-
     private void Awake()
     {
         _buttonGet.onClick.AddListener(OnGetButtonClicked);
@@ -77,18 +71,17 @@ public class UIPopupProp : UIBase
     {
         base.OnInit(userData);
         _currentProp = _configManager.GetProp((EPropType)userData);
-        UpdatePropDisplayAsync().Forget();
+        UpdatePropDisplay();
     }
 
     #region 私有方法
     /// <summary>
     /// 更新道具展示
     /// </summary>
-    private async UniTask UpdatePropDisplayAsync()
+    private void UpdatePropDisplay()
     {
         _textPropName.text = _currentProp.Name;
-        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(_currentProp.IconResourcePath);
-        _imageProp.sprite = sprite;
+        _imageProp.sprite = _configManager.PropRefSo.GetPropIcon(_currentProp.ID);
     }
     #endregion
 

@@ -77,40 +77,12 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
 
     #region 公共方法
     /// <summary>
-    /// 获取最近的动物
-    /// </summary>
-    /// <param name="fromPosition">参考位置</param>
-    /// <returns>最近的动物</returns>
-    public BaseAnimalBehaviour GetNearestAnimal(Vector3 fromPosition)
-    {
-        BaseAnimalBehaviour nearestAnimal = null;
-        float nearestSq = float.MaxValue;
-
-        foreach (var animal in _activeAnimals)
-        {
-            if (_pendingRemovalAnimals.Contains(animal))
-                continue;
-            if (animal.Health.IsDead)
-                continue;
-
-            float sq = Vector3.SqrMagnitude(animal.transform.position - fromPosition);
-            if (sq < nearestSq)
-            {
-                nearestSq = sq;
-                nearestAnimal = animal;
-            }
-        }
-
-        return nearestAnimal;
-    }
-
-    /// <summary>
     /// 获取最近且在屏幕内的动物
     /// </summary>
     /// <param name="fromPosition">参考位置</param>
     /// <param name="camera">相机</param>
     /// <returns>最近的可见动物</returns>
-    public BaseAnimalBehaviour GetNearestVisibleAnimal(Vector3 fromPosition, Camera camera)
+    public BaseAnimalBehaviour GetNearestVisibleAnimal(Vector3 fromPosition)
     {
         BaseAnimalBehaviour nearestAnimal = null;
         float nearestSq = float.MaxValue;
@@ -121,7 +93,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
                 continue;
             if (animal.Health.IsDead)
                 continue;
-            if (!ScreenUtils.IsVisible(animal.transform, camera))
+            if (!ScreenUtils.IsVisible(animal.transform, Camera.main))
                 continue;
 
             float sq = Vector3.SqrMagnitude(animal.transform.position - fromPosition);

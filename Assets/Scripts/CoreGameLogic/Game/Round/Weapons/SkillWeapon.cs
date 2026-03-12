@@ -8,7 +8,6 @@ using UnityEngine;
 public class SkillWeapon : MonoBehaviour
 {
     private HuntingSoundManager _soundManager;
-    private CameraManager _cameraManager;
     private BulletManager _bulletManager;
     private AnimalManager _animalManager;
 
@@ -54,7 +53,7 @@ public class SkillWeapon : MonoBehaviour
         }
         else
         {
-            var animal = _animalManager.GetNearestVisibleAnimal(_firePoint.position, _cameraManager.MainCamera);
+            var animal = _animalManager.GetNearestVisibleAnimal(_firePoint.position);
             if (animal != null && IsInRange(animal))
             {
                 _currentTarget = animal;
@@ -84,7 +83,6 @@ public class SkillWeapon : MonoBehaviour
     private void RegisterServices()
     {
         _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
-        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
         _bulletManager = GameServiceLocator.GetRoundManager<BulletManager>();
         _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
     }
@@ -104,7 +102,7 @@ public class SkillWeapon : MonoBehaviour
         if (_screenCheckTimer >= SCREEN_CHECK_INTERVAL)
         {
             _screenCheckTimer = 0f;
-            if (!ScreenUtils.IsVisible(_currentTarget.transform,_cameraManager.MainCamera))
+            if (!ScreenUtils.IsVisible(_currentTarget.transform,Camera.main))
                 return true;
         }
 

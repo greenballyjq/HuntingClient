@@ -1,10 +1,11 @@
 ﻿using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
+using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using GameFramework.Utility;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 /// <summary>
 /// 道具管理器
@@ -12,35 +13,35 @@ using UnityEngine;
 public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
-    /// 活跃道具上下文
+    /// 活跃道具
     /// </summary>
     private class ActiveProp
     {
         /// <summary>
         /// 道具处理器
         /// </summary>
-        public IPropHandler Handler;
-
-        /// <summary>
-        /// 道具上下文
-        /// </summary>
-        public PropContext Context;
+        public BasePropHandler Handler;
 
         /// <summary>
         /// 道具配置
         /// </summary>
         public Prop PropData;
-
-        /// <summary>
-        /// 剩余时间
-        /// </summary>
-        public float RemainingTime;
     }
 
     /// <summary>
     /// 活跃道具列表
     /// </summary>
     private readonly List<ActiveProp> _activeProps = new List<ActiveProp>();
+
+    /// <summary>
+    /// 道具处理器缓存
+    /// </summary>
+    private readonly Dictionary<EPropType, BasePropHandler> _handlerCache = new Dictionary<EPropType, BasePropHandler>();
+
+    /// <summary>
+    /// 配置缓存
+    /// </summary>
+    private readonly Dictionary<EPropType, Prop> _propDataCache = new Dictionary<EPropType, Prop>();
 
     private EventManager _eventManager;
     private HuntingConfigManager _configManager;
@@ -49,75 +50,61 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     public void Init(RoundContext context)
     {
         RegisterServices();
+        CacheHandler();
+        CachePropConfig();
         Log.Info("[PropManager] 初始化完成");
     }
 
-    public void DoUpdate(float deltaTime)
+    public void DoUpdate(float dt)
     {
-        UpdateActiveProps(deltaTime);
+        UpdateActiveProps(dt);
     }
 
     public void Dispose()
     {
-        StopAllProps();
+        EndAllProps();
+
         Log.Info("[PropManager] 已释放");
     }
 
     public void Cleanup()
     {
-        StopAllProps();
+        EndAllProps();
     }
 
-    public void ReInit(RoundContext context){}
+    public void ReInit(RoundContext context) { }
 
     #region 公共方法
     /// <summary>
-    /// 尝试使用道具
+    /// 尝试开始道具
     /// </summary>
     /// <param name="propType">道具类型</param>
-    /// <returns>是否使用成功</returns>
-    public bool TryUseProp(EPropType propType)
+    public void TryStartProp(EPropType propType)
     {
-        Prop propData = _configManager.GetProp(propType);
+        var handler = _handlerCache[propType];
+        if (handler.PropPhase != PropPhase.None)
+            return;
 
         if (_playerDataManager.GetPropCount(propType) < 1)
-        {
-            Log.Warning($"[PropManager] 道具数量不足，PropType:{propType}");
-            return false;
-        }
+            return;
 
-        if (!CanUseProp(propType, propData))
-        {
-            Log.Warning($"[PropManager] 道具正在使用中，无法重复使用，PropType:{propType}");
-            return false;
-        }
+        var propData = _propDataCache[propType];
+        StartProp(handler, propData);
 
         _playerDataManager.UpdatePropCount(propType, -1);
 
-        // 创建处理器
-        IPropHandler handler = PropHandlerFactory.CreatePropHandler(propType);
-
-        // 构造上下文
-        PropContext context = new PropContext
+        TriggerPropUseSucceeded(new PropUseSucceededEventArgs 
         {
-            PropData = propData
-        };
-
-        // 开始道具效果
-        BeginProp(propData, handler, context);
-        
-        // 触发道具使用成功事件
-        TriggerPropUseSucceeded(new PropUseSucceededEventArgs
-        {
-            Sender = this,
-            PropData = propData
+            Sender = this, 
+            PropData = propData 
         });
-        
-        return true;
     }
     #endregion
 
     #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
     private void RegisterServices()
     {
         _eventManager = GameServiceLocator.EventManager;
@@ -126,122 +113,103 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     }
 
     /// <summary>
-    /// 检查道具是否可以使用
+    /// 缓存处理器
     /// </summary>
-    /// <param name="propType">道具类型</param>
-    /// <param name="propData">道具配置</param>
-    /// <returns>是否可以使用</returns>
-    private bool CanUseProp(EPropType propType, Prop propData)
+    private void CacheHandler()
     {
-        // 有持续时间的道具，持续期间不能重复使用
-        if (propData.Duration > 0f)
+        foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
         {
-            // 检查同类型道具是否正在使用
-            foreach (var activeProp in _activeProps)
-            {
-                if (activeProp.PropData.PropType == propType)
-                    return false;
-            }
+            IPropHandler handler = PropHandlerFactory.CreatePropHandler(propType);
+            if (handler is BasePropHandler baseHandler)
+                _handlerCache[propType] = baseHandler;
         }
-
-        return true;
     }
 
     /// <summary>
-    /// 开始道具效果
+    /// 缓存道具配置
     /// </summary>
-    /// <param name="propData">道具配置</param>
-    /// <param name="handler">道具处理器</param>
-    /// <param name="context">道具上下文</param>
-    private void BeginProp(Prop propData, IPropHandler handler, PropContext context)
+    private void CachePropConfig()
     {
-        // 创建活跃道具实例
+        foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
+        {
+            Prop propData = _configManager.GetProp(propType);
+            if (propData != null)
+                _propDataCache[propType] = propData;
+        }
+    }
+
+    /// <summary>
+    /// 开始道具
+    /// </summary>
+    private void StartProp(BasePropHandler handler, Prop propData)
+    {
         ActiveProp activeProp = new ActiveProp
         {
             Handler = handler,
-            Context = context,
-            PropData = propData,
-            RemainingTime = propData.Duration
+            PropData = propData
         };
 
-        // 加入活跃列表
         _activeProps.Add(activeProp);
 
-        // 通知处理器执行开始逻辑
-        handler?.OnPropStart(context);
+        handler.StartProp(propData).Forget();
 
-
-
-        // 触发道具开始事件
-        TriggerPropStarted(new PropStartedEventArgs
-        {
-            Sender = this,
-            PropData = propData
+        TriggerPropStarted(new PropStartedEventArgs 
+        { 
+            Sender = this, 
+            PropData = propData 
         });
-
-        Log.Info($"[PropManager] 道具开始，类型:{propData.PropType}，持续时间:{propData.Duration:F2}秒");
-
-        // 无持续时间的道具，立即结束
-        if (propData.Duration <= 0f)
-            EndProp(activeProp);
     }
 
     /// <summary>
-    /// 结束道具效果
+    /// 结束道具
     /// </summary>
-    /// <param name="activeProp">活跃道具实例</param>
     private void EndProp(ActiveProp activeProp)
     {
-        // 通知处理器执行结束逻辑
-        activeProp.Handler?.OnPropEnd(activeProp.Context);
+        activeProp.Handler.EndProp();
 
-        // 从活跃列表移除
         _activeProps.Remove(activeProp);
 
-        // 触发道具结束事件
-        TriggerPropEnded(new PropEndedEventArgs
-        {
-            Sender = this,
+        TriggerPropEnded(new PropEndedEventArgs 
+        { 
+            Sender = this, 
             PropData = activeProp.PropData
         });
-
-        Log.Info($"[PropManager] 道具结束，类型:{activeProp.PropData.PropType}");
     }
 
     /// <summary>
     /// 更新所有活跃道具
     /// </summary>
-    /// <param name="deltaTime">时间增量</param>
-    private void UpdateActiveProps(float deltaTime)
+    private void UpdateActiveProps(float dt)
     {
+        ActiveProp activeProp;
         for (int i = _activeProps.Count - 1; i >= 0; i--)
         {
-            ActiveProp activeProp = _activeProps[i];
+            activeProp = _activeProps[i];
 
-            // 更新剩余时间
-            activeProp.RemainingTime -= deltaTime;
-
-            // 通知处理器执行更新逻辑
-            activeProp.Handler?.OnPropUpdate(activeProp.Context, deltaTime);
-
-            // 触发道具更新事件
-            TriggerPropUpdated(new PropUpdatedEventArgs
+            if (activeProp.Handler.PropPhase == PropPhase.Finished)
             {
-                Sender = this,
-                PropData = activeProp.PropData,
-                RemainingTime = activeProp.RemainingTime
-            });
-
-            // 检查是否时间到
-            if (activeProp.RemainingTime <= 0f)
                 EndProp(activeProp);
+                continue;
+            }
+
+            if (activeProp.Handler.PropPhase == PropPhase.Running)
+            {
+                activeProp.Handler.DoUpdate(dt);
+
+                TriggerPropUpdated(new PropUpdatedEventArgs
+                {
+                    Sender = this,
+                    PropData = activeProp.PropData,
+                    RemainingTime = activeProp.Handler.RemainingTime
+                });
+            }
         }
     }
 
     /// <summary>
     /// 停止所有道具
     /// </summary>
-    private void StopAllProps()
+    private void EndAllProps()
     {
         for (int i = _activeProps.Count - 1; i >= 0; i--)
             EndProp(_activeProps[i]);
@@ -249,6 +217,7 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     #endregion
 
     #region 事件相关
+
     /// <summary>
     /// 触发道具开始事件
     /// </summary>
@@ -280,6 +249,6 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         _eventManager.Trigger(PropEvents.PropUseSucceeded, args);
     }
+
     #endregion
 }
-

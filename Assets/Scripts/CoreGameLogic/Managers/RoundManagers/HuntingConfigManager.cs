@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Bean;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
@@ -53,6 +53,18 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     private BulletRefSo _bulletRefSo;
     public BulletRefSo BulletRefSo => _bulletRefSo;
 
+    /// <summary>
+    /// 道具关联资源配置
+    /// </summary>
+    private PropRefSo _propRefSo;
+    public PropRefSo PropRefSo => _propRefSo;
+
+    /// <summary>
+    /// 技能关联资源配置
+    /// </summary>
+    private SkillRefSo _skillRefSo;
+    public SkillRefSo SkillRefSo => _skillRefSo;
+
     private ResourceManager _resourceManager;
 
     #region 内部方法
@@ -84,6 +96,8 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     {
         _dropRewardRefSo = await _resourceManager.LoadAssetAsync<DropRewardRefSo>("Assets/Arts/SO/DropRewardRefSo");
         _bulletRefSo = await _resourceManager.LoadAssetAsync<BulletRefSo>("Assets/Arts/SO/BulletRefSo");
+        _propRefSo = await _resourceManager.LoadAssetAsync<PropRefSo>("Assets/Arts/SO/PropRefSo");
+        _skillRefSo = await _resourceManager.LoadAssetAsync<SkillRefSo>("Assets/Arts/SO/SkillRefSo");
     }
     #endregion
 

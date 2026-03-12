@@ -19,7 +19,6 @@ public sealed partial class SkillDaMeiLi : Luban.BeanBase
         ID = _buf.ReadInt();
         DamageAmount = _buf.ReadFloat();
         ControlDuration = _buf.ReadFloat();
-        SkillPrefabResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -41,10 +40,6 @@ public sealed partial class SkillDaMeiLi : Luban.BeanBase
     /// </summary>
     public readonly float ControlDuration;
     /// <summary>
-    /// 技能预制体资源路径
-    /// </summary>
-    public readonly string SkillPrefabResourcePath;
-    /// <summary>
     /// 备注
     /// </summary>
     public readonly string Comment;
@@ -62,7 +57,6 @@ public sealed partial class SkillDaMeiLi : Luban.BeanBase
         + "ID:" + ID + ","
         + "DamageAmount:" + DamageAmount + ","
         + "ControlDuration:" + ControlDuration + ","
-        + "SkillPrefabResourcePath:" + SkillPrefabResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

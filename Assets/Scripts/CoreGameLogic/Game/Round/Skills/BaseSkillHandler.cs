@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using CoreGameLogic.Managers.AppManagers;
+using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using UnityEngine;
 
@@ -22,21 +23,32 @@ public abstract class BaseSkillHandler : ISkillHandler
     /// </summary>
     protected Transform _player;
 
-    protected ResourceManager _resourceManager;
+    /// <summary>
+    /// 可游玩区域
+    /// </summary>
+    protected BaseAreaShape _playableArea;
+
+    protected EffectManager _effectManager;
     protected HuntingConfigManager _configManager;
+    protected HuntingSoundManager _soundManager;
+    protected GameplaySceneItemManager _gameplaySceneItemManager;
 
     public BaseSkillHandler()
     {
-        _resourceManager = GameServiceLocator.ResourceManager;
+        _effectManager = GameServiceLocator.EffectManager;
         _configManager = GameServiceLocator.ConfigManager;
+        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+        _gameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
     }
 
     public async UniTask StartSkill(SkillContext context)
     {
         SkillPhase = SkillPhase.Starting;
 
+        _player = _gameplaySceneItemManager.Player;
+        _playableArea = _gameplaySceneItemManager.PlayableArea;
+
         _remainingTime = context.SkillData.Duration;
-        _player = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>().Player;
 
         await OnSkillStart(context);
 

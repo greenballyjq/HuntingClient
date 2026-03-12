@@ -1,4 +1,3 @@
-﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using GameFramework.Core.UI;
@@ -33,11 +32,6 @@ public class UIComponentSkillInfo : MonoBehaviour, IUIComponent
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
-    /// 资源管理器
-    /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-
-    /// <summary>
     /// 事件管理器
     /// </summary>
     private EventManager _eventManager => GameServiceLocator.EventManager;
@@ -61,15 +55,14 @@ public class UIComponentSkillInfo : MonoBehaviour, IUIComponent
     /// 更新技能信息
     /// </summary>
     /// <param name="roleId">角色ID</param>
-    private async UniTask UpdateSkillInfo(int roleId)
+    private void UpdateSkillInfo(int roleId)
     {
         Role roleData = _configManager.GetRole(roleId);
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
 
         _textSkillDescription.text = skillData.Description;
 
-        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(skillData.IconResourcePath);
-        _imageSkill.sprite = sprite;
+        _imageSkill.sprite = _configManager.SkillRefSo.GetSkillIcon(skillData.ID);
     }
     #endregion
 
@@ -85,9 +78,9 @@ public class UIComponentSkillInfo : MonoBehaviour, IUIComponent
     /// <summary>
     /// 走格子动画结束事件回调
     /// </summary>
-    private async void OnSlotAnimationEnded()
+    private void OnSlotAnimationEnded()
     {
-        await UpdateSkillInfo(_currentRoleId);
+        UpdateSkillInfo(_currentRoleId);
         gameObject.SetActive(true);
     }
     #endregion

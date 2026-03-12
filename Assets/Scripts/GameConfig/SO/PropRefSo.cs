@@ -1,0 +1,70 @@
+﻿using cfg.HuntingConfig.Enum;
+using System.Collections.Generic;
+using UnityEngine;
+
+/// <summary>
+/// 道具关联资源配置
+/// </summary>
+[CreateAssetMenu(fileName = "PropRefSo", menuName = "SO/PropRefSo", order = 4)]
+public class PropRefSo : ScriptableObject
+{
+    /// <summary>
+    /// 道具关联资源类
+    /// </summary>
+    [System.Serializable]
+    public class PropRef
+    {
+        /// <summary>
+        /// 道具ID
+        /// </summary>
+        public int ID;
+
+        /// <summary>
+        /// 道具类型
+        /// </summary>
+        public EPropType PropType;
+
+        /// <summary>
+        /// 道具图标
+        /// </summary>
+        public Sprite PropIcon;
+
+        /// <summary>
+        /// 道具预制体
+        /// </summary>
+        public GameObject PropPrefab;
+    }
+
+    /// <summary>
+    /// 道具关联资源列表
+    /// </summary>
+    [SerializeField] private List<PropRef> _propRefList;
+
+    #region 公共方法
+    /// <summary>
+    /// 根据ID获取道具图标
+    /// </summary>
+    public Sprite GetPropIcon(int id)
+    {
+        for (int i = 0; i < _propRefList.Count; i++)
+        {
+            if (_propRefList[i].ID == id)
+                return _propRefList[i].PropIcon;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 根据ID获取道具预制体
+    /// </summary>
+    public GameObject GetPropEffectPrefab(int id)
+    {
+        for (int i = 0; i < _propRefList.Count; i++)
+        {
+            if (_propRefList[i].ID == id)
+                return _propRefList[i].PropPrefab;
+        }
+        return null;
+    }
+    #endregion
+}

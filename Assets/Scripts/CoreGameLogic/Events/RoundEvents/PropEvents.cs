@@ -7,22 +7,22 @@ using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
-/// 道具系统事件键
+/// 道具相关事件
 /// </summary>
 public static class PropEvents
 {
     /// <summary>
-    /// 道具效果开始事件
+    /// 道具开始事件
     /// </summary>
     public static readonly EventKey<PropStartedEventArgs> PropStarted = new EventKey<PropStartedEventArgs>();
 
     /// <summary>
-    /// 道具效果更新事件
+    /// 道具更新事件
     /// </summary>
     public static readonly EventKey<PropUpdatedEventArgs> PropUpdated = new EventKey<PropUpdatedEventArgs>();
 
     /// <summary>
-    /// 道具效果结束事件
+    /// 道具结束事件
     /// </summary>
     public static readonly EventKey<PropEndedEventArgs> PropEnded = new EventKey<PropEndedEventArgs>();
 
@@ -38,7 +38,7 @@ public static class PropEvents
 }
 
 /// <summary>
-/// 道具效果开始事件参数
+/// 道具开始事件参数
 /// </summary>
 public sealed class PropStartedEventArgs : EventArgs
 {
@@ -49,7 +49,7 @@ public sealed class PropStartedEventArgs : EventArgs
 }
 
 /// <summary>
-/// 道具效果更新事件参数
+/// 道具更新事件参数
 /// </summary>
 public sealed class PropUpdatedEventArgs : EventArgs
 {
@@ -65,7 +65,7 @@ public sealed class PropUpdatedEventArgs : EventArgs
 }
 
 /// <summary>
-/// 道具效果结束事件参数
+/// 道具结束事件参数
 /// </summary>
 public sealed class PropEndedEventArgs : EventArgs
 {

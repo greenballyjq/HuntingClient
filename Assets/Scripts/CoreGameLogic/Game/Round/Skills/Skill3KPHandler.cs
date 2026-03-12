@@ -1,4 +1,5 @@
-﻿using CoreGameLogic.Managers.AppManagers;
+﻿using cfg.HuntingConfig.Skill;
+using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 
 /// <summary>
@@ -7,41 +8,42 @@ using Cysharp.Threading.Tasks;
 public class Skill3KPHandler : BaseSkillHandler
 {
     /// <summary>
-    /// 技能修正来源ID
+    /// 技能参数缓存
     /// </summary>
-    private const string ModifierSourceId = "Skill_3KP";
+    private Skill3KP _skillParamCache;
 
-    /// <summary>
-    /// 武器管理器
-    /// </summary>
-    private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
+    private WeaponManager _weaponManager;
 
-    /// <summary>
-    /// 音效管理器
-    /// </summary>
-    private HuntingSoundManager _soundManager => GameServiceLocator.GetAppManager<HuntingSoundManager>();
+    private const string MODIFIER_SOURCE_ID = "Skill_3KP";
+
+    public Skill3KPHandler() : base()
+    {
+        _weaponManager = GameServiceLocator.GetRoundManager<WeaponManager>();
+    }
 
     protected override async UniTask OnSkillStart(SkillContext context)
     {
-        var skillParam = _configManager.GetSkill3KP(context.SkillData.ParamTableID);
+        if(_skillParamCache == null)
+            _skillParamCache = _configManager.GetSkill3KP(context.SkillData.ParamTableID);
 
-        _weaponManager.RegisterFireRateModifier(ModifierSourceId, skillParam.FireRateMultiplier);
-        _weaponManager.RegisterDamageModifier(ModifierSourceId, skillParam.DamageMultiplier);
+        _weaponManager.RegisterFireRateModifier(MODIFIER_SOURCE_ID, _skillParamCache.FireRateMultiplier);
+        _weaponManager.RegisterDamageModifier(MODIFIER_SOURCE_ID, _skillParamCache.DamageMultiplier);
 
         _weaponManager.PlayerWeapon.WeaponVisual.SetSkillEffect(true);
 
         _soundManager.PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_BlueRed);
 
-        await UniTask.CompletedTask;
+        // 模拟播放动画
+        await UniTask.Delay(1000);
     }
 
     protected override void OnSkillUpdate(float dt) { }
 
     protected override void OnSkillEnd()
     {
-        _weaponManager.UnregisterFireRateModifier(ModifierSourceId);
-        _weaponManager.UnregisterDamageModifier(ModifierSourceId);
-
         _weaponManager.PlayerWeapon?.WeaponVisual?.SetSkillEffect(false);
+
+        _weaponManager.UnregisterFireRateModifier(MODIFIER_SOURCE_ID);
+        _weaponManager.UnregisterDamageModifier(MODIFIER_SOURCE_ID);
     }
 }

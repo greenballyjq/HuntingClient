@@ -10,14 +10,14 @@ using UnityEngine;
 public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
-    /// 当前技能处理器
+    /// 当前处理器
     /// </summary>
-    private BaseSkillHandler _currentSkillHandler;
+    private BaseSkillHandler _currentHandler;
 
     /// <summary>
-    /// 当前技能上下文
+    /// 当前上下文
     /// </summary>
-    private SkillContext _currentSkillContext;
+    private SkillContext _currentContext;
 
     private EventManager _eventManager;
     private EnergyProgressManager _energyProgressManager;
@@ -26,11 +26,11 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         RegisterServices();
 
-        Skill skillData = context.SkillData;
+        var skillData = context.SkillData;
 
-        _currentSkillHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
+        _currentHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
 
-        _currentSkillContext = new SkillContext
+        _currentContext = new SkillContext
         {
             SkillData = skillData,
             RoundContext = context,
@@ -41,11 +41,11 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     public void DoUpdate(float dt)
     {
-        if (_currentSkillHandler.SkillPhase is SkillPhase.Finished)
+        if (_currentHandler.SkillPhase is SkillPhase.Finished)
             EndSkill();
             
-        if (_currentSkillHandler.SkillPhase is SkillPhase.Running)
-            _currentSkillHandler.DoUpdate(dt);
+        if (_currentHandler.SkillPhase is SkillPhase.Running)
+            _currentHandler.DoUpdate(dt);
     }
 
     public void Dispose()
@@ -65,17 +65,20 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     #region 公共方法
     public void TryStartSkill()
     {
-        if(_currentSkillHandler.SkillPhase is SkillPhase.None)
-        {
-            if (!_energyProgressManager.UseEnergyOneBar())
-                return;
+        if (_currentHandler.SkillPhase != SkillPhase.None)
+            return;
 
-            StartSkill();
-        }   
+        if (!_energyProgressManager.UseEnergyOneBar())
+            return;
+
+        StartSkill();
     }
     #endregion
 
     #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
     private void RegisterServices()
     {
         _eventManager = GameServiceLocator.EventManager;
@@ -83,16 +86,16 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     }
 
     /// <summary>
-    /// 启动技能
+    /// 开始技能
     /// </summary>
     private void StartSkill()
     {
-        _currentSkillHandler.StartSkill(_currentSkillContext).Forget();
+        _currentHandler.StartSkill(_currentContext).Forget();
 
         TriggerSkillStarted(new SkillStartedEventArgs
         {
             Sender = this,
-            SkillData = _currentSkillContext.SkillData
+            SkillData = _currentContext.SkillData
         });
     }
 
@@ -101,12 +104,12 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private void EndSkill()
     {
-        _currentSkillHandler.EndSkill();
+        _currentHandler.EndSkill();
 
         TriggerSkillEnded(new SkillEndedEventArgs
         {
             Sender = this,
-            SkillData = _currentSkillContext.SkillData
+            SkillData = _currentContext.SkillData
         });
     }
     #endregion

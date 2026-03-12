@@ -1,4 +1,4 @@
-﻿using GameFramework.Core.UI;
+using GameFramework.Core.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,9 +63,9 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     private EventManager _eventManager => GameServiceLocator.EventManager;
 
     /// <summary>
-    /// 资源管理器
+    /// 配置管理器
     /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
+    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
     /// 丰收能量条管理器
@@ -147,13 +147,12 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 异步加载技能图标
+    /// 更新技能图标
     /// </summary>
-    /// <param name="assetPath">资源路径</param>
-    private async UniTask LoadSkillIconAsync(string assetPath)
+    /// <param name="skillId">技能ID</param>
+    private void UpdateSkillIcon(int skillId)
     {
-        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(assetPath);
-        _imageSkill.sprite = sprite;
+        _imageSkill.sprite = _configManager.SkillRefSo.GetSkillIcon(skillId);
     }
     #endregion
 
@@ -163,7 +162,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnRoundEntered(RoundEnteredEventArgs args)
     {
-        LoadSkillIconAsync(args.RoundContext.SkillData.IconResourcePath).Forget();
+        UpdateSkillIcon(args.RoundContext.SkillData.ID);
     }
 
     /// <summary>

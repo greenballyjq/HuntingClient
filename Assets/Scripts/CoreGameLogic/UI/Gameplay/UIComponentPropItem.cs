@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig.Enum;
 using UnityEngine;
 using UnityEngine.UI;
@@ -166,7 +166,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnPropIconClicked()
     {
-        _propManager.TryUseProp(_propType);
+        _propManager.TryStartProp(_propType);
     }
 
     /// <summary>

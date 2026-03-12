@@ -10,6 +10,11 @@ using UnityEngine;
 public class SkillJinZhuangYuanHandler : BaseSkillHandler
 {
     /// <summary>
+    /// 技能参数缓存
+    /// </summary>
+    private SkillJinZhuangYuan _skillParamCache;
+
+    /// <summary>
     /// 生成数量
     /// </summary>
     private int _spawnCount;
@@ -29,46 +34,23 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
     /// </summary>
     private int _spawnedCount;
 
-    /// <summary>
-    /// 可游玩区域
-    /// </summary>
-    private BaseAreaShape _playableArea;
-
-    /// <summary>
-    /// 技能参数
-    /// </summary>
-    private SkillJinZhuangYuan  _skillParam;
-
-    /// <summary>
-    /// 掉落肉特效配置
-    /// </summary>
-    private DropRewardRefSo _dropMeatSo;
-
-    private EffectManager _effectManager;
     private MeatProgressManager _meatProgressManager;
-    private GameplaySceneItemManager _gameplaySceneItemManager;
-    public SkillJinZhuangYuanHandler()
-    {
-        _effectManager = GameServiceLocator.EffectManager;
-        _meatProgressManager = GameServiceLocator.GetRoundManager<MeatProgressManager>();
-        _gameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
 
-        _dropMeatSo = _configManager.DropRewardRefSo;
+    public SkillJinZhuangYuanHandler() : base()
+    {
+        _meatProgressManager = GameServiceLocator.GetRoundManager<MeatProgressManager>();
     }
 
     protected override async UniTask OnSkillStart(SkillContext context)
     {
+        if(_skillParamCache == null)
+            _skillParamCache = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
+
         _spawnTimer = 0f;
         _spawnedCount = 0;
 
-        _skillParam = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
+        _spawnCount = _skillParamCache.SpawnCount[Random.Range(0, _skillParamCache.SpawnCount.Length)];
 
-        _playableArea = _gameplaySceneItemManager.PlayableArea;
-
-        // 随机生成数量
-        _spawnCount = _skillParam.SpawnCount[Random.Range(0, _skillParam.SpawnCount.Length)];
-
-        // 根据技能持续时间计算生成间隔
         _spawnInterval = context.SkillData.Duration / _spawnCount;
 
         // 模拟播放动画
@@ -86,12 +68,23 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
         {
             _spawnTimer = 0f;
 
-            // 增加肉度值并生成特效
-            _meatProgressManager.AddMeatValue(_skillParam.MeatAmount);
-            _effectManager.PlayOneShot(_dropMeatSo.GetRandomEffectPrefabByIds(_skillParam.DropMeatEffectID), _playableArea.GetRandomPoint());
-            
+            SpawnMeat();
+
             _spawnedCount++;
         }
+    }
+
+    /// <summary>
+    /// 生成肉
+    /// </summary>
+    private void SpawnMeat()
+    {
+        _meatProgressManager.AddMeatValue(_skillParamCache.MeatAmount);
+
+        _effectManager.PlayOneShot(
+            _configManager.DropRewardRefSo.GetRandomEffectPrefabByIds(_skillParamCache.DropMeatEffectID),
+            _playableArea.GetRandomPoint()
+        );
     }
 
     protected override void OnSkillEnd()

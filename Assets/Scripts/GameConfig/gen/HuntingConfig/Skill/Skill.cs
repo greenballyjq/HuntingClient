@@ -21,7 +21,6 @@ public sealed partial class Skill : Luban.BeanBase
         Name = _buf.ReadString();
         Description = _buf.ReadString();
         Duration = _buf.ReadFloat();
-        IconResourcePath = _buf.ReadString();
         ParamTableID = _buf.ReadInt();
         Comment = _buf.ReadString();
     }
@@ -52,10 +51,6 @@ public sealed partial class Skill : Luban.BeanBase
     /// </summary>
     public readonly float Duration;
     /// <summary>
-    /// 图标资源路径
-    /// </summary>
-    public readonly string IconResourcePath;
-    /// <summary>
     /// 参数子表ID
     /// </summary>
     public readonly int ParamTableID;
@@ -79,7 +74,6 @@ public sealed partial class Skill : Luban.BeanBase
         + "Name:" + Name + ","
         + "Description:" + Description + ","
         + "Duration:" + Duration + ","
-        + "IconResourcePath:" + IconResourcePath + ","
         + "ParamTableID:" + ParamTableID + ","
         + "Comment:" + Comment + ","
         + "}";

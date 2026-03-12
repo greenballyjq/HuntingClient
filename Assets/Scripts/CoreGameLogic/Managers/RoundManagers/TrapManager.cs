@@ -1,5 +1,4 @@
-﻿using cfg.HuntingConfig.Enum;
-using Cysharp.Threading.Tasks;
+using cfg.HuntingConfig.Enum;
 using GameFramework.Core.Pool;
 using GameFramework.Manager;
 using GameFramework.Utility;
@@ -61,18 +60,18 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <param name="attractRadius">吸引半径</param>
     /// <param name="triggerRadius">触发半径</param>
     /// <param name="attractRadiusRangeByVolume">按体型划分的吸引半径范围比例</param>
-    /// <param name="prefabPath">预制体资源路径</param>
+    /// <param name="prefab">陷阱预制体</param>
     /// <returns>陷阱游戏对象</returns>
-    public async UniTask<GameObject> CreateTrapAsync(
+    public GameObject CreateTrap(
         Vector3 position,
         float attractRadius,
         float triggerRadius,
         Dictionary<ESpecieType, float[]> attractRadiusRangeByVolume,
-        string prefabPath
+        GameObject prefab
     )
     {
         // 从对象池获取
-        GameObject trap = await _gameObjectPoolManager.SpawnAsync(prefabPath);
+        GameObject trap = _gameObjectPoolManager.Spawn(prefab);
 
         // 初始化陷阱
         trap.transform.position = position;

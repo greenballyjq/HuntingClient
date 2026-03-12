@@ -13,19 +13,23 @@ MonoBehaviour:
   m_Name: BulletRefSo
   m_EditorClassIdentifier: 
   _bulletRefList:
-  - Id: 1
+  - ID: 1
+    BulletType: 0
     BulletPrefab: {fileID: 901204069464601842, guid: dd7ce625f4fcf8f439bb4dab1e948248, type: 3}
     BulletIcon: {fileID: 21300000, guid: 02c7825bf21c9e04a8883f5ace8ca264, type: 3}
     HitEffectPrefab: {fileID: 8392196111172028371, guid: f8bae09cbca325745b457ee6115eecb0, type: 3}
-  - Id: 2
+  - ID: 2
+    BulletType: 1
     BulletPrefab: {fileID: 6557327948202358942, guid: b162ff97b75e1b544a7a5575572dd1ea, type: 3}
     BulletIcon: {fileID: 21300000, guid: 412de1a0a427640429ee5ffea226b24c, type: 3}
     HitEffectPrefab: {fileID: 7961363822493051027, guid: 20f15bce647809d4e966ff5a2c0fc56e, type: 3}
-  - Id: 3
+  - ID: 3
+    BulletType: 2
     BulletPrefab: {fileID: 524788500471584065, guid: 7110d3b0a32886343adee317ebb6f223, type: 3}
     BulletIcon: {fileID: 21300000, guid: a17c6c806a5593342ba3211012bf9cfe, type: 3}
     HitEffectPrefab: {fileID: 4584541851933790105, guid: bbdf7919d7b96ee4eb4426520c72a49c, type: 3}
-  - Id: 4
+  - ID: 4
+    BulletType: 3
     BulletPrefab: {fileID: 5022387815911496739, guid: a49122ab90929ee47b6190b507b52cca, type: 3}
     BulletIcon: {fileID: 21300000, guid: 05eb2dbcce7f2d648989c1d0ca2425ad, type: 3}
     HitEffectPrefab: {fileID: 8392196111172028371, guid: f8bae09cbca325745b457ee6115eecb0, type: 3}

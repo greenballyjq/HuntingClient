@@ -26,7 +26,6 @@ public sealed partial class PropTrap : Luban.BeanBase
         TriggerRadius = _buf.ReadFloat();
         AttractRadius = _buf.ReadFloat();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);AttractRadiusRangeByVolume = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.ESpecieType, float[]>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.ESpecieType _k0;  _k0 = (HuntingConfig.Enum.ESpecieType)_buf.ReadInt(); float[] _v0;  {int __n1 = System.Math.Min(_buf.ReadSize(), _buf.Size);_v0 = new float[__n1];for(var __index1 = 0 ; __index1 < __n1 ; __index1++) { float __e1;__e1 = _buf.ReadFloat(); _v0[__index1] = __e1;}}     AttractRadiusRangeByVolume.Add(_k0, _v0);}}
-        TrapPrefabResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -76,10 +75,6 @@ public sealed partial class PropTrap : Luban.BeanBase
     /// </summary>
     public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.ESpecieType, float[]> AttractRadiusRangeByVolume;
     /// <summary>
-    /// 陷阱预制体资源路径
-    /// </summary>
-    public readonly string TrapPrefabResourcePath;
-    /// <summary>
     /// 备注
     /// </summary>
     public readonly string Comment;
@@ -104,7 +99,6 @@ public sealed partial class PropTrap : Luban.BeanBase
         + "TriggerRadius:" + TriggerRadius + ","
         + "AttractRadius:" + AttractRadius + ","
         + "AttractRadiusRangeByVolume:" + Luban.StringUtil.CollectionToString(AttractRadiusRangeByVolume) + ","
-        + "TrapPrefabResourcePath:" + TrapPrefabResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

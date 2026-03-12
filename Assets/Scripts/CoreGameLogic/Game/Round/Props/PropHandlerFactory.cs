@@ -20,8 +20,8 @@ public static class PropHandlerFactory
                 return new PropAimAssistHandler();
             case EPropType.Trap:
                 return new PropTrapHandler();
+            default:
+                return null;
         }
-
-        return null;
     }
 }

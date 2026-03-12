@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using cfg.HuntingConfig.Enum;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BulletRefSo", menuName = "SO/BulletRefSo",order = 3)]
+/// <summary>
+/// 子弹关联资源配置
+/// </summary>
+[CreateAssetMenu(fileName = "BulletRefSo", menuName = "SO/BulletRefSo", order = 3)]
 public class BulletRefSo : ScriptableObject
 {
     /// <summary>
@@ -14,7 +17,12 @@ public class BulletRefSo : ScriptableObject
         /// <summary>
         /// ID
         /// </summary>
-        public int Id;
+        public int ID;
+
+        /// <summary>
+        /// 子弹类型
+        /// </summary>
+        public EBulletType BulletType;
 
         /// <summary>
         /// 子弹预制体
@@ -41,17 +49,38 @@ public class BulletRefSo : ScriptableObject
     /// 根据ID获取子弹预制体
     /// </summary>
     public GameObject GetBulletPrefab(int id)
-        => _bulletRefList.FirstOrDefault(x => x.Id == id)?.BulletPrefab;
+    {
+        for (int i = 0; i < _bulletRefList.Count; i++)
+        {
+            if (_bulletRefList[i].ID == id)
+                return _bulletRefList[i].BulletPrefab;
+        }
+        return null;
+    }
 
     /// <summary>
     /// 根据ID获取子弹命中特效预制体
     /// </summary>
     public GameObject GetBulletEffectPrefab(int id)
-        => _bulletRefList.FirstOrDefault(x => x.Id == id)?.HitEffectPrefab;
+    {
+        for (int i = 0; i < _bulletRefList.Count; i++)
+        {
+            if (_bulletRefList[i].ID == id)
+                return _bulletRefList[i].HitEffectPrefab;
+        }
+        return null;
+    }
 
     /// <summary>
     /// 根据ID获取子弹图标
     /// </summary>
     public Sprite GetBulletIcon(int id)
-        => _bulletRefList.FirstOrDefault(x => x.Id == id)?.BulletIcon;
+    {
+        for (int i = 0; i < _bulletRefList.Count; i++)
+        {
+            if (_bulletRefList[i].ID == id)
+                return _bulletRefList[i].BulletIcon;
+        }
+        return null;
+    }
 }

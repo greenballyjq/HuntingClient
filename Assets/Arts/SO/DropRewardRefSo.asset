@@ -13,66 +13,66 @@ MonoBehaviour:
   m_Name: DropRewardRefSo
   m_EditorClassIdentifier: 
   _dropRewardRefList:
-  - Id: 1
+  - ID: 1
     Type: 0
     EffectPrefab: {fileID: 287138244155372215, guid: 67983e4809ed7f24e88795d72f9f1634, type: 3}
-  - Id: 2
+  - ID: 2
     Type: 1
     EffectPrefab: {fileID: 882616571061191849, guid: f67c06847c4d4d94da6d32fecbd46b5a, type: 3}
-  - Id: 3
+  - ID: 3
     Type: 2
     EffectPrefab: {fileID: 2316936425073306799, guid: 0167e80844675684c9d8bff1f75787eb, type: 3}
-  - Id: 4
+  - ID: 4
     Type: 3
     EffectPrefab: {fileID: 1097860242715669609, guid: d17d1904e5777cd49a890559f31ba73d, type: 3}
-  - Id: 5
+  - ID: 5
     Type: 4
     EffectPrefab: {fileID: 4222644213100902772, guid: c33db6c709eb7d44d9401d4a6ed6de1b, type: 3}
-  - Id: 6
+  - ID: 6
     Type: 5
     EffectPrefab: {fileID: 1220782457813419348, guid: bb364f54d41278144895a1c298ff6f1b, type: 3}
-  - Id: 7
+  - ID: 7
     Type: 6
     EffectPrefab: {fileID: 136675063790151636, guid: 7c7d0b06129b6c14ab8078e1a7416a82, type: 3}
-  - Id: 8
+  - ID: 8
     Type: 7
     EffectPrefab: {fileID: 7381534685050691462, guid: 034837bc1f0e23d4fa2fe4fb312418e0, type: 3}
-  - Id: 9
+  - ID: 9
     Type: 8
     EffectPrefab: {fileID: 2290872323049477986, guid: 4ddf988fc84147646a87f724f144b3ed, type: 3}
-  - Id: 10
+  - ID: 10
     Type: 9
     EffectPrefab: {fileID: 6150117664735322811, guid: 5feef11593d15304ba61c5619dd5d7f6, type: 3}
-  - Id: 11
+  - ID: 11
     Type: 10
     EffectPrefab: {fileID: 392526624565117293, guid: 716b27373ee0fbb478c27b4f95b1c450, type: 3}
-  - Id: 12
+  - ID: 12
     Type: 11
     EffectPrefab: {fileID: 8427165726396192499, guid: fa2195feb67f4e8498c8ef8cedb8c73b, type: 3}
-  - Id: 13
+  - ID: 13
     Type: 12
     EffectPrefab: {fileID: 8240298286447417427, guid: 4ba5d8d8af944fc4683f03d2121d24de, type: 3}
-  - Id: 14
+  - ID: 14
     Type: 13
     EffectPrefab: {fileID: 1350624171539836282, guid: d5bcd0d9f0140094abb5c784433b87e3, type: 3}
-  - Id: 15
+  - ID: 15
     Type: 14
     EffectPrefab: {fileID: 6524752479546700820, guid: a04b62f744cf0d34da62487d0c85d768, type: 3}
-  - Id: 16
+  - ID: 16
     Type: 15
     EffectPrefab: {fileID: 3709588182956337841, guid: ecb6be0bf82bd6a47adfc168f96b8e9d, type: 3}
-  - Id: 101
+  - ID: 101
     Type: 16
     EffectPrefab: {fileID: 7878858932354828942, guid: a452f5df2b23c694d89c03c2cbbab28d, type: 3}
-  - Id: 102
+  - ID: 102
     Type: 16
     EffectPrefab: {fileID: 8317365876305603001, guid: 58ae0b4a8f91f344aa33a58a18a96b7a, type: 3}
-  - Id: 103
+  - ID: 103
     Type: 16
     EffectPrefab: {fileID: 4472980358395853879, guid: 78cd3e898c61ee546ad33087e016fbf0, type: 3}
-  - Id: 104
+  - ID: 104
     Type: 16
     EffectPrefab: {fileID: 2008685326993628477, guid: 1424b307d47e8b04cba99f96a4487761, type: 3}
-  - Id: 201
+  - ID: 201
     Type: 17
     EffectPrefab: {fileID: 6368290710951837802, guid: 9b743b1e97947f5419069e91da5b0a12, type: 3}
