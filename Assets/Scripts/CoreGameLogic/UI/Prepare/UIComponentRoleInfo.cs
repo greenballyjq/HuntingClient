@@ -71,7 +71,7 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
 
         var description = roleData.RoleProfile;
 
-        _textRoleDescription.text = description.BackgroundStory;
+        _textRoleDescription.text = $"名称：{description.Name}\n{description.BackgroundStory}";
 
         var sprite = await _resourceManager.LoadAssetAsync<Sprite>(roleData.IconResourcePath);
         _imageRole.sprite = sprite;

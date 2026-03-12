@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using CoreGameLogic.Managers.AppManagers;
 using Hunting.Game.Animal;
 using UnityEngine;
 
@@ -7,27 +7,21 @@ using UnityEngine;
 /// </summary>
 public class SkillWeapon : MonoBehaviour
 {
-    /// <summary>
-    /// 使用的子弹ID
-    /// </summary>
-    [Header("武器配置")]
-    [SerializeField] private int bulletId = 1;
+    private HuntingSoundManager _soundManager;
+    private CameraManager _cameraManager;
+    private BulletManager _bulletManager;
+    private AnimalManager _animalManager;
+
+    private const int DEFAULT_BULLT_ID = 1;
+    private const float MIN_LOCK_DISTANCE = 0f;
+    private const float MAX_LOCK_DISTANCE = 30f;
+    private const float SCREEN_CHECK_INTERVAL = 0.1f;
+    private const float ROTATION_SPEED = 60f;
 
     /// <summary>
-    /// 枪口位置
+    /// 开火点
     /// </summary>
-    [SerializeField] private Transform muzzlePoint;
-
-    /// <summary>
-    /// 是否平滑旋转
-    /// </summary>
-    [Header("旋转配置")]
-    [SerializeField] private bool rotationSmooth = true;
-
-    /// <summary>
-    /// 旋转速度
-    /// </summary>
-    [SerializeField] private float rotationSpeed = 20f;
+    [SerializeField] private Transform _firePoint;
 
     /// <summary>
     /// 射击间隔（秒）
@@ -35,143 +29,139 @@ public class SkillWeapon : MonoBehaviour
     private float _fireInterval;
 
     /// <summary>
-    /// 上次射击的时间戳
+    /// 开火计时器
     /// </summary>
-    private float _lastFireTime;
+    private float _fireTimer;
 
     /// <summary>
-    /// 当前瞄准目标
+    /// 当前目标
     /// </summary>
     private BaseAnimalBehaviour _currentTarget;
 
     /// <summary>
-    /// 子弹管理器
+    /// 屏幕检测计时器
     /// </summary>
-    private BulletManager _bulletManager => GameServiceLocator.GetRoundManager<BulletManager>();
-
-    /// <summary>
-    /// 动物管理器
-    /// </summary>
-    private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
+    private float _screenCheckTimer;
 
     public void DoUpdate(float dt)
     {
-        UpdateAiming();
-        UpdateShooting();
+        if (_currentTarget != null)
+        {
+            if (IsTargetLost(dt))
+                _currentTarget = null;
+            else
+                TryFire(dt);
+        }
+        else
+        {
+            var animal = _animalManager.GetNearestVisibleAnimal(_firePoint.position, _cameraManager.MainCamera);
+            if (animal != null && IsInRange(animal))
+            {
+                _currentTarget = animal;
+                TryFire(dt);
+            }
+        }
     }
 
     #region 公共方法
     /// <summary>
-    /// 初始化技能武器
+    /// 初始化
     /// </summary>
     /// <param name="fireInterval">射击间隔（秒）</param>
     public void Init(float fireInterval)
     {
+        RegisterServices();
+
         _fireInterval = fireInterval;
-        _lastFireTime = Time.time - _fireInterval; // 允许立即射击
-        Debug.Log($"[SkillWeapon] 初始化完成，射击间隔: {_fireInterval}秒");
+        _fireTimer = 0f;
     }
     #endregion
 
     #region 私有方法
     /// <summary>
-    /// 更新瞄准逻辑
+    /// 注册服务
     /// </summary>
-    private void UpdateAiming()
+    private void RegisterServices()
     {
-        _currentTarget = FindNearestAnimal();
-        if (_currentTarget == null)
-            return;
-
-        RotateToTarget(_currentTarget.transform.position);
+        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
+        _bulletManager = GameServiceLocator.GetRoundManager<BulletManager>();
+        _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
     }
 
     /// <summary>
-    /// 更新射击逻辑
+    /// 目标是否已丢失
     /// </summary>
-    private void UpdateShooting()
+    private bool IsTargetLost(float dt)
     {
-        if (_currentTarget == null)
-            return;
+        if (_currentTarget.Health.IsDead)
+            return true;
 
-        TryShoot();
-    }
+        if (!IsInRange(_currentTarget))
+            return true;
 
-    /// <summary>
-    /// 查找最近的动物
-    /// </summary>
-    private BaseAnimalBehaviour FindNearestAnimal()
-    {
-        var  animals =_animalManager.GetAllAliveAnimals();
-        if (animals == null || animals.Count == 0)
-            return null;
-
-        BaseAnimalBehaviour nearestAnimal = null;
-        float nearestDistance = float.MaxValue;
-        Vector3 weaponPosition = transform.position;
-
-        foreach (var animal in animals)
+        _screenCheckTimer += dt;
+        if (_screenCheckTimer >= SCREEN_CHECK_INTERVAL)
         {
-            if (animal == null)
-                continue;
-
-            float distance = Vector3.Distance(weaponPosition, animal.transform.position);
-            if (distance < nearestDistance)
-            {
-                nearestDistance = distance;
-                nearestAnimal = animal;
-            }
+            _screenCheckTimer = 0f;
+            if (!ScreenUtils.IsVisible(_currentTarget.transform,_cameraManager.MainCamera))
+                return true;
         }
 
-        return nearestAnimal;
+        return false;
     }
 
     /// <summary>
-    /// 旋转朝向目标
+    /// 目标是否在攻击范围内
     /// </summary>
-    private void RotateToTarget(Vector3 targetPosition)
+    private bool IsInRange(BaseAnimalBehaviour animal)
     {
-        Vector3 direction = (targetPosition - transform.position).normalized;
-        direction.y = 0f; // 保持水平旋转
-
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-        if (rotationSmooth)
-        {
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation, 
-                targetRotation, 
-                Time.deltaTime * rotationSpeed);
-        }
-        else
-        {
-            transform.rotation = targetRotation;
-        }
+        float sq = Vector3.SqrMagnitude(animal.transform.position - _firePoint.position);
+        float minSq = MIN_LOCK_DISTANCE * MIN_LOCK_DISTANCE;
+        float maxSq = MAX_LOCK_DISTANCE * MAX_LOCK_DISTANCE;
+        return sq >= minSq && sq <= maxSq;
     }
 
     /// <summary>
-    /// 尝试射击
+    /// 尝试开火
     /// </summary>
-    private void TryShoot()
+    private void TryFire(float dt)
     {
-        // 检查射击间隔
-        if (Time.time - _lastFireTime < _fireInterval)
+        Aim(dt);
+
+        _fireTimer += dt;
+        if (_fireTimer < _fireInterval)
             return;
 
-        // 执行射击
-        SpawnBulletAsync().Forget();
-        _lastFireTime = Time.time;
+        _fireTimer = 0f;
+
+        Fire();
     }
 
     /// <summary>
-    /// 生成子弹
+    /// 瞄准
     /// </summary>
-    private async UniTask SpawnBulletAsync()
+    private void Aim(float dt)
     {
-        Vector3 spawnPosition = muzzlePoint.position;
-        Vector3 spawnDirection = muzzlePoint.forward;
+        Vector3 origin = _firePoint.position;
+        Vector3 target = _currentTarget.transform.position;
+        Vector3 velocity = _currentTarget.Moveable.CurrentSpeed * _currentTarget.Moveable.CurrentMoveDirection;
+        float projectileSpeed = _bulletManager.GetBullet(DEFAULT_BULLT_ID).MoveSpeed;
 
-        await _bulletManager.SpawnBullet(bulletId, spawnPosition, spawnDirection);
+        var leadDir = Ballistics.CalculateLeadDirection(origin, target, velocity, projectileSpeed);
+        Vector3 direction = leadDir ?? (target - origin).normalized;
+        direction.y = 0f;
+        Quaternion targetRot = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, ROTATION_SPEED * dt);
+    }
+
+    /// <summary>
+    /// 开火
+    /// </summary>
+    private void Fire()
+    {
+        _bulletManager.SpawnBullet(DEFAULT_BULLT_ID, _firePoint.position, _firePoint.forward);
+        _soundManager.PlayFireSound();
     }
     #endregion
 }

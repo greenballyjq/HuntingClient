@@ -3,8 +3,8 @@ using Cysharp.Threading.Tasks;
 using GameFramework.Core.Audio;
 using GameFramework.Game;
 using GameFramework.Manager;
+using GameFramework.Utility;
 using Hunting.Events;
-using UnityEngine;
 
 namespace CoreGameLogic.Managers.AppManagers
 {
@@ -13,34 +13,36 @@ namespace CoreGameLogic.Managers.AppManagers
     /// </summary>
     public class HuntingSoundManager : IAppManager
     {
-        private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-        private SoundManager _soundManager => GameServiceLocator.GetFrameworkManager<SoundManager>();
-        private EventManager _eventManager => GameServiceLocator.EventManager;
-        
         private HuntingAudioRefSo _huntingAudioRefSo;
+
+        private ResourceManager _resourceManager;
+        private SoundManager _soundManager;
+        private EventManager _eventManager;
 
         #region IAppManager生命周期函数
 
         public async void Init()
         {
+            RegisterServices();
+
             _huntingAudioRefSo = await _resourceManager.LoadAssetAsync<HuntingAudioRefSo>("Assets/Arts/SO/HuntingAudioRefSo");
 
             if (_huntingAudioRefSo ==null)
             {
-                Debug.LogError($"[HuntingSoundManager] HuntingAudioRefSo 资源加载失败");
+                Log.Error($"[HuntingSoundManager] HuntingAudioRefSo 资源加载失败");
                 return;
             }
 
             var audioClip = _huntingAudioRefSo.GetAudioFromType(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_Beatch);
             if (audioClip == null)
             {
-                Debug.LogError($"[HuntingSoundManager] audioClip 资源加载失败");
+                Log.Error($"[HuntingSoundManager] audioClip 资源加载失败");
                 return;
             }
 
             SubscribeAudioEvents();
 
-            Debug.Log($"[HuntingSoundManager] 初始化成功");
+            Log.Info($"[HuntingSoundManager] 初始化成功");
         }
 
         public void Dispose()
@@ -142,6 +144,14 @@ namespace CoreGameLogic.Managers.AppManagers
         public void ClearAllSounds(bool forceRemoveAll = false)
         {
             _soundManager.ClearAllSounds(forceRemoveAll);
+        }
+
+        /// <summary>
+        /// 播放开火音效
+        /// </summary>
+        public void PlayFireSound()
+        {
+            PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.GunShoot_Default);
         }
         #endregion
 
@@ -314,7 +324,14 @@ namespace CoreGameLogic.Managers.AppManagers
         }
         #endregion
 
-        #region 私有方法 
+        #region 私有方法
+        private void RegisterServices()
+        {
+            _resourceManager = GameServiceLocator.ResourceManager;
+            _soundManager = GameServiceLocator.GetFrameworkManager<SoundManager>();
+            _eventManager = GameServiceLocator.EventManager;
+        }
+
         /// <summary>
         /// 播放地图环境应
         /// </summary>

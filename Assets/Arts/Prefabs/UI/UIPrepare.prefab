@@ -1631,6 +1631,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIComponentPrepareDebug
       objectReference: {fileID: 0}
+    - target: {fileID: 2554341779124415841, guid: a693680bfa48012429f7c59c5219cf5d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

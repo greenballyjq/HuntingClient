@@ -1,10 +1,11 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Bean;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
+using GameFramework.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -54,23 +55,24 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
 
     private ResourceManager _resourceManager;
 
-
     #region 内部方法
     protected override async void InitializeAsync()
     {
+        _resourceManager = GameServiceLocator.ResourceManager;
         try
         {
-            _resourceManager = GameServiceLocator.ResourceManager;
+            Log.Info($"[{GetType().Name}] 开始加载配置表");
 
             await LoadTablesAsync();
-
             await LoadScriptableObjects();
 
             Initialized = true;
+
+            Log.Info($"[{GetType().Name}] 配置表加载完成");
         }
         catch (System.Exception ex)
         {
-            Debug.LogError($"[{GetType().Name}] 配置加载失败: {ex.Message}");
+            Log.Error($"[{GetType().Name}] 配置加载失败: {ex.Message}");
         }
     }
 

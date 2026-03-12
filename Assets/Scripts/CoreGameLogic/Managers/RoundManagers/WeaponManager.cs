@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using cfg.HuntingConfig;
+using GameFramework.Manager;
+using GameFramework.Utility;
 using UnityEngine;
-
 
 /// <summary>
 /// 武器管理器
@@ -37,11 +39,14 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private float _damageMultiplier = 1f;
 
+    private HuntingConfigManager _configManager;
+
     public void Init(RoundContext context)
     {
+        RegisterServices();
         FindPlayerWeapon();
         _playerWeapon.Init();
-        Debug.Log("[WeaponManager] 初始化完成");
+        Log.Info("[WeaponManager] 初始化完成");
     }
 
     public void DoUpdate(float deltaTime)
@@ -52,7 +57,7 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     public void Dispose()
     {
-        Debug.Log("[WeaponManager] 已释放");
+        Log.Info("[WeaponManager] 已释放");
     }
 
     public void Cleanup()
@@ -115,8 +120,7 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     public float GetCurrentFireRate(int bulletId)
     {
-        var configManager = GameServiceLocator.ConfigManager;
-        var bulletData = configManager.GetBullet(bulletId);
+        var bulletData = _configManager.GetBullet(bulletId);
         return bulletData.FireRate * _fireRateMultiplier;
     }
 
@@ -125,13 +129,17 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     public float GetCurrentDamage(int bulletId)
     {
-        var configManager = GameServiceLocator.ConfigManager;
-        var bulletData = configManager.GetBullet(bulletId);
+        var bulletData = _configManager.GetBullet(bulletId);
         return bulletData.BaseDamage * _damageMultiplier;
     }
     #endregion
 
     #region 私有方法
+    private void RegisterServices()
+    {
+        _configManager = GameServiceLocator.ConfigManager;
+    }
+
     /// <summary>
     /// 寻找玩家武器
     /// </summary>

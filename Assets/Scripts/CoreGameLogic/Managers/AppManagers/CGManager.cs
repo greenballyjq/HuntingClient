@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using GameFramework.Game;
+using GameFramework.Manager;
 using UnityEngine;
 using WeChatWASM;
 
@@ -8,11 +9,6 @@ using WeChatWASM;
 /// </summary>
 public class CGManager : IAppManager
 {
-    /// <summary>
-    /// 平台管理器
-    /// </summary>
-    private PlatformManager _platformManager => GameServiceLocator.GetFrameworkManager<PlatformManager>();
-
     /// <summary>
     /// CG播放完毕异步任务源
     /// </summary>
@@ -23,10 +19,23 @@ public class CGManager : IAppManager
     /// </summary>
     private WXVideo _cg;
 
-    public void Init() {}
+    private PlatformManager _platformManager;
 
-    public void Dispose(){}
+    public void Init()
+    {
+        RegisterServices();
+    }
 
+    public void Dispose() { }
+
+    #region 私有方法
+    private void RegisterServices()
+    {
+        _platformManager = GameServiceLocator.GetFrameworkManager<PlatformManager>();
+    }
+    #endregion
+
+    #region 公共方法
     /// <summary>
     /// 播放CG
     /// </summary>
@@ -67,4 +76,5 @@ public class CGManager : IAppManager
 
         return cgCreated.Task;
     }
+    #endregion
 }

@@ -1,7 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using cfg.HuntingConfig;
-using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
+using GameFramework.Utility;
 using Hunting.Events;
 using UnityEngine;
 /// <summary>
@@ -9,16 +9,6 @@ using UnityEngine;
 /// </summary>
 public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager = GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 对象池管理器
-    /// </summary>
-    private GameObjectPoolManager _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
-
     /// <summary>
     /// 活跃子弹集合
     /// </summary>
@@ -30,26 +20,38 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private readonly List<BulletBehavior> _pendingRemovalBullets = new List<BulletBehavior>();
 
     /// <summary>
-    /// 配置管理器
+    /// 子弹配置缓存
     /// </summary>
-    private HuntingConfigManager _configManager = GameServiceLocator.ConfigManager;
+    private readonly Dictionary<int, Bullet> _bulletConfigs = new Dictionary<int, Bullet>();
 
     /// <summary>
-    /// 武器管理器
+    /// 子弹预制体缓存
     /// </summary>
-    private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
+    private readonly Dictionary<int, GameObject> _bulletPrefabs = new Dictionary<int, GameObject>();
+
+    private EventManager _eventManager;
+    private GameObjectPoolManager _gameObjectPoolManager;
+    private HuntingConfigManager _configManager;
+    private WeaponManager _weaponManager;
 
     public void Init(RoundContext context)
     {
+        RegisterServices();
         RegisterEvents();
-        Debug.Log("[BulletManager] 初始化完成");
+        CacheBullets();
+        Log.Info("[BulletManager] 初始化完成");
     }
 
     public void Dispose()
     {
         RecycleAllBullets();
+
+        _bulletConfigs.Clear();
+        _bulletPrefabs.Clear();
+
         UnregisterEvents();
-        Debug.Log("[BulletManager] 已释放");
+
+        Log.Info("[BulletManager] 已释放");
     }
 
     public void Cleanup()
@@ -69,19 +71,22 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     #region 公共方法
     /// <summary>
+    /// 根据ID获取子弹配置
+    /// </summary>
+    public Bullet GetBullet(int bulletId) => _bulletConfigs[bulletId];
+
+    /// <summary>
     /// 生成子弹
     /// </summary>
-    public UniTask<BulletBehavior> SpawnBullet(int bulletId, Vector3 position, Vector3 direction)
+    public BulletBehavior SpawnBullet(int bulletId, Vector3 position, Vector3 direction)
     {
-        Bullet bulletData = _configManager.GetBullet(bulletId);
-
-        GameObject prefab = _configManager.BulletRefSo.GetBulletPrefab(bulletId);
+        Bullet bulletData = _bulletConfigs[bulletId];
+        GameObject prefab = _bulletPrefabs[bulletId];
 
         float finalDamage = _weaponManager.GetCurrentDamage(bulletId);
 
         GameObject gameObject = _gameObjectPoolManager.Spawn(prefab);
 
-        // 初始化子弹
         gameObject.transform.position = position;
         if (direction != Vector3.zero)
             gameObject.transform.rotation = Quaternion.LookRotation(direction);
@@ -97,11 +102,31 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
             Bullet = bullet
         });
 
-        return UniTask.FromResult(bullet);
+        return bullet;
     }
     #endregion
 
     #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _weaponManager = GameServiceLocator.GetRoundManager<WeaponManager>();
+    }
+
+    /// <summary>
+    /// 缓存所有子弹配置和预制体
+    /// </summary>
+    private void CacheBullets()
+    {
+        foreach (var bullet in _configManager.BulletTable.DataList)
+        {
+            _bulletConfigs[bullet.ID] = bullet;
+            _bulletPrefabs[bullet.ID] = _configManager.BulletRefSo.GetBulletPrefab(bullet.ID);
+        }
+    }
+
     /// <summary>
     /// 处理待移除的子弹
     /// </summary>
@@ -147,19 +172,19 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     }
 
     /// <summary>
-    /// 子弹销毁事件回调
-    /// </summary>
-    private void OnBulletDestroyed(BulletDestroyedEventArgs args)
-    {
-        _pendingRemovalBullets.Add(args.Bullet);
-    }
-
-    /// <summary>
     /// 触发子弹生成事件
     /// </summary>
     private void TriggerBulletSpawned(BulletSpawnedEventArgs args)
     {
         _eventManager.Trigger(BulletEvents.BulletSpawned, args);
+    }
+
+    /// <summary>
+    /// 触发子弹销毁事件回调
+    /// </summary>
+    private void OnBulletDestroyed(BulletDestroyedEventArgs args)
+    {
+        _pendingRemovalBullets.Add(args.Bullet);
     }
     #endregion
 }

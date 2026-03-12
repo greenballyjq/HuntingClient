@@ -1,7 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using cfg.HuntingConfig;
 using UnityEngine;
 using GameFramework.Manager;
+using GameFramework.Utility;
 using System;
 using System.Linq;
 using Hunting.Game.Animal;
@@ -11,21 +12,6 @@ using Hunting.Game.Animal;
 /// </summary>
 public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
 {
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 对象池管理器
-    /// </summary>
-    private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
     /// <summary>
     /// 活跃动物集合
     /// </summary>
@@ -47,18 +33,23 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private readonly HashSet<BaseAnimalBehaviour> _unDeathAnimals = new HashSet<BaseAnimalBehaviour>();
 
+    private EventManager _eventManager;
+    private GameObjectPoolManager _gameObjectPoolManager;
+    private HuntingConfigManager _configManager;
+
     public void Init(RoundContext context)
     {
-        CacheMapSpeciesData(context.MapData.ID);
+        RegisterServices();
         RegisterEvents();
-        Debug.Log("[AnimalManager] 初始化完成");
+        CacheMapSpeciesData(context.MapData.ID);
+        Log.Info("[AnimalManager] 初始化完成");
     }
 
     public void Dispose()
     {
         RecycleAllAnimals();
         UnregisterEvents();
-        Debug.Log("[AnimalManager] 已释放");
+        Log.Info("[AnimalManager] 已释放");
     }
 
     public void Cleanup()
@@ -86,18 +77,62 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
 
     #region 公共方法
     /// <summary>
-    /// 获取所有活着的动物
+    /// 获取最近的动物
     /// </summary>
-    /// <returns>活着的动物列表</returns>
-    public List<BaseAnimalBehaviour> GetAllAliveAnimals()
+    /// <param name="fromPosition">参考位置</param>
+    /// <returns>最近的动物</returns>
+    public BaseAnimalBehaviour GetNearestAnimal(Vector3 fromPosition)
     {
-        List<BaseAnimalBehaviour> aliveAnimals = new List<BaseAnimalBehaviour>();
+        BaseAnimalBehaviour nearestAnimal = null;
+        float nearestSq = float.MaxValue;
 
         foreach (var animal in _activeAnimals)
-            if (!animal.GetComponent<IHealth>().IsDead)
-                aliveAnimals.Add(animal);
+        {
+            if (_pendingRemovalAnimals.Contains(animal))
+                continue;
+            if (animal.Health.IsDead)
+                continue;
 
-        return aliveAnimals;
+            float sq = Vector3.SqrMagnitude(animal.transform.position - fromPosition);
+            if (sq < nearestSq)
+            {
+                nearestSq = sq;
+                nearestAnimal = animal;
+            }
+        }
+
+        return nearestAnimal;
+    }
+
+    /// <summary>
+    /// 获取最近且在屏幕内的动物
+    /// </summary>
+    /// <param name="fromPosition">参考位置</param>
+    /// <param name="camera">相机</param>
+    /// <returns>最近的可见动物</returns>
+    public BaseAnimalBehaviour GetNearestVisibleAnimal(Vector3 fromPosition, Camera camera)
+    {
+        BaseAnimalBehaviour nearestAnimal = null;
+        float nearestSq = float.MaxValue;
+
+        foreach (var animal in _activeAnimals)
+        {
+            if (_pendingRemovalAnimals.Contains(animal))
+                continue;
+            if (animal.Health.IsDead)
+                continue;
+            if (!ScreenUtils.IsVisible(animal.transform, camera))
+                continue;
+
+            float sq = Vector3.SqrMagnitude(animal.transform.position - fromPosition);
+            if (sq < nearestSq)
+            {
+                nearestSq = sq;
+                nearestAnimal = animal;
+            }
+        }
+
+        return nearestAnimal;
     }
 
     /// <summary>
@@ -137,26 +172,16 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
             .Take(animalCount)
             .ToList();
     }
-
-    /// <summary>
-    /// 获取BossAnimalBehaviour，没有则返回空
-    /// </summary>
-    public BossAnimalBehaviour GetBossAnimalBehaviour()
-    {
-        BossAnimalBehaviour result = null;
-        foreach (var animal in _activeAnimals)
-        {
-            if (animal is BossAnimalBehaviour bossAnimalBehaviour)
-            {
-                result = bossAnimalBehaviour;
-                break;
-            }
-        }
-        return result;
-    }
     #endregion
 
     #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+        _configManager = GameServiceLocator.ConfigManager;
+    }
+
     /// <summary>
     /// 缓存地图物种配置数据
     /// </summary>

@@ -1,5 +1,7 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
+using GameFramework.Manager;
+using GameFramework.Utility;
 using UnityEngine;
 
 
@@ -38,26 +40,20 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     private int _completedBars;
     public int CompletedBars => _completedBars;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private EventManager _eventManager;
+    private HuntingConfigManager _configManager;
 
     public void Init(RoundContext context)
     {
+        RegisterServices();
+        RegisterEvents();
+
         EnergyProgress energyProgress = _configManager.GetEnergyProgress(1);
         _valuePerBar = energyProgress.ValuePerBar;
         _totalBar = energyProgress.TotalBar;
         _increasePerSecond = energyProgress.IncreasePerSecond;
-
-        RegisterEvents();
-
-        Debug.Log("[EnergyProgressManager] 初始化完成");
+        
+        Log.Info("[EnergyProgressManager] 初始化完成");
     }
 
     public void DoUpdate(float deltaTime)
@@ -69,7 +65,7 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     {
         UnregisterEvents();
 
-        Debug.Log("[EnergyProgressManager] 已释放");
+        Log.Info("[EnergyProgressManager] 已释放");
     }
 
     #region 公共方法
@@ -142,6 +138,14 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
             CurrentBars = _completedBars
         });
         return true;
+    }
+    #endregion
+
+    #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
     }
     #endregion
 

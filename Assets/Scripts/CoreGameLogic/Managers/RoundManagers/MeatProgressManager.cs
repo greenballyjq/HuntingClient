@@ -1,4 +1,6 @@
 ﻿using cfg.HuntingConfig.Enum;
+using GameFramework.Manager;
+using GameFramework.Utility;
 using UnityEngine;
 
 /// <summary>
@@ -41,34 +43,28 @@ public class MeatProgressManager : IRoundManager
     /// </summary>
     public float TotalProgressRatio => Mathf.Clamp01(_currentMeatValue / _totalMeatValue);
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private EventManager _eventManager;
+    private HuntingConfigManager _configManager;
 
     public void Init(RoundContext context)
     {
+        RegisterServices();
+        RegisterEvents();
+
         var meatProgress = _configManager.GetMeatProgress(1);
         _valuePerScale = meatProgress.ValuePerScale;
         _totalScale = meatProgress.TotalScale;
         _totalMeatValue = _valuePerScale * _totalScale;
         _completedScaleCount = 0;
 
-        RegisterEvents();
-
-        Debug.Log("[MeatProgressManager] 初始化完成");
+        Log.Info("[MeatProgressManager] 初始化完成");
     }
 
     public void Dispose()
     {
         UnregisterEvents();
 
-        Debug.Log("[MeatProgressManager] 已释放");
+        Log.Info("[MeatProgressManager] 已释放");
     }
 
     #region 公共方法
@@ -104,6 +100,14 @@ public class MeatProgressManager : IRoundManager
             if (_completedScaleCount == _totalScale)
                 _eventManager.Trigger(MeatEvents.MeatScaleFull);
         }
+    }
+    #endregion
+
+    #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
     }
     #endregion
 

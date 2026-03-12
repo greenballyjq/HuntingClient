@@ -1,4 +1,6 @@
 ﻿using GameFramework.Game;
+using GameFramework.Manager;
+using GameFramework.Utility;
 using UnityEngine;
 
 /// <summary>
@@ -24,21 +26,33 @@ public class CameraManager : IAppManager
     public Camera _uiCamera;
     public Camera UICamera => _uiCamera;
 
+    private UIManager _uiManager;
+
+
     public void Init()
     {
+        RegisterServices();
+
         _particleCamera = GameObject.FindGameObjectWithTag("Particle Camera").GetComponent<Camera>();
         Object.DontDestroyOnLoad(_particleCamera.gameObject);
 
-        _uiCamera = GameServiceLocator.UIManager.UICamera;
+        _uiCamera = _uiManager.UICamera;
 
-        Debug.Log("[CameraManager] 初始化完成");
+        Log.Info("[CameraManager] 初始化完成");
     }
 
     public void Dispose()
     {
         _particleCamera = null;
-        Debug.Log("[CameraManager] 已释放");
+        Log.Info("[CameraManager] 已释放");
     }
+
+    #region 私有方法
+    private void RegisterServices()
+    {
+        _uiManager = GameServiceLocator.UIManager;
+    }
+    #endregion
 
     #region 公共方法
     /// <summary>

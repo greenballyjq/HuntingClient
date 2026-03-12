@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameFramework.Utility;
+using UnityEngine;
 
 /// <summary>
 /// 游戏游玩场景元素管理器
@@ -21,7 +22,7 @@ public class GameplaySceneItemManager : IRoundManager, IRoundResettable
     {
         FindPlayer();
         FindPlayableArea();
-        Debug.Log("[PlayerManager] 初始化完成");
+        Log.Info("[GameplaySceneItemManager] 初始化完成");
     }
 
     public void ReInit(RoundContext context)
@@ -34,7 +35,7 @@ public class GameplaySceneItemManager : IRoundManager, IRoundResettable
     {
         _player = null;
         _playableArea = null;
-        Debug.Log("[PlayerManager] 已释放");
+        Log.Info("[GameplaySceneItemManager] 已释放");
     }
 
     public void Cleanup()

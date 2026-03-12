@@ -1,8 +1,8 @@
 ﻿using cfg.HuntingConfig.Enum;
 using GameFramework.Game;
+using GameFramework.Utility;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 /// <summary>
 /// 玩家数据管理器
@@ -19,25 +19,24 @@ public class PlayerDataManager : IAppManager
     /// </summary>
     private Dictionary<EPropType, int> _propCounts = new Dictionary<EPropType, int>();
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     public void Init()
     {
+        RegisterServices();
+
         // TODO 未来从服务器获取玩家数据
         _threeKPCoinAmount = 50;
 
         foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
             _propCounts[propType] = 3;
         
-        Debug.Log("[PlayerDataManager] 初始化完成");
+        Log.Info("[PlayerDataManager] 初始化完成");
     }
 
     public void Dispose()
     {
-        Debug.Log("[PlayerDataManager] 已释放");
+        Log.Info("[PlayerDataManager] 已释放");
     }
 
     #region 公共方法
@@ -86,6 +85,13 @@ public class PlayerDataManager : IAppManager
             CurrentAmount = currentAmount,
             DeltaAmount = deltaAmount
         });
+    }
+    #endregion
+
+    #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
     }
     #endregion
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameFramework.Utility;
+using UnityEngine;
 
 /// <summary>
 /// 玩家控制管理器
@@ -12,7 +13,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
 
     public void Init(RoundContext context)
     {
-        Debug.Log("[PlayerControlManager] 初始化完成");
+        Log.Info("[PlayerControlManager] 初始化完成");
     }
 
     public void DoUpdate(float deltaTime)
@@ -27,7 +28,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     public void Dispose()
     {
         EndCurrentControl();
-        Debug.Log("[PlayerControlManager] 已释放");
+        Log.Info("[PlayerControlManager] 已释放");
     }
 
     public void Cleanup()
@@ -38,7 +39,6 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     public void ReInit(RoundContext context)
     {
         SwitchToJoystick();
-        //SwitchToDefaultShooting();
     }
 
     #region 公共方法
@@ -63,18 +63,9 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// <summary>
     /// 切换到指哪打哪模式
     /// </summary>
-    /// <param name="minLockDistance">最小锁定距离</param>
-    /// <param name="maxLockDistance">最大锁定距离</param>
-    public void SwitchToAimAssist(float minLockDistance, float maxLockDistance)
+    public void SwitchToAimAssist()
     {
         BasePlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.AimAssist);
-            
-        if (handler is AimAssistHandler aimAssistHandler)
-        {
-            aimAssistHandler.SetMinLockDistance(minLockDistance);
-            aimAssistHandler.SetMaxLockDistance(maxLockDistance);
-        }
-            
         SwitchHandler(handler);
     }
     #endregion

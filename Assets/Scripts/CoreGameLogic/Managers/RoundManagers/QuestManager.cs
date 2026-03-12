@@ -1,6 +1,8 @@
 ﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Game;
+using GameFramework.Manager;
+using GameFramework.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,22 +67,15 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private int _currentRewardValue;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
+    private EventManager _eventManager;
+    private HuntingConfigManager _configManager;
     public void Init(RoundContext context)
     {
+        RegisterServices();
         _handlerCache = new Dictionary<EQuestType, IQuestHandler>();
         _roundStartTime = Time.time;
         _nextDispatchTime = QuestStartTime;
-        Debug.Log("[QuestManager] 初始化完成");
+        Log.Info("[QuestManager] 初始化完成");
     }
 
     public void DoUpdate(float deltaTime)
@@ -132,7 +127,7 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
     public void Dispose()
     {
         EndCurrentQuest(isTimeout: false);
-        Debug.Log("[QuestManager] 已释放");
+        Log.Info("[QuestManager] 已释放");
     }
 
     public void Cleanup()
@@ -158,6 +153,12 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
     #endregion
 
     #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
+    }
+
     /// <summary>
     /// 派发新任务
     /// </summary>
@@ -167,7 +168,7 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
         Quest questData = _configManager.GetRandomQuest();
         if (questData == null)
         {
-            Debug.LogWarning("[QuestManager] 未找到任务配置");
+            Log.Warning("[QuestManager] 未找到任务配置");
             return;
         }
 
@@ -177,7 +178,7 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
             _currentHandler = QuestHandlerFactory.CreateQuestHandler(questData.QuestType);
             if (_currentHandler == null)
             {
-                Debug.LogWarning($"[QuestManager] 未实现的任务类型: {questData.QuestType}");
+                Log.Warning($"[QuestManager] 未实现的任务类型: {questData.QuestType}");
                 return;
             }
             _handlerCache[questData.QuestType] = _currentHandler;
@@ -212,7 +213,7 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
             RewardValue = _currentRewardValue,
         });
 
-        Debug.Log($"[QuestManager] 任务已派发: {questData.QuestType}，目标值:{_currentTargetValue}，奖励值:{_currentRewardValue}");
+        Log.Info($"[QuestManager] 任务已派发: {questData.QuestType}，目标值:{_currentTargetValue}，奖励值:{_currentRewardValue}");
     }
 
     /// <summary>
@@ -235,7 +236,7 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
                 Sender = this,
                 QuestData = _currentQuestContext.QuestData
             });
-            Debug.Log("[QuestManager] 任务已超时");
+            Log.Info("[QuestManager] 任务已超时");
         }
         else
         {
@@ -246,7 +247,7 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
                 QuestData = _currentQuestContext.QuestData,
                 RewardCoin = _currentRewardValue
             });
-            Debug.Log($"[QuestManager] 任务已完成，奖励:{_currentRewardValue}");
+            Log.Info($"[QuestManager] 任务已完成，奖励:{_currentRewardValue}");
         }
 
         // 清理当前任务
@@ -290,8 +291,6 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         _eventManager.Trigger(QuestEvents.QuestTimeout, args);
     }
-
-        
     #endregion
 }
 

@@ -1,6 +1,5 @@
 ﻿using cfg.HuntingConfig.Enum;
 using CoreGameLogic.Managers.AppManagers;
-using Cysharp.Threading.Tasks;
 using Hunting.Events;
 using UnityEngine;
 
@@ -9,11 +8,6 @@ using UnityEngine;
 /// </summary>
 public class PlayerWeapon : MonoBehaviour
 {
-    /// <summary>
-    /// 旋转速度
-    /// </summary>
-    [SerializeField] private float _rotationSpeed;
-
     /// <summary>
     /// 开火点
     /// </summary>
@@ -30,7 +24,7 @@ public class PlayerWeapon : MonoBehaviour
     private float _fireInterval;
 
     /// <summary>
-    /// 上次射击的时间戳
+    /// 上次射击时间
     /// </summary>
     private float _lastFireTime;
 
@@ -45,34 +39,15 @@ public class PlayerWeapon : MonoBehaviour
     private bool _isSpecialBullet;
 
     /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
-    /// <summary>
-    /// 武器管理器
-    /// </summary>
-    private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
-
-    /// <summary>
-    /// 子弹管理器
-    /// </summary>
-    private BulletManager _bulletManager => GameServiceLocator.GetRoundManager<BulletManager>();
-
-    /// <summary>
-    /// 打猎音效管理器
-    /// </summary>
-    private HuntingSoundManager _huntingSoundManager => GameServiceLocator.GetAppManager<HuntingSoundManager>();
-
-    /// <summary>
     /// 武器视觉组件
     /// </summary>
     public WeaponVisual WeaponVisual { get; private set; }
+
+    private EventManager _eventManager;
+    private HuntingConfigManager _configManager;
+    private HuntingSoundManager _soundManager;
+    private WeaponManager _weaponManager;
+    private BulletManager _bulletManager;
 
     private void Awake()
     {
@@ -86,14 +61,29 @@ public class PlayerWeapon : MonoBehaviour
 
     #region 公共方法
     /// <summary>
-    /// 初始化武器
+    /// 初始化
     /// </summary>
     public void Init()
     {
+        RegisterServices();
+
         RegisterEvents();
-        // 设置默认子弹
+
         ChangeBullet(_currentBulletId);
         UpdateFireInterval();
+    }
+
+    /// <summary>
+    /// 尝试开火
+    /// </summary>
+    public void TryFire()
+    {
+        if (Time.time - _lastFireTime < _fireInterval)
+            return;
+
+        Fire();
+
+        _lastFireTime = Time.time;
     }
 
     /// <summary>
@@ -141,13 +131,6 @@ public class PlayerWeapon : MonoBehaviour
         ChangeBullet(bulletId);
     }
 
-    /// <summary>
-    /// 获取当前子弹ID
-    /// </summary>
-    public int GetCurrentBulletId()
-    {
-        return _currentBulletId;
-    }
 
     /// <summary>
     /// 响应射速变化
@@ -188,23 +171,31 @@ public class PlayerWeapon : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// 尝试射击
-    /// </summary>
-    public void TryFire()
-    {
-        // 检查射击间隔
-        if (Time.time - _lastFireTime < _fireInterval)
-            return;
-
-        // 执行射击
-        SpawnBulletAsync().Forget();
-        _huntingSoundManager.PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.GunShoot_Default);
-        _lastFireTime = Time.time;
-    }
+    
     #endregion
 
     #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+        _weaponManager = GameServiceLocator.GetRoundManager<WeaponManager>();
+        _bulletManager = GameServiceLocator.GetRoundManager<BulletManager>();
+    }
+
+    /// <summary>
+    /// 开火
+    /// </summary>
+    private void Fire()
+    {
+        _bulletManager.SpawnBullet(_currentBulletId, _firePoint.position, _firePoint.forward);
+        _soundManager.PlayFireSound();
+    }
+
     /// <summary>
     /// 更新射击间隔
     /// </summary>
@@ -212,14 +203,6 @@ public class PlayerWeapon : MonoBehaviour
     {
         float fireRate = _weaponManager.GetCurrentFireRate(_currentBulletId);
         _fireInterval = 1f / fireRate;
-    }
-
-    /// <summary>
-    /// 生成子弹
-    /// </summary>
-    private async UniTask SpawnBulletAsync()
-    {
-        await _bulletManager.SpawnBullet(_currentBulletId, _firePoint.position, _firePoint.forward);
     }
 
     /// <summary>

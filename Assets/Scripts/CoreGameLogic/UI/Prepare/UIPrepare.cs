@@ -1,4 +1,4 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using CoreGameLogic.Managers.AppManagers;
@@ -101,6 +101,7 @@ public class UIPrepare : UIBase
         _uiComponentSkillInfo.Init();
         _uiComponentMapInfo.Init();
         _uiComponentPrepareDebug.Init();
+        _uiComponentPrepareDebug.gameObject.SetActive(false);
     }
 
     public override void OnClose()

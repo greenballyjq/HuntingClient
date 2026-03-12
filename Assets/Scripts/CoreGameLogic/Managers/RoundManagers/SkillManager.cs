@@ -1,5 +1,7 @@
 ﻿using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
+using GameFramework.Manager;
+using GameFramework.Utility;
 using UnityEngine;
 
 /// <summary>
@@ -17,18 +19,13 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private SkillContext _currentSkillContext;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager = GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 能量条管理器
-    /// </summary>
-    private EnergyProgressManager _energyProgressManager = GameServiceLocator.GetRoundManager<EnergyProgressManager>();
+    private EventManager _eventManager;
+    private EnergyProgressManager _energyProgressManager;
 
     public void Init(RoundContext context)
     {
+        RegisterServices();
+
         Skill skillData = context.SkillData;
 
         _currentSkillHandler = SkillHandlerFactory.CreateSkillHandler(skillData.SkillType);
@@ -39,7 +36,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
             RoundContext = context,
         };
 
-        Debug.Log("[SkillManager] 初始化完成");
+        Log.Info("[SkillManager] 初始化完成");
     }
 
     public void DoUpdate(float dt)
@@ -55,7 +52,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         EndSkill();
 
-        Debug.Log("[SkillManager] 已释放");
+        Log.Info("[SkillManager] 已释放");
     }
 
     public void Cleanup()
@@ -79,6 +76,12 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     #endregion
 
     #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _energyProgressManager = GameServiceLocator.GetRoundManager<EnergyProgressManager>();
+    }
+
     /// <summary>
     /// 启动技能
     /// </summary>

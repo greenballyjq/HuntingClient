@@ -45,11 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edab6a0979ca281439fe0320320f6146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletId: 1
-  muzzlePoint: {fileID: 7497616816640137080}
-  rotationSmooth: 1
-  rotationSpeed: 20
-  fireAudioClip: {fileID: 8300000, guid: 24512ee4aa7451745974b27c89028038, type: 3}
+  _firePoint: {fileID: 7497616816640137080}
 --- !u!1 &4662290557515016372
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,9 +71,9 @@ Transform:
   m_GameObject: {fileID: 4662290557515016372}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.18, z: 0.96}
+  m_LocalPosition: {x: 0, y: 0.18, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4298192183235322543}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -109,8 +105,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7497616816640137080}
   m_Father: {fileID: 332820029836833302}

@@ -1,4 +1,6 @@
 ﻿using cfg.HuntingConfig.Enum;
+using GameFramework.Manager;
+using GameFramework.Utility;
 using UnityEngine;
 
 
@@ -42,26 +44,19 @@ public class SettlementRewardManager : IRoundManager
     /// </summary>
     private bool _isDoubleApplied;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
+    private EventManager _eventManager;
+    private HuntingConfigManager _configManager;
     public void Init(RoundContext context)
     {
+        RegisterServices();
         RegisterEvents();
-        Debug.Log("[SettlementRewardManager] 初始化完成");
+        Log.Info("[SettlementRewardManager] 初始化完成");
     }
 
     public void Dispose()
     {
         UnregisterEvents();
-        Debug.Log("[SettlementRewardManager] 已释放");
+        Log.Info("[SettlementRewardManager] 已释放");
     }
 
     #region 公共方法
@@ -123,6 +118,12 @@ public class SettlementRewardManager : IRoundManager
     #endregion
 
     #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
+    }
+
     /// <summary>
     /// 计算肉度条基础奖励
     /// </summary>

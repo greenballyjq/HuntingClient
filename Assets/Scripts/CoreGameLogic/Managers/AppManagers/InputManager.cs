@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using GameFramework.Game;
+using GameFramework.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -36,14 +37,14 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
         _input.Player.SelectTarget.Disable();
         _input.Player.PointerPosition.Enable();
 
-        Debug.Log("[InputManager] 初始化完成");
+        Log.Info("[InputManager] 初始化完成");
     }
 
     public void Dispose()
     {
         _input.Disable();
         _input.Dispose();
-        Debug.Log("[InputManager] 已释放");
+        Log.Info("[InputManager] 已释放");
     }
 
     #region 公共方法

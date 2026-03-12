@@ -6,8 +6,9 @@
     <type fullname="BossAnimalBehaviour" preserve="all" />
     <type fullname="BossMovement" preserve="all" />
     <type fullname="BulletBehavior" preserve="all" />
+    <type fullname="BulletRefSo" preserve="all" />
     <type fullname="DiceRollAnimator" preserve="all" />
-    <type fullname="DropMeatSo" preserve="all" />
+    <type fullname="DropRewardRefSo" preserve="all" />
     <type fullname="GameFramework.Core.Effect.ParticleEffectItem" preserve="all" />
     <type fullname="GiftOpenVFX" preserve="all" />
     <type fullname="Hunting.Game.Animal.AnimalMovement" preserve="all" />
@@ -28,14 +29,13 @@
     <type fullname="UIComponentAnimalCounterItem" preserve="all" />
     <type fullname="UIComponentBossHealth" preserve="all" />
     <type fullname="UIComponentBullet" preserve="all" />
-    <type fullname="UIComponentDropReward" preserve="all" />
+    <type fullname="UIComponentDropRewardLightEffect" preserve="all" />
     <type fullname="UIComponentGift" preserve="all" />
     <type fullname="UIComponentGiftAd" preserve="all" />
     <type fullname="UIComponentJoystick" preserve="all" />
     <type fullname="UIComponentMapInfo" preserve="all" />
     <type fullname="UIComponentMeatProgress" preserve="all" />
     <type fullname="UIComponentPrepareDebug" preserve="all" />
-    <type fullname="UIComponentPrepareTest" preserve="all" />
     <type fullname="UIComponentPropGroup" preserve="all" />
     <type fullname="UIComponentPropItem" preserve="all" />
     <type fullname="UIComponentRankingItem" preserve="all" />
@@ -68,8 +68,9 @@
     <type fullname="UIPopupSettlementSnowFake/WindowShakeConfig" preserve="nothing" serialized="true" />
     <type fullname="UISnowMountainVictory/FamilyPortraitConfig" preserve="nothing" serialized="true" />
     <type fullname="UISnowMountainVictory/LightEffectConfig" preserve="nothing" serialized="true" />
+    <type fullname="DropRewardRefSo/DropRewardRef" preserve="nothing" serialized="true" />
+    <type fullname="BulletRefSo/BulletRef" preserve="nothing" serialized="true" />
     <type fullname="HuntingAudioRefSo/HuntingAudioRef" preserve="nothing" serialized="true" />
-    <type fullname="DropMeatSo/DropMeat" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="spine-unity, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="Spine.Unity.SkeletonDataAsset" preserve="all" />

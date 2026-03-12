@@ -1,5 +1,7 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
+using GameFramework.Manager;
+using GameFramework.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,24 +42,14 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private readonly List<ActiveProp> _activeProps = new List<ActiveProp>();
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
-    /// <summary>
-    /// 玩家数据管理器
-    /// </summary>
-    private PlayerDataManager _playerDataManager => GameServiceLocator.GetAppManager<PlayerDataManager>();
+    private EventManager _eventManager;
+    private HuntingConfigManager _configManager;
+    private PlayerDataManager _playerDataManager;
 
     public void Init(RoundContext context)
     {
-        Debug.Log("[PropManager] 初始化完成");
+        RegisterServices();
+        Log.Info("[PropManager] 初始化完成");
     }
 
     public void DoUpdate(float deltaTime)
@@ -68,7 +60,7 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     public void Dispose()
     {
         StopAllProps();
-        Debug.Log("[PropManager] 已释放");
+        Log.Info("[PropManager] 已释放");
     }
 
     public void Cleanup()
@@ -90,13 +82,13 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
         if (_playerDataManager.GetPropCount(propType) < 1)
         {
-            Debug.LogWarning($"[PropManager] 道具数量不足，PropType:{propType}");
+            Log.Warning($"[PropManager] 道具数量不足，PropType:{propType}");
             return false;
         }
 
         if (!CanUseProp(propType, propData))
         {
-            Debug.LogWarning($"[PropManager] 道具正在使用中，无法重复使用，PropType:{propType}");
+            Log.Warning($"[PropManager] 道具正在使用中，无法重复使用，PropType:{propType}");
             return false;
         }
 
@@ -126,6 +118,13 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     #endregion
 
     #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
+    }
+
     /// <summary>
     /// 检查道具是否可以使用
     /// </summary>
@@ -180,7 +179,7 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
             PropData = propData
         });
 
-        Debug.Log($"[PropManager] 道具开始，类型:{propData.PropType}，持续时间:{propData.Duration:F2}秒");
+        Log.Info($"[PropManager] 道具开始，类型:{propData.PropType}，持续时间:{propData.Duration:F2}秒");
 
         // 无持续时间的道具，立即结束
         if (propData.Duration <= 0f)
@@ -206,7 +205,7 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
             PropData = activeProp.PropData
         });
 
-        Debug.Log($"[PropManager] 道具结束，类型:{activeProp.PropData.PropType}");
+        Log.Info($"[PropManager] 道具结束，类型:{activeProp.PropData.PropType}");
     }
 
     /// <summary>

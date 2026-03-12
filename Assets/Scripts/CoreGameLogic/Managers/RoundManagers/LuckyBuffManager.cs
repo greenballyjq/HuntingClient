@@ -1,4 +1,5 @@
 ﻿using cfg.HuntingConfig;
+using GameFramework.Manager;
 using UnityEngine;
 
 
@@ -17,13 +18,12 @@ public class LuckyBuffManager : IRoundManager
     /// </summary>
     private LuckyBuffContext _luckyBuffContext;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager = GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     public void Init(RoundContext context)
     {
+        RegisterServices();
+
         // 获取本局幸运仪式增益配置
         LuckyBuff buffData = context.LuckyBuffData;
 
@@ -56,6 +56,13 @@ public class LuckyBuffManager : IRoundManager
         // 停用幸运仪式增益效果
         _luckyBuffhandler?.OnDeactivate(_luckyBuffContext);
     }
+
+    #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+    }
+    #endregion
 
     #region 事件相关
     /// <summary>

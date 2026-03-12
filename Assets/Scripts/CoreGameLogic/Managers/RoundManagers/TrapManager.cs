@@ -2,6 +2,7 @@
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Pool;
 using GameFramework.Manager;
+using GameFramework.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,16 +13,6 @@ using UnityEngine;
 public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 对象池管理器
-    /// </summary>
-    private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
-
-    /// <summary>
     /// 活跃陷阱集合
     /// </summary>
     private readonly HashSet<TrapBehaviour> _activeTraps = new HashSet<TrapBehaviour>();
@@ -31,17 +22,20 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private readonly List<TrapBehaviour> _pendingRemovalTraps = new List<TrapBehaviour>();
 
+    private EventManager _eventManager;
+    private GameObjectPoolManager _gameObjectPoolManager;
     public void Init(RoundContext context)
     {
+        RegisterServices();
         RegisterEvents();
-        Debug.Log("[TrapManager] 初始化完成");
+        Log.Info("[TrapManager] 初始化完成");
     }
 
     public void Dispose()
     {
         UnregisterEvents();
         RecycleAllTraps();
-        Debug.Log("[TrapManager] 已释放");
+        Log.Info("[TrapManager] 已释放");
     }
     
     public void Cleanup()
@@ -108,6 +102,12 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     #endregion
 
     #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+    }
+
     /// <summary>
     /// 回收所有陷阱
     /// </summary>

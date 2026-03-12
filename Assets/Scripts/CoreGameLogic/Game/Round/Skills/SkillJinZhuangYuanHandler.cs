@@ -45,14 +45,13 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
     private DropRewardRefSo _dropMeatSo;
 
     private EffectManager _effectManager;
-
     private MeatProgressManager _meatProgressManager;
+    private GameplaySceneItemManager _gameplaySceneItemManager;
     public SkillJinZhuangYuanHandler()
     {
         _effectManager = GameServiceLocator.EffectManager;
         _meatProgressManager = GameServiceLocator.GetRoundManager<MeatProgressManager>();
-
-        _playableArea = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>().PlayableArea;
+        _gameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
 
         _dropMeatSo = _configManager.DropRewardRefSo;
     }
@@ -63,6 +62,8 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
         _spawnedCount = 0;
 
         _skillParam = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
+
+        _playableArea = _gameplaySceneItemManager.PlayableArea;
 
         // 随机生成数量
         _spawnCount = _skillParam.SpawnCount[Random.Range(0, _skillParam.SpawnCount.Length)];

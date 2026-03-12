@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Manager;
+using GameFramework.Utility;
 using UnityEngine;
 
 namespace Hunting.Game.Animal
@@ -13,26 +14,6 @@ namespace Hunting.Game.Animal
     /// </summary>
     public class SpawnerManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
-        /// <summary>
-        /// 事件管理器
-        /// </summary>
-        private EventManager _eventManager => GameServiceLocator.EventManager;
-
-        /// <summary>
-        /// 资源加载管理器
-        /// </summary>
-        private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-
-        /// <summary>
-        /// 对象池管理器
-        /// </summary>
-        private GameObjectPoolManager _gameObjectPoolManager => GameServiceLocator.GameObjectPoolManager;
-
-        /// <summary>
-        /// 配置管理器
-        /// </summary>
-        private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
-
         /// <summary>
         /// 所有派发器列表
         /// </summary>
@@ -58,14 +39,20 @@ namespace Hunting.Game.Animal
         /// </summary>
         private readonly Dictionary<int, GameObject> _cachedPrefabs = new Dictionary<int, GameObject>();
 
+        private EventManager _eventManager;
+        private ResourceManager _resourceManager;
+        private GameObjectPoolManager _gameObjectPoolManager;
+        private HuntingConfigManager _configManager;
+
         public void Init(RoundContext context)
         {
+            RegisterServices();
             _currentMapData = context.MapData;
             CollectSpawners();
             InitializeWeights();
             CacheSpecieData();
             CachePrefabs().Forget();
-            Debug.Log("[SpawnerManager] 初始化完成");
+            Log.Info("[SpawnerManager] 初始化完成");
         }
 
         public void Dispose()
@@ -73,7 +60,7 @@ namespace Hunting.Game.Animal
             _spawners.Clear();
             _cachedSpecieData.Clear();
             _cachedPrefabs.Clear();
-            Debug.Log("[SpawnerManager] 已释放");
+            Log.Info("[SpawnerManager] 已释放");
         }
 
         public void Cleanup()
@@ -149,6 +136,14 @@ namespace Hunting.Game.Animal
         #endregion
 
         #region 私有方法
+        private void RegisterServices()
+        {
+            _eventManager = GameServiceLocator.EventManager;
+            _resourceManager = GameServiceLocator.ResourceManager;
+            _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+            _configManager = GameServiceLocator.ConfigManager;
+        }
+
         /// <summary>
         /// 收集所有派发器
         /// </summary>

@@ -9,17 +9,7 @@ using UnityEngine;
 public class PropAimAssistHandler : IPropHandler
 {
     /// <summary>
-    /// 最小锁定距离
-    /// </summary>
-    private float _minLockDistance;
-
-    /// <summary>
-    /// 最大锁定距离
-    /// </summary>
-    private float _maxLockDistance;
-
-    /// <summary>
-    /// 当前锁定的目标
+    /// 当前目标
     /// </summary>
     private Transform _currentTarget;
 
@@ -33,30 +23,11 @@ public class PropAimAssistHandler : IPropHandler
     /// </summary>
     private AimAssistEffectController _effectController;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
     private EventManager _eventManager;
-
-    /// <summary>
-    /// UI管理器
-    /// </summary>
     private UIManager _uiManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager;
-
-    /// <summary>
-    /// 特效管理器
-    /// </summary>
     private EffectManager _effectManager;
-
-    /// <summary>
-    /// 玩家控制管理器
-    /// </summary>
-    private PlayerControlManager _playerControlManager => GameServiceLocator.GetRoundManager<PlayerControlManager>();
+    private HuntingConfigManager _configManager;
+    private PlayerControlManager _playerControlManager;
 
     public PropAimAssistHandler()
     {
@@ -64,6 +35,7 @@ public class PropAimAssistHandler : IPropHandler
         _uiManager = GameServiceLocator.UIManager;
         _configManager = GameServiceLocator.ConfigManager;
         _effectManager = GameServiceLocator.EffectManager;
+        _playerControlManager = GameServiceLocator.GetRoundManager<PlayerControlManager>();
     }
 
     /// <summary>
@@ -75,8 +47,6 @@ public class PropAimAssistHandler : IPropHandler
 
         // 读取配置参数
         PropAimAssist parameter = _configManager.GetPropAimAssist(context.PropData.ParamTableID);
-        _minLockDistance = parameter.MinLockDistance;
-        _maxLockDistance = parameter.MaxLockDistance;
 
         // 获取特效路径
         string effectPath = parameter.EffectPrefabPath;
@@ -92,7 +62,7 @@ public class PropAimAssistHandler : IPropHandler
         _uiManager.GetUI<UIGameplay>("UIGameplay").PlayTipAnimationAsync("点击动物自动瞄准射击", Color.green, context.PropData.Duration).Forget();
 
         // 切换到指哪打哪模式
-        _playerControlManager.SwitchToAimAssist(_minLockDistance, _maxLockDistance);
+        _playerControlManager.SwitchToAimAssist();
     }
 
     /// <summary>
@@ -100,9 +70,6 @@ public class PropAimAssistHandler : IPropHandler
     /// </summary>
     public void OnPropUpdate(PropContext context, float dt)
     {
-        if (_effectController == null)
-            return;
-
         // 检查目标是否仍然有效
         if (_currentTarget != null && _currentTarget.gameObject == null)
         {
@@ -110,8 +77,7 @@ public class PropAimAssistHandler : IPropHandler
             _effectController.SetTarget(null);
         }
 
-        // 由道具管理器驱动更新
-        _effectController.UpdatePosition(dt);
+        _effectController?.UpdatePosition(dt);
     }
 
     /// <summary>

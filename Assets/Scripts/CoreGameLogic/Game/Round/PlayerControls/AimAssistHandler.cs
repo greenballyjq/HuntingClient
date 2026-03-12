@@ -1,4 +1,4 @@
-using Hunting.Game.Animal;
+﻿using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
@@ -6,62 +6,42 @@ using UnityEngine;
 /// </summary>
 public class AimAssistHandler : BasePlayerControlHandler
 {
-    /// <summary>
-    /// 主武器
-    /// </summary>
-    private PlayerWeapon _weapon;
+    private EventManager _eventManager;
+    private CameraManager _cameraManager;
+    private InputManager _inputManager;
+    private WeaponManager _weaponManager;
+
+    private const float MIN_LOCK_DISTANCE = 0f;
+    private const float MAX_LOCK_DISTANCE = 50f;
 
     /// <summary>
-    /// 当前锁定的目标
+    /// 玩家武器
+    /// </summary>
+    private PlayerWeapon _playerWeapon;
+
+    /// <summary>
+    /// 当前目标
     /// </summary>
     private Transform _currentTarget;
 
-    /// <summary>
-    /// 最小锁定距离
-    /// </summary>
-    private float _minLockDistance;
-
-    /// <summary>
-    /// 最大锁定距离
-    /// </summary>
-    private float _maxLockDistance;
-
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager = GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 相机管理器
-    /// </summary>
-    private CameraManager _cameraManager => GameServiceLocator.GetAppManager<CameraManager>();
-
-    /// <summary>
-    /// 输入管理器
-    /// </summary>
-    private InputManager _inputManager => GameServiceLocator.GetAppManager<InputManager>();
-
-    /// <summary>
-    /// 武器管理器
-    /// </summary>
-    private WeaponManager _weaponManager => GameServiceLocator.GetRoundManager<WeaponManager>();
+    public AimAssistHandler()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
+        _inputManager = GameServiceLocator.GetAppManager<InputManager>();
+        _weaponManager = GameServiceLocator.GetRoundManager<WeaponManager>();
+    }
 
     protected override void OnControlStart()
     {
-        _inputManager.SwitchToSelectTargetMode();
         RegisterEvents();
+        _inputManager.SwitchToSelectTargetMode();
+
+        _playerWeapon = _weaponManager.PlayerWeapon;
     }
 
     protected override void OnControlUpdate(float deltaTime)
     {
-        // TODO: 待以后实现LoadingManager后移除
-        if (_weapon == null)
-        {
-            _weapon = _weaponManager.PlayerWeapon;
-            if (_weapon == null)
-                return;
-        }
-
         // 检查是否有目标
         if (_currentTarget == null)
             return;
@@ -71,24 +51,23 @@ public class AimAssistHandler : BasePlayerControlHandler
         Vector3 targetPosition = targetCollider.bounds.center;
 
         // 检查目标距离
-        float distance = Vector3.Distance(_weapon.transform.position, targetPosition);
-        if (distance < _minLockDistance || distance > _maxLockDistance)
+        float distance = Vector3.Distance(_playerWeapon.transform.position, targetPosition);
+        if (distance < MIN_LOCK_DISTANCE || distance > MAX_LOCK_DISTANCE)
         {
             Transform lostTarget = _currentTarget;
             _currentTarget = null;
             TriggerTargetLost(new TargetLostEventArgs
             {
                 LostTarget = lostTarget,
-                Reason = ETargetLostReason.DistanceExceeded
             });
             return;
         }
 
         // 控制武器朝向目标
-        _weapon.SetAimTarget(targetPosition);
+        _playerWeapon.SetAimTarget(targetPosition);
 
         // 持续射击
-        _weapon.TryFire();
+        _playerWeapon.TryFire();
     }
 
     protected override void OnControlEnd()
@@ -100,31 +79,10 @@ public class AimAssistHandler : BasePlayerControlHandler
             _currentTarget = null;
             TriggerTargetLost(new TargetLostEventArgs
             {
-                LostTarget = lostTarget,
-                Reason = ETargetLostReason.ControlEnded
+                LostTarget = lostTarget
             });
         }
     }
-
-    #region 公共方法
-    /// <summary>
-    /// 设置最小锁定距离
-    /// </summary>
-    /// <param name="distance">最小锁定距离</param>
-    public void SetMinLockDistance(float distance)
-    {
-        _minLockDistance = distance;
-    }
-
-    /// <summary>
-    /// 设置最大锁定距离
-    /// </summary>
-    /// <param name="distance">最大锁定距离</param>
-    public void SetMaxLockDistance(float distance)
-    {
-        _maxLockDistance = distance;
-    }
-    #endregion
 
     #region 私有方法
     /// <summary>
@@ -146,10 +104,10 @@ public class AimAssistHandler : BasePlayerControlHandler
             Vector3 targetPosition = targetCollider != null ? targetCollider.bounds.center : newTarget.position;
             
             // 检查距离是否在范围内
-            if (_weapon != null)
+            if (_playerWeapon != null)
             {
-                float distance = Vector3.Distance(_weapon.transform.position, targetPosition);
-                if (distance < _minLockDistance || distance > _maxLockDistance)
+                float distance = Vector3.Distance(_playerWeapon.transform.position, targetPosition);
+                if (distance < MIN_LOCK_DISTANCE || distance > MAX_LOCK_DISTANCE)
                     return;
             }
 
@@ -162,7 +120,6 @@ public class AimAssistHandler : BasePlayerControlHandler
                 TriggerTargetSelected(new TargetSelectedEventArgs
                 {
                     Target = newTarget,
-                    Animal = animal
                 });
             }
             else if (_currentTarget != newTarget)
@@ -178,7 +135,6 @@ public class AimAssistHandler : BasePlayerControlHandler
                 TriggerTargetSelected(new TargetSelectedEventArgs
                 {
                     Target = newTarget,
-                    Animal = animal
                 });
             }
         }
@@ -217,7 +173,6 @@ public class AimAssistHandler : BasePlayerControlHandler
             TriggerTargetLost(new TargetLostEventArgs
             {
                 LostTarget = lostTarget,
-                Reason = ETargetLostReason.TargetDied
             });
         }
     }
@@ -239,7 +194,7 @@ public class AimAssistHandler : BasePlayerControlHandler
     }
 
     /// <summary>
-    /// 触发目标已切换事件
+    /// 触发目标切换事件
     /// </summary>
     private void TriggerTargetChanged(TargetChangedEventArgs args)
     {

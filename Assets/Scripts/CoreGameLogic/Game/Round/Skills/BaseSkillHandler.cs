@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using GameFramework.Manager;
 using UnityEngine;
 
 /// <summary>
@@ -21,10 +22,14 @@ public abstract class BaseSkillHandler : ISkillHandler
     /// </summary>
     protected Transform _player;
 
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    protected HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    protected ResourceManager _resourceManager;
+    protected HuntingConfigManager _configManager;
+
+    public BaseSkillHandler()
+    {
+        _resourceManager = GameServiceLocator.ResourceManager;
+        _configManager = GameServiceLocator.ConfigManager;
+    }
 
     public async UniTask StartSkill(SkillContext context)
     {
