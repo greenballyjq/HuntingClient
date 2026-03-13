@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Prop;
+using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,9 +62,7 @@ public class PropTrapHandler : BasePropHandler
         _spawnedCount = 0;
         _newPositions.Clear();
 
-        int min = _propParam.SpawnCount?.Length > 0 ? _propParam.SpawnCount[0] : 0;
-        int max = _propParam.SpawnCount?.Length > 1 ? _propParam.SpawnCount[1] : min;
-        _spawnCount = Mathf.Clamp(Random.Range(min, max + 1), 1, int.MaxValue);
+        _spawnCount = _propParam.SpawnCount[Random.Range(0, _propParam.SpawnCount.Length)];
 
         _spawnInterval = PropData.Duration / _spawnCount;
 
@@ -89,7 +87,6 @@ public class PropTrapHandler : BasePropHandler
     protected override void OnPropEnd() { }
 
     #region 私有方法
-
     /// <summary>
     /// 生成单个陷阱
     /// </summary>
@@ -122,13 +119,14 @@ public class PropTrapHandler : BasePropHandler
             if (Vector3.Distance(position, p) < TRAP_MIN_DISTANCE)
                 return false;
         }
+
         foreach (var p in _existingTrapPositions)
         {
             if (Vector3.Distance(position, p) < TRAP_MIN_DISTANCE)
                 return false;
         }
+
         return true;
     }
-
     #endregion
 }

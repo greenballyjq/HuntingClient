@@ -62,7 +62,7 @@ public class SkillWeapon : MonoBehaviour
         }
         else
         {
-            var animal = _animalManager.GetNearestVisibleAnimal(_firePoint.position);
+            var animal = _animalManager.GetNearestVisibleAnimal(transform.position);
             if (animal != null && IsInRange(animal))
             {
                 _currentTarget = animal;

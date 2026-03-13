@@ -1,4 +1,4 @@
-using Hunting.Game.Animal;
+﻿using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
@@ -37,8 +37,6 @@ public class AimAssistControlHandler : BaseControlHandler
     private const float MAX_YAW_ANGLE = 80f;
     private const float ROTATION_SPEED = 120f;
     private const float VELOCITY_SMOOTH_SPEED = 6f;
-
-    
 
     protected override void OnInit()
     {
@@ -81,7 +79,7 @@ public class AimAssistControlHandler : BaseControlHandler
         }
         else if (_hasPlayerSelectedTarget)
         {
-            var animal = _animalManager.GetNearestVisibleAnimal(PlayerWeapon.FirePointPosition);
+            var animal = _animalManager.GetNearestVisibleAnimal(PlayerWeapon.transform.position);
             if (animal != null && IsInRange(animal))
             {
                 _currentTarget = animal;

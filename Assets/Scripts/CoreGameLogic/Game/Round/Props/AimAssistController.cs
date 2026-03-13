@@ -1,4 +1,3 @@
-using GameFramework.Manager;
 using UnityEngine;
 
 /// <summary>
@@ -7,27 +6,33 @@ using UnityEngine;
 public class AimAssistController : MonoBehaviour
 {
     /// <summary>
-    /// 移动速度
+    /// 跟随速度
     /// </summary>
-    [SerializeField] private float _moveSpeed = 15f;
+    [SerializeField] private float _followSpeed = 10f;
+
+    private Collider _targetCollider;
 
     /// <summary>
-    /// 当前目标
+    /// 屏幕中心点世界坐标
     /// </summary>
-    private Transform _target;
+    private Vector3 _screenCenterWorldPos;
 
-    /// <summary>
-    /// 相机管理器
-    /// </summary>
-    private CameraManager _cameraManager => GameServiceLocator.GetAppManager<CameraManager>();
+    private CameraManager _cameraManager;
+
+    private const float CAMERA_DEPTH = 3f;
+
+    private void Awake()
+    {
+        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
+        _screenCenterWorldPos = _cameraManager.ScreenToWorldPoint(new Vector2(Screen.width / 2f, Screen.height / 2f), CAMERA_DEPTH);
+    }
 
     /// <summary>
     /// 设置目标
     /// </summary>
-    /// <param name="target">目标</param>
     public void SetTarget(Transform target)
     {
-        _target = target;
+        _targetCollider = target?.GetComponent<Collider>();
     }
 
     /// <summary>
@@ -38,14 +43,12 @@ public class AimAssistController : MonoBehaviour
     {
         Vector3 targetPos;
 
-        // 有目标时在目标位置显示，无目标时在屏幕中心显示
-        if (_target != null && _target.gameObject != null)
-            targetPos = _target.GetComponent<Collider>().bounds.center;
+        if (_targetCollider != null)
+            targetPos = _targetCollider.bounds.center;
         else
-            targetPos = _cameraManager.ScreenToWorldPoint(new Vector2(Screen.width / 2f, Screen.height / 2f),3f);
+            targetPos = _screenCenterWorldPos;
 
-        // 平滑移动
-        transform.position = Vector3.Lerp(transform.position, targetPos, dt * _moveSpeed);
+        transform.position = Vector3.Lerp(transform.position, targetPos, dt * _followSpeed);
     }
 }
 

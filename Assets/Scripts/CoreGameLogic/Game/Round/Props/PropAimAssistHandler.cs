@@ -1,6 +1,7 @@
-﻿using cfg.HuntingConfig.Prop;
+using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
@@ -9,48 +10,58 @@ using UnityEngine;
 public class PropAimAssistHandler : BasePropHandler
 {
     /// <summary>
-    /// 道具参数
-    /// </summary>
-    private PropAimAssist _propParam;
-
-    /// <summary>
     /// 瞄准镜预制体
     /// </summary>
     private GameObject _aimAssisPrefab;
 
     /// <summary>
-    /// 瞄准器实例
+    /// 手势引导预制体
     /// </summary>
-    private GameObject _aimAssisInstance;
+    private GameObject _handGuidePrefab;
 
     /// <summary>
     /// 瞄准器控制器
     /// </summary>
     private AimAssistController _aimAssisController;
 
+    /// <summary>
+    /// 手势引导控制器
+    /// </summary>
+    private AimAssistHandGuideController _handGuideController;
+
+    /// <summary>
+    /// 是否有目标
+    /// </summary>
+    private bool _hasTarget;
+
     private EventManager _eventManager;
     private UIManager _uiManager;
+    private AnimalManager _animalManager;
     private PlayerControlManager _playerControlManager;
+    
 
-    protected override void OnInit() 
+    protected override void OnInit()
     {
         _eventManager = GameServiceLocator.EventManager;
         _uiManager = GameServiceLocator.UIManager;
-        EffectManager = GameServiceLocator.EffectManager;
+        _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
         _playerControlManager = GameServiceLocator.GetRoundManager<PlayerControlManager>();
-
-        _propParam = ConfigManager.GetPropAimAssist(PropData.ParamTableID);
-        _aimAssisPrefab = ConfigManager.PropRefSo.GetPropEffectPrefab(PropData.ID);
+        
+        _aimAssisPrefab = ConfigManager.PropRefSo.GetPropPrefab(PropData.ID);
+        _handGuidePrefab = ConfigManager.PropRefSo.GetPropEffectPrefab(PropData.ID);
     }
 
     protected override UniTask OnPropStart()
     {
         RegisterEvents();
 
-        _aimAssisInstance = EffectManager.PlayLoop(_aimAssisPrefab);
+        _hasTarget = false;
 
-        _aimAssisController = _aimAssisInstance.GetComponent<AimAssistController>();
+         _aimAssisController = EffectManager.PlayLoop(_aimAssisPrefab).GetComponent<AimAssistController>();
         _aimAssisController.SetTarget(null);
+
+        _handGuideController = Object.Instantiate(_handGuidePrefab).GetComponent<AimAssistHandGuideController>();
+        _handGuideController.SetVisible(true);
 
         var _uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
         _uiGameplay.PlayTipAnimationAsync("点击动物自动瞄准射击", Color.green, PropData.Duration).Forget();
@@ -63,16 +74,23 @@ public class PropAimAssistHandler : BasePropHandler
     protected override void OnPropUpdate(float dt)
     {
         _aimAssisController.UpdatePosition(dt);
-    }
 
+        if (_hasTarget)
+            return;
+
+        var animal = _animalManager.GetNearestVisibleAnimal(Player.position);
+        if (animal != null)
+            _handGuideController.UpdatePosition(animal.Collider.bounds.center, dt);
+    }
 
     protected override void OnPropEnd()
     {
         _playerControlManager.SwitchToJoystick();
 
-        EffectManager.Stop(_aimAssisInstance, EffectStopMode.Graceful);
+        EffectManager.Stop(_aimAssisController.gameObject, EffectStopMode.Graceful);
 
-        _aimAssisInstance = null;
+        _aimAssisController = null; 
+        _handGuideController = null;
 
         UnregisterEvents();
     }
@@ -85,7 +103,6 @@ public class PropAimAssistHandler : BasePropHandler
     {
         _eventManager.AddListener(PlayerControlEvents.TargetSelected, OnTargetSelected);
         _eventManager.AddListener(PlayerControlEvents.TargetLost, OnTargetLost);
-        _eventManager.AddListener(PlayerControlEvents.TargetChanged, OnTargetChanged);
     }
 
     /// <summary>
@@ -95,32 +112,26 @@ public class PropAimAssistHandler : BasePropHandler
     {
         _eventManager.RemoveListener(PlayerControlEvents.TargetSelected, OnTargetSelected);
         _eventManager.RemoveListener(PlayerControlEvents.TargetLost, OnTargetLost);
-        _eventManager.RemoveListener(PlayerControlEvents.TargetChanged, OnTargetChanged);
     }
 
     /// <summary>
-    /// 目标已选中事件回调
+    /// 目标选中事件回调
     /// </summary>
     private void OnTargetSelected(TargetSelectedEventArgs args)
     {
+        _hasTarget = true;
         _aimAssisController.SetTarget(args.Target?.transform);
+        _handGuideController.SetVisible(false);
     }
 
     /// <summary>
-    /// 目标已丢失事件回调
+    /// 目标丢失事件回调
     /// </summary>
     private void OnTargetLost(TargetLostEventArgs args)
     {
+        _hasTarget = false;
         _aimAssisController.SetTarget(null);
+        _handGuideController.SetVisible(true);
     }
-
-    /// <summary>
-    /// 目标已切换事件回调
-    /// </summary>
-    private void OnTargetChanged(TargetChangedEventArgs args)
-    {
-        _aimAssisController.SetTarget(args.NewTarget?.transform);
-    }
-
     #endregion
 }
