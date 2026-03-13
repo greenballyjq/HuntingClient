@@ -4,147 +4,129 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 智能诱捕陷阱道具处理器
+/// 陷阱道具处理器
 /// </summary>
 public class PropTrapHandler : BasePropHandler
 {
     /// <summary>
-    /// 玩家管理器
+    /// 道具参数
     /// </summary>
-    private GameplaySceneItemManager _playerManager;
+    private PropTrap _propParam;
 
     /// <summary>
-    /// 陷阱管理器
+    /// 生成数量
     /// </summary>
+    private int _spawnCount;
+
+    /// <summary>
+    /// 生成间隔
+    /// </summary>
+    private float _spawnInterval;
+
+    /// <summary>
+    /// 生成计时器
+    /// </summary>
+    private float _spawnTimer;
+
+    /// <summary>
+    /// 已生成数量
+    /// </summary>
+    private int _spawnedCount;
+
+    /// <summary>
+    /// 场上陷阱位置缓存
+    /// </summary>
+    private readonly List<Vector3> _existingTrapPositions = new List<Vector3>();
+
+    /// <summary>
+    /// 本局已生成陷阱位置
+    /// </summary>
+    private readonly List<Vector3> _newPositions = new List<Vector3>();
+
     private TrapManager _trapManager;
 
-    /// <summary>
-    /// 构造函数
-    /// </summary>
-    public PropTrapHandler()
+    private const float TRAP_MIN_DISTANCE = 3f;
+    private const float AREA_BOUNDARY_OFFSET = -16f;
+    private const float ANIMAL_CHECK_RADIUS = 2f;
+    private const int MAX_ATTEMPTS = 20;
+
+    protected override void OnInit()
     {
-        _playerManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
         _trapManager = GameServiceLocator.GetRoundManager<TrapManager>();
+        _propParam = ConfigManager.GetPropTrap(PropData.ParamTableID);
     }
 
-    /// <summary>
-    /// 道具开始钩子
-    /// </summary>
-    protected override UniTask OnPropStart(Prop propData)
+    protected override UniTask OnPropStart()
     {
-        Transform player = _playerManager.Player;
+        _spawnTimer = 0f;
+        _spawnedCount = 0;
+        _newPositions.Clear();
 
-        PropTrap parameter = _configManager.GetPropTrap(propData.ParamTableID);
-        GameObject trapPrefab = _configManager.PropRefSo.GetPropEffectPrefab(propData.ID);
+        int min = _propParam.SpawnCount?.Length > 0 ? _propParam.SpawnCount[0] : 0;
+        int max = _propParam.SpawnCount?.Length > 1 ? _propParam.SpawnCount[1] : min;
+        _spawnCount = Mathf.Clamp(Random.Range(min, max + 1), 1, int.MaxValue);
 
-        List<Vector3> existingTrapPositions = _trapManager.GetAllTrapPositions();
-
-        List<Vector3> trapPositions = GenerateTrapPositions(
-            player,
-            parameter.TrapCount,
-            parameter.SpawnMinDistance,
-            parameter.SpawnMaxDistance,
-            parameter.SpawnSectorAngle,
-            parameter.SpawnAnimalCheckRadius,
-            parameter.SpawnTrapMinDistance,
-            existingTrapPositions
-        );
-
-        foreach (Vector3 position in trapPositions)
-        {
-            _trapManager.CreateTrap(
-                position,
-                parameter.AttractRadius,
-                parameter.TriggerRadius,
-                parameter.AttractRadiusRangeByVolume,
-                trapPrefab
-            );
-        }
+        _spawnInterval = PropData.Duration / _spawnCount;
 
         return UniTask.CompletedTask;
     }
 
-    /// <summary>
-    /// 道具更新钩子
-    /// </summary>
-    protected override void OnPropUpdate(float dt) { }
+    protected override void OnPropUpdate(float dt)
+    {
+        if (_spawnedCount >= _spawnCount)
+            return;
 
-    /// <summary>
-    /// 道具结束钩子
-    /// </summary>
+        _spawnTimer += dt;
+
+        if (_spawnTimer >= _spawnInterval)
+        {
+            _spawnTimer = 0f;
+            SpawnTrap();
+            _spawnedCount++;
+        }
+    }
+
     protected override void OnPropEnd() { }
 
     #region 私有方法
 
     /// <summary>
-    /// 生成陷阱位置列表
+    /// 生成单个陷阱
     /// </summary>
-    private List<Vector3> GenerateTrapPositions(
-        Transform playerTransform,
-        int trapCount,
-        float spawnMinDistance,
-        float spawnMaxDistance,
-        float sectorAngle,
-        float animalCheckRadius,
-        float trapMinDistance,
-        List<Vector3> existingTrapPositions
-    )
+    private void SpawnTrap()
     {
-        List<Vector3> positions = new List<Vector3>();
-        int maxAttempts = 100;
-        int attempts = 0;
+        _trapManager.GetTrapPositions(_existingTrapPositions);
 
-        while (positions.Count < trapCount && attempts < maxAttempts)
+        Vector3 position = default;
+        for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++)
         {
-            attempts++;
-
-            Vector3 candidate = GetRandomSectorPoint(playerTransform, spawnMinDistance, spawnMaxDistance, sectorAngle);
-
-            if (CanPlaceTrap(candidate, animalCheckRadius, trapMinDistance, positions, existingTrapPositions))
-            {
-                positions.Add(candidate);
-                attempts = 0;
-            }
+            position = PlayableArea.GetRandomPoint(100, AREA_BOUNDARY_OFFSET);
+            if (IsValidTrapPosition(position))
+                break;
         }
 
-        return positions;
+        _newPositions.Add(position);
+        _trapManager.SpawnTrap(position);
     }
 
     /// <summary>
-    /// 获取扇形范围内随机点
+    /// 是否是有效陷阱位置
     /// </summary>
-    private Vector3 GetRandomSectorPoint(Transform playerTransform, float spawnMinDistance, float spawnMaxDistance, float sectorAngle)
+    private bool IsValidTrapPosition(Vector3 position)
     {
-        float randomAngle = Random.Range(-sectorAngle / 2f, sectorAngle / 2f);
-        Quaternion rotation = Quaternion.Euler(0, randomAngle, 0);
-        float randomDistance = Random.Range(spawnMinDistance, spawnMaxDistance);
-        Vector3 direction = rotation * playerTransform.forward;
-        Vector3 position = playerTransform.position + direction * randomDistance;
-
-        return position;
-    }
-
-    /// <summary>
-    /// 检查是否可以在此位置放置陷阱
-    /// </summary>
-    private bool CanPlaceTrap(Vector3 position, float animalCheckRadius, float trapMinDistance, List<Vector3> newPositions, List<Vector3> existingTrapPositions)
-    {
-        Collider[] animalColliders = Physics.OverlapSphere(position, animalCheckRadius, LayerMask.GetMask("Animal"));
-
-        if (animalColliders.Length > 0)
+        if (Physics.OverlapSphere(position, ANIMAL_CHECK_RADIUS, LayerMask.GetMask("Animal")).Length > 0)
             return false;
 
-        foreach (Vector3 newPosition in newPositions)
+        foreach (var p in _newPositions)
         {
-            if (Vector3.Distance(position, newPosition) < trapMinDistance)
+            if (Vector3.Distance(position, p) < TRAP_MIN_DISTANCE)
                 return false;
         }
-        foreach (Vector3 existingPosition in existingTrapPositions)
+        foreach (var p in _existingTrapPositions)
         {
-            if (Vector3.Distance(position, existingPosition) < trapMinDistance)
+            if (Vector3.Distance(position, p) < TRAP_MIN_DISTANCE)
                 return false;
         }
-
         return true;
     }
 

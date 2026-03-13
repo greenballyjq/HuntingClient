@@ -62,7 +62,7 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     public void Cleanup()
     {
-        _playerWeapon.SetCurrentBullet(1);
+        _playerWeapon.SetBullet(1);
         _playerWeapon = null;
     }
 
@@ -163,7 +163,7 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
         // 通知主武器更新射速
         if (_playerWeapon != null)
-            _playerWeapon.OnFireRateChanged();
+            _playerWeapon.UpdateFireInterval();
     }
 
     /// <summary>

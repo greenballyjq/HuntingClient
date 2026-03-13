@@ -23,7 +23,7 @@ public class LuckyBuffStartSpecialBulletHandler : ILuckyBuffHandler
 
         // 获取主武器并切换子弹
         var mainWeapon = _weaponManager.PlayerWeapon;
-        mainWeapon.SetCurrentBullet(specialBullet.ID);
+        mainWeapon.SetBullet(specialBullet.ID);
     }
 
     /// <summary>

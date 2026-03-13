@@ -10,93 +10,106 @@ using UnityEngine;
 public class PropBombardmentHandler : BasePropHandler
 {
     /// <summary>
-    /// 轰炸范围半径
+    /// 道具参数
     /// </summary>
-    private float _zoneRadius;
+    private PropBombardment _propParam;
 
     /// <summary>
-    /// 伤害值
+    /// 轰炸特效预制体
     /// </summary>
-    private float _damageAmount;
+    private GameObject _bombardmentEffectPrefab;
 
     /// <summary>
-    /// 伤害间隔
+    /// 轰炸区域位置列表
     /// </summary>
-    private float _damageInterval;
-
-    /// <summary>
-    /// 开火距离
-    /// </summary>
-    private float _fireDistance;
+    private Vector3[] _zonePositions;
 
     /// <summary>
     /// 伤害计时器
     /// </summary>
     private float _damageTimer;
 
-    /// <summary>
-    /// 轰炸位置
-    /// </summary>
-    private Vector3 _bombardmentPos;
+    private const float ZONE_MIN_DISTANCE = 8f;
+    private const float AREA_BOUNDARY_OFFSET = -24f;
+    private const int MAX_ATTEMPTS = 20;
 
-    private EffectManager _effectManager;
-
-    public PropBombardmentHandler()
+    protected override  void OnInit()
     {
-        _effectManager = GameServiceLocator.EffectManager;
+        _propParam = ConfigManager.GetPropBombardment(PropData.ParamTableID);
+        _bombardmentEffectPrefab = ConfigManager.PropRefSo.GetPropEffectPrefab(PropData.ID);
     }
 
-    /// <summary>
-    /// 道具开始钩子
-    /// </summary>
-    protected override UniTask OnPropStart(Prop propData)
+    protected override UniTask OnPropStart()
     {
-        PropBombardment parameter = _configManager.GetPropBombardment(propData.ParamTableID);
-        _zoneRadius = parameter.ZoneRadius;
-        _fireDistance = 8;
-        _damageAmount = parameter.DamageAmount;
-        _damageInterval = parameter.DamageInterval;
-
-        _bombardmentPos = _player.position + _player.forward * _fireDistance;
-
-        GameObject effectPrefab = _configManager.PropRefSo.GetPropEffectPrefab(propData.ID);
-        _effectManager.PlayOneShot(effectPrefab, _bombardmentPos);
-
         _damageTimer = 0f;
+
+        CreateBombardmentZones();
 
         return UniTask.CompletedTask;
     }
 
-    /// <summary>
-    /// 道具更新钩子
-    /// </summary>
     protected override void OnPropUpdate(float dt)
     {
         _damageTimer += dt;
-        if (_damageTimer < _damageInterval)
+
+        if (_damageTimer < _propParam.DamageInterval)
             return;
 
-        ApplyBombardmentDamage();
         _damageTimer = 0f;
+
+        ApplyBombardmentDamage();
     }
 
-    /// <summary>
-    /// 道具结束钩子
-    /// </summary>
     protected override void OnPropEnd() { }
 
     #region 私有方法
+    /// <summary>
+    /// 创建轰炸区域
+    /// </summary>
+    private void CreateBombardmentZones()
+    {
+        _zonePositions = new Vector3[_propParam.ZoneCount];
+
+        for (int i = 0; i < _propParam.ZoneCount; i++)
+        {
+            Vector3 position = default;
+            for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++)
+            {
+                position = PlayableArea.GetRandomPoint(100, AREA_BOUNDARY_OFFSET);
+                if (IsValidZonePosition(position, i))
+                    break;
+            }
+            // 超限未找到有效位置时，用最后一次随机点兜底
+            _zonePositions[i] = position;
+            EffectManager.PlayOneShot(_bombardmentEffectPrefab, _zonePositions[i]);
+        }
+    }
 
     /// <summary>
-    /// 应用轰炸范围伤害
+    /// 应用轰炸伤害
     /// </summary>
     private void ApplyBombardmentDamage()
     {
-        Collider[] colliders = Physics.OverlapSphere(_bombardmentPos, _zoneRadius, LayerMask.GetMask("Animal"));
+        for (int i = 0; i < _zonePositions.Length; i++)
+        {
+            Collider[] colliders = Physics.OverlapSphere(_zonePositions[i], _propParam.ZoneRadius, LayerMask.GetMask("Animal"));
 
-        foreach (Collider collider in colliders)
-            collider.GetComponent<IDamageable>().TakeDamage(_damageAmount);
+            foreach (var collider in colliders)
+                collider.GetComponent<IDamageable>().TakeDamage(_propParam.DamageAmount);
+        }
     }
 
+    /// <summary>
+    /// 是否是有效轰炸区域
+    /// </summary>
+    private bool IsValidZonePosition(Vector3 position, int existingCount)
+    {
+        for (int i = 0; i < existingCount; i++)
+        {
+            if (Vector3.Distance(position, _zonePositions[i]) < ZONE_MIN_DISTANCE)
+                return false;
+        }
+        return true;
+    }
     #endregion
 }

@@ -1,6 +1,5 @@
 ﻿using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
-using GameFramework.Manager;
 using Hunting.Game.Animal;
 using UnityEngine;
 
@@ -10,26 +9,26 @@ using UnityEngine;
 public class SkillDaMeiLiHandler : BaseSkillHandler
 {
     /// <summary>
-    /// 技能参数缓存
+    /// 技能参数
     /// </summary>
-    private SkillDaMeiLi _skillParamCache;
+    private SkillDaMeiLi _skillParam;
 
     /// <summary>
-    /// 技能预制体缓存
+    /// 爱心预制体
     /// </summary>
-    private GameObject _skillPrefabCache;
+    private GameObject _lovePrefab;
 
-    protected override async UniTask OnSkillStart(SkillContext context)
+    protected override void OnInit() 
     {
-        if(_skillParamCache == null)
-            _skillParamCache = _configManager.GetSkillDaMeiLi(context.SkillData.ParamTableID);
+        _skillParam = ConfigManager.GetSkillDaMeiLi(SkillContext.SkillData.ParamTableID);
+        _lovePrefab = ConfigManager.SkillRefSo.GetSkillPrefab(SkillContext.SkillData.ID);
+    }
 
-        if (_skillPrefabCache == null)
-            _skillPrefabCache = _configManager.SkillRefSo.GetSkillPrefab(context.SkillData.ID);
-
+    protected override UniTask OnSkillStart()
+    {
         Collider[] colliders = Physics.OverlapSphere(
-            _playableArea.GetCenter(), 
-            _playableArea.GetBoundingRadius(), 
+            PlayableArea.GetCenter(), 
+            PlayableArea.GetBoundingRadius(), 
             LayerMask.GetMask("Animal")
         );
 
@@ -37,33 +36,29 @@ public class SkillDaMeiLiHandler : BaseSkillHandler
         {
             var animal = collider.GetComponent<BaseAnimalBehaviour>();
 
-            if (!_playableArea.IsInside(animal.transform.position))
+            if (!PlayableArea.IsInside(animal.transform.position))
                 continue;
 
-            animal.GetComponent<IDamageable>().TakeDamage(_skillParamCache.DamageAmount);
+            animal.GetComponent<IDamageable>().TakeDamage(_skillParam.DamageAmount);
             animal.GetComponent<IControlable>().TakeControl();
         }
 
-        // 模拟动画播放
-        await UniTask.Delay(1000);
+        CreateLoveZone();
 
-        CreateLove();
+        return UniTask.CompletedTask;
     }
 
     protected override void OnSkillUpdate(float dt) { }
 
-    protected override void OnSkillEnd()
-    {
-        Object.Destroy(_skillPrefabCache);
-    }
+    protected override void OnSkillEnd() {}
 
     #region 私有方法
     /// <summary>
-    /// 创建爱心
+    /// 创建爱心区域
     /// </summary>
-    private void CreateLove()
+    private void CreateLoveZone()
     {
-        _skillPrefabCache = Object.Instantiate(_skillPrefabCache, _playableArea.GetCenter(),Quaternion.identity);
+        _lovePrefab = Object.Instantiate(_lovePrefab, PlayableArea.GetCenter(),Quaternion.identity);
     }
     #endregion
 }

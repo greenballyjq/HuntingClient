@@ -36,7 +36,7 @@ public sealed partial class SkillYaKeDong : Luban.BeanBase
     /// </summary>
     public readonly int[] SpawnCount;
     /// <summary>
-    /// 物种配置
+    /// 物种配置ID
     /// </summary>
     public readonly int SpecieDataID;
     /// <summary>

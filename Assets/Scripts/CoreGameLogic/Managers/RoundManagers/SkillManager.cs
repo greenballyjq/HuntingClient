@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Skill;
+using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using GameFramework.Utility;
@@ -35,6 +35,8 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
             SkillData = skillData,
             RoundContext = context,
         };
+
+        _currentHandler.Init(_currentContext);
 
         Log.Info("[SkillManager] 初始化完成");
     }
@@ -90,7 +92,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private void StartSkill()
     {
-        _currentHandler.StartSkill(_currentContext).Forget();
+        _currentHandler.StartSkill().Forget();
 
         TriggerSkillStarted(new SkillStartedEventArgs
         {

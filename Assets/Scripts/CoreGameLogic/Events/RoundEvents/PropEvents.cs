@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using GameFramework.Core;
@@ -35,6 +35,11 @@ public static class PropEvents
     /// 陷阱触发事件
     /// </summary>
     public static readonly EventKey<TrapTriggeredEventArgs> TrapTriggered = new EventKey<TrapTriggeredEventArgs>();
+
+    /// <summary>
+    /// 陷阱销毁事件
+    /// </summary>
+    public static readonly EventKey<TrapDestroyedEventArgs> TrapDestroyed = new EventKey<TrapDestroyedEventArgs>();
 }
 
 /// <summary>
@@ -95,15 +100,15 @@ public sealed class TrapTriggeredEventArgs : EventArgs
     /// 触发的陷阱实例
     /// </summary>
     public TrapBehaviour Trap { get; set; }
-
-    /// <summary>
-    /// 触发陷阱的动物实例
-    /// </summary>
-    public BaseAnimalBehaviour TriggeredAnimal { get; set; }
-
-    /// <summary>
-    /// 触发位置
-    /// </summary>
-    public Vector3 TriggerPosition { get; set; }
 }
 
+/// <summary>
+/// 陷阱销毁事件参数
+/// </summary>
+public sealed class TrapDestroyedEventArgs : EventArgs
+{
+    /// <summary>
+    /// 销毁的陷阱实例
+    /// </summary>
+    public TrapBehaviour Trap { get; set; }
+}

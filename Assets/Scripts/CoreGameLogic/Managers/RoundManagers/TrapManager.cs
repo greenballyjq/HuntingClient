@@ -1,10 +1,10 @@
 using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Prop;
 using GameFramework.Core.Pool;
 using GameFramework.Manager;
 using GameFramework.Utility;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 /// <summary>
 /// 陷阱管理器
@@ -21,12 +21,30 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private readonly List<TrapBehaviour> _pendingRemovalTraps = new List<TrapBehaviour>();
 
+    /// <summary>
+    /// 陷阱道具参数
+    /// </summary>
+    private PropTrap _trapParam;
+
+    /// <summary>
+    /// 陷阱预制体
+    /// </summary>
+    private GameObject _trapPrefab;
+
     private EventManager _eventManager;
     private GameObjectPoolManager _gameObjectPoolManager;
+    private HuntingConfigManager _configManager;
+
     public void Init(RoundContext context)
     {
         RegisterServices();
+
+        var propData = _configManager.GetProp(EPropType.Trap);
+        _trapParam = _configManager.GetPropTrap(propData.ParamTableID);
+        _trapPrefab = _configManager.PropRefSo.GetPropPrefab(propData.ID);
+
         RegisterEvents();
+
         Log.Info("[TrapManager] 初始化完成");
     }
 
@@ -36,52 +54,34 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
         RecycleAllTraps();
         Log.Info("[TrapManager] 已释放");
     }
-    
+
     public void Cleanup()
     {
         RecycleAllTraps();
     }
-    
-    public void ReInit(RoundContext context){}
-    
+
+    public void ReInit(RoundContext context) { }
+
     public void DoUpdate(float dt)
     {
-        foreach (var trap in _activeTraps)
-            trap.DoUpdate(dt);
-
         ProcessPendingRemovals();
     }
 
     #region 公共方法
     /// <summary>
-    /// 创建陷阱
+    /// 生成陷阱
     /// </summary>
     /// <param name="position">陷阱位置</param>
-    /// <param name="attractRadius">吸引半径</param>
-    /// <param name="triggerRadius">触发半径</param>
-    /// <param name="attractRadiusRangeByVolume">按体型划分的吸引半径范围比例</param>
-    /// <param name="prefab">陷阱预制体</param>
-    /// <returns>陷阱游戏对象</returns>
-    public GameObject CreateTrap(
-        Vector3 position,
-        float attractRadius,
-        float triggerRadius,
-        Dictionary<ESpecieType, float[]> attractRadiusRangeByVolume,
-        GameObject prefab
-    )
+    public GameObject SpawnTrap(Vector3 position)
     {
-        // 从对象池获取
-        GameObject trap = _gameObjectPoolManager.Spawn(prefab);
-
-        // 初始化陷阱
+        GameObject trap = _gameObjectPoolManager.Spawn(_trapPrefab);
         trap.transform.position = position;
         trap.transform.rotation = Quaternion.identity;
 
-        TrapBehaviour trapBehavior = trap.GetComponent<TrapBehaviour>();
-        trapBehavior.Init(attractRadius, triggerRadius, attractRadiusRangeByVolume);
+        var trapBehaviour = trap.GetComponent<TrapBehaviour>();
+        trapBehaviour.Init(_trapParam.AttractRadius, _trapParam.TriggerRadius, _trapParam.AttractRadiusRangeByVolume);
 
-        // 注册到活跃集合
-        _activeTraps.Add(trapBehavior);
+        _activeTraps.Add(trapBehaviour);
 
         return trap;
     }
@@ -89,22 +89,23 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 获取所有陷阱位置
     /// </summary>
-    /// <returns>陷阱位置列表</returns>
-    public List<Vector3> GetAllTrapPositions()
+    public void GetTrapPositions(List<Vector3> positions)
     {
-        List<Vector3> positions = new List<Vector3>();
+        positions.Clear();
         foreach (var trap in _activeTraps)
             positions.Add(trap.transform.position);
-
-        return positions;
     }
     #endregion
 
     #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
     private void RegisterServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+        _configManager = GameServiceLocator.ConfigManager;
     }
 
     /// <summary>
@@ -132,7 +133,6 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
         _pendingRemovalTraps.Clear();
     }
-
     #endregion
 
     #region 事件相关
@@ -141,7 +141,7 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private void RegisterEvents()
     {
-        _eventManager.AddListener(PropEvents.TrapTriggered, OnTrapTriggered);
+        _eventManager.AddListener(PropEvents.TrapDestroyed, OnTrapDestoryed);
     }
 
     /// <summary>
@@ -149,16 +149,15 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// </summary>
     private void UnregisterEvents()
     {
-        _eventManager.RemoveListener(PropEvents.TrapTriggered, OnTrapTriggered);
+        _eventManager.RemoveListener(PropEvents.TrapDestroyed, OnTrapDestoryed);
     }
 
     /// <summary>
     /// 陷阱触发事件回调
     /// </summary>
-    private void OnTrapTriggered(TrapTriggeredEventArgs args)
+    private void OnTrapDestoryed(TrapDestroyedEventArgs args)
     {
         _pendingRemovalTraps.Add(args.Trap);
     }
     #endregion
 }
-

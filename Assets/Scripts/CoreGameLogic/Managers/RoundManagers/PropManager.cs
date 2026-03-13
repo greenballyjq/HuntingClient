@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
@@ -151,7 +151,8 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
         _activeProps.Add(activeProp);
 
-        handler.StartProp(propData).Forget();
+        handler.Init(propData);
+        handler.StartProp().Forget();
 
         TriggerPropStarted(new PropStartedEventArgs 
         { 

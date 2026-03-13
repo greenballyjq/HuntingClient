@@ -10,9 +10,9 @@ using UnityEngine;
 public class SkillJinZhuangYuanHandler : BaseSkillHandler
 {
     /// <summary>
-    /// 技能参数缓存
+    /// 技能参数
     /// </summary>
-    private SkillJinZhuangYuan _skillParamCache;
+    private SkillJinZhuangYuan _skillParam;
 
     /// <summary>
     /// 生成数量
@@ -36,25 +36,22 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
 
     private MeatProgressManager _meatProgressManager;
 
-    public SkillJinZhuangYuanHandler() : base()
+    protected override void OnInit() 
     {
         _meatProgressManager = GameServiceLocator.GetRoundManager<MeatProgressManager>();
+        _skillParam = ConfigManager.GetSkillJinZhuangYuan(SkillContext.SkillData.ParamTableID);
     }
 
-    protected override async UniTask OnSkillStart(SkillContext context)
+    protected override UniTask OnSkillStart()
     {
-        if(_skillParamCache == null)
-            _skillParamCache = _configManager.GetSkillJinZhuangYuan(context.SkillData.ParamTableID);
-
         _spawnTimer = 0f;
         _spawnedCount = 0;
 
-        _spawnCount = _skillParamCache.SpawnCount[Random.Range(0, _skillParamCache.SpawnCount.Length)];
+        _spawnCount = _skillParam.SpawnCount[Random.Range(0, _skillParam.SpawnCount.Length)];
 
-        _spawnInterval = context.SkillData.Duration / _spawnCount;
+        _spawnInterval = SkillContext.SkillData.Duration / _spawnCount;
 
-        // 模拟播放动画
-        await UniTask.Delay(1000);
+        return UniTask.CompletedTask;
     }
 
     protected override void OnSkillUpdate(float dt)
@@ -68,27 +65,24 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
         {
             _spawnTimer = 0f;
 
-            SpawnMeat();
+            SpawnDropMeat();
 
             _spawnedCount++;
         }
     }
 
     /// <summary>
-    /// 生成肉
+    /// 生成掉落肉
     /// </summary>
-    private void SpawnMeat()
+    private void SpawnDropMeat()
     {
-        _meatProgressManager.AddMeatValue(_skillParamCache.MeatAmount);
+        _meatProgressManager.AddMeatValue(_skillParam.MeatAmount);
 
-        _effectManager.PlayOneShot(
-            _configManager.DropRewardRefSo.GetRandomEffectPrefabByIds(_skillParamCache.DropMeatEffectID),
-            _playableArea.GetRandomPoint()
+        EffectManager.PlayOneShot(
+            ConfigManager.DropRewardRefSo.GetRandomEffectPrefabByIds(_skillParam.DropMeatEffectID),
+            PlayableArea.GetRandomPoint()
         );
     }
 
-    protected override void OnSkillEnd()
-    {
-
-    }
+    protected override void OnSkillEnd(){}
 }

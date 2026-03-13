@@ -4,107 +4,80 @@ using GameFramework.Manager;
 using UnityEngine;
 
 /// <summary>
-/// 指哪打哪道具处理器
+/// 瞄准镜道具处理器
 /// </summary>
 public class PropAimAssistHandler : BasePropHandler
 {
     /// <summary>
-    /// 当前目标
+    /// 道具参数
     /// </summary>
-    private Transform _currentTarget;
+    private PropAimAssist _propParam;
 
     /// <summary>
-    /// 特效实例
+    /// 瞄准镜预制体
     /// </summary>
-    private GameObject _effectInstance;
+    private GameObject _aimAssisPrefab;
 
     /// <summary>
-    /// 特效控制器
+    /// 瞄准器实例
     /// </summary>
-    private AimAssistEffectController _effectController;
+    private GameObject _aimAssisInstance;
 
     /// <summary>
-    /// 事件管理器
+    /// 瞄准器控制器
     /// </summary>
+    private AimAssistController _aimAssisController;
+
     private EventManager _eventManager;
-
-    /// <summary>
-    /// UI管理器
-    /// </summary>
     private UIManager _uiManager;
-
-    /// <summary>
-    /// 特效管理器
-    /// </summary>
-    private EffectManager _effectManager;
-
-    /// <summary>
-    /// 玩家控制管理器
-    /// </summary>
     private PlayerControlManager _playerControlManager;
 
-    /// <summary>
-    /// 构造函数
-    /// </summary>
-    public PropAimAssistHandler()
+    protected override void OnInit() 
     {
         _eventManager = GameServiceLocator.EventManager;
         _uiManager = GameServiceLocator.UIManager;
-        _effectManager = GameServiceLocator.EffectManager;
+        EffectManager = GameServiceLocator.EffectManager;
         _playerControlManager = GameServiceLocator.GetRoundManager<PlayerControlManager>();
+
+        _propParam = ConfigManager.GetPropAimAssist(PropData.ParamTableID);
+        _aimAssisPrefab = ConfigManager.PropRefSo.GetPropEffectPrefab(PropData.ID);
     }
 
-    /// <summary>
-    /// 道具开始钩子
-    /// </summary>
-    protected override UniTask OnPropStart(Prop propData)
+    protected override UniTask OnPropStart()
     {
         RegisterEvents();
 
-        GameObject effectPrefab = _configManager.PropRefSo.GetPropEffectPrefab(propData.ID);
-        _effectInstance = _effectManager.PlayLoop(effectPrefab);
+        _aimAssisInstance = EffectManager.PlayLoop(_aimAssisPrefab);
 
-        _effectController = _effectInstance.GetComponent<AimAssistEffectController>();
-        _effectController.SetTarget(null);
+        _aimAssisController = _aimAssisInstance.GetComponent<AimAssistController>();
+        _aimAssisController.SetTarget(null);
 
-        _uiManager.GetUI<UIGameplay>("UIGameplay").PlayTipAnimationAsync("点击动物自动瞄准射击", Color.green, propData.Duration).Forget();
+        var _uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
+        _uiGameplay.PlayTipAnimationAsync("点击动物自动瞄准射击", Color.green, PropData.Duration).Forget();
 
         _playerControlManager.SwitchToAimAssist();
 
         return UniTask.CompletedTask;
     }
 
-    /// <summary>
-    /// 道具更新钩子
-    /// </summary>
     protected override void OnPropUpdate(float dt)
     {
-        if (_currentTarget != null && _currentTarget.gameObject == null)
-        {
-            _currentTarget = null;
-            _effectController.SetTarget(null);
-        }
-
-        _effectController?.UpdatePosition(dt);
+        _aimAssisController.UpdatePosition(dt);
     }
 
-    /// <summary>
-    /// 道具结束钩子
-    /// </summary>
+
     protected override void OnPropEnd()
     {
         _playerControlManager.SwitchToJoystick();
 
-        _effectManager.Stop(_effectInstance, EffectStopMode.Graceful);
-        _effectInstance = null;
+        EffectManager.Stop(_aimAssisInstance, EffectStopMode.Graceful);
 
-        _currentTarget = null;
+        _aimAssisInstance = null;
 
         UnregisterEvents();
     }
 
     #region 私有方法
-
     /// <summary>
     /// 注册事件
     /// </summary>
@@ -130,8 +103,7 @@ public class PropAimAssistHandler : BasePropHandler
     /// </summary>
     private void OnTargetSelected(TargetSelectedEventArgs args)
     {
-        _currentTarget = args.Target;
-        _effectController.SetTarget(_currentTarget);
+        _aimAssisController.SetTarget(args.Target?.transform);
     }
 
     /// <summary>
@@ -139,11 +111,7 @@ public class PropAimAssistHandler : BasePropHandler
     /// </summary>
     private void OnTargetLost(TargetLostEventArgs args)
     {
-        if (_currentTarget == args.LostTarget)
-        {
-            _currentTarget = null;
-            _effectController.SetTarget(null);
-        }
+        _aimAssisController.SetTarget(null);
     }
 
     /// <summary>
@@ -151,8 +119,7 @@ public class PropAimAssistHandler : BasePropHandler
     /// </summary>
     private void OnTargetChanged(TargetChangedEventArgs args)
     {
-        _currentTarget = args.NewTarget;
-        _effectController.SetTarget(_currentTarget);
+        _aimAssisController.SetTarget(args.NewTarget?.transform);
     }
 
     #endregion

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3892110271746967208}
   - component: {fileID: 8027399021209670576}
   - component: {fileID: 6035377647715761896}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Circle_Impact_Blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4915,7 +4915,7 @@ GameObject:
   - component: {fileID: 2309928120307319321}
   - component: {fileID: 6789783238281868943}
   - component: {fileID: 8642596805900858028}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Impact4_Blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9810,7 +9810,7 @@ GameObject:
   - component: {fileID: 2696889519394123538}
   - component: {fileID: 9116717219275691504}
   - component: {fileID: 7172719420375130195}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14697,7 +14697,7 @@ GameObject:
   - component: {fileID: 9214971046410656277}
   - component: {fileID: 2434244065896147181}
   - component: {fileID: 4783379909677695300}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19583,7 +19583,7 @@ GameObject:
   - component: {fileID: 4780921358562676037}
   - component: {fileID: 975085202439904786}
   - component: {fileID: 5047458778867863141}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24411,7 +24411,7 @@ GameObject:
   - component: {fileID: 7837841241538115426}
   - component: {fileID: 3471117374224122281}
   - component: {fileID: 3462671651578688193}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29244,7 +29244,7 @@ GameObject:
   - component: {fileID: 730857742560852319}
   - component: {fileID: 3161453303370830701}
   - component: {fileID: 3410395933351434684}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34147,7 +34147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1370446210016973819}
   - component: {fileID: 4016963705161799217}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Settlement_Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}

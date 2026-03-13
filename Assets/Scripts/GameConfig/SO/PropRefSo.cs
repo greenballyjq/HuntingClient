@@ -15,7 +15,7 @@ public class PropRefSo : ScriptableObject
     public class PropRef
     {
         /// <summary>
-        /// 道具ID
+        /// ID
         /// </summary>
         public int ID;
 
@@ -33,6 +33,11 @@ public class PropRefSo : ScriptableObject
         /// 道具预制体
         /// </summary>
         public GameObject PropPrefab;
+
+        /// <summary>
+        /// 道具特效预制体
+        /// </summary>
+        public GameObject PropEffectPrefab;
     }
 
     /// <summary>
@@ -57,12 +62,25 @@ public class PropRefSo : ScriptableObject
     /// <summary>
     /// 根据ID获取道具预制体
     /// </summary>
-    public GameObject GetPropEffectPrefab(int id)
+    public GameObject GetPropPrefab(int id)
     {
         for (int i = 0; i < _propRefList.Count; i++)
         {
             if (_propRefList[i].ID == id)
                 return _propRefList[i].PropPrefab;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 根据ID获取道具特效预制体
+    /// </summary>
+    public GameObject GetPropEffectPrefab(int id) 
+    {
+        for (int i = 0; i < _propRefList.Count; i++)
+        {
+            if (_propRefList[i].ID == id)
+                return _propRefList[i].PropEffectPrefab;
         }
         return null;
     }

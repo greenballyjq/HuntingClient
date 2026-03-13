@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Prop;
+using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 
 /// <summary>
@@ -7,10 +7,15 @@ using Cysharp.Threading.Tasks;
 public interface IPropHandler
 {
     /// <summary>
-    /// 道具开始
+    /// 初始化
     /// </summary>
     /// <param name="propData">道具配置</param>
-    UniTask StartProp(Prop propData);
+    void Init(Prop propData);
+
+    /// <summary>
+    /// 道具开始
+    /// </summary>
+    UniTask StartProp();
 
     /// <summary>
     /// 每帧更新

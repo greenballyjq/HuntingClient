@@ -77,7 +77,7 @@ public class AreaShapeLineSegment : BaseAreaShape
         outPoints.Add(transform.TransformPoint(new Vector3(start2D.x - perp.x * halfWidth, 0, start2D.y - perp.y * halfWidth)));
     }
 
-    public override Vector3 GetRandomPoint(int maxAttempts = 100)
+    public override Vector3 GetRandomPoint(int maxAttempts = 100, float boundaryOffset = 0f)
     {
         Vector2 start2D = new Vector2(_start.x, _start.z);
         Vector2 end2D = new Vector2(_end.x, _end.z);
@@ -89,8 +89,8 @@ public class AreaShapeLineSegment : BaseAreaShape
             return transform.TransformPoint(_start);
         }
 
+        float halfWidth = Mathf.Max(0.01f, _width * 0.5f + boundaryOffset);
         float t = Random.Range(0f, 1f);
-        float halfWidth = _width * 0.5f;
         float offset = Random.Range(-halfWidth, halfWidth);
 
         Vector2 perp = new Vector2(-dir.y, dir.x);

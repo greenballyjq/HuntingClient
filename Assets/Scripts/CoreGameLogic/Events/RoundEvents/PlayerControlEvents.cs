@@ -1,6 +1,6 @@
-﻿using GameFramework.Core;
+using GameFramework.Core;
+using Hunting.Game.Animal;
 using UnityEngine;
-
 
 /// <summary>
 /// 玩家控制相关事件
@@ -31,7 +31,7 @@ public sealed class TargetSelectedEventArgs : EventArgs
     /// <summary>
     /// 选中的目标
     /// </summary>
-    public Transform Target { get; set; }
+    public BaseAnimalBehaviour Target { get; set; }
 }
 
 /// <summary>
@@ -42,7 +42,7 @@ public sealed class TargetLostEventArgs : EventArgs
     /// <summary>
     /// 丢失的目标
     /// </summary>
-    public Transform LostTarget { get; set; }
+    public BaseAnimalBehaviour LostTarget { get; set; }
 }
 
 /// <summary>
@@ -53,11 +53,11 @@ public sealed class TargetChangedEventArgs : EventArgs
     /// <summary>
     /// 旧目标
     /// </summary>
-    public Transform OldTarget { get; set; }
+    public BaseAnimalBehaviour OldTarget { get; set; }
 
     /// <summary>
     /// 新目标
     /// </summary>
-    public Transform NewTarget { get; set; }
+    public BaseAnimalBehaviour NewTarget { get; set; }
 }
 

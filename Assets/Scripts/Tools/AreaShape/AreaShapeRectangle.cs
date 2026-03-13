@@ -61,10 +61,10 @@ public class AreaShapeRectangle : BaseAreaShape
         outPoints.Add(transform.TransformPoint(new Vector3(-halfWidth, 0, -halfHeight)));
     }
 
-    public override Vector3 GetRandomPoint(int maxAttempts = 100)
+    public override Vector3 GetRandomPoint(int maxAttempts = 100, float boundaryOffset = 0f)
     {
-        float halfWidth = _width * 0.5f;
-        float halfHeight = _height * 0.5f;
+        float halfWidth = Mathf.Max(0.01f, _width * 0.5f + boundaryOffset);
+        float halfHeight = Mathf.Max(0.01f, _height * 0.5f + boundaryOffset);
         Vector3 local = new Vector3(
             Random.Range(-halfWidth, halfWidth),
             0,

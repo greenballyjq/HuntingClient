@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using CoreGameLogic.Managers.AppManagers;
 using Hunting.Events;
 using UnityEngine;
@@ -12,11 +12,19 @@ public class PlayerWeapon : MonoBehaviour
     /// 开火点
     /// </summary>
     [SerializeField] private Transform _firePoint;
+    public Vector3 FirePointPosition => _firePoint.position;
+
+    /// <summary>
+    /// 武器视觉组件
+    /// </summary>
+    private WeaponVisual _weaponVisual;
+    public WeaponVisual WeaponVisual => _weaponVisual;
 
     /// <summary>
     /// 当前子弹ID
     /// </summary>
-    private int _currentBulletId = 1;
+    private int _currentBulletID = 1;
+    public int CurrentBulletID => _currentBulletID;
 
     /// <summary>
     /// 射击间隔（秒）
@@ -24,9 +32,9 @@ public class PlayerWeapon : MonoBehaviour
     private float _fireInterval;
 
     /// <summary>
-    /// 上次射击时间
+    /// 开火计时器
     /// </summary>
-    private float _lastFireTime;
+    private float _fireTimer;
 
     /// <summary>
     /// 特殊子弹剩余持续时间（秒）
@@ -38,20 +46,17 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     private bool _isSpecialBullet;
 
-    /// <summary>
-    /// 武器视觉组件
-    /// </summary>
-    public WeaponVisual WeaponVisual { get; private set; }
+    private const int DEFAULT_BULLET_ID = 1;
 
     private EventManager _eventManager;
     private HuntingConfigManager _configManager;
     private HuntingSoundManager _soundManager;
     private WeaponManager _weaponManager;
     private BulletManager _bulletManager;
-
+    
     private void Awake()
     {
-        WeaponVisual = GetComponent<WeaponVisual>();
+        _weaponVisual = GetComponent<WeaponVisual>();
     }
 
     private void OnDestroy()
@@ -66,24 +71,10 @@ public class PlayerWeapon : MonoBehaviour
     public void Init()
     {
         RegisterServices();
-
         RegisterEvents();
 
-        ChangeBullet(_currentBulletId);
+        ChangeBullet(DEFAULT_BULLET_ID);
         UpdateFireInterval();
-    }
-
-    /// <summary>
-    /// 尝试开火
-    /// </summary>
-    public void TryFire()
-    {
-        if (Time.time - _lastFireTime < _fireInterval)
-            return;
-
-        Fire();
-
-        _lastFireTime = Time.time;
     }
 
     /// <summary>
@@ -97,7 +88,7 @@ public class PlayerWeapon : MonoBehaviour
         _specialBulletRemainingTime -= Time.deltaTime;
 
         // 获取子弹配置用于触发倒计时事件
-        var bulletData = _configManager.GetBullet(_currentBulletId);
+        var bulletData = _configManager.GetBullet(_currentBulletID);
         if (bulletData != null)
         {
             // 触发特殊子弹倒计时事件
@@ -112,7 +103,7 @@ public class PlayerWeapon : MonoBehaviour
         if (_specialBulletRemainingTime <= 0f)
         {
             // 触发特殊子弹效果结束事件
-            var endedBulletData = _configManager.GetBullet(_currentBulletId);
+            var endedBulletData = _configManager.GetBullet(_currentBulletID);
             TriggerSpecialBulletEffectEnded(new SpecialBulletEffectEndedEventArgs
             {
                 BulletData = endedBulletData
@@ -124,54 +115,50 @@ public class PlayerWeapon : MonoBehaviour
     }
 
     /// <summary>
-    /// 设置当前子弹类型
+    /// 更新射击间隔
     /// </summary>
-    public void SetCurrentBullet(int bulletId)
+    public void UpdateFireInterval()
     {
-        ChangeBullet(bulletId);
+        float fireRate = _weaponManager.GetCurrentFireRate(_currentBulletID);
+        _fireInterval = 1f / fireRate;
     }
 
-
     /// <summary>
-    /// 响应射速变化
+    /// 设置当前子弹类型
     /// </summary>
-    public void OnFireRateChanged()
+    public void SetBullet(int bulletID)
     {
-        UpdateFireInterval();
+        ChangeBullet(bulletID);
     }
 
     /// <summary>
     /// 设置瞄准目标
     /// </summary>
-    /// <param name="worldPosition">目标世界坐标</param>
-    public void SetAimTarget(Vector3 worldPosition)
+    /// <param name="worldPos">目标世界坐标</param>
+    public void SetAimTarget(Vector3 worldPos)
     {
-        Vector3 direction = worldPosition - transform.position;
+        Vector3 direction = worldPos - transform.position;
         direction.y = 0f;
+
         if (direction.sqrMagnitude < 0.0001f)
             return;
+
         transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
     }
 
     /// <summary>
-    /// 旋转武器
+    /// 尝试开火
     /// </summary>
-    /// <param name="deltaAngle">增量角度（度）</param>
-    public void RotateWeapon(float deltaAngle)
+    public void TryFire()
     {
-        Vector3 forwardXZ = new Vector3(transform.forward.x, 0f, transform.forward.z);
-        if (forwardXZ.sqrMagnitude < 0.0001f)
+        if (Time.time - _fireTimer < _fireInterval)
             return;
 
-        float currentAngle = Vector3.SignedAngle(Vector3.forward, forwardXZ.normalized, Vector3.up);
-        float newAngle = Mathf.Clamp(currentAngle + deltaAngle, -70f, 70f);
+        Fire();
 
-        Vector3 direction = Quaternion.Euler(0f, newAngle, 0f) * Vector3.forward;
-        transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+        _fireTimer = Time.time;
     }
 
-
-    
     #endregion
 
     #region 私有方法
@@ -188,21 +175,11 @@ public class PlayerWeapon : MonoBehaviour
     }
 
     /// <summary>
-    /// 开火
+    /// 生成子弹
     /// </summary>
-    private void Fire()
+    private void SpawnBullet()
     {
-        _bulletManager.SpawnBullet(_currentBulletId, _firePoint.position, _firePoint.forward);
-        _soundManager.PlayFireSound();
-    }
-
-    /// <summary>
-    /// 更新射击间隔
-    /// </summary>
-    private void UpdateFireInterval()
-    {
-        float fireRate = _weaponManager.GetCurrentFireRate(_currentBulletId);
-        _fireInterval = 1f / fireRate;
+        _bulletManager.SpawnBullet(_currentBulletID, _firePoint.position, _firePoint.forward);
     }
 
     /// <summary>
@@ -210,8 +187,8 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     private void ChangeBullet(int newBulletId)
     {
-        int oldBulletId = _currentBulletId;
-        _currentBulletId = newBulletId;
+        int oldBulletId = _currentBulletID;
+        _currentBulletID = newBulletId;
 
         // 更新射击间隔
         UpdateFireInterval();
@@ -243,6 +220,19 @@ public class PlayerWeapon : MonoBehaviour
             RemainingTime = _specialBulletRemainingTime
         });
     }
+
+    /// <summary>
+    /// 开火
+    /// </summary>
+    private void Fire()
+    {
+        SpawnBullet();
+
+        _soundManager.PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.GunShoot_Default);
+
+        _fireTimer = Time.time;
+
+    }
     #endregion
 
     #region 事件相关
@@ -261,7 +251,7 @@ public class PlayerWeapon : MonoBehaviour
     {
         _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
-    
+
     /// <summary>
     /// 掉落奖励生效事件回调
     /// </summary>
@@ -270,7 +260,7 @@ public class PlayerWeapon : MonoBehaviour
         if (args.DropType == EDropType.Bullet)
             ChangeBullet(_configManager.GetRandomSpecialBullet().ID);
     }
-   
+
     /// <summary>
     /// 触发子弹切换事件
     /// </summary>

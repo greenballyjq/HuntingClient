@@ -10,14 +10,14 @@ using UnityEngine;
 public class SkillZiWeiHandler : BaseSkillHandler
 {
     /// <summary>
-    /// 技能参数缓存
+    /// 技能参数
     /// </summary>
-    private SkillZiWei _skillParamCache;
+    private SkillZiWei _skillParam;
 
     /// <summary>
-    /// 技能预制体缓存
+    /// 武器预制体
     /// </summary>
-    private GameObject _skillPrefabCache;
+    private GameObject _weaponPrefab;
 
     /// <summary>
     /// 武器列表
@@ -26,18 +26,17 @@ public class SkillZiWeiHandler : BaseSkillHandler
 
     private const float WEAPON_OFFSET_X = 2f;
 
-    protected override async UniTask OnSkillStart(SkillContext context)
+    protected override void OnInit() 
     {
-        if(_skillParamCache == null)
-            _skillParamCache = _configManager.GetSkillZiWei(context.SkillData.ParamTableID);
+        _skillParam = ConfigManager.GetSkillZiWei(SkillContext.SkillData.ParamTableID);
+        _weaponPrefab = ConfigManager.SkillRefSo.GetSkillPrefab(SkillContext.SkillData.ID);
+    }
 
-        if(_skillPrefabCache == null)
-            _skillPrefabCache = _configManager.SkillRefSo.GetSkillPrefab(context.SkillData.ID);
-
+    protected override UniTask OnSkillStart()
+    {
         CreateWeapons();
 
-        // 模拟播放动画
-        await UniTask.Delay(1000);
+        return UniTask.CompletedTask;
     }
 
     protected override void OnSkillUpdate(float dt)
@@ -57,21 +56,21 @@ public class SkillZiWeiHandler : BaseSkillHandler
     /// </summary>
     private void CreateWeapons()
     {
-        Vector3 playerPos = _player.position;
+        Vector3 playerPos = Player.position;
         Vector3 playerRight = Vector3.right;
 
         Vector3 spawnPos;
 
-        for (int i = 0; i < _skillParamCache.WeaponCountPerSide; i++)
+        for (int i = 0; i < _skillParam.WeaponCountPerSide; i++)
         {
             spawnPos = playerPos + playerRight * (-WEAPON_OFFSET_X * (i + 1));
-            CreateWeapon(spawnPos, _skillParamCache.FireInterval);
+            CreateWeapon(spawnPos, _skillParam.FireInterval);
         }
 
-        for (int i = 0; i < _skillParamCache.WeaponCountPerSide; i++)
+        for (int i = 0; i < _skillParam.WeaponCountPerSide; i++)
         {
             spawnPos = playerPos + playerRight * (WEAPON_OFFSET_X * (i + 1));
-            CreateWeapon(spawnPos, _skillParamCache.FireInterval);
+            CreateWeapon(spawnPos, _skillParam.FireInterval);
         }
     }
 
@@ -80,7 +79,7 @@ public class SkillZiWeiHandler : BaseSkillHandler
     /// </summary>
     private void CreateWeapon(Vector3 position, float fireInterval)
     {
-        GameObject weaponObj = Object.Instantiate(_skillPrefabCache);
+        GameObject weaponObj = Object.Instantiate(_weaponPrefab);
         weaponObj.transform.position = position;
 
         var weapon = weaponObj.GetComponent<SkillWeapon>();

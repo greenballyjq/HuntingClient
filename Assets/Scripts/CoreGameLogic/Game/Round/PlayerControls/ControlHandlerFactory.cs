@@ -1,15 +1,15 @@
-/// <summary>
-/// 控制类型枚举
+﻿/// <summary>
+/// 控制类型
 /// </summary>
 public enum EControlType
 {
     /// <summary>
-    /// 默认射击
+    /// 默认射击控制
     /// </summary>
     DefaultShooting,
 
     /// <summary>
-    /// 指哪打哪
+    /// 瞄准辅助控制
     /// </summary>
     AimAssist,
 
@@ -20,23 +20,23 @@ public enum EControlType
 }
 
 /// <summary>
-/// 玩家控制处理器工厂
+/// 控制处理器工厂
 /// </summary>
-public static class PlayerControlHandlerFactory
+public static class ControlHandlerFactory
 {
     /// <summary>
     /// 创建控制处理器
     /// </summary>
     /// <param name="type">控制类型</param>
     /// <returns>控制处理器实例</returns>
-    public static BasePlayerControlHandler CreatePlayerControlHandler(EControlType type)
+    public static BaseControlHandler CreatePlayerControlHandler(EControlType type)
     {
         switch (type)
         {
             case EControlType.DefaultShooting:
-                return new DefaultShootingHandler();
+                return new DefaultShootingControlHandler();
             case EControlType.AimAssist:
-                return new AimAssistHandler();
+                return new AimAssistControlHandler();
             case EControlType.Joystick:
                 return new JoystickControlHandler();
             default:

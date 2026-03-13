@@ -9,7 +9,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// <summary>
     /// 当前玩家控制处理器
     /// </summary>
-    private BasePlayerControlHandler _currentPlayerControlHandler;
+    private BaseControlHandler _currentPlayerControlHandler;
 
     public void Init(RoundContext context)
     {
@@ -19,9 +19,9 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     public void DoUpdate(float deltaTime)
     {
         if (_currentPlayerControlHandler != null && 
-            _currentPlayerControlHandler.ControlPhase == PlayerControlHandlerPhase.Running)
+            _currentPlayerControlHandler.ControlPhase == ControlHandlerPhase.Running)
         {
-            _currentPlayerControlHandler.UpdateControl(deltaTime);
+            _currentPlayerControlHandler.DoUpdate(deltaTime);
         }
     }
 
@@ -47,7 +47,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// </summary>
     public void SwitchToDefaultShooting()
     {
-        BasePlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.DefaultShooting);
+        BaseControlHandler handler = ControlHandlerFactory.CreatePlayerControlHandler(EControlType.DefaultShooting);
         SwitchHandler(handler);
     }
 
@@ -56,7 +56,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// </summary>
     public void SwitchToJoystick()
     {
-        BasePlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.Joystick);
+        BaseControlHandler handler = ControlHandlerFactory.CreatePlayerControlHandler(EControlType.Joystick);
         SwitchHandler(handler);
     }
 
@@ -65,7 +65,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// </summary>
     public void SwitchToAimAssist()
     {
-        BasePlayerControlHandler handler = PlayerControlHandlerFactory.CreatePlayerControlHandler(EControlType.AimAssist);
+        BaseControlHandler handler = ControlHandlerFactory.CreatePlayerControlHandler(EControlType.AimAssist);
         SwitchHandler(handler);
     }
     #endregion
@@ -74,11 +74,12 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// <summary>
     /// 切换控制处理器
     /// </summary>
-    private void SwitchHandler(BasePlayerControlHandler newHandler)
+    private void SwitchHandler(BaseControlHandler newHandler)
     {
         EndCurrentControl();
 
         _currentPlayerControlHandler = newHandler;
+        _currentPlayerControlHandler.Init();
         _currentPlayerControlHandler.StartControl();
     }
 

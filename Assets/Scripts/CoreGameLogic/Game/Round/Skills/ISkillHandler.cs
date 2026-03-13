@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Skill;
+using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 
 /// <summary>
@@ -49,10 +49,15 @@ public enum SkillPhase
 public interface ISkillHandler
 {
     /// <summary>
-    /// 技能开始
+    /// 初始化
     /// </summary>
     /// <param name="context">技能上下文</param>
-    UniTask StartSkill(SkillContext context);
+    void Init(SkillContext context);
+
+    /// <summary>
+    /// 技能开始
+    /// </summary>
+    UniTask StartSkill();
 
     /// <summary>
     /// 每帧更新

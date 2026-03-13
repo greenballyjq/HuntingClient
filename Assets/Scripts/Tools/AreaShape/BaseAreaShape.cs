@@ -54,11 +54,12 @@ public abstract class BaseAreaShape : MonoBehaviour
     /// 获取随机点
     /// </summary>
     /// <param name="maxAttempts">最大尝试次数</param>
+    /// <param name="boundaryOffset">边界偏移</param>
     /// <returns>随机点</returns>
-    public virtual Vector3 GetRandomPoint(int maxAttempts = 100)
+    public virtual Vector3 GetRandomPoint(int maxAttempts = 100, float boundaryOffset = 0f)
     {
         Vector3 center = GetCenter();
-        float boundingRadius = GetBoundingRadius();
+        float boundingRadius = Mathf.Max(0.01f, GetBoundingRadius() + boundaryOffset);
         float angle;
         float distance;
         Vector3 randomPoint;

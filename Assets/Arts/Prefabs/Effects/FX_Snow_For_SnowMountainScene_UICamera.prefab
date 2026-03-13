@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6980977688169545467}
   - component: {fileID: 7384916074849819554}
   - component: {fileID: 7108298827144124566}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Snow_Par
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4838,7 +4838,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4865345922429498953}
   - component: {fileID: 6512253234582932601}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: FX_Snow_For_SnowMountainScene_UICamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4885,7 +4885,7 @@ GameObject:
   - component: {fileID: 6905111392851459063}
   - component: {fileID: 1178837280651604311}
   - component: {fileID: 1277645124844387579}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,4 +1,5 @@
 ﻿using cfg.HuntingConfig.Prop;
+using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using UnityEngine;
@@ -14,6 +15,11 @@ public abstract class BasePropHandler : IPropHandler
     public PropPhase PropPhase { get; private set; }
 
     /// <summary>
+    /// 道具配置
+    /// </summary>
+    protected Prop PropData;
+
+    /// <summary>
     /// 剩余时间
     /// </summary>
     private float _remainingTime;
@@ -22,34 +28,40 @@ public abstract class BasePropHandler : IPropHandler
     /// <summary>
     /// 玩家变换组件
     /// </summary>
-    protected Transform _player;
+    protected Transform Player;
 
     /// <summary>
     /// 可游玩区域
     /// </summary>
-    protected BaseAreaShape _playableArea;
+    protected BaseAreaShape PlayableArea;
 
-    protected ResourceManager _resourceManager;
-    protected HuntingConfigManager _configManager;
-    protected GameplaySceneItemManager _gameplaySceneItemManager;
+    protected EffectManager EffectManager;
+    protected HuntingConfigManager ConfigManager;
+    protected HuntingSoundManager SoundManager;
+    protected GameplaySceneItemManager GameplaySceneItemManager;
 
-    public BasePropHandler()
+    public void Init(Prop propData)
     {
-        _resourceManager = GameServiceLocator.ResourceManager;
-        _configManager = GameServiceLocator.ConfigManager;
-        _gameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+        EffectManager = GameServiceLocator.EffectManager;
+        ConfigManager = GameServiceLocator.ConfigManager;
+        SoundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+        GameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+
+        PropData = propData;
+
+        OnInit();
     }
 
-    public async UniTask StartProp(Prop propData)
+    public async UniTask StartProp()
     {
         PropPhase = PropPhase.Starting;
 
-        _player = _gameplaySceneItemManager.Player;
-        _playableArea = _gameplaySceneItemManager.PlayableArea;
+        Player = GameplaySceneItemManager.Player;
+        PlayableArea = GameplaySceneItemManager.PlayableArea;
 
-        _remainingTime = propData.Duration;
+        _remainingTime = PropData.Duration;
 
-        await OnPropStart(propData);
+        await OnPropStart();
 
         PropPhase = PropPhase.Running;
     }
@@ -71,10 +83,14 @@ public abstract class BasePropHandler : IPropHandler
     }
 
     /// <summary>
+    /// 初始化钩子
+    /// </summary>
+    protected abstract void OnInit();
+
+    /// <summary>
     /// 道具开始钩子
     /// </summary>
-    /// <param name="propData">道具配置</param>
-    protected abstract UniTask OnPropStart(Prop propData);
+    protected abstract UniTask OnPropStart();
 
     /// <summary>
     /// 道具更新钩子

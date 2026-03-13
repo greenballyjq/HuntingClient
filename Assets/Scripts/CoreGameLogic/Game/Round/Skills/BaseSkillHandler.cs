@@ -14,6 +14,11 @@ public abstract class BaseSkillHandler : ISkillHandler
     public SkillPhase SkillPhase { get; private set; }
 
     /// <summary>
+    /// 技能上下文
+    /// </summary>
+    protected SkillContext SkillContext;
+
+    /// <summary>
     /// 剩余时间
     /// </summary>
     private float _remainingTime;
@@ -21,36 +26,40 @@ public abstract class BaseSkillHandler : ISkillHandler
     /// <summary>
     /// 玩家变换组件
     /// </summary>
-    protected Transform _player;
+    protected Transform Player;
 
     /// <summary>
     /// 可游玩区域
     /// </summary>
-    protected BaseAreaShape _playableArea;
+    protected BaseAreaShape PlayableArea;
 
-    protected EffectManager _effectManager;
-    protected HuntingConfigManager _configManager;
+    protected EffectManager EffectManager;
+    protected HuntingConfigManager ConfigManager;
     protected HuntingSoundManager _soundManager;
-    protected GameplaySceneItemManager _gameplaySceneItemManager;
+    protected GameplaySceneItemManager GameplaySceneItemManager;
 
-    public BaseSkillHandler()
+    public void Init(SkillContext context)
     {
-        _effectManager = GameServiceLocator.EffectManager;
-        _configManager = GameServiceLocator.ConfigManager;
+        EffectManager = GameServiceLocator.EffectManager;
+        ConfigManager = GameServiceLocator.ConfigManager;
         _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
-        _gameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+        GameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+
+        SkillContext = context;
+
+        OnInit();
     }
 
-    public async UniTask StartSkill(SkillContext context)
+    public async UniTask StartSkill()
     {
         SkillPhase = SkillPhase.Starting;
 
-        _player = _gameplaySceneItemManager.Player;
-        _playableArea = _gameplaySceneItemManager.PlayableArea;
+        Player = GameplaySceneItemManager.Player;
+        PlayableArea = GameplaySceneItemManager.PlayableArea;
 
-        _remainingTime = context.SkillData.Duration;
+        _remainingTime = SkillContext.SkillData.Duration;
 
-        await OnSkillStart(context);
+        await OnSkillStart();
 
         SkillPhase = SkillPhase.Running;
     }
@@ -72,10 +81,14 @@ public abstract class BaseSkillHandler : ISkillHandler
     }
 
     /// <summary>
+    /// 初始化钩子
+    /// </summary>
+    protected abstract void OnInit();
+
+    /// <summary>
     /// 技能开始钩子
     /// </summary>
-    /// <param name="context">技能上下文</param>
-    protected abstract UniTask OnSkillStart(SkillContext context);
+    protected abstract UniTask OnSkillStart();
 
     /// <summary>
     /// 技能更新钩子

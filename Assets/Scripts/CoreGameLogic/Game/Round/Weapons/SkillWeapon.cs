@@ -1,4 +1,5 @@
 ﻿using CoreGameLogic.Managers.AppManagers;
+using GameFramework.Utility;
 using Hunting.Game.Animal;
 using UnityEngine;
 
@@ -16,6 +17,9 @@ public class SkillWeapon : MonoBehaviour
     private const float MAX_LOCK_DISTANCE = 30f;
     private const float SCREEN_CHECK_INTERVAL = 0.1f;
     private const float ROTATION_SPEED = 60f;
+    private const float MIN_YAW_ANGLE = -75f;
+    private const float MAX_YAW_ANGLE = 75f;
+    private const float VELOCITY_SMOOTH_SPEED = 10f;
 
     /// <summary>
     /// 开火点
@@ -42,6 +46,11 @@ public class SkillWeapon : MonoBehaviour
     /// </summary>
     private float _screenCheckTimer;
 
+    /// <summary>
+    /// 平滑后目标速度
+    /// </summary>
+    private Vector3 _smoothedTargetVelocity;
+
     public void DoUpdate(float dt)
     {
         if (_currentTarget != null)
@@ -57,6 +66,7 @@ public class SkillWeapon : MonoBehaviour
             if (animal != null && IsInRange(animal))
             {
                 _currentTarget = animal;
+                _smoothedTargetVelocity = animal.Moveable.CurrentSpeed * animal.Moveable.CurrentMoveDirection;
                 TryFire(dt);
             }
         }
@@ -92,19 +102,19 @@ public class SkillWeapon : MonoBehaviour
     /// </summary>
     private bool IsTargetLost(float dt)
     {
-        if (_currentTarget.Health.IsDead)
-            return true;
-
-        if (!IsInRange(_currentTarget))
-            return true;
-
         _screenCheckTimer += dt;
         if (_screenCheckTimer >= SCREEN_CHECK_INTERVAL)
         {
             _screenCheckTimer = 0f;
-            if (!ScreenUtils.IsVisible(_currentTarget.transform,Camera.main))
+            if (!ScreenUtils.IsVisible(_currentTarget.transform, Camera.main))
                 return true;
         }
+
+        if (!IsInRange(_currentTarget))
+            return true;
+
+        if (_currentTarget.Health.IsDead)
+            return true;
 
         return false;
     }
@@ -144,11 +154,17 @@ public class SkillWeapon : MonoBehaviour
         Vector3 origin = _firePoint.position;
         Vector3 target = _currentTarget.transform.position;
         Vector3 velocity = _currentTarget.Moveable.CurrentSpeed * _currentTarget.Moveable.CurrentMoveDirection;
-        float projectileSpeed = _bulletManager.GetBullet(DEFAULT_BULLT_ID).MoveSpeed;
+        _smoothedTargetVelocity = Vector3.Lerp(_smoothedTargetVelocity, velocity, VELOCITY_SMOOTH_SPEED * dt);
 
-        var leadDir = Ballistics.CalculateLeadDirection(origin, target, velocity, projectileSpeed);
+        float projectileSpeed = _bulletManager.GetBullet(DEFAULT_BULLT_ID).MoveSpeed;
+        var leadDir = Ballistics.CalculateLeadDirection(origin, target, _smoothedTargetVelocity, projectileSpeed);
         Vector3 direction = leadDir ?? (target - origin).normalized;
         direction.y = 0f;
+
+        float yaw = Vector3.SignedAngle(Vector3.forward, direction.normalized, Vector3.up);
+        yaw = Mathf.Clamp(yaw, MIN_YAW_ANGLE, MAX_YAW_ANGLE);
+        direction = Quaternion.Euler(0f, yaw, 0f) * Vector3.forward;
+
         Quaternion targetRot = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, ROTATION_SPEED * dt);
     }

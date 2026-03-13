@@ -1,10 +1,10 @@
-﻿using GameFramework.Manager;
+using GameFramework.Manager;
 using UnityEngine;
 
 /// <summary>
-/// 指哪打哪特效控制器
+/// 瞄准器控制器
 /// </summary>
-public class AimAssistEffectController : MonoBehaviour
+public class AimAssistController : MonoBehaviour
 {
     /// <summary>
     /// 移动速度

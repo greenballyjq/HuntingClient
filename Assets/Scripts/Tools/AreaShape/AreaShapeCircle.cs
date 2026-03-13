@@ -50,12 +50,13 @@ public class AreaShapeCircle : BaseAreaShape
         }
     }
 
-    public override Vector3 GetRandomPoint(int maxAttempts = 100)
+    public override Vector3 GetRandomPoint(int maxAttempts = 100, float boundaryOffset = 0f)
     {
         Vector3 center = transform.position;
         float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
 
-        float distance = Mathf.Sqrt(Random.Range(0f, 1f)) * _radius;
+        float effectiveRadius = Mathf.Max(0.01f, _radius + boundaryOffset);
+        float distance = Mathf.Sqrt(Random.Range(0f, 1f)) * effectiveRadius;
         
         return center + new Vector3(
             Mathf.Cos(angle) * distance,

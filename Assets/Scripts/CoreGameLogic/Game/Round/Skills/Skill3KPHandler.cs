@@ -8,33 +8,28 @@ using Cysharp.Threading.Tasks;
 public class Skill3KPHandler : BaseSkillHandler
 {
     /// <summary>
-    /// 技能参数缓存
+    /// 技能参数
     /// </summary>
-    private Skill3KP _skillParamCache;
+    private Skill3KP _skillParam;
 
     private WeaponManager _weaponManager;
 
     private const string MODIFIER_SOURCE_ID = "Skill_3KP";
 
-    public Skill3KPHandler() : base()
+    protected override void OnInit() 
     {
         _weaponManager = GameServiceLocator.GetRoundManager<WeaponManager>();
+        _skillParam = ConfigManager.GetSkill3KP(SkillContext.SkillData.ParamTableID);
     }
 
-    protected override async UniTask OnSkillStart(SkillContext context)
+    protected override UniTask OnSkillStart()
     {
-        if(_skillParamCache == null)
-            _skillParamCache = _configManager.GetSkill3KP(context.SkillData.ParamTableID);
-
-        _weaponManager.RegisterFireRateModifier(MODIFIER_SOURCE_ID, _skillParamCache.FireRateMultiplier);
-        _weaponManager.RegisterDamageModifier(MODIFIER_SOURCE_ID, _skillParamCache.DamageMultiplier);
+        _weaponManager.RegisterFireRateModifier(MODIFIER_SOURCE_ID, _skillParam.FireRateMultiplier);
+        _weaponManager.RegisterDamageModifier(MODIFIER_SOURCE_ID, _skillParam.DamageMultiplier);
 
         _weaponManager.PlayerWeapon.WeaponVisual.SetSkillEffect(true);
 
-        _soundManager.PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Skill_BlueRed);
-
-        // 模拟播放动画
-        await UniTask.Delay(1000);
+        return UniTask.CompletedTask;
     }
 
     protected override void OnSkillUpdate(float dt) { }
