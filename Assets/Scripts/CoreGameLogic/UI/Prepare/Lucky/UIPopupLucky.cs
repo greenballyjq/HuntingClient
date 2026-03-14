@@ -1,4 +1,4 @@
-﻿using GameFramework.Core.UI;
+using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,14 +8,9 @@ using UnityEngine.UI;
 public class UIPopupLucky : UIBase
 {
     /// <summary>
-    /// 3币数量文本
+    /// 三千盘金币组件
     /// </summary>
-    [SerializeField] private Text _textThreeCoinAmount;
-
-    /// <summary>
-    /// 关闭按钮
-    /// </summary>
-    [SerializeField] private Button _buttonClose;
+    [SerializeField] private UIComponentThreeKPCoin _uiComponentThreeKPCoin;
 
     /// <summary>
     /// 礼包组件列表
@@ -28,88 +23,65 @@ public class UIPopupLucky : UIBase
     [SerializeField] private UIComponentGiftAd[] _uiComponentGiftAds;
 
     /// <summary>
-    /// 事件管理器
+    /// 关闭按钮
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    [SerializeField] private Button _buttonClose;
 
-    /// <summary>
-    /// 玩家数据管理器
-    /// </summary>
-    private PlayerDataManager PlayerData => GameServiceLocator.GetAppManager<PlayerDataManager>();
-
-    /// <summary>
-    /// UI管理器
-    /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
+    private EventManager _eventManager;
+    private UIManager _uiManager;
 
     private void Awake()
     {
-        _buttonClose.onClick.AddListener(OnClickClose);
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+
+        _buttonClose.onClick.AddListener(OnCloseButtonClicked);
     }
 
     private void OnDestroy()
     {
-        _buttonClose.onClick.RemoveListener(OnClickClose);
+        _buttonClose.onClick.RemoveListener(OnCloseButtonClicked);
     }
 
     public override void OnInit(object userData)
     {
         base.OnInit(userData);
 
+        _eventManager.AddListener(LuckyEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
+        _eventManager.AddListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
+
+        _uiComponentThreeKPCoin.Init();
+
         foreach (var gift in _uiComponentGifts)
             gift.Init();
 
         foreach (var giftAd in _uiComponentGiftAds)
             giftAd.Init();
-
-        UpdateThreeCoinDisplay(PlayerData.GetThreeKPCoinAmount());
-
-        _eventManager.AddListener(PlayerDataEvents.ThreeKPCoinAmountChanged, OnThreeKPCoinChanged);
-        _eventManager.AddListener(LuckyEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
-        _eventManager.AddListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
     }
 
     public override void OnClose()
     {
+        _uiComponentThreeKPCoin.CleanUp();
+
         foreach (var gift in _uiComponentGifts)
             gift.CleanUp();
 
         foreach (var giftAd in _uiComponentGiftAds)
             giftAd.CleanUp();
 
-        _eventManager.RemoveListener(PlayerDataEvents.ThreeKPCoinAmountChanged, OnThreeKPCoinChanged);
         _eventManager.RemoveListener(LuckyEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
         _eventManager.RemoveListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
 
         base.OnClose();
     }
 
-    #region 私有方法
-    /// <summary>
-    /// 更新3币显示
-    /// </summary>
-    /// <param name="coinAmount">3币数量</param>
-    private void UpdateThreeCoinDisplay(int coinAmount)
-    {
-        _textThreeCoinAmount.text = coinAmount.ToString();
-    }
-    #endregion
-
     #region 事件相关
     /// <summary>
     /// 关闭按钮点击回调
     /// </summary>
-    private void OnClickClose()
+    private void OnCloseButtonClicked()
     {
         Close();
-    }
-
-    /// <summary>
-    /// 3币数量改变事件回调
-    /// </summary>
-    private void OnThreeKPCoinChanged(ThreeKPCoinAmountChangedEventArgs args)
-    {
-        UpdateThreeCoinDisplay(args.CurrentAmount);
     }
 
     /// <summary>

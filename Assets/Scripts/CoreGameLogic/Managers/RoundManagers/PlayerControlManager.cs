@@ -13,6 +13,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
 
     public void Init(RoundContext context)
     {
+        SwitchToJoystick();
         Log.Info("[PlayerControlManager] 初始化完成");
     }
 

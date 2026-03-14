@@ -39,7 +39,6 @@ public class PropAimAssistHandler : BasePropHandler
     private AnimalManager _animalManager;
     private PlayerControlManager _playerControlManager;
     
-
     protected override void OnInit()
     {
         _eventManager = GameServiceLocator.EventManager;
@@ -61,7 +60,7 @@ public class PropAimAssistHandler : BasePropHandler
         _aimAssisController.SetTarget(null);
 
         _handGuideController = Object.Instantiate(_handGuidePrefab).GetComponent<AimAssistHandGuideController>();
-        _handGuideController.SetVisible(true);
+        _handGuideController.SetVisible(false);
 
         var _uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
         _uiGameplay.PlayTipAnimationAsync("点击动物自动瞄准射击", Color.green, PropData.Duration).Forget();
@@ -78,9 +77,11 @@ public class PropAimAssistHandler : BasePropHandler
         if (_hasTarget)
             return;
 
-        var animal = _animalManager.GetNearestVisibleAnimal(Player.position);
-        if (animal != null)
-            _handGuideController.UpdatePosition(animal.Collider.bounds.center, dt);
+        var guideTarget = GetGuideTarget();
+        var shouldShow = guideTarget != null;
+        _handGuideController.SetVisible(shouldShow);
+        if (shouldShow)
+            _handGuideController.UpdatePosition(guideTarget.Collider.bounds.center, dt);
     }
 
     protected override void OnPropEnd()
@@ -88,14 +89,28 @@ public class PropAimAssistHandler : BasePropHandler
         _playerControlManager.SwitchToJoystick();
 
         EffectManager.Stop(_aimAssisController.gameObject, EffectStopMode.Graceful);
-
         _aimAssisController = null; 
+
+        Object.Destroy(_handGuideController.gameObject);
         _handGuideController = null;
 
         UnregisterEvents();
     }
 
     #region 私有方法
+    /// <summary>
+    /// 获取手势引导目标（最近、活着、屏幕内的动物）
+    /// </summary>
+    private BaseAnimalBehaviour GetGuideTarget()
+    {
+        var animal = _animalManager.GetNearestVisibleAnimal(Player.position);
+        if (animal == null || animal.Health.IsDead)
+            return null;
+        return animal;
+    }
+    #endregion
+
+    #region 事件相关
     /// <summary>
     /// 注册事件
     /// </summary>
@@ -131,7 +146,6 @@ public class PropAimAssistHandler : BasePropHandler
     {
         _hasTarget = false;
         _aimAssisController.SetTarget(null);
-        _handGuideController.SetVisible(true);
     }
     #endregion
 }

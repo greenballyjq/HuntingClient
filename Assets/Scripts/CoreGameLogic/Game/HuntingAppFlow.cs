@@ -68,6 +68,7 @@ public class HuntingAppFlow : GameAppFlow
     /// 当前单局流程
     /// </summary>
     private RoundFlow _currentRoundFlow;
+    public RoundFlow RoundFlow => _currentRoundFlow;
 
     /// <summary>
     /// UI管理器

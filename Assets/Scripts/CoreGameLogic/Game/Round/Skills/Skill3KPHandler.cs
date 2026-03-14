@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Skill;
+using cfg.HuntingConfig.Skill;
 using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 

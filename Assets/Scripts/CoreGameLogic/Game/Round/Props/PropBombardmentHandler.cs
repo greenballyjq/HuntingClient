@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Prop;
+using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using Hunting.Game.Animal;

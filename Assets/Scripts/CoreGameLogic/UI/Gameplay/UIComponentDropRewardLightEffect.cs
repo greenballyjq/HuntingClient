@@ -82,8 +82,7 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
             { EDropType.Bullet, _uiGameplay.UIComponentBullet.RectTransformBulletImage.position },
             { EDropType.Energy, _uiGameplay.UIComponentSkill.RectTransformSkillImage.position },
             { EDropType.Meat, _uiGameplay.UIComponentMeatProgress.RectTransformMeatImage.position },
-            { EDropType.ThreeKPCoin, _uiGameplay.UIComponentReturnButton.RectTransformReturnButton.position }
-            //{ EDropType.ThreeKPCoin, _uiGameplay.UIComponentReturnOrSettlement.RectTransformReturnOrSettlementButton.position }
+            { EDropType.ThreeKPCoin, _uiGameplay.UIComponentThreeKPCoin.RectTransformThreeKPCoin.position }
         };
     }
 

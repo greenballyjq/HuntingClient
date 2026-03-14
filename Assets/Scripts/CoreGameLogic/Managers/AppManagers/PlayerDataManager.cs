@@ -13,6 +13,7 @@ public class PlayerDataManager : IAppManager
     /// 三千盘金币数量
     /// </summary>
     private int _threeKPCoinAmount;
+    public int ThreeKPCoinAmount => _threeKPCoinAmount;
 
     /// <summary>
     /// 各道具数量
@@ -24,10 +25,10 @@ public class PlayerDataManager : IAppManager
     public void Init()
     {
         RegisterServices();
+        RegisterEvents();
 
         // TODO 未来从服务器获取玩家数据
         _threeKPCoinAmount = 50;
-
         foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
             _propCounts[propType] = 3;
         
@@ -36,6 +37,7 @@ public class PlayerDataManager : IAppManager
 
     public void Dispose()
     {
+        UnregisterEvents();
         Log.Info("[PlayerDataManager] 已释放");
     }
 
@@ -92,6 +94,22 @@ public class PlayerDataManager : IAppManager
     private void RegisterServices()
     {
         _eventManager = GameServiceLocator.EventManager;
+    }
+
+    private void RegisterEvents()
+    {
+        _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+    }
+
+    private void UnregisterEvents()
+    {
+        _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+    }
+
+    private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
+    {
+        if (args.DropRewards.TryGetValue(EDropType.ThreeKPCoin, out int count) && count > 0)
+            UpdateThreeKPCoinAmount(count);
     }
     #endregion
 

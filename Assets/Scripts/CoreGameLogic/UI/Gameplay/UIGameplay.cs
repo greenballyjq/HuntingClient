@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using UnityEngine;
@@ -14,6 +14,12 @@ public class UIGameplay : UIBase
     /// </summary>
     [SerializeField] private UIComponentReturnButton _uiComponentReturnButton;
     public UIComponentReturnButton UIComponentReturnButton => _uiComponentReturnButton;
+
+    /// <summary>
+    /// 三千盘金币组件
+    /// </summary>
+    [SerializeField] private UIComponentThreeKPCoin _uiComponentThreeKPCoin;
+    public UIComponentThreeKPCoin UIComponentThreeKPCoin => _uiComponentThreeKPCoin;
 
     /// <summary>
     /// 动物计数器组件
@@ -37,10 +43,9 @@ public class UIGameplay : UIBase
     public UIComponentMeatProgress UIComponentMeatProgress => _uiComponentMeatProgress;
 
     /// <summary>
-    /// 技能组件
+    /// 道具组组件
     /// </summary>
-    [SerializeField] private UIComponentSkill _uiComponentSkill;
-    public UIComponentSkill UIComponentSkill => _uiComponentSkill;
+    [SerializeField] private UIComponentPropGroup _uiComponentPropGroup;
 
     /// <summary>
     /// 子弹组件
@@ -49,14 +54,16 @@ public class UIGameplay : UIBase
     public UIComponentBullet UIComponentBullet => _uiComponentBullet;
 
     /// <summary>
-    /// 道具组组件
+    /// 摇杆组件
     /// </summary>
-    [SerializeField] private UIComponentPropGroup _uiComponentPropGroup;
+    [SerializeField] private UIComponentJoystick _uiComponentJoystick;
+    public UIComponentJoystick UIComponentJoystick => _uiComponentJoystick;
 
     /// <summary>
-    /// 道具使用提示组件
+    /// 技能组件
     /// </summary>
-    [SerializeField] private UIComponentTip _uiComponentTip;
+    [SerializeField] private UIComponentSkill _uiComponentSkill;
+    public UIComponentSkill UIComponentSkill => _uiComponentSkill;
 
     /// <summary>
     /// 掉落奖励光效组件
@@ -64,10 +71,9 @@ public class UIGameplay : UIBase
     [SerializeField] private UIComponentDropRewardLightEffect _uiComponentDropRewardLightEffect;
 
     /// <summary>
-    /// 摇杆组件（控制枪械旋转与开火）
+    /// 道具使用提示组件
     /// </summary>
-    [SerializeField] private UIComponentJoystick _uiComponentJoystick;
-    public UIComponentJoystick UIComponentJoystick => _uiComponentJoystick;
+    [SerializeField] private UIComponentTip _uiComponentTip;
 
     /// <summary>
     /// 背景图像
@@ -93,16 +99,17 @@ public class UIGameplay : UIBase
     {
         base.OnInit(userData);
         _uiComponentReturnButton.Init();
-        _uiComponentBossHealth.Init();
+        _uiComponentThreeKPCoin.Init();
         _uiComponentAnimalCounter.Init();
+        _uiComponentBossHealth.Init();
         _uiComponentTime.Init();
         _uiComponentMeatProgress.Init();
-        _uiComponentSkill.Init();
-        _uiComponentBullet.Init();
         _uiComponentPropGroup.Init();
-        _uiComponentTip.Init();
-        _uiComponentDropRewardLightEffect.Init(this);
+        _uiComponentBullet.Init();
         _uiComponentJoystick.Init();
+        _uiComponentSkill.Init();
+        _uiComponentDropRewardLightEffect.Init(this);
+        _uiComponentTip.Init();
 
         _uiComponentTip.gameObject.SetActive(false);
         _uiComponentBossHealth.gameObject.SetActive(false);
@@ -111,16 +118,17 @@ public class UIGameplay : UIBase
     public override void OnClose()
     {
         _uiComponentReturnButton.CleanUp();
+        _uiComponentThreeKPCoin.CleanUp();
         _uiComponentAnimalCounter.CleanUp();
         _uiComponentBossHealth.CleanUp();
         _uiComponentTime.CleanUp();
         _uiComponentMeatProgress.CleanUp();
-        _uiComponentSkill.CleanUp();
-        _uiComponentBullet.CleanUp();
         _uiComponentPropGroup.CleanUp();
-        _uiComponentTip.CleanUp();
-        _uiComponentDropRewardLightEffect.CleanUp();
+        _uiComponentBullet.CleanUp();
         _uiComponentJoystick.CleanUp();
+        _uiComponentSkill.CleanUp();
+        _uiComponentDropRewardLightEffect.CleanUp();
+        _uiComponentTip.CleanUp();
         base.OnClose();
     }
 

@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Skill;
+using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using System.Collections.Generic;

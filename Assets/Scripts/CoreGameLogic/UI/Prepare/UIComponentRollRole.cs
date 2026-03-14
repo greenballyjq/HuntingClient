@@ -16,7 +16,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     [SerializeField] private UIComponentRoleSlot[] _roleSlots;
 
     /// <summary>
-    /// 金币人动画控制器
+    /// 三千盘金币人动画控制器
     /// </summary>
     [SerializeField] private ThreeKPCoinManThrowDiceAnimator _threeKPCoinManThrowDiceAnimator;
 
@@ -35,15 +35,16 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     /// </summary>
     private int _diceValue;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
+
+    private void Awake()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+    }
 
     public void Init(){}
 
     public void CleanUp(){}
-
 
     #region 公共方法
     /// <summary>
@@ -53,7 +54,6 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     {
         // 随机骰子点数
         _diceValue = Random.Range(1, 7);
-        //_diceValue = 4;
         
         int fromSlotIndex = _currentSlotIndex;
 

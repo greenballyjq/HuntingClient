@@ -33,10 +33,7 @@ public class UIComponentTime : MonoBehaviour, IUIComponent
     /// </summary>
     private readonly StringBuilder _stringBuilder = new StringBuilder(12);
 
-    /// <summary>
-    /// 毫秒字体大小百分比
-    /// </summary>
-    private const int FontSizePercentage = 80;
+    private const int FONT_SIZE_PERCENTAGE = 80;
 
     public void Init()
     {
@@ -44,10 +41,7 @@ public class UIComponentTime : MonoBehaviour, IUIComponent
         UpdateTimeDisplay();
     }
 
-    public void CleanUp()
-    {
-        
-    }
+    public void CleanUp() { }
 
     private void Update()
     {
@@ -77,7 +71,7 @@ public class UIComponentTime : MonoBehaviour, IUIComponent
         _stringBuilder.Append("'");
         _stringBuilder.Append(seconds.ToString("D2"));
         _stringBuilder.Append("''");
-        _stringBuilder.Append($"<size={FontSizePercentage}%>");
+        _stringBuilder.Append($"<size={FONT_SIZE_PERCENTAGE}%>");
         _stringBuilder.Append(milliseconds.ToString("D2"));
         _stringBuilder.Append("'''</size>");
 

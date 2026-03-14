@@ -277,7 +277,7 @@ namespace CoreGameLogic.Managers.AppManagers
         private void OnPropStarted(PropStartedEventArgs args)
         {
             var propType = args.PropData.PropType;
-            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().CurrentRoundContext;
+            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().RoundContext;
             var roleType = roundContext.RoleData.RoleType;
 
             PlayPropSoundAndIPVoice(propType, roleType);
@@ -289,7 +289,7 @@ namespace CoreGameLogic.Managers.AppManagers
         /// <param name="args"></param>
         private void OnSkillStarted(SkillStartedEventArgs args)
         {
-            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().CurrentRoundContext;
+            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().RoundContext;
             var roleType = roundContext.RoleData.RoleType;
             var hasLinkage = roundContext.HasLinkage;
 
@@ -303,7 +303,7 @@ namespace CoreGameLogic.Managers.AppManagers
         /// </summary>
         private void OnSettlementStarted()
         {
-            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().CurrentRoundContext;
+            var roundContext = HuntingAppFlow.Instance.GetCurrentRoundFlow().RoundContext;
             var roleType = roundContext.RoleData.RoleType;
 
             switch (roleType)

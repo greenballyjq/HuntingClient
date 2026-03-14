@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using System;
@@ -51,58 +51,35 @@ public class RoundContext
     /// 隐藏地图数据
     /// </summary>
     public Map HiddenMapData { get; set; }
-
-    /// <summary>
-    /// 隐藏地图结束触发器
-    /// </summary>
-    public HiddenRoundEndTrigger HiddenRoundEndTrigger { get; set; }
 }
 
-public class HiddenRoundEndTrigger
+/// <summary>
+/// 隐藏地图上下文
+/// </summary>
+public class HiddenMapContext
 {
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-    private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
-
-    private bool _bossDied;
-
-    private bool _isLastOne;
+    private EventManager _eventManager;
+    private AnimalManager _animalManager;
 
     public void Init()
     {
-        _eventManager.AddListener(AnimalEvents.AnimalRemoved, OnAnimalRemoved);
+        _eventManager = GameServiceLocator.EventManager;
+        _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
+
         _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnterDeath);
-        // _eventManager.AddListener(BossEvents.BossDied, OnBossDied);
-        _bossDied = false;
     }
 
     public void Release()
     {
-        _eventManager.RemoveListener(AnimalEvents.AnimalRemoved, OnAnimalRemoved);
         _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnterDeath);
-        // _eventManager.RemoveListener(BossEvents.BossDied, OnBossDied);
     }
 
-    private void OnAnimalRemoved(AnimalRemovedEventArgs _)
-    {
-        // if (_isLastOne) return;
-        // var activeAnimalCount = _animalManager.GetActiveAnimalCount();
-        // _isLastOne = activeAnimalCount == 1;
-        // Debug.Log($"[{GetType().Name}] 最后一只? {_isLastOne}, activeAnimalCount: {activeAnimalCount}");
-    }
-
+    /// <summary>
+    /// 动物进入死亡事件回调
+    /// </summary>
     private void OnAnimalEnterDeath(AnimalEnteredDeathEventArgs args)
     {
-        CheckIsHiddenRoundEnd();
-    }
-
-
-    private void CheckIsHiddenRoundEnd()
-    {
-        var isLastOne = _animalManager.GetUnDeathAnimalCount() == 0;
-
-        Debug.Log($"[{GetType().Name}] 检测雪山地图是否结束, _isLastOne: {isLastOne}，{_animalManager.GetUnDeathAnimalCount()}");
-
-        if (isLastOne)
+        if (_animalManager.GetUnDeathAnimalCount() == 0)
             RoundFlow.Instance.EndHiddenMapAsync().Forget();
     }
 }
@@ -113,7 +90,7 @@ public class HiddenRoundEndTrigger
 public class RoundFlow : Singleton<RoundFlow>
 {
     /// <summary>
-    /// 单局流程状态枚举
+    /// 单局流程状态
     /// </summary>
     private enum RoundFlowState
     {
@@ -144,15 +121,48 @@ public class RoundFlow : Singleton<RoundFlow>
     }
 
     /// <summary>
+    /// 单局阶段（决定计时等规则）
+    /// </summary>
+    public enum RoundPhase
+    {
+        /// <summary>
+        /// 无阶段
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// 主地图（计时）
+        /// </summary>
+        MainMap,
+
+        /// <summary>
+        /// 隐藏地图（不计时）
+        /// </summary>
+        HiddenMap,
+    }
+
+    /// <summary>
     /// 当前状态
     /// </summary>
     private RoundFlowState _currentState = RoundFlowState.None;
 
     /// <summary>
+    /// 当前阶段
+    /// </summary>
+    private RoundPhase _currentPhase = RoundPhase.None;
+    public RoundPhase CurrentPhase => _currentPhase;
+
+    /// <summary>
+    /// 当前隐藏地图流程
+    /// </summary>
+    private HiddenMapContext _currentHiddenMapContext;
+    private HiddenMapContext HiddenMapContext => _currentHiddenMapContext;
+
+    /// <summary>
     /// 当前单局上下文
     /// </summary>
     private RoundContext _currentRoundContext;
-    public RoundContext CurrentRoundContext => _currentRoundContext;
+    public RoundContext RoundContext => _currentRoundContext;
 
     /// <summary>
     /// 单局已用时间（秒）
@@ -170,15 +180,6 @@ public class RoundFlow : Singleton<RoundFlow>
     private GameObjectPoolManager _gameObjectPoolManager;
     private EffectManager _effectManager;
     private HuntingSoundManager _soundManager;
-
-    public RoundFlow()
-    {
-        _eventManager = GameServiceLocator.EventManager;
-        _uiManager = GameServiceLocator.UIManager;
-        _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
-        _effectManager = GameServiceLocator.EffectManager;
-        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
-    }
 
     #region 公共方法
     /// <summary>
@@ -200,28 +201,19 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _currentState = RoundFlowState.Transitioning;
 
+        RegisterServices();
+        RegisterEvents();
+
+        CreateRoundManagers();
+        InitRoundManagers();
+
         _roundElapsedTime = 0f;
         _currentRoundContext = context;
 
-        // 订阅事件
-        RegisterEvents();
-
-        // 创建单局管理器
-        CreateRoundManagers();
-
-        // 初始化单局管理器
-        InitRoundManagers();
-
-        // 打开游玩界面
-        var uiGameplay = await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay", UIManager.UILayer.Fixed);
-
         // 禁止游玩界面操作
+        var uiGameplay = await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay", UIManager.UILayer.Fixed);
         uiGameplay.SetClickable(false);
 
-        // 切换到摇杆控制模式
-        //GetRoundManager<PlayerControlManager>().SwitchToDefaultShooting();
-        GetRoundManager<PlayerControlManager>().SwitchToJoystick();
-        
         // 触发单局进入事件
         TriggerRoundEntered(new RoundEnteredEventArgs
         {
@@ -241,7 +233,8 @@ public class RoundFlow : Singleton<RoundFlow>
             RoundContext = _currentRoundContext
         });
 
-        _currentState = RoundFlowState.Playing;        
+        _currentPhase = RoundPhase.MainMap;
+        _currentState = RoundFlowState.Playing;
     }
 
     /// <summary>
@@ -270,6 +263,7 @@ public class RoundFlow : Singleton<RoundFlow>
         // 加载准备场景
         await SceneManager.LoadSceneAsync("PrepareScene").ToUniTask();
 
+        _currentPhase = RoundPhase.None;
         _currentState = RoundFlowState.None;
     }
 
@@ -320,8 +314,8 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _currentState = RoundFlowState.Transitioning;
 
-        _currentRoundContext.HiddenRoundEndTrigger = new HiddenRoundEndTrigger();
-        _currentRoundContext.HiddenRoundEndTrigger.Init();
+        _currentHiddenMapContext = new HiddenMapContext();
+        _currentHiddenMapContext.Init();
 
         // 播放伪结算面板动画
         var uiFakeSettlement = _uiManager.GetUI<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake");
@@ -414,6 +408,7 @@ public class RoundFlow : Singleton<RoundFlow>
         // 恢复游玩界面操作
         uiGameplay.SetClickable(true);
 
+        _currentPhase = RoundPhase.HiddenMap;
         _currentState = RoundFlowState.Playing;
     }
 
@@ -442,13 +437,26 @@ public class RoundFlow : Singleton<RoundFlow>
         // 结算奖励
         GetRoundManager<SettlementRewardManager>().CalculateReward();
 
-        _currentRoundContext.HiddenRoundEndTrigger.Release();
+        _currentHiddenMapContext.Release();
 
+        _currentPhase = RoundPhase.None;
         _currentState = RoundFlowState.None;
     }
-#endregion
+    #endregion
 
     #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+        _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+        _effectManager = GameServiceLocator.EffectManager;
+        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+    }
+
     /// <summary>
     /// 创建单局管理器
     /// </summary>
@@ -519,7 +527,8 @@ public class RoundFlow : Singleton<RoundFlow>
     /// <param name="dt">时间增量</param>
     private void OnRoundPlaying(float dt)
     {
-        _roundElapsedTime += dt;
+        if (_currentPhase == RoundPhase.MainMap)
+            _roundElapsedTime += dt;
 
         foreach (var manager in _roundManagers.Values)
         {

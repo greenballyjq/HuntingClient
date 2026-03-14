@@ -1,4 +1,4 @@
-﻿using GameFramework.Core;
+using GameFramework.Core;
 using GameFramework.Core.UI;
 using TMPro;
 using UnityEngine;
@@ -19,16 +19,9 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
     /// </summary>
     [SerializeField] private TextMeshProUGUI _textReturn;
 
-    /// <summary>
-    /// 返回按钮矩形变换组件
-    /// </summary>
-    private RectTransform _rectTransformReturnButton;
-    public RectTransform RectTransformReturnButton => _rectTransformReturnButton;
-
     private void Awake()
     {
         _buttonReturn.onClick.AddListener(OnReturnButtonClicked);
-        _rectTransformReturnButton = GetComponent<RectTransform>();
     }
 
     private void OnDestroy()
