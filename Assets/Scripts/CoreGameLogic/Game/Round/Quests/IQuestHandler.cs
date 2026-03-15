@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using cfg.HuntingConfig;
 
 /// <summary>
@@ -33,7 +33,7 @@ public interface IQuestHandler
     Action<int> OnQuestProgressUpdated { get; set; }
 
     /// <summary>
-    /// 任务完成回调
+    /// 任务完成回调（参数：奖励值）
     /// </summary>
-    Action OnQuestCompleted { get; set; }
+    Action<int> OnQuestCompleted { get; set; }
 }

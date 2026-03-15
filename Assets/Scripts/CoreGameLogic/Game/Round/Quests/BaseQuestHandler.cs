@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using cfg.HuntingConfig;
 
 /// <summary>
@@ -13,7 +13,7 @@ public abstract class BaseQuestHandler : IQuestHandler
 
     public Action<string, int, int> OnQuestDispatched { get; set; }
     public Action<int> OnQuestProgressUpdated { get; set; }
-    public Action OnQuestCompleted { get; set; }
+    public Action<int> OnQuestCompleted { get; set; }
 
     protected EventManager EventManager;
 
@@ -47,8 +47,8 @@ public abstract class BaseQuestHandler : IQuestHandler
     /// <summary>
     /// 通知任务完成
     /// </summary>
-    protected void NotifyCompleted()
+    protected void NotifyCompleted(int rewardValue)
     {
-        OnQuestCompleted?.Invoke();
+        OnQuestCompleted?.Invoke(rewardValue);
     }
 }

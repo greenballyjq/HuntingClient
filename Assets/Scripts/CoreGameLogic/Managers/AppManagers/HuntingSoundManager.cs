@@ -182,7 +182,7 @@ namespace CoreGameLogic.Managers.AppManagers
             _eventManager.RemoveListener(PropEvents.PropStarted, OnPropStarted);
             _eventManager.RemoveListener(SkillEvents.SkillStarted, OnSkillStarted);
             _eventManager.RemoveListener(SettlementEvents.SettlementStarted, OnSettlementStarted);
-            _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
+            _eventManager.RemoveListener(RoundEvents.RoundEntered, OnRoundEntered);
             _eventManager.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
             _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
             _eventManager.RemoveListener(PropEvents.TrapTriggered, OnTrapTriggered);
