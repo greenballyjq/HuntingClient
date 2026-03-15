@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GameFramework.Core.UI;
+using GameFramework.Manager;
 using UnityEngine;
 
 /// <summary>
@@ -13,19 +14,18 @@ public class UIComponentAnimalCounter : MonoBehaviour, IUIComponent
     [SerializeField] private UIComponentAnimalCounterItem[] _animalCounterItems;
 
     /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 动物管理器
-    /// </summary>
-    private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
-
-    /// <summary>
     /// 动物统计项组件字典
     /// </summary>
     private Dictionary<int, UIComponentAnimalCounterItem> _animalCounterItemsDic = new Dictionary<int, UIComponentAnimalCounterItem>();
+
+    private EventManager _eventManager;
+    private AnimalManager _animalManager;
+
+    private void Awake()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
+    }
 
     public void Init()
     {
@@ -37,11 +37,6 @@ public class UIComponentAnimalCounter : MonoBehaviour, IUIComponent
     {
         _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
         _animalCounterItemsDic.Clear();
-    }
-
-    private void OnDestroy()
-    {
-        CleanUp();
     }
 
     /// <summary>

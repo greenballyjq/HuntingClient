@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using TMPro;
 using UnityEngine;
@@ -48,12 +48,12 @@ public class UIPopupSettlementSnowVictory : UIBase
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// UI管理器
     /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
+    private UIManager _uiManager;
 
     private int _totalCoin;
     private int _totalMastery;
@@ -61,6 +61,9 @@ public class UIPopupSettlementSnowVictory : UIBase
 
     private void Awake()
     {
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+
         _buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
         _buttonShare.onClick.AddListener(OnShareButtonClicked);
         _buttonDice.onClick.AddListener(OnDiceButtonClicked);
@@ -92,9 +95,7 @@ public class UIPopupSettlementSnowVictory : UIBase
     private async void OnSettlementButtonClicked()
     {
         Close();
-
         await HuntingAppFlow.Instance.EnterPrepareAsync();
-
         _uiManager.CloseUI("UISnowMountainVictory");
     }
 
@@ -113,7 +114,7 @@ public class UIPopupSettlementSnowVictory : UIBase
     {
         _buttonDice.enabled = false;
         // 掷骰子动画
-        int point = Random.Range(1, 7);
+        int point = UnityEngine.Random.Range(1, 7);
         if (!_diceTransform)
         {
             _diceTransform = Instantiate(_dicePrefab, _diceParent);

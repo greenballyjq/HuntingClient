@@ -34,19 +34,14 @@ public class HuntingAppFlow : GameAppFlow
     }
 
     /// <summary>
-    /// 打猎应用流程状态枚举
+    /// 打猎应用流程状态
     /// </summary>
-    private enum HuntingAppFlowState
+    private enum EHuntingAppFlowState
     {
         /// <summary>
         /// 无状态
         /// </summary>
         None,
-
-        /// <summary>
-        /// 登录状态
-        /// </summary>
-        Login,
 
         /// <summary>
         /// 准备状态
@@ -60,9 +55,9 @@ public class HuntingAppFlow : GameAppFlow
     }
 
     /// <summary>
-    /// 打猎应用流程当前状态
+    /// 当前状态
     /// </summary>
-    private HuntingAppFlowState _currentState = HuntingAppFlowState.None;
+    private EHuntingAppFlowState _currentState = EHuntingAppFlowState.None;
 
     /// <summary>
     /// 当前单局流程
@@ -70,19 +65,14 @@ public class HuntingAppFlow : GameAppFlow
     private RoundFlow _currentRoundFlow;
     public RoundFlow RoundFlow => _currentRoundFlow;
 
-    /// <summary>
-    /// UI管理器
-    /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
 
     private void Start()
     {
-        // TODO: 将来可能在别处调用
         StartAppAsync().Forget();
     }
 
     #region 公共方法
-    
     /// <summary>
     /// 进入准备
     /// </summary>
@@ -96,7 +86,7 @@ public class HuntingAppFlow : GameAppFlow
 
         await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
 
-        _currentState = HuntingAppFlowState.Prepare;
+        _currentState = EHuntingAppFlowState.Prepare;
     }
 
     /// <summary>
@@ -108,7 +98,7 @@ public class HuntingAppFlow : GameAppFlow
         _currentRoundFlow = new RoundFlow();
         await _currentRoundFlow.EnterRound(context);
         
-        _currentState = HuntingAppFlowState.Round;
+        _currentState = EHuntingAppFlowState.Round;
     }
 
     /// <summary>
@@ -116,7 +106,6 @@ public class HuntingAppFlow : GameAppFlow
     /// </summary>
     /// <returns></returns>
     public RoundFlow GetCurrentRoundFlow() => _currentRoundFlow;
-    
     #endregion
 
     #region 私有方法

@@ -14,6 +14,10 @@ namespace cfg
 public partial class Tables
 {
     /// <summary>
+    /// 全局数值表
+    /// </summary>
+    public HuntingConfig.TbGlobal TbGlobal {get; }
+    /// <summary>
     /// 子弹数值表
     /// </summary>
     public HuntingConfig.TbBullet TbBullet {get; }
@@ -86,6 +90,7 @@ public partial class Tables
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
+        TbGlobal = new HuntingConfig.TbGlobal(loader("huntingconfig_tbglobal"));
         TbBullet = new HuntingConfig.TbBullet(loader("huntingconfig_tbbullet"));
         TbSpecie = new HuntingConfig.TbSpecie(loader("huntingconfig_tbspecie"));
         TbMap = new HuntingConfig.TbMap(loader("huntingconfig_tbmap"));
@@ -110,6 +115,7 @@ public partial class Tables
     
     private void ResolveRef()
     {
+        TbGlobal.ResolveRef(this);
         TbBullet.ResolveRef(this);
         TbSpecie.ResolveRef(this);
         TbMap.ResolveRef(this);

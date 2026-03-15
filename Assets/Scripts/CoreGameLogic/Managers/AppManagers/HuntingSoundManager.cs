@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Audio;
 using GameFramework.Game;

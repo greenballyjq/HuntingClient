@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,7 +28,7 @@ public class HuntingAudioRefSo : ScriptableObject
         /// <summary>地图环境声-西域大草原</summary>
         MapEnv_GrassLand,
 
-        /// <summary>地图环境声-远古雪山</summary>
+        /// <summary>地图环境声-隐藏地图</summary>
         MapEnv_SnowMountain,
 
         #endregion

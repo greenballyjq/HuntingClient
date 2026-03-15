@@ -1,13 +1,13 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using GameFramework.Manager;
 using GameFramework.Utility;
 using UnityEngine;
 
 
 /// <summary>
-/// 结算奖励管理器
+/// 结算管理器
 /// </summary>
-public class SettlementRewardManager : IRoundManager
+public class SettlementManager : IRoundManager
 {
     /// <summary>
     /// 完成的肉条刻度
@@ -97,9 +97,6 @@ public class SettlementRewardManager : IRoundManager
         // 触发结算开始事件
         TriggerSettlementStarted();
 
-        // 计算肉度条基础奖励
-        CalculateBaseReward();
-        
         // 触发结算计算事件
         TriggerSettlementCalculated(new SettlementCalculatedEventArgs
         {
@@ -122,23 +119,6 @@ public class SettlementRewardManager : IRoundManager
     {
         _eventManager = GameServiceLocator.EventManager;
         _configManager = GameServiceLocator.ConfigManager;
-    }
-
-    /// <summary>
-    /// 计算肉度条基础奖励
-    /// </summary>
-    private void CalculateBaseReward()
-    {
-        var reward = _configManager.GetMeatProgressReward(_completedMeatScale);
-        if (reward == null)
-        {
-            _coinFromMeat = 0;
-            _pointReward = 0;
-            return;
-        }
-        
-        _coinFromMeat = reward.ThreeKPCoin;
-        _pointReward = reward.Point;
     }
 
     /// <summary>
@@ -211,7 +191,7 @@ public class SettlementRewardManager : IRoundManager
     /// </summary>
     private void OnQuestCompleted(QuestCompletedEventArgs args)
     {
-        _coinFromQuest += args.RewardCoin;
+        _coinFromQuest += args.RewardValue;
     }
 
     /// <summary>

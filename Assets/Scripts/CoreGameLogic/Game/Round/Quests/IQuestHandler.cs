@@ -1,15 +1,5 @@
-﻿using cfg.HuntingConfig;
-
-/// <summary>
-/// 任务上下文
-/// </summary>
-public class QuestContext
-{
-    /// <summary>
-    /// 任务配置
-    /// </summary>
-    public Quest QuestData { get; set; }
-}
+﻿using System;
+using cfg.HuntingConfig;
 
 /// <summary>
 /// 任务处理器接口
@@ -17,28 +7,33 @@ public class QuestContext
 public interface IQuestHandler
 {
     /// <summary>
-    /// 任务开始
+    /// 初始化
     /// </summary>
-    /// <param name="context">任务上下文</param>
-    void OnQuestStart(QuestContext context);
+    /// <param name="questData">技能数据</param>
+    void Init(Quest questData);
 
     /// <summary>
-    /// 任务更新
+    /// 开始任务
     /// </summary>
-    /// <param name="context">任务上下文</param>
-    /// <param name="deltaTime">时间增量</param>
-    void OnQuestUpdate(QuestContext context, float deltaTime);
+    void StartQuest();
 
     /// <summary>
-    /// 任务结束
+    /// 结束任务
     /// </summary>
-    /// <param name="context">任务上下文</param>
-    void OnQuestEnd(QuestContext context);
+    void EndQuest();
 
     /// <summary>
-    /// 获取当前进度值
+    /// 派发任务回调
     /// </summary>
-    /// <param name="context">任务上下文</param>
-    /// <returns>当前进度值</returns>
-    int GetCurrentProgress(QuestContext context);
+    Action<string, int, int> OnQuestDispatched { get; set; }
+
+    /// <summary>
+    /// 进度更新回调
+    /// </summary>
+    Action<int> OnQuestProgressUpdated { get; set; }
+
+    /// <summary>
+    /// 任务完成回调
+    /// </summary>
+    Action OnQuestCompleted { get; set; }
 }

@@ -44,20 +44,21 @@ public class UIPopupProp : UIBase
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager;
 
     /// <summary>
     /// 玩家数据管理器
     /// </summary>
-    private PlayerDataManager _playerDataManager => GameServiceLocator.GetAppManager<PlayerDataManager>();
+    private PlayerDataManager _playerDataManager;
 
     private void Awake()
     {
         _buttonGet.onClick.AddListener(OnGetButtonClicked);
         _buttonClose.onClick.AddListener(OnCloseButtonClicked);
         _buttonCancel.onClick.AddListener(OnCancelButtonClicked);
-        
-        
+
+        _configManager = GameServiceLocator.ConfigManager;
+        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
     }
 
     private void OnDestroy()
@@ -71,14 +72,14 @@ public class UIPopupProp : UIBase
     {
         base.OnInit(userData);
         _currentProp = _configManager.GetProp((EPropType)userData);
-        UpdatePropDisplay();
+        RefreshPropDisplay();
     }
 
     #region 私有方法
     /// <summary>
-    /// 更新道具展示
+    /// 刷新道具展示
     /// </summary>
-    private void UpdatePropDisplay()
+    private void RefreshPropDisplay()
     {
         _textPropName.text = _currentProp.Name;
         _imageProp.sprite = _configManager.PropRefSo.GetPropIcon(_currentProp.ID);

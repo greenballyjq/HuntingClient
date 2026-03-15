@@ -14,14 +14,12 @@ public static class QuestHandlerFactory
     {
         switch (questType)
         {
-            case EQuestType.KillLargeAnimal:
-                return new QuestKillLargeAnimalHandler();
-            case EQuestType.CollectMeat:
-                return new QuestCollectMeatHandler();
-            case EQuestType.UsePaidItem:
-                return new QuestUsePaidItemHandler();
-            case EQuestType.Settle:
-                return new QuestSettleHandler();
+            case EQuestType.Hunting:
+                return null;
+            case EQuestType.Collect:
+                return null;
+            case EQuestType.Consume:
+                return null;
             default:
                 return null;
         }

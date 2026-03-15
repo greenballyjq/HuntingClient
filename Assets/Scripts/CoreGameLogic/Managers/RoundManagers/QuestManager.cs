@@ -116,10 +116,7 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
         // 触发进度更新事件
         TriggerProgressUpdated(new QuestProgressUpdatedEventArgs
         {
-            Sender = this,
-            QuestData = _currentQuestContext.QuestData,
             CurrentProgress = currentProgress,
-            TargetValue = _currentTargetValue,
             RemainingTime = _currentQuestRemainingTime
         });
     }
@@ -140,17 +137,6 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
         _roundStartTime = Time.time;
         _nextDispatchTime = QuestStartTime;
     }
-
-    #region 公共方法
-    /// <summary>
-    /// 获取当前任务上下文
-    /// </summary>
-    /// <returns>当前任务上下文</returns>
-    public QuestContext GetCurrentQuest()
-    {
-        return _currentQuestContext;
-    }
-    #endregion
 
     #region 私有方法
     private void RegisterServices()
@@ -205,12 +191,13 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
         _nextDispatchTime = currentTime + QuestDispatchInterval;
 
         // 触发任务派发事件
+        var questGlobal = _configManager.GetQuestGlobal();
         TriggerQuestDispatched(new QuestDispatchedEventArgs
         {
-            Sender = this,
-            QuestData = questData,
+            Description = questData.Comment,
             TargetValue = _currentTargetValue,
             RewardValue = _currentRewardValue,
+            Duration = questGlobal.Duration
         });
 
         Log.Info($"[QuestManager] 任务已派发: {questData.QuestType}，目标值:{_currentTargetValue}，奖励值:{_currentRewardValue}");
@@ -230,22 +217,14 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
         if (isTimeout)
         {
-            // 触发任务超时事件
-            TriggerQuestTimeout(new QuestTimeoutEventArgs
-            {
-                Sender = this,
-                QuestData = _currentQuestContext.QuestData
-            });
+            TriggerQuestTimeout(new QuestTimeoutEventArgs());
             Log.Info("[QuestManager] 任务已超时");
         }
         else
         {
-            // 触发任务完成事件
             TriggerQuestCompleted(new QuestCompletedEventArgs
             {
-                Sender = this,
-                QuestData = _currentQuestContext.QuestData,
-                RewardCoin = _currentRewardValue
+                RewardValue = _currentRewardValue
             });
             Log.Info($"[QuestManager] 任务已完成，奖励:{_currentRewardValue}");
         }
@@ -287,9 +266,9 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 触发任务超时事件
     /// </summary>
-    private void TriggerQuestTimeout(QuestTimeoutEventArgs args)
+    private void TriggerQuestTimeout()
     {
-        _eventManager.Trigger(QuestEvents.QuestTimeout, args);
+        _eventManager.Trigger(QuestEvents.QuestTimeout);
     }
     #endregion
 }

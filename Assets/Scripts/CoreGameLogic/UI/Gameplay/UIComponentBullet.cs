@@ -50,21 +50,30 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager;
+
+    /// <summary>
+    /// 武器管理器
+    /// </summary>
+    private WeaponManager _weaponManager;
 
     private void Awake()
     {
         _rectTransformBulletImage = _imageBullet.GetComponent<RectTransform>();
+
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _weaponManager = GameServiceLocator.GetRoundManager<WeaponManager>();
     }
 
     public void Init()
     {
-        UpdateCountdown(false, 0, 0);
+        SyncFromManager();
 
         _eventManager.AddListener(BulletEvents.BulletChanged, OnBulletChanged);
         _eventManager.AddListener(BulletEvents.SpecialBulletCountdown, OnSpecialBulletCountdown);
@@ -80,22 +89,40 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
 
     #region 私有方法
     /// <summary>
-    /// 更新子弹图标
+    /// 从管理器同步当前状态并刷新显示
+    /// </summary>
+    private void SyncFromManager()
+    {
+        var playerWeapon = _weaponManager?.PlayerWeapon;
+        if (playerWeapon != null)
+        {
+            var bulletData = _configManager.GetBullet(playerWeapon.CurrentBulletID);
+            if (bulletData != null)
+            {
+                RefreshBulletIcon(bulletData);
+            }
+        }
+
+        RefreshCountdown(false, 0, 0);
+    }
+
+    /// <summary>
+    /// 刷新子弹图标
     /// </summary>
     /// <param name="bulletData">子弹配置</param>
-    private void UpdateBulletIcon(Bullet bulletData)
+    private void RefreshBulletIcon(Bullet bulletData)
     {
         var sprite = _configManager.BulletRefSo.GetBulletIcon(bulletData.ID);
         _imageBullet.sprite = sprite;
     }
 
     /// <summary>
-    /// 更新倒计时显示
+    /// 刷新倒计时显示
     /// </summary>
     /// <param name="isSpecial">是否为特殊子弹</param>
     /// <param name="remainingTime">剩余时间</param>
     /// <param name="totalTime">总时间</param>
-    private void UpdateCountdown(bool isSpecial, float remainingTime = 0f, float totalTime = 0f)
+    private void RefreshCountdown(bool isSpecial, float remainingTime = 0f, float totalTime = 0f)
     {
         if (!isSpecial)
             _textCountdown.text = "∞";
@@ -115,11 +142,8 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
         _remainingTime = args.RemainingTime;
         _duration = args.NewBulletData.Duration;
 
-        // 更新子弹图标
-        UpdateBulletIcon(args.NewBulletData);
-
-        // 更新倒计时显示
-        UpdateCountdown(args.IsSpecialBullet, args.RemainingTime, _duration);
+        RefreshBulletIcon(args.NewBulletData);
+        RefreshCountdown(args.IsSpecialBullet, args.RemainingTime, _duration);
     }
 
     /// <summary>
@@ -133,8 +157,7 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
         _remainingTime = args.RemainingTime;
         _duration = args.BulletData.Duration;
 
-        // 更新倒计时显示
-        UpdateCountdown(true, args.RemainingTime, args.BulletData.Duration);
+        RefreshCountdown(true, args.RemainingTime, args.BulletData.Duration);
     }
 
     /// <summary>
@@ -145,6 +168,8 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
         _isSpecialBullet = false;
         _remainingTime = 0f;
         _duration = 0f;
+
+        RefreshCountdown(false, 0, 0);
     }
     #endregion
 }

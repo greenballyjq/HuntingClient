@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+using System;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using GameFramework.Manager;
 using TMPro;
@@ -34,15 +35,18 @@ public class UIPopupSettlementNormal : UIBase
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// 结算管理器
     /// </summary>
-    private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
+    private SettlementManager _settlementRewardManager;
 
     private void Awake()
     {
+        _eventManager = GameServiceLocator.EventManager;
+        _settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementManager>();
+
         buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
         buttonDoubleSettlement.onClick.AddListener(OnDoubleSettlementClicked);
     }
@@ -72,8 +76,7 @@ public class UIPopupSettlementNormal : UIBase
     private void OnSettlementButtonClicked()
     {
         Close();
-
-        HuntingAppFlow.Instance.EnterPrepareAsync().Forget();        
+        HuntingAppFlow.Instance.EnterPrepareAsync().Forget();
     }
 
     /// <summary>

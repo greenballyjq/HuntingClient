@@ -97,7 +97,7 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
     private void OpenGift()
     {
         // 抽到的幸运仪式增益配置
-        LuckyBuff buff = _configManager.GetLuckyBuffFromGift(_giftType);
+        LuckyBuff buff = _configManager.GetLuckyBuffByGiftAndWeights(_giftType);
 
         // 扣除三千盘金币
         PlayerData.UpdateThreeKPCoinAmount(-_giftPrice);

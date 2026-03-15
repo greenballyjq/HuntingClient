@@ -84,16 +84,18 @@ public class UISnowMountainVictory : UIBase
     /// <summary>
     /// 特效管理器
     /// </summary>
-    private EffectManager _effectManager => GameServiceLocator.EffectManager;
+    private EffectManager _effectManager;
 
     /// <summary>
     /// 相机管理器
     /// </summary>
-    private CameraManager _cameraManager => GameServiceLocator.GetAppManager<CameraManager>();
+    private CameraManager _cameraManager;
 
     private void Awake()
     {
         _snowMountainVictoryRectTransform = GetComponent<RectTransform>();
+        _effectManager = GameServiceLocator.EffectManager;
+        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
     }
 
     #region 公共方法

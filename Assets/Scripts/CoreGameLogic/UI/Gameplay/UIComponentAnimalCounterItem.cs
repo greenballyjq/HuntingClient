@@ -22,14 +22,16 @@ public class UIComponentAnimalCounterItem : MonoBehaviour, IUIComponent<Specie>
     [SerializeField] private TextMeshProUGUI _textAnimalCount;
 
     /// <summary>
-    /// 资源管理器
-    /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-
-    /// <summary>
     /// 当前数量
     /// </summary>
     private int _currentCount;
+
+    private ResourceManager _resourceManager;
+
+    private void Awake()
+    {
+        _resourceManager = GameServiceLocator.ResourceManager;
+    }
 
     public void Init(Specie specieData)
     {

@@ -38,10 +38,12 @@ public class UIComponentBossHealth : MonoBehaviour, IUIComponent
     /// </summary>
     [SerializeField] private BossHealthAnimationConfig _animationConfig;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
+
+    private void Awake()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+    }
 
     public void Init()
     {
@@ -59,7 +61,7 @@ public class UIComponentBossHealth : MonoBehaviour, IUIComponent
     /// </summary>
     public async UniTask PlayBossHealthIncreaseAnimationAsync()
     {
-        _imageBossHealthBar.DOFillAmount(1f, _animationConfig.Duration)
+        await _imageBossHealthBar.DOFillAmount(1f, _animationConfig.Duration)
             .SetUpdate(_animationConfig.UseUnscaledTime);
 
         await UniTask.Delay(TimeSpan.FromSeconds(_animationConfig.Duration), _animationConfig.UseUnscaledTime);
@@ -71,7 +73,17 @@ public class UIComponentBossHealth : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnBossDamaged(BossDamagedEventArgs args)
     {
-        float healthRatio = args.CurrentHealth / args.MaxHealth;
+        RefreshBossHealthBar(args.CurrentHealth / args.MaxHealth);
+    }
+    #endregion
+
+    #region 私有方法
+    /// <summary>
+    /// 刷新Boss血量条显示
+    /// </summary>
+    /// <param name="healthRatio">血量比例</param>
+    private void RefreshBossHealthBar(float healthRatio)
+    {
         _imageBossHealthBar.fillAmount = healthRatio;
     }
     #endregion

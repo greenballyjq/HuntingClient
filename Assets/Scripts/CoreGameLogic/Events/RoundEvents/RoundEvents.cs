@@ -1,4 +1,4 @@
-﻿using GameFramework.Core;
+using GameFramework.Core;
 
 /// <summary>
 /// 单局流程相关事件
@@ -14,6 +14,11 @@ public static class RoundEvents
     /// 单局开始事件
     /// </summary>
     public static readonly EventKey<RoundStartedEventArgs> RoundStarted = new EventKey<RoundStartedEventArgs>();
+
+    /// <summary>
+    /// 时间更新事件
+    /// </summary>
+    public static readonly EventKey<TimeUpdatedEventArgs> TimeUpdated = new EventKey<TimeUpdatedEventArgs>();
 }
 
 /// <summary>
@@ -36,6 +41,22 @@ public sealed class RoundStartedEventArgs : EventArgs
     /// 单局上下文
     /// </summary>
     public RoundContext RoundContext { get; set; }
+}
+
+/// <summary>
+/// 时间更新事件参数
+/// </summary>
+public sealed class TimeUpdatedEventArgs : EventArgs
+{
+    /// <summary>
+    /// 当前秒数
+    /// </summary>
+    public float Seconds { get; set; }
+
+    /// <summary>
+    /// 是否为倒计时模式
+    /// </summary>
+    public bool IsCountdown { get; set; }
 }
 
 

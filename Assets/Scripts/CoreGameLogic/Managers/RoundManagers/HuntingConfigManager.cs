@@ -20,6 +20,7 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// </summary>
     protected override List<string> TableNames => new List<string>
     {
+        "huntingconfig_tbglobal",
         "huntingconfig_tbbullet",
         "huntingconfig_tbspecie",
         "huntingconfig_tbmap",
@@ -102,6 +103,11 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     #endregion
 
     #region 数值表访问
+    /// <summary>
+    /// 全局数值表
+    /// </summary>
+    public TbGlobal GlobalTable => _tables.TbGlobal;
+
     /// <summary>
     /// 子弹数值表
     /// </summary>
@@ -202,209 +208,166 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <summary>
     /// 获取单个子弹数据
     /// </summary>
-    /// <param name="id">子弹ID</param>
-    /// <returns></returns>
     public Bullet GetBullet(int id) => BulletTable.Get(id);
 
     /// <summary>
     /// 通过子弹类型获取单个子弹数据
     /// </summary>
-    /// <param name="type">子弹类型</param>
-    /// <returns></returns>
     public Bullet GetBullet(EBulletType type)
         => BulletTable.DataList.FirstOrDefault(b => b.BulletType == type);
 
     /// <summary>
     /// 获取单个物种数据
     /// </summary>
-    /// <param name="id">物种ID</param>
-    /// <returns></returns>
     public Specie GetSpecie(int id) => SpecieTable.Get(id);
 
     /// <summary>
     /// 获取单个地图数据
     /// </summary>
-    /// <param name="id">地图ID</param>
-    /// <returns></returns>
     public Map GetMap(int id) => MapTable.Get(id);
 
     /// <summary>
     /// 通过地图类型获取单个地图数据
     /// </summary>
-    /// <param name="type">地图类型</param>
-    /// <returns></returns>
     public Map GetMap(EMapType type)
         => MapTable.DataList.FirstOrDefault(m => m.MapType == type);
 
     /// <summary>
     /// 获取单个角色数据
     /// </summary>
-    /// <param name="id">角色ID</param>
-    /// <returns></returns>
     public Role GetRole(int id) => RoleTable.Get(id);
 
     /// <summary>
     /// 通过角色类型获取单个角色数据
     /// </summary>
-    /// <param name="type">角色类型</param>
-    /// <returns></returns>
     public Role GetRole(ERoleType type)
         => RoleTable.DataList.FirstOrDefault(r => r.RoleType == type);
 
     /// <summary>
     /// 获取单个肉条数据
     /// </summary>
-    /// <param name="id">肉条ID</param>
-    /// <returns></returns>
     public MeatProgress GetMeatProgress(int id) => MeatProgressTable.Get(id);
 
     /// <summary>
     /// 获取单个能量条数据
     /// </summary>
-    /// <param name="id">能量条ID</param>
-    /// <returns></returns>
     public EnergyProgress GetEnergyProgress(int id) => EnergyProgressTable.Get(id);
 
     /// <summary>
     /// 获取单个任务数据
     /// </summary>
-    /// <param name="id">任务ID</param>
-    /// <returns></returns>
     public Quest GetQuest(int id) => QuestTable.Get(id);
 
     /// <summary>
     /// 通过任务类型获取单个任务数据
     /// </summary>
-    /// <param name="type">任务类型</param>
-    /// <returns></returns>
     public Quest GetQuest(EQuestType type)
         => QuestTable.DataList.FirstOrDefault(q => q.QuestType == type);
 
     /// <summary>
     /// 获取单个技能数据
     /// </summary>
-    /// <param name="id">技能ID</param>
-    /// <returns></returns>
     public Skill GetSkill(int id) => SkillTable.Get(id);
 
     /// <summary>
     /// 通过技能类型获取单个技能数据
     /// </summary>
-    /// <param name="type">技能类型</param>
-    /// <returns></returns>
     public Skill GetSkill(ESkillType type)
         => SkillTable.DataList.FirstOrDefault(s => s.SkillType == type);
 
     /// <summary>
     /// 获取色块人技能数据
     /// </summary>
-    /// <param name="id">参数ID</param>
-    /// <returns></returns>
     public Skill3KP GetSkill3KP(int id) => Skill3KPTable.Get(id);
 
     /// <summary>
     /// 获取紫薇技能数据
     /// </summary>
-    /// <param name="id">参数ID</param>
-    /// <returns></returns>
     public SkillZiWei GetSkillZiWei(int id) => SkillZiWeiTable.Get(id);
 
     /// <summary>
     /// 获取大美丽技能数据
     /// </summary>
-    /// <param name="id">参数ID</param>
-    /// <returns></returns>
     public SkillDaMeiLi GetSkillDaMeiLi(int id) => SkillDaMeiLiTable.Get(id);
 
     /// <summary>
     /// 获取金状元技能数据
     /// </summary>
-    /// <param name="id">参数ID</param>
-    /// <returns></returns>
     public SkillJinZhuangYuan GetSkillJinZhuangYuan(int id)
         => SkillJinZhuangYuanTable.Get(id);
 
     /// <summary>
     /// 获取亚克东技能数据
     /// </summary>
-    /// <param name="id">参数ID</param>
-    /// <returns></returns>
     public SkillYaKeDong GetSkillYaKeDong(int id) => SkillYaKeDongTable.Get(id);
 
     /// <summary>
     /// 获取单个幸运仪式增益数据
     /// </summary>
-    /// <param name="id">增益ID</param>
-    /// <returns></returns>
     public LuckyBuff GetLuckyBuff(int id) => LuckyBuffTable.Get(id);
 
     /// <summary>
     /// 通过幸运仪式增益类型获取单个增益数据
     /// </summary>
-    /// <param name="type">增益类型</param>
-    /// <returns></returns>
     public LuckyBuff GetLuckyBuff(ELuckyBuffType type)
         => LuckyBuffTable.DataList.FirstOrDefault(b => b.LuckyBuffType == type);
 
     /// <summary>
     /// 通过幸运仪式增益类型和强度获取单个增益数据
     /// </summary>
-    /// <param name="type">增益类型</param>
-    /// <param name="strength">增益强度</param>
-    /// <returns></returns>
     public LuckyBuff GetLuckyBuff(ELuckyBuffType type, ELuckyBuffStrengthType strength)
         => LuckyBuffTable.DataList.FirstOrDefault(b => b.LuckyBuffType == type && b.LuckyBuffStrengthType == strength);
 
     /// <summary>
     /// 获取单个幸运仪式礼包数据
     /// </summary>
-    /// <param name="id">礼包ID</param>
-    /// <returns></returns>
     public LuckyGift GetLuckyGift(int id) => LuckyGiftTable.Get(id);
 
     /// <summary>
     /// 通过礼包类型获取单个礼包数据
     /// </summary>
-    /// <param name="type">礼包类型</param>
-    /// <returns></returns>
     public LuckyGift GetLuckyGift(ELuckyGiftType type)
         => LuckyGiftTable.DataList.FirstOrDefault(g => g.LuckyGiftType == type);
 
     /// <summary>
     /// 获取单个道具数据
     /// </summary>
-    /// <param name="id">道具ID</param>
-    /// <returns></returns>
     public Prop GetProp(int id) => PropTable.Get(id);
 
     /// <summary>
     /// 通过道具类型获取单个道具数据
     /// </summary>
-    /// <param name="type">道具类型</param>
-    /// <returns></returns>
     public Prop GetProp(EPropType type)
         => PropTable.DataList.FirstOrDefault(p => p.PropType == type);
 
     /// <summary>
     /// 获取炮火轰炸道具数据
     /// </summary>
-    /// <param name="id">参数ID</param>
-    /// <returns></returns>
     public PropBombardment GetPropBombardment(int id) => PropBombardmentTable.Get(id);
 
     /// <summary>
     /// 获取指哪打哪道具数据
     /// </summary>
-    /// <param name="id">参数ID</param>
-    /// <returns></returns>
     public PropAimAssist GetPropAimAssist(int id) => PropAimAssistTable.Get(id);
 
     /// <summary>
     /// 获取智能诱捕陷阱道具数据
     /// </summary>
-    /// <param name="id">参数ID</param>
-    /// <returns></returns>
     public PropTrap GetPropTrap(int id) => PropTrapTable.Get(id);
+    #endregion
+
+    #region 全局相关特殊方法
+    /// <summary>
+    /// 获取隐藏地图倒计时时长
+    /// </summary>
+    public float GetHiddenMapCountdownTime()
+        => GlobalTable.DataList[0].HiddenMapCountDownTime;
+
+    /// <summary>
+    /// 获取任务全局配置
+    /// </summary>
+    public QuestGlobal GetQuestGlobal()
+        => GlobalTable.DataList[0].QuestGlobal;
     #endregion
 
     #region 子弹相关特殊方法
@@ -418,7 +381,10 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// 随机获取一个特殊子弹的数据
     /// </summary>
     public Bullet GetRandomSpecialBullet()
-        => GetAllSpecialBullets()[Random.Range(0, GetAllSpecialBullets().Count)];
+    {
+        var specialBullets = GetAllSpecialBullets();
+        return specialBullets[Random.Range(0, specialBullets.Count)];
+    }  
     #endregion
 
     #region 物种相关特殊方法
@@ -441,9 +407,9 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
 
     #region 地图相关特殊方法
     /// <summary>
-    /// 随机获取一个地图的数据
+    /// 随机获取一个主地图的数据
     /// </summary>
-    public Map GetRandomMap()
+    public Map GetRandomMainMap()
     {
         var maps = MapTable.DataList.Where(m => m.MapType != EMapType.Hidden).ToList();
         return maps[Random.Range(0, maps.Count)];
@@ -459,15 +425,6 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     #endregion
 
     #region 肉度条相关特殊方法
-    /// <summary>
-    /// 根据完成的肉度条数量获取默认肉度条奖励
-    /// </summary>
-    public MeatProgressReward GetMeatProgressReward(int completedBars)
-    {
-        if (completedBars == 0)
-            return null;
-        return GetMeatProgress(1).RewardSteps[completedBars];
-    }
     #endregion
 
     #region 能量条相关特殊方法
@@ -513,9 +470,7 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <summary>
     /// 根据礼包类型和权重随机抽取一个幸运仪式增益数据
     /// </summary>
-    /// <param name="giftType">礼包类型</param>
-    /// <returns>随机抽取的幸运 Buff 数据</returns>
-    public LuckyBuff GetLuckyBuffFromGift(ELuckyGiftType giftType)
+    public LuckyBuff GetLuckyBuffByGiftAndWeights(ELuckyGiftType giftType)
     {
         var gift = GetLuckyGift(giftType);
 
@@ -528,8 +483,6 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <summary>
     /// 根据权重随机抽取幸运仪式增益类型
     /// </summary>
-    /// <param name="typeWeights">类型权重映射</param>
-    /// <returns>随机抽取的幸运仪式增益类型</returns>
     private ELuckyBuffType GetBuffTypeByWeight(Dictionary<ELuckyBuffType, int> typeWeights)
     {
         int totalWeight = typeWeights.Values.Sum();
@@ -549,8 +502,6 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <summary>
     /// 根据权重随机抽取幸运仪式增益强度
     /// </summary>
-    /// <param name="strengthWeights">强度权重映射</param>
-    /// <returns>随机抽取的幸运仪式增益强度</returns>
     private ELuckyBuffStrengthType GetBuffStrengthByWeight(Dictionary<ELuckyBuffStrengthType, int> strengthWeights)
     {
         int totalWeight = strengthWeights.Values.Sum();
@@ -572,7 +523,6 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <summary>
     /// 随机获取一个道具配置
     /// </summary>
-    /// <returns>随机道具配置</returns>
     public Prop GetRandomProp()
         => PropTable.DataList[Random.Range(0, PropTable.DataList.Count)];
     #endregion

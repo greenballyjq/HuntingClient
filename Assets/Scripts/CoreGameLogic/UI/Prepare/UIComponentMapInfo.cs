@@ -44,7 +44,7 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
 
     public void Init()
     {
-        Map map = _configManager.GetRandomMap();
+        Map map = _configManager.GetRandomMainMap();
         _currentMapData = map;
         UpdateMapInfo(map);
     }

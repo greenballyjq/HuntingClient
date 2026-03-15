@@ -12,51 +12,52 @@ using Luban;
 
 namespace cfg.HuntingConfig
 {
-public sealed partial class MeatProgress : Luban.BeanBase
+public sealed partial class Global : Luban.BeanBase
 {
-    public MeatProgress(ByteBuf _buf) 
+    public Global(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        ValuePerScale = _buf.ReadFloat();
-        TotalScale = _buf.ReadInt();
+        QuestGlobal = global::cfg.HuntingConfig.Bean.QuestGlobal.DeserializeQuestGlobal(_buf);
+        HiddenMapCountDownTime = _buf.ReadFloat();
         Comment = _buf.ReadString();
     }
 
-    public static MeatProgress DeserializeMeatProgress(ByteBuf _buf)
+    public static Global DeserializeGlobal(ByteBuf _buf)
     {
-        return new HuntingConfig.MeatProgress(_buf);
+        return new HuntingConfig.Global(_buf);
     }
 
     /// <summary>
-    /// 肉条ID
+    /// ID
     /// </summary>
     public readonly int ID;
     /// <summary>
-    /// 单刻度所需值
+    /// 任务全局配置
     /// </summary>
-    public readonly float ValuePerScale;
+    public readonly HuntingConfig.Bean.QuestGlobal QuestGlobal;
     /// <summary>
-    /// 总刻度数
+    /// 隐藏地图倒计时时间
     /// </summary>
-    public readonly int TotalScale;
+    public readonly float HiddenMapCountDownTime;
     /// <summary>
-    /// 备注
+    /// 注释
     /// </summary>
     public readonly string Comment;
    
-    public const int __ID__ = 1668320917;
+    public const int __ID__ = -678234912;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
+        QuestGlobal?.ResolveRef(tables);
     }
 
     public override string ToString()
     {
         return "{ "
         + "ID:" + ID + ","
-        + "ValuePerScale:" + ValuePerScale + ","
-        + "TotalScale:" + TotalScale + ","
+        + "QuestGlobal:" + QuestGlobal + ","
+        + "HiddenMapCountDownTime:" + HiddenMapCountDownTime + ","
         + "Comment:" + Comment + ","
         + "}";
     }
