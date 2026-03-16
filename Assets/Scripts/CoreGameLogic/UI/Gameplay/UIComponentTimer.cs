@@ -32,7 +32,6 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        _roundFlow = RoundFlow.Instance;
         _eventManager = GameServiceLocator.EventManager;
     }
 
@@ -40,6 +39,8 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
     {
         _eventManager.AddListener(RoundEvents.TimeUpdated, OnTimeUpdated);
         
+        _roundFlow = RoundFlow.Instance;
+
         _timingRule = _roundFlow.GetPlayRule<ITimingRule>();
         if (_timingRule.IsCountdown)
             RefreshCountdownDisplay(_timingRule.GetCurrentSeconds());

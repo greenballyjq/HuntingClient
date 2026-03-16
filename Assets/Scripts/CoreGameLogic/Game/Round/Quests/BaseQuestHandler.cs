@@ -11,6 +11,11 @@ public abstract class BaseQuestHandler : IQuestHandler
     /// </summary>
     protected Quest QuestData;
 
+    /// <summary>
+    /// 当前进度
+    /// </summary>
+    protected int CurrentProgress;
+
     public Action<string, int, int> OnQuestDispatched { get; set; }
     public Action<int> OnQuestProgressUpdated { get; set; }
     public Action<int> OnQuestCompleted { get; set; }
@@ -19,8 +24,9 @@ public abstract class BaseQuestHandler : IQuestHandler
 
     public virtual void Init(Quest questData)
     {
-        QuestData = questData;
         EventManager = GameServiceLocator.EventManager;
+        QuestData = questData;
+        CurrentProgress = 0;
     }
 
     public virtual void StartQuest()

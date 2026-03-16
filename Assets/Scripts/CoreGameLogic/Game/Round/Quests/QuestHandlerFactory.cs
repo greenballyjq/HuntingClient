@@ -15,11 +15,11 @@ public static class QuestHandlerFactory
         switch (questType)
         {
             case EQuestType.Hunting:
-                return null;
+                return new QuestHuntingHandler();
             case EQuestType.Collect:
-                return null;
+                return new QuestCollectHandler();
             case EQuestType.Consume:
-                return null;
+                return new QuestConsumeHandler();
             default:
                 return null;
         }
