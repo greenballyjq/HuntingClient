@@ -33,6 +33,7 @@ namespace CoreGameLogic.Net
             
             GameConfigProxy proxy = GameConfigProxy.Instance;
             // todo 拉取后端配置
+            proxy.RegisterConfig("hlg_daily_config", data => DailyConfigData = data);
         }
     }
 }

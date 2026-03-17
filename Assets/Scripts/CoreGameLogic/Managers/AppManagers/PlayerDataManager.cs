@@ -168,7 +168,37 @@ public class PlayerDataManager : IAppManager
             DeltaAmount = amount
         });
     }
+    
+    /// <summary>
+    /// 金币是否足够
+    /// </summary>
+    /// <param name="priceCoin"></param>
+    /// <returns></returns>
+    public bool EnoughThreeKp(int priceCoin)
+    {
+        return _threeKPCoinAmount >= priceCoin;
+    }
+    
+    #endregion
 
+    #region 私有方法
+    private void RegisterServices()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _mallManager = GameServiceLocator.GetAppManager<MallManager>();
+        _platformManager = GameServiceLocator.PlatformManager;
+    }
+
+    private void RegisterEvents()
+    {
+        _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+    }
+
+    private void UnregisterEvents()
+    {
+        _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
+    }
+    
     /// <summary>
     /// 从远端同步道具数据
     /// </summary>
@@ -201,26 +231,6 @@ public class PlayerDataManager : IAppManager
         }
 
         Debug.Log($"[PlayerDataManager] 映射道具数据完成------");
-    }
-    
-    #endregion
-
-    #region 私有方法
-    private void RegisterServices()
-    {
-        _eventManager = GameServiceLocator.EventManager;
-        _mallManager = GameServiceLocator.GetAppManager<MallManager>();
-        _platformManager = GameServiceLocator.PlatformManager;
-    }
-
-    private void RegisterEvents()
-    {
-        _eventManager.AddListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
-    }
-
-    private void UnregisterEvents()
-    {
-        _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
     }
     
     private EPropType GetPropsTypeFromName(string propName)
@@ -259,4 +269,6 @@ public class PlayerDataManager : IAppManager
         _eventManager.Trigger(PlayerDataEvents.PropCountChanged, args);
     }
     #endregion
+
+    
 }
