@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
@@ -44,12 +44,12 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 道具处理器缓存
     /// </summary>
-    private readonly Dictionary<EPropType, BasePropHandler> _handlerCache = new Dictionary<EPropType, BasePropHandler>();
+    private readonly Dictionary<EPropType, BasePropHandler> _propHandlers = new Dictionary<EPropType, BasePropHandler>();
 
     /// <summary>
     /// 配置缓存
     /// </summary>
-    private readonly Dictionary<EPropType, Prop> _propDataCache = new Dictionary<EPropType, Prop>();
+    private readonly Dictionary<EPropType, Prop> _propDatas = new Dictionary<EPropType, Prop>();
 
     private EventManager _eventManager;
     private HuntingConfigManager _configManager;
@@ -93,14 +93,14 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <param name="propType">道具类型</param>
     public void TryStartProp(EPropType propType)
     {
-        var handler = _handlerCache[propType];
+        var handler = _propHandlers[propType];
         if (handler.PropPhase != PropPhase.None)
             return;
 
         if (_playerDataManager.GetPropCount(propType) < 1)
             return;
 
-        var propData = _propDataCache[propType];
+        var propData = _propDatas[propType];
         StartProp(handler, propData);
 
         _playerDataManager.UpdatePropCount(propType, -1);
@@ -132,8 +132,7 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
         foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
         {
             IPropHandler handler = PropHandlerFactory.CreatePropHandler(propType);
-            if (handler is BasePropHandler baseHandler)
-                _handlerCache[propType] = baseHandler;
+            _propHandlers[propType] = handler as BasePropHandler;
         }
     }
 
@@ -145,8 +144,7 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
         foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
         {
             Prop propData = _configManager.GetProp(propType);
-            if (propData != null)
-                _propDataCache[propType] = propData;
+            _propDatas[propType] = propData;
         }
     }
 

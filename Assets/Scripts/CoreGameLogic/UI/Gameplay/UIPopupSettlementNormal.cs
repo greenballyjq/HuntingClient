@@ -1,4 +1,5 @@
-﻿using CoreGameLogic.Net;
+﻿using System;
+using CoreGameLogic.Net;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using GameFramework.Manager;
@@ -35,12 +36,12 @@ public class UIPopupSettlementNormal : UIBase
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// 结算管理器
     /// </summary>
-    private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
+    private SettlementManager _settlementRewardManager;
 
     /// <summary>
     /// 需要上报获得三币数
@@ -54,6 +55,9 @@ public class UIPopupSettlementNormal : UIBase
 
     private void Awake()
     {
+        _eventManager = GameServiceLocator.EventManager;
+        _settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementManager>();
+
         buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
         buttonDoubleSettlement.onClick.AddListener(OnDoubleSettlementClicked);
     }
@@ -83,6 +87,7 @@ public class UIPopupSettlementNormal : UIBase
     private void OnSettlementButtonClicked()
     {
         Close();
+        HuntingAppFlow.Instance.EnterPrepareAsync().Forget();
         
         // 进行后端结算上传
         HuntingSettlementProxy.Instance.UploadSettlement(_uploadPoints, _uploadCoins).Forget();

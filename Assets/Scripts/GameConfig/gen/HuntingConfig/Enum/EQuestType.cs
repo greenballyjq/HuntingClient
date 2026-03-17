@@ -17,21 +17,17 @@ namespace cfg.HuntingConfig.Enum
     public enum EQuestType
     {
         /// <summary>
-        /// 击杀大型动物
+        /// 狩猎
         /// </summary>
-        KillLargeAnimal = 0,
+        Hunting = 0,
         /// <summary>
-        /// 收集回血肉
+        /// 收集
         /// </summary>
-        CollectMeat = 1,
+        Collect = 1,
         /// <summary>
-        /// 使用付费道具
+        /// 消耗
         /// </summary>
-        UsePaidItem = 2,
-        /// <summary>
-        /// 进行结算
-        /// </summary>
-        Settle = 3,
+        Consume = 2,
     }
 
 } 

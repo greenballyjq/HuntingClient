@@ -1,9 +1,8 @@
-﻿using cfg.HuntingConfig;
-using GameFramework.Core;
+﻿using GameFramework.Core;
 using GameFramework.Game;
 
 /// <summary>
-/// 任务系统事件键
+/// 任务相关事件
 /// </summary>
 public static class QuestEvents
 {
@@ -25,7 +24,7 @@ public static class QuestEvents
     /// <summary>
     /// 任务超时事件
     /// </summary>
-    public static readonly EventKey<QuestTimeoutEventArgs> QuestTimeout = new EventKey<QuestTimeoutEventArgs>();
+    public static readonly EventKey QuestTimeout = new EventKey();
 }
 
 /// <summary>
@@ -34,19 +33,24 @@ public static class QuestEvents
 public sealed class QuestDispatchedEventArgs : EventArgs
 {
     /// <summary>
-    /// 任务配置
+    /// 任务描述
     /// </summary>
-    public Quest QuestData { get; set; }
-    
+    public string Description { get; set; }
+
     /// <summary>
-    /// 任务目标值
+    /// 目标值
     /// </summary>
     public int TargetValue { get; set; }
-    
+
     /// <summary>
-    /// 任务奖励值
+    /// 奖励值
     /// </summary>
     public int RewardValue { get; set; }
+
+    /// <summary>
+    /// 持续时间（秒）
+    /// </summary>
+    public float Duration { get; set; }
 }
 
 /// <summary>
@@ -55,19 +59,9 @@ public sealed class QuestDispatchedEventArgs : EventArgs
 public sealed class QuestProgressUpdatedEventArgs : EventArgs
 {
     /// <summary>
-    /// 任务配置
-    /// </summary>
-    public Quest QuestData { get; set; }
-
-    /// <summary>
-    /// 当前进度值
+    /// 当前进度
     /// </summary>
     public int CurrentProgress { get; set; }
-
-    /// <summary>
-    /// 目标值
-    /// </summary>
-    public int TargetValue { get; set; }
 
     /// <summary>
     /// 剩余时间（秒）
@@ -81,24 +75,7 @@ public sealed class QuestProgressUpdatedEventArgs : EventArgs
 public sealed class QuestCompletedEventArgs : EventArgs
 {
     /// <summary>
-    /// 任务配置
+    /// 奖励值
     /// </summary>
-    public Quest QuestData { get; set; }
-
-    /// <summary>
-    /// 奖励金币数量
-    /// </summary>
-    public int RewardCoin { get; set; }
+    public int RewardValue { get; set; }
 }
-
-/// <summary>
-/// 任务超时事件参数
-/// </summary>
-public sealed class QuestTimeoutEventArgs : EventArgs
-{
-    /// <summary>
-    /// 任务配置
-    /// </summary>
-    public Quest QuestData { get; set; }
-}
-

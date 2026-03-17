@@ -1,4 +1,4 @@
-﻿namespace CoreGameLogic.Const
+namespace CoreGameLogic.Const
 {
     /// <summary>
     /// 打猎项目 音效资源枚举

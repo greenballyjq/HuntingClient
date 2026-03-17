@@ -59,22 +59,30 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// UI管理器
     /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
+    private UIManager _uiManager;
 
     /// <summary>
     /// 道具管理器
     /// </summary>
-    private PropManager _propManager => GameServiceLocator.GetRoundManager<PropManager>();
+    private PropManager _propManager;
 
     /// <summary>
     /// 玩家数据管理器
     /// </summary>
-    private PlayerDataManager _playerDataManager => GameServiceLocator.GetAppManager<PlayerDataManager>();
+    private PlayerDataManager _playerDataManager;
+
+    private void Awake()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+        _propManager = GameServiceLocator.GetRoundManager<PropManager>();
+        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
+    }
 
     public void Init()
     {
@@ -111,7 +119,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private void InitializeDisplay()
     {
-        UpdateCount();
+        RefreshCount();
 
         _imageCooldownMask.fillAmount = 0f;
     }
@@ -130,18 +138,18 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 更新冷却显示
+    /// 刷新冷却显示
     /// </summary>
-    private void UpdateCooldown(float remainingTime, float totalTime)
+    private void RefreshCooldown(float remainingTime, float totalTime)
     {
         float progress = remainingTime / totalTime;
         _imageCooldownMask.fillAmount = progress;
     }
 
     /// <summary>
-    /// 更新道具数量显示
+    /// 刷新道具数量显示
     /// </summary>
-    private void UpdateCount()
+    private void RefreshCount()
     {
         _textCount.text = _playerDataManager.GetPropCount(_propType).ToString();
     }
@@ -198,7 +206,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
             return;
 
         _cooldownRemainingTime = args.RemainingTime;
-        UpdateCooldown(args.RemainingTime, args.PropData.Duration);
+        RefreshCooldown(args.RemainingTime, args.PropData.Duration);
     }
 
     /// <summary>
@@ -211,7 +219,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
 
         EndCooldown();
 
-        UpdateCount();
+        RefreshCount();
     }
 
     /// <summary>
@@ -221,7 +229,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     {
         if (args.PropType != _propType)
             return;
-        UpdateCount();
+        RefreshCount();
     }
     #endregion
 }

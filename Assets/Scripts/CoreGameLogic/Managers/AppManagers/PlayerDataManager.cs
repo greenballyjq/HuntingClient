@@ -20,7 +20,6 @@ public class PlayerDataManager : IAppManager
     /// 三千盘金币数量
     /// </summary>
     private int _threeKPCoinAmount;
-    public int ThreeKPCoinAmount => _threeKPCoinAmount;
 
     /// <summary>
     /// 三千盘积分数量
@@ -156,16 +155,16 @@ public class PlayerDataManager : IAppManager
     /// <summary>
     /// 更新道具数量
     /// </summary>
-    public void UpdatePropCount(EPropType propType, int deltaAmount)
+    public void UpdatePropCount(EPropType propType, int amount)
     {
         int oldAmount = GetPropCount(propType);
-        _propCounts[propType] = oldAmount + deltaAmount;
+        _propCounts[propType] = oldAmount + amount;
         int currentAmount = _propCounts[propType];
         TriggerPropCountChanged(new PropCountChangedEventArgs
         {
             PropType = propType,
             CurrentAmount = currentAmount,
-            DeltaAmount = deltaAmount
+            DeltaAmount = amount
         });
     }
 

@@ -74,7 +74,8 @@ MonoBehaviour:
   _uiComponentDropRewardLightEffect: {fileID: 3209780266437533700}
   _uiComponentTip: {fileID: 6144739063090853493}
   _imageBackground: {fileID: 5822324207324200485}
-  _snowBackgroundSprite: {fileID: 21300000, guid: 0f9bcb12c08507942ab39c8aa7f0a0ad, type: 3}
+  _mainMapBackgroundSprite: {fileID: 21300000, guid: 11db585abea744748aafe1b72a110c73, type: 3}
+  _hiddenMapBackgroundSprite: {fileID: 21300000, guid: 0f9bcb12c08507942ab39c8aa7f0a0ad, type: 3}
 --- !u!225 &1805034723493829135
 CanvasGroup:
   m_ObjectHideFlags: 0

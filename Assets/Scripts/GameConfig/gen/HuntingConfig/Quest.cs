@@ -18,10 +18,8 @@ public sealed partial class Quest : Luban.BeanBase
     {
         ID = _buf.ReadInt();
         QuestType = (HuntingConfig.Enum.EQuestType)_buf.ReadInt();
-        {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);TargetRange = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); TargetRange[__index0] = __e0;}}
-        Duration = _buf.ReadFloat();
-        {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);RewardRange = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); RewardRange[__index0] = __e0;}}
-        Comment = _buf.ReadString();
+        TargetValue = _buf.ReadInt();
+        RewardValue = _buf.ReadInt();
     }
 
     public static Quest DeserializeQuest(ByteBuf _buf)
@@ -38,21 +36,13 @@ public sealed partial class Quest : Luban.BeanBase
     /// </summary>
     public readonly HuntingConfig.Enum.EQuestType QuestType;
     /// <summary>
-    /// 任务目标数值范围
+    /// 目标值
     /// </summary>
-    public readonly int[] TargetRange;
+    public readonly int TargetValue;
     /// <summary>
-    /// 任务持续时间
+    /// 奖励值
     /// </summary>
-    public readonly float Duration;
-    /// <summary>
-    /// 任务奖励数值范围
-    /// </summary>
-    public readonly int[] RewardRange;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
+    public readonly int RewardValue;
    
     public const int __ID__ = 1095994373;
     public override int GetTypeId() => __ID__;
@@ -66,10 +56,8 @@ public sealed partial class Quest : Luban.BeanBase
         return "{ "
         + "ID:" + ID + ","
         + "QuestType:" + QuestType + ","
-        + "TargetRange:" + Luban.StringUtil.CollectionToString(TargetRange) + ","
-        + "Duration:" + Duration + ","
-        + "RewardRange:" + Luban.StringUtil.CollectionToString(RewardRange) + ","
-        + "Comment:" + Comment + ","
+        + "TargetValue:" + TargetValue + ","
+        + "RewardValue:" + RewardValue + ","
         + "}";
     }
 }

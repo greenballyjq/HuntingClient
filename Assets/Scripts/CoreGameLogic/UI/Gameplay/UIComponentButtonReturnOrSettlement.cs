@@ -1,8 +1,10 @@
-﻿using GameFramework.Core.UI;
+using System;
+using Cysharp.Threading.Tasks;
+using GameFramework.Core.UI;
+using GameFramework.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
 
 /// <summary>
 /// 返回/结算按钮组件
@@ -23,22 +25,22 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// UI管理器
     /// </summary>
-    private UIManager _uiManager => GameServiceLocator.UIManager;
+    private UIManager _uiManager;
 
     /// <summary>
     /// 结算管理器
     /// </summary>
-    private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
+    private SettlementManager _settlementRewardManager;
 
     /// <summary>
     /// 单局流程
     /// </summary>
-    private RoundFlow _roundFlow => RoundFlow.Instance;
+    private RoundFlow _roundFlow;
 
     /// <summary>
     /// 返回/结算按钮矩形变换组件
@@ -64,8 +66,12 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
     private void Awake()
     {
         _buttonReturnOrSettlement.onClick.AddListener(OnReturnOrSettlementButtonClicked);
-
         _rectTransformReturnOrSettlementButton = _buttonReturnOrSettlement.GetComponent<RectTransform>();
+
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+        _settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementManager>();
+        _roundFlow = RoundFlow.Instance;
     }
 
     private void OnDestroy()
@@ -132,7 +138,7 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
             if (_isMeatScaleFull && _hasHiddenMap)
                 await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
             else
-                await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);                
+                await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
 
             _settlementRewardManager.CalculateReward();
         }
@@ -141,8 +147,6 @@ public class UIComponentButtonReturnOrSettlement : MonoBehaviour, IUIComponent
             _roundFlow.StartSettlement();
             await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
             _settlementRewardManager.CalculateReward();
-
-            //await HuntingAppFlow.Instance.EnterPrepareAsync();
         }
     }
     #endregion

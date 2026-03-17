@@ -50,7 +50,7 @@ public class UIComponentPrepareDebug : MonoBehaviour, IUIComponent
     {
         Role roleData = _configManager.GetRandomRole();
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
-        Map mapData = _configManager.GetRandomMap();
+        Map mapData = _configManager.GetRandomMainMap();
 
         await SceneManager.LoadSceneAsync("GameplayForestScene").ToUniTask();
         DynamicGI.UpdateEnvironment();

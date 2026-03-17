@@ -2,7 +2,6 @@ using GameFramework.Core.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 
 /// <summary>
@@ -60,39 +59,40 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager;
 
     /// <summary>
     /// 丰收能量条管理器
     /// </summary>
-    private EnergyProgressManager _energyProgressManager => GameServiceLocator.GetRoundManager<EnergyProgressManager>();
+    private EnergyProgressManager _energyProgressManager;
 
     /// <summary>
     /// 技能管理器
     /// </summary>
-    private SkillManager _skillManager => GameServiceLocator.GetRoundManager<SkillManager>();
+    private SkillManager _skillManager;
 
     private void Awake()
     {
         _buttonSkill.onClick.AddListener(OnSkillButtonClicked);
+        _rectTransformSkillImage = _imageSkill.GetComponent<RectTransform>();
 
-        _rectTransformSkillImage =  _imageSkill.GetComponent<RectTransform>();
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _energyProgressManager = GameServiceLocator.GetRoundManager<EnergyProgressManager>();
+        _skillManager = GameServiceLocator.GetRoundManager<SkillManager>();
     }
 
     public void Init()
     {
         _totalBar = _energyProgressManager.TotalBar;
-
         _valuePerBar = _energyProgressManager.ValuePerBar;
 
-        UpdateFill(0,0);
-        UpdateBarText(0);
-        UpdateBackgroundColor(0);
+        SyncFromManager();
 
         _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
         _eventManager.AddListener(EnergyEvents.EnergyProgressChanged, OnEnergyProgressChanged);
@@ -115,9 +115,26 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
 
     #region 私有方法
     /// <summary>
-    /// 更新填充图像
+    /// 从管理器同步当前状态并刷新显示
     /// </summary>
-    private void UpdateFill(float currentEnergy, int currentBars)
+    private void SyncFromManager()
+    {
+        float currentEnergy = _energyProgressManager.CurrentEnergyValue;
+        int currentBars = _energyProgressManager.CompletedBars;
+
+        RefreshFill(currentEnergy, currentBars);
+        RefreshBarText(currentBars);
+        RefreshBackgroundColor(currentBars);
+
+        var ctx = RoundFlow.Instance.RoundContext;
+        if (ctx?.SkillData != null)
+            RefreshSkillIcon(ctx.SkillData.ID);
+    }
+
+    /// <summary>
+    /// 刷新填充图像
+    /// </summary>
+    private void RefreshFill(float currentEnergy, int currentBars)
     {
         _imageSkillBarFill.fillAmount = currentEnergy / _valuePerBar;
         int colorIndex = currentBars >= _colors.Length ? _colors.Length - 1 : currentBars;
@@ -125,17 +142,17 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 更新文本
+    /// 刷新文本
     /// </summary>
-    private void UpdateBarText(int currentBars)
+    private void RefreshBarText(int currentBars)
     {
         _textSkillBarAmount.text = $"{currentBars}/{_totalBar}";
     }
 
     /// <summary>
-    /// 更新底图颜色
+    /// 刷新底图颜色
     /// </summary>
-    private void UpdateBackgroundColor(int currentBars)
+    private void RefreshBackgroundColor(int currentBars)
     {
         if (currentBars <= 0)
         {
@@ -147,10 +164,10 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     }
 
     /// <summary>
-    /// 更新技能图标
+    /// 刷新技能图标
     /// </summary>
     /// <param name="skillId">技能ID</param>
-    private void UpdateSkillIcon(int skillId)
+    private void RefreshSkillIcon(int skillId)
     {
         _imageSkill.sprite = _configManager.SkillRefSo.GetSkillIcon(skillId);
     }
@@ -162,7 +179,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnRoundEntered(RoundEnteredEventArgs args)
     {
-        UpdateSkillIcon(args.RoundContext.SkillData.ID);
+        RefreshSkillIcon(args.RoundContext.SkillData.ID);
     }
 
     /// <summary>
@@ -170,7 +187,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnEnergyProgressChanged(EnergyProgressChangedEventArgs args)
     {
-        UpdateFill(args.CurrentEnergy, args.CurrentBars);
+        RefreshFill(args.CurrentEnergy, args.CurrentBars);
     }
 
     /// <summary>
@@ -178,9 +195,9 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnEnergyBarCountChanged(EnergyBarCountChangedEventArgs args)
     {
-        UpdateFill(_energyProgressManager.CurrentEnergyValue, args.CurrentBars);
-        UpdateBarText(args.CurrentBars);
-        UpdateBackgroundColor(args.CurrentBars);
+        RefreshFill(_energyProgressManager.CurrentEnergyValue, args.CurrentBars);
+        RefreshBarText(args.CurrentBars);
+        RefreshBackgroundColor(args.CurrentBars);
     }
 
     /// <summary>
@@ -188,7 +205,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnEnergyMaxBarsReached()
     {
-        UpdateBarText(_totalBar);
+        RefreshBarText(_totalBar);
         int colorIndex = _totalBar - 1 >= _colors.Length ? _colors.Length - 1 : _totalBar - 1;
         _imageSkillBarBackground.color = _colors[colorIndex];
         _imageSkillBarFill.color = _colors[colorIndex];

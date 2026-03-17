@@ -74,7 +74,7 @@ public class UIComponentGiftAd : MonoBehaviour, IUIComponent
     /// </summary>
     private void OpenGift()
     {
-        LuckyBuff buff = _configManager.GetLuckyBuffFromGift(_giftType);
+        LuckyBuff buff = _configManager.GetLuckyBuffByGiftAndWeights(_giftType);
 
         TriggerGiftOpened(new GiftOpenedEventArgs
         {

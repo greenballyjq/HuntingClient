@@ -112,12 +112,12 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     public void OnPointerDown(PointerEventData eventData)
     {
         _isActive = true;
-        UpdateKnobPosition(eventData);
+        RefreshKnobPosition(eventData);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        UpdateKnobPosition(eventData);
+        RefreshKnobPosition(eventData);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -128,9 +128,9 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
 
     #region 私有方法
     /// <summary>
-    /// 更新摇杆位置
+    /// 刷新摇杆位置
     /// </summary>
-    private void UpdateKnobPosition(PointerEventData eventData)
+    private void RefreshKnobPosition(PointerEventData eventData)
     {
         Vector2 localPoint = PointConverter.ScreenPointToUiLocalPoint(_rectBase, eventData.position, _uiCamera);
 

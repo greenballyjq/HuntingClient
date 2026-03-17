@@ -18,6 +18,11 @@ public class SkillDaMeiLiHandler : BaseSkillHandler
     /// </summary>
     private GameObject _lovePrefab;
 
+    /// <summary>
+    /// 爱心实例
+    /// </summary>
+    private GameObject _loveInstance;
+
     protected override void OnInit() 
     {
         _skillParam = ConfigManager.GetSkillDaMeiLi(SkillContext.SkillData.ParamTableID);
@@ -50,7 +55,10 @@ public class SkillDaMeiLiHandler : BaseSkillHandler
 
     protected override void OnSkillUpdate(float dt) { }
 
-    protected override void OnSkillEnd() {}
+    protected override void OnSkillEnd() 
+    {
+        Object.Destroy(_loveInstance);
+    }
 
     #region 私有方法
     /// <summary>
@@ -58,7 +66,7 @@ public class SkillDaMeiLiHandler : BaseSkillHandler
     /// </summary>
     private void CreateLoveZone()
     {
-        _lovePrefab = Object.Instantiate(_lovePrefab, PlayableArea.GetCenter(),Quaternion.identity);
+        _loveInstance = Object.Instantiate(_lovePrefab, PlayableArea.GetCenter(),Quaternion.identity);
     }
     #endregion
 }

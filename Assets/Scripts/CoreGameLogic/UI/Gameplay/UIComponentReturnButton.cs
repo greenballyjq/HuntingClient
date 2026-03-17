@@ -1,11 +1,11 @@
-using GameFramework.Core;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
-using TMPro;
+using GameFramework.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 返回按钮组件（仅负责返回，无结算功能）
+/// 返回按钮组件
 /// </summary>
 public class UIComponentReturnButton : MonoBehaviour, IUIComponent
 {
@@ -15,12 +15,14 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
     [SerializeField] private Button _buttonReturn;
 
     /// <summary>
-    /// 返回文本
+    /// UI管理器
     /// </summary>
-    [SerializeField] private TextMeshProUGUI _textReturn;
+    private UIManager _uiManager;
 
     private void Awake()
     {
+        _uiManager = GameServiceLocator.UIManager;
+
         _buttonReturn.onClick.AddListener(OnReturnButtonClicked);
     }
 
@@ -29,16 +31,12 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
         _buttonReturn.onClick.RemoveListener(OnReturnButtonClicked);
     }
 
-    public void Init()
-    {
-        _textReturn.text = "返回";
-    }
+    public void Init(){}
 
     public void CleanUp() { }
 
     private async void OnReturnButtonClicked()
     {
-        await GameServiceLocator.UIManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
-        //await HuntingAppFlow.Instance.EnterPrepareAsync();
+        await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
     }
 }

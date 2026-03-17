@@ -1,11 +1,11 @@
 ﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig.Bean;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Game;
 using GameFramework.Manager;
 using GameFramework.Utility;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 /// <summary>
 /// 任务管理器
@@ -13,146 +13,88 @@ using UnityEngine;
 public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
 {
     /// <summary>
-    /// 任务起始派发时间（秒）
-    /// </summary>
-    private const float QuestStartTime = 0f;
-
-    /// <summary>
-    /// 任务派发间隔（秒）
-    /// </summary>
-    private const float QuestDispatchInterval = 20f;
-
-    /// <summary>
-    /// 任务持续时间（秒）
-    /// </summary>
-    private const float QuestDuration = 10f;
-
-    /// <summary>
-    /// 当前任务处理器
+    /// 当前处理器
     /// </summary>
     private IQuestHandler _currentHandler;
 
     /// <summary>
-    /// 当前任务上下文
+    /// 当前当前剩余时间（秒）
     /// </summary>
-    private QuestContext _currentQuestContext;
+    private float _currentRemainingTime;
 
     /// <summary>
-    /// 处理器缓存字典
+    /// 任务派发计时器
     /// </summary>
-    private Dictionary<EQuestType, IQuestHandler> _handlerCache;
+    private float _dispatchTimer;
 
     /// <summary>
-    /// 单局开始时间
+    /// 任务派发间隔（秒）
     /// </summary>
-    private float _roundStartTime;
+    private float _dispatchInterval;
 
     /// <summary>
-    /// 下次派发时间
+    /// 任务全局配置缓存
     /// </summary>
-    private float _nextDispatchTime;
+    private QuestGlobal _questGlobal;
 
     /// <summary>
-    /// 当前任务剩余时间
+    /// 任务处理器缓存
     /// </summary>
-    private float _currentQuestRemainingTime;
-
-    /// <summary>
-    /// 当前任务目标值
-    /// </summary>
-    private int _currentTargetValue;
-
-    /// <summary>
-    /// 当前任务奖励值
-    /// </summary>
-    private int _currentRewardValue;
+    private readonly Dictionary<EQuestType, IQuestHandler> _questHandlers = new Dictionary<EQuestType, IQuestHandler>();
 
     private EventManager _eventManager;
     private HuntingConfigManager _configManager;
+
     public void Init(RoundContext context)
     {
         RegisterServices();
-        _handlerCache = new Dictionary<EQuestType, IQuestHandler>();
-        _roundStartTime = Time.time;
-        _nextDispatchTime = QuestStartTime;
+        CacheHandlers();
+
+        _questGlobal = _configManager.GetQuestGlobal();
+
+        _dispatchTimer = 0f;
+        _dispatchInterval = _questGlobal.StartDispatchTime;
+
         Log.Info("[QuestManager] 初始化完成");
     }
 
-    public void DoUpdate(float deltaTime)
+    public void DoUpdate(float dt)
     {
-        if (_currentQuestContext == null)
+        if (_currentHandler == null)
         {
-            // 检查是否需要派发新任务
-            float currentTime = Time.time - _roundStartTime;
-            if (currentTime >= _nextDispatchTime)
+            _dispatchTimer += dt;
+
+            if (_dispatchTimer >= _dispatchInterval)
                 DispatchQuest();
 
             return;
         }
 
-        // 更新当前任务剩余时间
-        _currentQuestRemainingTime -= deltaTime;
-
-        // 调用处理器更新
-        _currentHandler?.OnQuestUpdate(_currentQuestContext, deltaTime);
-
-        // 检查任务是否完成
-        int currentProgress = _currentHandler.GetCurrentProgress(_currentQuestContext);
-        if (currentProgress >= _currentTargetValue)
-        {
-            // 任务完成
-            EndCurrentQuest(isTimeout: false);
-            return;
-        }
-
-        // 检查任务是否超时
-        if (_currentQuestRemainingTime <= 0f)
-        {
-            // 任务超时
-            EndCurrentQuest(isTimeout: true);
-            return;
-        }
-
-        // 触发进度更新事件
-        TriggerProgressUpdated(new QuestProgressUpdatedEventArgs
-        {
-            Sender = this,
-            QuestData = _currentQuestContext.QuestData,
-            CurrentProgress = currentProgress,
-            TargetValue = _currentTargetValue,
-            RemainingTime = _currentQuestRemainingTime
-        });
+        _currentRemainingTime -= dt;
+        if (_currentRemainingTime <= 0f)
+            EndQuest(isCompleted: false);
     }
 
     public void Dispose()
     {
-        EndCurrentQuest(isTimeout: false);
+        EndQuest(isCompleted: false);
         Log.Info("[QuestManager] 已释放");
     }
 
     public void Cleanup()
     {
-        EndCurrentQuest(isTimeout: false);
+        EndQuest(isCompleted: false);
     }
 
     public void ReInit(RoundContext context)
     {
-        _roundStartTime = Time.time;
-        _nextDispatchTime = QuestStartTime;
+        _dispatchTimer = 0f;
     }
-
-    #region 公共方法
-    /// <summary>
-    /// 获取当前任务上下文
-    /// </summary>
-    /// <returns>当前任务上下文</returns>
-    public QuestContext GetCurrentQuest()
-    {
-        return _currentQuestContext;
-    }
-    #endregion
 
     #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
     private void RegisterServices()
     {
         _eventManager = GameServiceLocator.EventManager;
@@ -160,102 +102,86 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
     }
 
     /// <summary>
-    /// 派发新任务
+    /// 缓存任务处理器
+    /// </summary>
+    private void CacheHandlers()
+    {
+        foreach (EQuestType questType in Enum.GetValues(typeof(EQuestType)))
+        {
+            var handler = QuestHandlerFactory.CreateQuestHandler(questType);
+            _questHandlers[questType] = handler;
+        }
+    }
+
+    /// <summary>
+    /// 派发任务
     /// </summary>
     private void DispatchQuest()
     {
-        // 随机获取任务配置
-        Quest questData = _configManager.GetRandomQuest();
-        if (questData == null)
-        {
-            Log.Warning("[QuestManager] 未找到任务配置");
-            return;
-        }
+        var questData = _configManager.GetRandomQuest();
 
-        // 获取或创建处理器
-        if (!_handlerCache.TryGetValue(questData.QuestType, out _currentHandler))
+        var handler = _questHandlers[questData.QuestType];
+        
+        handler.Init(questData);
+
+        handler.OnQuestDispatched = (description, targetValue, rewardValue) =>
         {
-            _currentHandler = QuestHandlerFactory.CreateQuestHandler(questData.QuestType);
-            if (_currentHandler == null)
+            TriggerQuestDispatched(new QuestDispatchedEventArgs
             {
-                Log.Warning($"[QuestManager] 未实现的任务类型: {questData.QuestType}");
-                return;
-            }
-            _handlerCache[questData.QuestType] = _currentHandler;
-        }
-
-        // 获取随机目标值和奖励值
-        _currentTargetValue = _configManager.GetRandomTargetValue(questData);
-        _currentRewardValue = _configManager.GetRandomRewardValue(questData);
-
-        // 构造任务上下文
-        _currentQuestContext = new QuestContext
-        {
-            QuestData = questData
+                Description = description,
+                TargetValue = targetValue,
+                RewardValue = rewardValue,
+                Duration = _questGlobal.Duration
+            });
         };
 
-        // 设置任务剩余时间
-        _currentQuestRemainingTime = QuestDuration;
-
-        // 调用处理器开始
-        _currentHandler?.OnQuestStart(_currentQuestContext);
-
-        // 计算下次派发时间
-        float currentTime = Time.time - _roundStartTime;
-        _nextDispatchTime = currentTime + QuestDispatchInterval;
-
-        // 触发任务派发事件
-        TriggerQuestDispatched(new QuestDispatchedEventArgs
+        handler.OnQuestProgressUpdated = (currentProgress) =>
         {
-            Sender = this,
-            QuestData = questData,
-            TargetValue = _currentTargetValue,
-            RewardValue = _currentRewardValue,
-        });
+            TriggerProgressUpdated(new QuestProgressUpdatedEventArgs
+            {
+                CurrentProgress = currentProgress,
+                RemainingTime = _currentRemainingTime
+            });
+        };
 
-        Log.Info($"[QuestManager] 任务已派发: {questData.QuestType}，目标值:{_currentTargetValue}，奖励值:{_currentRewardValue}");
+        handler.OnQuestCompleted = (rewardValue) =>
+        {
+            EndQuest(isCompleted: true, rewardValue);
+        };
+
+        handler.StartQuest();
+
+        _currentHandler = handler;
+        _currentRemainingTime = _configManager.GetQuestGlobal().Duration;
+        _dispatchTimer = 0f;
+        _dispatchInterval = _configManager.GetQuestGlobal().DispatchInterval;
     }
 
     /// <summary>
     /// 结束当前任务
     /// </summary>
-    /// <param name="isTimeout">是否超时</param>
-    private void EndCurrentQuest(bool isTimeout)
+    /// <param name="isCompleted">是否完成</param>
+    /// <param name="rewardValue">奖励值</param>
+    private void EndQuest(bool isCompleted, int rewardValue = 0)
     {
-        if (_currentQuestContext == null)
-            return;
-
-        // 调用处理器结束
-        _currentHandler?.OnQuestEnd(_currentQuestContext);
-
-        if (isTimeout)
+        if (_currentHandler != null)
         {
-            // 触发任务超时事件
-            TriggerQuestTimeout(new QuestTimeoutEventArgs
-            {
-                Sender = this,
-                QuestData = _currentQuestContext.QuestData
-            });
-            Log.Info("[QuestManager] 任务已超时");
-        }
-        else
-        {
-            // 触发任务完成事件
-            TriggerQuestCompleted(new QuestCompletedEventArgs
-            {
-                Sender = this,
-                QuestData = _currentQuestContext.QuestData,
-                RewardCoin = _currentRewardValue
-            });
-            Log.Info($"[QuestManager] 任务已完成，奖励:{_currentRewardValue}");
+            _currentHandler.OnQuestDispatched = null;
+            _currentHandler.OnQuestProgressUpdated = null;
+            _currentHandler.OnQuestCompleted = null;
+            _currentHandler.EndQuest();
+
+            if (isCompleted)
+                TriggerQuestCompleted(new QuestCompletedEventArgs
+                { 
+                    RewardValue = rewardValue 
+                });
+            else
+                TriggerQuestTimeout();
         }
 
-        // 清理当前任务
-        _currentQuestContext = null;
         _currentHandler = null;
-        _currentQuestRemainingTime = 0f;
-        _currentTargetValue = 0;
-        _currentRewardValue = 0;
+        _currentRemainingTime = 0f;
     }
     #endregion
 
@@ -287,10 +213,9 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 触发任务超时事件
     /// </summary>
-    private void TriggerQuestTimeout(QuestTimeoutEventArgs args)
+    private void TriggerQuestTimeout()
     {
-        _eventManager.Trigger(QuestEvents.QuestTimeout, args);
+        _eventManager.Trigger(QuestEvents.QuestTimeout);
     }
     #endregion
 }
-

@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -113,7 +113,7 @@ public class UIPopupSettlementSnowFake : UIBase
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// 原始锚点位置
@@ -122,6 +122,8 @@ public class UIPopupSettlementSnowFake : UIBase
 
     private void Awake()
     {
+        _eventManager = GameServiceLocator.EventManager;
+
         _buttonConfirm.onClick.AddListener(OnButtonConfirmClicked);
     }
 
@@ -218,10 +220,10 @@ public class UIPopupSettlementSnowFake : UIBase
     /// <summary>
     /// 确认按钮点击事件回调
     /// </summary>
-    private async void OnButtonConfirmClicked()
+    private void OnButtonConfirmClicked()
     {
         _buttonConfirm.onClick.RemoveListener(OnButtonConfirmClicked);
-        await RoundFlow.Instance.EnterHiddenMapAsync();
+        RoundFlow.Instance.SwitchToNextMode(EGameplayMode.HiddenMap).Forget();
     }
 
     /// <summary>

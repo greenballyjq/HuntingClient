@@ -1,4 +1,6 @@
-﻿using GameFramework.Utility;
+using System;
+using System.Collections.Generic;
+using GameFramework.Utility;
 using UnityEngine;
 
 /// <summary>
@@ -11,9 +13,14 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// </summary>
     private BaseControlHandler _currentPlayerControlHandler;
 
+    /// <summary>
+    /// 控制处理器缓存
+    /// </summary>
+    private readonly Dictionary<EControlType, BaseControlHandler> _controlHandlers = new Dictionary<EControlType, BaseControlHandler>();
+
     public void Init(RoundContext context)
     {
-        SwitchToJoystick();
+        CacheHandlers();
         Log.Info("[PlayerControlManager] 初始化完成");
     }
 
@@ -48,8 +55,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// </summary>
     public void SwitchToDefaultShooting()
     {
-        BaseControlHandler handler = ControlHandlerFactory.CreatePlayerControlHandler(EControlType.DefaultShooting);
-        SwitchHandler(handler);
+        SwitchHandler(_controlHandlers[EControlType.DefaultShooting]);
     }
 
     /// <summary>
@@ -57,8 +63,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// </summary>
     public void SwitchToJoystick()
     {
-        BaseControlHandler handler = ControlHandlerFactory.CreatePlayerControlHandler(EControlType.Joystick);
-        SwitchHandler(handler);
+        SwitchHandler(_controlHandlers[EControlType.Joystick]);
     }
 
     /// <summary>
@@ -66,12 +71,23 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// </summary>
     public void SwitchToAimAssist()
     {
-        BaseControlHandler handler = ControlHandlerFactory.CreatePlayerControlHandler(EControlType.AimAssist);
-        SwitchHandler(handler);
+        SwitchHandler(_controlHandlers[EControlType.AimAssist]);
     }
     #endregion
 
     #region 私有方法
+    /// <summary>
+    /// 缓存处理器
+    /// </summary>
+    private void CacheHandlers()
+    {
+        foreach (EControlType controlType in Enum.GetValues(typeof(EControlType)))
+        {
+            BaseControlHandler handler = ControlHandlerFactory.CreatePlayerControlHandler(controlType);
+            _controlHandlers[controlType] = handler;
+        }
+    }
+
     /// <summary>
     /// 切换控制处理器
     /// </summary>
