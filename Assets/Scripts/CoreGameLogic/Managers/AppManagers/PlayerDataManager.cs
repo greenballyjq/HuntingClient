@@ -20,6 +20,7 @@ public class PlayerDataManager : IAppManager
     /// 三千盘金币数量
     /// </summary>
     private int _threeKPCoinAmount;
+    public int ThreeKPCoinAmount => _threeKPCoinAmount;
 
     /// <summary>
     /// 三千盘积分数量
