@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using CoreGameLogic.Net;
+using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using GameFramework.Manager;
 using TMPro;
@@ -41,6 +42,16 @@ public class UIPopupSettlementNormal : UIBase
     /// </summary>
     private SettlementRewardManager _settlementRewardManager => GameServiceLocator.GetRoundManager<SettlementRewardManager>();
 
+    /// <summary>
+    /// 需要上报获得三币数
+    /// </summary>
+    private int _uploadCoins;
+    
+    /// <summary>
+    /// 需要上报获得积分数 
+    /// </summary>
+    private int _uploadPoints;
+
     private void Awake()
     {
         buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
@@ -72,6 +83,9 @@ public class UIPopupSettlementNormal : UIBase
     private void OnSettlementButtonClicked()
     {
         Close();
+        
+        // 进行后端结算上传
+        HuntingSettlementProxy.Instance.UploadSettlement(_uploadPoints, _uploadCoins).Forget();
 
         HuntingAppFlow.Instance.EnterPrepareAsync().Forget();        
     }
@@ -82,6 +96,10 @@ public class UIPopupSettlementNormal : UIBase
     private void OnDoubleSettlementClicked()
     {
         _settlementRewardManager.SetRewardDouble();
+        
+        // 进行后端结算上传
+        HuntingSettlementProxy.Instance.UploadSettlement(_uploadPoints, _uploadCoins).Forget();
+        
         buttonDoubleSettlement.gameObject.SetActive(false);
     }
 
@@ -90,6 +108,8 @@ public class UIPopupSettlementNormal : UIBase
     /// </summary>
     private void OnSettlementCalculated(SettlementCalculatedEventArgs args)
     {
+        _uploadCoins = args.TotalCoin;
+        _uploadPoints = args.TotalMastery;
         textThreeKPCoin.text = args.TotalCoin.ToString();
         textPoint.text = args.TotalMastery.ToString();
     }

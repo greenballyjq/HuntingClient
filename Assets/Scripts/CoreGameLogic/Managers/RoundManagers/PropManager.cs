@@ -5,6 +5,9 @@ using GameFramework.Manager;
 using GameFramework.Utility;
 using System;
 using System.Collections.Generic;
+using CoreGameLogic.Managers.AppManagers;
+using GameFramework.Network.Models.Vo;
+using GameFramework.Network.Proxy;
 using UnityEngine;
 
 /// <summary>
@@ -26,6 +29,11 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
         /// 道具配置
         /// </summary>
         public Prop PropData;
+
+        /// <summary>
+        /// 后端的道具ID
+        /// </summary>
+        public string RemoteItemId;
     }
 
     /// <summary>
@@ -52,6 +60,10 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
         RegisterServices();
         CacheHandler();
         CachePropConfig();
+        
+        // todo 拉取远端道具数据
+        
+        
         Log.Info("[PropManager] 初始化完成");
     }
 

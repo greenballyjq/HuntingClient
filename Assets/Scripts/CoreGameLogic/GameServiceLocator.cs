@@ -25,6 +25,11 @@ public static class GameServiceLocator
     public static ResourceManager ResourceManager => GameFrameworkManager.Instance.GetManager<ResourceManager>();
 
     /// <summary>
+    /// 平台管理器
+    /// </summary>
+    public static PlatformManager PlatformManager => GameFrameworkManager.Instance.GetManager<PlatformManager>();
+
+    /// <summary>
     /// 对象池管理器
     /// </summary>
     public static GameObjectPoolManager GameObjectPoolManager => GameFrameworkManager.Instance.GetManager<GameObjectPoolManager>();
@@ -47,7 +52,7 @@ public static class GameServiceLocator
     /// <summary>
     /// 配置管理器
     /// </summary>
-    public static HuntingConfigManager ConfigManager => HuntingConfigManager.Instance;    
+    public static HuntingConfigManager ConfigManager => HuntingConfigManager.Instance;
     #endregion
 
     /// <summary>

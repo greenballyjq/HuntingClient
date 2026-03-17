@@ -1,5 +1,6 @@
 ﻿using System;
 using CoreGameLogic.Managers.AppManagers;
+using CoreGameLogic.Net;
 using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;
@@ -74,6 +75,11 @@ public class HuntingAppFlow : GameAppFlow
     /// UI管理器
     /// </summary>
     private UIManager _uiManager => GameServiceLocator.UIManager;
+    
+    /// <summary>
+    /// 平台管理器
+    /// </summary>
+    private PlatformManager _platformManager => GameServiceLocator.PlatformManager;
 
     private void Start()
     {
@@ -129,6 +135,24 @@ public class HuntingAppFlow : GameAppFlow
     }
 
     /// <summary>
+    /// 游戏后端登录
+    /// </summary>
+    protected override void GameLogin()
+    {
+        HuntingGameServiceProxy.Instance.InitNetwork();
+        Debug.Log($"[HuntingAppFlow] 开始游戏后端登录");
+        IPlatform platform = _platformManager.CurrentPlatform;
+        platform.Login(async code =>
+        {
+            Debug.Log($"[HuntingAppFlow] 平台登录成功：{code}");
+            await HuntingGameServiceProxy.Instance.Login(_platformManager.GetCurrentPlatform(), code);
+        }, error =>
+        {
+            Debug.Log($"[HuntingAppFlow] 平台登录失败：{error}");
+        });
+    }
+
+    /// <summary>
     /// 注册应用级管理器
     /// </summary>
     protected override void RegisterAppManagers()
@@ -139,6 +163,7 @@ public class HuntingAppFlow : GameAppFlow
         RegisterAppManager(new CameraManager());
         RegisterAppManager(new CGManager());
         RegisterAppManager(new HuntingSoundManager());
+        RegisterAppManager(new MallManager());
     }
     #endregion
 

@@ -153,7 +153,7 @@ internal class WechatFileSystem : IFileSystem
     {
         string mainURL = RemoteServices.GetRemoteMainURL(bundle.FileName);
         string fallbackURL = RemoteServices.GetRemoteFallbackURL(bundle.FileName);
-        UnityEngine.Debug.Log($"[WechatFileSystem] 准备下载文件\nBundle: {bundle.FileName}\n主URL: {mainURL}");
+        // UnityEngine.Debug.Log($"[WechatFileSystem] 准备下载文件\nBundle: {bundle.FileName}\n主URL: {mainURL}");
         options.SetURL(mainURL, fallbackURL);
         var operation = new WXFSDownloadFileOperation(this, bundle, options);
         return operation;
@@ -162,14 +162,14 @@ internal class WechatFileSystem : IFileSystem
     {
         if (bundle.BundleType == (int)EBuildBundleType.AssetBundle)
         {
-            UnityEngine.Debug.Log($"[WechatFileSystem] 准备加载 Bundle 文件: {bundle.FileName}");
+            // UnityEngine.Debug.Log($"[WechatFileSystem] 准备加载 Bundle 文件: {bundle.FileName}");
             var operation = new WXFSLoadBundleOperation(this, bundle);
             return operation;
         }
         else
         {
             string error = $"{nameof(WechatFileSystem)} not support load bundle type : {bundle.BundleType}";
-            UnityEngine.Debug.LogError($"[WechatFileSystem] 不支持的 Bundle 类型: {bundle.BundleType}");
+            // UnityEngine.Debug.LogError($"[WechatFileSystem] 不支持的 Bundle 类型: {bundle.BundleType}");
             var operation = new FSLoadBundleCompleteOperation(error);
             return operation;
         }
@@ -245,7 +245,7 @@ internal class WechatFileSystem : IFileSystem
 
         if (exists)
         {
-            UnityEngine.Debug.Log($"[WechatFileSystem] 文件已缓存: {bundle.FileName}");
+            // UnityEngine.Debug.Log($"[WechatFileSystem] 文件已缓存: {bundle.FileName}");
         }
 
         return exists;
