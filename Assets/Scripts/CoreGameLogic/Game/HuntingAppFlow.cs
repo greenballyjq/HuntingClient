@@ -1,4 +1,4 @@
-﻿using CoreGameLogic.Managers.AppManagers;
+using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;

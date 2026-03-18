@@ -23,7 +23,7 @@ namespace CoreGameLogic.Net
 
         private static HuntingGameServiceProxy _instance;
         
-        protected override string GameId { get; } = "Hunting";
+        protected override string GameId => "Hunting";
         protected override string GetServerUrl()
         {
             // 开发域 https://dev.sanqianpan.com:10888
