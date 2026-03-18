@@ -86,7 +86,7 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
         EndQuest(isCompleted: false);
     }
 
-    public void ReInit(RoundContext context)
+    public void ReInit(Map mapData)
     {
         _dispatchTimer = 0f;
     }
@@ -172,10 +172,13 @@ public class QuestManager : IRoundManager, IRoundUpdatable, IRoundResettable
             _currentHandler.EndQuest();
 
             if (isCompleted)
+            {
                 TriggerQuestCompleted(new QuestCompletedEventArgs
-                { 
-                    RewardValue = rewardValue 
+                {
+                    RewardValue = rewardValue
                 });
+                Debug.LogWarning(rewardValue);
+            }
             else
                 TriggerQuestTimeout();
         }

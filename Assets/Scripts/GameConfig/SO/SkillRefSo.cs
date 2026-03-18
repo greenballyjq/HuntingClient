@@ -1,11 +1,11 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// 技能关联资源配置
 /// </summary>
-[CreateAssetMenu(fileName = "SkillRefSo", menuName = "SO/SkillRefSo", order = 5)]
+[CreateAssetMenu(fileName = "SkillRefSo", menuName = "SO/SkillRefSo")]
 public class SkillRefSo : ScriptableObject
 {
     /// <summary>
@@ -15,7 +15,7 @@ public class SkillRefSo : ScriptableObject
     public class SkillRef
     {
         /// <summary>
-        /// 技能ID
+        /// ID
         /// </summary>
         public int ID;
 

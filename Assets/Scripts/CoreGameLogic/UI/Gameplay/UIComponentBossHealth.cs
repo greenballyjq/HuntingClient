@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GameFramework.Core.UI;
 using GameFramework.Manager;
@@ -42,7 +42,7 @@ public class UIComponentBossHealth : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        _eventManager = GameServiceLocator.EventManager;
+        RegisterServers();
     }
 
     public void Init()
@@ -67,6 +67,24 @@ public class UIComponentBossHealth : MonoBehaviour, IUIComponent
         await UniTask.Delay(TimeSpan.FromSeconds(_animationConfig.Duration), _animationConfig.UseUnscaledTime);
     }
 
+    #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+    }
+
+    /// <summary>
+    /// 刷新Boss血量条显示
+    /// </summary>
+    private void RefreshBossHealthBar(float healthRatio)
+    {
+        _imageBossHealthBar.fillAmount = healthRatio;
+    }
+    #endregion
+
     #region 事件相关
     /// <summary>
     /// Boss受伤事件回调
@@ -74,17 +92,6 @@ public class UIComponentBossHealth : MonoBehaviour, IUIComponent
     private void OnBossDamaged(BossDamagedEventArgs args)
     {
         RefreshBossHealthBar(args.CurrentHealth / args.MaxHealth);
-    }
-    #endregion
-
-    #region 私有方法
-    /// <summary>
-    /// 刷新Boss血量条显示
-    /// </summary>
-    /// <param name="healthRatio">血量比例</param>
-    private void RefreshBossHealthBar(float healthRatio)
-    {
-        _imageBossHealthBar.fillAmount = healthRatio;
     }
     #endregion
 }

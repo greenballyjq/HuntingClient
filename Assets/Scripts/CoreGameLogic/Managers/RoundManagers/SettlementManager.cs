@@ -1,8 +1,6 @@
-using cfg.HuntingConfig.Enum;
-using GameFramework.Manager;
+﻿using cfg.HuntingConfig.Enum;
 using GameFramework.Utility;
 using UnityEngine;
-
 
 /// <summary>
 /// 结算管理器
@@ -28,11 +26,6 @@ public class SettlementManager : IRoundManager
     /// 物种掉落金币
     /// </summary>
     private int _coinFromSpecie;
-
-    /// <summary>
-    /// 任务奖励金币
-    /// </summary>
-    private int _coinFromQuest;
 
     /// <summary>
     /// 额外结算倍率
@@ -81,7 +74,6 @@ public class SettlementManager : IRoundManager
             BaseCoin = _coinFromMeat,
             BaseMastery = _pointReward,
             CoinFromSpecie = _coinFromSpecie,
-            CoinFromQuest = _coinFromQuest,
             ExtraMultiplier = _extraMultiplier,
             IsDoubleApplied = _isDoubleApplied,
             TotalCoin = GetTotalCoin(),
@@ -105,7 +97,6 @@ public class SettlementManager : IRoundManager
             BaseCoin = _coinFromMeat,
             BaseMastery = _pointReward,
             CoinFromSpecie = _coinFromSpecie,
-            CoinFromQuest = _coinFromQuest,
             ExtraMultiplier = _extraMultiplier,
             IsDoubleApplied = _isDoubleApplied,
             TotalCoin = GetTotalCoin(),
@@ -126,7 +117,7 @@ public class SettlementManager : IRoundManager
     /// </summary>
     private int GetTotalCoin()
     {
-        int total = _coinFromMeat + _coinFromSpecie + _coinFromQuest;
+        int total = _coinFromMeat + _coinFromSpecie;
         total = Mathf.RoundToInt(total * _extraMultiplier);
         if (_isDoubleApplied)
             total *= 2;
@@ -156,7 +147,6 @@ public class SettlementManager : IRoundManager
     {
         _eventManager.AddListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
         _eventManager.AddListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
-        _eventManager.AddListener(QuestEvents.QuestCompleted, OnQuestCompleted);
     }
 
     /// <summary>
@@ -166,13 +156,12 @@ public class SettlementManager : IRoundManager
     {
         _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
         _eventManager.RemoveListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
-        _eventManager.RemoveListener(QuestEvents.QuestCompleted, OnQuestCompleted);
     }
     
     /// <summary>
     /// 掉落奖励生效事件回调
     /// </summary>
-    private void OnDropRewardArrived(RewardArrivedEventArgs args)
+    private void OnDropRewardArrived(DropRewardArrivedEventArgs args)
     {
         if (args.DropType == EDropType.ThreeKPCoin)
             _coinFromSpecie += args.DropCount;
@@ -184,14 +173,6 @@ public class SettlementManager : IRoundManager
     private void OnMeatScaleCompleted(MeatScaleCompletedEventArgs args)
     {
         _completedMeatScale = Mathf.Max(0, args.CompletedScaleCount);
-    }
-
-    /// <summary>
-    /// 任务完成回调
-    /// </summary>
-    private void OnQuestCompleted(QuestCompletedEventArgs args)
-    {
-        _coinFromQuest += args.RewardValue;
     }
 
     /// <summary>

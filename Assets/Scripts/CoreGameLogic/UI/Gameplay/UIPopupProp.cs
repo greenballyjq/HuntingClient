@@ -41,24 +41,16 @@ public class UIPopupProp : UIBase
     /// </summary>
     private Prop _currentProp;
 
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
+    private RoundFlow _roundFlow => RoundFlow.Instance;
     private HuntingConfigManager _configManager;
-
-    /// <summary>
-    /// 玩家数据管理器
-    /// </summary>
     private PlayerDataManager _playerDataManager;
 
     private void Awake()
     {
+        RegisterServers();
         _buttonGet.onClick.AddListener(OnGetButtonClicked);
         _buttonClose.onClick.AddListener(OnCloseButtonClicked);
         _buttonCancel.onClick.AddListener(OnCancelButtonClicked);
-
-        _configManager = GameServiceLocator.ConfigManager;
-        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
     }
 
     private void OnDestroy()
@@ -77,6 +69,15 @@ public class UIPopupProp : UIBase
 
     #region 私有方法
     /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _configManager = GameServiceLocator.ConfigManager;
+        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
+    }
+
+    /// <summary>
     /// 刷新道具展示
     /// </summary>
     private void RefreshPropDisplay()
@@ -93,7 +94,7 @@ public class UIPopupProp : UIBase
     private void OnGetButtonClicked()
     {
         _playerDataManager.UpdatePropCount(_currentProp.PropType, 1);
-        RoundFlow.Instance.ResumeRound();
+        _roundFlow.ResumeRound();
         Close();
     }
 
@@ -102,7 +103,7 @@ public class UIPopupProp : UIBase
     /// </summary>
     private void OnCancelButtonClicked()
     {
-        RoundFlow.Instance.ResumeRound();
+        _roundFlow.ResumeRound();
         Close();
     }
 
@@ -111,7 +112,7 @@ public class UIPopupProp : UIBase
     /// </summary>
     private void OnCloseButtonClicked()
     {
-        RoundFlow.Instance.ResumeRound();
+        _roundFlow.ResumeRound();
         Close();
        
     }             

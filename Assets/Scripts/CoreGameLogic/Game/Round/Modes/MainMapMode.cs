@@ -152,10 +152,8 @@ public class MainMapMode : IGameplayMode
         {
             // 播放倒计时动画
             var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
-            await UniTask.WhenAll(
-                uiGameplay.PlayTipAnimationAsync("肉条已满，即将结算！", Color.red, 10f),
-                uiCountDown.PlayCountdownAsync(new[] { "10", "9", "8", "7", "6", "5", "4", "3", "2", "1" }, 10f)
-            );
+            uiGameplay.PlayTip("肉条已满，即将结算！", Color.red, 10f,false);
+            await uiCountDown.PlayCountdownAsync(new[] { "10", "9", "8", "7", "6", "5", "4", "3", "2", "1" }, 10f);
 
             // 开始结算
             _roundFlow.StartSettlement();
@@ -169,7 +167,7 @@ public class MainMapMode : IGameplayMode
         {
             // 播放狩猎进度提示动画
             int percent = args.CompletedScaleCount * 100 / args.TotalScaleCount;
-            uiGameplay.PlayTipAnimationAsync($"狩猎进度已完成{percent}%", Color.yellow, 6f).Forget();
+            uiGameplay.PlayTip($"狩猎进度已完成{percent}%", Color.yellow, 6f);
         }
     }
 

@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DropRewardRefSo", menuName = "SO/DropRewardRefSo", order = 2)]
+[CreateAssetMenu(fileName = "DropRewardRefSo", menuName = "SO/DropRewardRefSo")]
 public class DropRewardRefSo : ScriptableObject
 {
     /// <summary>

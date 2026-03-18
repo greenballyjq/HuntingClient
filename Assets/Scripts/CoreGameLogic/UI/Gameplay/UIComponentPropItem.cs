@@ -56,32 +56,15 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private float _cooldownTotalTime;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
+    private RoundFlow _roundFlow => RoundFlow.Instance;
     private EventManager _eventManager;
-
-    /// <summary>
-    /// UI管理器
-    /// </summary>
     private UIManager _uiManager;
-
-    /// <summary>
-    /// 道具管理器
-    /// </summary>
     private PropManager _propManager;
-
-    /// <summary>
-    /// 玩家数据管理器
-    /// </summary>
     private PlayerDataManager _playerDataManager;
 
     private void Awake()
     {
-        _eventManager = GameServiceLocator.EventManager;
-        _uiManager = GameServiceLocator.UIManager;
-        _propManager = GameServiceLocator.GetRoundManager<PropManager>();
-        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
+        RegisterServers();
     }
 
     public void Init()
@@ -114,6 +97,17 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     }
 
     #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
+        _propManager = GameServiceLocator.GetRoundManager<PropManager>();
+    }
+
     /// <summary>
     /// 初始化显示
     /// </summary>
@@ -182,7 +176,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private async void OnAddButtonClicked()
     {
-        RoundFlow.Instance.PauseRound();
+        _roundFlow.PauseRound();
         await _uiManager.OpenUIAsync<UIPopupProp>("UIPopupProp", UIManager.UILayer.PopUp, _propType);
     }
 

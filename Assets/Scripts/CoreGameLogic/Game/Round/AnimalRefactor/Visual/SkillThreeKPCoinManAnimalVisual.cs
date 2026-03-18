@@ -3,7 +3,7 @@
 /// <summary>
 /// 技能三千盘金币人动物视觉组件
 /// </summary>
-public class SkillThreeKPCoinManAnimalVisual : LeaveAnimalVisual
+public class SkillThreeKPCoinManAnimalVisual : BaseAnimalVisual
 {
     /// <summary>
     /// 播放入场动画

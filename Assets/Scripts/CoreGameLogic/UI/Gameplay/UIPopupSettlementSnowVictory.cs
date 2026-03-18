@@ -61,9 +61,7 @@ public class UIPopupSettlementSnowVictory : UIBase
 
     private void Awake()
     {
-        _eventManager = GameServiceLocator.EventManager;
-        _uiManager = GameServiceLocator.UIManager;
-
+        RegisterServers();
         _buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
         _buttonShare.onClick.AddListener(OnShareButtonClicked);
         _buttonDice.onClick.AddListener(OnDiceButtonClicked);
@@ -87,6 +85,17 @@ public class UIPopupSettlementSnowVictory : UIBase
         base.OnClose();
         _eventManager.RemoveListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
     }
+
+    #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _uiManager = GameServiceLocator.UIManager;
+    }
+    #endregion
 
     #region 事件相关
     /// <summary>

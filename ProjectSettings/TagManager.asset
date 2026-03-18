@@ -4,8 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Animal
-  - Bullet
   - Particle Camera
   layers:
   - Default

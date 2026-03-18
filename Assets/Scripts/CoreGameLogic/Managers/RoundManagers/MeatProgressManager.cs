@@ -131,7 +131,7 @@ public class MeatProgressManager : IRoundManager
     /// <summary>
     /// 掉落奖励生效事件回调
     /// </summary>
-    private void OnDropRewardArrived(RewardArrivedEventArgs args)
+    private void OnDropRewardArrived(DropRewardArrivedEventArgs args)
     {
         if (args.DropType == EDropType.Meat)
             AddMeatValue(args.DropCount);

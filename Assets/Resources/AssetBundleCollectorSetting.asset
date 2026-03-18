@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowPackageView: 1
   ShowEditorAlias: 1
-  UniqueBundleName: 0
+  UniqueBundleName: 1
   Packages:
   - PackageName: DefaultPackage
     PackageDesc: 
@@ -87,6 +87,14 @@ MonoBehaviour:
         UserData: 
       - CollectPath: Assets/Arts/UI/Sprites/Gameplay/Prop
         CollectorGUID: 73e38f316033c274dbd8f81258ad6297
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/ArtsTemp/100476945_p0.jpg
+        CollectorGUID: 1e0b09d4544126c4fb4289f23e6c2778
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackDirectory
@@ -195,6 +203,22 @@ MonoBehaviour:
         UserData: 
       - CollectPath: Assets/Arts/SO/SkillRefSo.asset
         CollectorGUID: b2c3d4e5f6789012345678abcdef0123
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackGroup
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/SO/AnimalRefSo.asset
+        CollectorGUID: b1e85cc49fdff764baeefb5fcb6b3290
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackGroup
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/Arts/SO/MapRefSo.asset
+        CollectorGUID: d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackGroup

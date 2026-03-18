@@ -410,7 +410,7 @@ MonoBehaviour:
     ShowFPS: 0
     ResourceLoadMode: 0
     IsCDNEnabled: 1
-    CDNUrl: https://3kp-panggu-1342832102.cos.ap-shanghai.myqcloud.com/game/hunt/yoo/DefaultPackage
+    CDNUrl: https://3kp-panggu-1342832102.cos.ap-shanghai.myqcloud.com/game/hunt/yoo/DefaultPackage/1.0.17
     loading: {fileID: 628647663}
   _updatePanel: {fileID: 0}
   _progressBar: {fileID: 0}
@@ -1982,7 +1982,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1974705417
 MonoBehaviour:
   m_ObjectHideFlags: 0

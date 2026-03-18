@@ -1,7 +1,6 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
-using GameFramework.Manager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,44 +21,52 @@ public class UIComponentAnimalCounterItem : MonoBehaviour, IUIComponent<Specie>
     [SerializeField] private TextMeshProUGUI _textAnimalCount;
 
     /// <summary>
-    /// 当前数量
+    /// 当前计数
     /// </summary>
     private int _currentCount;
 
-    private ResourceManager _resourceManager;
+    private HuntingConfigManager _configManager;
 
     private void Awake()
     {
-        _resourceManager = GameServiceLocator.ResourceManager;
+        RegisterServers();
     }
 
     public void Init(Specie specieData)
     {
         _currentCount = 0;
         _textAnimalCount.text = "0";
-        LoadIconAsync(specieData.IconResourcePath).Forget();
+        LoadIcon(specieData.ID);
     }
 
-    public void CleanUp()
+    public void CleanUp() {}
+
+    #region 公共方法
+    /// <summary>
+    /// 设置数量
+    /// </summary>
+    public void SetCount(int count)
     {
+        _currentCount = count;
+        _textAnimalCount.text = count.ToString();
+    }
+    #endregion
+
+    #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _configManager = GameServiceLocator.ConfigManager;
     }
 
     /// <summary>
-    /// 增加数量
+    /// 加载动物图标
     /// </summary>
-    public void AddCount()
+    private void LoadIcon(int ID)
     {
-        _currentCount++;
-        _textAnimalCount.text = _currentCount.ToString();
+        _imageAnimal.sprite = _configManager._AnimalRefSo.GetAnimalIcon(ID);
     }
-
-    /// <summary>
-    /// 异步加载图标
-    /// </summary>
-    /// <param name="iconPath">图标资源路径</param>
-    private async UniTask LoadIconAsync(string iconPath)
-    {
-        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(iconPath);
-        _imageAnimal.sprite = sprite;
-    }
+    #endregion
 }

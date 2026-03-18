@@ -18,7 +18,7 @@ public class UIComponentLoginLoading : MonoBehaviour, IUIComponent
         /// <summary>
         /// 基础文字
         /// </summary>
-        public string BaseText = "加载中";
+        public string BaseText = "资源加载中";
 
         /// <summary>
         /// 点数变化间隔（秒）
@@ -42,26 +42,26 @@ public class UIComponentLoginLoading : MonoBehaviour, IUIComponent
     private int _dotCount = 0;
 
     /// <summary>
-    /// 计时器
+    /// 点数变化计时器
     /// </summary>
-    private float _timer = 0f;
+    private float _dotTimer = 0f;
 
     /// <summary>
     /// 字符串构建器
     /// </summary>
-    private StringBuilder _stringBuilder = new StringBuilder();
+    private StringBuilder _stringBuilder = new StringBuilder(12);
 
-    public void Init() { }
+    public void Init() {}
 
-    public void CleanUp() { }
+    public void CleanUp() {}
 
     private void Update()
     {
-        _timer += Time.deltaTime;
+        _dotTimer += Time.deltaTime;
 
-        if (_timer >= _loadingConfig.DotInterval)
+        if (_dotTimer >= _loadingConfig.DotInterval)
         {
-            _timer = 0f;
+            _dotTimer = 0f;
             _dotCount = (_dotCount + 1) % 4;
             
             _stringBuilder.Clear();

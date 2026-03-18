@@ -1,10 +1,7 @@
-﻿using System;
-using CoreGameLogic.Managers.AppManagers;
-using CoreGameLogic.Net;
+﻿using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;
-using GameFramework.Network.Utility;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,13 +63,8 @@ public class HuntingAppFlow : GameAppFlow
     private RoundFlow _currentRoundFlow;
     public RoundFlow RoundFlow => _currentRoundFlow;
 
-    private UIManager _uiManager => GameServiceLocator.UIManager;
+    private UIManager _uiManager;
     
-    /// <summary>
-    /// 平台管理器
-    /// </summary>
-    private PlatformManager _platformManager => GameServiceLocator.PlatformManager;
-
     private void Start()
     {
         StartAppAsync().Forget();
@@ -106,12 +98,6 @@ public class HuntingAppFlow : GameAppFlow
         
         _currentState = EHuntingAppFlowState.Round;
     }
-
-    /// <summary>
-    /// 获取单局流
-    /// </summary>
-    /// <returns></returns>
-    public RoundFlow GetCurrentRoundFlow() => _currentRoundFlow;
     #endregion
 
     #region 私有方法
@@ -124,29 +110,10 @@ public class HuntingAppFlow : GameAppFlow
     }
 
     /// <summary>
-    /// 游戏后端登录
-    /// </summary>
-    protected override void GameLogin()
-    {
-        HuntingGameServiceProxy.Instance.InitNetwork();
-        Debug.Log($"[HuntingAppFlow] 开始游戏后端登录");
-        IPlatform platform = _platformManager.CurrentPlatform;
-        platform.Login(async code =>
-        {
-            Debug.Log($"[HuntingAppFlow] 平台登录成功：{code}");
-            await HuntingGameServiceProxy.Instance.Login(_platformManager.GetCurrentPlatform(), code);
-        }, error =>
-        {
-            Debug.Log($"[HuntingAppFlow] 平台登录失败：{error}");
-        });
-    }
-
-    /// <summary>
     /// 注册应用级管理器
     /// </summary>
     protected override void RegisterAppManagers()
     {
-        // TODO: 将来按需调整顺序
         RegisterAppManager(new PlayerDataManager());
         RegisterAppManager(new InputManager());
         RegisterAppManager(new CameraManager());
@@ -156,12 +123,21 @@ public class HuntingAppFlow : GameAppFlow
     }
     #endregion
 
+    #region 私有方法
+    public void RegisterServers()
+    {
+        _uiManager = GameServiceLocator.UIManager;
+    }
+    #endregion
+
     #region 钩子方法
     /// <summary>
     /// 应用启动钩子
     /// </summary>
     protected override async UniTask OnAppStartAsync()
     {
+        RegisterServers();
+
         // TODO: 预加载所有会用到的UIBase预制体 将来可能在别处调用
         await _uiManager.PreloadUIAsync("UIPrepare");
         await _uiManager.PreloadUIAsync("UIPopupLucky");

@@ -111,19 +111,16 @@ public class UIPopupSettlementSnowFake : UIBase
     [SerializeField] private ButtonGlowConfig _buttonGlowConfig;
 
     /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager;
-
-    /// <summary>
     /// 原始锚点位置
     /// </summary>
     private Vector2 _originAnchoredPos;
 
+    private RoundFlow _roundFlow => RoundFlow.Instance;
+    private EventManager _eventManager;
+
     private void Awake()
     {
-        _eventManager = GameServiceLocator.EventManager;
-
+        RegisterServers();
         _buttonConfirm.onClick.AddListener(OnButtonConfirmClicked);
     }
 
@@ -147,6 +144,16 @@ public class UIPopupSettlementSnowFake : UIBase
 
         base.OnClose();
     }
+
+    #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+    }
+    #endregion
 
     #region 公共方法
     /// <summary>
@@ -223,7 +230,7 @@ public class UIPopupSettlementSnowFake : UIBase
     private void OnButtonConfirmClicked()
     {
         _buttonConfirm.onClick.RemoveListener(OnButtonConfirmClicked);
-        RoundFlow.Instance.SwitchToNextMode(EGameplayMode.HiddenMap).Forget();
+        _roundFlow.SwitchToNextMode(EGameplayMode.HiddenMap).Forget();
     }
 
     /// <summary>

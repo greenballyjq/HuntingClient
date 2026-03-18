@@ -9,6 +9,7 @@ using CoreGameLogic.Managers.AppManagers;
 using GameFramework.Network.Models.Vo;
 using GameFramework.Network.Proxy;
 using UnityEngine;
+using cfg.HuntingConfig;
 
 /// <summary>
 /// 道具管理器
@@ -84,7 +85,7 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
         EndAllProps();
     }
 
-    public void ReInit(RoundContext context) { }
+    public void ReInit(Map mapData) { }
 
     #region 公共方法
     /// <summary>

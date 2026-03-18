@@ -1,4 +1,4 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 
 /// <summary>
@@ -22,7 +22,7 @@ public class QuestCollectHandler : BaseQuestHandler
         return $"收集 {QuestData.TargetValue} 块肉";
     }
 
-    private void OnDropRewardArrived(RewardArrivedEventArgs args)
+    private void OnDropRewardArrived(DropRewardArrivedEventArgs args)
     {
         if (args.DropType != EDropType.Meat)
             return;

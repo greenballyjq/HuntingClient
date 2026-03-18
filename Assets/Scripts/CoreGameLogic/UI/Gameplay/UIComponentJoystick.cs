@@ -1,4 +1,4 @@
-using GameFramework.Core.UI;
+﻿using GameFramework.Core.UI;
 using GameFramework.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -45,31 +45,6 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     private Camera _uiCamera;
 
     /// <summary>
-    /// 左右可拖动范围占总宽度的比例
-    /// </summary>
-    private const float DRAG_RANGE_RATIO = 0.33f;
-
-    /// <summary>
-    /// 死区占可拖动范围的比例
-    /// </summary>
-    private const float DEAD_ZONE_RATIO = 0.25f;
-
-    /// <summary>
-    /// 死区摇杆颜色（淡红色）
-    /// </summary>
-    private static readonly Color DEAD_ZONE_COLOR = new Color(1f, 0.75f, 0.75f, 1f);
-
-    /// <summary>
-    /// 可拖动范围摇杆颜色（淡绿色）
-    /// </summary>
-    private static readonly Color DRAG_RANGE_COLOR = new Color(0.75f, 1f, 0.75f, 1f);
-
-    /// <summary>
-    /// 默认摇杆颜色（淡红色）
-    /// </summary>
-    private static readonly Color DEFAULT_COLOR = new Color(1f, 0.75f, 0.75f, 1f);
-
-    /// <summary>
     /// 是否处于按下/拖拽状态
     /// </summary>
     private bool _isActive;
@@ -80,6 +55,12 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     /// </summary>
     private float _horizontalInput;
     public float HorizontalInput => _horizontalInput;
+
+    private const float DRAG_RANGE_RATIO = 0.33f;
+    private const float DEAD_ZONE_RATIO = 0.25f;
+    private static readonly Color DEAD_ZONE_COLOR = new Color(1f, 0.75f, 0.75f, 1f);
+    private static readonly Color DRAG_RANGE_COLOR = new Color(0.75f, 1f, 0.75f, 1f);
+    private static readonly Color DEFAULT_COLOR = new Color(1f, 0.75f, 0.75f, 1f);
 
     private void Awake()
     {
@@ -156,7 +137,7 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     }
 
     /// <summary>
-    /// 设置摇杆颜色，保持当前透明度
+    /// 设置摇杆颜色
     /// </summary>
     private void SetKnobColor(Color color)
     {

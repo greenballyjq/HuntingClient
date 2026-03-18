@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System;
 using GameFramework.Core;
 using GameFramework.Utility;
+using CoreGameLogic.Net;
 
 /// <summary>
 /// 登录按钮组件
@@ -62,16 +63,12 @@ public class UIComponentLoginButton : MonoBehaviour, IUIComponent
     /// </summary>
     private float _originAlpha = 1;
 
+    /// <summary>
+    /// 画布组件
+    /// </summary>
     private CanvasGroup _canvasGroup;
 
-    /// <summary>
-    /// 平台管理器
-    /// </summary>
     private PlatformManager _platformManager;
-
-    /// <summary>
-    /// 玩家数据管理器
-    /// </summary>
     private PlayerDataManager _playerDataManager;
 
     private void Awake()
@@ -79,60 +76,14 @@ public class UIComponentLoginButton : MonoBehaviour, IUIComponent
         _canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public async void Init()
+    public void Init()
     {
-        Debug.Log($"[UIComponentLoginButton] 开始初始化登录按钮组件");
-        await GameFrameworkManager.Instance.WaitForInitializationAsync();
-        // await HuntingAppFlow.Instance.WaitForGameAppStaredAsync();
-
-        Debug.Log($"[UIComponentLoginButton] 等待框架初始化完成------");
-        
         _buttonLogin.onClick.AddListener(OnLoginButtonClicked);
+
         _platformManager = GameServiceLocator.PlatformManager;
-        // null
         _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
 
-        Debug.Log($"[UIComponentLoginButton] _platformManager: {_platformManager == null}, _playerDataManager: {_playerDataManager == null}," +
-                  $" CurrentPlatform: {_platformManager.CurrentPlatform == null}");
-
-        Debug.Log($"[UIComponentLoginButton] 开始检测用户是否授权");
-        // 检测用户是否授权
-        _platformManager.CurrentPlatform.CheckUserAuthorization(result =>
-        {
-            if (!result)
-            {
-                Debug.Log($"[UIComponentLoginButton] 用户未授权");
-                // 没有授权，创建授权按钮
-                RectTransform loginButtonRectTransform = _buttonLogin.GetComponent<RectTransform>();
-                WeChatPlatform.WechatPoint wechatPoint = PlatformRectTransformScreenPointTransformer
-                    .RectTransformToWechatCreateUserInfoButtonPoint(loginButtonRectTransform, _uiCamera);
-                _platformManager.CurrentPlatform.CreateUserInfoButton(wechatPoint.x, wechatPoint.y, wechatPoint.width,
-                    wechatPoint.height,
-                    userInfoResult =>
-                    {
-                        Debug.Log($"[UIComponentLoginButton] 用户按下授权按钮: {userInfoResult.AvatarUrl}, {userInfoResult.NickName}");
-                        PlatformUserInfo platformUserInfo = new PlatformUserInfo
-                        {
-                            NickName = userInfoResult.NickName,
-                            AvatarUrl = userInfoResult.AvatarUrl,
-                            Gender = userInfoResult.Gender,
-                            Province = userInfoResult.Province,
-                            City = userInfoResult.City,
-                            Language = userInfoResult.Language
-                        };
-                        _playerDataManager.SetPlatformUserInfo(platformUserInfo);
-                    });
-            }
-            else
-            {
-                Debug.Log($"[UIComponentLoginButton] 用户已授权");
-                // 提醒 PlayerDataManager 进行平台用户信息拉取
-                _playerDataManager.SyncPlatformUserInfo();
-            }
-        }, error =>
-        {
-            
-        });
+    
     }
 
     public void CleanUp()
@@ -171,14 +122,74 @@ public class UIComponentLoginButton : MonoBehaviour, IUIComponent
     private async void OnLoginButtonClicked()
     {
         // TODO: 在此处实现登录逻辑
-        // GameFrameworkManager.Instance.Login();
-        
         _buttonLogin.targetGraphic.raycastTarget = false;
+
+        
 
         await PlayBlinkAsync();
 
         await HuntingAppFlow.Instance.EnterPrepareAsync();
 
         GameFrameLauncher.Instance.HideLoading();
+    }
+
+    /// <summary>
+    /// 游戏后端登录
+    /// </summary>
+    protected void GameLogin()
+    {
+        HuntingGameServiceProxy.Instance.InitNetwork();
+        Debug.Log($"[HuntingAppFlow] 开始游戏后端登录");
+        IPlatform platform = _platformManager.CurrentPlatform;
+        platform.Login(async code =>
+        {
+            Debug.Log($"[HuntingAppFlow] 平台登录成功：{code}");
+            await HuntingGameServiceProxy.Instance.Login(_platformManager.GetCurrentPlatform(), code);
+
+            Debug.Log($"[UIComponentLoginButton] 开始检测用户是否授权");
+            // 检测用户是否授权
+            _platformManager.CurrentPlatform.CheckUserAuthorization(result =>
+            {
+                if (!result)
+                {
+                    Debug.Log($"[UIComponentLoginButton] 用户未授权");
+                    // 没有授权，创建授权按钮
+                    RectTransform loginButtonRectTransform = _buttonLogin.GetComponent<RectTransform>();
+                    WeChatPlatform.WechatPoint wechatPoint = PlatformRectTransformScreenPointTransformer
+                        .RectTransformToWechatCreateUserInfoButtonPoint(loginButtonRectTransform, _uiCamera);
+                    _platformManager.CurrentPlatform.CreateUserInfoButton(wechatPoint.x, wechatPoint.y, wechatPoint.width,
+                        wechatPoint.height,
+                        userInfoResult =>
+                        {
+                            Debug.Log($"[UIComponentLoginButton] 用户按下授权按钮: {userInfoResult.AvatarUrl}, {userInfoResult.NickName}");
+                            PlatformUserInfo platformUserInfo = new PlatformUserInfo
+                            {
+                                NickName = userInfoResult.NickName,
+                                AvatarUrl = userInfoResult.AvatarUrl,
+                                Gender = userInfoResult.Gender,
+                                Province = userInfoResult.Province,
+                                City = userInfoResult.City,
+                                Language = userInfoResult.Language
+                            };
+                            _playerDataManager.SetPlatformUserInfo(platformUserInfo);
+                        });
+                }
+                else
+                {
+                    Debug.Log($"[UIComponentLoginButton] 用户已授权");
+                    // 提醒 PlayerDataManager 进行平台用户信息拉取
+                    _playerDataManager.SyncPlatformUserInfo();
+                }
+            }, error =>
+            {
+
+            });
+
+        }, error =>
+        {
+            Debug.Log($"[HuntingAppFlow] 平台登录失败：{error}");
+        });
+
+
     }
 }

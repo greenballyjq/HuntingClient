@@ -8,7 +8,7 @@ namespace Hunting.Game.Animal
     /// <summary>
     /// 动物行为基类
     /// </summary>
-    public abstract class BaseAnimalBehaviour : MonoBehaviour, IPoolItem
+    public class BaseAnimalBehaviour : MonoBehaviour, IPoolItem
     {
         /// <summary>
         /// 状态机

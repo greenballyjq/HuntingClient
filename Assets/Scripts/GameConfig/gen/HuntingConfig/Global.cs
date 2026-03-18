@@ -19,6 +19,7 @@ public sealed partial class Global : Luban.BeanBase
         ID = _buf.ReadInt();
         QuestGlobal = global::cfg.HuntingConfig.Bean.QuestGlobal.DeserializeQuestGlobal(_buf);
         HiddenMapCountDownTime = _buf.ReadFloat();
+        MeatToThreeKPCoinRate = _buf.ReadFloat();
         Comment = _buf.ReadString();
     }
 
@@ -40,6 +41,10 @@ public sealed partial class Global : Luban.BeanBase
     /// </summary>
     public readonly float HiddenMapCountDownTime;
     /// <summary>
+    /// 肉/三千盘金币汇率
+    /// </summary>
+    public readonly float MeatToThreeKPCoinRate;
+    /// <summary>
     /// 注释
     /// </summary>
     public readonly string Comment;
@@ -58,6 +63,7 @@ public sealed partial class Global : Luban.BeanBase
         + "ID:" + ID + ","
         + "QuestGlobal:" + QuestGlobal + ","
         + "HiddenMapCountDownTime:" + HiddenMapCountDownTime + ","
+        + "MeatToThreeKPCoinRate:" + MeatToThreeKPCoinRate + ","
         + "Comment:" + Comment + ","
         + "}";
     }

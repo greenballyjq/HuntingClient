@@ -22,12 +22,12 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 子弹配置缓存
     /// </summary>
-    private readonly Dictionary<int, Bullet> _bulletDataCache = new Dictionary<int, Bullet>();
+    private readonly Dictionary<int, Bullet> _bulletDatas = new Dictionary<int, Bullet>();
 
     /// <summary>
     /// 子弹预制体缓存
     /// </summary>
-    private readonly Dictionary<int, GameObject> _bulletPrefabCache = new Dictionary<int, GameObject>();
+    private readonly Dictionary<int, GameObject> _bulletPrefabs = new Dictionary<int, GameObject>();
 
     private EventManager _eventManager;
     private GameObjectPoolManager _gameObjectPoolManager;
@@ -38,17 +38,14 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     {
         RegisterServices();
         RegisterEvents();
-        CacheBullets();
+        CacheBulletDatas();
         Log.Info("[BulletManager] 初始化完成");
     }
 
     public void Dispose()
     {
         RecycleAllBullets();
-
-        _bulletDataCache.Clear();
-        _bulletPrefabCache.Clear();
-
+        ClearBulletDataCache();
         UnregisterEvents();
 
         Log.Info("[BulletManager] 已释放");
@@ -59,7 +56,7 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
         RecycleAllBullets();
     }
 
-    public void ReInit(RoundContext context){}
+    public void ReInit(Map mapData){}
 
     public void DoUpdate(float dt)
     {
@@ -73,15 +70,15 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 根据ID获取子弹配置
     /// </summary>
-    public Bullet GetBullet(int bulletId) => _bulletDataCache[bulletId];
+    public Bullet GetBullet(int bulletId) => _bulletDatas[bulletId];
 
     /// <summary>
     /// 生成子弹
     /// </summary>
     public BulletBehavior SpawnBullet(int bulletId, Vector3 position, Vector3 direction)
     {
-        Bullet bulletData = _bulletDataCache[bulletId];
-        GameObject prefab = _bulletPrefabCache[bulletId];
+        Bullet bulletData = _bulletDatas[bulletId];
+        GameObject prefab = _bulletPrefabs[bulletId];
 
         float finalDamage = _weaponManager.GetCurrentDamage(bulletId);
 
@@ -116,15 +113,26 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     }
 
     /// <summary>
-    /// 缓存子弹配置和预制体
+    /// 缓存子弹配置
     /// </summary>
-    private void CacheBullets()
+    private void CacheBulletDatas()
     {
+        ClearBulletDataCache();
+
         foreach (var bullet in _configManager.BulletTable.DataList)
         {
-            _bulletDataCache[bullet.ID] = bullet;
-            _bulletPrefabCache[bullet.ID] = _configManager.BulletRefSo.GetBulletPrefab(bullet.ID);
+            _bulletDatas[bullet.ID] = bullet;
+            _bulletPrefabs[bullet.ID] = _configManager.BulletRefSo.GetBulletPrefab(bullet.ID);
         }
+    }
+
+    /// <summary>
+    /// 清理子弹配置缓存
+    /// </summary>
+    private void ClearBulletDataCache()
+    {
+        _bulletDatas.Clear();
+        _bulletPrefabs.Clear();
     }
 
     /// <summary>

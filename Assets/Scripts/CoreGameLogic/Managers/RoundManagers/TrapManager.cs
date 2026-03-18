@@ -1,3 +1,4 @@
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using GameFramework.Core.Pool;
@@ -60,7 +61,7 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
         RecycleAllTraps();
     }
 
-    public void ReInit(RoundContext context) { }
+    public void ReInit(Map mapData) { }
 
     public void DoUpdate(float dt)
     {

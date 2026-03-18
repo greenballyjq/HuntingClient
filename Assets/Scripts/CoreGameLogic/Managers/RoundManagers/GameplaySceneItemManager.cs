@@ -1,4 +1,5 @@
-﻿using GameFramework.Utility;
+﻿using cfg.HuntingConfig;
+using GameFramework.Utility;
 using UnityEngine;
 
 /// <summary>
@@ -25,7 +26,7 @@ public class GameplaySceneItemManager : IRoundManager, IRoundResettable
         Log.Info("[GameplaySceneItemManager] 初始化完成");
     }
 
-    public void ReInit(RoundContext context)
+    public void ReInit(Map mapData)
     {
         FindPlayer();
         FindPlayableArea();

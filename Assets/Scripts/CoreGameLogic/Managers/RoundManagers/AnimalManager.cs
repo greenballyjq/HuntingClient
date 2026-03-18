@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using cfg.HuntingConfig;
+using cfg.HuntingConfig.Enum;
 using UnityEngine;
 using GameFramework.Manager;
 using GameFramework.Utility;
@@ -23,10 +24,21 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private readonly List<BaseAnimalBehaviour> _pendingRemovalAnimals = new List<BaseAnimalBehaviour>();
 
     /// <summary>
-    /// 地图物种配置缓存字典
+    /// 动物配置缓存
     /// </summary>
-    private readonly Dictionary<int, Specie> _mapSpeciesDataCacheDic = new Dictionary<int, Specie>();
-    public  Dictionary<int, Specie> MapSpeciesDataCacheDic => _mapSpeciesDataCacheDic;
+    private readonly Dictionary<int, Specie> _animalDatas = new Dictionary<int, Specie>();
+    public  Dictionary<int, Specie> AnimalDatas => _animalDatas;
+
+    /// <summary>
+    /// 动物预制体缓存
+    /// </summary>
+    private readonly Dictionary<int, GameObject> _animalPrefabs = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> AnimalPrefabs => _animalPrefabs;
+
+    /// <summary>
+    /// 动物击杀数量
+    /// </summary>
+    private readonly Dictionary<int, int> _huntingCounts = new Dictionary<int, int>();
 
     /// <summary>
     /// 未进入死亡状态动物集合
@@ -41,8 +53,16 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     {
         RegisterServices();
         RegisterEvents();
-        CacheMapSpeciesData(context.MapData.ID);
+        CacheAnimalDatas(context.MapData.ID);
         Log.Info("[AnimalManager] 初始化完成");
+    }
+
+    public void DoUpdate(float dt)
+    {
+        foreach (var animal in _activeAnimals)
+            animal.DoUpdate(dt);
+
+        ProcessPendingRemovals();
     }
 
     public void Dispose()
@@ -55,24 +75,12 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     public void Cleanup()
     {
         RecycleAllAnimals();
-        _mapSpeciesDataCacheDic.Clear();
+        ClearAnimalCache();
     }
 
-    public void ReInit(RoundContext context) 
+    public void ReInit(Map mapData) 
     {
-        CacheMapSpeciesData(context.HiddenMapData.ID);
-    }
-
-    /// <summary>
-    /// 每帧更新
-    /// </summary>
-    /// <param name="dt">时间增量</param>
-    public void DoUpdate(float dt)
-    {
-        foreach (var animal in _activeAnimals)
-            animal.DoUpdate(dt);
-
-        ProcessPendingRemovals();
+        CacheAnimalDatas(mapData.ID);
     }
 
     #region 公共方法
@@ -108,6 +116,22 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     }
 
     /// <summary>
+    /// 获取动物狩猎数量
+    /// </summary>
+    public int GetHuntingCount(int specieId)
+    {
+        return _huntingCounts.GetValueOrDefault(specieId, 0);
+    }
+
+    /// <summary>
+    /// 获取动物肉量
+    /// </summary>
+    public int GetMeatAmount(int specieId, int count = 1)
+    {
+        return _animalDatas[specieId].DropRewards[EDropType.Meat] * count;
+    }
+
+    /// <summary>
     /// 获取未进入死亡状态的动物数量
     /// </summary>
     /// <returns></returns>
@@ -119,6 +143,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <returns></returns>
     public int GetActiveAnimalCount() => _activeAnimals.Count;
 
+    
     /// <summary>
     /// 获取最后一只活跃动物位置
     /// </summary>
@@ -155,17 +180,32 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     }
 
     /// <summary>
-    /// 缓存地图物种配置数据
+    /// 缓存动物配置
     /// </summary>
     /// <param name="mapId">地图ID</param>
-    private void CacheMapSpeciesData(int mapId)
+    private void CacheAnimalDatas(int mapId)
     {
-        _mapSpeciesDataCacheDic.Clear();
+        ClearAnimalCache();
 
         var mapSpecies = _configManager.GetMapSpecies(mapId);
         foreach (var specieIds in mapSpecies.Values)
+        {
             foreach (var specieId in specieIds)
-                _mapSpeciesDataCacheDic[specieId] = _configManager.GetSpecie(specieId);
+            {
+                _animalDatas[specieId] = _configManager.GetSpecie(specieId);
+                _animalPrefabs[specieId] = _configManager._AnimalRefSo.GetAnimalPrefab(specieId);
+            }
+        }
+            
+    }
+
+    /// <summary>
+    /// 清理动物配置缓存
+    /// </summary>
+    private void ClearAnimalCache()
+    {
+        _animalDatas.Clear();
+        _animalPrefabs.Clear();
     }
 
     /// <summary>
@@ -179,10 +219,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
             
             _unDeathAnimals.Remove(animal);
             _gameObjectPoolManager.Despawn(animal.gameObject);
-
-            _eventManager.Trigger(AnimalEvents.AnimalRemoved, new AnimalRemovedEventArgs { Animal = animal });
         }
-
         _pendingRemovalAnimals.Clear();
     }
 
@@ -232,17 +269,18 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     private void OnAnimalGenerated(AnimalGeneratedEventArgs args)
     {
         _activeAnimals.Add(args.Animal);
-
         _unDeathAnimals.Add(args.Animal);
     }
 
     /// <summary>
     /// 动物进入死亡状态事件回调
     /// </summary>
-    /// <param name="args"></param>
     private void OnAnimalEnteredDeath(AnimalEnteredDeathEventArgs args)
     {
         _unDeathAnimals.Remove(args.Animal);
+
+        int id = args.SpecieData.ID;
+        _huntingCounts[id] = _huntingCounts.GetValueOrDefault(id) + 1;
     }
 
     /// <summary>

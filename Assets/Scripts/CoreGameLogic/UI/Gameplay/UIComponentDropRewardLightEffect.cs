@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GameFramework.Core.UI;
@@ -38,11 +38,8 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
 
     private void Awake()
     {
+        RegisterServers();
         _dropRewardLightEffectRectTransform = GetComponent<RectTransform>();
-
-        _eventManager = GameServiceLocator.EventManager;
-        _effectManager = GameServiceLocator.EffectManager;
-        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
     }
 
     public void Init(UIGameplay uiGameplay)
@@ -57,21 +54,17 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
         _eventManager.RemoveListener(AnimalEvents.AnimalDropReward, OnAnimalDropReward);
     }
 
-    #region 事件处理
-    /// <summary>
-    /// 动物掉落奖励事件回调
-    /// </summary>
-    private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
-    {
-        foreach (var dropReward in args.DropRewards)
-        {
-            if (dropReward.Value > 0)
-                PlayDropRewardAnimation(dropReward.Key, dropReward.Value, args.Animal.transform.position).Forget();
-        }
-    }
-    #endregion
-
     #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _effectManager = GameServiceLocator.EffectManager;
+        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
+    }
+
     /// <summary>
     /// 缓存掉落目标位置
     /// </summary>
@@ -89,9 +82,6 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
     /// <summary>
     /// 播放掉落奖励动画
     /// </summary>
-    /// <param name="dropType">掉落类型</param>
-    /// <param name="dropCount">掉落数量</param>
-    /// <param name="worldPosition">世界位置</param>
     private async UniTask PlayDropRewardAnimation(EDropType dropType, int dropCount, Vector3 worldPosition)
     {
         Vector3 endPosition = _dropTargetPositionCache[dropType];
@@ -109,7 +99,7 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
 
         _effectManager.Stop(effectObj);
 
-        TriggerDropRewardEffect(new RewardArrivedEventArgs 
+        TriggerDropRewardEffect(new DropRewardArrivedEventArgs 
         { 
             DropType = dropType, 
             DropCount = dropCount 
@@ -119,9 +109,23 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
     /// <summary>
     /// 触发掉落奖励生效事件
     /// </summary>
-    private void TriggerDropRewardEffect(RewardArrivedEventArgs args)
+    private void TriggerDropRewardEffect(DropRewardArrivedEventArgs args)
     {
         _eventManager.Trigger(AnimalEvents.DropRewardArrived, args);
+    }
+    #endregion
+
+    #region 事件相关
+    /// <summary>
+    /// 动物掉落奖励事件回调
+    /// </summary>
+    private void OnAnimalDropReward(AnimalDropRewardEventArgs args)
+    {
+        foreach (var dropReward in args.DropRewards)
+        {
+            if (dropReward.Value > 0)
+                PlayDropRewardAnimation(dropReward.Key, dropReward.Value, args.Animal.transform.position).Forget();
+        }
     }
     #endregion
 }

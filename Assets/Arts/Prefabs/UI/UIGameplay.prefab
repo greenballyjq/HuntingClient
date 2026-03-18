@@ -65,7 +65,7 @@ MonoBehaviour:
   _uiComponentThreeKPCoin: {fileID: 2030319054397574560}
   _uiComponentAnimalCounter: {fileID: 9036615251731551520}
   _uiComponentBossHealth: {fileID: 6404782345486752426}
-  _uiComponentTime: {fileID: 3510642630389223595}
+  _uiComponentTimer: {fileID: 3510642630389223595}
   _uiComponentMeatProgress: {fileID: 7280430127180491774}
   _uiComponentPropGroup: {fileID: 2159433299583931742}
   _uiComponentBullet: {fileID: 8628024366440286865}
@@ -2098,7 +2098,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2211921940602367301, guid: b23b1a98794ec974182b2ff5a885a766, type: 3}
       propertyPath: m_Name
-      value: UIComponentTime
+      value: UIComponentTimer
       objectReference: {fileID: 0}
     - target: {fileID: 3071899403071522982, guid: b23b1a98794ec974182b2ff5a885a766, type: 3}
       propertyPath: m_Pivot.x

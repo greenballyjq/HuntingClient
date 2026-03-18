@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using cfg.HuntingConfig;
+
+/// <summary>
 /// 单局管理器基础接口
 /// </summary>
 public interface IRoundManager
@@ -56,6 +58,6 @@ public interface IRoundResettable
     /// <summary>
     /// 重新初始化
     /// </summary>
-    /// <param name="context">单局上下文</param>
-    void ReInit(RoundContext context);
+    /// <param name="mapData">地图数据</param>
+    void ReInit(Map mapData);
 }
