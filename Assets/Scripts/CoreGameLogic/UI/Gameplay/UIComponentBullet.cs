@@ -110,7 +110,7 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
     private void RefreshCountdown(bool isSpecial, float remainingTime = 0f, float totalTime = 0f)
     {
         if (!isSpecial)
-            _textCountdown.text = "∞";
+            _textCountdown.text = "";
         else
             _textCountdown.text = Mathf.CeilToInt(remainingTime).ToString();
     }

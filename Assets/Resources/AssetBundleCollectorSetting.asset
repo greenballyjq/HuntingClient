@@ -93,14 +93,6 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/ArtsTemp/100476945_p0.jpg
-        CollectorGUID: 1e0b09d4544126c4fb4289f23e6c2778
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackDirectory
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
     - GroupName: game
       GroupDesc: 
       AssetTags: 

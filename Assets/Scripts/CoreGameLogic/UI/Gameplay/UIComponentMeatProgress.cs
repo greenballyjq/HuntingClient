@@ -3,10 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
-using GameFramework.Manager;
 
 /// <summary>
-/// 肉度条组件
+/// 肉条进度组件
 /// </summary>
 public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
 {
@@ -31,6 +30,11 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     private RectTransform _rectTransformMeatImage;
     public RectTransform RectTransformMeatImage => _rectTransformMeatImage;
 
+    /// <summary>
+    /// 填充动画
+    /// </summary>
+    private Tween _fillTween;
+
     private EventManager _eventManager;
     private MeatProgressManager _meatProgressManager;
 
@@ -42,12 +46,13 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
 
     public void Init()
     {
-        SyncFromManager();
+        SyncStatus();
         _eventManager.AddListener(MeatEvents.MeatValueChanged, OnMeatValueChanged);
     }
 
     public void CleanUp()
     {
+        _fillTween?.Kill();
         _eventManager.RemoveListener(MeatEvents.MeatValueChanged, OnMeatValueChanged);
     }
 
@@ -64,7 +69,7 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// <summary>
     /// 同步管理器状态
     /// </summary>
-    private void SyncFromManager()
+    private void SyncStatus()
     {
         float ratio = _meatProgressManager.TotalProgressRatio;
         RefreshMeatProgressFill(ratio);
@@ -76,7 +81,8 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// </summary>
     private void RefreshMeatProgressFill(float progressRatio)
     {
-        _imageMeatBarFill.DOFillAmount(progressRatio, 0.3f);
+        _fillTween?.Kill();
+        _fillTween = _imageMeatBarFill.DOFillAmount(progressRatio, 0.3f);
     }
 
     /// <summary>

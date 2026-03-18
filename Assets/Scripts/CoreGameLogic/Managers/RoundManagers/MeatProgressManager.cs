@@ -1,5 +1,4 @@
 ﻿using cfg.HuntingConfig.Enum;
-using GameFramework.Manager;
 using GameFramework.Utility;
 using UnityEngine;
 
@@ -98,7 +97,9 @@ public class MeatProgressManager : IRoundManager
             });
 
             if (_completedScaleCount == _totalScale)
-                _eventManager.Trigger(MeatEvents.MeatScaleFull);
+            {
+                TriggerMeatScaleFull();
+            }
         }
     }
     #endregion
@@ -151,6 +152,14 @@ public class MeatProgressManager : IRoundManager
     private void TriggerMeatScaleCompleted(MeatScaleCompletedEventArgs args)
     {
         _eventManager.Trigger(MeatEvents.MeatScaleCompleted, args);
+    }
+
+    /// <summary>
+    /// 触发肉度刻度满事件
+    /// </summary>
+    private void TriggerMeatScaleFull() 
+    {
+        _eventManager.Trigger(MeatEvents.MeatScaleFull);
     }
     #endregion
 }

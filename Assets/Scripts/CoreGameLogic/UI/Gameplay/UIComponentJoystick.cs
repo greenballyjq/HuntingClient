@@ -1,4 +1,5 @@
-﻿using GameFramework.Core.UI;
+using DG.Tweening;
+using GameFramework.Core.UI;
 using GameFramework.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -51,16 +52,18 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     public bool IsActive => _isActive;
 
     /// <summary>
-    /// 水平输入值
+    /// 水平输入值，范围 -1~1，摇杆中心为0
     /// </summary>
     private float _horizontalInput;
     public float HorizontalInput => _horizontalInput;
 
-    private const float DRAG_RANGE_RATIO = 0.33f;
-    private const float DEAD_ZONE_RATIO = 0.25f;
-    private static readonly Color DEAD_ZONE_COLOR = new Color(1f, 0.75f, 0.75f, 1f);
-    private static readonly Color DRAG_RANGE_COLOR = new Color(0.75f, 1f, 0.75f, 1f);
-    private static readonly Color DEFAULT_COLOR = new Color(1f, 0.75f, 0.75f, 1f);
+    /// <summary>
+    /// 摇杆弹簧式归位动画
+    /// </summary>
+    private Tween _springTween;
+
+    private const float DRAG_RANGE_RATIO = 0.48f;
+    private const float SPRING_DURATION = 0.25f;
 
     private void Awake()
     {
@@ -77,7 +80,6 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     public void Init()
     {
         Joystick = this;
-        SetKnobColor(DEFAULT_COLOR);
         Debug.Log("[UIComponentJoystick] 初始化完成");
     }
 
@@ -85,6 +87,7 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     {
         _isActive = false;
         _horizontalInput = 0f;
+        KillSpringTween();
         ResetKnobPosition();
         Joystick = null;
         Debug.Log("[UIComponentJoystick] 已清理");
@@ -92,6 +95,7 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        KillSpringTween();
         _isActive = true;
         RefreshKnobPosition(eventData);
     }
@@ -104,10 +108,46 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     public void OnPointerUp(PointerEventData eventData)
     {
         _isActive = false;
-        ResetKnobPosition();
+        StartSpringReturn();
     }
 
+    #region 公共方法
+    /// <summary>
+    /// 应用外部输入（如屏幕滑动）
+    /// </summary>
+    /// <param name="horizontalInput">水平输入值，范围 -1~1</param>
+    /// <param name="isActive">是否激活</param>
+    public void ApplyExternalInput(float horizontalInput, bool isActive)
+    {
+        if (isActive)
+        {
+            KillSpringTween();
+            _isActive = true;
+            _horizontalInput = Mathf.Clamp(horizontalInput, -1f, 1f);
+
+            float dragRange = GetDragRange();
+            var anchoredPos = _rectKnob.anchoredPosition;
+            anchoredPos.x = _horizontalInput * dragRange;
+            _rectKnob.anchoredPosition = anchoredPos;
+        }
+        else
+        {
+            _isActive = false;
+            StartSpringReturn();
+        }
+    }
+    #endregion
+
     #region 私有方法
+    /// <summary>
+    /// 获取拖拽范围
+    /// </summary>
+    private float GetDragRange()
+    {
+        var rect = _rectBase.rect;
+        return rect.width * 0.5f * DRAG_RANGE_RATIO;
+    }
+
     /// <summary>
     /// 刷新摇杆位置
     /// </summary>
@@ -118,18 +158,9 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
         var rect = _rectBase.rect;
         float halfWidth = rect.width * 0.5f;
         float dragRange = halfWidth * DRAG_RANGE_RATIO;
-        float deadZoneSize = dragRange * DEAD_ZONE_RATIO;
 
         float knobX = Mathf.Clamp(localPoint.x, -dragRange, dragRange);
-        bool inDeadZone = localPoint.x >= -deadZoneSize && localPoint.x <= deadZoneSize;
-        if (localPoint.x > deadZoneSize)
-            _horizontalInput = 1f;
-        else if (localPoint.x < -deadZoneSize)
-            _horizontalInput = -1f;
-        else
-            _horizontalInput = 0f;
-
-        SetKnobColor(inDeadZone ? DEAD_ZONE_COLOR : DRAG_RANGE_COLOR);
+        _horizontalInput = knobX / dragRange;
 
         var anchoredPos = _rectKnob.anchoredPosition;
         anchoredPos.x = knobX;
@@ -137,13 +168,32 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     }
 
     /// <summary>
-    /// 设置摇杆颜色
+    /// 摇杆弹簧式归位，松手后平滑回到中心
     /// </summary>
-    private void SetKnobColor(Color color)
+    private void StartSpringReturn()
     {
-        var c = color;
-        c.a = _imageKnob.color.a;
-        _imageKnob.color = c;
+        KillSpringTween();
+
+        float dragRange = GetDragRange();
+        _springTween = _rectKnob.DOAnchorPosX(0f, SPRING_DURATION)
+            .SetEase(Ease.OutQuad)
+            .OnUpdate(() =>
+            {
+                _horizontalInput = _rectKnob.anchoredPosition.x / dragRange;
+            })
+            .OnKill(() => _springTween = null);
+    }
+
+    /// <summary>
+    /// 停止弹簧归位动画
+    /// </summary>
+    private void KillSpringTween()
+    {
+        if (_springTween != null && _springTween.IsActive())
+        {
+            _springTween.Kill();
+            _springTween = null;
+        }
     }
 
     /// <summary>
@@ -152,7 +202,6 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     private void ResetKnobPosition()
     {
         _horizontalInput = 0f;
-        SetKnobColor(DEFAULT_COLOR);
         var anchoredPos = _rectKnob.anchoredPosition;
         anchoredPos.x = 0f;
         _rectKnob.anchoredPosition = anchoredPos;
