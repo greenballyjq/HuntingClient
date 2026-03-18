@@ -1,6 +1,7 @@
 ﻿using System;
 using CoreGameLogic.Managers.AppManagers;
 using CoreGameLogic.Net;
+using CoreGameLogic.UI.GM;
 using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;
@@ -91,6 +92,18 @@ public class HuntingAppFlow : GameAppFlow
         }
 
         await _uiManager.OpenUIAsync<UIPrepare>("UIPrepare");
+        
+        // Debug
+        UIGM uiGM = FindObjectOfType<UIGM>(true);
+        if (uiGM != null)
+        {
+            GameObject popUpObj = GameObject.Find("PopUp");
+            if (popUpObj != null)
+            {
+                uiGM.transform.SetParent(popUpObj.transform);
+            }
+            uiGM.Show();
+        }
 
         _currentState = EHuntingAppFlowState.Prepare;
     }

@@ -33,21 +33,6 @@ namespace CoreGameLogic.UI.Platform.Single
         /// 购买按钮
         /// </summary>
         [SerializeField] private Button purchaseButton;
-
-        /// <summary>
-        /// 金币购买Transform
-        /// </summary>
-        [SerializeField] private GameObject coinPriceObj;
-
-        /// <summary>
-        /// 看广告获取Transform
-        /// </summary>
-        [SerializeField] private GameObject adPriceObj;
-
-        /// <summary>
-        /// 冷却时间text
-        /// </summary>
-        [SerializeField] private TextMeshProUGUI cooldownText;
         
         private MallItemVo _mallItemVo;
         private IPlatform _platform;
