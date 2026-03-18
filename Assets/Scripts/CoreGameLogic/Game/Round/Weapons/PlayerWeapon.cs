@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using CoreGameLogic.Managers.AppManagers;
 using Hunting.Events;
 using UnityEngine;
@@ -255,7 +255,7 @@ public class PlayerWeapon : MonoBehaviour
     /// <summary>
     /// 掉落奖励生效事件回调
     /// </summary>
-    private void OnDropRewardArrived(RewardArrivedEventArgs args)
+    private void OnDropRewardArrived(DropRewardArrivedEventArgs args)
     {
         if (args.DropType == EDropType.Bullet)
             ChangeBullet(_configManager.GetRandomSpecialBullet().ID);

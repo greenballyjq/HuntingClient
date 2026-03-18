@@ -15,9 +15,10 @@ public class AnimalLeaveAreaTrigger : AreaTriggerBase
 
     protected override void OnEnter(Collider collider)
     {
+        var animal = collider.GetComponent<BaseAnimalBehaviour>();
         _eventManager.Trigger(AnimalEvents.AnimalLeft, new AnimalLeftEventArgs
         {
-            Animal = collider.GetComponent<BaseAnimalBehaviour>()
+            Animal = animal
         });
     }
 

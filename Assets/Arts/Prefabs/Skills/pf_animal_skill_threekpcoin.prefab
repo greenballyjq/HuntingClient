@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 2493791828211855521}
   - component: {fileID: 73862213935059533}
   - component: {fileID: 2367598607875819690}
-  - component: {fileID: -6816324075201017398}
-  - component: {fileID: 1406088030178191212}
   - component: {fileID: -6606010155510144222}
+  - component: {fileID: 1406088030178191212}
   - component: {fileID: -1021470051666031397}
+  - component: {fileID: 4140135800456342635}
   m_Layer: 6
   m_Name: pf_animal_skill_threekpcoin
   m_TagString: Animal
@@ -71,30 +71,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53bf92a233e35954c8a4f0fe37be933e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6816324075201017398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 399629174674016163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99b3f47d703613f4d9a2c433889f176e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1406088030178191212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 399629174674016163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2696546f99ce625448e9c417611859b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-6606010155510144222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,6 +84,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentMovePolicyType: 0
+--- !u!114 &1406088030178191212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399629174674016163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2696546f99ce625448e9c417611859b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-1021470051666031397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,6 +106,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2b766bd352464e4b8e21f43f618b42b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4140135800456342635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399629174674016163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271377594501e894d916ba5b8ffd72f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6602948970012789010

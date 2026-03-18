@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using cfg.HuntingConfig;
 using GameFramework.Utility;
 using UnityEngine;
 
@@ -44,7 +45,7 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
         EndCurrentControl();
     }
 
-    public void ReInit(RoundContext context)
+    public void ReInit(Map mapData)
     {
         SwitchToJoystick();
     }

@@ -1,3 +1,4 @@
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
@@ -62,7 +63,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
         EndSkill();
     }
 
-    public void ReInit(RoundContext context){}
+    public void ReInit(Map mapData){}
 
     #region 公共方法
     public void TryStartSkill()

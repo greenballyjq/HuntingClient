@@ -63,7 +63,7 @@ public class PropAimAssistHandler : BasePropHandler
         _handGuideController.SetVisible(false);
 
         var _uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
-        _uiGameplay.PlayTipAnimationAsync("点击动物自动瞄准射击", Color.green, PropData.Duration).Forget();
+        _uiGameplay.PlayTip("点击动物自动瞄准射击", Color.green, PropData.Duration);
 
         _playerControlManager.SwitchToAimAssist();
 

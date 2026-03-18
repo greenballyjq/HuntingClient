@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 8286008219278438738}
   - component: {fileID: 4463869927092418029}
   - component: {fileID: 6017176107667071625}
-  - component: {fileID: 864478037542468030}
-  - component: {fileID: 4498699731842172988}
-  - component: {fileID: 6477783511751467715}
   - component: {fileID: 4020862261256511169}
+  - component: {fileID: 864478037542468030}
+  - component: {fileID: 6477783511751467715}
+  - component: {fileID: 4498699731842172988}
   m_Layer: 6
   m_Name: pf_animal_snow_boss_beijixiong
   m_TagString: Animal
@@ -71,6 +71,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53bf92a233e35954c8a4f0fe37be933e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4020862261256511169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1942289701834609811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 145d8c965e804295a33a408a29826122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &864478037542468030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,18 +93,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6232693e03c49ddaf2bffd7638e02c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4498699731842172988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1942289701834609811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d387c33aba9246cf968e9273556b8d59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6477783511751467715
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3880b6014014b3f84b720acfea2450a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4020862261256511169
+--- !u!114 &4498699731842172988
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1942289701834609811}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 145d8c965e804295a33a408a29826122, type: 3}
+  m_Script: {fileID: 11500000, guid: d387c33aba9246cf968e9273556b8d59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2362254977937086082

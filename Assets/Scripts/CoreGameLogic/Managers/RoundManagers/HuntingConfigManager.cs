@@ -43,6 +43,11 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     };
 
     /// <summary>
+    /// SO资源路径
+    /// </summary>
+    private const string PATH_SO = "Assets/Arts/SO";
+
+    /// <summary>
     /// 掉落奖励关联资源配置
     /// </summary>
     private DropRewardRefSo _dropRewardRefSo;
@@ -65,6 +70,18 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// </summary>
     private SkillRefSo _skillRefSo;
     public SkillRefSo SkillRefSo => _skillRefSo;
+
+    /// <summary>
+    /// 动物关联资源配置
+    /// </summary>
+    private AnimalRefSo _animalRefSo;
+    public AnimalRefSo _AnimalRefSo => _animalRefSo;
+
+    /// <summary>
+    /// 地图关联资源配置
+    /// </summary>
+    private MapRefSo _mapRefSo;
+    public MapRefSo MapRefSo => _mapRefSo;
 
     private ResourceManager _resourceManager;
 
@@ -95,10 +112,12 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     /// <returns></returns>
     private async UniTask LoadScriptableObjects()
     {
-        _dropRewardRefSo = await _resourceManager.LoadAssetAsync<DropRewardRefSo>("Assets/Arts/SO/DropRewardRefSo");
-        _bulletRefSo = await _resourceManager.LoadAssetAsync<BulletRefSo>("Assets/Arts/SO/BulletRefSo");
-        _propRefSo = await _resourceManager.LoadAssetAsync<PropRefSo>("Assets/Arts/SO/PropRefSo");
-        _skillRefSo = await _resourceManager.LoadAssetAsync<SkillRefSo>("Assets/Arts/SO/SkillRefSo");
+        _dropRewardRefSo = await _resourceManager.LoadAssetAsync<DropRewardRefSo>($"{PATH_SO}/DropRewardRefSo");
+        _bulletRefSo = await _resourceManager.LoadAssetAsync<BulletRefSo>($"{PATH_SO}/BulletRefSo");
+        _propRefSo = await _resourceManager.LoadAssetAsync<PropRefSo>($"{PATH_SO}/PropRefSo");
+        _skillRefSo = await _resourceManager.LoadAssetAsync<SkillRefSo>($"{PATH_SO}/SkillRefSo");
+        _animalRefSo = await _resourceManager.LoadAssetAsync<AnimalRefSo>($"{PATH_SO}/AnimalRefSo");
+        _mapRefSo = await _resourceManager.LoadAssetAsync<MapRefSo>($"{PATH_SO}/MapRefSo");
     }
     #endregion
 

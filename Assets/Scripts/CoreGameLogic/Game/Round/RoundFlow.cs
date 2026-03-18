@@ -415,7 +415,7 @@ public class RoundFlow : Singleton<RoundFlow>
         foreach (var manager in _roundManagers.Values)
         {
             if (manager is IRoundResettable resettable)
-                resettable.ReInit(_roundContext);
+                resettable.ReInit(_roundContext.HiddenMapData);
         }
     }
 

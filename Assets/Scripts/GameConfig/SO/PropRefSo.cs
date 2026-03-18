@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 道具关联资源配置
 /// </summary>
-[CreateAssetMenu(fileName = "PropRefSo", menuName = "SO/PropRefSo", order = 4)]
+[CreateAssetMenu(fileName = "PropRefSo", menuName = "SO/PropRefSo")]
 public class PropRefSo : ScriptableObject
 {
     /// <summary>

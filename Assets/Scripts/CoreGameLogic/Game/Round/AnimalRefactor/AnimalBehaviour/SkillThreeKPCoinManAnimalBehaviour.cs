@@ -2,7 +2,7 @@
 using Hunting.Game.Animal;
 using UnityEngine;
 
-public class SkillThreeKPCoinManAnimalBehaviour : LeaveAnimalBehaviour
+public class SkillThreeKPCoinManAnimalBehaviour : BaseAnimalBehaviour
 {
     /// <summary>
     /// 入场状态

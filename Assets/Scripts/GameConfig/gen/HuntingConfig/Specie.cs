@@ -22,11 +22,8 @@ public sealed partial class Specie : Luban.BeanBase
         BossType = (HuntingConfig.Enum.EBossType)_buf.ReadInt();
         HP = _buf.ReadFloat();
         MoveSpeed = _buf.ReadFloat();
-        StayTime = _buf.ReadFloat();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DropRewards = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.EDropType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.EDropType _k0;  _k0 = (HuntingConfig.Enum.EDropType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     DropRewards.Add(_k0, _v0);}}
-        PrefabResourcePath = _buf.ReadString();
         {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DropMeatEffectID = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); DropMeatEffectID[__index0] = __e0;}}
-        IconResourcePath = _buf.ReadString();
         Comment = _buf.ReadString();
     }
 
@@ -60,25 +57,13 @@ public sealed partial class Specie : Luban.BeanBase
     /// </summary>
     public readonly float MoveSpeed;
     /// <summary>
-    /// 驻场时间
-    /// </summary>
-    public readonly float StayTime;
-    /// <summary>
     /// 掉落奖励
     /// </summary>
     public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.EDropType, int> DropRewards;
     /// <summary>
-    /// 预制体资源路径
-    /// </summary>
-    public readonly string PrefabResourcePath;
-    /// <summary>
     /// 掉落肉特效ID
     /// </summary>
     public readonly int[] DropMeatEffectID;
-    /// <summary>
-    /// 图标资源路径
-    /// </summary>
-    public readonly string IconResourcePath;
     /// <summary>
     /// 备注
     /// </summary>
@@ -100,11 +85,8 @@ public sealed partial class Specie : Luban.BeanBase
         + "BossType:" + BossType + ","
         + "HP:" + HP + ","
         + "MoveSpeed:" + MoveSpeed + ","
-        + "StayTime:" + StayTime + ","
         + "DropRewards:" + Luban.StringUtil.CollectionToString(DropRewards) + ","
-        + "PrefabResourcePath:" + PrefabResourcePath + ","
         + "DropMeatEffectID:" + Luban.StringUtil.CollectionToString(DropMeatEffectID) + ","
-        + "IconResourcePath:" + IconResourcePath + ","
         + "Comment:" + Comment + ","
         + "}";
     }

@@ -43,7 +43,6 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// 技能图像矩形变换组件
     /// </summary>
     private RectTransform _rectTransformSkillImage;
-
     public RectTransform RectTransformSkillImage => _rectTransformSkillImage;
 
     /// <summary>
@@ -56,35 +55,17 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private int _totalBar;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
+    private RoundFlow _roundFlow => RoundFlow.Instance;
     private EventManager _eventManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
     private HuntingConfigManager _configManager;
-
-    /// <summary>
-    /// 丰收能量条管理器
-    /// </summary>
     private EnergyProgressManager _energyProgressManager;
-
-    /// <summary>
-    /// 技能管理器
-    /// </summary>
     private SkillManager _skillManager;
 
     private void Awake()
     {
+        RegisterServers();
         _buttonSkill.onClick.AddListener(OnSkillButtonClicked);
         _rectTransformSkillImage = _imageSkill.GetComponent<RectTransform>();
-
-        _eventManager = GameServiceLocator.EventManager;
-        _configManager = GameServiceLocator.ConfigManager;
-        _energyProgressManager = GameServiceLocator.GetRoundManager<EnergyProgressManager>();
-        _skillManager = GameServiceLocator.GetRoundManager<SkillManager>();
     }
 
     public void Init()
@@ -93,8 +74,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
         _valuePerBar = _energyProgressManager.ValuePerBar;
 
         SyncFromManager();
-
-        _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
+    
         _eventManager.AddListener(EnergyEvents.EnergyProgressChanged, OnEnergyProgressChanged);
         _eventManager.AddListener(EnergyEvents.EnergyBarCountChanged, OnEnergyBarCountChanged);
         _eventManager.AddListener(EnergyEvents.EnergyMaxBarsReached, OnEnergyMaxBarsReached);
@@ -102,7 +82,6 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
 
     public void CleanUp()
     {
-        _eventManager.RemoveListener(RoundEvents.RoundEntered, OnRoundEntered);
         _eventManager.RemoveListener(EnergyEvents.EnergyProgressChanged, OnEnergyProgressChanged);
         _eventManager.RemoveListener(EnergyEvents.EnergyBarCountChanged, OnEnergyBarCountChanged);
         _eventManager.RemoveListener(EnergyEvents.EnergyMaxBarsReached, OnEnergyMaxBarsReached);
@@ -115,6 +94,17 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
 
     #region 私有方法
     /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _energyProgressManager = GameServiceLocator.GetRoundManager<EnergyProgressManager>();
+        _skillManager = GameServiceLocator.GetRoundManager<SkillManager>();
+    }
+
+    /// <summary>
     /// 从管理器同步当前状态并刷新显示
     /// </summary>
     private void SyncFromManager()
@@ -125,10 +115,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
         RefreshFill(currentEnergy, currentBars);
         RefreshBarText(currentBars);
         RefreshBackgroundColor(currentBars);
-
-        var ctx = RoundFlow.Instance.RoundContext;
-        if (ctx?.SkillData != null)
-            RefreshSkillIcon(ctx.SkillData.ID);
+        RefreshSkillIcon(_roundFlow.RoundContext.SkillData.ID);
     }
 
     /// <summary>
@@ -174,14 +161,6 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     #endregion
 
     #region 事件相关
-    /// <summary>
-    /// 单局开始事件回调
-    /// </summary>
-    private void OnRoundEntered(RoundEnteredEventArgs args)
-    {
-        RefreshSkillIcon(args.RoundContext.SkillData.ID);
-    }
-
     /// <summary>
     /// 能量值变化回调
     /// </summary>

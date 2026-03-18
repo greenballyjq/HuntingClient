@@ -93,10 +93,20 @@ public class UISnowMountainVictory : UIBase
 
     private void Awake()
     {
+        RegisterServers();
         _snowMountainVictoryRectTransform = GetComponent<RectTransform>();
+    }
+
+    #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
         _effectManager = GameServiceLocator.EffectManager;
         _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
     }
+    #endregion
 
     #region 公共方法
     /// <summary>

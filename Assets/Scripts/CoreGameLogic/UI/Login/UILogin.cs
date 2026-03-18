@@ -19,25 +19,16 @@ public class UILogin : MonoBehaviour
     /// </summary>
     [SerializeField] private UIComponentLoginLoading _uiComponentLoginLoading;
 
-    private async void OnEnable()
+    private void Awake()
     {
-        _uiComponentLoginLoading.Init();
-        _uiComponentLoginButton.Init();
-
-        _uiComponentLoginLoading.gameObject.SetActive(true);
-        _uiComponentLoginButton.gameObject.SetActive(false);
-
-        await GameFrameLauncher.Instance.WaitForInitializationAsync();
-
         GameServiceLocator.EventManager.AddListener("GameAppStarted", OnGameAppStarted);
+
+        _uiComponentLoginLoading.Init();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         GameServiceLocator.EventManager.RemoveListener("GameAppStarted", OnGameAppStarted);
-
-        _uiComponentLoginLoading.CleanUp();
-        _uiComponentLoginButton.CleanUp();
     }
 
     /// <summary>
@@ -45,7 +36,10 @@ public class UILogin : MonoBehaviour
     /// </summary>
     private void OnGameAppStarted()
     {
+        _uiComponentLoginLoading.CleanUp();
         _uiComponentLoginLoading.gameObject.SetActive(false);
+
+        _uiComponentLoginButton.Init();
         _uiComponentLoginButton.gameObject.SetActive(true);
     }
 }

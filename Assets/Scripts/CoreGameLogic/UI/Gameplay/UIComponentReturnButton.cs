@@ -14,15 +14,11 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
     /// </summary>
     [SerializeField] private Button _buttonReturn;
 
-    /// <summary>
-    /// UI管理器
-    /// </summary>
     private UIManager _uiManager;
 
     private void Awake()
     {
-        _uiManager = GameServiceLocator.UIManager;
-
+        RegisterServers();
         _buttonReturn.onClick.AddListener(OnReturnButtonClicked);
     }
 
@@ -35,8 +31,20 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
 
     public void CleanUp() { }
 
+    #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _uiManager = GameServiceLocator.UIManager;
+    }
+    #endregion
+
+    #region 事件相关
     private async void OnReturnButtonClicked()
     {
         await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
     }
+    #endregion
 }

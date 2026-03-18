@@ -66,7 +66,7 @@ public class WeaponManager : IRoundManager, IRoundUpdatable, IRoundResettable
         _playerWeapon = null;
     }
 
-    public void ReInit(RoundContext context)
+    public void ReInit(Map mapData)
     {
         FindPlayerWeapon();
         _playerWeapon.Init();

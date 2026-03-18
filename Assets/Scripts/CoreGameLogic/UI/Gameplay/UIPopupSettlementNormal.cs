@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CoreGameLogic.Net;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
@@ -55,9 +55,7 @@ public class UIPopupSettlementNormal : UIBase
 
     private void Awake()
     {
-        _eventManager = GameServiceLocator.EventManager;
-        _settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementManager>();
-
+        RegisterServers();
         buttonSettlement.onClick.AddListener(OnSettlementButtonClicked);
         buttonDoubleSettlement.onClick.AddListener(OnDoubleSettlementClicked);
     }
@@ -79,6 +77,17 @@ public class UIPopupSettlementNormal : UIBase
         _eventManager.RemoveListener(SettlementEvents.SettlementCalculated, OnSettlementCalculated);
         base.OnClose();
     }
+
+    #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        _settlementRewardManager = GameServiceLocator.GetRoundManager<SettlementManager>();
+    }
+    #endregion
 
     #region 事件相关
     /// <summary>

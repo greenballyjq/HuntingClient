@@ -34,7 +34,7 @@ public class UIGameplay : UIBase
     /// <summary>
     /// 时间显示组件
     /// </summary>
-    [SerializeField] private UIComponentTimer _uiComponentTime;
+    [SerializeField] private UIComponentTimer _uiComponentTimer;
 
     /// <summary>
     /// 肉度条组件
@@ -95,20 +95,11 @@ public class UIGameplay : UIBase
     /// </summary>
     private CanvasGroup _canvasGroup;
 
-    /// <summary>
-    /// 单局流程
-    /// </summary>
-    private RoundFlow _roundFlow;
+    private RoundFlow _roundFlow => RoundFlow.Instance;
 
     private void Awake()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
-    }
-
-    public override void OnInit(object userData)
-    {
-        base.OnInit(userData);
-        _roundFlow = RoundFlow.Instance;
     }
 
     public override void OnClose()
@@ -133,70 +124,9 @@ public class UIGameplay : UIBase
     }
 
     /// <summary>
-    /// 清理所有组件
-    /// </summary>
-    private void CleanUpAll()
-    {
-        _uiComponentReturnButton.CleanUp();
-        _uiComponentThreeKPCoin.CleanUp();
-        _uiComponentAnimalCounter.CleanUp();
-        _uiComponentBossHealth.CleanUp();
-        _uiComponentTime.CleanUp();
-        _uiComponentMeatProgress.CleanUp();
-        _uiComponentPropGroup.CleanUp();
-        _uiComponentBullet.CleanUp();
-        _uiComponentJoystick.CleanUp();
-        _uiComponentSkill.CleanUp();
-        _uiComponentDropRewardLightEffect.CleanUp();
-        _uiComponentTip.CleanUp();
-    }
-
-    /// <summary>
-    /// 设置所有组件的显隐状态
-    /// </summary>
-    /// <param name="active">是否激活</param>
-    private void SetAllComponentsActive(bool active)
-    {
-        _uiComponentReturnButton.gameObject.SetActive(active);
-        _uiComponentThreeKPCoin.gameObject.SetActive(active);
-        _uiComponentAnimalCounter.gameObject.SetActive(active);
-        _uiComponentBossHealth.gameObject.SetActive(active);
-        _uiComponentTime.gameObject.SetActive(active);
-        _uiComponentMeatProgress.gameObject.SetActive(active);
-        _uiComponentPropGroup.gameObject.SetActive(active);
-        _uiComponentBullet.gameObject.SetActive(active);
-        _uiComponentJoystick.gameObject.SetActive(active);
-        _uiComponentSkill.gameObject.SetActive(active);
-        _uiComponentDropRewardLightEffect.gameObject.SetActive(active);
-        _uiComponentTip.gameObject.SetActive(active);
-    }
-
-    /// <summary>
-    /// 根据玩法规则初始化并显示组件
-    /// </summary>
-    /// <param name="rule">组件显隐规则</param>
-    private void InitAndShowByRule(IUIGameplayComponentVisibilityRule rule)
-    {
-        _imageBackground.sprite = rule.UseHiddenMapBackground ? _hiddenMapBackgroundSprite : _mainMapBackgroundSprite;
-
-        if (rule.ShowTime) { _uiComponentTime.Init(); _uiComponentTime.gameObject.SetActive(true); }
-        if (rule.ShowMeatBar) { _uiComponentMeatProgress.Init(); _uiComponentMeatProgress.gameObject.SetActive(true); }
-        if (rule.ShowAnimalCounter) { _uiComponentAnimalCounter.Init(); _uiComponentAnimalCounter.gameObject.SetActive(true); }
-        if (rule.ShowBossHealth) { _uiComponentBossHealth.Init(); _uiComponentBossHealth.gameObject.SetActive(true); }
-        if (rule.ShowReturnButton) { _uiComponentReturnButton.Init(); _uiComponentReturnButton.gameObject.SetActive(true); }
-        if (rule.ShowThreeKPCoin) { _uiComponentThreeKPCoin.Init(); _uiComponentThreeKPCoin.gameObject.SetActive(true); }
-        if (rule.ShowPropGroup) { _uiComponentPropGroup.Init(); _uiComponentPropGroup.gameObject.SetActive(true); }
-        if (rule.ShowBullet) { _uiComponentBullet.Init(); _uiComponentBullet.gameObject.SetActive(true); }
-        if (rule.ShowJoystick) { _uiComponentJoystick.Init(); _uiComponentJoystick.gameObject.SetActive(true); }
-        if (rule.ShowSkill) { _uiComponentSkill.Init(); _uiComponentSkill.gameObject.SetActive(true); }
-        if (rule.ShowDropRewardLightEffect) { _uiComponentDropRewardLightEffect.Init(this); _uiComponentDropRewardLightEffect.gameObject.SetActive(true); }
-        if (rule.ShowTip) { _uiComponentTip.Init(); _uiComponentTip.gameObject.SetActive(true); }
-    }
-
-    /// <summary>
     /// 设置是否可点击
     /// </summary>
-    /// <param name="enable"></param>
+    /// <param name="enable">启用</param>
     public void SetClickable(bool enable)
     {
         _canvasGroup.blocksRaycasts = enable;
@@ -211,21 +141,84 @@ public class UIGameplay : UIBase
     }
 
     /// <summary>
-    /// 播放提示动画
+    /// 播放提示
     /// </summary>
-    /// <param name="duration">播放总时长（秒）</param>
-    public async UniTask PlayTipAnimationAsync(string text, Color textColor, float duration)
+    /// <param name="text">提示文本</param>
+    /// <param name="textColor">文本颜色</param>
+    /// <param name="duration">播放时长（秒）</param>
+    /// <param name="overridable">是否可被后续提示覆盖</param>
+    public void PlayTip(string text, Color textColor, float duration, bool overridable = true)
     {
-        _uiComponentTip.gameObject.SetActive(true);
-        try
-        {
-            await _uiComponentTip.PlayTipAnimationAsync(text, textColor, duration);
-            if (this != null && _uiComponentTip != null)
-                _uiComponentTip.gameObject.SetActive(false);
-        }
-        catch (OperationCanceledException) { }
-        catch (MissingReferenceException) { }
+        _uiComponentTip.Play(text, textColor, duration, overridable);
     }
 
+    /// <summary>
+    /// 强制停止所有提示
+    /// </summary>
+    public void ForceStopAllTips()
+    {
+        _uiComponentTip.ForceStopAll();
+    }
+    #endregion
+
+    #region 私有方法
+    /// <summary>
+    /// 清理所有组件
+    /// </summary>
+    private void CleanUpAll()
+    {
+        _uiComponentReturnButton.CleanUp();
+        _uiComponentThreeKPCoin.CleanUp();
+        _uiComponentAnimalCounter.CleanUp();
+        _uiComponentBossHealth.CleanUp();
+        _uiComponentTimer.CleanUp();
+        _uiComponentMeatProgress.CleanUp();
+        _uiComponentPropGroup.CleanUp();
+        _uiComponentBullet.CleanUp();
+        _uiComponentJoystick.CleanUp();
+        _uiComponentSkill.CleanUp();
+        _uiComponentDropRewardLightEffect.CleanUp();
+        _uiComponentTip.CleanUp();
+    }
+
+    /// <summary>
+    /// 设置所有组件的显隐状态
+    /// </summary>
+    private void SetAllComponentsActive(bool active)
+    {
+        _uiComponentReturnButton.gameObject.SetActive(active);
+        _uiComponentThreeKPCoin.gameObject.SetActive(active);
+        _uiComponentAnimalCounter.gameObject.SetActive(active);
+        _uiComponentBossHealth.gameObject.SetActive(active);
+        _uiComponentTimer.gameObject.SetActive(active);
+        _uiComponentMeatProgress.gameObject.SetActive(active);
+        _uiComponentPropGroup.gameObject.SetActive(active);
+        _uiComponentBullet.gameObject.SetActive(active);
+        _uiComponentJoystick.gameObject.SetActive(active);
+        _uiComponentSkill.gameObject.SetActive(active);
+        _uiComponentDropRewardLightEffect.gameObject.SetActive(active);
+        _uiComponentTip.gameObject.SetActive(active);
+    }
+
+    /// <summary>
+    /// 根据玩法规则初始化并显示组件
+    /// </summary>
+    private void InitAndShowByRule(IUIGameplayComponentVisibilityRule rule)
+    {
+        _imageBackground.sprite = rule.UseHiddenMapBackground ? _hiddenMapBackgroundSprite : _mainMapBackgroundSprite;
+
+        if (rule.ShowTime) { _uiComponentTimer.Init(); _uiComponentTimer.gameObject.SetActive(true); }
+        if (rule.ShowMeatBar) { _uiComponentMeatProgress.Init(); _uiComponentMeatProgress.gameObject.SetActive(true); }
+        if (rule.ShowAnimalCounter) { _uiComponentAnimalCounter.Init(); _uiComponentAnimalCounter.gameObject.SetActive(true); }
+        if (rule.ShowBossHealth) { _uiComponentBossHealth.Init(); _uiComponentBossHealth.gameObject.SetActive(true); }
+        if (rule.ShowReturnButton) { _uiComponentReturnButton.Init(); _uiComponentReturnButton.gameObject.SetActive(true); }
+        if (rule.ShowThreeKPCoin) { _uiComponentThreeKPCoin.Init(); _uiComponentThreeKPCoin.gameObject.SetActive(true); }
+        if (rule.ShowPropGroup) { _uiComponentPropGroup.Init(); _uiComponentPropGroup.gameObject.SetActive(true); }
+        if (rule.ShowBullet) { _uiComponentBullet.Init(); _uiComponentBullet.gameObject.SetActive(true); }
+        if (rule.ShowJoystick) { _uiComponentJoystick.Init(); _uiComponentJoystick.gameObject.SetActive(true); }
+        if (rule.ShowSkill) { _uiComponentSkill.Init(); _uiComponentSkill.gameObject.SetActive(true); }
+        if (rule.ShowDropRewardLightEffect) { _uiComponentDropRewardLightEffect.Init(this); _uiComponentDropRewardLightEffect.gameObject.SetActive(true); }
+        if (rule.ShowTip) { _uiComponentTip.Init(); _uiComponentTip.gameObject.SetActive(false); }
+    }
     #endregion
 }

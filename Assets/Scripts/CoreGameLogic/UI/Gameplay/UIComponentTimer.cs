@@ -24,7 +24,7 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
     /// </summary>
     private StringBuilder _stringBuilder = new StringBuilder(12);
 
-    private RoundFlow _roundFlow;
+    private RoundFlow _roundFlow => RoundFlow.Instance;
     private EventManager _eventManager;
     
     private const int ELAPSED_TIME_MS_FONT_SIZE_PERCENTAGE = 80;
@@ -32,14 +32,12 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        _eventManager = GameServiceLocator.EventManager;
+        RegisterServers();
     }
 
     public void Init()
     {
         _eventManager.AddListener(RoundEvents.TimeUpdated, OnTimeUpdated);
-        
-        _roundFlow = RoundFlow.Instance;
 
         _timingRule = _roundFlow.GetPlayRule<ITimingRule>();
         if (_timingRule.IsCountdown)
@@ -52,14 +50,21 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
     {
         _eventManager.RemoveListener(RoundEvents.TimeUpdated, OnTimeUpdated);
         _timingRule = null;
-        _roundFlow = null;
     }
 
     #region 私有方法
     /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void RegisterServers()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+        
+    }
+
+    /// <summary>
     /// 刷新倒计时显示
     /// </summary>
-    /// <param name="seconds">剩余秒数</param>
     private void RefreshCountdownDisplay(float seconds)
     {
         int remainingSeconds = Mathf.FloorToInt(seconds);
@@ -69,7 +74,6 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
     /// <summary>
     /// 刷新累加时间显示
     /// </summary>
-    /// <param name="seconds">已用秒数</param>
     private void RefreshElapsedTimeDisplay(float seconds)
     {
         int totalMilliseconds = Mathf.FloorToInt(seconds * 1000f);
@@ -94,7 +98,6 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
     /// <summary>
     /// 时间更新事件回调
     /// </summary>
-    /// <param name="args">时间更新事件参数</param>
     private void OnTimeUpdated(TimeUpdatedEventArgs args)
     {
         if (args.IsCountdown)

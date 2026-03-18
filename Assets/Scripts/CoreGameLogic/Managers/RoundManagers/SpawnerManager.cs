@@ -20,63 +20,62 @@ namespace Hunting.Game.Animal
         private readonly List<BaseSpawner> _spawners = new List<BaseSpawner>();
 
         /// <summary>
-        /// 当前地图数据
+        /// 地图数据缓存
         /// </summary>
-        private Map _currentMapData;
+        private Map _mapData;
 
         /// <summary>
-        /// 当前物种类型权重
+        /// 动物类型权重缓存
         /// </summary>
-        private Dictionary<ESpecieType, float> _currentSpecieTypeWeights;
+        private Dictionary<ESpecieType, float> _animalTypeWeights;
 
         /// <summary>
-        /// 缓存的物种数据
+        /// 动物配置缓存
         /// </summary>
-        private readonly Dictionary<int, Specie> _cachedSpecieData = new Dictionary<int, Specie>();
+        private Dictionary<int, Specie> _animalDatas = new Dictionary<int, Specie>();
 
         /// <summary>
-        /// 缓存的预制体
+        /// 动物预制体缓存
         /// </summary>
-        private readonly Dictionary<int, GameObject> _cachedPrefabs = new Dictionary<int, GameObject>();
+        private Dictionary<int, GameObject> _animalPrefabs = new Dictionary<int, GameObject>();
 
         private EventManager _eventManager;
         private ResourceManager _resourceManager;
         private GameObjectPoolManager _gameObjectPoolManager;
         private HuntingConfigManager _configManager;
+        private AnimalManager _animalManager;
 
         public void Init(RoundContext context)
         {
+            _mapData = context.MapData;
+
             RegisterServices();
-            _currentMapData = context.MapData;
             CollectSpawners();
             InitializeWeights();
-            CacheSpecieData();
-            CachePrefabs().Forget();
+            CacheAnimalDatas(_mapData.ID);
+
             Log.Info("[SpawnerManager] 初始化完成");
         }
 
         public void Dispose()
         {
             _spawners.Clear();
-            _cachedSpecieData.Clear();
-            _cachedPrefabs.Clear();
+            ClearAnimalCache();
+
             Log.Info("[SpawnerManager] 已释放");
         }
 
         public void Cleanup()
         {
             _spawners.Clear();
-            _cachedSpecieData.Clear();
-            _cachedPrefabs.Clear();
+            ClearAnimalCache();
         }
 
-        public void ReInit(RoundContext context)
+        public void ReInit(Map mapData)
         {
-            _currentMapData = context.HiddenMapData;
+            _mapData = mapData;
             CollectSpawners();
             InitializeWeights();
-            CacheSpecieData();
-            CachePrefabs().Forget();
         }
 
         /// <summary>
@@ -130,8 +129,8 @@ namespace Hunting.Game.Animal
         /// <param name="weight">权重值</param>
         public void UpdateWeight(ESpecieType type, float weight)
         {
-            if (_currentSpecieTypeWeights.ContainsKey(type))
-                _currentSpecieTypeWeights[type] = weight;
+            if (_animalTypeWeights.ContainsKey(type))
+                _animalTypeWeights[type] = weight;
         }
         #endregion
 
@@ -142,6 +141,28 @@ namespace Hunting.Game.Animal
             _resourceManager = GameServiceLocator.ResourceManager;
             _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
             _configManager = GameServiceLocator.ConfigManager;
+            _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
+        }
+
+        /// <summary>
+        /// 缓存动物配置
+        /// </summary>
+        /// <param name="mapId">地图ID</param>
+        private void CacheAnimalDatas(int mapId)
+        {
+            ClearAnimalCache();
+
+            _animalDatas = _animalManager.AnimalDatas;
+            _animalPrefabs = _animalManager.AnimalPrefabs;
+        }
+
+        /// <summary>
+        /// 清理动物配置缓存
+        /// </summary>
+        private void ClearAnimalCache()
+        {
+            _animalDatas.Clear();
+            _animalPrefabs.Clear();
         }
 
         /// <summary>
@@ -158,30 +179,7 @@ namespace Hunting.Game.Animal
         /// </summary>
         private void InitializeWeights()
         {
-            _currentSpecieTypeWeights = _configManager.GetMapSpecieTypeWeights(_currentMapData.ID);
-        }
-
-        /// <summary>
-        /// 缓存物种数据
-        /// </summary>
-        private void CacheSpecieData()
-        {
-            var mapSpecies = _configManager.GetMapSpecies(_currentMapData.ID);
-            foreach (var kv in mapSpecies)
-                foreach (var specieId in kv.Value)
-                    _cachedSpecieData[specieId] = _configManager.GetSpecie(specieId);
-        }
-
-        /// <summary>
-        /// 缓存预制体
-        /// </summary>
-        private async UniTaskVoid CachePrefabs()
-        {
-            foreach (var kv in _cachedSpecieData)
-            {
-                var prefab = await _resourceManager.LoadAssetAsync<GameObject>(kv.Value.PrefabResourcePath);
-                _cachedPrefabs[kv.Key] = prefab;
-            }
+            _animalTypeWeights = _configManager.GetMapSpecieTypeWeights(_mapData.ID);
         }
 
         /// <summary>
@@ -205,18 +203,18 @@ namespace Hunting.Game.Animal
         /// <returns></returns>
         private Specie GetRandomSpecieByWeight()
         {
-            float totalWeight = _currentSpecieTypeWeights.Values.Sum();
+            float totalWeight = _animalTypeWeights.Values.Sum();
             float randomPoint = Random.Range(0f, totalWeight);
             float cumulative = 0f;
 
-            foreach (var kv in _currentSpecieTypeWeights)
+            foreach (var kv in _animalTypeWeights)
             {
                 cumulative += kv.Value;
                 if (randomPoint <= cumulative)
                 {
-                    var specieIds = _currentMapData.MapSpecies[kv.Key];
+                    var specieIds = _mapData.MapSpecies[kv.Key];
                     int specieId = specieIds[Random.Range(0, specieIds.Length)];
-                    return _cachedSpecieData[specieId];
+                    return _animalDatas[specieId];
                 }
             }
 
@@ -231,7 +229,7 @@ namespace Hunting.Game.Animal
         /// <returns>生成的动物实例</returns>
         private BaseAnimalBehaviour SpawnAnimal(Specie specie, SpawnInfo spawnInfo)
         {
-            var go = _gameObjectPoolManager.Spawn(_cachedPrefabs[specie.ID]);
+            var go = _gameObjectPoolManager.Spawn(_animalPrefabs[specie.ID]);
             go.transform.position = spawnInfo.Position;
 
             var animal = go.GetComponent<BaseAnimalBehaviour>();

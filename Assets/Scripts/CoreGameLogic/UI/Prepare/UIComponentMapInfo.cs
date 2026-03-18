@@ -1,8 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using UnityEngine;
 using UnityEngine.UI;
-using GameFramework.Manager;
 using GameFramework.Core.UI;
 using TMPro;
 
@@ -32,12 +30,7 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
     private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
 
     /// <summary>
-    /// 资源管理器
-    /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
-
-    /// <summary>
-    /// 当前地图ID
+    /// 当前地图数据
     /// </summary>
     private Map _currentMapData;
     public Map CurrentMapData => _currentMapData;
@@ -51,28 +44,13 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
 
     public void CleanUp(){}
 
-    #region 私有方法
     /// <summary>
     /// 更新地图信息显示
     /// </summary>
-    /// <param name="map">地图配置</param>
     private void UpdateMapInfo(Map map)
     {
         _textMapDescription.text = map.Description;
-
         _textMapName.text = map.Name;
-
-        LoadMapSpriteAsync(map.MapImageResourcePath).Forget();
+        _imageMap.sprite = _configManager.MapRefSo.GetMapIcon(map.ID);
     }
-
-    /// <summary>
-    /// 异步加载地图图片
-    /// </summary>
-    /// <param name="assetPath">资源路径</param>
-    private async UniTask LoadMapSpriteAsync(string assetPath)
-    {
-        var sprite = await _resourceManager.LoadAssetAsync<Sprite>(assetPath);
-        _imageMap.sprite = sprite;
-    }
-    #endregion
 }

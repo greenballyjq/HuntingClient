@@ -22,6 +22,11 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
     public Vector2 PointerScreenPosition { get; private set; }
 
     /// <summary>
+    /// Fire键按下时的起始屏幕坐标
+    /// </summary>
+    public Vector2 PointerPressStartPosition { get; private set; }
+
+    /// <summary>
     /// Fire键是否按住
     /// </summary>
     public bool IsFireHeld { get; private set; }
@@ -96,7 +101,8 @@ public class InputManager : IAppManager, GameInputActions.IPlayerActions
             {
                 return;
             }
-            
+
+            PointerPressStartPosition = screenPos;
             IsFireHeld = true;
             OnFireStarted?.Invoke();
         }

@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 子弹关联资源配置
 /// </summary>
-[CreateAssetMenu(fileName = "BulletRefSo", menuName = "SO/BulletRefSo", order = 3)]
+[CreateAssetMenu(fileName = "BulletRefSo", menuName = "SO/BulletRefSo")]
 public class BulletRefSo : ScriptableObject
 {
     /// <summary>
@@ -25,14 +25,14 @@ public class BulletRefSo : ScriptableObject
         public EBulletType BulletType;
 
         /// <summary>
-        /// 子弹预制体
-        /// </summary>
-        public GameObject BulletPrefab;
-
-        /// <summary>
         /// 子弹图标
         /// </summary>
         public Sprite BulletIcon;
+
+        /// <summary>
+        /// 子弹预制体
+        /// </summary>
+        public GameObject BulletPrefab;
 
         /// <summary>
         /// 命中特效预制体

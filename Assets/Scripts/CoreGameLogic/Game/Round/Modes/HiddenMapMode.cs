@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using GameFramework.Core;
@@ -165,6 +165,10 @@ public class HiddenMapMode : IGameplayMode
     /// </summary>
     private async UniTask EndHiddenMapAsync()
     {
+        _roundFlow.StartSettlement();
+
+        _uiManager.GetUI<UIGameplay>("UIGameplay").ForceStopAllTips();
+
         // 播放慢镜头动画
         await PlaySlowMotion(0.3f, 4f);
 
@@ -179,9 +183,8 @@ public class HiddenMapMode : IGameplayMode
 
         // 播放全家福动画
         await uiSnowMountainVictory.PlayFamilyPortraitFadeInAsync();
-
-        // 开始结算
-        _roundFlow.StartSettlement();
+        
+        // 打开结算面板
         await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
         _settlementManager.CalculateReward();
     }
