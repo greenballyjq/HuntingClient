@@ -176,6 +176,7 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
 
         float dragRange = GetDragRange();
         _springTween = _rectKnob.DOAnchorPosX(0f, SPRING_DURATION)
+            .SetLink(gameObject)
             .SetEase(Ease.OutQuad)
             .OnUpdate(() =>
             {

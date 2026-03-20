@@ -1,17 +1,19 @@
-﻿using cfg.HuntingConfig.Enum;
+using System.Collections.Generic;
+using cfg.HuntingConfig;
+using cfg.HuntingConfig.Enum;
 using GameFramework.Utility;
 using UnityEngine;
 
 /// <summary>
 /// 肉度条管理器
 /// </summary>
-public class MeatProgressManager : IRoundManager
+public class MeatProgressManager : IRoundManager, IRoundResettable
 {
     /// <summary>
     /// 单刻度所需值
     /// </summary>
-    private float _valuePerScale;
-    public float ValuePerScale => _valuePerScale;
+    private int _valuePerScale;
+    public int ValuePerScale => _valuePerScale;
 
     /// <summary>
     /// 总刻度数
@@ -20,16 +22,16 @@ public class MeatProgressManager : IRoundManager
     public int TotalScale => _totalScale;
 
     /// <summary>
-    /// 总肉度值
+    /// 满条所需肉度值
     /// </summary>
-    private float _totalMeatValue;
-    public float TotalMeatValue => _totalMeatValue;
+    private int _totalMeatValue;
+    public int TotalMeatValue => _totalMeatValue;
 
     /// <summary>
-    /// 当前肉度值
+    /// 当前地图肉度值
     /// </summary>
-    private float _currentMeatValue;
-    public float CurrentMeatProgress => _currentMeatValue;
+    private int _currentMeatValue;
+    public int CurrentMeatValue => _currentMeatValue;
 
     /// <summary>
     /// 已完成的刻度数
@@ -38,9 +40,25 @@ public class MeatProgressManager : IRoundManager
     public int CompletedScaleCount => _completedScaleCount;
 
     /// <summary>
+    /// 所有地图肉量累加
+    /// </summary>
+    private int _totalMeatAcrossMaps;
+    public int TotalMeatAcrossMaps => _totalMeatAcrossMaps;
+
+    /// <summary>
+    /// 各地图肉量记录
+    /// </summary>
+    private readonly List<(int mapId, int meatAmount)> _meatPerMap = new List<(int mapId, int meatAmount)>();
+
+    /// <summary>
+    /// 当前地图ID
+    /// </summary>
+    private int _currentMapId;
+
+    /// <summary>
     /// 总进度比例
     /// </summary>
-    public float TotalProgressRatio => Mathf.Clamp01(_currentMeatValue / _totalMeatValue);
+    public float TotalProgressRatio => Mathf.Clamp01((float)_currentMeatValue / _totalMeatValue);
 
     private EventManager _eventManager;
     private HuntingConfigManager _configManager;
@@ -49,6 +67,8 @@ public class MeatProgressManager : IRoundManager
     {
         RegisterServices();
         RegisterEvents();
+
+        _currentMapId = context.MapData.ID;
 
         var meatProgress = _configManager.GetMeatProgress(1);
         _valuePerScale = meatProgress.ValuePerScale;
@@ -66,20 +86,33 @@ public class MeatProgressManager : IRoundManager
         Log.Info("[MeatProgressManager] 已释放");
     }
 
+    public void Cleanup()
+    {
+        _meatPerMap.Add((_currentMapId, _currentMeatValue));
+        _totalMeatAcrossMaps += _currentMeatValue;
+
+        _currentMeatValue = 0;
+        _completedScaleCount = 0;
+    }
+
+    public void ReInit(Map mapData)
+    {
+        _currentMapId = mapData.ID;
+    }
+
     #region 公共方法
     /// <summary>
     /// 增加肉度值
     /// </summary>
     /// <param name="amount">增加的肉度值</param>
-    public void AddMeatValue(float amount)
+    public void AddMeatAmount(int amount)
     {
         int beforeScaleCount = _completedScaleCount;
 
         _currentMeatValue += amount;
-        if (_currentMeatValue > _totalMeatValue)
-            _currentMeatValue = _totalMeatValue;
 
-        _completedScaleCount = Mathf.FloorToInt(_currentMeatValue / _valuePerScale);
+        int clampedForProgress = Mathf.Min(_currentMeatValue, _totalMeatValue);
+        _completedScaleCount = Mathf.Min(_totalScale, Mathf.FloorToInt(clampedForProgress / _valuePerScale));
 
         TriggerMeatValueChanged(new MeatValueChangedEventArgs
         {
@@ -101,6 +134,25 @@ public class MeatProgressManager : IRoundManager
                 TriggerMeatScaleFull();
             }
         }
+    }
+
+    /// <summary>
+    /// 肉量换算为三千盘金币数量
+    /// </summary>
+    public int GetThreeKPCoinCountFromMeat(int meatValue)
+    {
+        int rate = _configManager.GetMeatToThreeKPCoinRate();
+        return meatValue / rate;
+    }
+
+    /// <summary>
+    /// 获取各地图肉量统计
+    /// </summary>
+    public void GetMeatPerMapStatistics(List<(int mapId, int meatAmount)> results)
+    {
+        results.Clear();
+        results.AddRange(_meatPerMap);
+        results.Add((_currentMapId, _currentMeatValue));
     }
     #endregion
 
@@ -135,7 +187,7 @@ public class MeatProgressManager : IRoundManager
     private void OnDropRewardArrived(DropRewardArrivedEventArgs args)
     {
         if (args.DropType == EDropType.Meat)
-            AddMeatValue(args.DropCount);
+            AddMeatAmount(args.DropCount);
     }
     
     /// <summary>

@@ -17,7 +17,7 @@ public sealed partial class MeatProgress : Luban.BeanBase
     public MeatProgress(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        ValuePerScale = _buf.ReadFloat();
+        ValuePerScale = _buf.ReadInt();
         TotalScale = _buf.ReadInt();
         Comment = _buf.ReadString();
     }
@@ -28,13 +28,13 @@ public sealed partial class MeatProgress : Luban.BeanBase
     }
 
     /// <summary>
-    /// 肉条ID
+    /// 肉条配置ID
     /// </summary>
     public readonly int ID;
     /// <summary>
     /// 单刻度所需值
     /// </summary>
-    public readonly float ValuePerScale;
+    public readonly int ValuePerScale;
     /// <summary>
     /// 总刻度数
     /// </summary>

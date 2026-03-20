@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -96,11 +96,11 @@ public class ThreeKPCoinManThrowDiceAnimator : MonoBehaviour
             float duration = distance / _moveSpeed;
 
             // 移动到目标位置
-            Tween tween = _rectTransform.DOAnchorPos3D(targetPosition, duration).SetEase(Ease.Linear);
-
-            // 等待移动完成
-            while (tween.IsActive())
-                await UniTask.Yield();
+            await _rectTransform
+                .DOAnchorPos3D(targetPosition, duration)
+                .SetLink(gameObject)
+                .SetEase(Ease.Linear)
+                .ToUniTask();
 
             // 设置朝向
             Vector3 scale = transform.localScale;

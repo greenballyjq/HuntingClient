@@ -70,17 +70,17 @@ public class MainMapMode : IGameplayMode
             case EGameplayMode.HiddenMap:
                 {
                     // 播放假结算面板动画
-                    var uiPopupSettlementSnowFake = _uiManager.GetUI<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake");
+                    var uiPopupFakeSettlement = _uiManager.GetUI<UIPopupFakeSettlement>("UIPopupFakeSettlement");
                     await UniTask.WhenAll(
-                        uiPopupSettlementSnowFake.PlayWindowShakeAsync(),
-                        uiPopupSettlementSnowFake.PlayButtonGlowAsync()
+                        uiPopupFakeSettlement.PlayWindowShakeAsync(),
+                        uiPopupFakeSettlement.PlayButtonGlowAsync()
                     );
 
                     // 播放爆炸特效和音效
                     await _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Effects/Settlement_Explosion");
                     _soundManager.PlaySettlementPanelExplosion();
                     await UniTask.Delay(200); // 等待200毫秒模拟爆炸动画
-                    _uiManager.CloseUI("UIPopupSettlementSnowFake");
+                    _uiManager.CloseUI("UIPopupFakeSettlement");
 
                     // 播放淡入动画与音效
                     _soundManager.PlayLightTransition();
@@ -158,9 +158,9 @@ public class MainMapMode : IGameplayMode
             // 开始结算
             _roundFlow.StartSettlement();
             if (_roundContext.HasHiddenMap)
-                await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+                await _uiManager.OpenUIAsync<UIPopupFakeSettlement>("UIPopupFakeSettlement", UIManager.UILayer.PopUp);
             else
-                await _uiManager.OpenUIAsync<UIPopupSettlementNormal>("UIPopupSettlementNormal", UIManager.UILayer.PopUp);
+                await _uiManager.OpenUIAsync<UIPopupNormalSettlement>("UIPopupNormalSettlement", UIManager.UILayer.PopUp);
             _settlementManager.CalculateReward();
         }
         else

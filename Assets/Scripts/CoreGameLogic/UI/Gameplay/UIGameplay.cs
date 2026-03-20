@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.UI;
 using UnityEngine;
@@ -135,9 +135,9 @@ public class UIGameplay : UIBase
     /// <summary>
     /// 播放Boss血量增长动画
     /// </summary>
-    public async UniTask PlayBossHealthIncreaseAnimationAsync()
+    public async UniTask PlayBossHealthIncreaseAsync()
     {
-        await _uiComponentBossHealth.PlayBossHealthIncreaseAnimationAsync();
+        await _uiComponentBossHealth.PlayBossHealthIncreaseAsync();
     }
 
     /// <summary>

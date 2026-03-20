@@ -59,12 +59,13 @@ public class UIComponentBossHealth : MonoBehaviour, IUIComponent
     /// <summary>
     /// 播放Boss血量增长动画
     /// </summary>
-    public async UniTask PlayBossHealthIncreaseAnimationAsync()
+    public async UniTask PlayBossHealthIncreaseAsync()
     {
-        await _imageBossHealthBar.DOFillAmount(1f, _animationConfig.Duration)
-            .SetUpdate(_animationConfig.UseUnscaledTime);
-
-        await UniTask.Delay(TimeSpan.FromSeconds(_animationConfig.Duration), _animationConfig.UseUnscaledTime);
+        await _imageBossHealthBar
+            .DOFillAmount(1f, _animationConfig.Duration)
+            .SetLink(gameObject)
+            .SetUpdate(_animationConfig.UseUnscaledTime)
+            .ToUniTask();
     }
 
     #region 私有方法

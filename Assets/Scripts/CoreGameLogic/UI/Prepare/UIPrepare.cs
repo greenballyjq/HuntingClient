@@ -238,8 +238,6 @@ public class UIPrepare : UIBase
     /// <summary>指定角色直接开始，跳过投骰子</summary>
     public async void StartRoundWithRole(int roleId)
     {
-        
-
         _buttonStartRound.interactable = false;
         _buttonLucky.interactable = false;
         _buttonRanking.interactable = false;

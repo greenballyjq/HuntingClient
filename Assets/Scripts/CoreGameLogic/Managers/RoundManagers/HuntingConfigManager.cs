@@ -376,17 +376,36 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
     #endregion
 
     #region 全局相关特殊方法
+    public const int GlobalMainConfigId = 1;
+
+    /// <summary>
+    /// 获取全局配置行
+    /// </summary>
+    public Global GetGlobal(int id) => GlobalTable.Get(id);
+
+    /// <summary>
+    /// 肉兑换三千盘金币汇率
+    /// </summary>
+    public int GetMeatToThreeKPCoinRate() 
+        => GetGlobal(GlobalMainConfigId).MeatToThreeKPCoinRate;
+
+    /// <summary>
+    /// 普通结算固定积分量
+    /// </summary>
+    public int GetSettlementPointRewardAmount() 
+        => GetGlobal(GlobalMainConfigId).PointRewardAmount;
+
     /// <summary>
     /// 获取隐藏地图倒计时时长
     /// </summary>
     public float GetHiddenMapCountdownTime()
-        => GlobalTable.DataList[0].HiddenMapCountDownTime;
+        => GetGlobal(GlobalMainConfigId).HiddenMapCountDownTime;
 
     /// <summary>
     /// 获取任务全局配置
     /// </summary>
     public QuestGlobal GetQuestGlobal()
-        => GlobalTable.DataList[0].QuestGlobal;
+        => GetGlobal(GlobalMainConfigId).QuestGlobal;
     #endregion
 
     #region 子弹相关特殊方法

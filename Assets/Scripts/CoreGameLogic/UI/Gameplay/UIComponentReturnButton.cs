@@ -44,7 +44,7 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
     #region 事件相关
     private async void OnReturnButtonClicked()
     {
-        await _uiManager.OpenUIAsync<UIPopupSettlementSnowFake>("UIPopupSettlementSnowFake", UIManager.UILayer.PopUp);
+        await _uiManager.OpenUIAsync<UIPopupFakeSettlement>("UIPopupFakeSettlement", UIManager.UILayer.PopUp, userData: RoundFlow.Instance.RoundContext);
     }
     #endregion
 }

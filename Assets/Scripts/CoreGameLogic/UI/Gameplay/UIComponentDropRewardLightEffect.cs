@@ -82,7 +82,7 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
     /// <summary>
     /// 播放掉落奖励动画
     /// </summary>
-    private async UniTask PlayDropRewardAnimation(EDropType dropType, int dropCount, Vector3 worldPosition)
+    private async UniTask PlayDropReward(EDropType dropType, int dropCount, Vector3 worldPosition)
     {
         Vector3 endPosition = _dropTargetPositionCache[dropType];
         Vector3 startPosition = PointConverter.WorldPointToUiPoint(_dropRewardLightEffectRectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
@@ -124,7 +124,7 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
         foreach (var dropReward in args.DropRewards)
         {
             if (dropReward.Value > 0)
-                PlayDropRewardAnimation(dropReward.Key, dropReward.Value, args.Animal.transform.position).Forget();
+                PlayDropReward(dropReward.Key, dropReward.Value, args.Animal.transform.position).Forget();
         }
     }
     #endregion

@@ -1,6 +1,5 @@
 using cfg.HuntingConfig;
 using GameFramework.Core.UI;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,11 +13,6 @@ public class UIComponentSettlementMapStatItem : UIComponentSettlementStatItem, I
     /// </summary>
     [SerializeField] private Image _imageMapIcon;
 
-    /// <summary>
-    /// 价值肉量文本
-    /// </summary>
-    [SerializeField] private TextMeshProUGUI _textMeatValue;
-
     private HuntingConfigManager _configManager;
 
     private void Awake()
@@ -30,18 +24,9 @@ public class UIComponentSettlementMapStatItem : UIComponentSettlementStatItem, I
     {
         base.Init();
         LoadMapIcon(data.ID);
-        _textMeatValue.text = "0";
     }
 
-    #region 公共方法
-    /// <summary>
-    /// 设置价值肉量
-    /// </summary>
-    public void SetMeatValue(int meatValue)
-    {
-        _textMeatValue.text = meatValue.ToString();
-    }
-
+    #region 私有方法
     /// <summary>
     /// 加载地图图标
     /// </summary>

@@ -1,5 +1,6 @@
-﻿using System.Text;
+using System.Text;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using GameFramework.Core.UI;
 using TMPro;
 using UnityEngine;
@@ -43,29 +44,12 @@ public class UIComponentSettlementStatItem : MonoBehaviour, IUIComponent
     /// <summary>
     /// 播放数量变化动画
     /// </summary>
-    public async UniTask PlayCountAnimationAsync(int targetCount, float duration)
+    public async UniTask PlayCountAsync(int targetCount, float duration)
     {
-        int startValue = _currentValue;
-
-        float current = startValue;
-        float speed = (targetCount - startValue) / duration;
-        int lastDisplayed = startValue - 1;
-
-        while (current != targetCount)
-        {
-            current = Mathf.MoveTowards(current, targetCount, speed * Time.deltaTime);
-
-            int displayInt = (int)current;
-            if (displayInt != lastDisplayed)
-            {
-                lastDisplayed = displayInt;
-                RefreshCountDisplay(displayInt);
-            }
-
-            await UniTask.Yield();
-        }
-
-        RefreshCountDisplay(targetCount);
+        await DOVirtual
+            .Int(_currentValue, targetCount, duration, RefreshCountDisplay)
+            .SetLink(gameObject)
+            .ToUniTask();
     }
     #endregion
 

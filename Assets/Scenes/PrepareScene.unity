@@ -348,7 +348,7 @@ MonoBehaviour:
     ShowFPS: 0
     ResourceLoadMode: 0
     IsCDNEnabled: 1
-    CDNUrl: https://3kp-panggu-1342832102.cos.ap-shanghai.myqcloud.com/game/hunt/yoo/DefaultPackage/1.0.18
+    CDNUrl: https://3kp-panggu-1342832102.cos.ap-shanghai.myqcloud.com/game/hunt/yoo/DefaultPackage/1.0.19
     loading: {fileID: 628647663}
   _updatePanel: {fileID: 0}
   _progressBar: {fileID: 0}

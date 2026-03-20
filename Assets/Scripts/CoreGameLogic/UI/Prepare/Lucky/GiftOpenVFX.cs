@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -68,14 +68,16 @@ public class GiftOpenVFX : MonoBehaviour
     /// 播放礼包开启动画
     /// </summary>
     /// <param name="buffData">幸运仪式增益配置</param>
-    private async UniTask PlayGiftAnimationAsync(LuckyBuff buffData)
+    private async UniTask PlayGiftAsync(LuckyBuff buffData)
     {
         // 触发礼包开启动画开始事件
         _eventManager.Trigger(LuckyEvents.GiftOpenAnimationStarted);
 
         // 播放抖动动画
-        _giftRectTransform.DOShakePosition(_shakeDuration, _shakeStrength);
-        await UniTask.Delay((int)(_shakeDuration * 1000));
+        await _giftRectTransform
+            .DOShakePosition(_shakeDuration, _shakeStrength)
+            .SetLink(gameObject)
+            .ToUniTask();
 
         // 切换到打开后的图片
         _imageGift.sprite = _giftOpenSprite;
@@ -97,7 +99,7 @@ public class GiftOpenVFX : MonoBehaviour
     {
         // 判断是否匹配自己的礼包类型
         if (args.GiftType == _giftType)
-            PlayGiftAnimationAsync(args.LuckyBuffData).Forget();
+            PlayGiftAsync(args.LuckyBuffData).Forget();
     }
 
     /// <summary>

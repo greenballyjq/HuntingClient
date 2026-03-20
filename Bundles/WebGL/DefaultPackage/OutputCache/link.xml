@@ -52,6 +52,9 @@
     <type fullname="UIComponentRoleInfo" preserve="all" />
     <type fullname="UIComponentRoleSlot" preserve="all" />
     <type fullname="UIComponentRollRole" preserve="all" />
+    <type fullname="UIComponentSettlementAnimalStatItem" preserve="all" />
+    <type fullname="UIComponentSettlementMapStatItem" preserve="all" />
+    <type fullname="UIComponentSettlementStatItem" preserve="all" />
     <type fullname="UIComponentSkill" preserve="all" />
     <type fullname="UIComponentSkillInfo" preserve="all" />
     <type fullname="UIComponentThreeKPCoin" preserve="all" />
@@ -60,12 +63,12 @@
     <type fullname="UICountdown" preserve="all" />
     <type fullname="UIGameplay" preserve="all" />
     <type fullname="UILoading" preserve="all" />
+    <type fullname="UIPopupFakeSettlement" preserve="all" />
+    <type fullname="UIPopupHiddenSettlement" preserve="all" />
     <type fullname="UIPopupLucky" preserve="all" />
     <type fullname="UIPopupLuckyBuff" preserve="all" />
+    <type fullname="UIPopupNormalSettlement" preserve="all" />
     <type fullname="UIPopupProp" preserve="all" />
-    <type fullname="UIPopupSettlementNormal" preserve="all" />
-    <type fullname="UIPopupSettlementSnowFake" preserve="all" />
-    <type fullname="UIPopupSettlementSnowVictory" preserve="all" />
     <type fullname="UIPrepare" preserve="all" />
     <type fullname="UIRanking" preserve="all" />
     <type fullname="UISnowMountainVictory" preserve="all" />
@@ -74,8 +77,8 @@
     <type fullname="UIComponentBossHealth/BossHealthAnimationConfig" preserve="nothing" serialized="true" />
     <type fullname="UIComponentTip/BlinkConfig" preserve="nothing" serialized="true" />
     <type fullname="UILoading/FadeConfig" preserve="nothing" serialized="true" />
-    <type fullname="UIPopupSettlementSnowFake/ButtonGlowConfig" preserve="nothing" serialized="true" />
-    <type fullname="UIPopupSettlementSnowFake/WindowShakeConfig" preserve="nothing" serialized="true" />
+    <type fullname="UIPopupFakeSettlement/ButtonGlowConfig" preserve="nothing" serialized="true" />
+    <type fullname="UIPopupFakeSettlement/WindowShakeConfig" preserve="nothing" serialized="true" />
     <type fullname="UISnowMountainVictory/FamilyPortraitConfig" preserve="nothing" serialized="true" />
     <type fullname="UISnowMountainVictory/LightEffectConfig" preserve="nothing" serialized="true" />
     <type fullname="AnimalRefSo/AnimalRef" preserve="nothing" serialized="true" />
@@ -152,6 +155,7 @@
   <assembly fullname="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="UnityEngine.UI.Button" preserve="all" />
     <type fullname="UnityEngine.UI.ContentSizeFitter" preserve="all" />
+    <type fullname="UnityEngine.UI.GridLayoutGroup" preserve="all" />
     <type fullname="UnityEngine.UI.Image" preserve="all" />
     <type fullname="UnityEngine.UI.Mask" preserve="all" />
     <type fullname="UnityEngine.UI.ScrollRect" preserve="all" />

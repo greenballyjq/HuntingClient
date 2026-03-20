@@ -124,11 +124,25 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     }
 
     /// <summary>
+    /// 获取狩猎统计
+    /// </summary>
+    public void GetHuntStatistics(List<(int specieId, int count)> results, ESpecieType[] specieTypes)
+    {
+        results.Clear();
+        for (int t = 0; t < specieTypes.Length; t++)
+        {
+            ESpecieType want = specieTypes[t];
+            foreach (Specie s in _animalDatas.Values.Where(x => x.SpecieType == want).OrderBy(x => x.ID))
+                results.Add((s.ID, _huntingCounts.GetValueOrDefault(s.ID, 0)));
+        }
+    }
+
+    /// <summary>
     /// 获取动物肉量
     /// </summary>
-    public int GetMeatAmount(int specieId, int count = 1)
+    public int GetMeatAmount(int specieId)
     {
-        return _animalDatas[specieId].DropRewards[EDropType.Meat] * count;
+        return _animalDatas[specieId].DropRewards[EDropType.Meat];
     }
 
     /// <summary>

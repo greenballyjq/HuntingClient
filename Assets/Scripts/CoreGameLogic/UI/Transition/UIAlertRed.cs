@@ -60,17 +60,13 @@ public class UIAlertRed : UIBase
         Color originColor = _imageFlash.color;
         float halfPeriod = 0.5f / _flashConfig.Frequency;
 
-        Tween flashTween = _imageFlash
+        await _imageFlash
             .DOColor(_flashConfig.FlashColor, halfPeriod)
-            .SetLoops(Mathf.CeilToInt(_flashConfig.Duration / halfPeriod), LoopType.Yoyo)
+            .SetLink(gameObject)
             .SetUpdate(_flashConfig.UseUnscaledTime)
-            .OnComplete(() =>
-            {
-                _imageFlash.color = originColor;
-            });
-
-        while (flashTween.IsActive())
-            await UniTask.Yield();
+            .SetLoops(Mathf.CeilToInt(_flashConfig.Duration / halfPeriod), LoopType.Yoyo)
+            .OnComplete(() => _imageFlash.color = originColor)
+            .ToUniTask();
     }
 }
 

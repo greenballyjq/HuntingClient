@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 动物结算统计项组件
 /// </summary>
-public class UIComponentSettlementAnimalStatItem : UIComponentSettlementStatItem,IUIComponent<Specie>
+public class UIComponentSettlementAnimalStatItem : UIComponentSettlementStatItem,IUIComponent<int>
 {
     /// <summary>
     /// 动物头像
@@ -26,10 +26,10 @@ public class UIComponentSettlementAnimalStatItem : UIComponentSettlementStatItem
         _configManager = GameServiceLocator.ConfigManager;
     }
 
-    public void Init(Specie data)
+    public void Init(int specieId)
     {
         base.Init();
-        LoadHeadImage(data.ID);
+        LoadHeadImage(specieId);
         _textMeatValue.text = "0";
     }
 

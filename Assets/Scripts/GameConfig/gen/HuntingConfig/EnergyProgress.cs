@@ -29,7 +29,7 @@ public sealed partial class EnergyProgress : Luban.BeanBase
     }
 
     /// <summary>
-    /// 能量条ID
+    /// 能量条配置ID
     /// </summary>
     public readonly int ID;
     /// <summary>

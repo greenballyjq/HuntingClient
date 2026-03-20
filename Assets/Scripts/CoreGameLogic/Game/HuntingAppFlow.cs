@@ -1,4 +1,4 @@
-using CoreGameLogic.Managers.AppManagers;
+﻿using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;
@@ -148,7 +148,9 @@ public class HuntingAppFlow : GameAppFlow
         await _uiManager.PreloadUIAsync("UIGameplay");
         await _uiManager.PreloadUIAsync("UICountdown");
 
-        await _uiManager.PreloadUIAsync("UIPopupSettlementNormal");
+        await _uiManager.PreloadUIAsync("UIPopupNormalSettlement");
+        await _uiManager.PreloadUIAsync("UIPopupFakeSettlement");
+        await _uiManager.PreloadUIAsync("UIPopupHiddenSettlement");
         await _uiManager.PreloadUIAsync("UISnowMountainVictory");
 
         _uiManager.SetCanvasScaler(CanvasScaler.ScaleMode.ScaleWithScreenSize, new Vector2(1920, 1080), 1);

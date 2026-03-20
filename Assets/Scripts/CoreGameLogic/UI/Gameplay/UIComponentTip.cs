@@ -186,10 +186,11 @@ public class UIComponentTip : MonoBehaviour, IUIComponent
         float step = _blinkConfig.BlinkInterval * 0.5f;
         Color target = new Color(_currentColor.r, _currentColor.g, _currentColor.b, _blinkConfig.TargetOpacity);
         _blinkSequence = DOTween.Sequence()
+            .SetLink(gameObject)
+            .SetUpdate(_blinkConfig.UseUnscaledTime)
             .Append(_tipText.DOColor(target, step))
             .Append(_tipText.DOColor(new Color(_currentColor.r, _currentColor.g, _currentColor.b, 1f), step))
             .SetLoops(-1)
-            .SetUpdate(_blinkConfig.UseUnscaledTime)
             .Play();
     }
 

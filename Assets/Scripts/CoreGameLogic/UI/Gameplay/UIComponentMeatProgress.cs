@@ -82,7 +82,9 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     private void RefreshMeatProgressFill(float progressRatio)
     {
         _fillTween?.Kill();
-        _fillTween = _imageMeatBarFill.DOFillAmount(progressRatio, 0.3f);
+        _fillTween = _imageMeatBarFill
+            .DOFillAmount(progressRatio, 0.3f)
+            .SetLink(gameObject);
     }
 
     /// <summary>

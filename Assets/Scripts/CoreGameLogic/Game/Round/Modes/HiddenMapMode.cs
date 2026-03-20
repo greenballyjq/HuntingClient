@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using GameFramework.Core;
@@ -97,7 +97,7 @@ public class HiddenMapMode : IGameplayMode
 
         // 播放Boss血量增长动画和音效
         await UniTask.WhenAll(
-            uiGameplay.PlayBossHealthIncreaseAnimationAsync(),
+            uiGameplay.PlayBossHealthIncreaseAsync(),
             _soundManager.PlayBossHPGrowth().ToUniTask()
         );
         await UniTask.Delay(2000); // 等待固定时长控制节奏
@@ -185,7 +185,7 @@ public class HiddenMapMode : IGameplayMode
         await uiSnowMountainVictory.PlayFamilyPortraitFadeInAsync();
         
         // 打开结算面板
-        await _uiManager.OpenUIAsync<UIPopupSettlementSnowVictory>("UIPopupSettlementSnowVictory", UIManager.UILayer.PopUp);
+        await _uiManager.OpenUIAsync<UIPopupHiddenSettlement>("UIPopupHiddenSettlement", UIManager.UILayer.PopUp);
         _settlementManager.CalculateReward();
     }
 

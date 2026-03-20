@@ -57,7 +57,7 @@ public sealed partial class Specie : Luban.BeanBase
     /// </summary>
     public readonly float MoveSpeed;
     /// <summary>
-    /// 掉落奖励
+    /// 掉落奖励（从左往右：肉/子弹/三千盘金币/能量
     /// </summary>
     public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.EDropType, int> DropRewards;
     /// <summary>

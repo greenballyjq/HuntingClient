@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Skill;
+﻿using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using System.Collections.Generic;
@@ -76,7 +76,7 @@ public class SkillJinZhuangYuanHandler : BaseSkillHandler
     /// </summary>
     private void SpawnDropMeat()
     {
-        _meatProgressManager.AddMeatValue(_skillParam.MeatAmount);
+        _meatProgressManager.AddMeatAmount(_skillParam.MeatAmount);
 
         EffectManager.PlayOneShot(
             ConfigManager.DropRewardRefSo.GetRandomEffectPrefabByIds(_skillParam.DropMeatEffectID),

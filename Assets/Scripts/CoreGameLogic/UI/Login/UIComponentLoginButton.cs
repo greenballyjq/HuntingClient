@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using GameFramework.Core.UI;
 using UnityEngine;
@@ -96,7 +96,10 @@ public class UIComponentLoginButton : MonoBehaviour, IUIComponent
         float stepDuration = _blinkConfig.IntervalDuration / 2f;
         float targetAlpha = _blinkConfig.TargetOpacity;
 
-        Sequence blinkSequence = DOTween.Sequence();
+        var blinkSequence = DOTween.Sequence()
+            .SetLink(gameObject)
+            .SetUpdate(_blinkConfig.UseUnscaledTime)
+            .OnComplete(() => _canvasGroup.alpha = _originAlpha);
 
         for (int i = 0; i < _blinkConfig.BlinkCount; i++)
         {
@@ -104,16 +107,8 @@ public class UIComponentLoginButton : MonoBehaviour, IUIComponent
             blinkSequence.Append(_canvasGroup.DOFade(_originAlpha, stepDuration));
         }
 
-        blinkSequence.SetUpdate(_blinkConfig.UseUnscaledTime);
-
-        blinkSequence.OnComplete(() =>
-        {
-            _canvasGroup.alpha = _originAlpha;
-        });
-
         blinkSequence.Play();
-
-        await blinkSequence.AsyncWaitForCompletion();
+        await blinkSequence.ToUniTask();
     }
 
     /// <summary>

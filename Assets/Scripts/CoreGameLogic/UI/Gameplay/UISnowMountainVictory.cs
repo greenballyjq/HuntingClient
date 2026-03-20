@@ -122,16 +122,15 @@ public class UISnowMountainVictory : UIBase
         effectObj.transform.position = startPosition;
         Vector3 targetScale = effectObj.transform.localScale * ScaleMultiplier;
 
-        var scaleTween = effectObj.transform.DOScale(targetScale, _lightEffectConfig.Duration);
-        scaleTween.SetEase(_lightEffectConfig.ScaleEaseCurve);
+        var scaleTween = effectObj.transform.DOScale(targetScale, _lightEffectConfig.Duration)
+            .SetEase(_lightEffectConfig.ScaleEaseCurve);
 
-        Sequence sequence = DOTween.Sequence()
+        await DOTween.Sequence()
             .SetLink(effectObj)
             .SetUpdate(_lightEffectConfig.UseUnscaledTime)
             .Join(effectObj.transform.DOMove(endPosition, _lightEffectConfig.Duration))
-            .Join(scaleTween);
-
-        await sequence.ToUniTask();
+            .Join(scaleTween)
+            .ToUniTask();
     }
 
     /// <summary>
@@ -141,6 +140,7 @@ public class UISnowMountainVictory : UIBase
     {
         await _imageFamilyPortrait
             .DOFade(1f, _familyPortraitConfig.Duration)
+            .SetLink(gameObject)
             .SetUpdate(_familyPortraitConfig.UseUnscaledTime)
             .ToUniTask();
     }
