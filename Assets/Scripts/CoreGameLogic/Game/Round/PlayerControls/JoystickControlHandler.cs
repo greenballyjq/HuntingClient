@@ -37,6 +37,7 @@ public class JoystickControlHandler : BaseControlHandler
 
     protected override void OnControlStart()
     {
+        InputManager.SwitchToFireMode();
         _joystick = UIComponentJoystick.Joystick;
         _platformManager = GameServiceLocator.PlatformManager;
         _systemInfo = _platformManager.CurrentPlatform.GetSystemInfo();

@@ -2,7 +2,6 @@
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using CoreGameLogic.Managers.AppManagers;
-using CoreGameLogic.UI.GM;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Audio;
 using GameFramework.Core.UI;
@@ -55,8 +54,6 @@ public class UIPrepare : UIBase
     /// </summary>
     [SerializeField] private Button _buttonRanking;
 
-    [SerializeField] private Button _gmButton;
-
     private EventManager _eventManager;
     private UIManager _uiManager;
     private HuntingConfigManager _configManager;
@@ -84,17 +81,6 @@ public class UIPrepare : UIBase
         _buttonStartRound.onClick.AddListener(OnClickStartRound);
         _buttonLucky.onClick.AddListener(OnClickLuckyRitual);
         _buttonRanking.onClick.AddListener(OnClickRanking);
-        
-        _gmButton.onClick.AddListener(() =>
-        {
-            UIGM uigm = FindObjectOfType<UIGM>(true);
-            GameObject popUpObj = GameObject.Find("PopUp");
-            if (popUpObj != null)
-            {
-                uigm.transform.SetParent(popUpObj.transform);
-            }
-            uigm.Show();
-        });
     }
 
     private void OnDestroy()

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// 瞄准器控制器
@@ -25,6 +25,7 @@ public class AimAssistController : MonoBehaviour
     {
         _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
         _screenCenterWorldPos = _cameraManager.ScreenToWorldPoint(new Vector2(Screen.width / 2f, Screen.height / 2f), CAMERA_DEPTH);
+        Debug.LogWarning(_screenCenterWorldPos);
     }
 
     /// <summary>
@@ -46,7 +47,11 @@ public class AimAssistController : MonoBehaviour
         if (_targetCollider != null)
             targetPos = _targetCollider.bounds.center;
         else
+        {
             targetPos = _screenCenterWorldPos;
+            Debug.LogWarning(_screenCenterWorldPos);
+        }
+            
 
         transform.position = Vector3.Lerp(transform.position, targetPos, dt * _followSpeed);
     }

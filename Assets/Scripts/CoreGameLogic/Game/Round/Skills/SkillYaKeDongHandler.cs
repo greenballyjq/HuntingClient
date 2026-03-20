@@ -1,4 +1,4 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
@@ -60,7 +60,7 @@ public class SkillYaKeDongHandler : BaseSkillHandler
 
     protected override void OnInit() 
     {
-        EffectManager = GameServiceLocator.EffectManager;
+        _eventManager = GameServiceLocator.EventManager;
         _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
 
         CacheScreenCorners();

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4292824054547086674}
   - component: {fileID: 4191735208111419680}
   m_Layer: 5
-  m_Name: ImageAnimal
+  m_Name: ImageAnimalHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -335,8 +335,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92aa32723a5337743b48032dcb3ab1bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _imageAnimal: {fileID: 4191735208111419680}
-  _textAnimalCount: {fileID: 8896969038576165445}
+  _imageAnimalHead: {fileID: 4191735208111419680}
+  _textCount: {fileID: 8896969038576165445}
 --- !u!1 &6034112939750178194
 GameObject:
   m_ObjectHideFlags: 0

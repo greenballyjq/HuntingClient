@@ -1,5 +1,4 @@
-using cfg.HuntingConfig;
-using Cysharp.Threading.Tasks;
+﻿using cfg.HuntingConfig;
 using GameFramework.Core.UI;
 using TMPro;
 using UnityEngine;
@@ -11,19 +10,15 @@ using UnityEngine.UI;
 public class UIComponentAnimalCounterItem : MonoBehaviour, IUIComponent<Specie>
 {
     /// <summary>
-    /// 动物图像
+    /// 动物头像
     /// </summary>
-    [SerializeField] private Image _imageAnimal;
+    [SerializeField] private Image _imageAnimalHead;
 
     /// <summary>
-    /// 动物数量文本
+    /// 数量文本
     /// </summary>
-    [SerializeField] private TextMeshProUGUI _textAnimalCount;
+    [SerializeField] private TextMeshProUGUI _textCount;
 
-    /// <summary>
-    /// 当前计数
-    /// </summary>
-    private int _currentCount;
 
     private HuntingConfigManager _configManager;
 
@@ -34,9 +29,8 @@ public class UIComponentAnimalCounterItem : MonoBehaviour, IUIComponent<Specie>
 
     public void Init(Specie specieData)
     {
-        _currentCount = 0;
-        _textAnimalCount.text = "0";
-        LoadIcon(specieData.ID);
+        _textCount.text = "0";
+        LoadHeadImage(specieData.ID);
     }
 
     public void CleanUp() {}
@@ -47,8 +41,7 @@ public class UIComponentAnimalCounterItem : MonoBehaviour, IUIComponent<Specie>
     /// </summary>
     public void SetCount(int count)
     {
-        _currentCount = count;
-        _textAnimalCount.text = count.ToString();
+        _textCount.text = count.ToString();
     }
     #endregion
 
@@ -62,11 +55,11 @@ public class UIComponentAnimalCounterItem : MonoBehaviour, IUIComponent<Specie>
     }
 
     /// <summary>
-    /// 加载动物图标
+    /// 加载动物头像
     /// </summary>
-    private void LoadIcon(int ID)
+    private void LoadHeadImage(int ID)
     {
-        _imageAnimal.sprite = _configManager._AnimalRefSo.GetAnimalIcon(ID);
+        _imageAnimalHead.sprite = _configManager._AnimalRefSo.GetAnimalIcon(ID);
     }
     #endregion
 }

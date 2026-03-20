@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8997525496057130217
 RectTransform:
   m_ObjectHideFlags: 0
@@ -929,7 +929,6 @@ MonoBehaviour:
   _buttonStartRound: {fileID: 3373514697609883523}
   _buttonLucky: {fileID: 7326627236189431488}
   _buttonRanking: {fileID: 4890260342526247425}
-  _gmButton: {fileID: 8139892210187731057}
 --- !u!1 &7066205701641579256
 GameObject:
   m_ObjectHideFlags: 0
@@ -1890,7 +1889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2554341779124415841, guid: a693680bfa48012429f7c59c5219cf5d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
