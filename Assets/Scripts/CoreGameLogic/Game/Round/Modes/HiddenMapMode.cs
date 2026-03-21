@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
 using GameFramework.Core;
@@ -21,11 +21,11 @@ public class HiddenMapMode : IGameplayMode
     public float CountdownRemaining => _countdownRemaining;
 
     /// <summary>
-    /// 下雪特效实例
+    /// 隐藏地图上下文
     /// </summary>
-    private GameObject _snowEffectInstance;
+    private HiddenMapContext _hiddenMapContext;
 
-    private RoundFlow _roundFlow;
+    private RoundFlow _roundFlow => RoundFlow.Instance;
     private EventManager _eventManager;
     private UIManager _uiManager;
     private EffectManager _effectManager;
@@ -36,49 +36,36 @@ public class HiddenMapMode : IGameplayMode
     private SpawnerManager _spawnerManager;
     private SettlementManager _settlementManager;
 
-    public HiddenMapMode(RoundContext context,RoundFlow roundFlow)
-    {
-        _roundFlow = roundFlow;
-    }
-
-    public async UniTask EnterAsync()
+    public HiddenMapMode(HiddenMapContext hiddenMapContext)
     {
         RegisterServices();
         RegisterEvents();
 
+        _hiddenMapContext = hiddenMapContext;
+    }
+
+    public async UniTask EnterAsync()
+    {
         _countdownRemaining = _configManager.GetHiddenMapCountdownTime();
 
         //设置玩法规则
         SetPlayRules();
 
-        // 切换到隐藏地图界面
-        var uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
+        // 切换到隐藏地图游玩界面
+        var uiGameplay = await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay",UIManager.UILayer.Fixed);
         uiGameplay.SwitchToMode(EGameplayMode.HiddenMap);
-
-        // 禁止游玩界面操作
-        uiGameplay.SetClickable(false);
 
         // 切换到摇杆操作
         _playerControlManager.SwitchToJoystick();
 
-        // 播放中间过渡动画
-        var uiLoading = _uiManager.GetUI<UILoading>("UILoading");
-        await uiLoading.PlayMiddleTransitionAsync();
+        // 禁止游玩界面操作
+        uiGameplay.SetClickable(false);
 
-        // 播放下雪特效
-        _snowEffectInstance = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Effects/FX_Snow_For_SnowMountainScene_UICamera");
-
-        // 播放雪山环境音效
-        _soundManager.PlaySnowMountainMapEnv();
-
-        // 播放淡出动画
+        // 结束过渡动画
+        var uiLoading = _uiManager.GetUI<UINormalLoading>("UINormalLoading");
+        await UniTask.Delay(6000);
         await uiLoading.PlayFadeOutAsync();
-
-        // 关闭加载界面
-        _uiManager.CloseUI("UILoading");
-
-        // 触发进入隐藏地图事件
-        _eventManager.Trigger(HiddenMapEvents.HiddenMapEntered);
+        await UniTask.Delay(500);
 
         // 播放警报动画与音效
         var uiAlertRed = await _uiManager.OpenUIAsync<UIAlertRed>("UIAlertRed", UIManager.UILayer.Normal);
@@ -89,17 +76,13 @@ public class HiddenMapMode : IGameplayMode
 
         // 派发并播放Boss入场动画
         var bossAnimalBehavior = _spawnerManager.GetSpawner<ManualSpawner>("Boss").Spawn() as BossAnimalBehaviour;
-        await UniTask.Delay(2000); // 模拟Boss入场动画
+        await UniTask.Delay(3000); // 模拟Boss入场动画
+
+        // 播放Boss血量增长动画
+        uiGameplay.PlayBossHealthIncreaseAsync().Forget();
 
         // 播放Boss咆哮音效
         await _soundManager.PlayBossRoar(bossAnimalBehavior.SpecieData.BossType).ToUniTask();
-        await UniTask.Delay(2000); // 等待固定时长控制节奏
-
-        // 播放Boss血量增长动画和音效
-        await UniTask.WhenAll(
-            uiGameplay.PlayBossHealthIncreaseAsync(),
-            _soundManager.PlayBossHPGrowth().ToUniTask()
-        );
         await UniTask.Delay(2000); // 等待固定时长控制节奏
 
         // 播放倒计时动画
@@ -173,12 +156,10 @@ public class HiddenMapMode : IGameplayMode
         await PlaySlowMotion(0.3f, 4f);
 
         // 停止下雪特效
-        _effectManager.Stop(_snowEffectInstance);
-        _snowEffectInstance = null;
+        _effectManager.Stop(_hiddenMapContext.SnowEffect);
 
         // 播放光效动画和音效
         var uiSnowMountainVictory = await _uiManager.OpenUIAsync<UISnowMountainVictory>("UISnowMountainVictory", UIManager.UILayer.PopUp);
-        _soundManager.PlayLightTransition();
         await uiSnowMountainVictory.PlayLightEffectAsync(_animalManager.GetLastActiveAnimalPosition());
 
         // 播放全家福动画

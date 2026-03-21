@@ -21,6 +21,7 @@ public sealed partial class Global : Luban.BeanBase
         HiddenMapCountDownTime = _buf.ReadFloat();
         MeatToThreeKPCoinRate = _buf.ReadInt();
         PointRewardAmount = _buf.ReadInt();
+        HiddenMapProbability = _buf.ReadInt();
         Comment = _buf.ReadString();
     }
 
@@ -50,6 +51,10 @@ public sealed partial class Global : Luban.BeanBase
     /// </summary>
     public readonly int PointRewardAmount;
     /// <summary>
+    /// 隐藏地图概率
+    /// </summary>
+    public readonly int HiddenMapProbability;
+    /// <summary>
     /// 注释
     /// </summary>
     public readonly string Comment;
@@ -70,6 +75,7 @@ public sealed partial class Global : Luban.BeanBase
         + "HiddenMapCountDownTime:" + HiddenMapCountDownTime + ","
         + "MeatToThreeKPCoinRate:" + MeatToThreeKPCoinRate + ","
         + "PointRewardAmount:" + PointRewardAmount + ","
+        + "HiddenMapProbability:" + HiddenMapProbability + ","
         + "Comment:" + Comment + ","
         + "}";
     }

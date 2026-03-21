@@ -1,8 +1,9 @@
-﻿using CoreGameLogic.Managers.AppManagers;
+using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using GameFramework.Game;
 using GameFramework.Manager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -93,9 +94,19 @@ public class HuntingAppFlow : GameAppFlow
     /// <param name="context">单局上下文</param>
     public async UniTask EnterRound(RoundContext context)
     {
+        // 播放过渡动画
+        var uiLoading = await _uiManager.OpenUIAsync<UINormalLoading>("UINormalLoading", UIManager.UILayer.Loading);
+        await uiLoading.PlayFadeInAsync();
+        _uiManager.CloseUI("UIPrepare");
+
+        // 加载场景
+        await SceneManager.LoadSceneAsync("GameplayForestScene").ToUniTask();
+        DynamicGI.UpdateEnvironment();
+        
+        // 进入单局
         _currentRoundFlow = new RoundFlow();
         await _currentRoundFlow.EnterRound(context);
-        
+
         _currentState = EHuntingAppFlowState.Round;
     }
     #endregion

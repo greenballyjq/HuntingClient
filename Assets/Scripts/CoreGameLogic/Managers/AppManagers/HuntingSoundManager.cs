@@ -1,4 +1,4 @@
-using cfg.HuntingConfig.Enum;
+﻿using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Audio;
 using GameFramework.Game;
@@ -77,22 +77,6 @@ namespace CoreGameLogic.Managers.AppManagers
         }
 
         /// <summary>
-        /// 播放结算面板爆炸音效
-        /// </summary>
-        public AudioCallback PlaySettlementPanelExplosion()
-        {
-            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Effect_Explosion_SettlementPanel);
-        }
-
-        /// <summary>
-        /// 播放光效转场音效
-        /// </summary>
-        public AudioCallback PlayLightTransition()
-        {
-            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Effect_Transition_Light,dontDestroyOnLoad:true);
-        }
-
-        /// <summary>
         /// 播放Boss登场警报音效
         /// </summary>
         public AudioCallback PlayBossAlert()
@@ -131,14 +115,6 @@ namespace CoreGameLogic.Managers.AppManagers
         }
 
         /// <summary>
-        /// 播放雪山地图环境音效
-        /// </summary>
-        public AudioCallback PlaySnowMountainMapEnv()
-        {
-            return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_SnowMountain);
-        }
-
-        /// <summary>
         /// 清理所有音效
         /// </summary>
         /// <param name="forceRemoveAll">强制移除所有音效</param>
@@ -165,11 +141,9 @@ namespace CoreGameLogic.Managers.AppManagers
             _eventManager.AddListener(PropEvents.PropStarted, OnPropStarted);
             _eventManager.AddListener(SkillEvents.SkillStarted, OnSkillStarted);
             _eventManager.AddListener(SettlementEvents.SettlementStarted, OnSettlementStarted);
-            _eventManager.AddListener(RoundEvents.RoundEntered, OnRoundEntered);
-            _eventManager.AddListener(RoundEvents.RoundStarted, OnRoundStarted);
+            _eventManager.AddListener(RoundEvents.MapEntered, OnMapEntered);
             _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
             _eventManager.AddListener(PropEvents.TrapTriggered, OnTrapTriggered);
-            _eventManager.AddListener(HiddenMapEvents.HiddenMapEntered, OnHiddenMapEntered);
             _eventManager.AddListener(QuestEvents.QuestDispatched, OnQuestDispatched);
             _eventManager.AddListener(QuestEvents.QuestCompleted, OnQuestComplete);
             _eventManager.AddListener(BulletEvents.BulletHit, OnBulletHit);
@@ -183,37 +157,24 @@ namespace CoreGameLogic.Managers.AppManagers
             _eventManager.RemoveListener(PropEvents.PropStarted, OnPropStarted);
             _eventManager.RemoveListener(SkillEvents.SkillStarted, OnSkillStarted);
             _eventManager.RemoveListener(SettlementEvents.SettlementStarted, OnSettlementStarted);
-            _eventManager.RemoveListener(RoundEvents.RoundEntered, OnRoundEntered);
-            _eventManager.RemoveListener(RoundEvents.RoundStarted, OnRoundStarted);
+            _eventManager.RemoveListener(RoundEvents.MapEntered, OnMapEntered);
             _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
             _eventManager.RemoveListener(PropEvents.TrapTriggered, OnTrapTriggered);
-            _eventManager.RemoveListener(HiddenMapEvents.HiddenMapEntered, OnHiddenMapEntered);
             _eventManager.RemoveListener(QuestEvents.QuestDispatched, OnQuestDispatched);
             _eventManager.RemoveListener(QuestEvents.QuestCompleted, OnQuestComplete);
             _eventManager.RemoveListener(BulletEvents.BulletHit, OnBulletHit);
         }
 
         /// <summary>
-        /// 单局开始事件回调
+        /// 进入地图事件回调
         /// </summary>
-        private void OnRoundStarted(RoundStartedEventArgs args)
-        {
-
-        }
-
-        /// <summary>
-        /// 进入单局事件回调
-        /// </summary>
-        private void OnRoundEntered(RoundEnteredEventArgs args)
+        private void OnMapEntered(MapEnteredEventArgs args)
         {
             var roundContext = args.RoundContext;
-            var mapType = roundContext.MapData.MapType;
             var roleType = roundContext.RoleData.RoleType;
             var hasLinkage = roundContext.HasLinkage;
 
             PlayRoleOpening(roleType, hasLinkage);
-
-            PlayMapEnvSound(mapType);
         }
 
         /// <summary>
@@ -243,14 +204,6 @@ namespace CoreGameLogic.Managers.AppManagers
         private void OnTrapTriggered(TrapTriggeredEventArgs args)
         {
             PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.Props_TrapCatch);
-        }
-        
-        /// <summary>
-        /// 进入隐藏地图事件
-        /// </summary>
-        private void OnHiddenMapEntered()
-        {
-            PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_SnowMountain);
         }
         
         /// <summary>
@@ -336,27 +289,23 @@ namespace CoreGameLogic.Managers.AppManagers
         /// <summary>
         /// 播放地图环境应
         /// </summary>
-        /// <param name="roundContext"></param>
-        private void PlayMapEnvSound(EMapType mapType)
+        public AudioCallback PlayMapEnvSound(EMapType mapType,int loop = 1,bool dontDestroyOnLoad = false)
         {
             switch (mapType)
             {
                 case EMapType.Beach:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_Beatch);
-                    break;
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_Beatch,loop:loop,dontDestroyOnLoad:dontDestroyOnLoad);
                 case EMapType.Forest:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_RoyalForest);
-                    break;
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_RoyalForest,loop:loop,dontDestroyOnLoad:dontDestroyOnLoad);
                 case EMapType.Garden:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_PersonalGarden);
-                    break;
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_PersonalGarden,loop:loop,dontDestroyOnLoad:dontDestroyOnLoad);
                 case EMapType.Grassland:
-                    PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_GrassLand);
-                    break;
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_GrassLand,loop:loop,dontDestroyOnLoad:dontDestroyOnLoad);
                 case EMapType.Hidden:
-                    //PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_SnowMountain);
-                    break;
+                    return PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.MapEnv_SnowMountain,loop:loop,dontDestroyOnLoad:dontDestroyOnLoad);
             }
+
+            return null;
         }
 
         /// <summary>
@@ -564,7 +513,6 @@ namespace CoreGameLogic.Managers.AppManagers
         /// <summary>
         /// 播放IP人物开场白
         /// </summary>
-        /// <param name="roleType"></param>
         public AudioCallback PlayIPOpening(ERoleType roleType)
         {
             switch (roleType)

@@ -9,11 +9,6 @@ using GameFramework.Manager;
 public class MainMapMode : IGameplayMode
 {
     /// <summary>
-    /// 单局上下文
-    /// </summary>
-    private RoundContext _roundContext;
-
-    /// <summary>
     /// 主地图已用时间（秒）
     /// </summary>
     private float _elapsedTime;
@@ -22,17 +17,15 @@ public class MainMapMode : IGameplayMode
     private RoundFlow _roundFlow;
     private EventManager _eventManager;
     private UIManager _uiManager;
-    private EffectManager _effectManager;
-    private HuntingSoundManager _soundManager;    
+    private HuntingSoundManager _soundManager;
     private PlayerControlManager _playerControlManager;
     private SettlementManager _settlementManager;
 
-    public MainMapMode(RoundContext context, RoundFlow roundFlow)
+    public MainMapMode(RoundFlow roundFlow)
     {
         RegisterServices();
         RegisterEvents();
 
-        _roundContext = context;
         _roundFlow = roundFlow;
     }
 
@@ -43,15 +36,28 @@ public class MainMapMode : IGameplayMode
         // 设置玩法规则
         SetPlayRules();
 
-        // 切换到主地图界面
-        var uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
+        // 切换到主地图游玩界面
+        var uiGameplay = await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay");
         uiGameplay.SwitchToMode(EGameplayMode.MainMap);
+
+        // 切换到摇杆操作
+        _playerControlManager.SwitchToJoystick();
 
         // 禁止游玩界面操作
         uiGameplay.SetClickable(false);
 
-        // 切换到摇杆操作
-        _playerControlManager.SwitchToJoystick();
+        // 触发进入地图事件
+        _eventManager.Trigger(RoundEvents.MapEntered, new MapEnteredEventArgs
+        {
+            RoundContext = _roundFlow.RoundContext
+        });
+
+        // 播放地图环境音
+        _soundManager.PlayMapEnvSound(_roundFlow.RoundContext.MapData.MapType);
+
+        // 结束过渡动画
+        var uiLoading = _uiManager.GetUI<UINormalLoading>("UINormalLoading");
+        await uiLoading.PlayFadeOutAsync();
 
         // 播放倒计时动画
         var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
@@ -65,30 +71,7 @@ public class MainMapMode : IGameplayMode
     {
         UnregisterEvents();
 
-        switch (nextMode)
-        {
-            case EGameplayMode.HiddenMap:
-                {
-                    // 播放假结算面板动画
-                    var uiPopupFakeSettlement = _uiManager.GetUI<UIPopupFakeSettlement>("UIPopupFakeSettlement");
-                    await UniTask.WhenAll(
-                        uiPopupFakeSettlement.PlayWindowShakeAsync(),
-                        uiPopupFakeSettlement.PlayButtonGlowAsync()
-                    );
-
-                    // 播放爆炸特效和音效
-                    await _effectManager.PlayOneShotAsync("Assets/Arts/Prefabs/Effects/Settlement_Explosion");
-                    _soundManager.PlaySettlementPanelExplosion();
-                    await UniTask.Delay(200); // 等待200毫秒模拟爆炸动画
-                    _uiManager.CloseUI("UIPopupFakeSettlement");
-
-                    // 播放淡入动画与音效
-                    _soundManager.PlayLightTransition();
-                    var uiLoading = await _uiManager.OpenUIAsync<UILoading>("UILoading", UIManager.UILayer.Loading);
-                    await uiLoading.PlayFadeInAsync();
-                }
-                break;
-        }
+        await UniTask.CompletedTask;
     }
 
     public void DoUpdate(float dt)
@@ -109,7 +92,6 @@ public class MainMapMode : IGameplayMode
     {
         _eventManager = GameServiceLocator.EventManager;
         _uiManager = GameServiceLocator.UIManager;
-        _effectManager = GameServiceLocator.EffectManager;
         _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
         _playerControlManager = GameServiceLocator.GetRoundManager<PlayerControlManager>();
         _settlementManager = GameServiceLocator.GetRoundManager<SettlementManager>();
@@ -157,7 +139,7 @@ public class MainMapMode : IGameplayMode
 
             // 开始结算
             _roundFlow.StartSettlement();
-            if (_roundContext.HasHiddenMap)
+            if (_roundFlow.RoundContext.HasHiddenMap)
                 await _uiManager.OpenUIAsync<UIPopupFakeSettlement>("UIPopupFakeSettlement", UIManager.UILayer.PopUp);
             else
                 await _uiManager.OpenUIAsync<UIPopupNormalSettlement>("UIPopupNormalSettlement", UIManager.UILayer.PopUp);

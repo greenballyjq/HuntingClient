@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using System;
@@ -7,11 +7,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using GameFramework.Core;
 using GameFramework.Manager;
-using Hunting.Events;
 using Hunting.Game.Animal;
 using CoreGameLogic.Managers.AppManagers;
 using GameFramework.Core.Audio;
-using System.Threading.Tasks;
+using cfg.HuntingConfig.Enum;
 
 /// <summary>
 /// 单局上下文
@@ -52,6 +51,15 @@ public class RoundContext
     /// 隐藏地图数据
     /// </summary>
     public Map HiddenMapData { get; set; }
+}
+
+/// <summary>
+/// 隐藏地图上下文
+/// </summary>
+public class HiddenMapContext
+{
+    public GameObject SnowEffect { get; set; }
+    public AudioCallback EnvSoundCallback { get; set; }
 }
 
 /// <summary>
@@ -132,7 +140,6 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private readonly Dictionary<Type, IRoundManager> _roundManagers = new Dictionary<Type, IRoundManager>();
 
-    private EventManager _eventManager;
     private UIManager _uiManager;
     private GameObjectPoolManager _gameObjectPoolManager;
     private EffectManager _effectManager;
@@ -189,34 +196,15 @@ public class RoundFlow : Singleton<RoundFlow>
     {
         _currentState = ERoundFlowState.Transitioning;
 
-        // 缓存单局上下文
+        // 初始化单局
         _roundContext = context;
-
-        // 注册服务
         RegisterServices();
-
-        // 注册并初始化单据管理器
         RegisterRoundManagers();
         InitRoundManagers();
 
-        // 打开游玩界面
-        await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay", UIManager.UILayer.Fixed);
-
-        // 触发单局进入事件
-        TriggerRoundEntered(new RoundEnteredEventArgs
-        {
-            RoundContext = _roundContext
-        });
-
         // 进入主地图模式
-        _currentMode = new MainMapMode(_roundContext,this);
+        _currentMode = new MainMapMode(this);
         await _currentMode.EnterAsync();
-
-        // 触发单局开始事件
-        TriggerRoundStarted(new RoundStartedEventArgs
-        {
-            RoundContext = _roundContext
-        });
 
         _currentState = ERoundFlowState.Playing;
     }
@@ -297,12 +285,14 @@ public class RoundFlow : Singleton<RoundFlow>
     /// <param name="nextMode">下一个玩法模式</param>
     public async UniTask SwitchToNextMode(EGameplayMode nextMode)
     {
+        _currentState = ERoundFlowState.Transitioning;
         switch (nextMode)
         {
             case EGameplayMode.HiddenMap:
                 await SwitchToHiddenMapAsync(nextMode);
                 break;
         }
+        _currentState = ERoundFlowState.Playing;
     }
 
     /// <summary>
@@ -310,7 +300,21 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private async UniTask SwitchToHiddenMapAsync(EGameplayMode mode)
     {
-        _currentState = ERoundFlowState.Transitioning;
+        // 播放下雪特效和雪山环境音效
+        var snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Effects/FX_Snow_For_SnowMountainScene_UICamera",dontDestroyOnLoad:true);
+        var envSoundCallback = _soundManager.PlayMapEnvSound(EMapType.Hidden,-1,true);
+
+        // 播放假结算面板动画
+        var uiPopupFakeSettlement = _uiManager.GetUI<UIPopupFakeSettlement>("UIPopupFakeSettlement");
+        UniTask.WhenAll(
+            uiPopupFakeSettlement.PlayWindowShakeAsync(),
+            uiPopupFakeSettlement.PlayButtonGlowAsync(),
+            uiPopupFakeSettlement.PlayPanelFadeOutAsync()
+        ).Forget();
+        
+        // 播放过渡动画
+        var uiLoading = await _uiManager.OpenUIAsync<UINormalLoading>("UINormalLoading", UIManager.UILayer.Loading);
+        await uiLoading.PlayFadeInAsync();
 
         // 退出当前玩法模式
         await _currentMode.ExitAsync(EGameplayMode.HiddenMap);
@@ -327,10 +331,12 @@ public class RoundFlow : Singleton<RoundFlow>
         ReInitManagers();
 
         // 进入隐藏地图模式
-        _currentMode = new HiddenMapMode(_roundContext,this);
+        _currentMode = new HiddenMapMode(new HiddenMapContext 
+        { 
+            SnowEffect = snowEffect,
+            EnvSoundCallback = envSoundCallback 
+        });
         await _currentMode.EnterAsync();
-
-        _currentState = ERoundFlowState.Playing;
     }
     #endregion
 
@@ -340,7 +346,6 @@ public class RoundFlow : Singleton<RoundFlow>
     /// </summary>
     private void RegisterServices()
     {
-        _eventManager = GameServiceLocator.EventManager;
         _uiManager = GameServiceLocator.UIManager;
         _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
         _effectManager = GameServiceLocator.EffectManager;
@@ -432,24 +437,6 @@ public class RoundFlow : Singleton<RoundFlow>
             if (manager is IRoundUpdatable updatable)
                 updatable.DoUpdate(dt);
         }
-    }
-    #endregion
-
-    #region 事件相关
-    /// <summary>
-    /// 触发进入单局事件
-    /// </summary>
-    private void TriggerRoundEntered(RoundEnteredEventArgs args)
-    {
-        _eventManager.Trigger(RoundEvents.RoundEntered, args);
-    }
-
-    /// <summary>
-    /// 触发单局开始事件
-    /// </summary>
-    private void TriggerRoundStarted(RoundStartedEventArgs args)
-    {
-        _eventManager.Trigger(RoundEvents.RoundStarted, args);
     }
     #endregion
 }

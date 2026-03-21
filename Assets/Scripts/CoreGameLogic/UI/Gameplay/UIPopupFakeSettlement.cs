@@ -48,6 +48,28 @@ public class UIPopupFakeSettlement : UIPopupNormalSettlement
     }
 
     /// <summary>
+    /// 面板淡出配置
+    /// </summary>
+    [Serializable]
+    private class PanelFadeOutConfig
+    {
+        /// <summary>
+        /// 淡出开始前等待时长（秒）
+        /// </summary>
+        public float StartDelaySeconds = 3f;
+
+        /// <summary>
+        /// 淡出时长（秒）
+        /// </summary>
+        public float Duration = 1f;
+
+        /// <summary>
+        /// 是否不受TimeScale影响
+        /// </summary>
+        public bool UseUnscaledTime;
+    }
+
+    /// <summary>
     /// 按钮发光频闪配置
     /// </summary>
     [Serializable]
@@ -105,6 +127,16 @@ public class UIPopupFakeSettlement : UIPopupNormalSettlement
     [SerializeField] private ButtonGlowConfig _buttonGlowConfig;
 
     /// <summary>
+    /// 面板淡出配置
+    /// </summary>
+    [SerializeField] private PanelFadeOutConfig _panelFadeOutConfig;
+
+    /// <summary>
+    /// CanvasGroup组件
+    /// </summary>
+    private CanvasGroup _canvasGroup;
+
+    /// <summary>
     /// 原始锚点位置
     /// </summary>
     private Vector2 _originAnchoredPos;
@@ -112,6 +144,7 @@ public class UIPopupFakeSettlement : UIPopupNormalSettlement
     public override void OnInit(object userData)
     {
         base.OnInit(userData);
+        _canvasGroup = GetComponent<CanvasGroup>();
         _originAnchoredPos = _windowRectTransform.anchoredPosition;
     }
 
@@ -175,6 +208,28 @@ public class UIPopupFakeSettlement : UIPopupNormalSettlement
                 .ToUniTask();
         }
         await UniTask.WhenAll(tasks);
+    }
+
+    /// <summary>
+    /// 播放面板淡出
+    /// </summary>
+    public async UniTask PlayPanelFadeOutAsync()
+    {
+        if (_panelFadeOutConfig.StartDelaySeconds > 0f)
+        {
+            await UniTask.Delay(
+                TimeSpan.FromSeconds(_panelFadeOutConfig.StartDelaySeconds),
+                ignoreTimeScale: _panelFadeOutConfig.UseUnscaledTime
+            );
+        }
+
+        await _canvasGroup
+            .DOFade(0f, _panelFadeOutConfig.Duration)
+            .SetLink(gameObject)
+            .SetUpdate(_panelFadeOutConfig.UseUnscaledTime)
+            .ToUniTask();
+
+        Close();
     }
     #endregion
 

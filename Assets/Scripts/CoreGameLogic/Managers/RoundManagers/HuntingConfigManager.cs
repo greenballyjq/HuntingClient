@@ -1,4 +1,4 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using cfg.HuntingConfig.Bean;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
@@ -402,10 +402,18 @@ public class HuntingConfigManager : ConfigManager<HuntingConfigManager>
         => GetGlobal(GlobalMainConfigId).HiddenMapCountDownTime;
 
     /// <summary>
+    /// 获取隐藏地图概率
+    /// </summary>
+    public float GetHiddenMapProbability()
+        => GetGlobal(GlobalMainConfigId).HiddenMapProbability;  
+
+    /// <summary>
     /// 获取任务全局配置
     /// </summary>
     public QuestGlobal GetQuestGlobal()
         => GetGlobal(GlobalMainConfigId).QuestGlobal;
+
+    
     #endregion
 
     #region 子弹相关特殊方法

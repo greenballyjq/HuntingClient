@@ -16,6 +16,11 @@ public static class RoundEvents
     public static readonly EventKey<RoundStartedEventArgs> RoundStarted = new EventKey<RoundStartedEventArgs>();
 
     /// <summary>
+    /// 进入地图事件
+    /// </summary>
+    public static readonly EventKey<MapEnteredEventArgs> MapEntered = new EventKey<MapEnteredEventArgs>();
+
+    /// <summary>
     /// 时间更新事件
     /// </summary>
     public static readonly EventKey<TimeUpdatedEventArgs> TimeUpdated = new EventKey<TimeUpdatedEventArgs>();
@@ -36,6 +41,17 @@ public sealed class RoundEnteredEventArgs : EventArgs
 /// 单局开始事件参数
 /// </summary>
 public sealed class RoundStartedEventArgs : EventArgs
+{
+    /// <summary>
+    /// 单局上下文
+    /// </summary>
+    public RoundContext RoundContext { get; set; }
+}
+
+/// <summary>
+/// 进入地图事件参数
+/// </summary>
+public sealed class MapEnteredEventArgs : EventArgs
 {
     /// <summary>
     /// 单局上下文

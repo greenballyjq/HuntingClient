@@ -1201,6 +1201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4612798560401005991}
   - component: {fileID: 2118067668150143979}
+  - component: {fileID: 5055082360490173675}
   m_Layer: 5
   m_Name: UIPopupFakeSettlement
   m_TagString: Untagged
@@ -1255,7 +1256,7 @@ MonoBehaviour:
   _imageButtonClaim: {fileID: 7491267530172708434}
   _imageButtonDoubleClaim: {fileID: 8733580054397983526}
   _shakeConfig:
-    Duration: 3
+    Duration: 5
     Strength: 30
     Frequency: 10
     StrengthCurve:
@@ -1308,10 +1309,26 @@ MonoBehaviour:
       m_RotationOrder: 4
     UseUnscaledTime: 0
   _buttonGlowConfig:
-    Duration: 3
+    Duration: 5
     Frequency: 6
     GlowColor: {r: 1, g: 0.865404, b: 0.5801887, a: 1}
     UseUnscaledTime: 0
+  _panelFadeOutConfig:
+    StartDelaySeconds: 3
+    Duration: 2
+    UseUnscaledTime: 0
+--- !u!225 &5055082360490173675
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4881832181514704509}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4884973723498392085
 GameObject:
   m_ObjectHideFlags: 0

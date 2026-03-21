@@ -5,6 +5,7 @@ using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 using GameFramework.Core.Audio;
 using GameFramework.Core.UI;
+using GameFramework.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -56,6 +57,7 @@ public class UIPrepare : UIBase
 
     private EventManager _eventManager;
     private UIManager _uiManager;
+    private EffectManager _effectManager;
     private HuntingConfigManager _configManager;
     private HuntingSoundManager _soundManager;
     private CGManager _cgManager;
@@ -74,6 +76,7 @@ public class UIPrepare : UIBase
     {
         _eventManager = GameServiceLocator.EventManager;
         _uiManager = GameServiceLocator.UIManager;
+        _effectManager = GameServiceLocator.EffectManager;
         _configManager = GameServiceLocator.ConfigManager;
         _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
         _cgManager = GameServiceLocator.GetAppManager<CGManager>();
@@ -150,12 +153,8 @@ public class UIPrepare : UIBase
         Skill skillData = _configManager.GetSkill(roleData.LinkedSkillId);
         Map mapData = _uiComponentMapInfo.CurrentMapData;
 
-        // 是否有隐藏地图 TODO: 以后转移到配置表
-        bool hasHiddenMap = Random.Range(0, 100) < 100;
-
-        // 创建角色CG视频
-        if (hasHiddenMap)
-            await _cgManager.CreateCGAsync(roleData.VideoResourcePath);
+        // 是否有隐藏地图
+        bool hasHiddenMap = Random.Range(0, 100) <= _configManager.GetHiddenMapProbability();
 
         // 播放角色语音
         if(roleData.RoleType == ERoleType.Bule || roleData.RoleType == ERoleType.Red)
@@ -163,22 +162,8 @@ public class UIPrepare : UIBase
         else
             await _soundManager.PlayIPOpening(roleData.RoleType).ToUniTask();
 
-        // 加载地图
-        await SceneManager.LoadSceneAsync("GameplayForestScene").ToUniTask();
-        DynamicGI.UpdateEnvironment();
-
-        // 播放角色CG视频
-        if (hasHiddenMap)
-        {
-#if !UNITY_EDITOR
-                await _cgManager.PlayCGAsync();
-#endif
-        }
-
-        _uiManager.CloseUI("UIPrepare");
-
         // 进入单局
-        await HuntingAppFlow.Instance.EnterRound(new RoundContext
+        HuntingAppFlow.Instance.EnterRound(new RoundContext
         {
             RoleData = roleData,
             MapData = mapData,
@@ -187,7 +172,7 @@ public class UIPrepare : UIBase
             HasLinkage = roleData.LinkedMapId == mapData.ID,
             HasHiddenMap = hasHiddenMap,
             HiddenMapData = hasHiddenMap ? _configManager.GetMap(EMapType.Hidden) : null
-        });
+        }).Forget();
     }
 
     /// <summary>
