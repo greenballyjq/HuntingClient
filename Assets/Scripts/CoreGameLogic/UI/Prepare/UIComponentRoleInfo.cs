@@ -1,6 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using cfg.HuntingConfig;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using GameFramework.Manager;
 using TMPro;
 using UnityEngine;
@@ -81,19 +81,19 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
 
     #region 事件相关
     /// <summary>
-    /// 角色选中事件回调
+    /// 角色选中时先填内容，揭晓入场时再显示。
     /// </summary>
     private void OnRoleSelected(RoleSelectedEventArgs args)
     {
         _currentRoleId = args.RoleId;
+        UpdateRoleInfo(_currentRoleId).Forget();
     }
 
     /// <summary>
-    /// 走格子动画结束事件回调
+    /// 金币人停稳后显示，由入场动画带到休息位。
     /// </summary>
-    private async void OnSlotAnimationEnded()
+    private void OnSlotAnimationEnded()
     {
-        await UpdateRoleInfo(_currentRoleId);
         gameObject.SetActive(true);
     }
     #endregion

@@ -353,6 +353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3869630107947258348}
   - component: {fileID: 5028059920892135522}
+  - component: {fileID: 8281444062847893720}
   m_Layer: 5
   m_Name: UIComponentMapInfo
   m_TagString: Untagged
@@ -398,6 +399,27 @@ MonoBehaviour:
   _imageMap: {fileID: 7746279926448502450}
   _textMapName: {fileID: 2542011265800916235}
   _textMapDescription: {fileID: 749260741508996263}
+--- !u!114 &8281444062847893720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5320265898349202543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b48b470444cbf954cad470b2aaba7553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config:
+    Amplitude: {x: 3, y: 6}
+    Period: 3.2
+    PhaseX: 40
+    PhaseY: 200
+    RotationAmplitude: 0.25
+    RotationPhase: 0
+    ScaleAmplitude: 0
+    UseUnscaledTime: 0
 --- !u!1 &5501136520180850127
 GameObject:
   m_ObjectHideFlags: 0

@@ -219,6 +219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7384764399432904581}
   - component: {fileID: 3451035941714239252}
+  - component: {fileID: 5233592509695672162}
   m_Layer: 5
   m_Name: UIComponentRollRole
   m_TagString: Untagged
@@ -270,6 +271,27 @@ MonoBehaviour:
   - {fileID: 733350195924532337}
   - {fileID: 1127796058782195629}
   _threeKPCoinManThrowDiceAnimator: {fileID: 542655237346780698}
+--- !u!114 &5233592509695672162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4307558890711897133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b48b470444cbf954cad470b2aaba7553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config:
+    Amplitude: {x: 3, y: 7}
+    Period: 2.8
+    PhaseX: 0
+    PhaseY: 80
+    RotationAmplitude: 0.3
+    RotationPhase: 0
+    ScaleAmplitude: 0
+    UseUnscaledTime: 0
 --- !u!1 &5991676894346270056
 GameObject:
   m_ObjectHideFlags: 0
