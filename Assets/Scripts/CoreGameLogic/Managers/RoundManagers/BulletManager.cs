@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using cfg.HuntingConfig;
 using GameFramework.Manager;
 using GameFramework.Utility;
 using Hunting.Events;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 /// <summary>
 /// 子弹管理器
 /// </summary>
-public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
+public class BulletManager : IMapWorld, IRoundUpdatable
 {
     /// <summary>
     /// 活跃子弹集合
@@ -32,31 +33,32 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private EventManager _eventManager;
     private GameObjectPoolManager _gameObjectPoolManager;
     private HuntingConfigManager _configManager;
-    private WeaponManager _weaponManager;
+    private RoundNumericLayer _numeric;
 
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
-        RegisterServices();
-        RegisterEvents();
+        BindServices();
+        SubscribeEvents();
         CacheBulletDatas();
         Log.Info("[BulletManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void Dispose()
     {
         RecycleAllBullets();
         ClearBulletDataCache();
-        UnregisterEvents();
+        UnsubscribeEvents();
 
         Log.Info("[BulletManager] 已释放");
     }
 
-    public void Cleanup()
+    public void Unbind()
     {
         RecycleAllBullets();
     }
 
-    public void ReInit(Map mapData){}
+    public void Bind(Map mapData) { }
 
     public void DoUpdate(float dt)
     {
@@ -75,12 +77,18 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 生成子弹
     /// </summary>
-    public BulletBehavior SpawnBullet(int bulletId, Vector3 position, Vector3 direction)
+    public BulletBehavior SpawnBullet(
+        int bulletId,
+        Vector3 position,
+        Vector3 direction,
+        DamageSourceKind sourceKind = DamageSourceKind.Weapon)
     {
         Bullet bulletData = _bulletDatas[bulletId];
         GameObject prefab = _bulletPrefabs[bulletId];
 
-        float finalDamage = _weaponManager.GetCurrentDamage(bulletId);
+        float finalDamage = _numeric.EvaluateDamage(
+            bulletData.BaseDamage,
+            new DamageContext(sourceKind));
 
         GameObject gameObject = _gameObjectPoolManager.Spawn(prefab);
 
@@ -88,7 +96,7 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
         if (direction != Vector3.zero)
             gameObject.transform.rotation = Quaternion.LookRotation(direction);
         var bullet = gameObject.GetComponent<BulletBehavior>();
-        bullet.Init(bulletData, finalDamage);
+        bullet.Init(bulletData, finalDamage, _numeric);
         _activeBullets.Add(bullet);
             
         TriggerBulletSpawned(new BulletSpawnedEventArgs
@@ -104,12 +112,12 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     #endregion
 
     #region 私有方法
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
         _configManager = GameServiceLocator.ConfigManager;
-        _weaponManager = GameServiceLocator.GetRoundManager<WeaponManager>();
+        _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
     }
 
     /// <summary>
@@ -166,7 +174,7 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 注册事件
     /// </summary>
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         _eventManager.AddListener(BulletEvents.BulletDestroyed, OnBulletDestroyed);
     }
@@ -174,7 +182,7 @@ public class BulletManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 注销事件
     /// </summary>
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(BulletEvents.BulletDestroyed, OnBulletDestroyed);
     }

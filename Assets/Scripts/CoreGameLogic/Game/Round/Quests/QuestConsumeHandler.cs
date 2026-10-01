@@ -1,6 +1,4 @@
 using cfg.HuntingConfig;
-using cfg.HuntingConfig.Prop;
-using cfg.HuntingConfig.Skill;
 
 /// <summary>
 /// 消耗任务处理器（技能或道具被使用）

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using GameFramework.Utility;
+using UnityEngine;
 
 namespace Hunting.Game.Animal
 {
@@ -16,16 +17,16 @@ namespace Hunting.Game.Animal
             {
                 case MovePolicyType.Linear:
                     // MovePolicy = new LinearMovePolicy(_baseSpeed, _moveRate);
-                    Debug.Log("[LinearMovement] 切换到线性策略");
+                    Log.Info("[LinearMovement] 切换到线性策略");
                     break;
                 case MovePolicyType.Guard:
                     _guardTargetTransform = Object.FindObjectOfType<BossAnimalBehaviour>().transform;
                     if (_guardTargetTransform == null)
                     {
-                        Debug.LogError("[GuardMovePolicy] Could not find BossAnimalBehaviour");
+                        Log.Error("[GuardMovePolicy] Could not find BossAnimalBehaviour");
                     }
                     // MovePolicy = new GuardMovePolicy(_baseSpeed, _moveRate);
-                    Debug.Log("[LinearMovement] 切换到守卫策略");
+                    Log.Info("[LinearMovement] 切换到守卫策略");
                     break;
             }
         }
@@ -99,7 +100,7 @@ namespace Hunting.Game.Animal
             // float actualSpeed = _baseSpeed * _moveRate;
             // Vector3 movement = _currentTargetDirection * actualSpeed * dt;
             // transform.position += movement;
-            // Debug.Log($"[{GetType().Name}] DoUpdate");
+            // Log.Info($"[{GetType().Name}] DoUpdate");
             if (_currentMovePolicyType == MovePolicyType.Linear)
             {
                 _currentMoveDirection = _currentTargetDirection;

@@ -1,11 +1,12 @@
 ﻿using cfg.HuntingConfig;
 using GameFramework.Utility;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 游戏游玩场景元素管理器
 /// </summary>
-public class GameplaySceneItemManager : IRoundManager, IRoundResettable
+public class GameplaySceneItemManager : IMapWorld
 {
     /// <summary>
     /// 玩家组件
@@ -19,14 +20,15 @@ public class GameplaySceneItemManager : IRoundManager, IRoundResettable
     private BaseAreaShape _playableArea;
     public BaseAreaShape PlayableArea => _playableArea;
 
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
         FindPlayer();
         FindPlayableArea();
         Log.Info("[GameplaySceneItemManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
-    public void ReInit(Map mapData)
+    public void Bind(Map mapData)
     {
         FindPlayer();
         FindPlayableArea();
@@ -39,7 +41,7 @@ public class GameplaySceneItemManager : IRoundManager, IRoundResettable
         Log.Info("[GameplaySceneItemManager] 已释放");
     }
 
-    public void Cleanup()
+    public void Unbind()
     {
         _player = null;
         _playableArea = null;

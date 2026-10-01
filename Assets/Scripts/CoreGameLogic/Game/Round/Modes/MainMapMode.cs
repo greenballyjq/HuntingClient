@@ -1,13 +1,21 @@
-﻿using Cysharp.Threading.Tasks;
-using UnityEngine;
-using CoreGameLogic.Managers.AppManagers;
+using Cysharp.Threading.Tasks;
+using GameFramework.Audio;
 using GameFramework.Manager;
+using GameFramework.UI;
+using UnityEngine;
 
 /// <summary>
 /// 主地图玩法模式
 /// </summary>
 public class MainMapMode : IGameplayMode
 {
+    private const float StartCountdownDuration = 8f;
+    private const float MeatFullCountdownDuration = 10f;
+    private const float MeatFullTipDuration = 10f;
+    private static readonly string[] StartCountdownTexts =
+        { "5", "4", "3", "2", "1", "准备..", "开始.", "战斗!!" };
+    private static readonly string[] MeatFullCountdownTexts =
+        { "10", "9", "8", "7", "6", "5", "4", "3", "2", "1" };
     /// <summary>
     /// 主地图已用时间（秒）
     /// </summary>
@@ -17,14 +25,14 @@ public class MainMapMode : IGameplayMode
     private RoundFlow _roundFlow;
     private EventManager _eventManager;
     private UIManager _uiManager;
-    private HuntingSoundManager _soundManager;
+    private HuntingConfigManager _configManager;
     private PlayerControlManager _playerControlManager;
-    private SettlementManager _settlementManager;
+    private AudioManager _audioManager;
 
     public MainMapMode(RoundFlow roundFlow)
     {
-        RegisterServices();
-        RegisterEvents();
+        BindServices();
+        SubscribeEvents();
 
         _roundFlow = roundFlow;
     }
@@ -37,7 +45,7 @@ public class MainMapMode : IGameplayMode
         SetPlayRules();
 
         // 切换到主地图游玩界面
-        var uiGameplay = await _uiManager.OpenUIAsync<UIGameplay>("UIGameplay");
+        var uiGameplay = await _uiManager.OpenAsync<UIGameplay>();
         uiGameplay.SwitchToMode(EGameplayMode.MainMap);
 
         // 切换到摇杆操作
@@ -46,32 +54,31 @@ public class MainMapMode : IGameplayMode
         // 禁止游玩界面操作
         uiGameplay.SetClickable(false);
 
-        // 触发进入地图事件
-        _eventManager.Trigger(RoundEvents.MapEntered, new MapEnteredEventArgs
-        {
-            RoundContext = _roundFlow.RoundContext
-        });
+        var mapRef = _configManager.MapRefSo.Get(_roundFlow.RoundContext.MapData.ID);
+        _audioManager.Play(mapRef?.Ambience);
+    }
 
-        // 播放地图环境音
-        _soundManager.PlayMapEnvSound(_roundFlow.RoundContext.MapData.MapType);
-
-        // 结束过渡动画
-        var uiLoading = _uiManager.GetUI<UINormalLoading>("UINormalLoading");
-        await uiLoading.PlayFadeOutAsync();
+    public async UniTask PresentAsync()
+    {
+        var uiGameplay = _uiManager.Get<UIGameplay>();
+        var roleRef = _configManager.RoleRefSo.Get(_roundFlow.RoundContext.RoleData.ID);
+        _audioManager.Play(roleRef?.Opening);
 
         // 播放倒计时动画
-        var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
-        await uiCountDown.PlayCountdownAsync(new[] { "5", "4", "3", "2", "1", "准备..", "开始.", "战斗!!" }, 8f);
+        var uiCountDown = await _uiManager.OpenAsync<UICountdown>();
+        await uiCountDown.PlayCountdownAsync(StartCountdownTexts, StartCountdownDuration);
 
         // 恢复游玩界面操作
         uiGameplay.SetClickable(true);
+
+        var mapBgm = _configManager.MapRefSo.Get(_roundFlow.RoundContext.MapData.ID)?.Bgm;
+        _audioManager.PlayMusic(mapBgm, 0f);
     }
 
-    public async UniTask ExitAsync(EGameplayMode? nextMode)
+    public UniTask ExitAsync()
     {
-        UnregisterEvents();
-
-        await UniTask.CompletedTask;
+        UnsubscribeEvents();
+        return UniTask.CompletedTask;
     }
 
     public void DoUpdate(float dt)
@@ -88,13 +95,13 @@ public class MainMapMode : IGameplayMode
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _uiManager = GameServiceLocator.UIManager;
-        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+        _configManager = GameServiceLocator.ConfigManager;
+        _audioManager = GameServiceLocator.AudioManager;
         _playerControlManager = GameServiceLocator.GetRoundManager<PlayerControlManager>();
-        _settlementManager = GameServiceLocator.GetRoundManager<SettlementManager>();
     }
 
     /// <summary>
@@ -111,7 +118,7 @@ public class MainMapMode : IGameplayMode
     /// <summary>
     /// 注册事件
     /// </summary>
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         _eventManager.AddListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
     }
@@ -119,7 +126,7 @@ public class MainMapMode : IGameplayMode
     /// <summary>
     /// 注销事件
     /// </summary>
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(MeatEvents.MeatScaleCompleted, OnMeatScaleCompleted);
     }
@@ -129,21 +136,20 @@ public class MainMapMode : IGameplayMode
     /// </summary>
     private async void OnMeatScaleCompleted(MeatScaleCompletedEventArgs args)
     {
-        var uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
+        var uiGameplay = _uiManager.Get<UIGameplay>();
         if (args.CompletedScaleCount >= args.TotalScaleCount)
         {
             // 播放倒计时动画
-            var uiCountDown = await _uiManager.OpenUIAsync<UICountdown>("UICountdown", UIManager.UILayer.Fixed);
-            uiGameplay.PlayTip("肉条已满，即将结算！", Color.red, 10f,false);
-            await uiCountDown.PlayCountdownAsync(new[] { "10", "9", "8", "7", "6", "5", "4", "3", "2", "1" }, 10f);
+            var uiCountDown = await _uiManager.OpenAsync<UICountdown>();
+            uiGameplay.PlayTip("肉条已满，即将结算！", Color.red, MeatFullTipDuration,false);
+            await uiCountDown.PlayCountdownAsync(MeatFullCountdownTexts, MeatFullCountdownDuration);
 
             // 开始结算
             _roundFlow.StartSettlement();
             if (_roundFlow.RoundContext.HasHiddenMap)
-                await _uiManager.OpenUIAsync<UIPopupFakeSettlement>("UIPopupFakeSettlement", UIManager.UILayer.PopUp);
+                await _uiManager.OpenAsync<UIPopupEnterHiddenMap>();
             else
-                await _uiManager.OpenUIAsync<UIPopupNormalSettlement>("UIPopupNormalSettlement", UIManager.UILayer.PopUp);
-            _settlementManager.CalculateReward();
+                await _uiManager.OpenAsync<UIPopupNormalSettlement>();
         }
         else
         {

@@ -1,5 +1,6 @@
-﻿using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
+using cfg.HuntingConfig.Enum;
+using GameFramework.Audio;
 using GameFramework.Manager;
 using UnityEngine;
 
@@ -35,15 +36,22 @@ public abstract class BaseSkillHandler : ISkillHandler
 
     protected EffectManager EffectManager;
     protected HuntingConfigManager ConfigManager;
-    protected HuntingSoundManager _soundManager;
     protected GameplaySceneItemManager GameplaySceneItemManager;
+    protected RoundNumericLayer NumericLayer;
+    protected AudioManager AudioManager;
+
+    /// <summary>
+    /// 技能专属音效播放期间是否暂停 BGM，播完再恢复
+    /// </summary>
+    protected virtual bool ShouldYieldMusicForUniqueSkillAudio => false;
 
     public void Init(SkillContext context)
     {
         EffectManager = GameServiceLocator.EffectManager;
         ConfigManager = GameServiceLocator.ConfigManager;
-        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+        AudioManager = GameServiceLocator.AudioManager;
         GameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+        NumericLayer = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
 
         SkillContext = context;
 
@@ -58,6 +66,17 @@ public abstract class BaseSkillHandler : ISkillHandler
         PlayableArea = GameplaySceneItemManager.PlayableArea;
 
         _remainingTime = SkillContext.SkillData.Duration;
+
+        var skillRefSo = ConfigManager.SkillRefSo;
+        AudioManager.Play(skillRefSo.Use);
+        PlayUniqueSkillAudio(skillRefSo.Get(SkillContext.SkillData.ID)?.Unique);
+
+        var roleData = HuntingAppFlow.Instance.RoundFlow.RoundContext.RoleData;
+        if (roleData.RoleType != ERoleType.Bule && roleData.RoleType != ERoleType.Red)
+        {
+            var roleRef = ConfigManager.RoleRefSo.Get(roleData.ID);
+            AudioManager.Play(roleRef?.SkillVoice);
+        }
 
         await OnSkillStart();
 
@@ -100,4 +119,21 @@ public abstract class BaseSkillHandler : ISkillHandler
     /// 技能结束钩子
     /// </summary>
     protected abstract void OnSkillEnd();
+
+    private void PlayUniqueSkillAudio(SfxCue cue)
+    {
+        if (cue == null)
+            return;
+
+        if (!ShouldYieldMusicForUniqueSkillAudio)
+        {
+            AudioManager.Play(cue);
+            return;
+        }
+
+        AudioManager.PauseMusic();
+        PlayResult result = AudioManager.Play(cue, _ => AudioManager.ResumeMusic());
+        if (!result.Succeeded)
+            AudioManager.ResumeMusic();
+    }
 }

@@ -19,7 +19,6 @@ public sealed partial class Skill3KP : Luban.BeanBase
         ID = _buf.ReadInt();
         DamageMultiplier = _buf.ReadFloat();
         FireRateMultiplier = _buf.ReadFloat();
-        Comment = _buf.ReadString();
     }
 
     public static Skill3KP DeserializeSkill3KP(ByteBuf _buf)
@@ -39,10 +38,6 @@ public sealed partial class Skill3KP : Luban.BeanBase
     /// 射速倍率
     /// </summary>
     public readonly float FireRateMultiplier;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = -2146857919;
     public override int GetTypeId() => __ID__;
@@ -57,7 +52,6 @@ public sealed partial class Skill3KP : Luban.BeanBase
         + "ID:" + ID + ","
         + "DamageMultiplier:" + DamageMultiplier + ","
         + "FireRateMultiplier:" + FireRateMultiplier + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

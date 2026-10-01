@@ -1,76 +1,30 @@
-﻿using cfg.HuntingConfig;
-using GameFramework.Manager;
-using UnityEngine;
-
+using cfg.HuntingConfig;
+using GameFramework.Utility;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 幸运仪式增益管理器
 /// </summary>
 public class LuckyBuffManager : IRoundManager
 {
-    /// <summary>
-    /// 幸运仪式增益处理器
-    /// </summary>
-    private ILuckyBuffHandler _luckyBuffhandler;
+    private ILuckyBuffSource _source;
 
-    /// <summary>
-    /// 幸运仪式增益上下文
-    /// </summary>
-    private LuckyBuffContext _luckyBuffContext;
-
-    private EventManager _eventManager;
-
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
-        RegisterServices();
-
-        // 获取本局幸运仪式增益配置
         LuckyBuff buffData = context.LuckyBuffData;
-
-        // 未选择幸运仪式增益
         if (buffData == null)
-            return;
+            return UniTask.CompletedTask;
 
-        // 创建幸运仪式增益处理器
-        _luckyBuffhandler = LuckyBuffHandlerFactory.CreateLuckyBuffHandler(buffData.LuckyBuffType);
-
-        // 构造幸运仪式增益上下文
-        _luckyBuffContext = new LuckyBuffContext
-        {
-            LuckyBuffData = buffData
-        };
-
-        // 启用幸运仪式效果
-        _luckyBuffhandler?.OnActivate(_luckyBuffContext);
-
-        // 触发幸运仪式增益激活事件
-        TriggerLuckyBuffActivated(new LuckyBuffActivatedEventArgs
-        {
-            Sender = this,
-            LuckyBuffData = buffData
-        });
+        _source = LuckyBuffSourceFactory.Create(buffData);
+        _source?.Activate();
+        Log.Info("[LuckyBuffManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void Dispose()
     {
-        // 停用幸运仪式增益效果
-        _luckyBuffhandler?.OnDeactivate(_luckyBuffContext);
+        _source?.Deactivate();
+        _source = null;
+        Log.Info("[LuckyBuffManager] 已释放");
     }
-
-    #region 私有方法
-    private void RegisterServices()
-    {
-        _eventManager = GameServiceLocator.EventManager;
-    }
-    #endregion
-
-    #region 事件相关
-    /// <summary>
-    /// 触发幸运仪式增益激活事件
-    /// </summary>
-    private void TriggerLuckyBuffActivated(LuckyBuffActivatedEventArgs args)
-    {
-        _eventManager.Trigger(LuckyEvents.LuckyBuffActivated, args);
-    }
-    #endregion
 }

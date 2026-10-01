@@ -10,14 +10,16 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 派发管理器
         /// </summary>
-        private SpawnerManager _spawnerManager => GameServiceLocator.GetRoundManager<SpawnerManager>();
-        
+        private SpawnerManager _spawnerManager;
+
         /// <summary>
         /// 派发
         /// </summary>
-        /// <returns>生成的动物实例</returns>
         public BaseAnimalBehaviour Spawn()
         {
+            if (_spawnerManager == null)
+                _spawnerManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
+
             return _spawnerManager.HandleSpawnRequest(this, CalculateSpawnInfo());
         }
 

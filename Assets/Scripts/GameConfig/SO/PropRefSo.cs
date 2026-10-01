@@ -1,5 +1,6 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using System.Collections.Generic;
+using GameFramework.Audio;
 using UnityEngine;
 
 /// <summary>
@@ -38,6 +39,16 @@ public class PropRefSo : ScriptableObject
         /// 道具特效预制体
         /// </summary>
         public GameObject PropEffectPrefab;
+
+        /// <summary>
+        /// 使用音效
+        /// </summary>
+        public SfxCue Use;
+
+        /// <summary>
+        /// 陷阱捕获音效
+        /// </summary>
+        public SfxCue Catch;
     }
 
     /// <summary>
@@ -47,16 +58,24 @@ public class PropRefSo : ScriptableObject
 
     #region 公共方法
     /// <summary>
-    /// 根据ID获取道具图标
+    /// 根据ID获取道具关联资源
     /// </summary>
-    public Sprite GetPropIcon(int id)
+    public PropRef Get(int id)
     {
         for (int i = 0; i < _propRefList.Count; i++)
         {
             if (_propRefList[i].ID == id)
-                return _propRefList[i].PropIcon;
+                return _propRefList[i];
         }
         return null;
+    }
+
+    /// <summary>
+    /// 根据ID获取道具图标
+    /// </summary>
+    public Sprite GetPropIcon(int id)
+    {
+        return Get(id)?.PropIcon;
     }
 
     /// <summary>
@@ -64,12 +83,7 @@ public class PropRefSo : ScriptableObject
     /// </summary>
     public GameObject GetPropPrefab(int id)
     {
-        for (int i = 0; i < _propRefList.Count; i++)
-        {
-            if (_propRefList[i].ID == id)
-                return _propRefList[i].PropPrefab;
-        }
-        return null;
+        return Get(id)?.PropPrefab;
     }
 
     /// <summary>
@@ -77,12 +91,7 @@ public class PropRefSo : ScriptableObject
     /// </summary>
     public GameObject GetPropEffectPrefab(int id) 
     {
-        for (int i = 0; i < _propRefList.Count; i++)
-        {
-            if (_propRefList[i].ID == id)
-                return _propRefList[i].PropEffectPrefab;
-        }
-        return null;
+        return Get(id)?.PropEffectPrefab;
     }
     #endregion
 }

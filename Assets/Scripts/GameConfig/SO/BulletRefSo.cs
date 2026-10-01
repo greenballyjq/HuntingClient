@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using cfg.HuntingConfig.Enum;
+using GameFramework.Audio;
 using UnityEngine;
 
 /// <summary>
@@ -38,6 +39,16 @@ public class BulletRefSo : ScriptableObject
         /// 命中特效预制体
         /// </summary>
         public GameObject HitEffectPrefab;
+
+        /// <summary>
+        /// 开火
+        /// </summary>
+        public SfxCue Fire;
+
+        /// <summary>
+        /// 命中
+        /// </summary>
+        public SfxCue Hit;
     }
 
     /// <summary>
@@ -46,16 +57,24 @@ public class BulletRefSo : ScriptableObject
     [SerializeField] private List<BulletRef> _bulletRefList;
 
     /// <summary>
-    /// 根据ID获取子弹预制体
+    /// 根据ID获取子弹关联资源
     /// </summary>
-    public GameObject GetBulletPrefab(int id)
+    public BulletRef Get(int id)
     {
         for (int i = 0; i < _bulletRefList.Count; i++)
         {
             if (_bulletRefList[i].ID == id)
-                return _bulletRefList[i].BulletPrefab;
+                return _bulletRefList[i];
         }
         return null;
+    }
+
+    /// <summary>
+    /// 根据ID获取子弹预制体
+    /// </summary>
+    public GameObject GetBulletPrefab(int id)
+    {
+        return Get(id)?.BulletPrefab;
     }
 
     /// <summary>
@@ -63,12 +82,7 @@ public class BulletRefSo : ScriptableObject
     /// </summary>
     public GameObject GetBulletEffectPrefab(int id)
     {
-        for (int i = 0; i < _bulletRefList.Count; i++)
-        {
-            if (_bulletRefList[i].ID == id)
-                return _bulletRefList[i].HitEffectPrefab;
-        }
-        return null;
+        return Get(id)?.HitEffectPrefab;
     }
 
     /// <summary>
@@ -76,11 +90,6 @@ public class BulletRefSo : ScriptableObject
     /// </summary>
     public Sprite GetBulletIcon(int id)
     {
-        for (int i = 0; i < _bulletRefList.Count; i++)
-        {
-            if (_bulletRefList[i].ID == id)
-                return _bulletRefList[i].BulletIcon;
-        }
-        return null;
+        return Get(id)?.BulletIcon;
     }
 }

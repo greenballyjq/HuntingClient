@@ -1,6 +1,6 @@
 using cfg.HuntingConfig.Prop;
-using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
+using GameFramework.Audio;
 using GameFramework.Manager;
 using UnityEngine;
 
@@ -37,15 +37,17 @@ public abstract class BasePropHandler : IPropHandler
 
     protected EffectManager EffectManager;
     protected HuntingConfigManager ConfigManager;
-    protected HuntingSoundManager SoundManager;
+    protected AudioManager AudioManager;
     protected GameplaySceneItemManager GameplaySceneItemManager;
+    protected RoundNumericLayer NumericLayer;
 
     public void Init(Prop propData)
     {
         EffectManager = GameServiceLocator.EffectManager;
         ConfigManager = GameServiceLocator.ConfigManager;
-        SoundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+        AudioManager = GameServiceLocator.AudioManager;
         GameplaySceneItemManager = GameServiceLocator.GetRoundManager<GameplaySceneItemManager>();
+        NumericLayer = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
 
         PropData = propData;
 
@@ -60,6 +62,25 @@ public abstract class BasePropHandler : IPropHandler
         PlayableArea = GameplaySceneItemManager.PlayableArea;
 
         _remainingTime = PropData.Duration;
+
+        var propRef = ConfigManager.PropRefSo.Get(PropData.ID);
+        AudioManager.Play(propRef?.Use);
+        var roleRef = ConfigManager.RoleRefSo.Get(HuntingAppFlow.Instance.RoundFlow.RoundContext.RoleData.ID);
+        if (roleRef != null)
+        {
+            switch (PropData.PropType)
+            {
+                case cfg.HuntingConfig.Enum.EPropType.Bombardment:
+                    AudioManager.Play(roleRef.BombardmentVoice);
+                    break;
+                case cfg.HuntingConfig.Enum.EPropType.AimAssist:
+                    AudioManager.Play(roleRef.AimAssistVoice);
+                    break;
+                case cfg.HuntingConfig.Enum.EPropType.Trap:
+                    AudioManager.Play(roleRef.TrapVoice);
+                    break;
+            }
+        }
 
         await OnPropStart();
 

@@ -1,7 +1,9 @@
-﻿using GameFramework.Game;
+using GameFramework.Game;
 using GameFramework.Manager;
+using GameFramework.UI;
 using GameFramework.Utility;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 相机管理器
@@ -11,8 +13,7 @@ public class CameraManager : IAppManager
     /// <summary>
     /// 主摄像机
     /// </summary>
-    private Camera _mainCamera => Camera.main;
-    public Camera MainCamera => _mainCamera;
+    public Camera MainCamera => Camera.main;
 
     /// <summary>
     /// 粒子摄像机
@@ -29,9 +30,9 @@ public class CameraManager : IAppManager
     private UIManager _uiManager;
 
 
-    public void Init()
+    public UniTask InitAsync()
     {
-        RegisterServices();
+        BindServices();
 
         _particleCamera = GameObject.FindGameObjectWithTag("Particle Camera").GetComponent<Camera>();
         Object.DontDestroyOnLoad(_particleCamera.gameObject);
@@ -39,6 +40,7 @@ public class CameraManager : IAppManager
         _uiCamera = _uiManager.UICamera;
 
         Log.Info("[CameraManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void Dispose()
@@ -48,7 +50,7 @@ public class CameraManager : IAppManager
     }
 
     #region 私有方法
-    private void RegisterServices()
+    private void BindServices()
     {
         _uiManager = GameServiceLocator.UIManager;
     }

@@ -1,6 +1,7 @@
 using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
+using GameFramework.UI;
 using Hunting.Game.Animal;
 using UnityEngine;
 
@@ -52,17 +53,17 @@ public class PropAimAssistHandler : BasePropHandler
 
     protected override UniTask OnPropStart()
     {
-        RegisterEvents();
+        SubscribeEvents();
 
         _hasTarget = false;
 
-         _aimAssisController = EffectManager.PlayLoop(_aimAssisPrefab).GetComponent<AimAssistController>();
+        _aimAssisController = EffectManager.PlayLoop(_aimAssisPrefab).GetComponent<AimAssistController>();
         _aimAssisController.SetTarget(null);
 
         _handGuideController = Object.Instantiate(_handGuidePrefab).GetComponent<AimAssistHandGuideController>();
         _handGuideController.SetVisible(false);
 
-        var _uiGameplay = _uiManager.GetUI<UIGameplay>("UIGameplay");
+        var _uiGameplay = _uiManager.Get<UIGameplay>();
         _uiGameplay.PlayTip("点击动物自动瞄准射击", Color.green, PropData.Duration);
 
         _playerControlManager.SwitchToAimAssist();
@@ -89,12 +90,12 @@ public class PropAimAssistHandler : BasePropHandler
         _playerControlManager.SwitchToJoystick();
 
         EffectManager.Stop(_aimAssisController.gameObject, EffectStopMode.Graceful);
-        _aimAssisController = null; 
+        _aimAssisController = null;
 
         Object.Destroy(_handGuideController.gameObject);
         _handGuideController = null;
 
-        UnregisterEvents();
+        UnsubscribeEvents();
     }
 
     #region 私有方法
@@ -114,7 +115,7 @@ public class PropAimAssistHandler : BasePropHandler
     /// <summary>
     /// 注册事件
     /// </summary>
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         _eventManager.AddListener(PlayerControlEvents.TargetSelected, OnTargetSelected);
         _eventManager.AddListener(PlayerControlEvents.TargetLost, OnTargetLost);
@@ -123,7 +124,7 @@ public class PropAimAssistHandler : BasePropHandler
     /// <summary>
     /// 注销事件
     /// </summary>
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(PlayerControlEvents.TargetSelected, OnTargetSelected);
         _eventManager.RemoveListener(PlayerControlEvents.TargetLost, OnTargetLost);

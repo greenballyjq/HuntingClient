@@ -3,7 +3,7 @@ using cfg.HuntingConfig.Enum;
 using UnityEngine;
 using UnityEngine.UI;
 using GameFramework.Manager;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using TMPro;
 
 /// <summary>
@@ -56,7 +56,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// </summary>
     private float _cooldownTotalTime;
 
-    private RoundFlow _roundFlow => RoundFlow.Instance;
+    private RoundFlow _roundFlow => HuntingAppFlow.Instance.RoundFlow;
     private EventManager _eventManager;
     private UIManager _uiManager;
     private PropManager _propManager;
@@ -64,7 +64,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
     }
 
     public void Init()
@@ -100,7 +100,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _uiManager = GameServiceLocator.UIManager;
@@ -177,7 +177,7 @@ public class UIComponentPropItem : MonoBehaviour, IUIComponent
     private async void OnAddButtonClicked()
     {
         _roundFlow.PauseRound();
-        await _uiManager.OpenUIAsync<UIPopupProp>("UIPopupProp", UIManager.UILayer.PopUp, _propType);
+        await _uiManager.OpenAsync<UIPopupProp, EPropType>(_propType);
     }
 
     /// <summary>

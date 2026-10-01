@@ -22,7 +22,6 @@ public sealed partial class Prop : Luban.BeanBase
         Description = _buf.ReadString();
         Duration = _buf.ReadFloat();
         ParamTableID = _buf.ReadInt();
-        Comment = _buf.ReadString();
     }
 
     public static Prop DeserializeProp(ByteBuf _buf)
@@ -54,10 +53,6 @@ public sealed partial class Prop : Luban.BeanBase
     /// 参数子表ID
     /// </summary>
     public readonly int ParamTableID;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = 1362590929;
     public override int GetTypeId() => __ID__;
@@ -75,7 +70,6 @@ public sealed partial class Prop : Luban.BeanBase
         + "Description:" + Description + ","
         + "Duration:" + Duration + ","
         + "ParamTableID:" + ParamTableID + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

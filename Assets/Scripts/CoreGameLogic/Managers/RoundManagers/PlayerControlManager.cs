@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using cfg.HuntingConfig;
 using GameFramework.Utility;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 玩家控制管理器
 /// </summary>
-public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResettable
+public class PlayerControlManager : IMapWorld, IRoundUpdatable, IRoundPausable
 {
     /// <summary>
     /// 当前玩家控制处理器
@@ -18,20 +19,35 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
     /// 控制处理器缓存
     /// </summary>
     private readonly Dictionary<EControlType, BaseControlHandler> _controlHandlers = new Dictionary<EControlType, BaseControlHandler>();
+    private bool _paused;
 
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
         CacheHandlers();
         Log.Info("[PlayerControlManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void DoUpdate(float deltaTime)
     {
+        if (_paused)
+            return;
+
         if (_currentPlayerControlHandler != null && 
             _currentPlayerControlHandler.ControlPhase == ControlHandlerPhase.Running)
         {
             _currentPlayerControlHandler.DoUpdate(deltaTime);
         }
+    }
+
+    public void Pause()
+    {
+        _paused = true;
+    }
+
+    public void Resume()
+    {
+        _paused = false;
     }
 
     public void Dispose()
@@ -40,12 +56,12 @@ public class PlayerControlManager : IRoundManager, IRoundUpdatable, IRoundResett
         Log.Info("[PlayerControlManager] 已释放");
     }
 
-    public void Cleanup()
+    public void Unbind()
     {
         EndCurrentControl();
     }
 
-    public void ReInit(Map mapData)
+    public void Bind(Map mapData)
     {
         SwitchToJoystick();
     }

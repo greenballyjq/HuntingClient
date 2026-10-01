@@ -1,4 +1,4 @@
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -55,7 +55,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// </summary>
     private int _totalBar;
 
-    private RoundFlow _roundFlow => RoundFlow.Instance;
+    private RoundFlow _roundFlow => HuntingAppFlow.Instance.RoundFlow;
     private EventManager _eventManager;
     private HuntingConfigManager _configManager;
     private EnergyProgressManager _energyProgressManager;
@@ -63,7 +63,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
         _buttonSkill.onClick.AddListener(OnSkillButtonClicked);
         _rectTransformSkillImage = _imageSkill.GetComponent<RectTransform>();
     }
@@ -96,7 +96,7 @@ public class UIComponentSkill : MonoBehaviour, IUIComponent
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _configManager = GameServiceLocator.ConfigManager;

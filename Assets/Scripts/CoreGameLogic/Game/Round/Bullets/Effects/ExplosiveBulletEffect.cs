@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using Hunting.Game.Animal;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,7 +29,7 @@ public class ExplosiveBulletEffect : IBulletEffect
         };
 
         // 对主要目标造成伤害
-        hitInfo.PrimaryTarget.TakeDamage(context.FinalDamage, hitInfo.HitPoint, Vector3.zero);
+        context.Numeric.Apply(hitInfo.PrimaryTarget, context.FinalDamage, hitInfo.HitPoint, Vector3.zero);
 
         // 检测爆炸范围内的所有可伤害物体
         List<IDamageable> hitTargets = new List<IDamageable> { hitInfo.PrimaryTarget };
@@ -44,7 +44,7 @@ public class ExplosiveBulletEffect : IBulletEffect
                 continue;
 
             // 对范围内的其他可伤害物体造成伤害
-            damageable.TakeDamage(context.FinalDamage, hitInfo.HitPoint);
+            context.Numeric.Apply(damageable, context.FinalDamage, hitInfo.HitPoint);
             hitTargets.Add(damageable);
         }
 

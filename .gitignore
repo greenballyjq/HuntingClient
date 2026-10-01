@@ -77,3 +77,23 @@ crashlytics-build.properties
 
 # ArtSandBox directory
 /[Aa]rt[Ss]and[Bb]ox/
+
+# Local IDE and assistant scratch
+.cursor/
+.idea/
+.vscode/
+**/.workbuddy/
+.research/
+
+# Local tool output and scratch files
+/TextToolDatas/
+/yoo/
+/AIReadFile/
+/_restore_classify.json
+/xdfdf
+*.rar
+
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini

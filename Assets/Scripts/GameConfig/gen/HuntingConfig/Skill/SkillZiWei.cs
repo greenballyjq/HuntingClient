@@ -19,7 +19,6 @@ public sealed partial class SkillZiWei : Luban.BeanBase
         ID = _buf.ReadInt();
         WeaponCountPerSide = _buf.ReadInt();
         FireInterval = _buf.ReadFloat();
-        Comment = _buf.ReadString();
     }
 
     public static SkillZiWei DeserializeSkillZiWei(ByteBuf _buf)
@@ -39,10 +38,6 @@ public sealed partial class SkillZiWei : Luban.BeanBase
     /// 射击间隔（秒）
     /// </summary>
     public readonly float FireInterval;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = -1509237067;
     public override int GetTypeId() => __ID__;
@@ -57,7 +52,6 @@ public sealed partial class SkillZiWei : Luban.BeanBase
         + "ID:" + ID + ","
         + "WeaponCountPerSide:" + WeaponCountPerSide + ","
         + "FireInterval:" + FireInterval + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

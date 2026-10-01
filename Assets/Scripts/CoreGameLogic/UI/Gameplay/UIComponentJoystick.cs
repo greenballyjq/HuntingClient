@@ -1,5 +1,5 @@
 using DG.Tweening;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using GameFramework.Utility;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -79,8 +79,11 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
 
     public void Init()
     {
+        if (_rectBase != null)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_rectBase);
+
         Joystick = this;
-        Debug.Log("[UIComponentJoystick] 初始化完成");
+        Log.Info("[UIComponentJoystick] 初始化完成");
     }
 
     public void CleanUp()
@@ -90,7 +93,7 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
         KillSpringTween();
         ResetKnobPosition();
         Joystick = null;
-        Debug.Log("[UIComponentJoystick] 已清理");
+        Log.Info("[UIComponentJoystick] 已清理");
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -123,12 +126,15 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
         {
             KillSpringTween();
             _isActive = true;
-            _horizontalInput = Mathf.Clamp(horizontalInput, -1f, 1f);
+            SetHorizontalInput(horizontalInput);
 
-            float dragRange = GetDragRange();
-            var anchoredPos = _rectKnob.anchoredPosition;
-            anchoredPos.x = _horizontalInput * dragRange;
-            _rectKnob.anchoredPosition = anchoredPos;
+            float dragRange;
+            if (TryGetDragRange(out dragRange))
+            {
+                var anchoredPos = _rectKnob.anchoredPosition;
+                anchoredPos.x = _horizontalInput * dragRange;
+                _rectKnob.anchoredPosition = anchoredPos;
+            }
         }
         else
         {
@@ -142,10 +148,22 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     /// <summary>
     /// 获取拖拽范围
     /// </summary>
-    private float GetDragRange()
+    private bool TryGetDragRange(out float dragRange)
     {
-        var rect = _rectBase.rect;
-        return rect.width * 0.5f * DRAG_RANGE_RATIO;
+        dragRange = _rectBase != null ? _rectBase.rect.width * 0.5f * DRAG_RANGE_RATIO : 0f;
+        return dragRange > 0.0001f;
+    }
+
+    private void SetHorizontalInput(float value)
+    {
+        if (value >= -1f && value <= 1f)
+            _horizontalInput = value;
+        else if (value < -1f)
+            _horizontalInput = -1f;
+        else if (value > 1f)
+            _horizontalInput = 1f;
+        else
+            _horizontalInput = 0f;
     }
 
     /// <summary>
@@ -153,14 +171,14 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     /// </summary>
     private void RefreshKnobPosition(PointerEventData eventData)
     {
-        Vector2 localPoint = PointConverter.ScreenPointToUiLocalPoint(_rectBase, eventData.position, _uiCamera);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_rectBase, eventData.position, _uiCamera, out Vector2 localPoint);
 
-        var rect = _rectBase.rect;
-        float halfWidth = rect.width * 0.5f;
-        float dragRange = halfWidth * DRAG_RANGE_RATIO;
+        float dragRange;
+        if (!TryGetDragRange(out dragRange))
+            return;
 
         float knobX = Mathf.Clamp(localPoint.x, -dragRange, dragRange);
-        _horizontalInput = knobX / dragRange;
+        SetHorizontalInput(knobX / dragRange);
 
         var anchoredPos = _rectKnob.anchoredPosition;
         anchoredPos.x = knobX;
@@ -174,13 +192,19 @@ public class UIComponentJoystick : MonoBehaviour, IUIComponent, IPointerDownHand
     {
         KillSpringTween();
 
-        float dragRange = GetDragRange();
+        float dragRange;
+        if (!TryGetDragRange(out dragRange))
+        {
+            ResetKnobPosition();
+            return;
+        }
+
         _springTween = _rectKnob.DOAnchorPosX(0f, SPRING_DURATION)
             .SetLink(gameObject)
             .SetEase(Ease.OutQuad)
             .OnUpdate(() =>
             {
-                _horizontalInput = _rectKnob.anchoredPosition.x / dragRange;
+                SetHorizontalInput(_rectKnob.anchoredPosition.x / dragRange);
             })
             .OnKill(() => _springTween = null);
     }

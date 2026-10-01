@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4f5a6b7c8d90e1f2a3b4c5d6e7f8091, type: 3}
+  m_Name: UiAudioRefSo
+  m_EditorClassIdentifier: 
+  PrepareBgm: {fileID: 11400000, guid: c8a1b2c3d4e5f678901234567890aaa1, type: 2}
+  BossAlert: {fileID: 11400000, guid: 0f3baf2eb1cd471b9f2939af71a1731c, type: 2}
+  BossHealthGrowth: {fileID: 11400000, guid: 22b919b793a64a46b1dde52302c1995a, type: 2}
+  QuestDispatched: {fileID: 11400000, guid: b67b6ac66a56490ca901c680dc44f494, type: 2}
+  QuestCompleted: {fileID: 11400000, guid: a5d4ea38728e4ad2af1bb393a9ad481e, type: 2}
+  SettlementVictory: {fileID: 11400000, guid: d2e3f4a5b6c708192a3b4c5d6e7f8092, type: 2}
+  ButtonHover: {fileID: 11400000, guid: b8e1c4d7a2f0496e9c3d5a7b1e4f8021, type: 2}
+  ButtonClick: {fileID: 11400000, guid: c9f2d5e8b3a14a7f0d4e6b8c2f509132, type: 2}
+  Cheer: {fileID: 11400000, guid: f2c5081be6d47da230719ebf5283c465, type: 2}

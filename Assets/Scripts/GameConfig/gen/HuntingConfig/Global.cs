@@ -22,7 +22,7 @@ public sealed partial class Global : Luban.BeanBase
         MeatToThreeKPCoinRate = _buf.ReadInt();
         PointRewardAmount = _buf.ReadInt();
         HiddenMapProbability = _buf.ReadInt();
-        Comment = _buf.ReadString();
+        PropPrice = _buf.ReadInt();
     }
 
     public static Global DeserializeGlobal(ByteBuf _buf)
@@ -55,9 +55,9 @@ public sealed partial class Global : Luban.BeanBase
     /// </summary>
     public readonly int HiddenMapProbability;
     /// <summary>
-    /// 注释
+    /// 道具价格
     /// </summary>
-    public readonly string Comment;
+    public readonly int PropPrice;
    
     public const int __ID__ = -678234912;
     public override int GetTypeId() => __ID__;
@@ -76,7 +76,7 @@ public sealed partial class Global : Luban.BeanBase
         + "MeatToThreeKPCoinRate:" + MeatToThreeKPCoinRate + ","
         + "PointRewardAmount:" + PointRewardAmount + ","
         + "HiddenMapProbability:" + HiddenMapProbability + ","
-        + "Comment:" + Comment + ","
+        + "PropPrice:" + PropPrice + ","
         + "}";
     }
 }

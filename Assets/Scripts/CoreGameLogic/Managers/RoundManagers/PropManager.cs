@@ -1,20 +1,16 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using GameFramework.Utility;
 using System;
 using System.Collections.Generic;
-using CoreGameLogic.Managers.AppManagers;
-using GameFramework.Network.Models.Vo;
-using GameFramework.Network.Proxy;
-using UnityEngine;
 using cfg.HuntingConfig;
 
 /// <summary>
 /// 道具管理器
 /// </summary>
-public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
+public class PropManager : IMapWorld, IRoundUpdatable
 {
     /// <summary>
     /// 活跃道具
@@ -30,11 +26,6 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
         /// 道具配置
         /// </summary>
         public Prop PropData;
-
-        /// <summary>
-        /// 后端的道具ID
-        /// </summary>
-        public string RemoteItemId;
     }
 
     /// <summary>
@@ -56,16 +47,14 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private HuntingConfigManager _configManager;
     private PlayerDataManager _playerDataManager;
 
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
-        RegisterServices();
+        BindServices();
         CacheHandler();
         CachePropConfig();
-        
-        // todo 拉取远端道具数据
-        
-        
+
         Log.Info("[PropManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void DoUpdate(float dt)
@@ -80,12 +69,12 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
         Log.Info("[PropManager] 已释放");
     }
 
-    public void Cleanup()
+    public void Unbind()
     {
         EndAllProps();
     }
 
-    public void ReInit(Map mapData) { }
+    public void Bind(Map mapData) { }
 
     #region 公共方法
     /// <summary>
@@ -118,7 +107,7 @@ public class PropManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _configManager = GameServiceLocator.ConfigManager;

@@ -1,4 +1,4 @@
-﻿using GameFramework.Core;
+using GameFramework.Core;
 using GameFramework.Game;
 
 /// <summary>
@@ -15,6 +15,11 @@ public static class QuestEvents
     /// 任务进度更新事件
     /// </summary>
     public static readonly EventKey<QuestProgressUpdatedEventArgs> QuestProgressUpdated = new EventKey<QuestProgressUpdatedEventArgs>();
+
+    /// <summary>
+    /// 任务剩余时间更新事件
+    /// </summary>
+    public static readonly EventKey<QuestTimeUpdatedEventArgs> QuestTimeUpdated = new EventKey<QuestTimeUpdatedEventArgs>();
 
     /// <summary>
     /// 任务完成事件
@@ -62,7 +67,13 @@ public sealed class QuestProgressUpdatedEventArgs : EventArgs
     /// 当前进度
     /// </summary>
     public int CurrentProgress { get; set; }
+}
 
+/// <summary>
+/// 任务剩余时间更新事件参数
+/// </summary>
+public sealed class QuestTimeUpdatedEventArgs : EventArgs
+{
     /// <summary>
     /// 剩余时间（秒）
     /// </summary>

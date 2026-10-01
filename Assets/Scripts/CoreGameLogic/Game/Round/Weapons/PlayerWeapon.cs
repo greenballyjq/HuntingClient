@@ -1,5 +1,5 @@
-﻿using cfg.HuntingConfig.Enum;
-using CoreGameLogic.Managers.AppManagers;
+using cfg.HuntingConfig.Enum;
+using GameFramework.Audio;
 using Hunting.Events;
 using UnityEngine;
 
@@ -50,8 +50,8 @@ public class PlayerWeapon : MonoBehaviour
 
     private EventManager _eventManager;
     private HuntingConfigManager _configManager;
-    private HuntingSoundManager _soundManager;
-    private WeaponManager _weaponManager;
+    private AudioManager _audioManager;
+    private RoundNumericLayer _numeric;
     private BulletManager _bulletManager;
     
     private void Awake()
@@ -61,7 +61,9 @@ public class PlayerWeapon : MonoBehaviour
 
     private void OnDestroy()
     {
-        UnregisterEvents();
+        UnsubscribeEvents();
+        if (_numeric != null)
+            _numeric.FireRateChanged -= UpdateFireInterval;
     }
 
     #region 公共方法
@@ -70,8 +72,12 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        RegisterServices();
-        RegisterEvents();
+        if (_numeric != null)
+            _numeric.FireRateChanged -= UpdateFireInterval;
+
+        BindServices();
+        SubscribeEvents();
+        _numeric.FireRateChanged += UpdateFireInterval;
 
         ChangeBullet(DEFAULT_BULLET_ID);
         UpdateFireInterval();
@@ -119,7 +125,9 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     public void UpdateFireInterval()
     {
-        float fireRate = _weaponManager.GetCurrentFireRate(_currentBulletID);
+        float fireRate = _numeric.EvaluateFireRate(
+            _configManager.GetBullet(_currentBulletID).FireRate,
+            new FireRateContext(FireRateWeaponKind.Player));
         _fireInterval = 1f / fireRate;
     }
 
@@ -165,12 +173,12 @@ public class PlayerWeapon : MonoBehaviour
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _configManager = GameServiceLocator.ConfigManager;
-        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
-        _weaponManager = GameServiceLocator.GetRoundManager<WeaponManager>();
+        _audioManager = GameServiceLocator.AudioManager;
+        _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
         _bulletManager = GameServiceLocator.GetRoundManager<BulletManager>();
     }
 
@@ -179,7 +187,7 @@ public class PlayerWeapon : MonoBehaviour
     /// </summary>
     private void SpawnBullet()
     {
-        _bulletManager.SpawnBullet(_currentBulletID, _firePoint.position, _firePoint.forward);
+        _bulletManager.SpawnBullet(_currentBulletID, _firePoint.position, _firePoint.forward, DamageSourceKind.Weapon);
     }
 
     /// <summary>
@@ -227,8 +235,7 @@ public class PlayerWeapon : MonoBehaviour
     private void Fire()
     {
         SpawnBullet();
-
-        _soundManager.PlaySound2D(HuntingAudioRefSo.HuntingGameAudioType.GunShoot_Default);
+        _audioManager.Play(_configManager.BulletRefSo.Get(_currentBulletID)?.Fire);
 
         _fireTimer = Time.time;
 
@@ -239,7 +246,7 @@ public class PlayerWeapon : MonoBehaviour
     /// <summary>
     /// 注册事件
     /// </summary>
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         _eventManager.AddListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
@@ -247,7 +254,7 @@ public class PlayerWeapon : MonoBehaviour
     /// <summary>
     /// 注销事件
     /// </summary>
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }

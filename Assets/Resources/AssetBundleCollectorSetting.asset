@@ -161,56 +161,16 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Arts/SO/DropRewardRefSo.asset
-        CollectorGUID: f6d9c43a7b9b4e148b1c6c43793a517e
+      - CollectPath: Assets/Arts/SO/Cues
+        CollectorGUID: 8d1c0136daf09f568b66e45bd23c46a7
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackGroup
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Arts/SO/HuntingAudioRefSo.asset
-        CollectorGUID: 6bdaef14b8be7d346944c239b01a2485
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/SO/BulletRefSo.asset
-        CollectorGUID: 8b610e0b40ed2be49bd8a6ee11b8d2b1
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/SO/PropRefSo.asset
-        CollectorGUID: a1b2c3d4e5f6789012345678abcdef01
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/SO/SkillRefSo.asset
-        CollectorGUID: b2c3d4e5f6789012345678abcdef0123
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/SO/AnimalRefSo.asset
-        CollectorGUID: b1e85cc49fdff764baeefb5fcb6b3290
-        CollectorType: 0
-        AddressRuleName: AddressByFileName
-        PackRuleName: PackGroup
-        FilterRuleName: CollectAll
-        AssetTags: 
-        UserData: 
-      - CollectPath: Assets/Arts/SO/MapRefSo.asset
-        CollectorGUID: d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3
+      - CollectPath: Assets/Arts/SO/Refs
+        CollectorGUID: 4c88fcd9dd143e44d82bc54365e74240
         CollectorType: 0
         AddressRuleName: AddressByFileName
         PackRuleName: PackGroup

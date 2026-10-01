@@ -1,4 +1,4 @@
-﻿using Hunting.Game.Animal;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 /// <summary>
@@ -47,7 +47,7 @@ public class AimAssistControlHandler : BaseControlHandler
 
     protected override void OnControlStart()
     {
-        RegisterEvents();
+        SubscribeEvents();
 
         PlayerWeapon = WeaponManager.PlayerWeapon;
 
@@ -105,7 +105,7 @@ public class AimAssistControlHandler : BaseControlHandler
             });
         }
 
-        UnregisterEvents();
+        UnsubscribeEvents();
     }
 
     #region 私有方法
@@ -241,7 +241,7 @@ public class AimAssistControlHandler : BaseControlHandler
     /// <summary>
     /// 注册事件
     /// </summary>
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         InputManager.OnTargetSelected += HandleTargetSelected;
         _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
@@ -250,7 +250,7 @@ public class AimAssistControlHandler : BaseControlHandler
     /// <summary>
     /// 注销事件
     /// </summary>
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         InputManager.OnTargetSelected -= HandleTargetSelected;
         _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);

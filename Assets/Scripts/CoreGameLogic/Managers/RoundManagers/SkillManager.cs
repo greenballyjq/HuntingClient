@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
@@ -8,8 +8,9 @@ using UnityEngine;
 /// <summary>
 /// 技能管理器
 /// </summary>
-public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
+public class SkillManager : IMapWorld, IRoundUpdatable
 {
+    private const int SkillEnergyBarCost = 1;
     /// <summary>
     /// 当前处理器
     /// </summary>
@@ -22,10 +23,11 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
 
     private EventManager _eventManager;
     private EnergyProgressManager _energyProgressManager;
+    private RoundNumericLayer _numeric;
 
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
-        RegisterServices();
+        BindServices();
 
         var skillData = context.SkillData;
 
@@ -40,6 +42,7 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
         _currentHandler.Init(_currentContext);
 
         Log.Info("[SkillManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void DoUpdate(float dt)
@@ -58,12 +61,12 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
         Log.Info("[SkillManager] 已释放");
     }
 
-    public void Cleanup()
+    public void Unbind()
     {
         EndSkill();
     }
 
-    public void ReInit(Map mapData){}
+    public void Bind(Map mapData) { }
 
     #region 公共方法
     public void TryStartSkill()
@@ -71,7 +74,8 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
         if (_currentHandler.SkillPhase != SkillPhase.None)
             return;
 
-        if (!_energyProgressManager.UseEnergyOneBar())
+        int cost = _numeric.EvaluateSkillEnergyCost(SkillEnergyBarCost);
+        if (!_energyProgressManager.TryConsumeEnergyBars(cost))
             return;
 
         StartSkill();
@@ -82,10 +86,11 @@ public class SkillManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _energyProgressManager = GameServiceLocator.GetRoundManager<EnergyProgressManager>();
+        _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
     }
 
     /// <summary>

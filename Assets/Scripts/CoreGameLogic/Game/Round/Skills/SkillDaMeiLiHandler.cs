@@ -44,7 +44,11 @@ public class SkillDaMeiLiHandler : BaseSkillHandler
             if (!PlayableArea.IsInside(animal.transform.position))
                 continue;
 
-            animal.GetComponent<IDamageable>().TakeDamage(_skillParam.DamageAmount);
+            NumericLayer.Deal(
+                animal.GetComponent<IDamageable>(),
+                _skillParam.DamageAmount,
+                new DamageContext(DamageSourceKind.Skill));
+            animal.HeldState.SetDuration(_skillParam.ControlDuration);
             animal.GetComponent<IControlable>().TakeControl();
         }
 

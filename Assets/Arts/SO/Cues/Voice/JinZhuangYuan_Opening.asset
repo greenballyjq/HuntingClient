@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a7a68471a6997468d4928cbd833073, type: 3}
+  m_Name: JinZhuangYuan_Opening
+  m_EditorClassIdentifier: 
+  _clips:
+  - {fileID: 8300000, guid: 7a7533a1073e2af4eb7654b05fd71821, type: 3}
+  _volume: 0.5
+  _pitchMin: 1
+  _pitchMax: 1
+  _loop: 0
+  _priority: 128
+  _bus: {fileID: 11400000, guid: c8e1a4b27d3f4098a6b5c0d1e2f30412, type: 2}
+  _maxInstances: 1
+  _overflow: 0
+  _spatial: 0
+  _selection: 1

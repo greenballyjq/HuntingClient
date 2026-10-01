@@ -4,174 +4,75 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using GameFramework.Audio;
 using GameFramework.Core;
 using GameFramework.Manager;
+using GameFramework.UI;
 using Hunting.Game.Animal;
-using CoreGameLogic.Managers.AppManagers;
-using GameFramework.Core.Audio;
-using cfg.HuntingConfig.Enum;
 
-/// <summary>
-/// 单局上下文
-/// </summary>
 public class RoundContext
 {
-    /// <summary>
-    /// 角色数据
-    /// </summary>
     public Role RoleData { get; set; }
-
-    /// <summary>
-    /// 地图数据
-    /// </summary>
     public Map MapData { get; set; }
-
-    /// <summary>
-    /// 技能数据
-    /// </summary>
     public Skill SkillData { get; set; }
-
-    /// <summary>
-    /// 幸运仪式增益数据
-    /// </summary>
     public LuckyBuff LuckyBuffData { get; set; }
-
-    /// <summary>
-    /// 是否有地图联动
-    /// </summary>
-    public bool HasLinkage { get; set; }
-
-    /// <summary>
-    /// 是否有隐藏地图
-    /// </summary>
     public bool HasHiddenMap { get; set; }
-
-    /// <summary>
-    /// 隐藏地图数据
-    /// </summary>
     public Map HiddenMapData { get; set; }
 }
 
-/// <summary>
-/// 隐藏地图上下文
-/// </summary>
 public class HiddenMapContext
 {
     public GameObject SnowEffect { get; set; }
-    public AudioCallback EnvSoundCallback { get; set; }
 }
 
-/// <summary>
-/// 玩法模式
-/// </summary>
 public enum EGameplayMode
 {
-    /// <summary>
-    /// 主地图
-    /// </summary>
     MainMap,
-
-    /// <summary>
-    /// 隐藏地图
-    /// </summary>
     HiddenMap,
 }
 
-/// <summary>
-/// 单局流程类
-/// </summary>
-public class RoundFlow : Singleton<RoundFlow>
+public class RoundFlow
 {
-    /// <summary>
-    /// 单局流程状态
-    /// </summary>
     private enum ERoundFlowState
     {
-        /// <summary>
-        /// 无状态
-        /// </summary>
         None,
-
-        /// <summary>
-        /// 过渡状态
-        /// </summary>
         Transitioning,
-
-        /// <summary>
-        /// 游玩状态
-        /// </summary>
+        Presenting,
         Playing,
-
-        /// <summary>
-        /// 结算状态
-        /// </summary>
         Settlement,
-
-        /// <summary>
-        /// 暂停状态
-        /// </summary>
         Paused,
     }
 
-    /// <summary>
-    /// 当前状态
-    /// </summary>
     private ERoundFlowState _currentState = ERoundFlowState.None;
-
-    /// <summary>
-    /// 当前玩法模式
-    /// </summary>
     private IGameplayMode _currentMode;
-
-    /// <summary>
-    /// 单局上下文
-    /// </summary>
     private RoundContext _roundContext;
     public RoundContext RoundContext => _roundContext;
 
-    /// <summary>
-    /// 玩法规则字典
-    /// </summary>
     private readonly Dictionary<Type, object> _playRules = new Dictionary<Type, object>();
-
-    /// <summary>
-    /// 单局管理器字典
-    /// </summary>
+    private readonly List<IRoundManager> _roundManagerList = new List<IRoundManager>();
+    private readonly List<IRoundUpdatable> _updatables = new List<IRoundUpdatable>();
+    private readonly List<IRoundPausable> _pausables = new List<IRoundPausable>();
+    private readonly List<IMapWorld> _worlds = new List<IMapWorld>();
     private readonly Dictionary<Type, IRoundManager> _roundManagers = new Dictionary<Type, IRoundManager>();
 
     private UIManager _uiManager;
-    private GameObjectPoolManager _gameObjectPoolManager;
+    private EventManager _eventManager;
+    private AudioManager _audioManager;
     private EffectManager _effectManager;
-    private HuntingSoundManager _soundManager;
+    private ResourceManager _resourceManager;
+    private GameObjectPoolManager _gameObjectPoolManager;
+    private InputManager _inputManager;
 
-    #region 公共方法
-    /// <summary>
-    /// 获取单局管理器
-    /// </summary>
     public T GetRoundManager<T>() where T : class, IRoundManager
     {
-        if (_roundManagers.TryGetValue(typeof(T), out var manager))
-            return manager as T;
-
-        return null;
+        return (T)_roundManagers[typeof(T)];
     }
 
-    /// <summary>
-    /// 设置玩法规则
-    /// </summary>
-    /// <typeparam name="T">规则类型</typeparam>
-    /// <param name="rule">规则实例</param>
     public void SetPlayRule<T>(T rule) where T : class
     {
         _playRules[typeof(T)] = rule;
     }
 
-    /// <summary>
-    /// 获取玩法规则
-    /// </summary>
-    /// <typeparam name="T">规则类型</typeparam>
-    /// <returns>规则实例，未设置时返回 null</returns>
     public T GetPlayRule<T>() where T : class
     {
         if (_playRules.TryGetValue(typeof(T), out object rule))
@@ -180,70 +81,55 @@ public class RoundFlow : Singleton<RoundFlow>
         return null;
     }
 
-    /// <summary>
-    /// 清空玩法规则
-    /// </summary>
     public void ClearPlayRules()
     {
         _playRules.Clear();
     }
 
-    /// <summary>
-    /// 开始单局
-    /// </summary>
-    /// <param name="context">单局上下文</param>
     public async UniTask EnterRound(RoundContext context)
     {
         _currentState = ERoundFlowState.Transitioning;
-
-        // 初始化单局
         _roundContext = context;
-        RegisterServices();
+        BindServices();
+        _eventManager.PushScope(ResourceScope.Round);
         RegisterRoundManagers();
-        InitRoundManagers();
-
-        // 进入主地图模式
+        await InitRoundManagersAsync();
+        await _uiManager.OpenAsync<UIQuest>();
         _currentMode = new MainMapMode(this);
         await _currentMode.EnterAsync();
+    }
 
+    public async UniTask PresentAsync()
+    {
+        _currentState = ERoundFlowState.Presenting;
+        if (_currentMode != null)
+            await _currentMode.PresentAsync();
         _currentState = ERoundFlowState.Playing;
     }
 
-    /// <summary>
-    /// 结束单局
-    /// </summary>
     public async UniTask EndRound()
     {
         _currentState = ERoundFlowState.Transitioning;
-
-        // 退出当前玩法模式
         ClearPlayRules();
-        await _currentMode.ExitAsync(null);
+        if (_currentMode != null)
+            await _currentMode.ExitAsync();
         _currentMode = null;
 
-        // 释放单局管理器
+        UnbindWorlds();
         DisposeRoundManagers();
+        _roundManagerList.Clear();
+        _updatables.Clear();
+        _pausables.Clear();
+        _worlds.Clear();
         _roundManagers.Clear();
         _roundContext = null;
 
-        // 清理对象池
-        _effectManager.ClearAllEffects(true);
-        _soundManager.ClearAllSounds(true);
-        _gameObjectPoolManager.ClearAllPools();
-
-        // 关闭游玩界面
-        _uiManager.CloseUI("UIGameplay");
-
-        // 加载准备场景
-        await SceneManager.LoadSceneAsync("PrepareScene").ToUniTask();
-
+        UnloadRuntime();
+        CloseRoundUi();
+        PopRoundEvents();
         _currentState = ERoundFlowState.None;
     }
 
-    /// <summary>
-    /// 每帧更新
-    /// </summary>
-    /// <param name="dt">时间增量</param>
     public void DoUpdate(float dt)
     {
         switch (_currentState)
@@ -254,109 +140,91 @@ public class RoundFlow : Singleton<RoundFlow>
         }
     }
 
-    /// <summary>
-    /// 开始结算
-    /// </summary>
-    /// <returns></returns>
     public void StartSettlement()
     {
         _currentState = ERoundFlowState.Settlement;
+        GetRoundManager<QuestManager>()?.Abort();
     }
 
-    /// <summary>
-    /// 暂停单局
-    /// </summary>
     public void PauseRound()
     {
         _currentState = ERoundFlowState.Paused;
+        for (int i = 0; i < _pausables.Count; i++)
+            _pausables[i].Pause();
+
+        _audioManager.PauseMusic();
+        _effectManager.PauseAll();
+        _inputManager.PauseGameplayInput();
     }
 
-    /// <summary>
-    /// 恢复单局
-    /// </summary>
     public void ResumeRound()
     {
         _currentState = ERoundFlowState.Playing;
+        for (int i = 0; i < _pausables.Count; i++)
+            _pausables[i].Resume();
+
+        _audioManager.ResumeMusic();
+        _effectManager.ResumeAll();
+        _inputManager.ResumeGameplayInput();
     }
 
-    /// <summary>
-    /// 切换到下一个玩法模式
-    /// </summary>
-    /// <param name="nextMode">下一个玩法模式</param>
-    public async UniTask SwitchToNextMode(EGameplayMode nextMode)
+    public async UniTask SwitchToHiddenMapAsync()
     {
         _currentState = ERoundFlowState.Transitioning;
-        switch (nextMode)
-        {
-            case EGameplayMode.HiddenMap:
-                await SwitchToHiddenMapAsync(nextMode);
-                break;
-        }
-        _currentState = ERoundFlowState.Playing;
-    }
+        await _currentMode.ExitAsync();
 
-    /// <summary>
-    /// 切换到隐藏地图模式
-    /// </summary>
-    private async UniTask SwitchToHiddenMapAsync(EGameplayMode mode)
-    {
-        // 播放下雪特效和雪山环境音效
-        var snowEffect = await _effectManager.PlayLoopAsync("Assets/Arts/Prefabs/Effects/FX_Snow_For_SnowMountainScene_UICamera",dontDestroyOnLoad:true);
-        var envSoundCallback = _soundManager.PlayMapEnvSound(EMapType.Hidden,-1,true);
+        UnbindWorlds();
+        UnloadRuntime();
 
-        // 播放假结算面板动画
-        var uiPopupFakeSettlement = _uiManager.GetUI<UIPopupFakeSettlement>("UIPopupFakeSettlement");
-        UniTask.WhenAll(
-            uiPopupFakeSettlement.PlayWindowShakeAsync(),
-            uiPopupFakeSettlement.PlayButtonGlowAsync(),
-            uiPopupFakeSettlement.PlayPanelFadeOutAsync()
-        ).Forget();
-        
-        // 播放过渡动画
-        var uiLoading = await _uiManager.OpenUIAsync<UINormalLoading>("UINormalLoading", UIManager.UILayer.Loading);
-        await uiLoading.PlayFadeInAsync();
-
-        // 退出当前玩法模式
-        await _currentMode.ExitAsync(EGameplayMode.HiddenMap);
-
-        // 清理旧场景
-        CleanupManagers();
-        _effectManager.ClearAllEffects(); 
-        _soundManager.ClearAllSounds();
-        _gameObjectPoolManager.ClearAllPools();
-
-        // 加载新场景
-        await SceneManager.LoadSceneAsync("GameplaySnowMountainScene").ToUniTask();
+        RoundLoadManifest manifest = RoundLoadManifest.ForHiddenMap(_roundContext);
+        await _resourceManager.LoadSceneAsync(manifest.ScenePath);
         DynamicGI.UpdateEnvironment();
-        ReInitManagers();
+        manifest.Prewarm();
+        BindWorlds(_roundContext.HiddenMapData);
 
-        // 进入隐藏地图模式
-        _currentMode = new HiddenMapMode(new HiddenMapContext 
-        { 
-            SnowEffect = snowEffect,
-            EnvSoundCallback = envSoundCallback 
-        });
+        GameObject snow = await _effectManager.PlayLoopAsync(RoundScopeUnload.SnowEffect);
+        _currentMode = new HiddenMapMode(this, new HiddenMapContext { SnowEffect = snow });
         await _currentMode.EnterAsync();
     }
-    #endregion
 
-    #region 私有方法
-    /// <summary>
-    /// 注册服务
-    /// </summary>
-    private void RegisterServices()
+    public async UniTask SwitchToNextMode(EGameplayMode nextMode)
     {
-        _uiManager = GameServiceLocator.UIManager;
-        _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
-        _effectManager = GameServiceLocator.EffectManager;
-        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
+        if (nextMode == EGameplayMode.HiddenMap)
+            await HuntingAppFlow.Instance.EnterHiddenMapAsync();
     }
 
-    /// <summary>
-    /// 注册单局管理器
-    /// </summary>
+    private void BindServices()
+    {
+        _uiManager = GameServiceLocator.UIManager;
+        _eventManager = GameServiceLocator.EventManager;
+        _audioManager = GameServiceLocator.AudioManager;
+        _effectManager = GameServiceLocator.EffectManager;
+        _resourceManager = GameServiceLocator.ResourceManager;
+        _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+        _inputManager = GameServiceLocator.GetAppManager<InputManager>();
+    }
+
+    private void UnloadRuntime()
+    {
+        _effectManager.ClearAllEffects(true);
+        _audioManager.StopMusic(0f);
+        _audioManager.StopSfx();
+        _gameObjectPoolManager.ClearAllPools();
+    }
+
+    private void CloseRoundUi()
+    {
+        _uiManager.Close(UILifetime.Round);
+    }
+
+    private void PopRoundEvents()
+    {
+        _eventManager.PopScope();
+    }
+
     private void RegisterRoundManagers()
     {
+        RegisterRoundManager(new RoundNumericLayer());
         RegisterRoundManager(new WeaponManager());
         RegisterRoundManager(new AnimalManager());
         RegisterRoundManager(new GameplaySceneItemManager());
@@ -373,70 +241,46 @@ public class RoundFlow : Singleton<RoundFlow>
         RegisterRoundManager(new SkillManager());
     }
 
-    /// <summary>
-    /// 注册单个单局管理器
-    /// </summary>
-    /// <param name="manager">管理器实例</param>
     private void RegisterRoundManager(IRoundManager manager)
     {
-        _roundManagers[manager.GetType()] = manager;
+        _roundManagers.Add(manager.GetType(), manager);
+        _roundManagerList.Add(manager);
+        if (manager is IRoundUpdatable updatable)
+            _updatables.Add(updatable);
+        if (manager is IRoundPausable pausable)
+            _pausables.Add(pausable);
+        if (manager is IMapWorld world)
+            _worlds.Add(world);
     }
 
-    /// <summary>
-    /// 初始化单局管理器
-    /// </summary>
-    private void InitRoundManagers()
+    private async UniTask InitRoundManagersAsync()
     {
-        foreach (var manager in _roundManagers.Values)
-            manager.Init(_roundContext);
+        for (int i = 0; i < _roundManagerList.Count; i++)
+            await _roundManagerList[i].InitAsync(_roundContext);
     }
 
-    /// <summary>
-    /// 释放单局管理器
-    /// </summary>
     private void DisposeRoundManagers()
     {
-        foreach (var manager in _roundManagers.Values)
-            manager.Dispose();
+        for (int i = _roundManagerList.Count - 1; i >= 0; i--)
+            _roundManagerList[i].Dispose();
     }
 
-    /// <summary>
-    /// 清理单局管理器
-    /// </summary>
-    private void CleanupManagers()
+    private void UnbindWorlds()
     {
-        foreach (var manager in _roundManagers.Values)
-        {
-            if (manager is IRoundResettable resettable)
-                resettable.Cleanup();
-        }
+        for (int i = 0; i < _worlds.Count; i++)
+            _worlds[i].Unbind();
     }
 
-    /// <summary>
-    /// 重新初始化单局管理器
-    /// </summary>
-    private void ReInitManagers()
+    private void BindWorlds(Map mapData)
     {
-        foreach (var manager in _roundManagers.Values)
-        {
-            if (manager is IRoundResettable resettable)
-                resettable.ReInit(_roundContext.HiddenMapData);
-        }
+        for (int i = 0; i < _worlds.Count; i++)
+            _worlds[i].Bind(mapData);
     }
 
-    /// <summary>
-    /// 游玩中更新
-    /// </summary>
-    /// <param name="dt">时间增量</param>
     private void OnRoundPlaying(float dt)
     {
         _currentMode?.DoUpdate(dt);
-
-        foreach (var manager in _roundManagers.Values)
-        {
-            if (manager is IRoundUpdatable updatable)
-                updatable.DoUpdate(dt);
-        }
+        for (int i = 0; i < _updatables.Count; i++)
+            _updatables[i].DoUpdate(dt);
     }
-    #endregion
 }

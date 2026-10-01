@@ -20,7 +20,6 @@ public sealed partial class SkillJinZhuangYuan : Luban.BeanBase
         {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SpawnCount = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); SpawnCount[__index0] = __e0;}}
         MeatAmount = _buf.ReadInt();
         {int __n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);DropMeatEffectID = new int[__n0];for(var __index0 = 0 ; __index0 < __n0 ; __index0++) { int __e0;__e0 = _buf.ReadInt(); DropMeatEffectID[__index0] = __e0;}}
-        Comment = _buf.ReadString();
     }
 
     public static SkillJinZhuangYuan DeserializeSkillJinZhuangYuan(ByteBuf _buf)
@@ -44,10 +43,6 @@ public sealed partial class SkillJinZhuangYuan : Luban.BeanBase
     /// 特效预制体资源路径列表
     /// </summary>
     public readonly int[] DropMeatEffectID;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = -732992300;
     public override int GetTypeId() => __ID__;
@@ -63,7 +58,6 @@ public sealed partial class SkillJinZhuangYuan : Luban.BeanBase
         + "SpawnCount:" + Luban.StringUtil.CollectionToString(SpawnCount) + ","
         + "MeatAmount:" + MeatAmount + ","
         + "DropMeatEffectID:" + Luban.StringUtil.CollectionToString(DropMeatEffectID) + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

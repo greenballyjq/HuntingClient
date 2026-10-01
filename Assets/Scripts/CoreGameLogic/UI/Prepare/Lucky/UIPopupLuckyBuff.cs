@@ -1,5 +1,5 @@
-﻿using cfg.HuntingConfig;
-using GameFramework.Core.UI;
+using cfg.HuntingConfig;
+using GameFramework.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,13 +7,9 @@ using UnityEngine.UI;
 /// <summary>
 /// 幸运仪式增益弹窗
 /// </summary>
-public class UIPopupLuckyBuff : UIBase
+[UIForm(UILayer.Popup, lifetime: UILifetime.App)]
+public class UIPopupLuckyBuff : UIForm<LuckyBuff>
 {
-    /// <summary>
-    /// 标题文本
-    /// </summary>
-    [SerializeField] private TextMeshProUGUI _textTitle;
-
     /// <summary>
     /// 描述文本
     /// </summary>
@@ -27,7 +23,7 @@ public class UIPopupLuckyBuff : UIBase
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// 当前幸运仪式增益配置
@@ -36,6 +32,7 @@ public class UIPopupLuckyBuff : UIBase
 
     private void Awake()
     {
+        _eventManager = GameServiceLocator.EventManager;
         _buttonConfirm.onClick.AddListener(OnConfirmButtonClicked);
     }
 
@@ -44,12 +41,9 @@ public class UIPopupLuckyBuff : UIBase
         _buttonConfirm.onClick.RemoveListener(OnConfirmButtonClicked);
     }
 
-    public override void OnInit(object userData)
+    protected override void OnOpen(LuckyBuff args)
     {
-        base.OnInit(userData);
-
-        _currentLuckyBuffData = userData as LuckyBuff;
-
+        _currentLuckyBuffData = args;
         UpdateBuffDisplay(_currentLuckyBuffData);
     }
 
@@ -60,7 +54,6 @@ public class UIPopupLuckyBuff : UIBase
     /// <param name="buffData">幸运仪式增益配置</param>
     private void UpdateBuffDisplay(LuckyBuff buffData)
     {
-        _textTitle.text = buffData.Name;
         _textDescription.text = buffData.Description;
     }
     #endregion

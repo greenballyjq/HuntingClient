@@ -1,7 +1,7 @@
 using cfg.HuntingConfig;
 using UnityEngine;
 using UnityEngine.UI;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using TMPro;
 
 /// <summary>
@@ -27,7 +27,7 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager;
 
     /// <summary>
     /// 当前地图数据
@@ -37,6 +37,7 @@ public class UIComponentMapInfo : MonoBehaviour, IUIComponent
 
     public void Init()
     {
+        _configManager = GameServiceLocator.ConfigManager;
         Map map = _configManager.GetRandomMainMap();
         _currentMapData = map;
         UpdateMapInfo(map);

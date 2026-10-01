@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 
 namespace Hunting.Game.Animal
@@ -96,10 +96,17 @@ namespace Hunting.Game.Animal
             OnHeld?.Invoke();
         }
 
-        public void SetHealth(float amount)
+        /// <summary>
+        /// 立即死亡
+        /// </summary>
+        public void Kill()
         {
-            _maxHealth = amount;
-            _currentHealth = amount;
+            if (_isDead)
+                return;
+
+            _currentHealth = 0f;
+            _isDead = true;
+            OnDeath?.Invoke();
         }
         #endregion
     }

@@ -1,14 +1,15 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Manager;
 using GameFramework.Utility;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 
 /// <summary>
 /// 能量条管理器
 /// </summary>
-public class EnergyProgressManager : IRoundManager, IRoundUpdatable
+public class EnergyProgressManager : IRoundManager, IRoundUpdatable, IRoundPausable
 {
     /// <summary>
     /// 单条所需值
@@ -42,11 +43,13 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
 
     private EventManager _eventManager;
     private HuntingConfigManager _configManager;
+    private RoundNumericLayer _numeric;
+    private bool _paused;
 
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
-        RegisterServices();
-        RegisterEvents();
+        BindServices();
+        SubscribeEvents();
 
         EnergyProgress energyProgress = _configManager.GetEnergyProgress(1);
         _valuePerBar = energyProgress.ValuePerBar;
@@ -54,16 +57,30 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
         _increasePerSecond = energyProgress.IncreasePerSecond;
         
         Log.Info("[EnergyProgressManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void DoUpdate(float deltaTime)
     {
+        if (_paused)
+            return;
+
         AddEnergyValue(deltaTime * _increasePerSecond);
+    }
+
+    public void Pause()
+    {
+        _paused = true;
+    }
+
+    public void Resume()
+    {
+        _paused = false;
     }
 
     public void Dispose()
     {
-        UnregisterEvents();
+        UnsubscribeEvents();
 
         Log.Info("[EnergyProgressManager] 已释放");
     }
@@ -74,6 +91,10 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     /// </summary>
     public void AddEnergyValue(float amount)
     {
+        amount = _numeric.EvaluateEnergyGain(amount);
+        if (amount <= 0f)
+            return;
+
         if (_completedBars >= _totalBar)
             return;
 
@@ -113,6 +134,22 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     }
 
     /// <summary>
+    /// 消耗指定条数能量
+    /// </summary>
+    public bool TryConsumeEnergyBars(int barCount)
+    {
+        if (barCount <= 0)
+            return true;
+        if (_completedBars < barCount)
+            return false;
+
+        for (int i = 0; i < barCount; i++)
+            UseEnergyOneBar();
+
+        return true;
+    }
+
+    /// <summary>
     /// 使用一条能量条
     /// </summary>
     public bool UseEnergyOneBar()
@@ -142,10 +179,11 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     #endregion
 
     #region 私有方法
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _configManager = GameServiceLocator.ConfigManager;
+        _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
     }
     #endregion
 
@@ -153,7 +191,7 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     /// <summary>
     /// 注册事件
     /// </summary>
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         _eventManager.AddListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
@@ -161,7 +199,7 @@ public class EnergyProgressManager : IRoundManager, IRoundUpdatable
     /// <summary>
     /// 注销事件
     /// </summary>
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }

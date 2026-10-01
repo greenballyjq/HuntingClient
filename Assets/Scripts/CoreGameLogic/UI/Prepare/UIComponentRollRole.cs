@@ -1,5 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
-using GameFramework.Core.UI;
+using Cysharp.Threading.Tasks;
+using GameFramework.UI;
 using GameFramework.Manager;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,13 +36,24 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
     private int _diceValue;
 
     private EventManager _eventManager;
+    private PlayerDataManager _playerDataManager;
 
     private void Awake()
     {
         _eventManager = GameServiceLocator.EventManager;
+        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
     }
 
-    public void Init(){}
+    public void Init()
+    {
+        int slotIndex = _playerDataManager.CoinManSlotIndex;
+        if (slotIndex < 0 || slotIndex >= _roleSlots.Length)
+            return;
+
+        _currentSlotIndex = slotIndex;
+        Vector3 position = _roleSlots[slotIndex].GetPosition();
+        _threeKPCoinManThrowDiceAnimator.PlaceAtSlot(position, faceRight: slotIndex <= 2);
+    }
 
     public void CleanUp(){}
 
@@ -63,19 +74,6 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
             _targetSlotIndex += _roleSlots.Length;
         }
 
-        var roleId = _roleSlots[_targetSlotIndex].RoleID;
-
-        // 触发角色选择事件
-        TriggerRoleSelected(new RoleSelectedEventArgs
-        {
-            FromSlotIndex = fromSlotIndex,
-            TargetSlotIndex = _targetSlotIndex,
-            RoleId = roleId,
-            DiceValue = _diceValue,
-            RoleSlots = _roleSlots
-        });
-
-        // 触发骰子动画开始事件
         _eventManager.Trigger(PrepareEvents.DiceAnimationStarted);
 
         // 播放金币人投骰子动画
@@ -101,6 +99,16 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
         // 播放金币人行走动画
         await _threeKPCoinManThrowDiceAnimator.PlayWalkSlot(positionSequence, directions);
 
+        var roleId = _roleSlots[_targetSlotIndex].RoleID;
+        TriggerRoleSelected(new RoleSelectedEventArgs
+        {
+            FromSlotIndex = fromSlotIndex,
+            TargetSlotIndex = _targetSlotIndex,
+            RoleId = roleId,
+            DiceValue = _diceValue,
+            RoleSlots = _roleSlots
+        });
+
         // 触发走格子动画结束事件
         _eventManager.Trigger(PrepareEvents.SlotAnimationEnded);
 
@@ -109,6 +117,7 @@ public class UIComponentRollRole : MonoBehaviour, IUIComponent
 
         // 更新当前格子索引
         _currentSlotIndex = _targetSlotIndex;
+        _playerDataManager.SetCoinManSlotIndex(_currentSlotIndex);
     }
 
     /// <summary>

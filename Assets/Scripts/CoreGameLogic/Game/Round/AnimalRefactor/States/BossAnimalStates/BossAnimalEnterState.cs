@@ -1,4 +1,4 @@
-﻿using Hunting.Game.Animal;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 namespace CoreGameLogic.Game.Round.Boss.States
@@ -13,7 +13,14 @@ namespace CoreGameLogic.Game.Round.Boss.States
         public override void Enter()
         {
             base.Enter();
+            animalBehavior.Moveable.StopMove();
             ((BossAnimalVisual)animalBehavior.AnimalVisual).PlayEnter();
+        }
+
+        public override void Exit()
+        {
+            animalBehavior.Moveable.StartMove();
+            base.Exit();
         }
     }
 }

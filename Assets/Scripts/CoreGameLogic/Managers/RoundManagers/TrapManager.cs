@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using GameFramework.Core.Pool;
@@ -6,11 +6,12 @@ using GameFramework.Manager;
 using GameFramework.Utility;
 using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 陷阱管理器
 /// </summary>
-public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
+public class TrapManager : IMapWorld, IRoundUpdatable
 {
     /// <summary>
     /// 活跃陷阱集合
@@ -36,32 +37,33 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     private GameObjectPoolManager _gameObjectPoolManager;
     private HuntingConfigManager _configManager;
 
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
-        RegisterServices();
+        BindServices();
 
         var propData = _configManager.GetProp(EPropType.Trap);
         _trapParam = _configManager.GetPropTrap(propData.ParamTableID);
         _trapPrefab = _configManager.PropRefSo.GetPropPrefab(propData.ID);
 
-        RegisterEvents();
+        SubscribeEvents();
 
         Log.Info("[TrapManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void Dispose()
     {
-        UnregisterEvents();
+        UnsubscribeEvents();
         RecycleAllTraps();
         Log.Info("[TrapManager] 已释放");
     }
 
-    public void Cleanup()
+    public void Unbind()
     {
         RecycleAllTraps();
     }
 
-    public void ReInit(Map mapData) { }
+    public void Bind(Map mapData) { }
 
     public void DoUpdate(float dt)
     {
@@ -102,7 +104,7 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
@@ -140,7 +142,7 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 注册事件
     /// </summary>
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         _eventManager.AddListener(PropEvents.TrapDestroyed, OnTrapDestoryed);
     }
@@ -148,7 +150,7 @@ public class TrapManager : IRoundManager, IRoundUpdatable, IRoundResettable
     /// <summary>
     /// 注销事件
     /// </summary>
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(PropEvents.TrapDestroyed, OnTrapDestoryed);
     }

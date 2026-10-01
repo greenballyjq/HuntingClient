@@ -1,5 +1,6 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using System.Collections.Generic;
+using GameFramework.Audio;
 using UnityEngine;
 
 /// <summary>
@@ -28,6 +29,11 @@ public class AnimalRefSo : ScriptableObject
         /// 动物预制体
         /// </summary>
         public GameObject AnimalPrefab;
+
+        /// <summary>
+        /// Boss 咆哮
+        /// </summary>
+        public SfxCue Roar;
     }
 
     /// <summary>
@@ -37,16 +43,24 @@ public class AnimalRefSo : ScriptableObject
 
     #region 公共方法
     /// <summary>
-    /// 根据ID获取动物图标
+    /// 根据ID获取动物关联资源
     /// </summary>
-    public Sprite GetAnimalIcon(int id)
+    public AnimalRef Get(int id)
     {
         for (int i = 0; i < _animalRefList.Count; i++)
         {
             if (_animalRefList[i].ID == id)
-                return _animalRefList[i].AnimalIcon;
+                return _animalRefList[i];
         }
         return null;
+    }
+
+    /// <summary>
+    /// 根据ID获取动物图标
+    /// </summary>
+    public Sprite GetAnimalIcon(int id)
+    {
+        return Get(id)?.AnimalIcon;
     }
 
     /// <summary>
@@ -54,12 +68,7 @@ public class AnimalRefSo : ScriptableObject
     /// </summary>
     public GameObject GetAnimalPrefab(int id)
     {
-        for (int i = 0; i < _animalRefList.Count; i++)
-        {
-            if (_animalRefList[i].ID == id)
-                return _animalRefList[i].AnimalPrefab;
-        }
-        return null;
+        return Get(id)?.AnimalPrefab;
     }
     #endregion
 }

@@ -1,5 +1,6 @@
-using cfg.HuntingConfig;
+﻿using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
+using GameFramework.Audio;
 using GameFramework.Core.Pool;
 using GameFramework.Manager;
 using GameFramework.Utility;
@@ -43,20 +44,11 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
     /// </summary>
     private float _lifeTimer;
 
-    /// <summary>
-    /// 事件管理器
-    /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
-
-    /// <summary>
-    /// 特效管理器
-    /// </summary>
-    private EffectManager _effectManager => GameServiceLocator.EffectManager;
-
-    /// <summary>
-    /// 配置管理器
-    /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private EventManager _eventManager;
+    private EffectManager _effectManager;
+    private HuntingConfigManager _configManager;
+    private AudioManager _audioManager;
+    private RoundNumericLayer _numeric;
 
     #region 对象池接口
     public void OnSpawned()
@@ -80,16 +72,19 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
     /// </summary>
     /// <param name="bulletData">子弹数据</param>
     /// <param name="finalDamage">最终伤害</param>
-    public void Init(Bullet bulletData, float finalDamage)
+    public void Init(Bullet bulletData, float finalDamage, RoundNumericLayer numeric)
     {
-        // 初始化数据
+        BindServices();
+        _numeric = numeric;
+
         _bulletData = bulletData;
         _moveDirection = transform.forward;
         _lifeTimer = MaxLifetime;
 
         _bulletRuntimeContext = new BulletRuntimeContext
         {
-            FinalDamage = finalDamage
+            FinalDamage = finalDamage,
+            Numeric = _numeric
         };
 
         // 根据子弹类型创建效果
@@ -119,6 +114,20 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
     }
 
     #region 私有方法
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    private void BindServices()
+    {
+        if (_eventManager != null)
+            return;
+
+        _eventManager = GameServiceLocator.EventManager;
+        _effectManager = GameServiceLocator.EffectManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _audioManager = GameServiceLocator.AudioManager;
+    }
+
     /// <summary>
     /// 更新移动
     /// </summary>
@@ -166,14 +175,10 @@ public class BulletBehavior : MonoBehaviour, IPoolItem
     /// <param name="hitNormal">命中法线</param>
     private void HandleHit(IDamageable damageable, Vector3 hitPoint, Vector3 hitNormal)
     {
-        // 对目标造成伤害
-        damageable.TakeDamage(_bulletRuntimeContext.FinalDamage, hitPoint, hitNormal);
-        
-        // 播放击中特效
         PlayHitEffect(hitPoint);
-        
-        // 执行效果，获取所有命中的目标
-        List<IDamageable> hitAnimals = _bulletEffect.OnHit(_bulletRuntimeContext, new BulletHitInfo { 
+        _audioManager.Play(_configManager.BulletRefSo.Get(_bulletData.ID)?.Hit);
+
+        List<IDamageable> hitAnimals = _bulletEffect.OnHit(_bulletRuntimeContext, new BulletHitInfo {
             HitPoint = hitPoint,
             PrimaryTarget = damageable,
         });

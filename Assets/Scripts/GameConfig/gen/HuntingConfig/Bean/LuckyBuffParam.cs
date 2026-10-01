@@ -24,7 +24,6 @@ public abstract partial class LuckyBuffParam : Luban.BeanBase
         {
             case HuntingConfig.Bean.LuckyBuffParamMoreMeat.__ID__: return new HuntingConfig.Bean.LuckyBuffParamMoreMeat(_buf);
             case HuntingConfig.Bean.LuckyBuffParamDamageBoost.__ID__: return new HuntingConfig.Bean.LuckyBuffParamDamageBoost(_buf);
-            case HuntingConfig.Bean.LuckyBuffParamStartSpecialBullet.__ID__: return new HuntingConfig.Bean.LuckyBuffParamStartSpecialBullet(_buf);
             case HuntingConfig.Bean.LuckyBuffParamStartEnergy.__ID__: return new HuntingConfig.Bean.LuckyBuffParamStartEnergy(_buf);
             case HuntingConfig.Bean.LuckyBuffHighTierSpawn.__ID__: return new HuntingConfig.Bean.LuckyBuffHighTierSpawn(_buf);
             default: throw new SerializationException();

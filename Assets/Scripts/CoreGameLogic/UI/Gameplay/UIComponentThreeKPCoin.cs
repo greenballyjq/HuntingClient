@@ -1,4 +1,4 @@
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using TMPro;
 using UnityEngine;
 
@@ -23,7 +23,7 @@ public class UIComponentThreeKPCoin : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
         _rectTransformThreeKPCoin = _textThreeKPCoinAmount.GetComponent<RectTransform>();
     }
 
@@ -42,7 +42,7 @@ public class UIComponentThreeKPCoin : MonoBehaviour, IUIComponent
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();

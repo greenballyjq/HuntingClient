@@ -21,7 +21,6 @@ public sealed partial class PropBombardment : Luban.BeanBase
         ZoneRadius = _buf.ReadFloat();
         DamageAmount = _buf.ReadFloat();
         DamageInterval = _buf.ReadFloat();
-        Comment = _buf.ReadString();
     }
 
     public static PropBombardment DeserializePropBombardment(ByteBuf _buf)
@@ -49,10 +48,6 @@ public sealed partial class PropBombardment : Luban.BeanBase
     /// 伤害间隔（秒）
     /// </summary>
     public readonly float DamageInterval;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = -232208450;
     public override int GetTypeId() => __ID__;
@@ -69,7 +64,6 @@ public sealed partial class PropBombardment : Luban.BeanBase
         + "ZoneRadius:" + ZoneRadius + ","
         + "DamageAmount:" + DamageAmount + ","
         + "DamageInterval:" + DamageInterval + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

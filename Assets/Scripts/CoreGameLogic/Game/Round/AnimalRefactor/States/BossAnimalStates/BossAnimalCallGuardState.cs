@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Hunting.Game.Animal;
 
 namespace CoreGameLogic.Game.Round.Boss.States
 {
     public class BossAnimalCallGuardState : AnimalState
     {
-        private AnimalManager _animalManager => GameServiceLocator.GetRoundManager<AnimalManager>();
+        private AnimalManager _animalManager;
         
         private List<BaseAnimalBehaviour> _calledAnimals;
         
         public BossAnimalCallGuardState(StateMachine stateMachine, BaseAnimalBehaviour animalBehavior) : base(
             stateMachine, animalBehavior)
         {
-            
+            _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
         }
 
         public override void Enter()

@@ -1,21 +1,18 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using GameFramework.Game;
 using GameFramework.Utility;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using CoreGameLogic.Managers.AppManagers;
-using CoreGameLogic.Net;
 using Cysharp.Threading.Tasks;
-using GameFramework.Network.Models.Vo;
-using GameFramework.Network.Proxy;
-using UnityEngine;
 
 /// <summary>
 /// 玩家数据管理器
 /// </summary>
 public class PlayerDataManager : IAppManager
 {
+    private const int DefaultThreeKPCoinAmount = 50;
+    private const int DefaultPropCount = 3;
+
     /// <summary>
     /// 三千盘金币数量
     /// </summary>
@@ -25,11 +22,21 @@ public class PlayerDataManager : IAppManager
     /// 积分数量
     /// </summary>
     private int _pointAmount;
-    
+
     /// <summary>
-    /// 平台用户信息
+    /// 完成局数
     /// </summary>
-    private PlatformUserInfo _platformUserInfo;
+    private int _completedRoundCount;
+
+    /// <summary>
+    /// 击败 Boss 总数
+    /// </summary>
+    private int _totalBossKillCount;
+
+    /// <summary>
+    /// 金币人所在格子索引，-1 为场外
+    /// </summary>
+    private int _coinManSlotIndex = -1;
 
     /// <summary>
     /// 各道具数量
@@ -37,65 +44,35 @@ public class PlayerDataManager : IAppManager
     private readonly Dictionary<EPropType, int> _propCounts = new Dictionary<EPropType, int>();
 
     /// <summary>
-    /// 各道具远程ID
+    /// 各 Boss 击杀数
     /// </summary>
-    private readonly Dictionary<EPropType, string> _propRemoteIds = new Dictionary<EPropType, string>();
-    
+    private readonly Dictionary<EBossType, int> _bossKills = new Dictionary<EBossType, int>();
+
     private EventManager _eventManager;
-    private MallManager _mallManager;
-    private PlatformManager _platformManager;
+    private SaveService _saveService;
 
-    public void Init()
+    /// <summary>
+    /// 金币人所在格子索引，-1 为场外
+    /// </summary>
+    public int CoinManSlotIndex => _coinManSlotIndex;
+
+    public UniTask InitAsync()
     {
-        RegisterServices();
-        RegisterEvents();
+        BindServices();
+        SubscribeEvents();
 
-
-         _threeKPCoinAmount = 50;
-         foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
-             _propCounts[propType] = 3;
-
-        //FetchRemoteData().Forget();
+        if (!_saveService.TryRead(out PlayerSaveData data) || data == null)
+            ApplyDefaults();
+        else
+            ApplySaveData(data);
 
         Log.Info("[PlayerDataManager] 初始化完成");
-    }
-
-    /// <summary>
-    /// 设置平台用户信息 - 在用户按下授权按钮之后调用
-    /// </summary>
-    /// <param name="platformUserInfo"></param>
-    public void SetPlatformUserInfo(PlatformUserInfo platformUserInfo)
-    {
-        _platformUserInfo = platformUserInfo;
-    }
-
-    /// <summary>
-    /// 同步平台用户信息
-    /// </summary>
-    public void SyncPlatformUserInfo()
-    {
-        _platformManager.CurrentPlatform.GetUserInfo(result =>
-        {
-            Debug.Log($"[PlayerDataManager] 同步平台用户信息成功: {result.AvatarUrl}, {result.NickName}");
-            PlatformUserInfo platformUserInfo = new PlatformUserInfo()
-            {
-                AvatarUrl = result.AvatarUrl,
-                NickName = result.NickName,
-                City = result.City,
-                Province = result.Province,
-                Gender = result.Gender,
-                Language = result.Language,
-            };
-            SetPlatformUserInfo(platformUserInfo);
-        }, error =>
-        {
-            Debug.Log($"[PlayerDataManager] 同步平台用户信息失败: {error}");
-        });
+        return UniTask.CompletedTask;
     }
 
     public void Dispose()
     {
-        UnregisterEvents();
+        UnsubscribeEvents();
         Log.Info("[PlayerDataManager] 已释放");
     }
 
@@ -128,7 +105,7 @@ public class PlayerDataManager : IAppManager
     /// </summary>
     public int GetPropCount(EPropType propType)
     {
-        return _propCounts[propType];
+        return _propCounts.TryGetValue(propType, out int count) ? count : 0;
     }
 
     /// <summary>
@@ -146,110 +123,141 @@ public class PlayerDataManager : IAppManager
             DeltaAmount = amount
         });
     }
-    
+
     /// <summary>
     /// 金币是否足够
     /// </summary>
-    /// <param name="priceCoin"></param>
-    /// <returns></returns>
     public bool EnoughThreeKp(int priceCoin)
     {
         return _threeKPCoinAmount >= priceCoin;
     }
-    
+
+    /// <summary>
+    /// 完成局数 +1
+    /// </summary>
+    public void AddCompletedRound()
+    {
+        _completedRoundCount++;
+    }
+
+    /// <summary>
+    /// 设置金币人所在格子
+    /// </summary>
+    public void SetCoinManSlotIndex(int slotIndex)
+    {
+        _coinManSlotIndex = slotIndex;
+    }
+
+    /// <summary>
+    /// 写入存档
+    /// </summary>
+    public void Save()
+    {
+        _saveService.Write(ToSaveData());
+    }
     #endregion
 
     #region 私有方法
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
-        _platformManager = GameServiceLocator.PlatformManager;
-        _mallManager = GameServiceLocator.GetAppManager<MallManager>();
+        _saveService = GameServiceLocator.GetAppManager<SaveService>();
     }
 
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         _eventManager.AddListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
         _eventManager.AddListener(QuestEvents.QuestCompleted, OnQuestCompleted);
+        _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
     }
 
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
         _eventManager.RemoveListener(QuestEvents.QuestCompleted, OnQuestCompleted);
+        _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
     }
 
-    /// <summary>
-    /// 从服务器获取玩家数据
-    /// </summary>
-    private async UniTask FetchRemoteData()
+    private void ApplyDefaults()
     {
-        // 等待登录完成
-        await UniTask.WaitUntil(() => HuntingGameServiceProxy.Instance.IsClientLoggedIn);
+        _threeKPCoinAmount = DefaultThreeKPCoinAmount;
+        _pointAmount = 0;
+        _completedRoundCount = 0;
+        _totalBossKillCount = 0;
+        _coinManSlotIndex = -1;
+        _propCounts.Clear();
+        _bossKills.Clear();
 
-        // 拉取玩家三币和积分
-        _threeKPCoinAmount = (int)UserProxy.Instance.Threekp;
-        ProgressData progressData = await GameProxy.Instance.GetProgressData();
-        _pointAmount = (int)progressData.Point;
-
-        // _threeKPCoinAmount = 50;
-        // foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
-        //     _propCounts[propType] = 3;
-
-        // 同步玩家道具数据
-        await SyncPropsFromServer();
+        foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
+            _propCounts[propType] = DefaultPropCount;
     }
 
-    /// <summary>
-    /// 从远端同步道具数据
-    /// </summary>
-    private async UniTask SyncPropsFromServer()
+    private void ApplySaveData(PlayerSaveData data)
     {
-        try
+        _threeKPCoinAmount = data.ThreeKPCoinAmount;
+        _pointAmount = data.PointAmount;
+        _completedRoundCount = data.CompletedRoundCount;
+        _totalBossKillCount = data.TotalBossKillCount;
+        _coinManSlotIndex = data.CoinManSlotIndex;
+
+        _propCounts.Clear();
+        foreach (EPropType propType in Enum.GetValues(typeof(EPropType)))
+            _propCounts[propType] = 0;
+        if (data.PropCounts != null)
         {
-            Debug.Log($"[PlayerDataManager] 从服务器获取道具数据");
-            var serverItems = await GameProxy.Instance.GetItemData();
-
-            Debug.Log($"[PlayerDataManager] 打印服务器的道具数据");
-            foreach (var serverItem in serverItems)
+            for (int i = 0; i < data.PropCounts.Length; i++)
             {
-                Debug.Log($"[PlayerDataManager] 服务器道具id: {serverItem.Key}, 道具数量: {serverItem.Value}");
+                PropCountEntry entry = data.PropCounts[i];
+                _propCounts[entry.PropType] = entry.Count;
             }
-
-            Debug.Log($"[PlayerDataManager] 从服务器获取道具数据完成");
-
-            await UniTask.WaitUntil(() => _mallManager.IsFetchedMallItemSuccess);
-            List<ItemVo> itemVoList = _mallManager.GetPropItemVoList();
-
-            foreach (var itemVo in itemVoList)
-            {
-                Debug.Log($"[PlayerDataManager] 打印物品, id: {itemVo.ItemID}, name: {itemVo.Name}");
-                EPropType propType = GetPropsTypeFromName(itemVo.Name);
-                _propRemoteIds[propType] = itemVo.ItemID;
-                _propCounts[propType] = serverItems.TryGetValue(itemVo.ItemID, out var serverCount) ? (int)serverCount : 3;
-                Debug.Log($"[PlayerDataManager] 道具：{propType}, id: {itemVo.ItemID}");
-            }
-
-            Debug.Log($"[PlayerDataManager] 映射道具数据完成------");
         }
-        catch
+
+        _bossKills.Clear();
+        if (data.BossKills != null)
         {
-            Debug.LogWarning($"[PlayerDataManager] 同步道具数据失败，设置默认道具数量");
-            foreach (EPropType t in Enum.GetValues(typeof(EPropType)))
-                _propCounts[t] = 3;
+            for (int i = 0; i < data.BossKills.Length; i++)
+            {
+                BossKillEntry entry = data.BossKills[i];
+                _bossKills[entry.BossType] = entry.Count;
+            }
         }
     }
-    
-    private EPropType GetPropsTypeFromName(string propName)
+
+    private PlayerSaveData ToSaveData()
     {
-        switch (propName)
+        var propCounts = new PropCountEntry[_propCounts.Count];
+        int propIndex = 0;
+        foreach (var pair in _propCounts)
         {
-            case "炮火轰炸": return EPropType.Bombardment;
-            case "指哪打哪": return EPropType.AimAssist;
-            case "智能诱捕陷阱": return EPropType.Trap;
+            propCounts[propIndex++] = new PropCountEntry
+            {
+                PropType = pair.Key,
+                Count = pair.Value
+            };
         }
 
-        return default;
+        var bossKills = new BossKillEntry[_bossKills.Count];
+        int bossIndex = 0;
+        foreach (var pair in _bossKills)
+        {
+            bossKills[bossIndex++] = new BossKillEntry
+            {
+                BossType = pair.Key,
+                Count = pair.Value
+            };
+        }
+
+        return new PlayerSaveData
+        {
+            Version = 2,
+            ThreeKPCoinAmount = _threeKPCoinAmount,
+            PointAmount = _pointAmount,
+            CompletedRoundCount = _completedRoundCount,
+            TotalBossKillCount = _totalBossKillCount,
+            PropCounts = propCounts,
+            BossKills = bossKills,
+            CoinManSlotIndex = _coinManSlotIndex
+        };
     }
     #endregion
 
@@ -286,7 +294,22 @@ public class PlayerDataManager : IAppManager
     {
         UpdateThreeKPCoinAmount(args.RewardValue);
     }
+
+    /// <summary>
+    /// Boss 进死亡时按类型累计击杀
+    /// </summary>
+    private void OnAnimalEnteredDeath(AnimalEnteredDeathEventArgs args)
+    {
+        if (args.SpecieData == null)
+            return;
+
+        EBossType bossType = args.SpecieData.BossType;
+        if (bossType == EBossType.None)
+            return;
+
+        _bossKills.TryGetValue(bossType, out int count);
+        _bossKills[bossType] = count + 1;
+        _totalBossKillCount++;
+    }
     #endregion
-
-
 }

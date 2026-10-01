@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using GameFramework.Core.Pool;
 using UnityEngine;
 
@@ -65,6 +65,8 @@ namespace Hunting.Game.Animal
         /// </summary>
         public BaseAnimalEventTrigger AnimalEventTrigger { get; protected set; }
 
+        private RoundNumericLayer _numeric;
+
         /// <summary>
         /// 碰撞体组件
         /// </summary>
@@ -93,7 +95,10 @@ namespace Hunting.Game.Animal
             SpecieData = data;
 
             // 初始化血量组件
-            Health.Init(data.HP);
+            if (_numeric == null)
+                _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
+
+            Health.Init(_numeric.EvaluateMaxHealth(data.HP));
 
             // 初始化移动组件
             Moveable.Init();

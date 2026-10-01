@@ -20,7 +20,6 @@ public sealed partial class EnergyProgress : Luban.BeanBase
         ValuePerBar = _buf.ReadFloat();
         TotalBar = _buf.ReadInt();
         IncreasePerSecond = _buf.ReadFloat();
-        Comment = _buf.ReadString();
     }
 
     public static EnergyProgress DeserializeEnergyProgress(ByteBuf _buf)
@@ -44,10 +43,6 @@ public sealed partial class EnergyProgress : Luban.BeanBase
     /// 每秒增加量
     /// </summary>
     public readonly float IncreasePerSecond;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = 1061598482;
     public override int GetTypeId() => __ID__;
@@ -63,7 +58,6 @@ public sealed partial class EnergyProgress : Luban.BeanBase
         + "ValuePerBar:" + ValuePerBar + ","
         + "TotalBar:" + TotalBar + ","
         + "IncreasePerSecond:" + IncreasePerSecond + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

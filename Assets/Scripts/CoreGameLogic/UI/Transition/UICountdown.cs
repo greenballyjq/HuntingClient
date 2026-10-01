@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using Cysharp.Threading.Tasks;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using TMPro;
 using UnityEngine;
 
 /// <summary>
 /// 倒计时界面
 /// </summary>
-public class UICountdown : UIBase
+[UIForm(UILayer.Fixed)]
+public class UICountdown : UIForm
 {
     /// <summary>
     /// 文本组件

@@ -17,7 +17,6 @@ public sealed partial class PropAimAssist : Luban.BeanBase
     public PropAimAssist(ByteBuf _buf) 
     {
         ID = _buf.ReadInt();
-        Comment = _buf.ReadString();
     }
 
     public static PropAimAssist DeserializePropAimAssist(ByteBuf _buf)
@@ -29,10 +28,6 @@ public sealed partial class PropAimAssist : Luban.BeanBase
     /// 参数ID
     /// </summary>
     public readonly int ID;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = 1537318461;
     public override int GetTypeId() => __ID__;
@@ -45,7 +40,6 @@ public sealed partial class PropAimAssist : Luban.BeanBase
     {
         return "{ "
         + "ID:" + ID + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

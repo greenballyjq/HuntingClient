@@ -1,9 +1,8 @@
 using cfg.HuntingConfig.Enum;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using GameFramework.Manager;
-using GameFramework.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,7 +37,7 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
         _dropRewardLightEffectRectTransform = GetComponent<RectTransform>();
     }
 
@@ -58,7 +57,7 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _effectManager = GameServiceLocator.EffectManager;
@@ -85,7 +84,8 @@ public class UIComponentDropRewardLightEffect : MonoBehaviour, IUIComponent<UIGa
     private async UniTask PlayDropReward(EDropType dropType, int dropCount, Vector3 worldPosition)
     {
         Vector3 endPosition = _dropTargetPositionCache[dropType];
-        Vector3 startPosition = PointConverter.WorldPointToUiPoint(_dropRewardLightEffectRectTransform, worldPosition, _cameraManager.MainCamera, _cameraManager.UICamera);
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(_cameraManager.MainCamera, worldPosition);
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(_dropRewardLightEffectRectTransform, screenPoint, _cameraManager.UICamera, out Vector3 startPosition);
 
         GameObject effectObj = _effectManager.PlayLoop(_dropRewardEffectPrefab);
         effectObj.transform.SetParent(_dropRewardLightEffectRectTransform, true);

@@ -12,21 +12,9 @@ public class JoystickControlHandler : BaseControlHandler
     private UIComponentJoystick _joystick;
 
     /// <summary>
-    /// 屏幕滑动满量程像素数
-    /// </summary>
-    private float _screenSwipeFullRange;
-
-    /// <summary>
     /// 上一帧是否为屏幕滑动激活状态
     /// </summary>
     private bool _wasScreenSwipeActive;
-
-    /// <summary>
-    /// 平台系统信息
-    /// </summary>
-    private SystemInfo _systemInfo;
-
-    private PlatformManager _platformManager;
 
     private const float MIN_YAW_ANGLE = -70f;
     private const float MAX_YAW_ANGLE = 70f;
@@ -39,9 +27,6 @@ public class JoystickControlHandler : BaseControlHandler
     {
         InputManager.SwitchToFireMode();
         _joystick = UIComponentJoystick.Joystick;
-        _platformManager = GameServiceLocator.PlatformManager;
-        _systemInfo = _platformManager.CurrentPlatform.GetSystemInfo();
-        RefreshScreenSwipeFullRange();
     }
 
     protected override void OnControlUpdate(float dt)
@@ -69,15 +54,6 @@ public class JoystickControlHandler : BaseControlHandler
 
     #region 私有方法
     /// <summary>
-    /// 刷新屏幕滑动满量程
-    /// </summary>
-    private void RefreshScreenSwipeFullRange()
-    {
-        float screenWidth = _systemInfo != null ? _systemInfo.ScreenWidth : Screen.width;
-        _screenSwipeFullRange = screenWidth * SCREEN_SWIPE_RATIO;
-    }
-
-    /// <summary>
     /// 更新屏幕滑动输入
     /// </summary>
     private void UpdateScreenSwipeInput()
@@ -86,9 +62,12 @@ public class JoystickControlHandler : BaseControlHandler
 
         if (isScreenSwipeActive)
         {
+            float fullRange = Screen.width * SCREEN_SWIPE_RATIO;
+            if (fullRange <= 0f)
+                return;
+
             float deltaX = InputManager.PointerScreenPosition.x - InputManager.PointerPressStartPosition.x;
-            float horizontalInput = Mathf.Clamp(deltaX / _screenSwipeFullRange, -1f, 1f);
-            _joystick.ApplyExternalInput(horizontalInput, true);
+            _joystick.ApplyExternalInput(deltaX / fullRange, true);
         }
         else if (_wasScreenSwipeActive)
         {

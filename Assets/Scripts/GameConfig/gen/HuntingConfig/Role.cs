@@ -20,10 +20,7 @@ public sealed partial class Role : Luban.BeanBase
         RoleType = (HuntingConfig.Enum.ERoleType)_buf.ReadInt();
         RoleProfile = global::cfg.HuntingConfig.Bean.RoleProfile.DeserializeRoleProfile(_buf);
         LinkedSkillId = _buf.ReadInt();
-        LinkedMapId = _buf.ReadInt();
         IconResourcePath = _buf.ReadString();
-        VideoResourcePath = _buf.ReadString();
-        Comment = _buf.ReadString();
     }
 
     public static Role DeserializeRole(ByteBuf _buf)
@@ -48,21 +45,9 @@ public sealed partial class Role : Luban.BeanBase
     /// </summary>
     public readonly int LinkedSkillId;
     /// <summary>
-    /// 关联地图ID
-    /// </summary>
-    public readonly int LinkedMapId;
-    /// <summary>
     /// 图标资源路径
     /// </summary>
     public readonly string IconResourcePath;
-    /// <summary>
-    /// 视频资源路径
-    /// </summary>
-    public readonly string VideoResourcePath;
-    /// <summary>
-    /// 注释
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = 1697946867;
     public override int GetTypeId() => __ID__;
@@ -79,10 +64,7 @@ public sealed partial class Role : Luban.BeanBase
         + "RoleType:" + RoleType + ","
         + "RoleProfile:" + RoleProfile + ","
         + "LinkedSkillId:" + LinkedSkillId + ","
-        + "LinkedMapId:" + LinkedMapId + ","
         + "IconResourcePath:" + IconResourcePath + ","
-        + "VideoResourcePath:" + VideoResourcePath + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

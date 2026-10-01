@@ -1,4 +1,4 @@
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -40,13 +40,13 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
         _rectTransformMeatImage = _imageMeat.GetComponent<RectTransform>();
     }
 
     public void Init()
     {
-        SyncStatus();
+        SyncStatus(false);
         _eventManager.AddListener(MeatEvents.MeatValueChanged, OnMeatValueChanged);
     }
 
@@ -60,7 +60,7 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _meatProgressManager = GameServiceLocator.GetRoundManager<MeatProgressManager>();
@@ -69,19 +69,25 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// <summary>
     /// 同步管理器状态
     /// </summary>
-    private void SyncStatus()
+    private void SyncStatus(bool animated)
     {
         float ratio = _meatProgressManager.TotalProgressRatio;
-        RefreshMeatProgressFill(ratio);
+        RefreshMeatProgressFill(ratio, animated);
         RefreshMeatProgressText(ratio);
     }
 
     /// <summary>
     /// 刷新肉条进度填充
     /// </summary>
-    private void RefreshMeatProgressFill(float progressRatio)
+    private void RefreshMeatProgressFill(float progressRatio, bool animated)
     {
         _fillTween?.Kill();
+        if (!animated)
+        {
+            _imageMeatBarFill.fillAmount = progressRatio;
+            return;
+        }
+
         _fillTween = _imageMeatBarFill
             .DOFillAmount(progressRatio, 0.3f)
             .SetLink(gameObject);
@@ -102,7 +108,7 @@ public class UIComponentMeatProgress : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnMeatValueChanged(MeatValueChangedEventArgs args)
     {
-        RefreshMeatProgressFill(args.TotalProgressRatio);
+        RefreshMeatProgressFill(args.TotalProgressRatio, true);
         RefreshMeatProgressText(args.TotalProgressRatio);
     }
     #endregion

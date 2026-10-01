@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using UnityEngine;
@@ -7,27 +7,28 @@ using GameFramework.Utility;
 using System;
 using System.Linq;
 using Hunting.Game.Animal;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 动物管理器
 /// </summary>
-public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
+public class AnimalManager : IMapWorld, IRoundUpdatable
 {
     /// <summary>
-    /// 活跃动物集合
+    /// 场上实体，含尸体
     /// </summary>
-    private readonly HashSet<BaseAnimalBehaviour> _activeAnimals = new HashSet<BaseAnimalBehaviour>();
+    private readonly List<BaseAnimalBehaviour> _onField = new List<BaseAnimalBehaviour>();
 
     /// <summary>
-    /// 待移除动物列表
+    /// 本帧待回收
     /// </summary>
-    private readonly List<BaseAnimalBehaviour> _pendingRemovalAnimals = new List<BaseAnimalBehaviour>();
+    private readonly HashSet<BaseAnimalBehaviour> _toDespawn = new HashSet<BaseAnimalBehaviour>();
 
     /// <summary>
     /// 动物配置缓存
     /// </summary>
     private readonly Dictionary<int, Specie> _animalDatas = new Dictionary<int, Specie>();
-    public  Dictionary<int, Specie> AnimalDatas => _animalDatas;
+    public Dictionary<int, Specie> AnimalDatas => _animalDatas;
 
     /// <summary>
     /// 动物预制体缓存
@@ -40,68 +41,61 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private readonly Dictionary<int, int> _huntingCounts = new Dictionary<int, int>();
 
-    /// <summary>
-    /// 未进入死亡状态动物集合
-    /// </summary>
-    private readonly HashSet<BaseAnimalBehaviour> _unDeathAnimals = new HashSet<BaseAnimalBehaviour>();
-
     private EventManager _eventManager;
     private GameObjectPoolManager _gameObjectPoolManager;
     private HuntingConfigManager _configManager;
+    private CameraManager _cameraManager;
 
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
-        RegisterServices();
-        RegisterEvents();
+        BindServices();
+        SubscribeEvents();
         CacheAnimalDatas(context.MapData.ID);
         Log.Info("[AnimalManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void DoUpdate(float dt)
     {
-        foreach (var animal in _activeAnimals)
-            animal.DoUpdate(dt);
+        for (int i = 0; i < _onField.Count; i++)
+            _onField[i].DoUpdate(dt);
 
-        ProcessPendingRemovals();
+        ProcessDespawns();
     }
 
     public void Dispose()
     {
         RecycleAllAnimals();
-        UnregisterEvents();
+        UnsubscribeEvents();
         Log.Info("[AnimalManager] 已释放");
     }
 
-    public void Cleanup()
+    public void Unbind()
     {
         RecycleAllAnimals();
         ClearAnimalCache();
     }
 
-    public void ReInit(Map mapData) 
+    public void Bind(Map mapData)
     {
         CacheAnimalDatas(mapData.ID);
     }
 
     #region 公共方法
     /// <summary>
-    /// 获取最近且在屏幕内的动物
+    /// 获取最近且在屏幕内的活体动物
     /// </summary>
-    /// <param name="fromPosition">参考位置</param>
-    /// <param name="camera">相机</param>
-    /// <returns>最近的可见动物</returns>
     public BaseAnimalBehaviour GetNearestVisibleAnimal(Vector3 fromPosition)
     {
         BaseAnimalBehaviour nearestAnimal = null;
         float nearestSq = float.MaxValue;
 
-        foreach (var animal in _activeAnimals)
+        for (int i = 0; i < _onField.Count; i++)
         {
-            if (_pendingRemovalAnimals.Contains(animal))
+            var animal = _onField[i];
+            if (!IsAlive(animal))
                 continue;
-            if (animal.Health.IsDead)
-                continue;
-            if (!ScreenUtils.IsVisible(animal.transform, Camera.main))
+            if (!ScreenUtils.IsVisible(animal.transform, _cameraManager.MainCamera))
                 continue;
 
             float sq = Vector3.SqrMagnitude(animal.transform.position - fromPosition);
@@ -146,57 +140,95 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     }
 
     /// <summary>
-    /// 获取未进入死亡状态的动物数量
+    /// 活体数量
     /// </summary>
-    /// <returns></returns>
-    public int GetUnDeathAnimalCount() => _unDeathAnimals.Count;
-    
-    /// <summary>
-    /// 获取活跃动物数量
-    /// </summary>
-    /// <returns></returns>
-    public int GetActiveAnimalCount() => _activeAnimals.Count;
-
-    
-    /// <summary>
-    /// 获取最后一只活跃动物位置
-    /// </summary>
-    public Vector3 GetLastActiveAnimalPosition()
+    public int GetAliveAnimalCount()
     {
-        BaseAnimalBehaviour lastAnimal = null;
-        foreach (var animal in _activeAnimals)
-            lastAnimal = animal;
-
-        return lastAnimal.transform.position;
+        int count = 0;
+        for (int i = 0; i < _onField.Count; i++)
+        {
+            if (IsAlive(_onField[i]))
+                count++;
+        }
+        return count;
     }
 
+    /// <summary>
+    /// 场上是否还有实体
+    /// </summary>
+    public bool HasRemainingOnField(BaseAnimalBehaviour excluding)
+    {
+        for (int i = 0; i < _onField.Count; i++)
+        {
+            var animal = _onField[i];
+            if (animal == excluding)
+                continue;
+            if (_toDespawn.Contains(animal))
+                continue;
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 击杀除指定外的全部活体
+    /// </summary>
+    public void KillAllAliveExcept(BaseAnimalBehaviour except)
+    {
+        for (int i = 0; i < _onField.Count; i++)
+        {
+            var animal = _onField[i];
+            if (animal == except)
+                continue;
+            if (!IsAlive(animal))
+                continue;
+            animal.Health.Kill();
+        }
+    }
+
+    /// <summary>
+    /// 获取靠近目标位置的活体动物
+    /// </summary>
     public List<BaseAnimalBehaviour> GetCloseAnimalsFromTargetPosition(Vector3 position, int animalCount)
     {
-        if (animalCount <= 0) return null;
+        if (animalCount <= 0)
+            return null;
 
-        var validAnimals = _activeAnimals.Except(_pendingRemovalAnimals).ToList();
-        if (validAnimals.Count <= 0) return null;
+        var validAnimals = new List<BaseAnimalBehaviour>();
+        for (int i = 0; i < _onField.Count; i++)
+        {
+            if (IsAlive(_onField[i]))
+                validAnimals.Add(_onField[i]);
+        }
+
+        if (validAnimals.Count <= 0)
+            return null;
 
         animalCount = Math.Min(validAnimals.Count, animalCount);
-        return validAnimals
-            .OrderBy(animal => Vector3.SqrMagnitude(animal.transform.position - position))
-            .Take(animalCount)
-            .ToList();
+        validAnimals.Sort((a, b) =>
+            Vector3.SqrMagnitude(a.transform.position - position)
+                .CompareTo(Vector3.SqrMagnitude(b.transform.position - position)));
+        return validAnimals.GetRange(0, animalCount);
     }
     #endregion
 
     #region 私有方法
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
         _configManager = GameServiceLocator.ConfigManager;
+        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
+    }
+
+    private bool IsAlive(BaseAnimalBehaviour animal)
+    {
+        return !animal.Health.IsDead && !_toDespawn.Contains(animal);
     }
 
     /// <summary>
     /// 缓存动物配置
     /// </summary>
-    /// <param name="mapId">地图ID</param>
     private void CacheAnimalDatas(int mapId)
     {
         ClearAnimalCache();
@@ -210,7 +242,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
                 _animalPrefabs[specieId] = _configManager._AnimalRefSo.GetAnimalPrefab(specieId);
             }
         }
-            
     }
 
     /// <summary>
@@ -223,18 +254,19 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     }
 
     /// <summary>
-    /// 处理待移除的动物
+    /// 回收本帧待移除动物
     /// </summary>
-    private void ProcessPendingRemovals()
+    private void ProcessDespawns()
     {
-        foreach (var animal in _pendingRemovalAnimals)
+        if (_toDespawn.Count == 0)
+            return;
+
+        foreach (var animal in _toDespawn)
         {
-            _activeAnimals.Remove(animal);
-            
-            _unDeathAnimals.Remove(animal);
+            _onField.Remove(animal);
             _gameObjectPoolManager.Despawn(animal.gameObject);
         }
-        _pendingRemovalAnimals.Clear();
+        _toDespawn.Clear();
     }
 
     /// <summary>
@@ -242,13 +274,16 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void RecycleAllAnimals()
     {
-        foreach (var animal in _activeAnimals)
-            _gameObjectPoolManager.Despawn(animal.gameObject);
+        for (int i = 0; i < _onField.Count; i++)
+            _gameObjectPoolManager.Despawn(_onField[i].gameObject);
 
-        _activeAnimals.Clear();
-        _pendingRemovalAnimals.Clear();
+        _onField.Clear();
+        _toDespawn.Clear();
+    }
 
-        _unDeathAnimals.Clear();
+    private void MarkForDespawn(BaseAnimalBehaviour animal)
+    {
+        _toDespawn.Add(animal);
     }
     #endregion
 
@@ -256,7 +291,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <summary>
     /// 注册事件
     /// </summary>
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         _eventManager.AddListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
         _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
@@ -268,7 +303,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// <summary>
     /// 注销事件
     /// </summary>
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
         _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
@@ -282,8 +317,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnAnimalGenerated(AnimalGeneratedEventArgs args)
     {
-        _activeAnimals.Add(args.Animal);
-        _unDeathAnimals.Add(args.Animal);
+        _onField.Add(args.Animal);
     }
 
     /// <summary>
@@ -291,8 +325,6 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnAnimalEnteredDeath(AnimalEnteredDeathEventArgs args)
     {
-        _unDeathAnimals.Remove(args.Animal);
-
         int id = args.SpecieData.ID;
         _huntingCounts[id] = _huntingCounts.GetValueOrDefault(id) + 1;
     }
@@ -302,7 +334,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnAnimalDied(AnimalDiedEventArgs args)
     {
-        _pendingRemovalAnimals.Add(args.Animal);
+        MarkForDespawn(args.Animal);
     }
 
     /// <summary>
@@ -310,8 +342,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnAnimalLeft(AnimalLeftEventArgs args)
     {
-
-        _pendingRemovalAnimals.Add(args.Animal);
+        MarkForDespawn(args.Animal);
     }
 
     /// <summary>
@@ -319,7 +350,7 @@ public class AnimalManager : IRoundManager, IRoundResettable, IRoundUpdatable
     /// </summary>
     private void OnBossDied(BossDiedEventArgs args)
     {
-        _pendingRemovalAnimals.Add(args.Boss);
+        MarkForDespawn(args.Boss);
     }
     #endregion
 }

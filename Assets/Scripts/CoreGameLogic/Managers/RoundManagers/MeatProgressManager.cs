@@ -3,11 +3,12 @@ using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Utility;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// 肉度条管理器
 /// </summary>
-public class MeatProgressManager : IRoundManager, IRoundResettable
+public class MeatProgressManager : IMapWorld
 {
     /// <summary>
     /// 单刻度所需值
@@ -62,11 +63,12 @@ public class MeatProgressManager : IRoundManager, IRoundResettable
 
     private EventManager _eventManager;
     private HuntingConfigManager _configManager;
+    private RoundNumericLayer _numeric;
 
-    public void Init(RoundContext context)
+    public UniTask InitAsync(RoundContext context)
     {
-        RegisterServices();
-        RegisterEvents();
+        BindServices();
+        SubscribeEvents();
 
         _currentMapId = context.MapData.ID;
 
@@ -77,16 +79,17 @@ public class MeatProgressManager : IRoundManager, IRoundResettable
         _completedScaleCount = 0;
 
         Log.Info("[MeatProgressManager] 初始化完成");
+        return UniTask.CompletedTask;
     }
 
     public void Dispose()
     {
-        UnregisterEvents();
+        UnsubscribeEvents();
 
         Log.Info("[MeatProgressManager] 已释放");
     }
 
-    public void Cleanup()
+    public void Unbind()
     {
         _meatPerMap.Add((_currentMapId, _currentMeatValue));
         _totalMeatAcrossMaps += _currentMeatValue;
@@ -95,7 +98,7 @@ public class MeatProgressManager : IRoundManager, IRoundResettable
         _completedScaleCount = 0;
     }
 
-    public void ReInit(Map mapData)
+    public void Bind(Map mapData)
     {
         _currentMapId = mapData.ID;
     }
@@ -107,6 +110,10 @@ public class MeatProgressManager : IRoundManager, IRoundResettable
     /// <param name="amount">增加的肉度值</param>
     public void AddMeatAmount(int amount)
     {
+        amount = _numeric.EvaluateMeatGain(amount);
+        if (amount <= 0)
+            return;
+
         int beforeScaleCount = _completedScaleCount;
 
         _currentMeatValue += amount;
@@ -157,10 +164,11 @@ public class MeatProgressManager : IRoundManager, IRoundResettable
     #endregion
 
     #region 私有方法
-    private void RegisterServices()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _configManager = GameServiceLocator.ConfigManager;
+        _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
     }
     #endregion
 
@@ -168,7 +176,7 @@ public class MeatProgressManager : IRoundManager, IRoundResettable
     /// <summary>
     /// 注册事件
     /// </summary>
-    private void RegisterEvents()
+    private void SubscribeEvents()
     {
         _eventManager.AddListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }
@@ -176,7 +184,7 @@ public class MeatProgressManager : IRoundManager, IRoundResettable
     /// <summary>
     /// 注销事件
     /// </summary>
-    private void UnregisterEvents()
+    private void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(AnimalEvents.DropRewardArrived, OnDropRewardArrived);
     }

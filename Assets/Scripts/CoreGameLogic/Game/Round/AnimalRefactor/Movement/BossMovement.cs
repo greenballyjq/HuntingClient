@@ -1,4 +1,5 @@
-﻿using Hunting.Game.Animal;
+using GameFramework.Utility;
+using Hunting.Game.Animal;
 using UnityEngine;
 
 public class BossMovement : MonoBehaviour, IMoveable
@@ -70,7 +71,7 @@ public class BossMovement : MonoBehaviour, IMoveable
         _movePoints = FindObjectsOfType<BossMovePoint>();
         if (_movePoints.Length == 0)
         {
-            Debug.LogError($"[{GetType().Name}] 没有找到任何移动点");
+            Log.Error($"[{GetType().Name}] 没有找到任何移动点");
         }
     }
 
@@ -84,7 +85,7 @@ public class BossMovement : MonoBehaviour, IMoveable
         _movePoints = FindObjectsOfType<BossMovePoint>();
         if (_movePoints.Length == 0)
         {
-            Debug.LogError($"[{GetType().Name}] 没有找到任何移动点");
+            Log.Error($"[{GetType().Name}] 没有找到任何移动点");
         }
     }
 
@@ -151,7 +152,7 @@ public class BossMovement : MonoBehaviour, IMoveable
 
         if (_movePoints == null || _movePoints.Length < 2)
         {
-            Debug.LogWarning("随机移动点数量不足，无法选择两个不同的点");
+            Log.Warning("随机移动点数量不足，无法选择两个不同的点");
             return;
         }
 

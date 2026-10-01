@@ -19,7 +19,6 @@ public sealed partial class SkillDaMeiLi : Luban.BeanBase
         ID = _buf.ReadInt();
         DamageAmount = _buf.ReadFloat();
         ControlDuration = _buf.ReadFloat();
-        Comment = _buf.ReadString();
     }
 
     public static SkillDaMeiLi DeserializeSkillDaMeiLi(ByteBuf _buf)
@@ -39,10 +38,6 @@ public sealed partial class SkillDaMeiLi : Luban.BeanBase
     /// 控制持续时间
     /// </summary>
     public readonly float ControlDuration;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = -1261353094;
     public override int GetTypeId() => __ID__;
@@ -57,7 +52,6 @@ public sealed partial class SkillDaMeiLi : Luban.BeanBase
         + "ID:" + ID + ","
         + "DamageAmount:" + DamageAmount + ","
         + "ControlDuration:" + ControlDuration + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

@@ -1,6 +1,6 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,20 +38,23 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager;
 
     /// <summary>
     /// 玩家数据管理器
     /// </summary>
-    private PlayerDataManager PlayerData => GameServiceLocator.GetAppManager<PlayerDataManager>();
+    private PlayerDataManager _playerDataManager;
 
     private void Awake()
     {
+        _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
         _buttonGift.onClick.AddListener(OnGiftButtonClicked);
     }
 
@@ -68,7 +71,7 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
         _eventManager.AddListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
         _eventManager.AddListener(PlayerDataEvents.ThreeKPCoinAmountChanged, OnThreeKPCoinChanged);
 
-        UpdateGiftButtonInteractable(PlayerData.GetThreeKPCoinAmount());
+        UpdateGiftButtonInteractable(_playerDataManager.GetThreeKPCoinAmount());
     }
 
     public void CleanUp()
@@ -100,7 +103,7 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
         LuckyBuff buff = _configManager.GetLuckyBuffByGiftAndWeights(_giftType);
 
         // 扣除三千盘金币
-        PlayerData.UpdateThreeKPCoinAmount(-_giftPrice);
+        _playerDataManager.UpdateThreeKPCoinAmount(-_giftPrice);
 
         // 触发礼包开启事件
         TriggerGiftOpened(new GiftOpenedEventArgs
@@ -142,7 +145,7 @@ public class UIComponentGift : MonoBehaviour, IUIComponent
     /// </summary>
     private void OnGiftOpenAnimationEnded(GiftOpenAnimationEndedEventArgs args)
     {
-        int currentCoin = PlayerData.GetThreeKPCoinAmount();
+        int currentCoin = _playerDataManager.GetThreeKPCoinAmount();
         UpdateGiftButtonInteractable(currentCoin);
     }
 

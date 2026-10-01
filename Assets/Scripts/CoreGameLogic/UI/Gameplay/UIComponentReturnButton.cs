@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
-using GameFramework.Core.UI;
-using GameFramework.Manager;
+using GameFramework.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,12 +12,11 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
     /// 返回按钮
     /// </summary>
     [SerializeField] private Button _buttonReturn;
-
-    private UIManager _uiManager;
+    private PlayerDataManager _playerDataManager;
 
     private void Awake()
     {
-        RegisterServers();
+        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
         _buttonReturn.onClick.AddListener(OnReturnButtonClicked);
     }
 
@@ -31,20 +29,11 @@ public class UIComponentReturnButton : MonoBehaviour, IUIComponent
 
     public void CleanUp() { }
 
-    #region 私有方法
-    /// <summary>
-    /// 注册服务
-    /// </summary>
-    private void RegisterServers()
-    {
-        _uiManager = GameServiceLocator.UIManager;
-    }
-    #endregion
-
     #region 事件相关
     private async void OnReturnButtonClicked()
     {
-        await _uiManager.OpenUIAsync<UIPopupFakeSettlement>("UIPopupFakeSettlement", UIManager.UILayer.PopUp, userData: RoundFlow.Instance.RoundContext);
+        _playerDataManager.Save();
+        await HuntingAppFlow.Instance.EnterPrepareAsync();
     }
     #endregion
 }

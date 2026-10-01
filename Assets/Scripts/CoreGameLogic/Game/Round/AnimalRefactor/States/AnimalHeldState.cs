@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Hunting.Game.Animal;
 using UnityEngine;
@@ -14,10 +14,16 @@ public class AnimalHeldState : AnimalState
     {
     }
 
+    public void SetDuration(float duration)
+    {
+        _heldDuration = duration;
+    }
+
     public override void Enter()
     {
         base.Enter();
 
+        animalBehavior.Moveable.StopMove();
         animalBehavior.AnimalVisual.PlayHeld();
     }
 
@@ -31,6 +37,7 @@ public class AnimalHeldState : AnimalState
 
     public override void Exit()
     {
+        animalBehavior.Moveable.StartMove();
         base.Exit();
     }
 }

@@ -11,7 +11,12 @@ public class AnimalLeaveAreaTrigger : AreaTriggerBase
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
+
+    private void Awake()
+    {
+        _eventManager = GameServiceLocator.EventManager;
+    }
 
     protected override void OnEnter(Collider collider)
     {

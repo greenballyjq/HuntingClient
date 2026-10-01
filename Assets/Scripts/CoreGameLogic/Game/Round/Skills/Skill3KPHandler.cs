@@ -1,5 +1,4 @@
 using cfg.HuntingConfig.Skill;
-using CoreGameLogic.Managers.AppManagers;
 using Cysharp.Threading.Tasks;
 
 /// <summary>
@@ -12,20 +11,24 @@ public class Skill3KPHandler : BaseSkillHandler
     /// </summary>
     private Skill3KP _skillParam;
 
+    private RoundNumericLayer _numeric;
     private WeaponManager _weaponManager;
+    private NumericHandle _fireRateHandle;
+    private NumericHandle _damageHandle;
 
-    private const string MODIFIER_SOURCE_ID = "Skill_3KP";
-
-    protected override void OnInit() 
+    protected override void OnInit()
     {
+        _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
         _weaponManager = GameServiceLocator.GetRoundManager<WeaponManager>();
         _skillParam = ConfigManager.GetSkill3KP(SkillContext.SkillData.ParamTableID);
     }
 
     protected override UniTask OnSkillStart()
     {
-        _weaponManager.RegisterFireRateModifier(MODIFIER_SOURCE_ID, _skillParam.FireRateMultiplier);
-        _weaponManager.RegisterDamageModifier(MODIFIER_SOURCE_ID, _skillParam.DamageMultiplier);
+        _fireRateHandle = _numeric.RegisterFireRate(
+            new MultiplyFireRateModifier(_skillParam.FireRateMultiplier, FireRateWeaponKind.Player));
+        _damageHandle = _numeric.RegisterDamage(
+            new MultiplyDamageModifier(_skillParam.DamageMultiplier, DamageSourceKind.Weapon));
 
         _weaponManager.PlayerWeapon.WeaponVisual.SetSkillEffect(true);
 
@@ -38,7 +41,7 @@ public class Skill3KPHandler : BaseSkillHandler
     {
         _weaponManager.PlayerWeapon?.WeaponVisual?.SetSkillEffect(false);
 
-        _weaponManager.UnregisterFireRateModifier(MODIFIER_SOURCE_ID);
-        _weaponManager.UnregisterDamageModifier(MODIFIER_SOURCE_ID);
+        _numeric.UnregisterFireRate(_fireRateHandle);
+        _numeric.UnregisterDamage(_damageHandle);
     }
 }

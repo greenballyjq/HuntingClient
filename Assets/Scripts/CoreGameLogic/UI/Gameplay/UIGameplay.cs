@@ -1,13 +1,14 @@
 using System;
 using Cysharp.Threading.Tasks;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// 游玩界面主面板
 /// </summary>
-public class UIGameplay : UIBase
+[UIForm(UILayer.Hud)]
+public class UIGameplay : UIForm
 {
     /// <summary>
     /// 返回/结算按钮组件
@@ -95,14 +96,14 @@ public class UIGameplay : UIBase
     /// </summary>
     private CanvasGroup _canvasGroup;
 
-    private RoundFlow _roundFlow => RoundFlow.Instance;
+    private RoundFlow _roundFlow => HuntingAppFlow.Instance.RoundFlow;
 
     private void Awake()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public override void OnClose()
+    protected override void OnClose()
     {
         CleanUpAll();
         SetAllComponentsActive(false);

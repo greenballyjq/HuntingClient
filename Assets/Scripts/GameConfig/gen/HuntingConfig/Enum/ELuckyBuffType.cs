@@ -21,10 +21,6 @@ namespace cfg.HuntingConfig.Enum
         /// </summary>
         MoreMeat = 0,
         /// <summary>
-        /// 开局特殊子弹
-        /// </summary>
-        StartSpecialBullet = 1,
-        /// <summary>
         /// 开局丰收能量
         /// </summary>
         StartEnergy = 2,

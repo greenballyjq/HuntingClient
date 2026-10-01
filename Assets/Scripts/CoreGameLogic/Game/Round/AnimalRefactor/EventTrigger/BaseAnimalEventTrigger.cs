@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,12 +12,13 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 事件管理器
         /// </summary>
-        protected EventManager _eventManager => GameServiceLocator.EventManager;
+        protected EventManager _eventManager;
 
         /// <summary>
         /// 动物行为类
         /// </summary>
         protected BaseAnimalBehaviour _animalBehaviour;
+        private RoundNumericLayer _numeric;
 
         /// <summary>
         /// 初始化动画事件触发器组件
@@ -25,7 +26,9 @@ namespace Hunting.Game.Animal
         /// <param name="animalBehaviour">动物行为类</param>
         public void Init(BaseAnimalBehaviour animalBehaviour)
         {
+            _eventManager = GameServiceLocator.EventManager;
             _animalBehaviour = animalBehaviour;
+            _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace Hunting.Game.Animal
             {
                 Sender = this,
                 Animal = _animalBehaviour,
-                DropRewards = new Dictionary<EDropType, int>(_animalBehaviour.SpecieData.DropRewards)
+                DropRewards = _numeric.EvaluateDropRewards(_animalBehaviour.SpecieData.DropRewards)
             });
         }
     }

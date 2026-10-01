@@ -11,7 +11,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 准备界面
 /// </summary>
-[UIForm(UILayer.Page)]
+[UIForm(UILayer.Page, lifetime: UILifetime.App)]
 public class UIPrepare : UIForm
 {
     /// <summary>
@@ -57,6 +57,8 @@ public class UIPrepare : UIForm
     private EventManager _eventManager;
     private UIManager _uiManager;
     private HuntingConfigManager _configManager;
+    private ResourceManager _resourceManager;
+    private AudioManager _audioManager;
 
     /// <summary>
     /// 当前选中的角色ID
@@ -74,23 +76,15 @@ public class UIPrepare : UIForm
         _eventManager = GameServiceLocator.EventManager;
         _uiManager = GameServiceLocator.UIManager;
         _configManager = GameServiceLocator.ConfigManager;
+        _resourceManager = GameServiceLocator.ResourceManager;
+        _audioManager = GameServiceLocator.AudioManager;
         _startRoundBlink = _buttonStartRound.GetComponent<UIComponentStartRoundBlink>();
-
-        _buttonStartRound.onClick.AddListener(OnClickStartRound);
-        _buttonLucky.onClick.AddListener(OnClickLuckyRitual);
-        _buttonQuit.onClick.AddListener(OnClickQuit);
-    }
-
-    private void OnDestroy()
-    {
-        _buttonStartRound.onClick.RemoveListener(OnClickStartRound);
-        _buttonLucky.onClick.RemoveListener(OnClickLuckyRitual);
-        _buttonQuit.onClick.RemoveListener(OnClickQuit);
     }
 
     protected override void OnOpen()
     {
-        RegisterEvents();
+        BindButtons();
+        SubscribeEvents();
 
         _uiComponentRollRole.Init();
         _uiComponentRoleInfo.Init();
@@ -108,16 +102,42 @@ public class UIPrepare : UIForm
         _uiPrepareIntro?.CleanUp();
         _startRoundBlink?.StopBlink();
 
-        UnregisterEvents();
+        UnsubscribeEvents();
+        UnbindButtons();
 
         base.OnClose();
+    }
+
+    public async UniTask PreloadRoleIconsAsync()
+    {
+        var roles = _configManager.RoleTable.DataList;
+        for (int i = 0; i < roles.Count; i++)
+        {
+            string path = roles[i].IconResourcePath;
+            if (!string.IsNullOrEmpty(path))
+                await _resourceManager.LoadAssetAsync<Sprite>(path);
+        }
+    }
+
+    private void BindButtons()
+    {
+        _buttonStartRound.onClick.AddListener(OnClickStartRound);
+        _buttonLucky.onClick.AddListener(OnClickLuckyRitual);
+        _buttonQuit.onClick.AddListener(OnClickQuit);
+    }
+
+    private void UnbindButtons()
+    {
+        _buttonStartRound.onClick.RemoveListener(OnClickStartRound);
+        _buttonLucky.onClick.RemoveListener(OnClickLuckyRitual);
+        _buttonQuit.onClick.RemoveListener(OnClickQuit);
     }
 
     #region 事件相关
     /// <summary>
     /// 注册事件
     /// </summary>
-    public void RegisterEvents()
+    public void SubscribeEvents()
     {
         _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
         _eventManager.AddListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
@@ -128,7 +148,7 @@ public class UIPrepare : UIForm
     /// <summary>
     /// 注销事件
     /// </summary>
-    public void UnregisterEvents()
+    public void UnsubscribeEvents()
     {
         _eventManager.RemoveListener(PrepareEvents.RoleSelected, OnRoleSelected);
         _eventManager.RemoveListener(PrepareEvents.DiceAnimationStarted, OnDiceAnimationStarted);
@@ -159,9 +179,9 @@ public class UIPrepare : UIForm
         bool hasHiddenMap = Random.Range(0, 100) <= _configManager.GetHiddenMapProbability();
 
         RoleRefSo.RoleRef roleRef = _configManager.RoleRefSo.Get(roleData.ID);
-        AudioCue selected = roleRef?.Selected;
+        SfxCue selected = roleRef?.Selected;
         if (selected != null)
-            await AudioWait.UntilEnd(selected);
+            await AudioWait.UntilEnd(_audioManager, selected);
         else if (roleData.RoleType == ERoleType.Bule || roleData.RoleType == ERoleType.Red)
             await UniTask.Delay(2000);
 

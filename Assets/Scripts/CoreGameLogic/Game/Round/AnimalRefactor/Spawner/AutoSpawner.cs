@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Hunting.Game.Animal
 {
@@ -10,7 +10,12 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 派发管理器
         /// </summary>
-        private SpawnerManager _spawnerManager => GameServiceLocator.GetRoundManager<SpawnerManager>();
+        private SpawnerManager _spawnerManager;
+
+        /// <summary>
+        /// 数值修正层
+        /// </summary>
+        private RoundNumericLayer _numeric;
 
         /// <summary>
         /// 单次派发冷却时间
@@ -55,7 +60,6 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 设置启用状态
         /// </summary>
-        /// <param name="enabled">是否启用</param>
         public void SetEnabled(bool enabled)
         {
             isEnabled = enabled;
@@ -64,15 +68,17 @@ namespace Hunting.Game.Animal
         /// <summary>
         /// 每帧更新
         /// </summary>
-        /// <param name="dt">时间增量</param>
         public void DoUpdate(float dt)
         {
-            if (!isEnabled) return;
+            if (!isEnabled)
+                return;
+
+            EnsureServices();
 
             if (_remainingSpawnCount > 0)
             {
                 _spawnIntervalTimer += dt;
-                if (_spawnIntervalTimer >= spawnInterval)
+                if (_spawnIntervalTimer >= _numeric.EvaluateSpawnInterval(spawnInterval))
                 {
                     SpawnInfo info = CalculateSpawnInfo();
                     _spawnerManager.HandleSpawnRequest(this, info);
@@ -84,12 +90,22 @@ namespace Hunting.Game.Animal
             else
             {
                 _cooldownTimer += dt;
-                if (_cooldownTimer >= cooldownTime)
+                if (_cooldownTimer >= _numeric.EvaluateSpawnCooldown(cooldownTime))
                 {
-                    _remainingSpawnCount = spawnCount;
+                    _remainingSpawnCount = _numeric.EvaluateSpawnCount(spawnCount);
                     _cooldownTimer = 0f;
                 }
             }
+        }
+
+        private void EnsureServices()
+        {
+            if (_spawnerManager != null)
+                return;
+
+            _spawnerManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
+            _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
+            _remainingSpawnCount = _numeric.EvaluateSpawnCount(spawnCount);
         }
     }
 }

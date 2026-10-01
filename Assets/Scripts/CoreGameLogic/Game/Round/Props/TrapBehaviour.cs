@@ -1,4 +1,5 @@
-﻿using cfg.HuntingConfig.Enum;
+using cfg.HuntingConfig.Enum;
+using GameFramework.Audio;
 using Hunting.Game.Animal;
 using System;
 using System.Collections.Generic;
@@ -40,10 +41,17 @@ public class TrapBehaviour : MonoBehaviour
     private Dictionary<ESpecieType, float[]> _attractRadiusRangeByVolume;
 
     private EventManager _eventManager;
+    private HuntingConfigManager _configManager;
+    private AudioManager _audioManager;
+    private RoundNumericLayer _numeric;
+
+    private const float TrapDamage = 200f;
 
     private void Awake()
     {
         _eventManager = GameServiceLocator.EventManager;
+        _configManager = GameServiceLocator.ConfigManager;
+        _audioManager = GameServiceLocator.AudioManager;
     }
 
     private void OnEnable()
@@ -71,6 +79,7 @@ public class TrapBehaviour : MonoBehaviour
         _attractRadius = attractRadius;
         _triggerRadius = triggerRadius;
         _attractRadiusRangeByVolume = attractRadiusRangeByVolume;
+        _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
 
         _attractZone.Init(_attractRadius);
         _triggerZone.Init(_triggerRadius);
@@ -123,7 +132,12 @@ public class TrapBehaviour : MonoBehaviour
     private void TriggerTrap(BaseAnimalBehaviour animal)
     {
         TriggerTrapTriggered(new TrapTriggeredEventArgs { Trap = this });
-        animal.GetComponent<IDamageable>().TakeDamage(200);
+        var trapRef = _configManager.PropRefSo.Get(_configManager.GetProp(EPropType.Trap).ID);
+        _audioManager.Play(trapRef?.Catch, transform.position);
+        _numeric.Deal(
+            animal.GetComponent<IDamageable>(),
+            TrapDamage,
+            new DamageContext(DamageSourceKind.Prop));
         _trapAnimator.PlayClose();
     }
 

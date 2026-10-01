@@ -19,7 +19,6 @@ public sealed partial class MeatProgress : Luban.BeanBase
         ID = _buf.ReadInt();
         ValuePerScale = _buf.ReadInt();
         TotalScale = _buf.ReadInt();
-        Comment = _buf.ReadString();
     }
 
     public static MeatProgress DeserializeMeatProgress(ByteBuf _buf)
@@ -39,10 +38,6 @@ public sealed partial class MeatProgress : Luban.BeanBase
     /// 总刻度数
     /// </summary>
     public readonly int TotalScale;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = 1668320917;
     public override int GetTypeId() => __ID__;
@@ -57,7 +52,6 @@ public sealed partial class MeatProgress : Luban.BeanBase
         + "ID:" + ID + ","
         + "ValuePerScale:" + ValuePerScale + ","
         + "TotalScale:" + TotalScale + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

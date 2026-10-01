@@ -47,11 +47,12 @@ public class GiftOpenVFX : MonoBehaviour
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     private void Awake()
     {
         _originalGiftSprite = _imageGift.sprite;
+        _eventManager = GameServiceLocator.EventManager;
 
         _eventManager.AddListener(LuckyEvents.GiftOpened, OnGiftOpened);
         _eventManager.AddListener(LuckyEvents.LuckyBuffConfirmButtonClicked, OnLuckyBuffConfirmClicked);

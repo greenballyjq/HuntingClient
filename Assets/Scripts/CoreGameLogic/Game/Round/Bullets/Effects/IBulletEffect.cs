@@ -1,4 +1,4 @@
-﻿using Hunting.Game.Animal;
+using Hunting.Game.Animal;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +25,11 @@ public class BulletRuntimeContext
     /// 最终伤害
     /// </summary>
     public float FinalDamage { get; set; }
+
+    /// <summary>
+    /// 数值修正层
+    /// </summary>
+    public RoundNumericLayer Numeric { get; set; }
 }
 
 /// <summary>

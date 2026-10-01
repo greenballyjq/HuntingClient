@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Hunting.Game.Animal
 {
@@ -28,7 +28,10 @@ namespace Hunting.Game.Animal
         /// <param name="maxHealth">最大血量</param>
         void Init(float maxHealth);
 
-        void SetHealth(float amount);
+        /// <summary>
+        /// 立即死亡
+        /// </summary>
+        void Kill();
         
         /// <summary>
         /// 受伤事件

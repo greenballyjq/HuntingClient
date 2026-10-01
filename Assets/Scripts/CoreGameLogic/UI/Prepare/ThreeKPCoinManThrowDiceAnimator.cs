@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using GameFramework.Audio;
 using UnityEngine;
 
 /// <summary>
@@ -46,11 +47,15 @@ public class ThreeKPCoinManThrowDiceAnimator : MonoBehaviour
     /// 投骰子动画结束等待源
     /// </summary>
     private UniTaskCompletionSource<bool> _throwAnimationEndedCompletionSource;
+    private HuntingConfigManager _configManager;
+    private AudioManager _audioManager;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _rectTransform = GetComponent<RectTransform>();
+        _configManager = GameServiceLocator.ConfigManager;
+        _audioManager = GameServiceLocator.AudioManager;
     }
 
     #region 公共方法
@@ -112,10 +117,30 @@ public class ThreeKPCoinManThrowDiceAnimator : MonoBehaviour
     }
 
     /// <summary>
+    /// 直接站到指定格子 idle（有存档时进准备页）
+    /// </summary>
+    public void PlaceAtSlot(Vector3 anchoredPosition, bool faceRight)
+    {
+        Vector3 targetPosition = anchoredPosition;
+        targetPosition.y += _yMoveOffset;
+        _rectTransform.anchoredPosition3D = targetPosition;
+
+        Vector3 scale = transform.localScale;
+        scale.x = faceRight ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
+        transform.localScale = scale;
+
+        PlayIdle();
+    }
+
+    /// <summary>
     /// 骰子投出回调
     /// </summary>
     public void OnDiceThrowed()
     {
+        var uiAudio = _configManager.UiAudioRefSo;
+        if (uiAudio != null)
+            _audioManager.Play(uiAudio.Cheer);
+
         // 创建骰子
         GameObject diceObj = Instantiate(_dicePrefab, _diceThrowStartPosition.position, Quaternion.identity, transform.parent);
         DiceRollAnimator diceAnimation = diceObj.GetComponent<DiceRollAnimator>();

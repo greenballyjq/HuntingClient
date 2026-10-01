@@ -22,7 +22,6 @@ public sealed partial class Map : Luban.BeanBase
         Description = _buf.ReadString();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);SpecieTypeWeights = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.ESpecieType, float>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.ESpecieType _k0;  _k0 = (HuntingConfig.Enum.ESpecieType)_buf.ReadInt(); float _v0;  _v0 = _buf.ReadFloat();     SpecieTypeWeights.Add(_k0, _v0);}}
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);MapSpecies = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.ESpecieType, int[]>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.ESpecieType _k0;  _k0 = (HuntingConfig.Enum.ESpecieType)_buf.ReadInt(); int[] _v0;  {int __n1 = System.Math.Min(_buf.ReadSize(), _buf.Size);_v0 = new int[__n1];for(var __index1 = 0 ; __index1 < __n1 ; __index1++) { int __e1;__e1 = _buf.ReadInt(); _v0[__index1] = __e1;}}     MapSpecies.Add(_k0, _v0);}}
-        Comment = _buf.ReadString();
     }
 
     public static Map DeserializeMap(ByteBuf _buf)
@@ -54,10 +53,6 @@ public sealed partial class Map : Luban.BeanBase
     /// 地图物种
     /// </summary>
     public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.ESpecieType, int[]> MapSpecies;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = 1855882559;
     public override int GetTypeId() => __ID__;
@@ -75,7 +70,6 @@ public sealed partial class Map : Luban.BeanBase
         + "Description:" + Description + ","
         + "SpecieTypeWeights:" + Luban.StringUtil.CollectionToString(SpecieTypeWeights) + ","
         + "MapSpecies:" + Luban.StringUtil.CollectionToString(MapSpecies) + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

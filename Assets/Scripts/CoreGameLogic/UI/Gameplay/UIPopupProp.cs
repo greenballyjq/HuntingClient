@@ -1,6 +1,6 @@
 using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using GameFramework.Manager;
 using TMPro;
 using UnityEngine;
@@ -9,7 +9,8 @@ using UnityEngine.UI;
 /// <summary>
 /// 道具弹窗
 /// </summary>
-public class UIPopupProp : UIBase
+[UIForm(UILayer.Popup)]
+public class UIPopupProp : UIForm<EPropType>
 {
     /// <summary>
     /// 道具图片
@@ -37,17 +38,27 @@ public class UIPopupProp : UIBase
     [SerializeField] private TextMeshProUGUI _textPropName;
 
     /// <summary>
+    /// 获取按钮文本
+    /// </summary>
+    [SerializeField] private TextMeshProUGUI _textGet;
+
+    /// <summary>
     /// 当前道具配置
     /// </summary>
     private Prop _currentProp;
 
-    private RoundFlow _roundFlow => RoundFlow.Instance;
+    /// <summary>
+    /// 当前道具价格
+    /// </summary>
+    private int _propPrice;
+
+    private RoundFlow _roundFlow => HuntingAppFlow.Instance.RoundFlow;
     private HuntingConfigManager _configManager;
     private PlayerDataManager _playerDataManager;
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
         _buttonGet.onClick.AddListener(OnGetButtonClicked);
         _buttonClose.onClick.AddListener(OnCloseButtonClicked);
         _buttonCancel.onClick.AddListener(OnCancelButtonClicked);
@@ -60,10 +71,9 @@ public class UIPopupProp : UIBase
         _buttonCancel.onClick.RemoveListener(OnCancelButtonClicked);
     }
 
-    public override void OnInit(object userData)
+    protected override void OnOpen(EPropType args)
     {
-        base.OnInit(userData);
-        _currentProp = _configManager.GetProp((EPropType)userData);
+        _currentProp = _configManager.GetProp(args);
         RefreshPropDisplay();
     }
 
@@ -71,7 +81,7 @@ public class UIPopupProp : UIBase
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _configManager = GameServiceLocator.ConfigManager;
         _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
@@ -84,6 +94,11 @@ public class UIPopupProp : UIBase
     {
         _textPropName.text = _currentProp.Name;
         _imageProp.sprite = _configManager.PropRefSo.GetPropIcon(_currentProp.ID);
+
+        _propPrice = _configManager.GetPropPrice();
+        if (_textGet != null)
+            _textGet.text = _propPrice.ToString();
+        _buttonGet.interactable = _playerDataManager.EnoughThreeKp(_propPrice);
     }
     #endregion
 
@@ -93,6 +108,10 @@ public class UIPopupProp : UIBase
     /// </summary>
     private void OnGetButtonClicked()
     {
+        if (!_playerDataManager.EnoughThreeKp(_propPrice))
+            return;
+
+        _playerDataManager.UpdateThreeKPCoinAmount(-_propPrice);
         _playerDataManager.UpdatePropCount(_currentProp.PropType, 1);
         _roundFlow.ResumeRound();
         Close();

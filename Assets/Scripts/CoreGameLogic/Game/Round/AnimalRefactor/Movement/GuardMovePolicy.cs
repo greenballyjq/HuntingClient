@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using GameFramework.Utility;
+using UnityEngine;
 
 namespace Hunting.Game.Animal
 {
@@ -14,7 +15,7 @@ namespace Hunting.Game.Animal
             _guardTargetTransform = Object.FindObjectOfType<BossAnimalBehaviour>().transform;
             if (_guardTargetTransform == null)
             {
-                Debug.LogError("[GuardMovePolicy] Could not find BossAnimalBehaviour");
+                Log.Error("[GuardMovePolicy] Could not find BossAnimalBehaviour");
             }
         }
 
@@ -23,7 +24,7 @@ namespace Hunting.Game.Animal
             _guardTargetTransform = Object.FindObjectOfType<BossAnimalBehaviour>().transform;
             if (_guardTargetTransform == null)
             {
-                Debug.LogError("[GuardMovePolicy] Could not find BossAnimalBehaviour");
+                Log.Error("[GuardMovePolicy] Could not find BossAnimalBehaviour");
             }
         }
         

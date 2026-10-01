@@ -1,13 +1,14 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// 红色警报界面
 /// </summary>
-public class UIAlertRed : UIBase
+[UIForm(UILayer.Overlay)]
+public class UIAlertRed : UIForm
 {
     /// <summary>
     /// 闪烁配置
@@ -46,9 +47,8 @@ public class UIAlertRed : UIBase
     /// </summary>
     [SerializeField] private FlashConfig _flashConfig;
 
-    public override void OnInit(object userData)
+    protected override void OnOpen()
     {
-        base.OnInit(userData);
         _imageFlash.color = new Color(_flashConfig.FlashColor.r, _flashConfig.FlashColor.g, _flashConfig.FlashColor.b, 0f);
     }
 

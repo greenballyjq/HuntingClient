@@ -1,4 +1,4 @@
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using GameFramework.Manager;
 using System.Text;
 using TMPro;
@@ -24,7 +24,7 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
     /// </summary>
     private StringBuilder _stringBuilder = new StringBuilder(12);
 
-    private RoundFlow _roundFlow => RoundFlow.Instance;
+    private RoundFlow _roundFlow => HuntingAppFlow.Instance.RoundFlow;
     private EventManager _eventManager;
     
     private const int ELAPSED_TIME_MS_FONT_SIZE_PERCENTAGE = 80;
@@ -32,7 +32,7 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
     }
 
     public void Init()
@@ -56,7 +56,7 @@ public class UIComponentTimer : MonoBehaviour, IUIComponent
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         

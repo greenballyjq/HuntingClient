@@ -95,7 +95,10 @@ public class PropBombardmentHandler : BasePropHandler
             Collider[] colliders = Physics.OverlapSphere(_zonePositions[i], _propParam.ZoneRadius, LayerMask.GetMask("Animal"));
 
             foreach (var collider in colliders)
-                collider.GetComponent<IDamageable>().TakeDamage(_propParam.DamageAmount);
+                NumericLayer.Deal(
+                    collider.GetComponent<IDamageable>(),
+                    _propParam.DamageAmount,
+                    new DamageContext(DamageSourceKind.Prop));
         }
     }
 

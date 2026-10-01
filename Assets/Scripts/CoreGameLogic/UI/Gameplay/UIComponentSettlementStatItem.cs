@@ -1,7 +1,7 @@
 using System.Text;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using TMPro;
 using UnityEngine;
 

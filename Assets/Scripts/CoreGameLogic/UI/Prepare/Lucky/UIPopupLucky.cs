@@ -1,11 +1,13 @@
-using GameFramework.Core.UI;
+using cfg.HuntingConfig;
+using GameFramework.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// 幸运仪式界面
 /// </summary>
-public class UIPopupLucky : UIBase
+[UIForm(UILayer.Popup, lifetime: UILifetime.App)]
+public class UIPopupLucky : UIForm
 {
     /// <summary>
     /// 三千盘金币组件
@@ -16,11 +18,6 @@ public class UIPopupLucky : UIBase
     /// 礼包组件列表
     /// </summary>
     [SerializeField] private UIComponentGift[] _uiComponentGifts;
-
-    /// <summary>
-    /// 广告礼包组件列表
-    /// </summary>
-    [SerializeField] private UIComponentGiftAd[] _uiComponentGiftAds;
 
     /// <summary>
     /// 关闭按钮
@@ -43,9 +40,8 @@ public class UIPopupLucky : UIBase
         _buttonClose.onClick.RemoveListener(OnCloseButtonClicked);
     }
 
-    public override void OnInit(object userData)
+    protected override void OnOpen()
     {
-        base.OnInit(userData);
 
         _eventManager.AddListener(LuckyEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
         _eventManager.AddListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
@@ -54,20 +50,14 @@ public class UIPopupLucky : UIBase
 
         foreach (var gift in _uiComponentGifts)
             gift.Init();
-
-        foreach (var giftAd in _uiComponentGiftAds)
-            giftAd.Init();
     }
 
-    public override void OnClose()
+    protected override void OnClose()
     {
         _uiComponentThreeKPCoin.CleanUp();
 
         foreach (var gift in _uiComponentGifts)
             gift.CleanUp();
-
-        foreach (var giftAd in _uiComponentGiftAds)
-            giftAd.CleanUp();
 
         _eventManager.RemoveListener(LuckyEvents.GiftOpenAnimationStarted, OnGiftOpenAnimationStarted);
         _eventManager.RemoveListener(LuckyEvents.GiftOpenAnimationEnded, OnGiftOpenAnimationEnded);
@@ -99,7 +89,7 @@ public class UIPopupLucky : UIBase
     {
         _buttonClose.interactable = true;
 
-        await _uiManager.OpenUIAsync<UIPopupLuckyBuff>("UIPopupLuckyBuff", UIManager.UILayer.PopUp, args.LuckyBuffData);
+        await _uiManager.OpenAsync<UIPopupLuckyBuff, LuckyBuff>(args.LuckyBuffData);
     }
     #endregion
 }

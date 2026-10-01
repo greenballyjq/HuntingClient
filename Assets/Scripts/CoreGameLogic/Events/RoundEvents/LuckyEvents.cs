@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
 using GameFramework.Core;
 
@@ -7,11 +7,6 @@ using GameFramework.Core;
 /// </summary>
 public static class LuckyEvents
 {
-    /// <summary>
-    /// 幸运仪式增益激活事件
-    /// </summary>
-    public static readonly EventKey<LuckyBuffActivatedEventArgs> LuckyBuffActivated = new EventKey<LuckyBuffActivatedEventArgs>();
-
     /// <summary>
     /// 礼包开启事件
     /// </summary>
@@ -31,17 +26,6 @@ public static class LuckyEvents
     /// 幸运仪式增益确认按钮点击事件
     /// </summary>
     public static readonly EventKey LuckyBuffConfirmButtonClicked = new EventKey();
-}
-
-/// <summary>
-/// 幸运仪式增益激活事件参数
-/// </summary>
-public sealed class LuckyBuffActivatedEventArgs : EventArgs
-{
-    /// <summary>
-    /// 幸运仪式增益配置
-    /// </summary>
-    public LuckyBuff LuckyBuffData { get; set; }
 }
 
 /// <summary>

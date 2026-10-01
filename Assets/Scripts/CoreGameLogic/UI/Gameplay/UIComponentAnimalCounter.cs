@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using cfg.HuntingConfig;
 using cfg.HuntingConfig.Enum;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using UnityEngine;
 
 /// <summary>
@@ -24,7 +24,7 @@ public class UIComponentAnimalCounter : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
     }
 
     public void Init()
@@ -43,7 +43,7 @@ public class UIComponentAnimalCounter : MonoBehaviour, IUIComponent
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();

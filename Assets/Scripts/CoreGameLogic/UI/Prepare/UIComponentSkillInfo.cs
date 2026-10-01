@@ -29,15 +29,17 @@ public class UIComponentSkillInfo : MonoBehaviour, IUIComponent
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager;
 
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     public void Init()
     {
+        _configManager = GameServiceLocator.ConfigManager;
+        _eventManager = GameServiceLocator.EventManager;
         _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
         _eventManager.AddListener(PrepareEvents.SlotAnimationEnded, OnSlotAnimationEnded);
 

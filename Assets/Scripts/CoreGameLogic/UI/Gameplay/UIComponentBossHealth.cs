@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using GameFramework.Manager;
 using System;
 using UnityEngine;
@@ -42,7 +42,7 @@ public class UIComponentBossHealth : MonoBehaviour, IUIComponent
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
     }
 
     public void Init()
@@ -72,7 +72,7 @@ public class UIComponentBossHealth : MonoBehaviour, IUIComponent
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
     }

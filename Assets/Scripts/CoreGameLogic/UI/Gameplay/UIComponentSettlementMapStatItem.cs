@@ -1,5 +1,5 @@
 using cfg.HuntingConfig;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using UnityEngine;
 using UnityEngine.UI;
 

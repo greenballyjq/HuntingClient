@@ -1,11 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 /// <summary>
 /// 单个角色格子组件
 /// </summary>
-public class UIComponentRoleSlot : MonoBehaviour, IPointerClickHandler
+public class UIComponentRoleSlot : MonoBehaviour
 {
     /// <summary>
     /// 角色ID
@@ -25,13 +25,6 @@ public class UIComponentRoleSlot : MonoBehaviour, IPointerClickHandler
     public Vector3 GetPosition()
     {
         return (transform as RectTransform).anchoredPosition3D;
-    }
-    #endregion
-
-    #region 开发者测试方法
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        GetComponentInParent<UIPrepare>().StartRoundWithRole(RoleID);
     }
     #endregion
 }

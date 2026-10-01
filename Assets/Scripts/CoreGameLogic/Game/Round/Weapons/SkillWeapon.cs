@@ -1,4 +1,4 @@
-﻿using CoreGameLogic.Managers.AppManagers;
+using GameFramework.Audio;
 using GameFramework.Utility;
 using Hunting.Game.Animal;
 using UnityEngine;
@@ -8,9 +8,12 @@ using UnityEngine;
 /// </summary>
 public class SkillWeapon : MonoBehaviour
 {
-    private HuntingSoundManager _soundManager;
     private BulletManager _bulletManager;
     private AnimalManager _animalManager;
+    private RoundNumericLayer _numeric;
+    private HuntingConfigManager _configManager;
+    private AudioManager _audioManager;
+    private float _baseFireRate;
 
     private const int DEFAULT_BULLT_ID = 1;
     private const float MIN_LOCK_DISTANCE = 0f;
@@ -79,10 +82,18 @@ public class SkillWeapon : MonoBehaviour
     /// <param name="fireInterval">射击间隔（秒）</param>
     public void Init(float fireInterval)
     {
-        RegisterServices();
+        BindServices();
 
-        _fireInterval = fireInterval;
+        _baseFireRate = fireInterval > 0f ? 1f / fireInterval : 0f;
+        RefreshFireInterval();
+        _numeric.FireRateChanged += RefreshFireInterval;
         _fireTimer = 0f;
+    }
+
+    private void OnDestroy()
+    {
+        if (_numeric != null)
+            _numeric.FireRateChanged -= RefreshFireInterval;
     }
     #endregion
 
@@ -90,11 +101,22 @@ public class SkillWeapon : MonoBehaviour
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServices()
+    private void BindServices()
     {
-        _soundManager = GameServiceLocator.GetAppManager<HuntingSoundManager>();
         _bulletManager = GameServiceLocator.GetRoundManager<BulletManager>();
         _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
+        _numeric = GameServiceLocator.GetRoundManager<RoundNumericLayer>();
+        _configManager = GameServiceLocator.ConfigManager;
+        _audioManager = GameServiceLocator.AudioManager;
+    }
+
+    /// <summary>
+    /// 按修正层重算射击间隔
+    /// </summary>
+    private void RefreshFireInterval()
+    {
+        float fireRate = _numeric.EvaluateFireRate(_baseFireRate, new FireRateContext(FireRateWeaponKind.Skill));
+        _fireInterval = fireRate > 0f ? 1f / fireRate : float.MaxValue;
     }
 
     /// <summary>
@@ -174,8 +196,8 @@ public class SkillWeapon : MonoBehaviour
     /// </summary>
     private void Fire()
     {
-        _bulletManager.SpawnBullet(DEFAULT_BULLT_ID, _firePoint.position, _firePoint.forward);
-        _soundManager.PlayFireSound();
+        _bulletManager.SpawnBullet(DEFAULT_BULLT_ID, _firePoint.position, _firePoint.forward, DamageSourceKind.Skill);
+        _audioManager.Play(_configManager.BulletRefSo.Get(DEFAULT_BULLT_ID)?.Fire);
     }
     #endregion
 }

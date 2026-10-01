@@ -9,7 +9,7 @@ public interface IQuestHandler
     /// <summary>
     /// 初始化
     /// </summary>
-    /// <param name="questData">技能数据</param>
+    /// <param name="questData">任务数据</param>
     void Init(Quest questData);
 
     /// <summary>

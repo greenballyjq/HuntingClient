@@ -1,7 +1,9 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using GameFramework.Audio;
 using GameFramework.Core;
 using GameFramework.Game;
 using GameFramework.Manager;
+using GameFramework.UI;
 
 /// <summary>
 /// 游戏服务定位器
@@ -20,14 +22,9 @@ public static class GameServiceLocator
     public static UIManager UIManager => GameFrameworkManager.Instance.GetManager<UIManager>();
 
     /// <summary>
-    /// 资源加载管理器
+    /// 资源管理器
     /// </summary>
     public static ResourceManager ResourceManager => GameFrameworkManager.Instance.GetManager<ResourceManager>();
-
-    /// <summary>
-    /// 平台管理器
-    /// </summary>
-    public static PlatformManager PlatformManager => GameFrameworkManager.Instance.GetManager<PlatformManager>();
 
     /// <summary>
     /// 对象池管理器
@@ -40,19 +37,14 @@ public static class GameServiceLocator
     public static EffectManager EffectManager => GameFrameworkManager.Instance.GetManager<EffectManager>();
 
     /// <summary>
-    /// 音效管理器
+    /// 音频管理器
     /// </summary>
-    public static SoundManager SoundManager => GameFrameworkManager.Instance.GetManager<SoundManager>();
-
-    /// <summary>
-    /// 定时器管理器
-    /// </summary>
-    public static TimerManager TimerManager => GameFrameworkManager.Instance.GetManager<TimerManager>();
+    public static AudioManager AudioManager => GameFrameworkManager.Instance.GetManager<AudioManager>();
 
     /// <summary>
     /// 配置管理器
     /// </summary>
-    public static HuntingConfigManager ConfigManager => HuntingConfigManager.Instance;
+    public static HuntingConfigManager ConfigManager => HuntingAppFlow.Instance.GetAppManager<HuntingConfigManager>();
     #endregion
 
     /// <summary>
@@ -76,6 +68,6 @@ public static class GameServiceLocator
     /// </summary>
     public static T GetRoundManager<T>() where T : class, IRoundManager
     {
-        return RoundFlow.Instance.GetRoundManager<T>();
+        return HuntingAppFlow.Instance.RoundFlow.GetRoundManager<T>();
     }
 }

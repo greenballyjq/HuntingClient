@@ -1,4 +1,4 @@
-﻿using Hunting.Game.Animal;
+using Hunting.Game.Animal;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ public class NormalBulletEffect : IBulletEffect
     public List<IDamageable> OnHit(BulletRuntimeContext context, BulletHitInfo hitInfo)
     {
         // 对命中目标造成伤害
-        hitInfo.PrimaryTarget.TakeDamage(context.FinalDamage, hitInfo.HitPoint, Vector3.zero);
+        context.Numeric.Apply(hitInfo.PrimaryTarget, context.FinalDamage, hitInfo.HitPoint);
 
         // 返回命中的动物列表
         return new List<IDamageable> { hitInfo.PrimaryTarget };

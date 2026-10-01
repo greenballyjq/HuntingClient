@@ -1,5 +1,5 @@
-﻿using cfg.HuntingConfig;
-using GameFramework.Core.UI;
+using cfg.HuntingConfig;
+using GameFramework.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

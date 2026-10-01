@@ -1,5 +1,5 @@
-﻿using cfg.HuntingConfig;
-using GameFramework.Core.UI;
+using cfg.HuntingConfig;
+using GameFramework.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +24,7 @@ public class UIComponentAnimalCounterItem : MonoBehaviour, IUIComponent<Specie>
 
     private void Awake()
     {
-        RegisterServers();
+        BindServices();
     }
 
     public void Init(Specie specieData)
@@ -49,7 +49,7 @@ public class UIComponentAnimalCounterItem : MonoBehaviour, IUIComponent<Specie>
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _configManager = GameServiceLocator.ConfigManager;
     }

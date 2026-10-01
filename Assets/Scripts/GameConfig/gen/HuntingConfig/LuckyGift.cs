@@ -20,10 +20,8 @@ public sealed partial class LuckyGift : Luban.BeanBase
         LuckyGiftType = (HuntingConfig.Enum.ELuckyGiftType)_buf.ReadInt();
         Name = _buf.ReadString();
         ThreeKPCoin = _buf.ReadInt();
-        CostType = (HuntingConfig.Enum.ELuckyGiftCostType)_buf.ReadInt();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);BuffTypeWeights = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.ELuckyBuffType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.ELuckyBuffType _k0;  _k0 = (HuntingConfig.Enum.ELuckyBuffType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     BuffTypeWeights.Add(_k0, _v0);}}
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);BuffStrengthWeights = new System.Collections.Generic.Dictionary<HuntingConfig.Enum.ELuckyBuffStrengthType, int>(n0 * 3 / 2);for(var i0 = 0 ; i0 < n0 ; i0++) { HuntingConfig.Enum.ELuckyBuffStrengthType _k0;  _k0 = (HuntingConfig.Enum.ELuckyBuffStrengthType)_buf.ReadInt(); int _v0;  _v0 = _buf.ReadInt();     BuffStrengthWeights.Add(_k0, _v0);}}
-        Comment = _buf.ReadString();
     }
 
     public static LuckyGift DeserializeLuckyGift(ByteBuf _buf)
@@ -48,10 +46,6 @@ public sealed partial class LuckyGift : Luban.BeanBase
     /// </summary>
     public readonly int ThreeKPCoin;
     /// <summary>
-    /// 付费方式
-    /// </summary>
-    public readonly HuntingConfig.Enum.ELuckyGiftCostType CostType;
-    /// <summary>
     /// Buff类型权重(5种效果类型)
     /// </summary>
     public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.ELuckyBuffType, int> BuffTypeWeights;
@@ -59,10 +53,6 @@ public sealed partial class LuckyGift : Luban.BeanBase
     /// Buff强度权重(弱/中/强) 
     /// </summary>
     public readonly System.Collections.Generic.Dictionary<HuntingConfig.Enum.ELuckyBuffStrengthType, int> BuffStrengthWeights;
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public readonly string Comment;
    
     public const int __ID__ = -1198330405;
     public override int GetTypeId() => __ID__;
@@ -78,10 +68,8 @@ public sealed partial class LuckyGift : Luban.BeanBase
         + "LuckyGiftType:" + LuckyGiftType + ","
         + "Name:" + Name + ","
         + "ThreeKPCoin:" + ThreeKPCoin + ","
-        + "CostType:" + CostType + ","
         + "BuffTypeWeights:" + Luban.StringUtil.CollectionToString(BuffTypeWeights) + ","
         + "BuffStrengthWeights:" + Luban.StringUtil.CollectionToString(BuffStrengthWeights) + ","
-        + "Comment:" + Comment + ","
         + "}";
     }
 }

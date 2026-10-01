@@ -1,4 +1,4 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
@@ -52,16 +52,20 @@ public class SkillYaKeDongHandler : BaseSkillHandler
 
     private EventManager _eventManager;
     private GameObjectPoolManager _gameObjectPoolManager;
+    private CameraManager _cameraManager;
 
     private const float TARGET_DISTANCE_FROM_PLAYER = 8f;
     private const float TARGET_RANDOM_RANGEX = 3;
     private const float TARGET_RANDOM_RANGEZ = 5f;
     private const float CAMERA_DEPTH = 3f;
 
+    protected override bool ShouldYieldMusicForUniqueSkillAudio => true;
+
     protected override void OnInit() 
     {
         _eventManager = GameServiceLocator.EventManager;
         _gameObjectPoolManager = GameServiceLocator.GameObjectPoolManager;
+        _cameraManager = GameServiceLocator.GetAppManager<CameraManager>();
 
         CacheScreenCorners();
 
@@ -105,7 +109,7 @@ public class SkillYaKeDongHandler : BaseSkillHandler
     /// </summary>
     private void CacheScreenCorners()
     {
-        var cam = GameServiceLocator.GetAppManager<CameraManager>().MainCamera;
+        var cam = _cameraManager.MainCamera;
 
         _screenCornersCache[0] = cam.ViewportToWorldPoint(new Vector3(0f, 0, CAMERA_DEPTH));
         _screenCornersCache[1] = cam.ViewportToWorldPoint(new Vector3(1f, 0, CAMERA_DEPTH));

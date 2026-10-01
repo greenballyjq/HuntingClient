@@ -34,20 +34,23 @@ public class UIComponentRoleInfo : MonoBehaviour, IUIComponent
     /// <summary>
     /// 配置管理器
     /// </summary>
-    private HuntingConfigManager _configManager => GameServiceLocator.ConfigManager;
+    private HuntingConfigManager _configManager;
 
     /// <summary>
     /// 资源管理器
     /// </summary>
-    private ResourceManager _resourceManager => GameServiceLocator.ResourceManager;
+    private ResourceManager _resourceManager;
 
     /// <summary>
     /// 事件管理器
     /// </summary>
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
 
     public void Init()
     {
+        _configManager = GameServiceLocator.ConfigManager;
+        _resourceManager = GameServiceLocator.ResourceManager;
+        _eventManager = GameServiceLocator.EventManager;
         _eventManager.AddListener(PrepareEvents.RoleSelected, OnRoleSelected);
         _eventManager.AddListener(PrepareEvents.SlotAnimationEnded, OnSlotAnimationEnded);
 

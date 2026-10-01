@@ -24,7 +24,9 @@ public abstract class BaseQuestHandler : IQuestHandler
 
     public virtual void Init(Quest questData)
     {
-        EventManager = GameServiceLocator.EventManager;
+        if (EventManager == null)
+            EventManager = GameServiceLocator.EventManager;
+
         QuestData = questData;
         CurrentProgress = 0;
     }

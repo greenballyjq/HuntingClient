@@ -1,7 +1,10 @@
-﻿using cfg.HuntingConfig;
+using cfg.HuntingConfig;
 using CoreGameLogic.Game.Round.Boss.States;
+using Cysharp.Threading.Tasks;
 using GameFramework.Manager;
 using Hunting.Game.Animal;
+using System;
+using System.Threading;
 
 public class BossAnimalBehaviour : BaseAnimalBehaviour
 {
@@ -9,27 +12,32 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
     private BossAnimalCallGuardState _bossCallGuardState;
     private BossAnimalEnterState _bossEnterState;
     
-    private int _callGuardTimerId;
+    private CancellationTokenSource _callGuardCts;
     private const float CALL_GUARD_DURATION = 30f;
 
     private const float MAX_SPAWN_ANIMAL = 30;
 
-    private TimerManager _timerManager => GameServiceLocator.TimerManager;
-    
-    private EventManager _eventManager => GameServiceLocator.EventManager;
+    private EventManager _eventManager;
+    private AnimalManager _animalManager;
+    private SpawnerManager _spawnerManager;
     
     public int CalledGuardCount { get; set; }
     
     public override void Init(Specie data)
     {
+        _eventManager = GameServiceLocator.EventManager;
+        _animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
+        _spawnerManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
+
         _bossDeathState = new BossAnimalDeathState(_stateMachine, this);
         _bossEnterState = new BossAnimalEnterState(_stateMachine, this);
         _bossCallGuardState = new BossAnimalCallGuardState(_stateMachine, this);
 
         _eventManager.AddListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
-        _eventManager.AddListener(AnimalEvents.AnimalDied, OnAnimalDied);
+        _eventManager.AddListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
 
-        _callGuardTimerId = _timerManager.StartTimer(CALL_GUARD_DURATION, CallGuard, repeat: TimerManager.LOOP);
+        _callGuardCts = new CancellationTokenSource();
+        RunCallGuardLoop(_callGuardCts.Token).Forget();
 
         base.Init(data);
         
@@ -47,23 +55,37 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
     
     private void OnAnimalGenerated(AnimalGeneratedEventArgs args)
     {
-        AnimalManager animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
-        if (animalManager.GetActiveAnimalCount() >= MAX_SPAWN_ANIMAL)
+        if (_animalManager.GetAliveAnimalCount() >= MAX_SPAWN_ANIMAL)
         {
             DisableAnimalSpawners();
         }
     }
     
-    private void OnAnimalDied(AnimalDiedEventArgs args)
+    private void OnAnimalEnteredDeath(AnimalEnteredDeathEventArgs args)
     {
-        AnimalManager animalManager = GameServiceLocator.GetRoundManager<AnimalManager>();
-        if (animalManager.GetActiveAnimalCount() < MAX_SPAWN_ANIMAL)
+        if (_animalManager.GetAliveAnimalCount() < MAX_SPAWN_ANIMAL)
         {
             EnableAnimalSpawners();
         }
     }
 
     
+
+    private async UniTaskVoid RunCallGuardLoop(CancellationToken token)
+    {
+        try
+        {
+            while (!token.IsCancellationRequested)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(CALL_GUARD_DURATION), cancellationToken: token);
+                if (!token.IsCancellationRequested)
+                    CallGuard();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
 
     private void CallGuard()
     {
@@ -88,23 +110,26 @@ public class BossAnimalBehaviour : BaseAnimalBehaviour
 
         DisableAnimalSpawners();
 
-        _timerManager.StopTimer(_callGuardTimerId);
+        if (_callGuardCts != null)
+        {
+            _callGuardCts.Cancel();
+            _callGuardCts.Dispose();
+            _callGuardCts = null;
+        }
         
         _eventManager.RemoveListener(AnimalEvents.AnimalGenerated, OnAnimalGenerated);
-        _eventManager.RemoveListener(AnimalEvents.AnimalDied, OnAnimalDied);
+        _eventManager.RemoveListener(AnimalEvents.AnimalEnteredDeath, OnAnimalEnteredDeath);
     }
     
     private void EnableAnimalSpawners()
     {
-        var spawnerManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
-        var autoSpawners = spawnerManager.GetSpawners<AutoSpawner>("Random");
+        var autoSpawners = _spawnerManager.GetSpawners<AutoSpawner>("Random");
         autoSpawners.ForEach(spawner => spawner.SetEnabled(true));
     }
 
     private void DisableAnimalSpawners()
     {
-        var spawnerManager = GameServiceLocator.GetRoundManager<SpawnerManager>();
-        var autoSpawners = spawnerManager.GetSpawners<AutoSpawner>("Random");
+        var autoSpawners = _spawnerManager.GetSpawners<AutoSpawner>("Random");
         autoSpawners.ForEach(spawner => spawner.SetEnabled(false));
     }
 }

@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a22b33c44d55e66f77889900aabb0b, type: 3}
+  m_Name: RoleRefSo
+  m_EditorClassIdentifier: 
+  _roleRefList:
+  - ID: 1
+    Selected: {fileID: 0}
+    Opening: {fileID: 0}
+    Settlement: {fileID: 0}
+    SkillVoice: {fileID: 0}
+    BombardmentVoice: {fileID: 0}
+    AimAssistVoice: {fileID: 0}
+    TrapVoice: {fileID: 0}
+  - ID: 2
+    Selected: {fileID: 0}
+    Opening: {fileID: 0}
+    Settlement: {fileID: 0}
+    SkillVoice: {fileID: 0}
+    BombardmentVoice: {fileID: 0}
+    AimAssistVoice: {fileID: 0}
+    TrapVoice: {fileID: 0}
+  - ID: 3
+    Selected: {fileID: 11400000, guid: fc36bdd2f18149298410c53e9493a3a5, type: 2}
+    Opening: {fileID: 11400000, guid: f4ece22a015c4e10bc0ac6c35b47209e, type: 2}
+    Settlement: {fileID: 11400000, guid: 0b5da09a6dbf44e0b78323896572a80c, type: 2}
+    SkillVoice: {fileID: 11400000, guid: 7eae54610e55450ea7e297a22d4d0de7, type: 2}
+    BombardmentVoice: {fileID: 11400000, guid: 311a45832ea041d9b11052da0a685a05, type: 2}
+    AimAssistVoice: {fileID: 11400000, guid: f6735051dab6412fac4012a6c70e33db, type: 2}
+    TrapVoice: {fileID: 11400000, guid: 13a3d65f06e3491c86e89a0ed033ad4c, type: 2}
+  - ID: 4
+    Selected: {fileID: 11400000, guid: c3ec5b7d2fee402c868efe60a555edad, type: 2}
+    Opening: {fileID: 11400000, guid: f83f7b359ab440bca59565b58857ecb9, type: 2}
+    Settlement: {fileID: 11400000, guid: 5c2bd82bc2c94c0988e44b8f002b9e59, type: 2}
+    SkillVoice: {fileID: 11400000, guid: 9362c0ddce9f4e9b957ee8f4afb5bb6a, type: 2}
+    BombardmentVoice: {fileID: 11400000, guid: a137accab8de43f5b49abbcaee277ff7, type: 2}
+    AimAssistVoice: {fileID: 11400000, guid: c24f6399b55b491589c9a3f2f527efe8, type: 2}
+    TrapVoice: {fileID: 11400000, guid: 2342f4af4c8549b28c7da7f872bc9713, type: 2}
+  - ID: 5
+    Selected: {fileID: 11400000, guid: 7e4abed8f3744d579861b8e9b668108b, type: 2}
+    Opening: {fileID: 11400000, guid: 87ae8c56370c4b25a7abda9c2aea4f4e, type: 2}
+    Settlement: {fileID: 11400000, guid: 0d1fff2ce97f401f8b0a2689a0a192a3, type: 2}
+    SkillVoice: {fileID: 11400000, guid: 9f15ed0a0bc949d1a7919ac0ccf1d300, type: 2}
+    BombardmentVoice: {fileID: 11400000, guid: c465f8a2754a4cd88a7810e26f70d8c4, type: 2}
+    AimAssistVoice: {fileID: 11400000, guid: 851bb1fd38bd4a898c4247b64e0c02ce, type: 2}
+    TrapVoice: {fileID: 11400000, guid: b7e31aebf6114b29bd72778cc6e51fb1, type: 2}
+  - ID: 6
+    Selected: {fileID: 11400000, guid: 0a19383135204cc4a3d6423ca2dfd85d, type: 2}
+    Opening: {fileID: 11400000, guid: 7e24cde69c8c4c018d4f8fe3e21fd321, type: 2}
+    Settlement: {fileID: 11400000, guid: 1a12855788c1450da871cf62c0486ee0, type: 2}
+    SkillVoice: {fileID: 11400000, guid: 42270e62319c4244b3b907dfbe9b1dce, type: 2}
+    BombardmentVoice: {fileID: 11400000, guid: a7e86b373ff344cebf6dcc4a3b286437, type: 2}
+    AimAssistVoice: {fileID: 11400000, guid: 6d51006692ba451db7d09cc65342fc8b, type: 2}
+    TrapVoice: {fileID: 11400000, guid: ccf3dffbab56494e853113692b5d422c, type: 2}

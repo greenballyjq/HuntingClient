@@ -3,7 +3,7 @@ using Hunting.Events;
 using UnityEngine;
 using UnityEngine.UI;
 using GameFramework.Manager;
-using GameFramework.Core.UI;
+using GameFramework.UI;
 using TMPro;
 
 /// <summary>
@@ -54,7 +54,7 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
     private void Awake()
     {
         _rectTransformBulletImage = _imageBullet.GetComponent<RectTransform>();
-        RegisterServers();
+        BindServices();
     }
 
     public void Init()
@@ -76,7 +76,7 @@ public class UIComponentBullet : MonoBehaviour, IUIComponent
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _eventManager = GameServiceLocator.EventManager;
         _configManager = GameServiceLocator.ConfigManager;

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using cfg.HuntingConfig;
 using Cysharp.Threading.Tasks;
-using GameFramework.Core.UI;
+using GameFramework.Audio;
+using GameFramework.UI;
 using GameFramework.Manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,8 +10,10 @@ using UnityEngine.UI;
 /// <summary>
 /// 隐藏地图结算弹窗
 /// </summary>
-public class UIPopupHiddenSettlement : UIBase
+[UIForm(UILayer.Popup)]
+public class UIPopupHiddenSettlement : UIForm
 {
+    private const int CountUpDelayMs = 2000;
     /// <summary>
     /// 肉量统计项
     /// </summary>
@@ -37,19 +40,9 @@ public class UIPopupHiddenSettlement : UIBase
     [SerializeField] private GameObject _settlementMapStatItemPrefab;
 
     /// <summary>
-    /// 分享按钮
-    /// </summary>
-    [SerializeField] protected Button ButtonShare;
-
-    /// <summary>
     /// 领取按钮
     /// </summary>
     [SerializeField] protected Button ButtonClaim;
-
-    /// <summary>
-    /// 双倍领取按钮
-    /// </summary>
-    [SerializeField] protected Button ButtonDoubleClaim;
 
     /// <summary>
     /// 地图肉量统计
@@ -61,29 +54,28 @@ public class UIPopupHiddenSettlement : UIBase
     /// </summary>
     private List<UIComponentSettlementMapStatItem> _mapStatItems = new List<UIComponentSettlementMapStatItem>();
 
-    protected RoundFlow RoundFlow => RoundFlow.Instance;
+    protected RoundFlow RoundFlow => HuntingAppFlow.Instance.RoundFlow;
     private UIManager _uiManager;
     private HuntingConfigManager _configManager;
     private MeatProgressManager _meatProgressManager;
+    private SettlementManager _settlementManager;
+    private PlayerDataManager _playerDataManager;
+    private AudioManager _audioManager;
+    private int _meatCoinReward;
 
     private void Awake()
     {
-        RegisterServers();
-        ButtonShare.onClick.AddListener(OnShareButtonClicked);
+        BindServices();
         ButtonClaim.onClick.AddListener(OnClaimButtonClicked);
-        ButtonDoubleClaim.onClick.AddListener(OnDoubleClaimButtonClicked);
     }
 
     private void OnDestroy()
     {
-        ButtonShare.onClick.RemoveListener(OnShareButtonClicked);
         ButtonClaim.onClick.RemoveListener(OnClaimButtonClicked);
-        ButtonDoubleClaim.onClick.RemoveListener(OnDoubleClaimButtonClicked);
     }
 
-    public override void OnInit(object userData)
+    protected override void OnOpen()
     {
-        base.OnInit(userData);
 
         _uiComponentSettlementStatItemMeat.Init();
         _uiComponentSettlementStatItemThreeKPCoin.Init();
@@ -91,23 +83,22 @@ public class UIPopupHiddenSettlement : UIBase
 
         SetButtonsInteractable(false);
         RefreshSettlementDisplay();
+        PlaySettlementAudio();
         PlaySettlementAsync().Forget();
-    }
-
-    public override void OnClose()
-    {
-        base.OnClose();
     }
 
     #region 私有方法
     /// <summary>
     /// 注册服务
     /// </summary>
-    private void RegisterServers()
+    private void BindServices()
     {
         _uiManager = GameServiceLocator.UIManager;
         _configManager = GameServiceLocator.ConfigManager;
         _meatProgressManager = GameServiceLocator.GetRoundManager<MeatProgressManager>();
+        _settlementManager = GameServiceLocator.GetRoundManager<SettlementManager>();
+        _playerDataManager = GameServiceLocator.GetAppManager<PlayerDataManager>();
+        _audioManager = GameServiceLocator.AudioManager;
     }
 
     /// <summary>
@@ -116,11 +107,11 @@ public class UIPopupHiddenSettlement : UIBase
     private void RefreshSettlementDisplay()
     {
         int totalMeat = _meatProgressManager.TotalMeatAcrossMaps + _meatProgressManager.CurrentMeatValue;
-        int point = _configManager.GetSettlementPointRewardAmount();
+        var reward = _settlementManager.EvaluateReward();
 
         _uiComponentSettlementStatItemMeat.SetCount(totalMeat);
         _uiComponentSettlementStatItemThreeKPCoin.SetCount(0);
-        _uiComponentSettlementStatItemPoint.SetCount(point);
+        _uiComponentSettlementStatItemPoint.SetCount(reward.Point);
 
         RefreshMapStatItems();
     }
@@ -150,9 +141,13 @@ public class UIPopupHiddenSettlement : UIBase
     /// </summary>
     private void SetButtonsInteractable(bool interactable)
     {
-        ButtonShare.interactable = interactable;
         ButtonClaim.interactable = interactable;
-        ButtonDoubleClaim.interactable = interactable;
+    }
+
+    private void PlaySettlementAudio()
+    {
+        _audioManager.PlayMusic(_configManager.UiAudioRefSo.SettlementVictory, 0f);
+        _audioManager.Play(_configManager.RoleRefSo.Get(RoundFlow.RoundContext.RoleData.ID)?.Settlement);
     }
 
     /// <summary>
@@ -160,14 +155,14 @@ public class UIPopupHiddenSettlement : UIBase
     /// </summary>
     private async UniTask PlaySettlementAsync()
     {
-        int totalMeat = _meatProgressManager.TotalMeatAcrossMaps + _meatProgressManager.CurrentMeatValue;
-        int coinTarget = _meatProgressManager.GetThreeKPCoinCountFromMeat(totalMeat);
+        var reward = _settlementManager.EvaluateReward();
+        _meatCoinReward = reward.CoinFromMeat;
 
-        await UniTask.Delay(2000);
+        await UniTask.Delay(CountUpDelayMs);
 
         await UniTask.WhenAll(
             _uiComponentSettlementStatItemMeat.PlayCountAsync(0, 4f),
-            _uiComponentSettlementStatItemThreeKPCoin.PlayCountAsync(coinTarget, 4f)
+            _uiComponentSettlementStatItemThreeKPCoin.PlayCountAsync(_meatCoinReward, 4f)
         );
 
         SetButtonsInteractable(true);
@@ -187,9 +182,10 @@ public class UIPopupHiddenSettlement : UIBase
     /// </summary>
     protected virtual void OnClaimButtonClicked()
     {
-        _uiManager.CloseUI("UISnowMountainVictory");
-        Close();
-
+        SetButtonsInteractable(false);
+        _settlementManager.ClaimMeatCoin();
+        _playerDataManager.AddCompletedRound();
+        _playerDataManager.Save();
         HuntingAppFlow.Instance.EnterPrepareAsync().Forget();
     }
 
