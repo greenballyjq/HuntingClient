@@ -15,3 +15,10 @@
 ProjectSettings/BurstAotSettings_*.json
 /[Aa]ssets/[Ss]treamingAssets/[Yy]oo/
 
+# 第三方库，不进仓库
+/[Aa]ssets/[Pp]lugins/[Ss]pine/
+/[Aa]ssets/[Pp]lugins/[Dd]emigiant/
+/[Aa]ssets/DOTween/
+/[Aa]ssets/WX-WASM-SDK-V2/
+/[Aa]ssets/[Pp]lugins/ReferenceFinder/
+
