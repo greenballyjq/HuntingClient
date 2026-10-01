@@ -36,7 +36,7 @@
     <div class="hero-inner">
       <p class="kicker">Unity 2022.3</p>
       <h1>我给全家<em>打肉</em>吃</h1>
-      <p class="lead">准备页掷骰选定角色，花金币开宝箱摇 Buff。主地图射击动物、收集食物。肉度满了结算，或先去隐藏地图打 Boss 再结算。肉换成金币后回到准备页。</p>
+      <p class="lead">准备页掷骰选定角色和技能，幸运仪式页里花金币开宝箱随机摇 Buff。然后进入主地图射击动物、收集食物。肉度刻度满后结算，或者先进入隐藏地图打 Boss 再结算。结算把肉换成金币，回到准备页。</p>
       <div class="cta">
         <a class="btn primary" href="https://github.com/greenballyjq/HuntingClient">仓库</a>
         <a class="btn ghost" href="https://github.com/greenballyjq/HuntingClient/blob/main/README.md">README</a>
@@ -47,7 +47,7 @@
   <main>
     <section id="shots">
       <div class="section-head">
-        <h2>截图</h2>
+        <h2>画面</h2>
       </div>
       <div class="shots">
         <figure>
@@ -73,12 +73,35 @@
       <div class="section-head">
         <h2>玩法</h2>
       </div>
-      <p class="prose">
-        准备页随机一张主地图。三千盘金币人站在角色格上，掷骰走格后停在哪格，就是本局角色和绑定技能。也可以先花金币开宝箱，把抽到的增益带进这一局。进主地图时按概率决定这局带不带隐藏地图。
-      </p>
-      <p class="prose">
-        主地图是森林。开场倒计时 8 秒后才能操作。打死动物掉落食物，光效飞到界面对应位置才入账。肉度全部涨满后再倒计时 10 秒，然后结算。这局如果带了隐藏地图，会先问要不要进去。隐藏地图是雪山，倒计时走完不停局，Boss 倒下并且场上没有其他动物才结算。
-      </p>
+
+      <h3>单局流程</h3>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart LR
+  prepare[准备] --> main[主地图]
+  main --> full{肉度刻度满}
+  full -->|这局有隐藏地图| hidden[隐藏地图]
+  full -->|没有| settle[结算]
+  hidden --> hiddenSettle[隐藏图结算]
+  settle --> prepare
+  hiddenSettle --> prepare
+        </pre>
+      </div>
+      <p class="prose">进入主地图时按概率决定这局带不带隐藏地图。肉度没满就留在主地图。</p>
+
+      <h3>准备</h3>
+      <div class="frame"><img src="4.jpg" alt="准备页走格" /></div>
+      <p class="prose">随机抽一张主地图，显示名称和说明。三千盘金币人站在角色格上。点开始后掷骰走格，停在哪格就是本局角色，并带上该角色绑定的技能。界面会写出角色名、背景故事和技能说明。也可以先开幸运仪式，把抽到的增益带进这一局。</p>
+
+      <h3>主地图</h3>
+      <div class="frame"><img src="6.jpg" alt="主地图对局" /></div>
+      <p class="prose">加载森林场景。开场倒计时 8 秒，结束后才能操作，同时播放这张地图的音乐。计时是已经过了多久，到点不会结束这局。</p>
+      <p class="prose">动物按这张地图的物种配置生成。打死之后掉落食物，光效飞到界面对应的位置才入账。肉度涨满一格会提示进度；全部涨满后再倒计时 10 秒，然后结算。如果这局带了隐藏地图，会先弹出进入隐藏地图的提示。</p>
+      <p class="prose">返回按钮会先存档，再回到准备。</p>
+
+      <h3>隐藏地图</h3>
+      <div class="frame"><img src="9.jpg" alt="隐藏地图 Boss" /></div>
+      <p class="prose">加载雪山场景。出场演出结束后 Boss 才开始移动和受击，这时才能操作。倒计时走完停在 0，不会因此结束这局。Boss 倒下后清掉其他还活着的动物；场上没有其余尸体时结算，同时放慢动作。</p>
       <div class="tables">
         <table>
           <thead><tr><th></th><th>主地图</th><th>隐藏地图</th></tr></thead>
@@ -87,6 +110,96 @@
             <tr><td>时间</td><td>已用时间</td><td>倒计时</td></tr>
             <tr><td>动物计数</td><td>有</td><td>无</td></tr>
             <tr><td>Boss 血条</td><td>无</td><td>有</td></tr>
+            <tr><td>返回准备</td><td>有</td><td>无</td></tr>
+            <tr><td>肉条、道具、子弹、摇杆、技能</td><td>有</td><td>有</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>结算</h3>
+      <div class="frame"><img src="7.jpg" alt="普通结算" /></div>
+      <div class="frame"><img src="11.jpg" alt="隐藏图结算" /></div>
+      <p class="prose">普通结算用这一张地图上的肉。隐藏图结算把各张图的肉加在一起。肉按汇率换成金币。数字走完才能领取。领取后存档，回到准备页。</p>
+
+      <h3>角色</h3>
+      <div class="frame"><img src="14.jpg" alt="角色" /></div>
+      <p class="prose">准备页写出角色名和背景故事。角色是小蓝人、小红人、格格、大美丽、金状元、亚克东。</p>
+
+      <h3>掉落</h3>
+      <div class="tables">
+        <table>
+          <thead><tr><th>掉落</th><th>金光粒子飞到哪</th><th>然后</th></tr></thead>
+          <tbody>
+            <tr><td>肉</td><td>肉条</td><td>增加肉度</td></tr>
+            <tr><td>能量</td><td>技能</td><td>增加能量</td></tr>
+            <tr><td>子弹</td><td>子弹图标</td><td>换成一条特殊子弹</td></tr>
+            <tr><td>金币</td><td>金币图标</td><td>增加持有的金币</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>操作与子弹</h3>
+      <div class="frame"><img src="16.jpg" alt="摇杆射击" /></div>
+      <p class="prose">手指或鼠标拖动摇杆 UI 拨方向，按住即射击；手指或鼠标在屏幕上滑动，按住也能射击；道具「指哪打哪」会改成点选一只动物，再按提前量（预判）转向射击。两条路都由玩家武器开火。</p>
+      <p class="prose">爆炸弹打中后，落点半径内的动物受到同一次伤害。普通弹、高伤弹、高速弹都只扣打中的那一只。特殊子弹持续时间结束后，回到普通子弹。</p>
+
+      <h3>道具</h3>
+      <div class="frame"><img src="15.jpg" alt="道具栏" /></div>
+      <p class="prose">局内点加号会暂停，同时打开购买层。价格用金币支付。每种道具同时只能用一个，用掉就扣 1 个。</p>
+      <div class="frame"><img src="10.jpg" alt="购买道具" /></div>
+      <div class="tables">
+        <table>
+          <thead><tr><th>道具</th><th>效果</th></tr></thead>
+          <tbody>
+            <tr><td>炮火轰炸</td><td>在场上落几个点，按间隔伤害动物</td></tr>
+            <tr><td>指哪打哪</td><td>改成点选动物后再射击</td></tr>
+            <tr><td>智能诱捕陷阱</td><td>分批放夹子，把非 Boss 引过来并伤害它</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>技能与能量</h3>
+      <div class="frame"><img src="17.jpg" alt="技能" /></div>
+      <p class="prose">能量随时间上涨，打死动物掉落的能量也会加。攒满一条再点技能，消耗一条。这一局用哪个技能，由准备页选定的角色决定。</p>
+      <div class="tables">
+        <table>
+          <thead><tr><th>角色对应的技能</th><th>效果</th></tr></thead>
+          <tbody>
+            <tr><td>色块人</td><td>提高自己武器的射速和伤害</td></tr>
+            <tr><td>格格</td><td>身侧生成会自己射击的武器</td></tr>
+            <tr><td>大美丽</td><td>范围内的动物受伤并被定住</td></tr>
+            <tr><td>金状元</td><td>按间隔直接加肉</td></tr>
+            <tr><td>亚克东</td><td>从画面四角放出金币怪，依次跑进场景</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>局内动态随机任务</h3>
+      <div class="frame"><img src="18.jpg" alt="任务" /></div>
+      <p class="prose">开局过一段时间派出一条，完成或超时后过一段时间再派下一条。</p>
+      <div class="tables">
+        <table>
+          <thead><tr><th>任务</th><th>怎么算完成</th></tr></thead>
+          <tbody>
+            <tr><td>狩猎</td><td>打死足够数量的动物</td></tr>
+            <tr><td>收集</td><td>收集足够数量的肉</td></tr>
+            <tr><td>消耗</td><td>用了技能或道具</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>幸运仪式</h3>
+      <div class="frame"><img src="2.jpg" alt="幸运仪式礼包" /></div>
+      <p class="prose">准备页打开。开礼包后得到一条增益，带进随后这一局。</p>
+      <div class="frame"><img src="3.jpg" alt="抽到的增益" /></div>
+      <div class="tables">
+        <table>
+          <thead><tr><th>增益</th><th>效果</th></tr></thead>
+          <tbody>
+            <tr><td>更多大肉</td><td>掉落肉时按概率加量</td></tr>
+            <tr><td>开局能量</td><td>进局时多一段能量</td></tr>
+            <tr><td>伤害提升</td><td>武器和技能的伤害提高</td></tr>
+            <tr><td>高阶生成</td><td>大型动物、弹药怪、金币怪这三类的生成权重乘上配置里的倍数</td></tr>
           </tbody>
         </table>
       </div>
@@ -95,39 +208,54 @@
     <section id="architecture">
       <div class="section-head">
         <h2>架构</h2>
-        <p>分层图中的箭头表示依赖：上层调用下层。</p>
+        <p>箭头表示调用方向。界面调用这一局，也直接调用运行时。这一局读表、写存档。</p>
       </div>
 
-      <h3>分层依赖</h3>
+      <h3>模块依赖</h3>
       <div class="diagram">
         <pre class="mermaid">
 flowchart TB
-  subgraph pres [界面]
-    P1[准备与弹层] --- P2[局内界面]
+  subgraph ui [界面]
+    prepareUi[准备与弹层]
+    hud[局内界面]
   end
-  subgraph domain [玩法]
-    GM[HuntingAppFlow] --- RF[RoundFlow] --- MG[回合管理器]
+  subgraph play [一局]
+    flow[RoundFlow]
+    managers[回合管理器]
   end
-  subgraph infra [运行时]
-    EV[事件] --- RS[资源] --- UI[界面] --- AU[音频] --- PL[对象池] --- EF[特效]
+  subgraph runtime [运行时]
+    fw[事件 资源 界面 音频 对象池 特效]
   end
   subgraph store [数据]
-    TB[Luban 表] --- SV[player_save.json]
+    tables[Luban 表]
+    save[player_save.json]
   end
-  pres --> domain
-  domain --> infra
-  domain --> store
+  ui --> play
+  ui --> runtime
+  play --> runtime
+  play --> store
         </pre>
       </div>
 
-      <p class="prose">
-        <code>GameFrameworkManager</code> 按顺序建好事件、资源、对象池、界面、音频、特效。
-        <code>HuntingAppFlow</code> 再挂上配置、存档、玩家数据、输入、相机和转场。
-        换阶段时先盖上加载层，卸掉当前阶段，再加载下一阶段。
-        只有进行中的一局会推动地图规则。买道具时暂停。
-      </p>
+      <h3>运行时</h3>
+      <p class="prose"><code>GameFrameworkManager</code> 按顺序建好事件、资源、对象池、界面、音频、特效。<code>HuntingAppFlow</code> 再挂上配置、存档、玩家数据、输入、相机和转场。</p>
+      <p class="prose">资源从 <code>ResourceManager</code> 进。场景换成下一张时走场景管理器，不经过资源加载器。音频分两路：音效占槽位，音乐用三个声部。界面分成页面、抬头、固定、弹层、遮罩，同一种界面同时只开一个。</p>
 
-      <h3>从射击到死亡</h3>
+      <h3>转场与局状态</h3>
+      <p class="prose">每次换阶段都先盖上加载层，卸掉现在这阶段，加载下一阶段，再揭开。</p>
+      <div class="tables">
+        <table>
+          <thead><tr><th>去向</th><th>发生的事</th></tr></thead>
+          <tbody>
+            <tr><td>准备</td><td>结束正在进行的一局，打开准备页</td></tr>
+            <tr><td>主地图</td><td>关掉准备页，加载森林，预热要用的预制体，开始这一局</td></tr>
+            <tr><td>隐藏地图</td><td>关掉进入提示，卸掉主地图上的动物和子弹，加载雪山</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose">一局里只有「进行中」会推动地图规则和管理器。买道具时会暂停。</p>
+
+      <h3>生成、命中与数值</h3>
       <div class="diagram">
         <pre class="mermaid">
 flowchart LR
@@ -138,6 +266,25 @@ flowchart LR
   health --> states[状态]
         </pre>
       </div>
+      <p class="prose">生成点算出要生什么，管理器从对象池里取出动物。子弹命中时把已经算好的伤害交给生命，不再算一遍。幸运和一部分技能改的是数值层：伤害、射速、掉落、生成权重、肉、能量、结算。</p>
+
+      <h3>动物状态</h3>
+      <div class="diagram">
+        <pre class="mermaid">
+stateDiagram-v2
+  direction LR
+  [*] --> 移动
+  移动 --> 受击: 受伤
+  受击 --> 移动: 结束
+  移动 --> 被控: 被定住
+  被控 --> 移动: 结束
+  移动 --> 死亡: 生命耗尽
+        </pre>
+      </div>
+      <p class="prose">死亡之后先播死亡，再掉落，然后回收。Boss 在出场演出结束前停着，死亡后不走这次回收。</p>
+
+      <h3>事件</h3>
+      <p class="prose">动物、Boss、子弹、能量、肉条、道具、任务、技能、回合、准备、玩家数据，各自有一组事件。界面和管理器订阅这些事件来更新。</p>
     </section>
 
     <section id="files">
@@ -146,14 +293,16 @@ flowchart LR
       </div>
       <ul class="file-list">
         <li>
-          <span class="label">进准备与进图</span>
+          <span class="label">启动、存档与转场</span>
           <span class="links">
             <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/HuntingAppFlow.cs">HuntingAppFlow.cs</a>
             <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/AppManagers/TransitionGate.cs">TransitionGate.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/AppManagers/SaveService.cs">SaveService.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/AppManagers/PlayerDataManager.cs">PlayerDataManager.cs</a>
           </span>
         </li>
         <li>
-          <span class="label">一局与两张地图</span>
+          <span class="label">回合与模式</span>
           <span class="links">
             <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/RoundFlow.cs">RoundFlow.cs</a>
             <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/Modes/MainMapMode.cs">MainMapMode.cs</a>
@@ -161,46 +310,63 @@ flowchart LR
           </span>
         </li>
         <li>
-          <span class="label">射击与动物</span>
+          <span class="label">肉条、能量与结算</span>
           <span class="links">
-            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/Weapons/PlayerWeapon.cs">PlayerWeapon.cs</a>
-            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/AnimalRefactor/AnimalBehaviour/BaseAnimalBehaviour.cs">BaseAnimalBehaviour.cs</a>
-            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/SpawnerManager.cs">SpawnerManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/MeatProgressManager.cs">MeatProgressManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/EnergyProgressManager.cs">EnergyProgressManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/SettlementManager.cs">SettlementManager.cs</a>
           </span>
         </li>
         <li>
-          <span class="label">准备与读表</span>
+          <span class="label">动物、生成与武器</span>
+          <span class="links">
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/AnimalRefactor/AnimalBehaviour/BaseAnimalBehaviour.cs">BaseAnimalBehaviour.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/AnimalRefactor/AnimalBehaviour/BossAnimalBehaviour.cs">BossAnimalBehaviour.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/SpawnerManager.cs">SpawnerManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/Weapons/PlayerWeapon.cs">PlayerWeapon.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/Weapons/SkillWeapon.cs">SkillWeapon.cs</a>
+          </span>
+        </li>
+        <li>
+          <span class="label">操作与子弹</span>
+          <span class="links">
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/AppManagers/InputManager.cs">InputManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/PlayerControlManager.cs">PlayerControlManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/Bullets/BulletBehavior.cs">BulletBehavior.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/Numeric/RoundNumericLayer.cs">RoundNumericLayer.cs</a>
+          </span>
+        </li>
+        <li>
+          <span class="label">道具、技能、任务与幸运</span>
+          <span class="links">
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/PropManager.cs">PropManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/SkillManager.cs">SkillManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/QuestManager.cs">QuestManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/LuckyBuffManager.cs">LuckyBuffManager.cs</a>
+          </span>
+        </li>
+        <li>
+          <span class="label">界面与配表</span>
           <span class="links">
             <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/UI/Prepare/UIPrepare.cs">UIPrepare.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/UI/Gameplay/UIGameplay.cs">UIGameplay.cs</a>
             <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/AppManagers/HuntingConfigManager.cs">HuntingConfigManager.cs</a>
-            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/AppManagers/PlayerDataManager.cs">PlayerDataManager.cs</a>
           </span>
         </li>
       </ul>
+      <p class="prose">事件键在 <code>Assets/Scripts/CoreGameLogic/Events</code>，局内的分在 <code>RoundEvents</code>。表在 <code>Assets/Scripts/GameConfig/gen</code>。可游玩区域和提前量在 <code>Assets/Scripts/Tools</code>。运行时在 <code>Assets/GameFramework</code>。</p>
     </section>
 
-    <section id="run" class="split">
-      <div>
-        <div class="section-head">
-          <h2>环境</h2>
-        </div>
-        <ol class="plain">
-          <li>Unity 2022.3.7f1c1</li>
-          <li>入口 <code>Assets/Scenes/BootstrapScene.unity</code></li>
-          <li>同目录还有准备、森林、雪山</li>
-          <li>第一次打开会生成 <code>Library</code></li>
-        </ol>
+    <section id="run">
+      <div class="section-head">
+        <h2>环境</h2>
       </div>
-      <div>
-        <div class="section-head">
-          <h2>限制</h2>
-        </div>
-        <ol class="plain">
-          <li>抽到海滩、花园或草原时，主地图加载的场景仍是森林</li>
-          <li>隐藏地图倒计时结束不会结算，要等 Boss 倒下</li>
-          <li>仓库里没有打好的资源包，场景按工程路径加载</li>
-        </ol>
-      </div>
+      <ol class="plain">
+        <li>Unity 2022.3.7f1c1</li>
+        <li>入口 <code>Assets/Scenes/BootstrapScene.unity</code></li>
+        <li>同目录还有准备、森林、雪山</li>
+        <li>第一次打开会生成 <code>Library</code>。UniTask、YooAsset 2.3.14、Input System、UGUI、Luban 写在 <code>Packages/manifest.json</code></li>
+      </ol>
     </section>
   </main>
 
