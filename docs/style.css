@@ -252,20 +252,23 @@ h3 {
 .shots-band { margin-top: 0.5rem; }
 
 .shots {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.65rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .shots figure {
   margin: 0;
+  text-align: center;
 }
 
 .shots img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
+  display: inline-block;
+  width: auto;
+  height: auto;
+  zoom: 0.25;
   border: 1px solid var(--line);
   background: #dbe4ee;
 }
@@ -280,15 +283,21 @@ h3 {
 
 .frame {
   margin: 0 0 1.25rem;
-  max-width: 36rem;
+  text-align: center;
 }
 
 .frame img {
-  display: block;
-  width: 100%;
+  display: inline-block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  zoom: 0.5;
   border: 1px solid var(--line);
   background: #dbe4ee;
 }
+
+.frame.z67 img { zoom: 0.67; }
+.frame.z100 img { zoom: 1; }
 
 .steps,
 .plain {
@@ -383,7 +392,6 @@ footer {
 }
 
 @media (max-width: 820px) {
-  .shots,
   .split,
   .tables { grid-template-columns: 1fr; }
   .file-list li {
