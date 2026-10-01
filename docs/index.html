@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>我给全家打肉吃</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "base",
+      themeVariables: {
+        background: "#ffffff00",
+        primaryColor: "#d9f3ef",
+        primaryTextColor: "#132033",
+        primaryBorderColor: "#0f766e",
+        secondaryColor: "#eef2f6",
+        tertiaryColor: "#fff7ed",
+        lineColor: "#334155",
+        fontFamily: "Noto Sans SC, sans-serif"
+      },
+      securityLevel: "loose",
+      flowchart: { curve: "basis", padding: 14 }
+    });
+    await mermaid.run({ querySelector: ".mermaid" });
+  </script>
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="kicker">Unity 2022.3</p>
+      <h1>我给全家<em>打肉</em>吃</h1>
+      <p class="lead">准备页掷骰选定角色，花金币开宝箱摇 Buff。主地图射击动物、收集食物。肉度满了结算，或先去隐藏地图打 Boss 再结算。肉换成金币后回到准备页。</p>
+      <div class="cta">
+        <a class="btn primary" href="https://github.com/greenballyjq/HuntingClient">仓库</a>
+        <a class="btn ghost" href="https://github.com/greenballyjq/HuntingClient/blob/main/README.md">README</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="shots">
+      <div class="section-head">
+        <h2>截图</h2>
+      </div>
+      <div class="shots">
+        <figure>
+          <img src="1.jpg" alt="准备" />
+          <figcaption>准备</figcaption>
+        </figure>
+        <figure>
+          <img src="5.jpg" alt="主地图" />
+          <figcaption>主地图</figcaption>
+        </figure>
+        <figure>
+          <img src="8.jpg" alt="隐藏地图" />
+          <figcaption>隐藏地图</figcaption>
+        </figure>
+        <figure>
+          <img src="7.jpg" alt="结算" />
+          <figcaption>结算</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="gameplay">
+      <div class="section-head">
+        <h2>玩法</h2>
+      </div>
+      <p class="prose">
+        准备页随机一张主地图。三千盘金币人站在角色格上，掷骰走格后停在哪格，就是本局角色和绑定技能。也可以先花金币开宝箱，把抽到的增益带进这一局。进主地图时按概率决定这局带不带隐藏地图。
+      </p>
+      <p class="prose">
+        主地图是森林。开场倒计时 8 秒后才能操作。打死动物掉落食物，光效飞到界面对应位置才入账。肉度全部涨满后再倒计时 10 秒，然后结算。这局如果带了隐藏地图，会先问要不要进去。隐藏地图是雪山，倒计时走完不停局，Boss 倒下并且场上没有其他动物才结算。
+      </p>
+      <div class="tables">
+        <table>
+          <thead><tr><th></th><th>主地图</th><th>隐藏地图</th></tr></thead>
+          <tbody>
+            <tr><td>场景</td><td>森林</td><td>雪山</td></tr>
+            <tr><td>时间</td><td>已用时间</td><td>倒计时</td></tr>
+            <tr><td>动物计数</td><td>有</td><td>无</td></tr>
+            <tr><td>Boss 血条</td><td>无</td><td>有</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="section-head">
+        <h2>架构</h2>
+        <p>分层图中的箭头表示依赖：上层调用下层。</p>
+      </div>
+
+      <h3>分层依赖</h3>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart TB
+  subgraph pres [界面]
+    P1[准备与弹层] --- P2[局内界面]
+  end
+  subgraph domain [玩法]
+    GM[HuntingAppFlow] --- RF[RoundFlow] --- MG[回合管理器]
+  end
+  subgraph infra [运行时]
+    EV[事件] --- RS[资源] --- UI[界面] --- AU[音频] --- PL[对象池] --- EF[特效]
+  end
+  subgraph store [数据]
+    TB[Luban 表] --- SV[player_save.json]
+  end
+  pres --> domain
+  domain --> infra
+  domain --> store
+        </pre>
+      </div>
+
+      <p class="prose">
+        <code>GameFrameworkManager</code> 按顺序建好事件、资源、对象池、界面、音频、特效。
+        <code>HuntingAppFlow</code> 再挂上配置、存档、玩家数据、输入、相机和转场。
+        换阶段时先盖上加载层，卸掉当前阶段，再加载下一阶段。
+        只有进行中的一局会推动地图规则。买道具时暂停。
+      </p>
+
+      <h3>从射击到死亡</h3>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart LR
+  control[操作] --> weapon[武器]
+  weapon --> bullet[子弹]
+  bullet --> numeric[数值层]
+  numeric --> health[生命]
+  health --> states[状态]
+        </pre>
+      </div>
+    </section>
+
+    <section id="files">
+      <div class="section-head">
+        <h2>主要代码</h2>
+      </div>
+      <ul class="file-list">
+        <li>
+          <span class="label">进准备与进图</span>
+          <span class="links">
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/HuntingAppFlow.cs">HuntingAppFlow.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/AppManagers/TransitionGate.cs">TransitionGate.cs</a>
+          </span>
+        </li>
+        <li>
+          <span class="label">一局与两张地图</span>
+          <span class="links">
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/RoundFlow.cs">RoundFlow.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/Modes/MainMapMode.cs">MainMapMode.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/Modes/HiddenMapMode.cs">HiddenMapMode.cs</a>
+          </span>
+        </li>
+        <li>
+          <span class="label">射击与动物</span>
+          <span class="links">
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/Weapons/PlayerWeapon.cs">PlayerWeapon.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Game/Round/AnimalRefactor/AnimalBehaviour/BaseAnimalBehaviour.cs">BaseAnimalBehaviour.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/RoundManagers/SpawnerManager.cs">SpawnerManager.cs</a>
+          </span>
+        </li>
+        <li>
+          <span class="label">准备与读表</span>
+          <span class="links">
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/UI/Prepare/UIPrepare.cs">UIPrepare.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/AppManagers/HuntingConfigManager.cs">HuntingConfigManager.cs</a>
+            <a href="https://github.com/greenballyjq/HuntingClient/blob/main/Assets/Scripts/CoreGameLogic/Managers/AppManagers/PlayerDataManager.cs">PlayerDataManager.cs</a>
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <section id="run" class="split">
+      <div>
+        <div class="section-head">
+          <h2>环境</h2>
+        </div>
+        <ol class="plain">
+          <li>Unity 2022.3.7f1c1</li>
+          <li>入口 <code>Assets/Scenes/BootstrapScene.unity</code></li>
+          <li>同目录还有准备、森林、雪山</li>
+          <li>第一次打开会生成 <code>Library</code></li>
+        </ol>
+      </div>
+      <div>
+        <div class="section-head">
+          <h2>限制</h2>
+        </div>
+        <ol class="plain">
+          <li>抽到海滩、花园或草原时，主地图加载的场景仍是森林</li>
+          <li>隐藏地图倒计时结束不会结算，要等 Boss 倒下</li>
+          <li>仓库里没有打好的资源包，场景按工程路径加载</li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://github.com/greenballyjq/HuntingClient">greenballyjq/HuntingClient</a>
+    <span>·</span>
+    <a href="https://github.com/greenballyjq/HuntingClient/blob/main/README.md">README.md</a>
+  </footer>
+</body>
+</html>
