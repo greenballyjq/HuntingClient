@@ -1,5 +1,7 @@
 # 打开与运行
 
+[首页](../README.md) · [玩法](gameplay.md) · [架构](architecture.md) · [**打开与运行**](getting-started.md) · [目录导读](project-structure.md)
+
 本篇说明如何在本机打开工程并运行，以及运行前需要补齐哪些内容。
 
 ## 环境要求

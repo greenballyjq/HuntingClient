@@ -1,5 +1,7 @@
 # 架构
 
+[首页](../README.md) · [玩法](gameplay.md) · [**架构**](architecture.md) · [打开与运行](getting-started.md) · [目录导读](project-structure.md)
+
 本篇说明工程内部的结构：代码分成哪几块、各块之间怎么依赖、从哪里启动、一局怎么跑起来，以及几处结构选择为什么这么定。读者是要在这个工程上继续开发的人。要查某个功能落在哪个文件，见 [目录导读](project-structure.md)。
 
 ## 与框架仓库的边界

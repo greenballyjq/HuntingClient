@@ -1,5 +1,7 @@
 # 我给全家打肉吃
 
+[**首页**](README.md) · [玩法](docs/gameplay.md) · [架构](docs/architecture.md) · [打开与运行](docs/getting-started.md) · [目录导读](docs/project-structure.md)
+
 2D 打猎游戏，使用 Unity 2022.3.7f1c1制作。
 
 单局循环为：准备 → 主地图打猎 → 结算 → 隐藏地图（按概率触发）→ 回到准备。主地图中玩家猎杀动物获得肉，肉条打满即进入结算；隐藏地图为限时战斗。
@@ -8,20 +10,24 @@
 
 ## 截图
 
-> | <img src="E:\HuntingClient\docs\1.jpg" style="zoom:15%;" /> | <img src="E:\HuntingClient\docs\5.jpg" style="zoom:15%;" /> | <img src="E:\HuntingClient\docs\8.jpg" style="zoom:15%;" /> | <img src="E:\HuntingClient\docs\11.jpg" style="zoom:15%;" /> |
-> | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------ |
+<p>
+  <img src="docs/1.jpg" width="220" alt="准备">
+  <img src="docs/5.jpg" width="220" alt="主地图">
+  <img src="docs/8.jpg" width="220" alt="隐藏地图">
+  <img src="docs/11.jpg" width="220" alt="结算">
+</p>
 
 ## 玩法概览
 
 ### 准备
 
-<img src="E:\HuntingClient\docs\4.jpg" style="zoom:50%;" />
+<img src="docs/4.jpg" width="720" alt="准备">
 
 准备界面随机抽出一张主地图，展示其图标、名称与描述。角色由掷骰决定：金币人在角色格子上按骰子点数行走，落到的格子决定本局角色，角色绑定一个技能；金币人所在格子记入存档，下一局从该格子继续。开打前可进行一次幸运仪式，开礼包获得增益。点"开始"进入单局。
 
 ### 主地图
 
-<img src="E:\HuntingClient\docs\6.jpg" style="zoom:50%;" />
+<img src="docs/6.jpg" width="720" alt="主地图">
 
 入场播放 8 秒倒计时（5、4、3、2、1、准备..、开始.、战斗!!），随后开始计时。玩家自由猎杀动物，动物掉落肉，肉量按刻度推进肉条；每达成一个刻度提示一次狩猎进度，肉条打满时提示"肉条已满，即将结算！"并播放 10 秒倒计时，随后结算。
 
@@ -29,13 +35,13 @@
 
 ### 隐藏地图
 
-<img src="E:\HuntingClient\docs\9.jpg" style="zoom:50%;" />
+<img src="docs/9.jpg" width="720" alt="隐藏地图">
 
 结算时若本局触发隐藏地图，会给出进入入口。隐藏地图按固定节拍演出：红光警报与 Boss 警报音 → Boss 登场（吼叫、血量条增长）→ 8 秒战斗倒计时 → 开战。Boss 死亡后清场；场上无存活动物时以 0.3 倍速播放 4 秒慢动作，待尸体消失后结算。
 
 ### 结算
 
-<img src="E:\HuntingClient\docs\7.jpg" style="zoom:50%;" />
+<img src="docs/7.jpg" width="720" alt="结算">
 
 结算展示本局狩猎统计。主地图结算后，本局触发隐藏地图的会先给出进入入口，未触发的直接进入普通结算；隐藏地图结束时展示隐藏地图结算。之后回到准备阶段，进入下一局。
 

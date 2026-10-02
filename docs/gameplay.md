@@ -1,5 +1,7 @@
 # 玩法
 
+[首页](../README.md) · [**玩法**](gameplay.md) · [架构](architecture.md) · [打开与运行](getting-started.md) · [目录导读](project-structure.md)
+
 本篇说明这款游戏的规则：一局从头到尾会发生什么，每一步由什么推动，什么条件下会出现什么结果。具体数值在配表里，本篇讲数值的作用，不搬数值本身。
 
 ## 一局是怎么走的
@@ -23,7 +25,7 @@ flowchart LR
 
 ## 准备
 
-<img src="E:\HuntingClient\docs\1.jpg" style="zoom:33%;" />
+<img src="1.jpg" width="640" alt="准备">
 
 准备阶段做三件事：定地图、定角色、开幸运仪式。
 
@@ -33,9 +35,9 @@ flowchart LR
 
 每个角色绑定一个技能。角色定下来后，界面显示该角色的档案和它的技能说明。
 
-<img src="E:\HuntingClient\docs\2.jpg" style="zoom:33%;" />
+<img src="2.jpg" width="640" alt="幸运仪式">
 
-<img src="E:\HuntingClient\docs\3.jpg" style="zoom:33%;" />
+<img src="3.jpg" width="640" alt="抽到的增益">
 
 **开幸运仪式。** 花金币开一个礼包，随机得到一个增益。增益在随后开始的这一局里生效，不会留到下一局。
 
@@ -43,7 +45,7 @@ flowchart LR
 
 ## 主地图
 
-<img src="E:\HuntingClient\docs\5.jpg" style="zoom:33%;" />
+<img src="5.jpg" width="640" alt="主地图">
 
 进入主地图先有一段开场倒计时演出，演出期间界面不能操作；演完开始计时，并播放本地图的环境音与音乐。
 
@@ -76,7 +78,7 @@ flowchart LR
 
 ## 隐藏地图
 
-<img src="E:\HuntingClient\docs\8.jpg" style="zoom:33%;" />
+<img src="8.jpg" width="640" alt="隐藏地图">
 
 隐藏地图是一段独立的限时战斗，要在结算界面上主动点进入才会开始。
 
@@ -95,7 +97,7 @@ flowchart LR
 
 ## 结算
 
-<img src="E:\HuntingClient\docs\7.jpg" style="zoom:33%;" />
+<img src="7.jpg" width="640" alt="结算">
 
 结算把本局攒下的肉折算成奖励：
 
@@ -112,7 +114,7 @@ flowchart LR
 
 ### 操作
 
-<img src="E:\HuntingClient\docs\16.jpg" style="zoom: 50%;" />
+<img src="16.jpg" width="280" alt="摇杆射击">
 
 玩家不移动，只改变武器的朝向。默认用摇杆：左右推摇杆改变射击角度，摇杆一旦被推动就持续开火；按住指针左右拖动也能转方向。
 
@@ -120,7 +122,7 @@ flowchart LR
 
 ### 能量与技能
 
-<img src="E:\HuntingClient\docs\17.jpg" style="zoom:67%;" />
+<img src="17.jpg" width="200" alt="技能">
 
 能量随时间自己增长，掉落的能量也能补。攒够一条能量才能放技能。
 
@@ -136,7 +138,7 @@ flowchart LR
 
 ### 道具
 
-<img src="E:\HuntingClient\docs\15.jpg" style="zoom:67%;" />
+<img src="15.jpg" width="470" alt="道具">
 
 道具分三种，各有存量，也能在局内花金币买。同一种道具正在用时不能再放；放一次扣一个，并进入与持续时间等长的冷却。
 
@@ -150,7 +152,7 @@ flowchart LR
 
 ### 任务
 
-<img src="E:\HuntingClient\docs\18.jpg" style="zoom:67%;" />
+<img src="18.jpg" width="400" alt="任务">
 
 任务由系统按自己的节奏随机派发，同一时刻只有一个。到时间没做完就消失，做完直接给金币。
 

@@ -1,5 +1,7 @@
 # 目录导读
 
+[首页](../README.md) · [玩法](gameplay.md) · [架构](architecture.md) · [打开与运行](getting-started.md) · [**目录导读**](project-structure.md)
+
 本篇说明各目录放什么，以及想改某处该去哪个文件。读者是准备在这个工程上动手改东西的人；结构本身见 [架构](architecture.md)。
 
 ## 工程顶层
