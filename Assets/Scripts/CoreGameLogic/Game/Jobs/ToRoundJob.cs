@@ -25,18 +25,18 @@ public sealed class ToRoundJob : ITransitionJob
 
     public async UniTask LoadNext(IProgress<float> progress)
     {
-        progress?.Report(0f);
-        await _uiManager.PreloadAsync(UILifetime.Round);
+        await _uiManager.PreloadAsync(UILifetime.Round, new Progress<float>(p => progress?.Report(p * 0.55f)));
 
-        progress?.Report(0.3f);
         RoundLoadManifest manifest = RoundLoadManifest.ForMainMap(_context);
-        await _resourceManager.LoadSceneAsync(manifest.ScenePath);
+        await _resourceManager.LoadSceneAsync(manifest.ScenePath, true, new Progress<float>(p =>
+        {
+            progress?.Report(0.55f + p * 0.25f);
+        }));
         DynamicGI.UpdateEnvironment();
 
-        progress?.Report(0.6f);
+        progress?.Report(0.8f);
         manifest.Prewarm();
 
-        progress?.Report(0.8f);
         var roundFlow = HuntingAppFlow.Instance.CreateRoundFlow();
         await roundFlow.EnterRound(_context);
 

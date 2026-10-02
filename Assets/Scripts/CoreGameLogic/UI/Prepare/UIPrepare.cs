@@ -3,6 +3,7 @@ using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
 using GameFramework.Audio;
+using GameFramework.Core;
 using GameFramework.UI;
 using GameFramework.Manager;
 using UnityEngine;
@@ -108,15 +109,38 @@ public class UIPrepare : UIForm
         base.OnClose();
     }
 
-    public async UniTask PreloadRoleIconsAsync()
+    public async UniTask PreloadRoleIconsAsync(System.IProgress<float> progress = null)
     {
         var roles = _configManager.RoleTable.DataList;
+        int count = 0;
+        for (int i = 0; i < roles.Count; i++)
+        {
+            if (!string.IsNullOrEmpty(roles[i].IconResourcePath))
+                count++;
+        }
+
+        if (count == 0)
+        {
+            progress?.Report(1f);
+            return;
+        }
+
+        int index = 0;
         for (int i = 0; i < roles.Count; i++)
         {
             string path = roles[i].IconResourcePath;
-            if (!string.IsNullOrEmpty(path))
-                await _resourceManager.LoadAssetAsync<Sprite>(path);
+            if (string.IsNullOrEmpty(path))
+                continue;
+
+            int slot = index;
+            await _resourceManager.LoadAssetAsync<Sprite>(path, new System.Progress<AssetLoadProgress>(sample =>
+            {
+                progress?.Report(AssetLoadProgress.Across(slot, count, sample));
+            }));
+            index++;
         }
+
+        progress?.Report(1f);
     }
 
     private void BindButtons()

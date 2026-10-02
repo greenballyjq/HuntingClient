@@ -4,6 +4,7 @@ using cfg.HuntingConfig.Enum;
 using cfg.HuntingConfig.Prop;
 using cfg.HuntingConfig.Skill;
 using Cysharp.Threading.Tasks;
+using GameFramework.Core;
 using GameFramework.Game;
 using GameFramework.Manager;
 using GameFramework.UI;
@@ -137,17 +138,31 @@ public class HuntingConfigManager : IAppManager
         _tables = new cfg.Tables(_ => byteBuffs[index++]);
         await UniTask.Yield();
     }
+    private static readonly float[] StartupWeights = { 0.04f, 0.04f, 0.04f, 0.04f, 0.30f, 0.30f, 0.14f, 0.10f };
+
     private async UniTask LoadScriptableObjects()
     {
-        _dropRewardRefSo = await _resourceManager.LoadAssetAsync<DropRewardRefSo>($"{SOPath}/DropRewardRefSo");
-        _bulletRefSo = await _resourceManager.LoadAssetAsync<BulletRefSo>($"{SOPath}/BulletRefSo");
-        _propRefSo = await _resourceManager.LoadAssetAsync<PropRefSo>($"{SOPath}/PropRefSo");
-        _skillRefSo = await _resourceManager.LoadAssetAsync<SkillRefSo>($"{SOPath}/SkillRefSo");
-        _animalRefSo = await _resourceManager.LoadAssetAsync<AnimalRefSo>($"{SOPath}/AnimalRefSo");
-        _mapRefSo = await _resourceManager.LoadAssetAsync<MapRefSo>($"{SOPath}/MapRefSo");
-        _roleRefSo = await _resourceManager.LoadAssetAsync<RoleRefSo>($"{SOPath}/RoleRefSo");
-        _uiAudioRefSo = await _resourceManager.LoadAssetAsync<UiAudioRefSo>($"{SOPath}/UiAudioRefSo");
+        _dropRewardRefSo = await LoadStartupAsset<DropRewardRefSo>($"{SOPath}/DropRewardRefSo", 0);
+        _bulletRefSo = await LoadStartupAsset<BulletRefSo>($"{SOPath}/BulletRefSo", 1);
+        _propRefSo = await LoadStartupAsset<PropRefSo>($"{SOPath}/PropRefSo", 2);
+        _skillRefSo = await LoadStartupAsset<SkillRefSo>($"{SOPath}/SkillRefSo", 3);
+        _animalRefSo = await LoadStartupAsset<AnimalRefSo>($"{SOPath}/AnimalRefSo", 4);
+        _mapRefSo = await LoadStartupAsset<MapRefSo>($"{SOPath}/MapRefSo", 5);
+        _roleRefSo = await LoadStartupAsset<RoleRefSo>($"{SOPath}/RoleRefSo", 6);
+        _uiAudioRefSo = await LoadStartupAsset<UiAudioRefSo>($"{SOPath}/UiAudioRefSo", 7);
         UIButton.SetDefaults(_uiAudioRefSo);
+    }
+
+    private async UniTask<T> LoadStartupAsset<T>(string path, int index) where T : UnityEngine.Object
+    {
+        float start = 0f;
+        for (int i = 0; i < index; i++)
+            start += StartupWeights[i];
+        float weight = StartupWeights[index];
+        return await _resourceManager.LoadAssetAsync<T>(path, new System.Progress<AssetLoadProgress>(sample =>
+        {
+            UIBootCover.Report(start + weight * sample.DisplayRatio);
+        }));
     }
 
     #region 数值表访问

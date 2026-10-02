@@ -17,11 +17,6 @@ public sealed partial class RoleProfile : Luban.BeanBase
     public RoleProfile(ByteBuf _buf) 
     {
         Name = _buf.ReadString();
-        Birthplace = _buf.ReadString();
-        Height = _buf.ReadFloat();
-        Gender = _buf.ReadString();
-        Traits = _buf.ReadString();
-        Personality = _buf.ReadString();
         BackgroundStory = _buf.ReadString();
     }
 
@@ -34,26 +29,6 @@ public sealed partial class RoleProfile : Luban.BeanBase
     /// 角色名称
     /// </summary>
     public readonly string Name;
-    /// <summary>
-    /// 出生地
-    /// </summary>
-    public readonly string Birthplace;
-    /// <summary>
-    /// 身高
-    /// </summary>
-    public readonly float Height;
-    /// <summary>
-    /// 性别
-    /// </summary>
-    public readonly string Gender;
-    /// <summary>
-    /// 特征描述
-    /// </summary>
-    public readonly string Traits;
-    /// <summary>
-    /// 个性描述
-    /// </summary>
-    public readonly string Personality;
     /// <summary>
     /// 背景故事
     /// </summary>
@@ -70,11 +45,6 @@ public sealed partial class RoleProfile : Luban.BeanBase
     {
         return "{ "
         + "Name:" + Name + ","
-        + "Birthplace:" + Birthplace + ","
-        + "Height:" + Height + ","
-        + "Gender:" + Gender + ","
-        + "Traits:" + Traits + ","
-        + "Personality:" + Personality + ","
         + "BackgroundStory:" + BackgroundStory + ","
         + "}";
     }

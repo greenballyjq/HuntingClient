@@ -26,25 +26,32 @@ public sealed class ToPrepareJob : ITransitionJob
 
     public async UniTask LoadNext(IProgress<float> progress)
     {
-        progress?.Report(0f);
-        await _uiManager.PreloadAsync(UILifetime.App);
-
-        progress?.Report(0.3f);
+        await _uiManager.PreloadAsync(UILifetime.App, new Progress<float>(p => progress?.Report(p * 0.7f)));
 
         if (!RoundScopeUnload.IsPrepareOrBootstrapActive())
         {
-            await _resourceManager.LoadSceneAsync(RoundScopeUnload.PrepareScene);
+            await _resourceManager.LoadSceneAsync(RoundScopeUnload.PrepareScene, true, new Progress<float>(p =>
+            {
+                progress?.Report(0.7f + p * 0.15f);
+            }));
             UnityEngine.DynamicGI.UpdateEnvironment();
         }
-
-        progress?.Report(0.6f);
+        else
+        {
+            progress?.Report(0.85f);
+        }
 
         if (!_uiManager.IsOpen<UIPrepare>())
             await _uiManager.OpenAsync<UIPrepare>();
 
         UIPrepare prepare = _uiManager.Get<UIPrepare>();
         if (prepare != null)
-            await prepare.PreloadRoleIconsAsync();
+        {
+            await prepare.PreloadRoleIconsAsync(new Progress<float>(p =>
+            {
+                progress?.Report(0.85f + p * 0.15f);
+            }));
+        }
 
         progress?.Report(1f);
     }

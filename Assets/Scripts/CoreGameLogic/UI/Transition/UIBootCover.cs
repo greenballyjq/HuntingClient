@@ -37,6 +37,11 @@ public class UIBootCover : MonoBehaviour
         _eventManager.RemoveListener("GameAppStarted", Dismiss);
     }
 
+    public static void Report(float progress)
+    {
+        _instance?._loadingHint?.SetProgress(progress);
+    }
+
     public static void Dismiss()
     {
         if (_instance != null)
